@@ -1,0 +1,33 @@
+2011-11-17 v1.0.7
+  + biosHeatmap.Rscript: the options lwids and lheis are obsolete, since they are now exclusively determined by the input data, namely matrix dim and row/col name character lengths, with considering the minimum size of legend
+  + Wunschzettel: Check so-called all-NA lines and warns user; clustering algorithm should be made robust to all NAs.
+
+2011-11-16 v1.0.6
+  + biosHeatmap.Rscript: the data import function has been taken over by ribiosIO::read_exprs_matrix
+  + geneset_xyplot.Rscript: the data import function has been taken over by ribiosIO::read_exprs_matrix
+  + biosHeatmap.Rscript: four parameters for layout, width, height, lwid and lhei, can now be guessed from the input data. To do: lwid and lhei are not needed any more and shall be deleted from both command line and web interface
+  + biosHeatmap function: long titles (main) are wrapped into 40-character lines
+
+2011-11-15 v1.0.5
+  + add Rscript subdierectory in the inst directory, in order to hold plotting scripts
+  + add geneset_xyplot.Rscript and test_geneset_xyplot.txt into the package
+  + move biosHeatmap.Rscript into the package
+
+2011-11-10 v1.0.4
+  + export colorpanel function
+
+2011-10-10 v1.0.3
+  + add the zlim option to biosHeatmap, allowing defining color ranges by the user
+  + Makefile now checks whether the user is in the bdedev mode, if so, it will install the package to the R-devel, otherwise it is installed to the normal R version.
+
+2011-10-05 v1.0.2
+  + add turyeb (turquoise, yellow and black)
+
+2011-10-04 v1.0.1
+  + margins are now automatically guessed
+  + fine tunings of heatmap key plot parameters (mar and mgp)
+  + refactors functions in the gplots package in ribiosPlot (by using GPL-2 license), to avoid heavy dependencies of gdata
+
+2011-09-20 v1.0
+  + ribiosPlot refactors visualization functions from the ribios package. These functions are still accessible by loading the ribios package by package dependency.
+

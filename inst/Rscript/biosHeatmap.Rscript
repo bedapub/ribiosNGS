@@ -1,0 +1,253 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+## Version 1.0.7
+## Jitao David Zhang <jitao_david.zhang@roche.com>, Nov 2011
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosIO))
+suppressMessages(library(ribiosPlot))
+
+hasVal <- function(x) length(x)>1 | (!is.logical(x))
+
+## input
+## files: we assume the file was called by R -f drawHeatmap.R -infile XXX
+input.files <- getArg("infile")
+gethelp <- existArg("h") | existArg("help")
+
+if(!hasVal(input.files) | gethelp) {
+  message(paste("\nUsage: drawHeatmap.R -infile infile1 [infile2] [...] -outfile outfile1 [outfile2] [...] OPTS\n",
+                "OPTS can be one or more of following optional parameters:\n",
+                "# data scaling\n\t",
+                "[-scale none/row/column]\n",
+                "# hierarhical clustering, dendrogram and displaying order\n\t",
+                "[-noRowv] [-noColv] [-dendrogram both/row/column/none] [-dist FUN] [-hclust FUN] [-symm] [-revC]\n",
+                "# colors and mapping of colors\n\t",
+                "[-zlimLo zlimLo] [-zlimHi zlimHi] [-colors COLS] [-naColor COL] [-symbreaks auto/true/false]\n",
+                ##"[-colsep VAL] [-rowsep VAL] [-sepcolor COL] [-rowsepHeight VAL] [-colsepWidth VAL]",
+                "# Title and labels\n\t",
+                "[-main MAIN] [-xlab XLAB] [-ylab YLAB] [-cexRow VAL] [-cexCol VAL] [-colorKeyTitle TITLE]\n",
+                "# layout\n\t",
+                "[-width VAL] [-height VAL] [-margins colMargin rowMargin] [-lhei heightKey heightMap]",		
+                collapse=""))
+  quit(save="no", status=-1)
+}
+
+
+## logical parameters
+logpar <- existArg(c("noRowv", "noColv", "symm", "revC"))
+Rowv <- unname(!logpar["noRowv"]) ## note that the unname must be done, otherwise heatmap.2 moans!
+Colv <- unname(!logpar["noColv"])
+symm <- unname(logpar["symm"])
+revC <- unname(logpar["revC"])
+
+## value parameters
+## dendrogram
+dendrogram <- getArg("dendrogram")
+if(!dendrogram %in% c("both", "row", "column", "none"))
+  dendrogram <- "both"
+hclustMethod <- getArg("hclust",onlyArg="complete", missingArg="complete")
+if(!hclustMethod %in% c("complete", "ward", "single", "average", "mcquitty", "median", "centroid"))
+  hclustMethod <- "complete"
+distMethod <- getArg("dist", onlyArg="euclidean", missingArg="euclidean")
+if(!distMethod %in% c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"))
+  distMethod <- "euclidean"
+
+## data scaling
+scale <- getArg("scale")
+if(!scale %in% c("none", "row", "column"))
+  scale <- "none"
+na.color <- getArg("naColor", onlyArg="lightgray", missingArg="lightgray")
+
+## colors: supporting 2/3 color models and pre-defined multiple color models
+cols <- getArg("colors")
+support.cols <- c(twocolor.panels(), threecolor.panels())
+if(length(cols)==1) {
+  if(!cols %in% support.cols)
+    cols <- "greenred"
+} else if (length(cols)==3 && all(cols %in% colors())) {
+  cols <- colorpanel(100L,
+                     cols[1], cols[2], cols[3])
+} else if (length(cols)==2 && all(cols %in% colors())) {
+  cols <- colorpanel(100L,
+                     low=cols[1], high=cols[2])
+} else {
+  cols <- "greenred"
+}
+
+symbreaks <- getArg("symbreaks", onlyArg="true", missingArg="auto")
+symbreaks <- paste(symbreaks, collapse="")
+if(symbreaks=="true") {
+  symbr <- TRUE
+} else if (symbreaks=="false") {
+  symbr <- FALSE
+} else if (symbreaks=="auto") {
+  symbr <- NA
+} else {
+  symbr <- NA
+}
+
+## margins
+zlimLo <- getArg("zlimLo", onlyArg=NA, missingArg=NA)
+zlimHi <- getArg("zlimHi", onlyArg=NA, missingArg=NA)
+width <- getArg("width", onlyArg=NA, missingArg=NA)
+height <- getArg("height", onlyArg=NA, missingArg=NA)
+margins <- getArg("margins", onlyArg=NA, missingArg=NA)
+
+zlimLo <- parseNumVec(zlimLo, expLen=1, failVal=NA)
+zlimHi <- parseNumVec(zlimHi, expLen=1, failVal=NA)
+width <- parseNumVec(width, expLen=1, failVal=NA)
+height <- parseNumVec(height, expLen=1, failVal=NA)
+margins <- parseNumVec(margins, expLen=2, failVal=NULL)
+
+zlim <- c(zlimLo, zlimHi)
+
+## cexRow/cexCol
+cexs <- getArg(c("cexRow", "cexCol"), onlyArg=NA, missingArg=NA)
+cexRow <- cexs[[1]]
+cexCol <- cexs[[2]]
+if(!is.na(cexRow) && cexRow == 0) { ## hiding labels
+  labRow <- NA
+  cexRow <- 1
+} else {
+  labRow <- NULL
+  cexRow <- parseNumVec(cexRow, expLen=1L, failVal=NA)
+}
+if(!is.na(cexCol) && cexCol == 0) { ## hiding labels
+  labCol <- NA
+  cexCol <- 1
+} else {
+  labCol <- NULL
+  cexCol <- parseNumVec(cexCol, expLen=1L, failVal=NA)
+}
+
+## Row/Column labeling
+texts <- getArg(c("main", "xlab", "ylab", "colorKeyTitle"),
+                onlyArg="", missingArg="")
+main <- paste(texts[["main"]], collapse=" ")
+xlab <- paste(texts[["xlab"]], collapse=" ")
+ylab <- paste(texts[["ylab"]], collapse=" ")
+colorKeyTitle <- paste(texts[["colorKeyTitle"]], collapse=" ")
+
+## read input files and check for file existence
+input.ext <- file.exists(input.files)
+if(any(!input.ext))
+  warning("Following file(s) do not exist:\n",
+          paste(input.files[!input.ext], collapse="\t"))
+
+if(all(!input.ext))
+  quit(save="no", status=-2L)
+input.files <- input.files[input.ext]
+
+## get outfile names
+if(!existArg("outfile")) {
+  output.filenames <- NA
+} else {
+  output.files <- getArg("outfile", onlyArg=NA, missingArg=NA)
+  if(length(output.files) != length(input.ext)) {
+    output.filenames <- NA
+  } else {
+    output.filenames <- output.files[input.ext]
+  }
+}
+
+if(all(is.na(output.filenames))) {
+  output.filenames <- gsub("(.*)\\..*$", "\\1.pdf", input.files)
+  notpdf <- !grepl("pdf$", output.filenames)
+  output.filenames[notpdf] <- paste(output.filenames[notpdf], ".pdf", sep="")
+}
+
+## read tables and draw heatmap
+## note that sep="": white space
+input.tbl <- lapply(input.files, read_exprs_matrix)
+
+
+for(i in seq(along=input.tbl)) {
+  curtbl <- input.tbl[[i]]
+  if(is.na(cexRow)) cexRow <- 1L
+  if(is.na(cexCol)) cexCol <- 1L
+  if(is.na(symbr)) symbr <- min(input.tbl[[i]]<0, na.rm=TRUE) || scale != "none"
+
+  ## guess widths and heights of the figure
+  ## based on table size and dimnames
+  ## 0.10/0.12 inch: average character width/height of cex=1, width=7 and height=7
+  ## lgminw inch: the minimum width of the legend
+  ## 1.25: column factor
+  lgminw <- 1
+  hmwidth <- pmax(5.4, ncol(curtbl)*0.12*1.25*cexCol+max(0.10*cexRow*nchar(rownames(curtbl)), na.rm=TRUE))
+  lgwidth <- pmax(log10(ncol(curtbl)),lgminw)
+  twidth <- hmwidth+lgwidth
+  lg.wf <- lgwidth/twidth
+  if(!is.na(width)) {
+    if(lg.wf*width<lgminw) {
+      lgwidth <- lgminw
+      hmwidth <- width-lgwidth
+    }
+  } else {
+    width <- twidth
+  }
+  lwids <- c(lgwidth, hmwidth)
+
+  ## 6 inch: the minimum height of the heatmap itself
+  ## 1.1: row-factor
+  hmheight <- pmax(6, nrow(curtbl)*0.12*1.05*cexRow + max(0.10*cexCol*nchar(colnames(curtbl))))
+  ## 1 inch: the minimum height of the legend
+  lgheight <- pmax(log10(nrow(curtbl)), 1L)
+  theight <- hmheight+lgheight
+  if(is.na(height)) height <- theight
+  lg.hf <- lgheight/theight
+  ## the legend's height should not exceed 0.8 of its width for a nice visualization
+  ## and if so, it is set to 0.8 of the width (or 1 if the result is smaller than 1)
+  if (lg.hf*height>0.8*lg.wf*width) {
+    lgheight <- pmax(0.8*lg.wf*width, 1L)
+  }
+  hmheight <- height-lgheight
+  lheis <- c(lgheight, hmheight)
+
+  pdf(output.filenames[i], width=width, height=height)
+  biosHeatmap(curtbl,
+              ## dendrogram control
+              dendrogram=dendrogram,
+              Rowv=Rowv,
+              Colv=Colv,
+              distfun=function(x) dist(x, method=distMethod),
+              hclustfun=function(x) hclust(x, method=hclustMethod),
+              symm=symm,
+              
+              ## scaling
+              scale=scale,
+
+              ## image plot
+              revC=revC,
+
+              ## colors
+              col = cols,
+              na.color=na.color,
+
+              ## mapping data to colors
+              symbreaks = symbr,
+
+              ## margins
+              margins=margins,
+
+              ## Row/Column labelling
+              main=main,
+              xlab=xlab,
+              ylab=ylab,
+              cexRow=cexRow,
+              cexCol=cexCol,
+              labRow=labRow,
+              labCol=labCol,
+
+              ## layout
+              lhei=lheis,
+              lwid=lwids,
+              
+              ## color key
+              color.key.title=colorKeyTitle,
+
+              ## zlims
+              zlim=zlim)
+  dev.off()
+}
+
+quit(save="no", status=0)

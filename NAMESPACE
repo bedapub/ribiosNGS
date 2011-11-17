@@ -1,0 +1,40 @@
+importFrom(grDevices, heat.colors)
+
+## biosHeatmap
+export(biosHeatmap)
+
+## biosHeatmap aux
+export(bound, boundNorm)
+
+## color for factors
+export(brewer.pal.factorLevels,
+       brewer.pal.factor)
+
+## color palettes
+export(colorpanel)
+
+## three-colors
+export(royalbluered,
+       royalredblue,
+       turyeb,
+       redgreen,
+       greenred,
+       bluered,
+       redblue,
+       blueblackred,
+       redblackblue,
+       heat.colors)
+
+## two-colors
+export(blackyellow,
+       yellowblack,
+       whiteblue,
+       whitered,
+       blackred,
+       blackgreen)
+
+## display functions
+export(twocolor.panels,
+       threecolor.panels,
+       display.threecolor.panels,
+       display.twocolor.panels)

@@ -1,0 +1,10 @@
+Package: ribiosPrototype
+Type: Package
+Title: Prototypes, examples and documentations of implementing BIOS functionalities in R
+Version: 1.1
+Date: 2011-05-09
+Author: Jitao David Zhang, Clemens Rogers and Martin Ebeling
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: The ribiosPrototype package provides prototypes and examples demonstrating how to call APIs defined by the BIOS system from R via wrappers. Documentations assist programmers new to BIOS and/or to R to establish crosstalks between the two systems. Anyone is welcomed to study the source code and make contributions.
+License: LGPL-2
+LazyLoad: yes

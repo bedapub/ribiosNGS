@@ -1,0 +1,6 @@
+##exportPattern("^[[:alpha:]]+")
+
+export(printInt, getPi)
+export(repA, revcomp)
+
+useDynLib(ribiosPrototype, c_printInt, c_getPi, bios_repA, bios_revcomp);

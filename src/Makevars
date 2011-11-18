@@ -1,0 +1,18 @@
+DBMS=oracle
+include $(BIOINFOCONFDIR)/prpidefs.make
+.SUFFIXES:
+SHELL=/bin/sh
+
+## No R specific settings are needed, they are automatically handled by R CMD SHLIB
+## BIOS specific
+BIOS_CONF= /SOFT/bi/bios/conf
+BIOS_INCLUDE = /SOFT/bi/bios/include
+BIOS_SRC_LIBDEV = /SOFT/bi/bios/src/libdev
+
+##-I$(BIOS_CONF) -I$(BIOS_INCLUDE) is covered by $(PRPIINC)
+
+CFLAGSL= $(CFLAGS) $(defines) -I$(BIOS_CONF) -I$(BIOS_INCLUDE)
+
+PKG_CFLAGS= $(CFLAGSL) $(PRPIINC)
+
+PKG_LIBS=-fPIC -I$(BIOS_CONF) -I$(BIOS_INCLUDE) $(BIOS_SRC_LIBDEV)/log.c $(BIOS_SRC_LIBDEV)/format.c $(BIOS_SRC_LIBDEV)/array.c $(BIOS_SRC_LIBDEV)/hlrmisc.c $(BIOS_SRC_LIBDEV)/linestream.c

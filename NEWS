@@ -1,0 +1,15 @@
+Version 1.0.3 (2011-11-18)
+  + Add a correct version of iofile (the older version in ribios has a bug when the input paramter x has more than one values)
+
+Version 1.0.2 (2011-11-17)
+  + read_exprs_matrix function now supports the full table in case of space-delimited file.
+  + read_exprs_matrix supports duplicated row names for tab or space delimited files
+  + Wunschzettel: write a read_named_matrix routine to get around the read.table trick, which forces the data.frame structure and might be slow for large datasets
+
+Version 1.0.1 (2011-11-16)
+  + Add read_exprs_matrix for importing expression matrix from file (see help page)
+  + C rountine read_gct checks the second line with arrayMax, and stops if it is not separated by tab
+  + GCT file consistency check gives more useful information about feature numbers
+
+Version 1.0 (2011-11-15)
+  + Refactor read_gct from ribiosExpression

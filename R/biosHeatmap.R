@@ -43,6 +43,64 @@ isInvalid <- function (x)
         return(all(is.na(x)))
     else return(FALSE)
 }
+
+guessWH <- function(nrow, ncol,
+                    rownames, colnames,
+                    cexRow, cexCol,
+                    xlab, ylab,
+                    width, height) {
+  chr.wid <- 0.10
+  chr.hei <- 0.12
+  col.factor <- 1.02
+  row.factor <- 1.02
+  hm.min.wid <- 3
+  hm.min.hei <- 3
+  lgminw <- 1L ## minimum legend width
+  lgminh <- 1L ## minimum legend height
+  lgratio <- 0.8
+  xlab.factor <- ylab.factor <- 1.25
+  
+  if(is.na(cexRow)) cexRow <- 1L
+  if(is.na(cexCol)) cexCol <- 1L
+  if(is.null(rownames)) rownames <- as.character(seq(1:nrow))
+  if(is.null(colnames)) colnames <- as.character(seq(1:ncol))
+  if(is.na(xlab) || xlab=="") {
+    xlab.factor <- 0
+  }
+  if(is.na(ylab) || ylab=="") {
+    ylab.factor <- 0
+  }
+  
+  hmwidth <- pmax(hm.min.wid, ncol*chr.hei*col.factor*cexCol+max(chr.wid*cexRow*nchar(rownames), na.rm=TRUE)+chr.hei*col.factor*ylab.factor) ## columns+rowname+ylab
+  lgwidth <- pmax(log10(ncol),lgminw)
+  twidth <- hmwidth+lgwidth
+  lg.wf <- lgwidth/twidth
+  if(!is.na(width)) {
+    if(lg.wf*width<lgminw) {
+      lgwidth <- lgminw
+      hmwidth <- width-lgwidth
+    }
+  } else {
+    width <- twidth
+  }
+  lwids <- c(lgwidth, hmwidth)
+
+  hmheight <- pmax(hm.min.hei, nrow*chr.hei*row.factor*cexRow + max(chr.wid*cexCol*nchar(colnames), na.rm=TRUE)+chr.hei*row.factor*xlab.factor) ## rows + colname + xlab*2
+  lgheight <- pmax(log10(nrow), lgminh)
+  theight <- hmheight+lgheight
+  if(is.na(height)) height <- theight
+  lg.hf <- lgheight/theight
+  ## the legend's height should not exceed 0.8 of its width for a nice visualization
+  ## and if so, it is set to 0.8 of the width (or 1 if the result is smaller than 1)
+  if (lg.hf*height>lgratio*lg.wf*width) {
+    lgheight <- pmax(lgratio*lg.wf*width, lgminh)
+  }
+  hmheight <- height-lgheight
+  lheis <- c(lgheight, hmheight)
+
+  return(list(lwid=lwids, lhei=lheis, width=width, height=height))
+}
+
 biosHeatmap <- function (x,
                          ## dedrogram control
                          Rowv = TRUE,
@@ -325,8 +383,10 @@ biosHeatmap <- function (x,
 
   ## margins have to be determined now (after layout)
   if (is.null(margins) || !is.numeric(margins) || length(margins)!=2) {
-    margins <- c(max(strwidth(labCol, unit="inch", cex=cexCol))/par("csi")+1L,
-                 max(strwidth(labRow, unit="inch", cex=cexRow))/par("csi")+1L)
+    xlab.mar <- ifelse(!is.null(xlab) && length(xlab)==1,2,0.2)
+    ylab.mar <- ifelse(!is.null(ylab) && length(ylab)==1,1.5,0.2)
+    margins <- c(max(strwidth(labCol, unit="inch", cex=cexCol),na.rm=TRUE)/par("csi")+xlab.mar,
+                 max(strwidth(labRow, unit="inch", cex=cexRow),na.rm=TRUE)/par("csi")+ylab.mar)
   }
 
   if (!missing(RowSideColors)) {

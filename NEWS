@@ -1,3 +1,7 @@
+2011-11-22 v1.0.8
+  + Add guessWH function to automatically guess the width/heigh ratio of heatmaps
+  + Margins are automatically determined smartly, dependent on the xlab/ylab 
+
 2011-11-17 v1.0.7
   + biosHeatmap.Rscript: the options lwids and lheis are obsolete, since they are now exclusively determined by the input data, namely matrix dim and row/col name character lengths, with considering the minimum size of legend
   + Wunschzettel: Check so-called all-NA lines and warns user; clustering algorithm should be made robust to all NAs.

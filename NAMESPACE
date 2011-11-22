@@ -4,7 +4,9 @@ importFrom(grDevices, heat.colors)
 export(biosHeatmap)
 
 ## biosHeatmap aux
-export(bound, boundNorm)
+export(bound,
+       boundNorm,
+       guessWH)
 
 ## color for factors
 export(brewer.pal.factorLevels,

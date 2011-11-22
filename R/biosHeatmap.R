@@ -384,7 +384,7 @@ biosHeatmap <- function (x,
   ## margins have to be determined now (after layout)
   if (is.null(margins) || !is.numeric(margins) || length(margins)!=2) {
     xlab.mar <- ifelse(!is.null(xlab) && length(xlab)==1,2,0.2)
-    ylab.mar <- ifelse(!is.null(ylab) && length(ylab)==1,1.5,0.2)
+    ylab.mar <- ifelse(!is.null(ylab) && length(ylab)==1,2,0.2)
     margins <- c(max(strwidth(labCol, unit="inch", cex=cexCol),na.rm=TRUE)/par("csi")+xlab.mar,
                  max(strwidth(labRow, unit="inch", cex=cexRow),na.rm=TRUE)/par("csi")+ylab.mar)
   }

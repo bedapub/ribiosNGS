@@ -508,16 +508,17 @@ biosHeatmap <- function (x,
   else plot.new()
   if (!is.null(main)) {
     ## adjust main size
-    main <- strwrap(main, width=50L)
+    main <- strwrap(main, width=35L)
     if(length(main)==1) { ## wrapping not succeed
-      main <- strbreak(main, 50L, exdent=0)
+      main <- strbreak(main, 35L, exdent=0)
     } else {
       main <- paste(main, collapse="\n")
     }
     ## Todo: not quite sure whether the unit here is correct
     main.width <- strwidth(main, unit="figure", cex=op[["cex.main"]])
     if(main.width<1) main.width <- 1
-    title(main, cex.main = pmin(1.5, op[["cex.main"]]*1/main.width))
+    main.cex <- op[["cex.main"]]*main.width*(lwid[2]/sum(lwid))*0.8
+    title(main, cex.main=main.cex)
   }
   if (key) {
     par(mar = c(1.8, 1, 1, 1), cex = 0.75, mgp=c(1,0.5,0))

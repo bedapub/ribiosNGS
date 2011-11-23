@@ -84,11 +84,14 @@ whitered <- function(n) colorRampPalette(RIBIOS_WHITEREDS)(n)
 blackred <- function(n) colorpanel(n, "black", "red")
 blackgreen <- function(n) colorpanel(n, "black", "green")
 
+whiteblack <- function(n) rev(blackwhite(n))
+blackwhite <- function(n) gray(seq(0, 1, 1/(n-1)))
+
 ##-------------------- Display functions --------------------##
 twocolor.panels <- function() {
   return(c("blackyellow", "yellowblack",
            "whiteblue", "whitered",
-           "blackred", "blackgreen"))
+           "blackred", "blackgreen", "whiteblack", "blackwhite"))
 }
 threecolor.panels <- function() {
   return(c("royalbluered", "royalredblue",

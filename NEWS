@@ -1,3 +1,6 @@
+2011-11-23 v1.0.9
+  + Add whiteblack and blackwhite to two-color palettes
+
 2011-11-22 v1.0.8
   + Add guessWH function to automatically guess the width/heigh ratio of heatmaps
   + Margins are automatically determined smartly, dependent on the xlab/ylab 

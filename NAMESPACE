@@ -1,1 +1,4 @@
 exportPattern("^[[:alpha:]]+")
+
+## .registration=TRUE is only valid when the routines have been registered
+useDynLib(ribiosUtils, .registration=TRUE)

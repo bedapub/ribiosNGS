@@ -25,7 +25,7 @@ PKG_VERSION  := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2
 PKG_ROOT_DIR := $(shell pwd)
 PKG_SRC_DIR := $(PKG_ROOT_DIR)/src
 
-install: 
+install:
 	@echo '====== Installing Package ======'
 	@(cd ..; ${R} CMD INSTALL $(PKG))
 	@echo '====== Installing finished ======'
@@ -48,3 +48,5 @@ clean:
 	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so)
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@echo ' '
+
+

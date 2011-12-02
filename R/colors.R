@@ -53,7 +53,9 @@ brewer.pal.factor <- function(factor, name="Greys") {
 
 ## colors
 
-##-------------------- three-color systems --------------------##
+
+
+##-------------------- three-color (or more) systems --------------------##
 
 RIBIOS_BLUEREDS <- c("#2166AC", "#D1E5F0", "white", "#FDDBC7", "#B2182B")
 royalbluered <- function(n) colorRampPalette(RIBIOS_BLUEREDS)(n)
@@ -70,6 +72,9 @@ bluered <- function(n) colorpanel(n, "blue", "white", "red")
 redblue <- function(n) colorpanel(n, "red", "white", "blue")
 blueblackred <- function(n) colorpanel(n, "blue", "black", "red")
 redblackblue <- function(n) colorpanel(n, "red", "black", "blue")
+
+##-------------------- l3 color systems --------------------##
+whiteblueblackheat <- function(n) colorRampPalette(c("white", "blue", "black", "red", "yellow"))(n)
 
 ##-------------------- two-color systems --------------------##
 blackyellow <- function(n) colorpanel(n, "black", "yellow")
@@ -99,8 +104,11 @@ threecolor.panels <- function() {
            "redgreen", "greenred",
            "bluered", "redblue",
            "redblackblue", "blueblackred",
-           "heat.colors"))
+           "heat.colors",
+           "whiteblueblackheat"))
 }
+
+
 display.colorpanels <- function(panel.names, nc) {
   nc <- as.integer(pmax(pmin(nc, 100), 3))
   np=length(panel.names)

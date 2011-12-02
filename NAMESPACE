@@ -25,7 +25,8 @@ export(royalbluered,
        redblue,
        blueblackred,
        redblackblue,
-       heat.colors)
+       heat.colors,
+       whiteblueblackheat)
 
 ## two-colors
 export(blackyellow,

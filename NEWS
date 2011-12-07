@@ -1,3 +1,7 @@
+Version 1.0.4 (2011-12-07)
+  + Add the read_gmt_list function to read in gmt files
+  + Bug fix: ls_destroy() has been added to read_gmt C function (this bug had no visible effect on users, but with potential memory issues)
+
 Version 1.0.3 (2011-11-18)
   + Add a correct version of iofile (the older version in ribios has a bug when the input paramter x has more than one values)
 

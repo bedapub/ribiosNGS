@@ -82,7 +82,8 @@ SEXP read_gct(SEXP filename, SEXP keepdesc) {
   dimnamesgets(ans, dimnames);
   if(keep)
     setAttrib(ans, install("desc"), desc);
-
+  
+  ls_destroy(ls);
   free(fname); 
   if(keep) {
     UNPROTECT(5);

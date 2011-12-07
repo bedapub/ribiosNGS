@@ -9,6 +9,9 @@ storage.mode(input.matrix) <- "integer"
 storage.mode(input.gct) <- "integer" ## make the comparison easier
 stopifnot(identical(input.gct, input.matrix))
 
+## import gmt
+testgmt <- file.path(testfile.path, "test.gmt")
+testgmt.list <- read_gmt_list(testgmt)
 
 ## import tab-separated file (without/with colname for the first column)
 assertIdentical <- function(x,y) stopifnot(identical(x,y))

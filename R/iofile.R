@@ -2,14 +2,14 @@ iofile <- function(x) {
   if(!exists("DATA_DIR", inherits=TRUE)) {
     if (file.exists("./data")) {
       warning("DATA_DIR defined as ./data\n")
-      DATA_DIR <<- "./data"
+      assign("DATA_DIR", "./data", envir=.GlobalEnv)
     } else {
       stop("DATA_DIR not defined, or ./data does not exist \n")
     }
   }
   if(missing(x)) {
-    DATA_DIR
+    get("DATA_DIR")
   } else {
-    file.path(DATA_DIR, x)
+    file.path(get("DATA_DIR"), x)
   }
 }

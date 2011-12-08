@@ -5,7 +5,7 @@
   Calling C routine to read GCT file into a matrix
 }
 \description{
-  The function calls C route to read GCT file into a matrix
+  The function \code{read_gct_matrix} calls the C routine \code{read_gct} to read GCT file into a matrix
 }
 \usage{
 read_gct_matrix(gct.file, keep.desc=TRUE)

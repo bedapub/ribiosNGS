@@ -22,14 +22,13 @@ SEXP read_gmt(SEXP filename) {
   //allocate list vector
   ls=ls_createFromFile(fname);
   while(line=ls_nextLine(ls)) {
-    it=textFieldtokP(line, "\t");
+    it=textStrtok(line, "\t");
     if(arrayMax(it)<3) continue;
     textAdd(names, textItem(it, 0));
     textAdd(descs, textItem(it, 1));
     array(genes,ind,Texta)=textCreate(arrayMax(it)-2);
     for(i=2;i<arrayMax(it);++i) {
-      if(strcmp(textItem(it,i),"")!=0)
-	textAdd(array(genes,ind, Texta), textItem(it, i));
+      textAdd(array(genes,ind, Texta), textItem(it, i));
     }
     ind++;
   }

@@ -1,3 +1,11 @@
+Version 1.0.6 (2011-12-08)
+  + This version is almost warning-free (except for -Wall) and is placed in the stable release as well.
+
+Version 1.0.5 (2011-12-08)
+  + Add the man page for read_gmt_list and iofile
+  + Use assign/get instead of their symbolic shortcuts in the iofile function to prevent R-check warning against not-found global variables
+  + Use "textStrtok" instead of "textFieldtok" since the former neglects empty fields automatically. The "P" (Preserve) variant was not necessary since the input char was not used anymore beyond the splitting.
+
 Version 1.0.4 (2011-12-07)
   + Add the read_gmt_list function to read in gmt files
   + Bug fix: ls_destroy() has been added to read_gmt C function (this bug had no visible effect on users, but with potential memory issues)

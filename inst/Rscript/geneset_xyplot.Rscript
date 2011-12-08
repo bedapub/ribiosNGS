@@ -2,6 +2,7 @@
 
 suppressMessages(library(ribiosArg))
 suppressMessages(library(ribiosPlot))
+suppressMessages(library(ribiosIO))
 
 hasVal <- function(x) length(x)>1 | (!is.logical(x))
 
@@ -78,6 +79,7 @@ if(!type %in% c("p", "l", "b", "c", "o","h","s", "n")) {
 input.tbl <- lapply(input.files, read_exprs_matrix)
 for(i in seq(along=input.tbl)) {
   tbl <- as.data.frame(input.tbl[[i]])
+  rownames(tbl) <- make.unique(rownames(tbl),sep="_")
   if(is.na(width)) {
     width <- pmax(4, 0.15*nrow(tbl))
   }

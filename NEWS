@@ -1,0 +1,17 @@
+Version 1.0.5 (Dec 15, 2011)
+  + Mark annotateByChipname as priority to be updated: the current version has been made a copy in the biocAnnotation package (outside of the ribios suite). A replacement in the ribios suite will be placed in the ribiosAnnotation
+  + (Upstreaming updates) ribiosUtils depends on methods and therefore the rowscale can be imported from
+  + Add git version control
+
+Version 1.0.4 (Nov 25, 2011)
+  + Move data.frame and matrix functions to the ribiosUtils package
+  + Depend on the ribiosUtils package
+
+Version 1.0.3 (Nov 15, 2011)
+  + Refactor read_gct into ribiosIO for efficiency (since no class information like ExpressionSet is needed there)
+
+Version 1.0.2 (Nov 14, 2011)
+  + Change keepHighestVarProbe to more generalized keepMaxStatProbe
+
+Version 1.0.1 (Nov 11, 2011)
+  + Remove the path option sfrom the readGctCls function to make it consistent with readGct and readCls.

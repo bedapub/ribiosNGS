@@ -1,3 +1,8 @@
+Version 1.0.3 (2011-12-15)
+  + Add the methods package into depend list
+
+Version 1.0.2 (skipped since no stable release was made)
+
 Version 1.0.1 (2011-11-28)
   + Add data.frame and matrix manipulation methods
   + Updated the fme_cor function, although it is not finished.

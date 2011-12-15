@@ -1,0 +1,9 @@
+export(raceChipnames,
+       raceEntrez,
+       raceChipGenes)
+
+## deprecated functions
+export(affychipNames,
+       biosCurrentGeneSymbol)
+
+importFrom(ROracle, Oracle)

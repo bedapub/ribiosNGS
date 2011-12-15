@@ -1,5 +1,6 @@
 2011-12-15: v1.0.3
   + The onlyArg and/or missingArg parameter of the getArg function can be set to NULL now (in previous versions this would cause an error)
+  + Add tests folder to keep consistent behaviours of important functions (now getArg is under control, parseNumVec and existArg shall be tested similarly in future releases)
 
 2011-10-10: v1.0.2
   + (Important) getArg differentiates options (starting with a minus sign AND a non-numeric character, namely 0-9 or the dot) and negative numbers (starting with a minus sign, followed by numeric characters). For instance, "-a" is an option, but the "-3,4" in "-a -3,4" will be treated as value for "a". Arguments, which contain at least one character which is not number or punctuation characters (see ?regex), will be considered as an option (parameter) instead of a value, for instance "-3way".

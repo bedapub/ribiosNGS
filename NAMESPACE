@@ -1,0 +1,4 @@
+export("getArg",
+       "existArg")
+
+export("parseNumVec")

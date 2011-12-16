@@ -1,3 +1,9 @@
+Versopm 1.0.4 (2012-12-16)
+  + Current functions have been renamed to better reflect their functions
+  + raceChiptypes (aka raceChipnames) returns a list of supported chip types (in the form of character vector)
+  + raceChipAnnotation provides all annotation information for a certain chip
+  + annotateProbesets provides annotation information for queried probesets.
+
 Version 1.0.3 (2012-12-15)
   + Only BIOS-specific functions have been kept in the new ribiosAnnotation package, other functions relying on Bioc annotation mechanisms have been moved to the ciocAnnotation package, which shall not be part of the ribios suite). 
   + Functions are renamed in a consistent way, representing their functionality. The old names are deprecated.

@@ -1,6 +1,9 @@
-export(raceChipnames,
-       raceEntrez,
-       raceChipGenes)
+export(raceChiptypes,
+       raceChipnames) ## synonymous
+
+export(raceChipAnnotation)
+
+export(annotateProbesets)
 
 ## deprecated functions
 export(affychipNames,

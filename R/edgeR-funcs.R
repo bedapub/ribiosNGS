@@ -1,3 +1,17 @@
+edgeR.DGE <- function(path=".",
+                      targets.file="Targets.txt",
+                      normFactor.method="RLE") {
+  target.file.full <- file.path(path,targets.file)
+  if(!file.exists(target.file.full))
+    stop("target.file not found at ", target.file.full)
+  targets <- read.delim(file=target.file.full,
+                        stringsAsFactors=FALSE)
+  data <- readDGE(targets, path=path, comment.char="#", head=FALSE)
+  d <- calcNormFactors(data, method=normFactor.method)
+  d <- estimateCommonDisp(d)
+  d
+}
+
 edgeR.sumCountByGroup <- function(data,
                                   group.colName="group"){
   if(!group.colName %in% colnames(data$sample))

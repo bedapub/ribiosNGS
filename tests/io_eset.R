@@ -31,3 +31,12 @@ syspd <- file.path(sysdir, "sample_eset_pdata.txt")
 sys.eset <- readEset(exprs.file=sysexp,
                      fData.file=sysfd,
                      pData.file=syspd)
+sys.ponly <- readEset(exprs.file=sysexp,
+                      fData.file=NULL,
+                      pData.file=syspd)
+sys.fonly <- readEset(exprs.file=sysexp,
+                      fData.file=sysfd,
+                      pData.file=NULL)
+sys.minimum <- readEset(exprs.file=sysexp,
+                        fData.file=NULL,
+                        pData.file=NULL)

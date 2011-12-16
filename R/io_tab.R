@@ -2,11 +2,11 @@ writeEset <- function(eset,exprs.file,fData.file,pData.file) {
   write.table(exprs(eset),
               exprs.file,
               sep="\t", row.names=TRUE, col.names=TRUE)
-  if(!missing(fData.file))
+  if(!missing(fData.file) && !is.null(fData.file))
     write.table(fData(eset),
                 fData.file,
                 sep="\t", row.names=TRUE, col.names=TRUE)
-  if(!missing(pData.file))
+  if(!missing(pData.file) && !is.null(pData.file))
     write.table(pData(eset),
                 pData.file,
                 sep="\t", row.names=TRUE, col.names=TRUE)
@@ -14,7 +14,7 @@ writeEset <- function(eset,exprs.file,fData.file,pData.file) {
 
 readEset <- function(exprs.file,fData.file,pData.file) {
   ef <- data.matrix(read.table(exprs.file))
-  if(!missing(fData.file)) {
+  if(!missing(fData.file) && !is.null(fData.file)) {
     ff <- readFKdata(fData.file, rownames(ef))
     fd <- new("AnnotatedDataFrame", ff)
   } else {
@@ -22,7 +22,7 @@ readEset <- function(exprs.file,fData.file,pData.file) {
               data.frame(row.names=rownames(ef))
               )
   }
-  if(!missing(pData.file)) {
+  if(!missing(pData.file) && !is.null(pData.file)) {
     pf <- readFKdata(pData.file, colnames(ef))
     pd <- new("AnnotatedDataFrame", pf)
   } else {

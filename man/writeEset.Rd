@@ -19,9 +19,12 @@ readEset(exprs.file, fData.file, pData.file)
     object to be exported.}
   \item{exprs.file}{Required, character string, full name of the file containing the expression
     matrix.}
-  \item{fData.file}{Optional, full name of the file containing feature
-    annotations. }
-  \item{pData.file}{Optional, full name of the file containing sample annotations.}
+  \item{fData.file}{Optional, character string, full name of the file containing feature
+    annotations. \code{NULL} is handled specially: it will cause no
+    reading or writing of the feature annotation data.}
+  \item{pData.file}{Optional, character string, full name of the file
+    containing sample annotations. \code{NULL} is handled specially: it
+    will cause no reading or writing of the sample annotation data.}
 }
 \details{
   \code{readEset} and \code{writeEset} provide a lightweighted mechanism
@@ -36,6 +39,10 @@ readEset(exprs.file, fData.file, pData.file)
   All three files are saved as tab-delimited, quoted plain files with
   both row and column names. They can be readily read in by the
   \code{read.table} function with default parameters.
+
+  In both functions, \code{fData.file} and \code{pData.file} are
+  optional. Leaving them missing or settign their values to \code{NULL}
+  will prevent exporting/importing annotations.
 
   One limitation of these functions is that they only support the
   export/import of \strong{one} expression matrix from one

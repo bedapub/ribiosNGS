@@ -1,5 +1,6 @@
 ## read table with foreign key
-readFKtable <- function(file, fk, strict.order=FALSE, ...) {
+readFKtable <- function(file, fk,
+                        strict.order=FALSE,...) {
   fk <- as.character(fk)
   data <- read.table(file,...)
   c0 <- as.character(rownames(data))
@@ -17,18 +18,24 @@ readFKtable <- function(file, fk, strict.order=FALSE, ...) {
       stop("The 1st/2nd column of the input file are not stricktly identical with the foreign keys");
     }
   } else {
-    if(all(fk %in% c0)) {
+    if(!hasc1) {
       return(data[match(fk, c0),])
-    } else if (hasc1 && all(fk %in% c1)) {
-      res <- data[match(fk, c1),-1, drop=FALSE]
-      if(!anyDuplicated(fk))
-        rownames(res) <- fk
-      return(res)
     } else {
-      stop("The 1st/2nd column of the input file miss one or more foreign keys");
+      inc0 <- mean(fk %in% c0)
+      inc1 <- mean(fk %in% c1)
+      if(inc0>inc1 || (inc0==inc1 & inc0>0.5)) {
+        return(data[match(fk, c0),])
+      } else if (inc0<inc1) {
+        res <- data[match(fk, c1),-1,drop=FALSE]
+        if(!anyDuplicated(fk))
+          rownames(res) <- fk
+        return(res)
+      } else {
+        stop("The 1st/2nd column of the input file seem not to contain foreign keys");
+      }
     }
   }
-  
-
- 
 }
+    
+    
+

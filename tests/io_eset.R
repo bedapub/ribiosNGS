@@ -13,9 +13,13 @@ writeEset(sample.ExpressionSet,
 writeEset(sample.ExpressionSet,
           exprs.file=expfile)
 
+fiIdentical <- function(x,y) identical(sapply(x, as.character), sapply(y, as.character))
 eset.full <- readEset(exprs.file=expfile,
                       fData.file=ffile,
                       pData.file=pfile)
+stopifnot(fiIdentical(fData(eset.full), fData(sample.ExpressionSet)))
+stopifnot(fiIdentical(pData(eset.full), pData(sample.ExpressionSet)))
+stopifnot(identical(exprs(eset.full), exprs(sample.ExpressionSet)))
 eset.fonly <- readEset(exprs.file=expfile,
                        fData.file=ffile)
 eset.ponly <- readEset(exprs.file=expfile,
@@ -31,6 +35,10 @@ syspd <- file.path(sysdir, "sample_eset_pdata.txt")
 sys.eset <- readEset(exprs.file=sysexp,
                      fData.file=sysfd,
                      pData.file=syspd)
+stopifnot(identical(1:nrow(sys.eset),
+                    match(rownames(fData(sys.eset)) , rownames(read.table(sysfd)))))
+stopifnot(identical(1:ncol(sys.eset),
+                    match(rownames(pData(sys.eset)), rownames(read.table(syspd)))))
 sys.ponly <- readEset(exprs.file=sysexp,
                       fData.file=NULL,
                       pData.file=syspd)

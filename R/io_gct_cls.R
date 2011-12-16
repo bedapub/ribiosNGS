@@ -118,12 +118,12 @@ readGctCls <- function(file.base,
   pData(eset)$cls <- cls
 
   if(!missing(add.fData.file)) {
-    add.fdata <- readFKdata(add.fData.file, featureNames(eset))
+    add.fdata <- readFKtable(add.fData.file, featureNames(eset))
     fData(eset) <- cbind(fData(eset), add.fdata)
   }
   
   if(!missing(add.pData.file)) {
-    add.pdata <- readFKdata(add.pData.file, sampleNames(eset))
+    add.pdata <- readFKtable(add.pData.file, sampleNames(eset))
     pData(eset) <- cbind(pData(eset), add.pdata)
   }
 

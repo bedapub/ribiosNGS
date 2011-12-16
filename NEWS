@@ -1,3 +1,7 @@
+Version 1.0.4 (2011-12-16)
+  + Add qqmsg (function and documentation) to quitely quit a R session.  
+  + add libordie function to silently load a library when possible or kill the R session otherwise
+
 Version 1.0.3 (2011-12-15)
   + Add the methods package into depend list
 

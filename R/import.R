@@ -38,7 +38,7 @@ ChipFetcher2ExpressionSet <- function(filename,
   exprs.matrix <- data.matrix(exprs.matrix)
   feature.names <- rownames(exprs.matrix)
   
-  feature.data.frame <- annotateByChipname(annotation, feature.names)
+  feature.data.frame <- annotateProbesets(feature.names, annotation)
   colnames(exprs.matrix) <- rownames(pheno.data.frame)
   
   expSet <- new("ExpressionSet",

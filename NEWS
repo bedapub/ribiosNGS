@@ -2,6 +2,9 @@ Version 1.0-6 (Dec 16, 2011)
   + Add dependency on the ribiosAnnotation package
   + Add writeEset and readEset functions for importing/exporting ExpressionSet objects.
   + annotatedByChipname has been removed. Its functionality is replaced by the annotateProbesets in the ribiosAnnotation package.
+  + readFKdata was renamed as readFKtable, which is now fully documented and ready to be exported
+  + readFKdata supports two basic modes: strict.order=TRUE (as before) and strict.order=FALSE (can be of any order of FK, so far all FKs are covered)
+  + annotateByChipname is completely replaced by annotateProbesets
 
 Version 1.0.5 (Dec 15, 2011)
   + Mark annotateByChipname as priority to be updated: the current version has been made a copy in the biocAnnotation package (outside of the ribios suite). A replacement in the ribios suite will be placed in the ribiosAnnotation

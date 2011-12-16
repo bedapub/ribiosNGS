@@ -52,7 +52,7 @@ ChipFetcher2ExpressionSet <- function(filename,
 }
 
 
-## import partek files: TODO: the annotation is still done by biocAnnotation::annotateByChipname, should switch to ribiosAnnotation!
+## import partek files
 partek2ExpressionSet <- function(filename,
                                  annotation="illuminaHumanv3.db") {
   if(annotation == "illuminaHumanv3.db") {
@@ -73,7 +73,7 @@ partek2ExpressionSet <- function(filename,
   raw.char <- rawt[probeStart:nrow(rawt),]
   raw.exp <- matrix(as.numeric(raw.char),
                     nrow=nrow(raw.char), ncol=ncol(raw.char), dimnames=dimnames(raw.char))
-  rf <- annotateByChipname(annotation, rownames(raw.exp))
+  rf <- annotateProbesets(rownames(raw.exp), annotation)
   eset <- new("ExpressionSet",
               exprs=raw.exp,
               featureData=new("AnnotatedDataFrame", rf),

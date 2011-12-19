@@ -1,0 +1,4 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+## Summarize and report results from two or more biclustering algorithms
+## Jitao David Zhang <jitao_david.zhang@roche.com>

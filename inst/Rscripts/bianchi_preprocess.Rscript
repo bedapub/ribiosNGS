@@ -1,0 +1,136 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+## preprocessing script for biclustering tasks
+## input: expression file
+## output: an RData including the ExpressionSet
+## Jitao David Zhang <jitao_david.zhang@roche.com>
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+## check minimal input and print help
+input.file <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+if(is.null(input.file) | is.null(output.file) | getHelp) {
+  qqmsg(paste("\nUsage:bianchi_preprocess.Rscript -infile in_filename -outfile out_filename OPTIONS\n\n",
+              "-infile in_filename\tInput file name, in a format supported by the ribiosIO package.\n",
+              "\t\t\tAs of Dec 2011, a tab-delimited file or a gct file.\n",
+              "-outfile out_filename\tOutput file name, ideally with the \".RData\" suffix.\n",
+              "\t\t\tAs of Dec 2011, the output file is a binary file containing an ExpressionSet object for downstream analysis.\n\n",
+              "OPTIONS can be one or more of following optional parameters:\n",
+              "[-ffile fdata_filename]\tfeature annotation file in the tab-delimited format\n",
+              "[-pfile pdata_filename]\tsample annotation file in the tab-delimited format\n",
+              "[-clsfile clsdata_filename]\tsample annotation file in the cls format\n",
+              "[-invfilter percentage]\tpercentage (0-99) of features filtered out as invariant probes\n",
+              "[-summfeat true/false]\t\twhether the program should try to summarize features\n",
+              "[-chiptype chip_type]\t\tExpression chip type supported by pRED\n",
+              "[-logfile log_filename]\tprint important statistics regarding the preprocessing to the file\n",
+              collapse=" "),
+        status=1L)
+}
+
+if(!file.exists(input.file)) {
+  qqmsg("Error: infile \"", input.file, "\" does not exist. Program existing.",
+        status=2)
+} else if (identical(input.file, output.file)) {
+  qqmsg("Error: infile cannot have the same name as the outfile. Program existing.",
+        status=2)
+}
+
+## infile has been ready, read it
+libordie(Biobase)
+libordie(ribiosIO)
+libordie(ribiosAnnotation, minVer="1.0-4")
+
+exp <- read_exprs_matrix(input.file)
+nrexp <- nrow(exp)
+ncexp <- ncol(exp)
+
+## status labels
+fsuc <- FALSE
+psuc <- FALSE
+clssuc <- FALSE
+invno <- 0
+sfsuc <- FALSE
+chiploadsuc <- FALSE
+chipannosuc <- FALSE
+
+opts <- getArg(c("ffile", "pfile", "clsfile", "invfilter", "summfeat", "chiptype", "logfile"),
+               onlyArg=NULL, missingArg=NULL)
+ffile <- opts[[1L]]
+pfile <- opts[[2L]]
+clsfile <- opts[[3L]]
+invfilter <- opts[[4L]]
+summfeat <- opts[[5L]]
+chiptype <- opts[[6L]]
+logfile <- opts[[7L]]
+
+## check whether the chiptype is valid
+isChipValid <- !is.null(chiptype) && tolower(chiptype) %in% tolower(raceChipnames())
+
+## do feature annotation: chiptype takes priority
+if(!is.null(ffile) || isChipValid) {
+  fnames <- rownames(exp)
+  if(!is.null(ffile)) {
+    ffdata <- readFKtable(ffile, fk=fnames, strict.order=FALSE)
+  }
+  if(isChipValid) {
+    cfdata <- annotateProbsets(id=fnames, chiptype)
+  }
+  if(exists("ffdata") && exists("cfdata")) {
+    fdata <- cbind(cfdata, ffdata)
+  } else if (exists("ffdata")) {
+    fdata <- ffdata
+  } else if (exists("cfdata")) {
+    fdata <- cfdata
+  } else {
+    qqmsg("Unsuccessful feature annotation", status=3);
+  }
+} else {
+  fdata <- data.frame(row.names=row.names(exp))
+}
+
+## do sample annotation:
+if(!is.null(pfile) || is.null(clsfile) ) {
+  snames <- colnames(exp)
+  if(!is.null(pfile)) {
+    fpdata <- readFKtable(pfile, fk=snames, strict.order=FALSE)
+  }
+  if(!is.null(clsfile)) {
+    cls <- readCls(clsfile)
+    cpdata <- data.frame(class=cls)
+  }
+  if(exists("fpdata") && exists("cpdata")) {
+    pdata <- cbind(cpdata, fpdata)
+  } else if (exists("cpdata")) {
+    pdata <- cpdata
+  } else if (exists("fpdata")) {
+    pdata <- fpdata
+  } else {
+    qqmsg("Unsuccessful sample annotation", status=3);
+  }
+} else {
+  pdata <- data.frame(row.names=col.names(exp))
+}
+
+## build eset
+eset <- new("ExpressionSet",
+            exprs=exp,
+            fData=new("AnnotatedDataFrame", fData),
+            pData=new("AnnotatedDataFrame", pData))
+            
+## do invariant feature filtering
+if(!is.null(invfilter)) {
+  invprocent <- parseNumVec(invfilter, expLen=1L, failVal=0L)/100L
+  evar <- apply(exp, 1L, IQR)
+  isVar <- evar >= quantile(evar, invprocent)
+} else {
+  isVar <- rep(TRUE, nrexp)
+}
+eset <- eset[isVar,,drop=FALSE]
+
+## do feature summarizing
+if(!is.null(summfeat) && !identical(tolower(summfeat), "false")) {
+  
+}
+## write ExpressionSet in file

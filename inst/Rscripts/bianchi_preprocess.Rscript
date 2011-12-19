@@ -21,7 +21,7 @@ if(is.null(input.file) | is.null(output.file) | getHelp) {
               "[-ffile fdata_filename]\tfeature annotation file in the tab-delimited format\n",
               "[-pfile pdata_filename]\tsample annotation file in the tab-delimited format\n",
               "[-clsfile clsdata_filename]\tsample annotation file in the cls format\n",
-              "[-invfilter percentage]\tpercentage (0-99) of features filtered out as invariant probes\n",
+              "[-topvar integer]\t Number of features to be kept after filtering low-variance features\n",
               "[-summfeat true/false]\t\twhether the program should try to summarize features\n",
               "[-chiptype chip_type]\t\tExpression chip type supported by pRED\n",
               "[-logfile log_filename]\tprint important statistics regarding the preprocessing to the file\n",
@@ -41,6 +41,7 @@ if(!file.exists(input.file)) {
 libordie(Biobase)
 libordie(ribiosIO)
 libordie(ribiosAnnotation, minVer="1.0-4")
+libordie(ribiosExpression, minVer="1.0-7")
 
 exp <- read_exprs_matrix(input.file)
 nrexp <- nrow(exp)
@@ -48,19 +49,17 @@ ncexp <- ncol(exp)
 
 ## status labels
 fsuc <- FALSE
+chipsuc <- FALSE
 psuc <- FALSE
-clssuc <- FALSE
-invno <- 0
 sfsuc <- FALSE
-chiploadsuc <- FALSE
-chipannosuc <- FALSE
+clssuc <- FALSE
 
-opts <- getArg(c("ffile", "pfile", "clsfile", "invfilter", "summfeat", "chiptype", "logfile"),
+opts <- getArg(c("ffile", "pfile", "clsfile", "topvar", "summfeat", "chiptype", "logfile"),
                onlyArg=NULL, missingArg=NULL)
 ffile <- opts[[1L]]
 pfile <- opts[[2L]]
 clsfile <- opts[[3L]]
-invfilter <- opts[[4L]]
+topvar <- opts[[4L]]
 summfeat <- opts[[5L]]
 chiptype <- opts[[6L]]
 logfile <- opts[[7L]]
@@ -73,57 +72,64 @@ if(!is.null(ffile) || isChipValid) {
   fnames <- rownames(exp)
   if(!is.null(ffile)) {
     ffdata <- readFKtable(ffile, fk=fnames, strict.order=FALSE)
+    fsuc <- TRUE
   }
   if(isChipValid) {
-    cfdata <- annotateProbsets(id=fnames, chiptype)
+    cfdata <- annotateProbesets(id=fnames, chiptype)
+    chipsuc <- TRUE
   }
-  if(exists("ffdata") && exists("cfdata")) {
+  if(fsuc && chipsuc) {
     fdata <- cbind(cfdata, ffdata)
-  } else if (exists("ffdata")) {
+  } else if (fsuc) {
     fdata <- ffdata
-  } else if (exists("cfdata")) {
+  } else if (chipsuc) {
     fdata <- cfdata
   } else {
     qqmsg("Unsuccessful feature annotation", status=3);
   }
 } else {
-  fdata <- data.frame(row.names=row.names(exp))
+  fdata <- data.frame(row.names=rownames(exp))
 }
 
+
+
 ## do sample annotation:
-if(!is.null(pfile) || is.null(clsfile) ) {
+if(!is.null(pfile) || !is.null(clsfile) ) {
   snames <- colnames(exp)
   if(!is.null(pfile)) {
     fpdata <- readFKtable(pfile, fk=snames, strict.order=FALSE)
+    psuc <- TRUE
   }
   if(!is.null(clsfile)) {
     cls <- readCls(clsfile)
     cpdata <- data.frame(class=cls)
+    clssuc <- TRUE
   }
-  if(exists("fpdata") && exists("cpdata")) {
+  if(psuc && clssuc) {
     pdata <- cbind(cpdata, fpdata)
-  } else if (exists("cpdata")) {
-    pdata <- cpdata
-  } else if (exists("fpdata")) {
+  } else if (psuc) {
     pdata <- fpdata
+  } else if (clssuc) {
+    pdata <- cpdata
   } else {
     qqmsg("Unsuccessful sample annotation", status=3);
   }
 } else {
-  pdata <- data.frame(row.names=col.names(exp))
+  pdata <- data.frame(row.names=colnames(exp))
 }
 
 ## build eset
 eset <- new("ExpressionSet",
             exprs=exp,
-            fData=new("AnnotatedDataFrame", fData),
-            pData=new("AnnotatedDataFrame", pData))
+            featureData=new("AnnotatedDataFrame", fdata),
+            phenoData=new("AnnotatedDataFrame", pdata))
             
 ## do invariant feature filtering
-if(!is.null(invfilter)) {
-  invprocent <- parseNumVec(invfilter, expLen=1L, failVal=0L)/100L
+if(!is.null(topvar)) {
+  varno <- parseNumVec(topvar, expLen=1L, failVal=0L)
   evar <- apply(exp, 1L, IQR)
-  isVar <- evar >= quantile(evar, invprocent)
+  evar.ord <- order(evar, decreasing=TRUE)
+  isVar <- evar >= evar[ evar.ord[varno] ]
 } else {
   isVar <- rep(TRUE, nrexp)
 }
@@ -131,6 +137,27 @@ eset <- eset[isVar,,drop=FALSE]
 
 ## do feature summarizing
 if(!is.null(summfeat) && !identical(tolower(summfeat), "false")) {
-  
+  if(chipsuc) {
+    eset <- summarizeProbesets(eset,
+                               index.name="GeneID",
+                               fun=mean,
+                               keep.nonindex=FALSE) 
+  } else if (fsuc) {
+    i <- 1
+    while(!identical(as.character(fpdata[,i,drop=TRUE]), rownames(exp))) {
+      i <- i+1;
+      if(i>ncol(fpdata))
+        i <- NULL
+    }
+    if(!is.null(i)) {
+      eset <- summarizeProbesets(eset,
+                                 index.name=colnames(fpdata)[i],
+                                 fun=mean,
+                                 keep.nonindex=FALSE)
+    }
+  }
 }
+
 ## write ExpressionSet in file
+save(eset, file=output.file)
+qqmsg(status=0)

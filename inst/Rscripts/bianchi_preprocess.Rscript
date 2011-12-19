@@ -80,6 +80,7 @@ if(!is.null(ffile) || isChipValid) {
   }
   if(fsuc && chipsuc) {
     fdata <- cbind(cfdata, ffdata)
+    colnames(fdata) <- make.unique(colnames(fdata))
   } else if (fsuc) {
     fdata <- ffdata
   } else if (chipsuc) {
@@ -90,8 +91,6 @@ if(!is.null(ffile) || isChipValid) {
 } else {
   fdata <- data.frame(row.names=rownames(exp))
 }
-
-
 
 ## do sample annotation:
 if(!is.null(pfile) || !is.null(clsfile) ) {
@@ -107,6 +106,7 @@ if(!is.null(pfile) || !is.null(clsfile) ) {
   }
   if(psuc && clssuc) {
     pdata <- cbind(cpdata, fpdata)
+    colnames(pdata) <- make.unique(colnames(pdata))
   } else if (psuc) {
     pdata <- fpdata
   } else if (clssuc) {

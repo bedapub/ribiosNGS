@@ -1,3 +1,6 @@
+2011-12-19: v1.0-4
+  + The parseNumVec parameter accepts NULL as expLen value, in order to parse variable-length number vectors
+
 2011-12-15: v1.0.3
   + The onlyArg and/or missingArg parameter of the getArg function can be set to NULL now (in previous versions this would cause an error)
   + Add tests folder to keep consistent behaviours of important functions (now getArg is under control, parseNumVec and existArg shall be tested similarly in future releases)

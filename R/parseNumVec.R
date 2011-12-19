@@ -8,10 +8,13 @@ parseNumVec <- function(str, expLen=2, failVal=c(5,5), sep=",") {
   if(length(str)==1) {
     str <- strsplit(str, sep)[[1]]
   }
-
   str <- str[str!=""]
 
-  isNum <- length(str) == expLen && suppressWarnings(all(!is.na(as.numeric(str))))
+  isNum <- suppressWarnings(all(!is.na(as.numeric(str))))
+  if(!is.null(expLen)) {
+    isNum <- isNum && length(str) == expLen
+  }
+  
   if(isNum) {
     return(as.numeric(str))
   } else {

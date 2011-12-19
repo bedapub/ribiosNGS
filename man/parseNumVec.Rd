@@ -17,7 +17,8 @@ parseNumVec(str, expLen = 2, failVal = c(5, 5), sep=",")
 \arguments{
   \item{str}{A string or string vector, usually returned by the the
     \code{\link{getArg}} function.}
-  \item{expLen}{Expected length of the numeric vector}
+  \item{expLen}{Integer or NULL, expected length of the numeric
+    vector. When set to NULL, the numeric vector can be of variable length.}
   \item{failVal}{If the parsing failed (for example length not correct,
     or non-numeric values were provided, this value will be returned}
   \item{sep}{Delimiter other than blank, by default the comma}
@@ -45,6 +46,9 @@ parseNumVec(c("2,3,", "4"), expLen=3, failVal=c(3,4,5))
 
 ## fail: length incorrect
 parseNumVec(c("2", "3", "5.5"), expLen=4, failVal=c(3,4,5))
+
+## success: length undetermined
+parseNumVec(c("2", "3", "5.5"), expLen=NULL, failVal=c(3,4,5))
 
 ## fail: non-numeric value
 parseNumVec(c("2", "3", "5.5", "TB"), expLen=4, failVal=c(3,4,5,5))

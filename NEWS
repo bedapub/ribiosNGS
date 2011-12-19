@@ -1,3 +1,6 @@
+Version 1.0-5 (2011-12-19)
+  + Add summarizeRows and summarizeColumns to summarize rows/columns by factor
+
 Version 1.0.4 (2011-12-16)
   + Add qqmsg (function and documentation) to quitely quit a R session.  
   + add libordie function to silently load a library when possible or kill the R session otherwise

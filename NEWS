@@ -1,5 +1,9 @@
 Version 1.0-6 (2011-12-20)
   + Following suggestions of Laura, the race prefix is changed into gti
+  + Thanks for Stan's feedback: ORACLE_BASE and ORACLE_HOME environment variables are set in the .onLoad function
+  + ORACLE_BASE is set when there is no environment variable, or the path pointed to by the variable does not contain the "client" subfolder.
+  + ORACLE_HOME is set when there is no environment variable, or the path pointed to by the variable does not contain the "bin" subfolder.
+  + To test the ribiosAnnotation in a free environment, use "exec env -i bash --norc".
 
 Version 1.0-4 (2011-12-16)
   + Current functions have been renamed to better reflect their functions

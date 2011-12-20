@@ -126,18 +126,18 @@ sortByCol <- function (data.frame, columns,
   return(res)
 }
 
-dfFactor <- function(dataframe, sample.group) {
-  if(!is.data.frame(dataframe))
+dfFactor <- function(df, sample.group) {
+  if(!is.data.frame(df))
     stop("The function takes a data.frame as input. Don't pass the ExpressionSet object\n")
   if(length(sample.group)==1 & is.character(sample.group)) {
-    stopifnot(sample.group %in% colnames(dataframe))
-    fac <- dataframe[, sample.group]
-  } else if (length(sample.group==1) & is.numeric(sample.group)) {
+    stopifnot(sample.group %in% colnames(df))
+    fac <- df[, sample.group]
+  } else if (length(sample.group)==1 & is.numeric(sample.group)) {
     sample.group <- as.integer(sample.group)
-    stopifnot(sample.group>=1L & sample.group <= ncol(dataframe))
-    fac <- dataframe[, sample.group]
+    stopifnot(sample.group>=1L & sample.group <= ncol(df))
+    fac <- df[, sample.group]
   } else {
-    stopifnot(length(sample.group) == nrow(dataframe))
+    stopifnot(length(sample.group) == nrow(df))
     fac <- sample.group
   }
   if(!is.factor(fac)) fac <- factor(fac)

@@ -1,0 +1,9 @@
+importClassesFrom("rrcov", "Pca", "PcaRobust", "PcaHubert")
+
+exportClass("PcaHubertExt")
+export("pcaHubertBiData")
+export("bidata")
+export("expvar")
+
+## obsolete
+export(primaryComponentsHubert)

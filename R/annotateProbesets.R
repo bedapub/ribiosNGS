@@ -1,7 +1,7 @@
 annotateProbesets <- function(ids, chip="HG-U133_PLUS_2") {
   ids <- as.character(ids)
 
-  chipAnn <- raceChipAnnotation(chip)
+  chipAnn <- gtiChipAnnotation(chip)
   chipAnnOrd <- matchColumn(ids, chipAnn, "ProbeID")
   if(identical(anyDuplicated(ids), 0L)) {
     rownames(chipAnnOrd) <- ids

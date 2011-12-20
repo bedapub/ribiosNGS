@@ -6,7 +6,7 @@
 }
 \description{
   Annotate probesets in chip types supported, as listed by the
-  \code{\link{raceChiptypes}} function.
+  \code{\link{gtiChiptypes}} function.
 }
 \usage{
 annotateProbesets(ids, chip = "HG-U133_PLUS_2")
@@ -37,15 +37,15 @@ annotateProbesets(ids, chip = "HG-U133_PLUS_2")
 Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \note{
-  Internally the function calls the \code{raceChipAnnotation} to first
+  Internally the function calls the \code{gtiChipAnnotation} to first
   query all annotations about the given chip. Subsequently they are
   matched against queried probesets, returning their annotations only.
 }
 
 \seealso{
-  See \code{\link{raceChiptypes}} for supported chip types.
+  See \code{\link{gtiChiptypes}} for supported chip types.
 
-  See \code{\link{raceChipAnnotation}} to get annotation for all
+  See \code{\link{gtiChipAnnotation}} to get annotation for all
   probesets in a chip.
 }
 \examples{

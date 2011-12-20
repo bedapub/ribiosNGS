@@ -1,7 +1,7 @@
 ## query current GeneID/GeneSymbol from BIOS Oracle
 gtiChipAnnotation <- function(chip) {
   if(missing(chip)) {
-    stop("'chip' cannot be be missing. Use 'raceChipnames()' to see supported chip names")
+    stop("'chip' cannot be be missing. Use 'gtiChipnames()' to see supported chip names")
   }
   con <- newcon()
   state <- paste("SELECT AFFY_ID, LL, GN, SINGLE_LL,PCHIP_NAME FROM bi.AFFYCHIP_XREF_LL where PCHIP_NAME='",

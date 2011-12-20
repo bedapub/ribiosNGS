@@ -4,7 +4,6 @@
 #include <math.h>
 #include <array.h>
 #include <log.h>
-#include "gsl/gsl_statistics.h"
 
 #include "ribios_utils.h"
 #include "ribios_utils.h"

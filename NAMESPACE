@@ -1,12 +1,15 @@
-export(raceChiptypes,
-       raceChipnames) ## synonymous
+export(gtiChiptypes,
+       gtiChipnames) ## synonymous
 
-export(raceChipAnnotation)
+export(gtiChipAnnotation)
 
 export(annotateProbesets)
 
 ## deprecated functions
 export(affychipNames,
-       biosCurrentGeneSymbol)
+       biosCurrentGeneSymbol,
+       raceChiptypes,
+       raceChipnames,
+       raceChipAnnotation)
 
 importFrom(ROracle, Oracle)

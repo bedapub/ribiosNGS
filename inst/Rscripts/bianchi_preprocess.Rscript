@@ -65,7 +65,7 @@ chiptype <- opts[[6L]]
 logfile <- opts[[7L]]
 
 ## check whether the chiptype is valid
-isChipValid <- !is.null(chiptype) && tolower(chiptype) %in% tolower(raceChipnames())
+isChipValid <- !is.null(chiptype) && tolower(chiptype) %in% tolower(gtiChipnames())
 
 ## do feature annotation: chiptype takes priority
 if(!is.null(ffile) || isChipValid) {

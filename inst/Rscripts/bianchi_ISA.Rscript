@@ -2,4 +2,105 @@
 
 ## Rscript command-line interface to the ISA algorithm
 ## Jitao David Zhang <jitao_david.zhang@roche.com>
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
 
+input.file <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+if(is.null(input.file) | is.null(output.file) | getHelp) {
+  qqmsg(paste("\nUsage: bianchi_ISA.Rscript -infile infile.RData -outfile outfile.bic OPTIONS\n\n",
+              "-infile infile.RData\tInput file\n",
+              "\t\t\tCan be a binary .RData file (when -binary is provided) or an expression matrix in tab-delimited or gct format\n",
+              "-outfile outfile.bic\tOutput file, recording biclusters determined by the ISA algorithm\n",
+              "\n",
+              "OPTIONS can be one or more of following optional parameters\n",
+              "[-binary]\t\tIf given, the input file is binary (.RData). Otherwise the input file is treated as plain text file (tab or gct)\n",
+              "[-seed integer]\tThe initial random number seed\n",
+              "\t\t\tDefault value:1234\n",
+              "[-seedNo integer]\tHow many seeds should be generated to detect biclusters\n",
+              "\t\t\tDefault value:100\n",
+              "[-sparsity num_array]\tAn array of numbers, separated by commas, indicating the sparsity of seeds\n",
+              "\t\t\tDefault value:2\n",
+              "[-geneThr num_array]\tAn array of numbers, separated by commas, indicating the thresholds of genes\n",
+              "\t\t\tDefault value:2,3,4\n",
+              "[-condThr num_array]\tAn array of numbers, separated by commas, indicating the thresholds of conditions\n",
+              "\t\t\tDefault value:1,2,3\n",
+              "[-coreNo integer]\tHow many CPU cores should be used to find biclusters\n",
+              "\t\t\tDefault value:1\n",
+              "[-parafile para.out]\tIf given, the parameters are written in output file\n",
+              collapse=" "),
+        status=1L)
+}
+
+libordie(ribiosExpression)
+libordie(ribiosBic)
+
+isBinary <- getArg("binary", onlyArg=TRUE, missingArg=FALSE)
+
+if(isBinary) {
+  load(input.file)
+  if(!exists("eset")) {
+    qqmsg("Error: when -binary is set, the input file must be an .RData file containing an ExpressionSet object named \"eset\".\n",
+          "'eset' was however not found in the given file. Program stops\n",
+          status=1L)
+  }
+} else {
+  eset <- readExprsMatrix(input.file)
+}
+
+opts <- getArg(c("seed", "seedNo",
+                 "sparsity", "geneThr", "condThr", "coreNo", "parafile"),
+               onlyArg=NULL, missingArg=NULL)
+seed <- ifelse(is.null(opts[["seed"]]),
+               1234,
+               parseNumVec(opts[["seed"]],
+                           expLen=1L,failVal=1234L))
+seedNo <- ifelse(is.null(opts[["seedNo"]]),
+                 100L,
+                 parseNumVec(opts[["seedNo"]],
+                             expLen=1L, failVal=100L))
+coreNo <- ifelse(is.null(opts[["coreNo"]]),
+                 1L,
+                 parseNumVec(opts[["coreNo"]],
+                             expLen=1L, failVal=1L))
+myParse <- function(chr, defVal) {
+  if(is.null(opts[[chr]])) {
+    res <- defVal
+  } else {
+    res <- parseNumVec(opts[[chr]], expLen=NULL, failVal=defVal)
+  }
+  res
+}
+sparsity <- myParse("sparsity", 2)
+geneThr <- myParse("geneThr", c(2,3,4))
+condThr <- myParse("condThr", c(1,2,3))
+
+set.seed(seed)
+eset.isa <- ribiosISA(data=eset,
+                      thr.gene = geneThr,
+                      thr.cond = condThr,
+                      sparsity=sparsity,
+                      no.seeds=seedNo,
+                      mc.cores=coreNo)
+if(length(eset.isa)>0) {
+  eset.isa.bic <- as(eset.isa, "Biclust")
+  writeBiclusterResults(output.file,
+                        eset.isa.bic,
+                        bicName="Iterative Search Algorithm",
+                        geneNames=featureNames(eset.isa),
+                        arrayNames=sampleNames(eset.isa),
+                        delimiter=";")
+} else {
+  writeLines("Iterative Search Algorithm",
+             output.file)
+}
+  
+if(!is.null(opts[["parafile"]])) {
+  parafile <- opts[["parafile"]]
+  eset.isa.param <- seedData(eset.isa)
+  write.table(eset.isa.param,
+              parafile,
+              sep="\t", row.names=FALSE, quote=FALSE)
+}
+qqmsg(status=0L)

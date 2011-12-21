@@ -1,3 +1,6 @@
+Version 1.0-7 (2011-12-21)
+  + Add equi join of bi.EG_GENE_INFO to gtiChipAnnotation, in order to get GeneNames annotated
+
 Version 1.0-6 (2011-12-20)
   + Following suggestions of Laura, the race prefix is changed into gti
   + Thanks for Stan's feedback: ORACLE_BASE and ORACLE_HOME environment variables are set in the .onLoad function

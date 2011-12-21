@@ -64,59 +64,51 @@ summfeat <- opts[[5L]]
 chiptype <- opts[[6L]]
 logfile <- opts[[7L]]
 
+##-------------------- Feature Annotation --------------------##
 ## check whether the chiptype is valid
 isChipValid <- !is.null(chiptype) && tolower(chiptype) %in% tolower(gtiChipnames())
 
-## do feature annotation: chiptype takes priority
-if(!is.null(ffile) || isChipValid) {
-  fnames <- rownames(exp)
-  if(!is.null(ffile)) {
-    ffdata <- readFKtable(ffile, fk=fnames, strict.order=FALSE)
-    fsuc <- TRUE
-  }
-  if(isChipValid) {
-    cfdata <- annotateProbesets(id=fnames, chiptype)
+## do chiptype annotation
+fdata <- data.frame(row.names=rownames(exp))
+fnames <- rownames(exp)
+if(isChipValid) {
+  cfdata <- try(annotateProbesets(id=fnames, chiptype))
+  if(!isError(cfdata)) {
+    fdata <- cbind(fdata, cfdata)
     chipsuc <- TRUE
   }
-  if(fsuc && chipsuc) {
-    fdata <- cbind(cfdata, ffdata)
-    colnames(fdata) <- make.unique(colnames(fdata))
-  } else if (fsuc) {
-    fdata <- ffdata
-  } else if (chipsuc) {
-    fdata <- cfdata
-  } else {
-    qqmsg("Unsuccessful feature annotation", status=3);
-  }
-} else {
-  fdata <- data.frame(row.names=rownames(exp))
 }
 
-## do sample annotation:
-if(!is.null(pfile) || !is.null(clsfile) ) {
-  snames <- colnames(exp)
-  if(!is.null(pfile)) {
-    fpdata <- readFKtable(pfile, fk=snames, strict.order=FALSE)
-    psuc <- TRUE
+## do feature annotation
+if(!is.null(ffile)) {
+  ffdata <- try(readFKtable(ffile, fk=fnames, strict.order=FALSE))
+  if(!isError(ffdata)) {
+    fsuc <- TRUE
+    fdata <- cbind(fdata, ffdata)
   }
-  if(!is.null(clsfile)) {
-    cls <- readCls(clsfile)
-    cpdata <- data.frame(class=cls)
+}
+colnames(fdata) <- make.unique(colnames(fdata), sep="_")
+rownames(fdata) <- rownames(exp)
+
+##-------------------- Sample Annotation --------------------##
+pdata <- data.frame(row.names=colnames(exp))
+snames <- colnames(exp)
+if(!is.null(clsfile)) {
+  cls <- try(readCls(clsfile))
+  if(!isError(cls)) {
+    pdata <- cbind(pdata, data.frame(class=cls))
     clssuc <- TRUE
   }
-  if(psuc && clssuc) {
-    pdata <- cbind(cpdata, fpdata)
-    colnames(pdata) <- make.unique(colnames(pdata))
-  } else if (psuc) {
-    pdata <- fpdata
-  } else if (clssuc) {
-    pdata <- cpdata
-  } else {
-    qqmsg("Unsuccessful sample annotation", status=3);
-  }
-} else {
-  pdata <- data.frame(row.names=colnames(exp))
 }
+if(!is.null(pfile)) {
+  fpdata <- try(readFKtable(pfile, fk=snames, strict.order=FALSE))
+  if(!isError(fpdata)) {
+    pdata <- cbind(pdata, fpdata)
+    psuc <- TRUE    
+  }
+}
+colnames(pdata) <- make.unique(colnames(pdata), sep="_")
+rownames(pdata) <- colnames(exp)
 
 ## build eset
 eset <- new("ExpressionSet",
@@ -127,6 +119,7 @@ eset <- new("ExpressionSet",
 ## do invariant feature filtering
 if(!is.null(topvar)) {
   varno <- parseNumVec(topvar, expLen=1L, failVal=0L)
+  varno <- pmin(varno, nrow(exp))
   evar <- apply(exp, 1L, IQR)
   evar.ord <- order(evar, decreasing=TRUE)
   isVar <- evar >= evar[ evar.ord[varno] ]
@@ -141,23 +134,24 @@ if(!is.null(summfeat) && !identical(tolower(summfeat), "false")) {
     eset <- summarizeProbesets(eset,
                                index.name="GeneID",
                                fun=mean,
-                               keep.nonindex=FALSE) 
+                               keep.nonindex=FALSE)
   } else if (fsuc) {
     i <- 1
-    while(!identical(as.character(fpdata[,i,drop=TRUE]), rownames(exp))) {
+    while(!identical(as.character(fdata[,i,drop=TRUE]), rownames(exp))) {
       i <- i+1;
-      if(i>ncol(fpdata))
+      if(i>ncol(fdata)) {
         i <- NULL
+        break;
+      }
     }
     if(!is.null(i)) {
       eset <- summarizeProbesets(eset,
-                                 index.name=colnames(fpdata)[i],
+                                 index.name=colnames(fdata)[i],
                                  fun=mean,
                                  keep.nonindex=FALSE)
     }
   }
 }
-
 ## write ExpressionSet in file
 save(eset, file=output.file)
 qqmsg(status=0)

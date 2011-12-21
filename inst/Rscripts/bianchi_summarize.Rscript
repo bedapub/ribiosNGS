@@ -2,3 +2,21 @@
 
 ## Summarize and report results from two or more biclustering algorithms
 ## Jitao David Zhang <jitao_david.zhang@roche.com>
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+input.file <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+if(is.null(input.file) | is.null(output.file) | getHelp) {
+  qqmsg(paste("\nUsage: bianchi_summarize.Rscript -infile infile1 [infile2 ...] -eset Rdata -outfile outfile\n\n",
+              "-infile infile1 [...]\tInput file(s) containing biclusters\n",
+              "-eset RData\t\tBinary .RData file containing the ExpressionSet object, for which the biclusters were determined\n",
+              "-outfile outfile\tOutput file, a html file summarizing all biclusters\n",
+              "\n",
+              collapse=" "),
+        status=1L)
+}
+
+libordie(ExpressionView)

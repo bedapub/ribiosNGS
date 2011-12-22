@@ -5,6 +5,9 @@ export(gtiChipAnnotation)
 
 export(annotateProbesets)
 
+export(gti2bioc, bioc2gti)
+
+
 ## deprecated functions
 export(affychipNames,
        biosCurrentGeneSymbol,

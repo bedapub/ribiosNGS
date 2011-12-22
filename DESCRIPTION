@@ -7,4 +7,5 @@ Author: Jitao David Zhang <jitao_david.zhang@roche.com>, with inputs from Laura 
 Maintainer:  Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Annotate human genes, RNAs and proteins with information deposited in the Oracle database of the BIOS system. 
 Depends: ribiosUtils, ROracle
+LazyData: true
 License: GPL-3

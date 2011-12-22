@@ -21,14 +21,16 @@ if(is.null(input.file) | is.null(output.file) | getHelp) {
               "\t\t\tDefault value:1234\n",
               "[-rank num_array]\tInteger array of the discretize ranks\n",
               "\t\t\tDefault value:1\n",
-              "[-cond num_array]\tNumber array between 0-0.5, the estimated (half) proportions of biclusters\n",
+              "[-prop num_array]\tNumber array between 0-0.5, the estimated (half) proportions of biclusters\n",
               "\t\t\tDefault value:0.45\n",
               "[-report integer]\tNumber of reported biclusters in each parameter setting\n",
-              "\t\t\tDefault value:50\n",
+              "\t\t\tDefault value:20\n",
               "[-tolerance number]\tProportion of homogenous features/samples in biclusters\n",
               "\t\t\tDefault value:0.95\n",
               "[-filter number]\tThreshold of biclustering filtering by overlapping\n",
-              "\t\t\tDefault value:0.10\n",
+              "\t\t\tDefault value:0.25\n",
+              "[-coreNo integer]\tHow many CPU cores should be used to find biclusters\n",
+              "\t\t\tDefault value:1\n",
               "[-parafile para.out]\tIf given, the parameters are written in output file\n",
               collapse=" "),
         status=1L)
@@ -37,6 +39,7 @@ if(is.null(input.file) | is.null(output.file) | getHelp) {
 libordie(rqubic)
 libordie(ribiosExpression)
 libordie(ribiosBic)
+libordie(multicore)
 
 isBinary <- getArg("binary", onlyArg=TRUE, missingArg=FALSE)
 if(isBinary) {
@@ -51,12 +54,17 @@ if(isBinary) {
 }
 
 opts <- getArg(c("seed", "rank",
-                 "cond", "report", "tolerance", "filter", "parafile"),
+                 "prop", "report", "tolerance", "filter", "coreNo", "parafile"),
 		onlyArg=NULL, missingArg=NULL)
 seed <- ifelse(is.null(opts[["seed"]]),
                1234,
                parseNumVec(opts[["seed"]],
                            expLen=1L, failVal=1234))
+coreNo <- ifelse(is.null(opts[["coreNo"]]),
+                 1L,
+                 parseNumVec(opts[["coreNo"]],
+                             expLen=1L, failVal=1L))
+
 set.seed(seed)
 
 myParse <- function(chr, defVal) {
@@ -67,23 +75,34 @@ myParse <- function(chr, defVal) {
   }
   res
 }
-rank <- myParse("rank", 1L)
-prop <- myParse("prop", 0.45)
-report <- myParse("report", 100L)
-tolerances <- myParse("tolerance", 0.95)
-filter <- myParse("filter",0.10)
+ranks <- myParse("rank", 1L)
+props <- myParse("prop", 0.45)
+report <- myParse("report", 20L)
+tolerance <- myParse("tolerance", 0.95)
+filter <- myParse("filter",0.25)
 
-reslist <- vector("list")
+paras <- expand.grid(ranks, props)
+qf <- function(i) {
+  rank <- paras[i,1L]; prop <- paras[i,2L]
+  eset.disc <- quantileDiscretize(eset,
+                                  rank=rank,
+                                  q=prop)
+  eset.seeds <- generateSeeds(eset.disc)
+  eset.rqubic <- quBicluster(eset.seeds, eset.disc,
+                             report.no=report,
+                             tolerance=tolerance,
+                             filter.proportion=filter)
+}
+coreNo <- pmin(coreNo, nrow(paras))
+eset.rqubic.list <- mclapply(1:nrow(paras),
+                             qf,
+                             mc.cores=coreNo)
 
-## biclustering with rqubic
-eset.disc <- quantileDiscretize(eset,
-                                rank=rank,
-                                q=prop)
-eset.seeds <- generateSeeds(eset.disc)
-eset.rqubic <- quBicluster(eset.seeds, eset.disc,
-                           report.no=report,
-                           tolerance=tolerance,
-                           filter.proportion=filter)
+if(nrow(paras) > 1) {
+  eset.rqubic <- combineBiclusts(eset.rqubic.list)
+} else {
+  eset.rqubic <- eset.qubic.list[[1]]
+}
 
 writeBiclusterResults(output.file,
                       eset.rqubic,

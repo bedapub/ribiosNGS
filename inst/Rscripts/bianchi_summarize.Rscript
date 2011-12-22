@@ -8,15 +8,93 @@ suppressMessages(library(ribiosArg))
 
 input.file <- getArg("infile", onlyArg=NULL, missingArg=NULL)
 output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+exp.file <- getArg("expfile", onlyArg=NULL, missingArg=NULL)
 getHelp <- existArg("h") | existArg("help")
-if(is.null(input.file) | is.null(output.file) | getHelp) {
-  qqmsg(paste("\nUsage: bianchi_summarize.Rscript -infile infile1 [infile2 ...] -eset Rdata -outfile outfile\n\n",
+if(is.null(input.file) || is.null(output.file) || is.null(exp.file) || getHelp) {
+  qqmsg(paste("\nUsage: bianchi_summarize.Rscript -infile infile1 [infile2 ...] -eset Rdata -outfile outfile OPTS\n\n",
               "-infile infile1 [...]\tInput file(s) containing biclusters\n",
-              "-eset RData\t\tBinary .RData file containing the ExpressionSet object, for which the biclusters were determined\n",
-              "-outfile outfile\tOutput file, a html file summarizing all biclusters\n",
+              "-expfile file\t\tFile containing expression data, for which the biclusters were determined\n",
+              "\t\t\tSupporting RData binary file when -binary is set, tab-limited files, and gct files\n",
+              "-outfile outfile\tOutput file, a html file summarizing all biclusters\n\n",
+              "Optional parameters:\n",
+              "-binary\t\tIf set, the expfile is binary\n",
+              "-sortTime integer\t\tTime (in seconds) to sort biclusters into a optimal order. Default is 60.\n",
+              "-chiptype chiptype\tChiptype supported by GTI. Only useful when input file is plain text",
               "\n",
               collapse=" "),
         status=1L)
 }
 
+libordie(rqubic)
+libordie(eisa)
+libordie(ribiosAnnotation)
+libordie(ribiosExpression)
 libordie(ExpressionView)
+
+if(any(!file.exists(input.file)))
+  qqmsg("Error: Following input files does not exist:\n\t",
+	paste(input.file[!file.exists(input.file)], sep="\n"),
+        status=1L)
+if(!identical(length(output.file),1L))
+  qqmsg("Error: -outfile option value must be of length 1\n", status=1L)
+if(!identical(length(exp.file), 1L) || !file.exists(exp.file))
+  qqmsg("Error: -expfile must contain one existing file\n", status=1L)
+
+st <- getArg("sortTime", onlyArg=NULL, missingArg=NULL)
+sortTime <- ifelse(is.null(st),
+                   st,
+                   parseNumVec(st, 1, 60))
+
+## build exp data
+isBinary <- getArg("binary", onlyArg=TRUE, missingArg=FALSE)
+if(isBinary) {
+  load(exp.file)
+  if(!exists("eset"))
+    qqmsg("Error: when -binary is set, the input file must be an .RData file containing an ExpressionSet object named \"eset\".\n",
+          "'eset' was however not found in the given file. Program stops\n",
+          status=1L)
+} else {
+  eset <- readExprsMatrix(exp.file)
+}
+
+## annotation
+gtiCt <- gtiChiptypes()
+ianno <- annotation(eset)
+if(!is.na(ianno) && length(ianno)>0 && !identical(ianno,"")) {
+  chiptype <- getArg("chiptype", onlyArg=NULL, missingArg=NULL)
+  if(!is.null(chiptype)) {
+    if(!chiptype %in% gtiCt)
+      stop("Error: chiptype ", chiptype, " not supported by GTI\n")
+    annotation(eset) <- chiptype
+  }
+}
+ianno <- annotation(eset)
+if(identical(length(ianno),1L) && ianno %in% gtiCt) {
+  anno <- gti2bioc(annotation(eset))
+  if(!is.na(anno))
+    annotation(eset) <- anno
+} else {
+  annotation(eset) <- "hgu133plus2" ## backup when no valid annotation is available
+}
+
+## read in bic data
+bics <- lapply(input.file,
+               readBiclusterResults,
+               featureNames=featureNames(eset),
+               sampleNames=sampleNames(eset),
+               delimiter=";")
+bic <- combineBiclusts(bics)
+
+## order and display
+orderModules <- function(modules) {
+  opt.ord.int <- OrderEV(modules)
+  opt.ord <- OrderEV(modules, initialorder=opt.ord.int, maxtime=sortTime)
+  return(opt.ord)
+}
+bic.order <- orderModules(bic)
+ExportEV(bic,
+         eset,
+         order=bic.order,
+         filename=output.file)
+
+qqmsg(status=0)

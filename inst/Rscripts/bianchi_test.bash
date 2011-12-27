@@ -24,9 +24,13 @@ ${RS_DIR}/bianchi_preprocess.Rscript -infile ${DATA_DIR}/sample.gct -clsfile ${D
 ## testing RData->ISA
 ./bianchi_ISA.Rscript -infile ${OUT_DIR}/bianchi_test_tab.RData -binary -outfile ${OUT_DIR}/bianchi_test_tab.isa.bic
 
+## testing RData -> rqubic
 ./bianchi_QUBIC.Rscript -infile ${OUT_DIR}/bianchi_test_tab.RData -binary -outfile ${OUT_DIR}/bianchi_test_tab.qubic.bic
 ./bianchi_QUBIC.Rscript -infile ${OUT_DIR}/bianchi_test_tab.RData -binary -rank 1 -prop 0.1 -outfile ${OUT_DIR}/bianchi_test_tab.qubic.nocore.bic
 ./bianchi_QUBIC.Rscript -infile ${OUT_DIR}/bianchi_test_tab.RData -binary -rank 1,2,3 -prop 0.1,0.2,0.4 -coreNo 3 -outfile ${OUT_DIR}/bianchi_test_tab.qubic_core.bic
 ./bianchi_QUBIC.Rscript -infile ${DATA_DIR}/sample_exprs.txt -rank 1,3 -prop 0.1,0.2 -coreNo 3 -outfile ${OUT_DIR}/bianchi_test_tab.qubic_txt.bic
 ./bianchi_QUBIC.Rscript -infile ${DATA_DIR}/sample.gct -rank 1,3 -prop 0.1,0.2 -coreNo 3 -outfile ${OUT_DIR}/bianchi_test_tab.qubic_gct.bic -parafile ${OUT_DIR}/bianchi_test_tab.qubic_gct.para
 ./bianchi_QUBIC.Rscript -infile ${OUT_DIR}/bianchi_test_tab.RData -binary -rank 1,2 -prop 0.1,0.4 -coreNo 3 -outfile ${OUT_DIR}/bianchi_test_tab_all.qubic.bic -tolerance 0.85 -filter 0.1 -report 10 -parafile ${OUT_DIR}/bianchi_test_tab_all.qubic.para
+
+
+## testing ISA+rqubic->bic

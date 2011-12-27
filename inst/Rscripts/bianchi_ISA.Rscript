@@ -26,7 +26,7 @@ if(is.null(input.file) | is.null(output.file) | getHelp) {
               "\t\t\tDefault value:2,3,4\n",
               "[-condThr num_array]\tAn array of numbers, separated by commas, indicating the thresholds of conditions\n",
               "\t\t\tDefault value:1,2,3\n",
-              "[-coreNo integer]\tHow many CPU cores should be used to find biclusters\n",
+              "[-coreno integer]\tHow many CPU cores should be used to find biclusters\n",
               "\t\t\tDefault value:1\n",
               "[-parafile para.out]\tIf given, the parameters are written in output file\n",
               collapse=" "),
@@ -50,7 +50,7 @@ if(isBinary) {
 }
 
 opts <- getArg(c("seed", "seedNo",
-                 "sparsity", "geneThr", "condThr", "coreNo", "parafile"),
+                 "sparsity", "geneThr", "condThr", "coreno", "parafile"),
                onlyArg=NULL, missingArg=NULL)
 seed <- ifelse(is.null(opts[["seed"]]),
                1234,
@@ -60,9 +60,9 @@ seedNo <- ifelse(is.null(opts[["seedNo"]]),
                  100L,
                  parseNumVec(opts[["seedNo"]],
                              expLen=1L, failVal=100L))
-coreNo <- ifelse(is.null(opts[["coreNo"]]),
+coreno <- ifelse(is.null(opts[["coreno"]]),
                  1L,
-                 parseNumVec(opts[["coreNo"]],
+                 parseNumVec(opts[["coreno"]],
                              expLen=1L, failVal=1L))
 myParse <- function(chr, defVal) {
   if(is.null(opts[[chr]])) {
@@ -82,7 +82,7 @@ eset.isa <- ribiosISA(data=eset,
                       thr.cond = condThr,
                       sparsity=sparsity,
                       no.seeds=seedNo,
-                      mc.cores=coreNo)
+                      mc.cores=coreno)
 if(length(eset.isa)>0) {
   eset.isa.bic <- as(eset.isa, "Biclust")
   writeBiclusterResults(output.file,

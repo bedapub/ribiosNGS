@@ -29,7 +29,7 @@ if(is.null(input.file) | is.null(output.file) | getHelp) {
               "\t\t\tDefault value:0.95\n",
               "[-filter number]\tThreshold of biclustering filtering by overlapping\n",
               "\t\t\tDefault value:0.25\n",
-              "[-coreNo integer]\tHow many CPU cores should be used to find biclusters\n",
+              "[-coreno integer]\tHow many CPU cores should be used to find biclusters\n",
               "\t\t\tDefault value:1\n",
               "[-parafile para.out]\tIf given, the parameters are written in output file\n",
               collapse=" "),
@@ -54,15 +54,15 @@ if(isBinary) {
 }
 
 opts <- getArg(c("seed", "rank",
-                 "prop", "report", "tolerance", "filter", "coreNo", "parafile"),
+                 "prop", "report", "tolerance", "filter", "coreno", "parafile"),
 		onlyArg=NULL, missingArg=NULL)
 seed <- ifelse(is.null(opts[["seed"]]),
                1234,
                parseNumVec(opts[["seed"]],
                            expLen=1L, failVal=1234))
-coreNo <- ifelse(is.null(opts[["coreNo"]]),
+coreno <- ifelse(is.null(opts[["coreno"]]),
                  1L,
-                 parseNumVec(opts[["coreNo"]],
+                 parseNumVec(opts[["coreno"]],
                              expLen=1L, failVal=1L))
 
 set.seed(seed)
@@ -93,10 +93,10 @@ qf <- function(i) {
                              tolerance=tolerance,
                              filter.proportion=filter)
 }
-coreNo <- pmin(coreNo, nrow(paras))
+coreno <- pmin(coreno, nrow(paras))
 eset.rqubic.list <- mclapply(1:nrow(paras),
                              qf,
-                             mc.cores=coreNo)
+                             mc.cores=coreno)
 
 if(nrow(paras) > 1) {
   eset.rqubic <- combineBiclusts(eset.rqubic.list)

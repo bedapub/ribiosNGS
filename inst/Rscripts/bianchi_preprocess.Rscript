@@ -24,7 +24,6 @@ if(is.null(input.file) | is.null(output.file) | getHelp) {
               "[-topvar integer]\t Number of features to be kept after filtering low-variance features\n",
               "[-summfeat true/false]\t\twhether the program should try to summarize features\n",
               "[-chiptype chip_type]\t\tExpression chip type supported by pRED\n",
-              "[-logfile log_filename]\tprint important statistics regarding the preprocessing to the file\n",
               collapse=" "),
         status=1L)
 }
@@ -54,7 +53,7 @@ psuc <- FALSE
 sfsuc <- FALSE
 clssuc <- FALSE
 
-opts <- getArg(c("ffile", "pfile", "clsfile", "topvar", "summfeat", "chiptype", "logfile"),
+opts <- getArg(c("ffile", "pfile", "clsfile", "topvar", "summfeat", "chiptype"),
                onlyArg=NULL, missingArg=NULL)
 ffile <- opts[[1L]]
 pfile <- opts[[2L]]
@@ -62,7 +61,6 @@ clsfile <- opts[[3L]]
 topvar <- opts[[4L]]
 summfeat <- opts[[5L]]
 chiptype <- opts[[6L]]
-logfile <- opts[[7L]]
 
 ##-------------------- Feature Annotation --------------------##
 ## check whether the chiptype is valid

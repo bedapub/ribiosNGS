@@ -36,6 +36,3 @@ readFKtable <- function(file, fk,
     }
   }
 }
-    
-    
-

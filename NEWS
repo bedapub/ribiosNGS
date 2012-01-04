@@ -1,3 +1,18 @@
+Version 1.0-10 (Jan 04, 2012)
+  + Bugfix in readEset: Previous versions report error when importing expression matrices with numeric values as column names. The burg is caused by the default behaviour of the 'read.table' function, which appends a prefix (by default X) to the column names and thus cause the readFKtable function to fail. This has been fixed now.
+  + 
+
+Version 1.0-9 (Jan 03, 2012)
+  + Add the function kendallW and a S4-method kendallWmat. One of their usages is to detect sub-groups of probesets showing strong expression correlation. 
+
+Version 1.0-8 (Dec 20, 2011)
+  + PCA-related data structures and functions are re-factored into the ribiosPCA package.
+
+Version 1.0-7 (Dec 19, 2011)
+  + add summarizeProbesets to summarize probesets
+  + NAMESPACE are now explicitly stated
+  + apply2 and summarizeRows have been removed since they are now part of the ribiosUtils package.
+
 Version 1.0-6 (Dec 16, 2011)
   + Add dependency on the ribiosAnnotation package
   + Add writeEset and readEset functions for importing/exporting ExpressionSet objects.

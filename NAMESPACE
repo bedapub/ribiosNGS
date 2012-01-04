@@ -1,7 +1,46 @@
-exportPattern("^[[:alpha:]]+")
-
-importClassesFrom("rrcov", "Pca", "PcaRobust", "PcaHubert")
-
 importFrom("ribiosIO", "read_gct_matrix")
 importFrom("ribiosUtils", "rowscale")
 
+
+export("rowscale")
+export("keepMaxStatProbe")
+
+## GSEA
+export("biosGSEAannotations",
+       BIOS_GSEA_ANNOTATION_DIR,
+       "biosGSEA",
+       "grp2gmt",
+       "ks", "sScore", "cmap", "sprintGmt")
+
+## IO: import
+export("readExprsMatrix")
+export("ChipFetcher2ExpressionSet",
+       "partek2ExpressionSet")
+export("readGct",
+       "readCls",
+       "readGctCls")
+export("readEset")
+export("readFKtable")
+
+## IO: export
+export("writeGct",
+       "writeCls",
+       "writeGctCls")
+export("writeEset")
+
+## eset
+export("mergeEset")
+
+## summarization/collapsing
+export(summarizeProbesets)
+
+## transformation
+export("matrixToLongTable")
+export("exprsToLong")
+export("eSetToLongTable")
+
+## kendallW
+export("kendallW", "kendallWmat")
+
+## obsolete
+export(remainHighestVarProbe, keepHighestVarProbe, rankByCol, eset2gct, eset2cls)

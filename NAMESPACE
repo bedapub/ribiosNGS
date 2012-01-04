@@ -42,5 +42,8 @@ export("eSetToLongTable")
 ## kendallW
 export("kendallW", "kendallWmat")
 
+## annotation
+export("annotate", "reannotate")
+
 ## obsolete
 export(remainHighestVarProbe, keepHighestVarProbe, rankByCol, eset2gct, eset2cls)

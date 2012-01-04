@@ -1,6 +1,7 @@
 Version 1.0-10 (Jan 04, 2012)
   + Bugfix in readEset: Previous versions report error when importing expression matrices with numeric values as column names. The burg is caused by the default behaviour of the 'read.table' function, which appends a prefix (by default X) to the column names and thus cause the readFKtable function to fail. This has been fixed now.
-  + 
+  + Add annotate and reannotate: to annotate ExpressionSet objects with information from GTI. Both are S4 methods with documentations and examples.
+  + Add documentation for the ribios.ExpressionSet object.
 
 Version 1.0-9 (Jan 03, 2012)
   + Add the function kendallW and a S4-method kendallWmat. One of their usages is to detect sub-groups of probesets showing strong expression correlation. 

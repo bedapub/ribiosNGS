@@ -48,3 +48,14 @@ sys.fonly <- readEset(exprs.file=sysexp,
 sys.minimum <- readEset(exprs.file=sysexp,
                         fData.file=NULL,
                         pData.file=NULL)
+
+## readEset is able to deal with number-only column names
+nset <- sample.ExpressionSet
+sampleNames(sample.ExpressionSet) <- 1:dim(sample.ExpressionSet)[2]
+writeEset(sample.ExpressionSet,
+          exprs.file=expfile,
+          fData.file=ffile,
+          pData.file=pfile)
+readEset(exprs.file=expfile,
+         fData.file=ffile,
+         pData.file=pfile)

@@ -1,27 +1,33 @@
-meanProbe <- function(eset, probe.index.name) {
-  stopifnot(probe.index.name %in% colnames(fData(eset)))
+summarizeProbesets <- function(eset,
+                               index.name,
+                               fun=mean,
+                               keep.nonindex=FALSE) {
   
-  probe.index <- as.character(fData(eset)[,probe.index.name])
+  if(missing(index.name) || !index.name %in% colnames(fData(eset))) {
+    stop("'index.name' must be a valid column name in fData(", as.character(match.call()$eset), ")")
+  }
+  fun <- match.fun(fun)
+  
+  probe.index <- as.character(fData(eset)[,index.name])
   probe.has.index <- !is.na(probe.index) & probe.index != "" 
   eset.indexed <- eset[probe.has.index,]
-
-  probe.indexed.fac <- factor(fData(eset.indexed)[,probe.index.name])
-  probe.by.index <- split(1:dim(eset.indexed)[1], probe.indexed.fac)
-  myMean <- function(x) {
-    if(nrow(x)==1) {
-      return(x)
-    } else {
-      return(colMeans(x))
-    }
-  }
-  exp <- exprs(eset.indexed)
-  eset.mean <- t(sapply(probe.by.index, function(x) myMean(exp[x,,drop=FALSE])))
-  rm(exp)
-
-  mean.fd.match <- match(levels(probe.indexed.fac), probe.index)
   
-  eset.remain <- eset[mean.fd.match,]
-  exprs(eset.remain) <- eset.mean
+  probe.indexed.fac <- factor(fData(eset.indexed)[,index.name])
+  eset.fun <- summarizeRows(exprs(eset.indexed),
+                            probe.indexed.fac,
+                            fun=fun)
 
+  fun.fd.match <- match(levels(probe.indexed.fac), probe.index)
+  eset.remain <- eset[fun.fd.match,]
+  exprs(eset.remain) <- eset.fun
+
+  if(keep.nonindex) {
+    eset.inval <- eset[!probe.has.index,]
+    fData(eset.remain) <- rbind(fData(eset.remain),
+                                fData(eset.inval))
+    exprs(eset.remain) <- rbind(exprs(eset.remain),
+                                exprs(eset.inval))
+  }
+  
   return(eset.remain)
 }

@@ -1,14 +1,6 @@
 ## read matrix
 readExprsMatrix <- function(x) {
-  x.first <- readLines(con=x, n=5L, warn=FALSE)
-  if(grepl("\\#1.2", x.first[1])) {
-    return(readGct(x)) ## GCT file allowed
-  } else if(any(grepl("\t", x.first))) { ## tab delimited file
-    df <- read.table(x, sep="\t", row.names=1L, header=TRUE, check.names=FALSE)
-  } else { ## space delimited file
-    df <- read.table(x, sep="", check.names=FALSE)
-  }
-  exp <- data.matrix(df)
+  exp <- read_exprs_matrix(x)
   res <- new("ExpressionSet",
              exprs=exp,
              phenoData=new("AnnotatedDataFrame",
@@ -20,8 +12,8 @@ readExprsMatrix <- function(x) {
 
 ## import ChipFetcher output files as ExpressionSet
 ChipFetcher2ExpressionSet <- function(filename,
-                                      annotation="hgu133a") {
-  pre.scan <- scan(filename, what="character", sep="\n", nmax=200L)
+                                      annotation="HG-U133A") {
+  pre.scan <- scan(filename, what="character", sep="\n", nmax=200L, quiet=TRUE)
   probe.start <- grep("^[0-9]", pre.scan)[1L]
   ncols <- length(strsplit(pre.scan[probe.start],"\t")[[1L]])
   

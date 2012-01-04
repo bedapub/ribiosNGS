@@ -13,7 +13,8 @@ writeEset <- function(eset,exprs.file,fData.file,pData.file) {
 }
 
 readEset <- function(exprs.file,fData.file,pData.file) {
-  ef <- data.matrix(read.table(exprs.file))
+  ef <- data.matrix(read.table(exprs.file,
+                               check.names=FALSE))
   if(!missing(fData.file) && !is.null(fData.file)) {
     ff <- readFKtable(fData.file, rownames(ef))
     fd <- new("AnnotatedDataFrame", ff)

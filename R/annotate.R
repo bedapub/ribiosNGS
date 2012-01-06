@@ -1,5 +1,5 @@
 setGeneric("annotate",
-           function(object, target, ...) standardGeneric("annotate"))
+           function(object, target, check.target, ...) standardGeneric("annotate"))
 
 annChar <- function(object, target, check.target=FALSE) {
   if(check.target) {
@@ -12,8 +12,8 @@ annChar <- function(object, target, check.target=FALSE) {
 }
 
 setMethod("annotate",
-          c("ExpressionSet", "character"),
-          function(object, target, check.target=FALSE) {
+          c("ExpressionSet", "character", "logical"),
+          function(object, target, check.target) {
             ann <- annChar(featureNames(object),
                             target,
                             check.target=check.target)
@@ -22,17 +22,26 @@ setMethod("annotate",
             return(object)
           })
 setMethod("annotate",
-          c("character", "character"),
-          function(object, target, check.target=FALSE) {
+          c("ExpressionSet", "character","missing"),
+          function(object, target) {
+            annotate(object, target, check.target=FALSE)
+          })
+setMethod("annotate",
+          c("character", "character", "logical"),
+          function(object, target, check.target) {
             annChar(object, target, check.target)
           })
-
+setMethod("annotate",
+          c("character", "character", "missing"),
+          function(object, target) {
+            annChar(object, target, check.target=FALSE)
+          })
 
 setGeneric("reannotate",
-           function(object, ...) standardGeneric("reannotate"))
+           function(object, check.target,...) standardGeneric("reannotate"))
 setMethod("reannotate",
-          "ExpressionSet",
-          function(object, check.target=FALSE) {
+          c("ExpressionSet", "logical"),
+          function(object, check.target) {
             old.ann <- annotation(object)
             new.ann <- bioc2gti(old.ann)
             if(check.target && is.na(new.ann)) {
@@ -42,4 +51,9 @@ setMethod("reannotate",
                    "Call 'gtiChiptypes()' to see supported types")
             }
             annotate(object, new.ann)
+          })
+setMethod("reannotate",
+          c("ExpressionSet", "missing"),
+          function(object) {
+            reannotate(object, check.target=FALSE)
           })

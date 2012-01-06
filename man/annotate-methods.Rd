@@ -1,9 +1,9 @@
 \name{annotate-methods}
 \docType{methods}
 \alias{annotate-methods}
-\alias{annotate,ExpressionSet,character,ANY-method}
+\alias{annotate,ExpressionSet,character,logical-method}
 \alias{annotate,ExpressionSet,character,missing-method}
-\alias{annotate,character,character,ANY-method}
+\alias{annotate,character,character,logical-method}
 \alias{annotate,character,character,missing-method}
 \title{Annotate an object}
 \description{

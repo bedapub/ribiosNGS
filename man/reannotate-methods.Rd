@@ -1,7 +1,7 @@
 \name{reannotate-methods}
 \docType{methods}
 \alias{reannotate-methods}
-\alias{reannotate,ExpressionSet,ANY-method}
+\alias{reannotate,ExpressionSet,logical-method}
 \alias{reannotate,ExpressionSet,missing-method}
 \title{Re-annotate: Transform an ExpressionSet object of Bioc-annotation in GTI-annotation}
 \description{

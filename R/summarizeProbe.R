@@ -1,7 +1,8 @@
 summarizeProbesets <- function(eset,
                                index.name,
                                fun=mean,
-                               keep.nonindex=FALSE) {
+                               keep.nonindex=FALSE,
+                               keep.featureNames=FALSE) {
   
   if(missing(index.name) || !index.name %in% colnames(fData(eset))) {
     stop("'index.name' must be a valid column name in fData(", as.character(match.call()$eset), ")")
@@ -21,6 +22,12 @@ summarizeProbesets <- function(eset,
   eset.remain <- eset[fun.fd.match,]
   exprs(eset.remain) <- eset.fun
 
+  if(keep.featureNames) {
+    featureNames(eset.remain) <- rownames(fData(eset.remain))
+  } else {
+    rownames(fData(eset.remain)) <- featureNames(eset.remain)
+  }
+  
   if(keep.nonindex) {
     eset.inval <- eset[!probe.has.index,]
     fData(eset.remain) <- rbind(fData(eset.remain),
@@ -28,6 +35,5 @@ summarizeProbesets <- function(eset,
     exprs(eset.remain) <- rbind(exprs(eset.remain),
                                 exprs(eset.inval))
   }
-  
   return(eset.remain)
 }

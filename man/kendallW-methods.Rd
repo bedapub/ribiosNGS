@@ -4,7 +4,7 @@
 \alias{kendallW-methods}
 \alias{kendallW,ExpressionSet-method}
 \alias{kendallW,matrix-method}
-\title{ Interface to \code{kendallWmat} }
+\title{ Interface to function kendallWmat }
 \description{
   The S4 method acts as interface between advanced data structures (such
   as \code{ExpressionSet}) and the \code{kendallWmat} function. The

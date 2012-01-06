@@ -2,7 +2,7 @@
 \alias{ribios.ExpressionSet}
 \docType{data}
 \title{
-  An \code{ExpressionSet} for case demonstrations
+  An ExpressionSet for case demonstrations
 }
 \description{
   This object is adapted from the \code{sample.ExpressionSet} object,

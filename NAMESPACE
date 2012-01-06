@@ -9,8 +9,7 @@ export("keepMaxStatProbe")
 export("biosGSEAannotations",
        BIOS_GSEA_ANNOTATION_DIR,
        "biosGSEA",
-       "grp2gmt",
-       "ks", "sScore", "cmap", "sprintGmt")
+       "ks", "sScore", "cmap")
 
 ## IO: import
 export("readExprsMatrix")
@@ -27,6 +26,11 @@ export("writeGct",
        "writeCls",
        "writeGctCls")
 export("writeEset")
+
+## IO: format conversion
+export("grp2gmt",
+       "grpFiles2gmt")
+export("formatGmt")
 
 ## eset
 export("mergeEset")

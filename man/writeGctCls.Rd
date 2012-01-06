@@ -2,6 +2,8 @@
 \alias{writeGct}
 \alias{writeCls}
 \alias{writeGctCls}
+\alias{eset2gct}
+\alias{eset2cls}
 \title{Export ExpressionSet as Gct/Cls files}
 \description{
   Gct/Cls file formats are required by the Gene Set Enrichment Analysis

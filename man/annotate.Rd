@@ -8,18 +8,17 @@
   of characters representing probesets.
 }
 \usage{
-annotate(object, target, ...)
+annotate(object, target, check.target, ...)
 }
 \arguments{
   \item{object}{An object of \code{ExpressionSet}, or a character vector
   of probesets}
   \item{target}{Chip type to be annotated}
-  \item{\dots}{Currently \code{annotate} methods support the option
-    \code{check.target}. It accepts an logical (boolean) value, with
-    \code{FALSE} as default. If set to \code{TRUE}, before looking up
+  \item{check.target}{Logical, with \code{FALSE} as default. If set to \code{TRUE}, before looking up
     the annotations, it first check whether \code{target} is one of the
     valid chip types supported by GTI, and stops if it is not the
     case.}
+  \item{\dots}{Currently not implemented}
 }
 \details{
   Once successfully annotated, the \code{annotation} slot of the

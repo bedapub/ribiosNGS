@@ -9,17 +9,17 @@
   annotation information from GTI. 
 }
 \usage{
-reannotate(object, ...)
+reannotate(object, check.target,...)
 }
 \arguments{
   \item{object}{An \code{ExpressionSet} object, with the
     \code{annotation} slot set as one of the valid annotations
     recognized by Bioconductor, for instance \code{hgu95av2}.}
-  \item{\dots}{Currently one option is supported: \code{check.target}, a
-  logical (boolean) value with \code{FALSE} as default. When set to
-  \code{TRUE}, beforing fetching database for annotations, the function
-  first checks whether the chip type is supported by GTI. If it is not
-  the case, the function will print error message and stop.}
+  \item{check.target}{Logical,  with \code{FALSE} as default. When set to
+    \code{TRUE}, beforing fetching database for annotations, the function
+    first checks whether the chip type is supported by GTI. If it is not
+    the case, the function will print error message and stop.}
+  \item{\dots}{Currently not implemented}
 }
 \details{
   The translation between Bioconductor annotation package names and GTI
@@ -48,6 +48,7 @@ print(ribios.ExpressionSet)
 
 \dontrun{
 gti.ExpressionSet <- reannotate(ribios.ExpressionSet)
+gti.ExpressionSet <- reannotate(ribios.ExpressionSet, check.target=FALSE)
 print(gti.ExpressionSet)
 }
 }

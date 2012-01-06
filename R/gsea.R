@@ -4,6 +4,7 @@ biosGSEAannotations <- function(pattern=".*") {
   dir(BIOS_GSEA_ANNOTATION_DIR, pattern=pattern)
 }
 
+## An example of running GSEA on montale
 ##/SOFT/bi/apps/java/c/bin/java -Xmx2500m -classpath .:/SOFT/bi/apps/gsea/GSEA2-2.02/my_gsea2.jar xtools.gsea.GseaPreranked
 ##-gmx /DATA/bi/httpd_8080/htdoc/sawitmp/gsea_1927.gmt
 ##-chip /DATA/bi/httpd_8080/htdoc/apps/gsea/annotations/HG_U133_PLUS_2.chip
@@ -56,32 +57,7 @@ biosGSEA <- function(files,
 
 
 
-## convert grp file to gmt file
-grp2gmt <- function(file, annotation="hgu133plus2", n=-1L) {
-  if(!grepl("\\.db", annotation)) {
-    lib <- sprintf("%s.db", annotation)
-  } else {
-    lib <- annotation
-  }
-  if(!require(lib, character.only=TRUE))
-    stop("annotation not valid\n")
 
-  grp.lines <- lapply(file, readLines, n=n)
-  grp.symbols <- lapply(grp.lines,
-                        mget,
-                        get(paste(annotation, "SYMBOL", sep="")),
-                        ifnotfound=NA)
-  symbols <- lapply(grp.symbols, function(x) {
-    sym <- unique(unlist(x))
-    sym[!is.na(sym)]
-  })
-
-  gmt <- sapply(seq(along=symbols),
-                function(x) sprintf("%s\tgrp2gmt\t%s",
-                                    gsub("\\..*", "", basename(file[x])),
-                                    paste(symbols[[x]], collapse="\t")))
-  return(gmt)
-}
 
 ## convert connectivity map score
 ks <- function(vec, n) {
@@ -152,10 +128,5 @@ cmap <- function(rnks, up, down, perm=FALSE) {
   return(res)
 }
 
-## print GMT files
-sprintGmt <- function(title, comment, genes) {
-  genes <- unique(as.character(genes))
-  genes.collapse <- paste(genes, collapse="\t")
-  paste(title, "\t", comment, "\t", genes.collapse,sep="")
-}
+
 

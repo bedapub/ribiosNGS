@@ -1,5 +1,9 @@
+Version 1.0-7 (2012-01-09)
+  + Add loadFile from the ribios package
+
 Version 1.0.6 (2011-12-08)
   + This version is almost warning-free (except for -Wall) and is placed in the stable release as well.
+  + An informal benchmark of read_gmt_list against native R implementation on a 4000-gene-set GMT file was done. Results suggest the C-implementation is three times faster (23s/100 files) than the R-implemtation (74/100 files).
 
 Version 1.0.5 (2011-12-08)
   + Add the man page for read_gmt_list and iofile

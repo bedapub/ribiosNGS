@@ -1,7 +1,8 @@
 export(read_gct_matrix,
        read_gmt_list,
        read_exprs_matrix,
-       iofile)
+       iofile,
+       loadFile)
 
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosIO, .registration=TRUE)

@@ -9,18 +9,19 @@
   genes in the query signature (ks_up and ks_down). 
 }
 \usage{
-ksScore(vec, n)
+ksScore(n, vec)
 }
 \arguments{
+  \item{n}{The total number of probe-sets}
+  
   \item{vec}{Vector of integer, a vector V of the position of each tag
     in the ordered list of all probesets, sorted in ascending order such
     that V_j is the position of tag j, where j = 1,2,\dots,t. The input
     vector does \emph{not} need to be sorted: it will be sorted
     ascendingly inside the function.}
-  \item{n}{The total number of probe-sets}
 }
 \details{
-  Two enrichment scores, ks_up and ks_down, are used to calculate the
+  Two enrichment scores, ks_up and ks_down, are required to calculate the
   Connectivity Score \code{S} subsequently.
 
   Note that the maximum number in \code{vec} should be equal or less
@@ -70,11 +71,12 @@ ksScore(vec, n)
 }
 \examples{
 ksVec <- c(3,5,7,9)
-ksScore(ksVec, 10)
+## -0.3
+ksScore(n=10L, vec=ksVec)
 
 ## -0.4285714
-ksScore(c(5,6,3), 7)
+ksScore(n=7L, vec=c(5,6,3))
 
 ## 0.4285714
-ksScore(c(4,2,1),7)
+ksScore(n=7L, vec=c(4,2,1))
 }

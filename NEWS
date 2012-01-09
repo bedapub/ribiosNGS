@@ -1,0 +1,2 @@
+Version 1.0-0 (2012-01-09)
+  + Refactor ks functions from ribiosExpression to ribiosReposition. This package provides low-level functions for computational drug reposition with expression data.

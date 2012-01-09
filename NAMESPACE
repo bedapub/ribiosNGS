@@ -8,8 +8,7 @@ export("keepMaxStatProbe")
 ## GSEA
 export("biosGSEAannotations",
        BIOS_GSEA_ANNOTATION_DIR,
-       "biosGSEA",
-       "ks", "sScore", "cmap")
+       "biosGSEA")
 
 ## IO: import
 export("readExprsMatrix")

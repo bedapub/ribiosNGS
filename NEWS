@@ -1,3 +1,12 @@
+Version 1.0-12 (Jan 09, 2012)
+  + Low-level functions for computational drug repositioning has been refactored into the ribiosReposition package: ksScore, cmap and connScore. Currently there is no dependency of ribiosExpression on ribiosReposition, therefore users of these functions must explicitly load the ribiosReposition package.
+
+Version 1.0-11 (Jan 05, 2012)
+  + Add feature in summarizeProbesets: option "keep.featureNames" allow to keep old feature names whenever possible.
+  + Add documentations and examples for grp2gmt and grpFiles2gmt
+  + Rename and significantly rewrite the function sprintGmt to formatGmt: now it is a S4 method, supporting flexibly formatting character strings into the GMT format
+  + Several small updates in the documentation to reflect the current status of codes.
+
 Version 1.0-10 (Jan 04, 2012)
   + Bugfix in readEset: Previous versions report error when importing expression matrices with numeric values as column names. The burg is caused by the default behaviour of the 'read.table' function, which appends a prefix (by default X) to the column names and thus cause the readFKtable function to fail. This has been fixed now.
   + Add annotate and reannotate: to annotate ExpressionSet objects with information from GTI. Both are S4 methods with documentations and examples.

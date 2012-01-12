@@ -1,2 +1,6 @@
+Version 1.0-1 (2012-01-10)
+  + connScore and connScorePerm has been transformed into S4 methods
+  + cmap has been adapted to a matrix input
+
 Version 1.0-0 (2012-01-09)
   + Refactor ks functions from ribiosExpression to ribiosReposition. This package provides low-level functions for computational drug reposition with expression data.

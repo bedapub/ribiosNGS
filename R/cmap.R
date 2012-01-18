@@ -39,7 +39,7 @@ cmap <- function(rnks, up, down,
   S[cscores>0] <- cscores[cscores>0]/p
   S[cscores<0] <- -cscores[cscores<0]/q
   
-  ind <- rind[order(S, ksups, decreasing=TRUE)]
+  ind <- rind[order(S, ksups, decreasing=FALSE)]
   res <- data.frame(index=ind,
                     connScore=S[ind],
                     raw.connScore=cscores[ind],

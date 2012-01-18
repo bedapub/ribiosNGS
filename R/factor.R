@@ -35,14 +35,14 @@ relevels <- function(x, refs) {
   return(x)
 }
 
-test.relevels <- function() {
-  cup <- c("HSV","FCBayern","KSC","VfB")
-  teams <- factor(cup)
-  orderTeams <- relevels(teams, cup)
-
-  checkEquals(levels(orderTeams), cup)
-  checkException(relvels(teams, c(cup, "SF")))
-}
+##test.relevels <- function() {
+##  cup <- c("HSV","FCBayern","KSC","VfB")
+##  teams <- factor(cup)
+##  orderTeams <- relevels(teams, cup)
+##
+##  checkEquals(levels(orderTeams), cup)
+##  checkException(relvels(teams, c(cup, "SF")))
+##}
 
 cutInterval <- function(x, interval=100,
                         labelOption=c("cut.default", "left", "right"),

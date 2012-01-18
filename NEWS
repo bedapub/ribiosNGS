@@ -1,3 +1,7 @@
+Version 1.0-2 (2012-01-18)
+  + cmap returns scores in the descending order
+  + Add a prototype Rscript file as command-line tool
+
 Version 1.0-1 (2012-01-10)
   + connScore and connScorePerm has been transformed into S4 methods
   + cmap has been adapted to a matrix input

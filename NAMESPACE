@@ -1,8 +1,5 @@
 export("ksScore")
 
-export("indexConnScore",
-       "indexConnScorePerm")
-
 export("connScore",
        "connScorePerm")
 

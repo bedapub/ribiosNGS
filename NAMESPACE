@@ -1,6 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 
 export(summarizeRows, summarizeColumns, summarizeCols)
+export(isError)
 
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils, .registration=TRUE)

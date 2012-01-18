@@ -1,5 +1,16 @@
+Version 1.0-8 (2012-01-18)
+  + The library function is checked for the support of "quietly" option in libordie by checking the base package version (>=2.13.0 supports quietly=TRUE)
+
+Version 1.0-7 (2011-12-21)
+  + Add isError function for try-error catch blocks
+  + qqmsg tests whether message is empty, if no no message will be print, in order to prevent a blank line to be printed
+
+Version 1.0-6 (2011-12-19)
+  + Remove the dependency on the gsl library, which causes problem when the path is not known.
+
 Version 1.0-5 (2011-12-19)
   + Add summarizeRows and summarizeColumns to summarize rows/columns by factor
+  + Add the documentation for the dfFactor function.
 
 Version 1.0.4 (2011-12-16)
   + Add qqmsg (function and documentation) to quitely quit a R session.  

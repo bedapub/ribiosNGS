@@ -79,7 +79,7 @@ for(i in seq(along=input.files)) {
   } else {
     res <- annotateProbesets(ids=txt, chip=chipType)
   }
-  write.table(x=res, file=output.files[i],
+  write.table(x=res, file=output.files[i],sep="\t",
               row.names=FALSE, col.names=TRUE)
 }
 qqmsg(status=0L)

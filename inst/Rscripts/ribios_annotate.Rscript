@@ -2,6 +2,17 @@
 
 suppressMessages(library(ribiosArg))
 suppressMessages(library(ribiosUtils))
+
+## check LD_LIBRARY_PATH
+ORACLE.LIB <- "/opt/oracle/client/10/run_1/lib/"
+ld.path <- strsplit(Sys.getenv("LD_LIBRARY_PATH"), ":")[[1]]
+trimSlash <- function(x) gsub("/$","", x)
+if(!trimSlash(ORACLE.LIB) %in% trimSlash(ld.path))
+  qqmsg("Warning: Please modify the LD_LIBRARY_PATH environment variable. Copy the next line in command line and execute by pressing enter. Then restart the program.\n\n",
+        "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/oracle/client/10/run_1/lib;export LD_LIBRARY_PATH;\n\n",
+        "Program existing.",
+        status=1L)
+        
 libordie(ribiosAnnotation, minVer="1.0-9")
 
 input.files <- getArg("infile", onlyArg=NULL, missingArg=NULL)
@@ -62,9 +73,9 @@ for(i in seq(along=input.files)) {
                   head=FALSE, sep="\t",
                   stringsAsFactor=FALSE)[,1L]
   if(isGeneID) { ## GeneID: use a chip (HG_U133PLUS2) to annotate genes
-    res <- annotateGeneIDs(ids=txt, chip="HG-133_PLUS_2", keepProbeID=FALSE)
+    res <- annotateGeneIDs(ids=txt, chip="HG-U133_PLUS_2", keepProbeID=FALSE)
   } else if (isGeneSymbol) {
-    res <- annotateGeneSymbols(ids=txt, chip="HG-133_PLUS_2", keepProbeID=FALSE)
+    res <- annotateGeneSymbols(ids=txt, chip="HG-U133_PLUS_2", keepProbeID=FALSE)
   } else {
     res <- annotateProbesets(ids=txt, chip=chipType)
   }

@@ -1,6 +1,6 @@
 \name{annotateProbesets}
 \alias{annotateProbesets}
-\alias{annotateProbes}
+\alias{annotateProbeIDs}
 \title{
   Annotate probesets by their identifiers (ID) and chip type
 }
@@ -16,6 +16,8 @@ annotateProbesets(ids, chip = "HG-U133_PLUS_2")
   \item{chip}{Chip type identifier}
 }
 \details{
+  \code{annotateProbeIDs} is a synonym of \code{annotateProbesets}.
+  
   The concept \sQuote{Probesets} here can either refer to a set of
   probes, or a single probe, depending on manufacturing techniques used
   by the microarray vendor. As long as the chip type is supported, and

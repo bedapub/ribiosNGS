@@ -1,0 +1,74 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosUtils))
+libordie(ribiosAnnotation, minVer="1.0-9")
+
+input.files <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+chiptype <- getArg("chiptype", onlyArg=NULL, missingArg=NULL)
+output.files <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+printChiptypes <- existArg("allChiptypes") ## TODO: document it
+
+if(printChiptypes) {
+  print(gtiChiptypes());
+  qqmsg(status=0L)
+} else if(is.null(input.files) || is.null(chiptype) || is.null(output.files) || getHelp) {
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              "-infile infile1 [infile2 ...] -chiptype chip_name -outfile outfile1 [outfile2 ...]\n\n",
+              "-infile\tInput files containing features (probesets) to be annotated\n",
+              "\t\tOne feature per line, or the first column of a tab-\n",
+              "\t\tdelimited file contains features\n",
+              "\t\tMultiple files (of the same annotation) are allowed\n",
+              "-chiptype\tMust be supported by ribiosAnnotation::gtiChiptypes()\n",
+              "\t\tExceptions: \"GeneID\" or \"GeneSymbol\" (case-insensitive)\n",
+              "-outfile\tOutput files containing annotated features as tables\n",
+              "\t\tThe number of output files must match that of the infiles",
+              "\n\n",
+              collapse=" "),
+        "Run '", scriptName(), " -allChiptypes' to list all supported chiptypes\n",
+        status=1L)
+}
+
+## check input/output files
+if(!all(file.exists(input.files))) {
+  qqmsg("Error: infile \"",
+        paste(input.files[!file.exists(input.files)], collapse=","),
+        "\" does not exist. Program existing.",
+        status=2L)
+}
+if(length(input.files) != length(output.files)) {
+  qqmsg("Error: number of outfile (", length(output.files),
+        ") does not equal to that of infile (", length(input.files), ").\n",
+        "Program existing.", status=2L)
+}
+
+## check annotation
+chipType <- toupper(chiptype)
+isGeneID <- identical(chipType, "GENEID")
+isGeneSymbol <- identical(chipType, "GENESYMBOL")
+isValidChip <- chipType %in% gtiChiptypes() 
+if(!isValidChip && !isGeneID && !isGeneSymbol)
+  qqmsg("Error: chiptype \"",
+        chipType,
+        "\" is not supported by GTI (via ribiosAnnotation), nor it is \"GeneID\". ",
+        "Program existing.",
+        status=2L)
+
+## do annotation
+for(i in seq(along=input.files)) {
+  txt <- read.csv(input.files[i],
+                  head=FALSE, sep="\t",
+                  stringsAsFactor=FALSE)[,1L]
+  if(isGeneID) { ## GeneID: use a chip (HG_U133PLUS2) to annotate genes
+    res <- annotateGeneIDs(ids=txt, chip="HG-133_PLUS_2", keepProbeID=FALSE)
+  } else if (isGeneSymbol) {
+    res <- annotateGeneSymbols(ids=txt, chip="HG-133_PLUS_2", keepProbeID=FALSE)
+  } else {
+    res <- annotateProbesets(ids=txt, chip=chipType)
+  }
+  write.table(x=res, file=output.files[i],
+              row.names=FALSE, col.names=TRUE)
+}
+qqmsg(status=0L)

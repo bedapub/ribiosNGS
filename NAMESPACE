@@ -3,7 +3,10 @@ export(gtiChiptypes,
 
 export(gtiChipAnnotation)
 
-export(annotateProbesets)
+export(annotateProbesets,
+       annotateProbeIDs,
+       annotateGeneIDs,
+       annotateGeneSymbols)
 
 export(gti2bioc, bioc2gti)
 

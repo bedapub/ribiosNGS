@@ -8,7 +8,7 @@ ORACLE.LIB <- "/opt/oracle/client/10/run_1/lib/"
 ld.path <- strsplit(Sys.getenv("LD_LIBRARY_PATH"), ":")[[1]]
 trimSlash <- function(x) gsub("/$","", x)
 if(!trimSlash(ORACLE.LIB) %in% trimSlash(ld.path))
-  qqmsg("Warning: Please modify the LD_LIBRARY_PATH environment variable. Copy the next line in command line and execute by pressing enter. Then restart the program.\n\n",
+  qqmsg("Warning: Please modify the LD_LIBRARY_PATH environment variable. Copy the next line in command line and execute it by pressing enter. Then restart the program.\n\n",
         "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/oracle/client/10/run_1/lib;export LD_LIBRARY_PATH;\n\n",
         "Program existing.",
         status=1L)

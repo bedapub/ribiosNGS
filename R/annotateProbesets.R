@@ -8,6 +8,7 @@ annotateIDs <- function(ids, chip="HG-U133_PLUS_2", column="ProbeID") {
   } else {
     rownames(chipAnnOrd) <- NULL
   }
+  chipAnnOrd[,column] <- ids
   return(chipAnnOrd)
 }
 

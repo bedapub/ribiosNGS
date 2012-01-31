@@ -24,11 +24,9 @@ setMethod("connScore",
               return(c(cscore=0, ksup=NA, ksdown=NA))
             ksup <- ksScore(n=x, vec=up)
             ksdown <- ksScore(n=x, vec=down)
-            if(sign(ksup)==sign(ksdown)) {
-              return(c(cscore=0, ksup=ksup, ksdown=ksdown))
-            } else {
-              return(c(cscore=ksup - ksdown, ksup=ksup, ksdown=ksdown))
-            }
+            cscore <- ifelse(sign(ksup)==sign(ksdown),
+                             0, ksup-ksdown)
+            return(c(cscore=cscore, ksup=ksup, ksdown=ksdown))
           })
 setMethod("connScore",
           c("list", "character", "character"),

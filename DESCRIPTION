@@ -1,8 +1,8 @@
 Package: ribiosReposition
 Type: Package
 Title: Drug Reposition in ribios
-Version: 1.0-2
-Date: 2012-01-18
+Version: 1.0-3
+Date: 2012-01-31
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Low-level functionalities for computational drug reposition.

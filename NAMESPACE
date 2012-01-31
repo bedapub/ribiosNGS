@@ -4,3 +4,5 @@ export("connScore",
        "connScorePerm")
 
 export("cmap")
+
+useDynLib(ribiosReposition)

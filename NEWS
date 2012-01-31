@@ -1,3 +1,19 @@
+Version 1.0-11 (2012-01-31)
+  + Add gtiTaxAnnotation.Rd to get annotations belonging to the given TaxonID.
+
+Version 1.0-10 (2012-01-25)
+  + annotateIDs sets the queried IDs in its column, which affects annotateProbesets, annotateGeneIDs and annotateGeneSymbols
+
+Version 1.0-9 (2012-01-24)
+  + Add annotateGeneIDs and annotateGeneSymbols to annotate GeneIDs/GeneSymbols in a similar fashion as that for probesets
+  + annotateProbeIDs have been added as a synonym to annotateProbesets
+  + Internally the core logic of annotateProbesets is refactored into \code{annotateIDs} to be shared by \code{annotateGeneIDs} and \code{annotateGeneSymbols}.
+  + Add a Rscript to do annotation from command line: inst/Rscript/ribios_annotate.R
+  + Add test bash file and test text files for ribios_annotate.Rscript
+
+Version 1.0-8 (2012-01-06)
+  + bioc2gti and gti2bioc support missing argument. If 'chipname' is left missing, the functions will print GTI/Bioc names of chip types supported by both GTI and Bioc.
+
 Version 1.0-7 (2011-12-21)
   + Add join of bi.EG_GENE_INFO to gtiChipAnnotation, in order to get GeneNames
 

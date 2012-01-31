@@ -28,6 +28,7 @@ gtiChipAnnotation(chip)
  \item{ProbeID}{Probeset ID}
  \item{GeneID}{Entrez Gene ID}
  \item{GeneSymbol}{Entrez (HUGO) Gene Symbol}
+  \item{GeneName}{Gene descriptions}
  \item{isSingleGeneID}{Logical, whether the probeset is mapped to single
    gene id}
  \item{Chip}{Chip type}

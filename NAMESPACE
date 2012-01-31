@@ -1,7 +1,8 @@
 export(gtiChiptypes,
        gtiChipnames) ## synonymous
 
-export(gtiChipAnnotation)
+export(gtiChipAnnotation,
+       gtiTaxAnnotation)
 
 export(annotateProbesets,
        annotateProbeIDs,

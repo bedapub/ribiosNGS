@@ -19,8 +19,27 @@ gtiChipAnnotation <- function(chip) {
   rownames(ann) <- NULL
   return(ann)
 }
-
-
+gtiTaxAnnotation <- function(taxid) {
+  if(missing(taxid))
+    stop("'taxid' cannot be missing.")
+  con <- newcon()
+  state <- paste("SELECT GENEID, OFFICIAL_SYMBOL, LOCUSTAG, SYNONYMS, DBXREFS, ",
+                 "CHROMOSOME, MAP_LOCATION, DESCRIPTION, GENE_TYPE, ",
+                 "SYMBOL, OFFICIAL_NAME, OTHER_DESIGNATIONS, MODIF_DATE ",
+                 "FROM bi.EG_GENE_INFO ",
+                 "where TAX_ID = '",taxid, "'", sep="")
+  rs <- dbSendQuery(con, state)
+  while(!dbHasCompleted(rs)) {
+    ann <- fetch(rs, n=-1)
+  }
+  dbClearResult(rs)
+  dbDisconnect(con)
+  colnames(ann) <- c("GeneID", "GeneSymbol", "LocusTag", "Synonyms", "xrefs",
+                     "Chromosome", "MapLocation", "Description", "GeneType",
+                     "Symbol", "GeneName", "OtherDesignations", "ModifDate")
+  rownames(ann) <- NULL
+  return(ann)
+}
 
 biosCurrentGeneSymbol <- function(...) {
   .Deprecated("gtiChipAnnotation",

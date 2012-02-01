@@ -1,5 +1,5 @@
-ORACLE.USER <- "bi"
-ORACLE.PWD <- "bi"
+ORACLE.BIA.USER <- "biread"
+ORACLE.BIA.PWD <- "biread"
 ORACLE.BASE <- "/opt/oracle"
 ORACLE.HOME <- "/opt/oracle/client/10/run_1"
 ## ORACLE.LIB <- ":/opt/oracle/client/10/run_1/lib"
@@ -19,5 +19,5 @@ ORACLE.HOME <- "/opt/oracle/client/10/run_1"
 }
 
 newcon <- function() {
-  dbConnect(ORA, user=ORACLE.USER, password=ORACLE.PWD,db="bia")
+  dbConnect(ORA, user=ORACLE.BIA.USER, password=ORACLE.BIA.PWD, db="bia")
 }

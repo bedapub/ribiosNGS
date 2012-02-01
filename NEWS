@@ -1,8 +1,4 @@
-Version 1.0-12 (2012-02-01)
-  + The Oracle database is now accessed with the bi account, which allows cross-database links
-  + gtiTaxAnnotation joins the genome.gti_gene_map_a@genome table to provide chromosome mapping of genes
-
-Version 1.0-11 (2012-01-31)
+Version 1.0-11 (2012-02-01)
   + Add gtiTaxAnnotation.Rd to get annotations belonging to the given TaxonID.
 
 Version 1.0-10 (2012-01-25)

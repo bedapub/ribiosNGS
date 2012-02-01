@@ -23,20 +23,29 @@ gtiTaxAnnotation <- function(taxid) {
   if(missing(taxid))
     stop("'taxid' cannot be missing.")
   con <- newcon()
-  state <- paste("SELECT GENEID, OFFICIAL_SYMBOL, LOCUSTAG, SYNONYMS, DBXREFS, ",
-                 "CHROMOSOME, MAP_LOCATION, DESCRIPTION, GENE_TYPE, ",
-                 "SYMBOL, OFFICIAL_NAME, OTHER_DESIGNATIONS, MODIF_DATE ",
-                 "FROM bi.EG_GENE_INFO ",
-                 "where TAX_ID = '",taxid, "'", sep="")
+  state <- paste("SELECT g.GENEID, g.OFFICIAL_SYMBOL, g.SYNONYMS, g.DBXREFS, ",
+                 "g.CHROMOSOME, g.MAP_LOCATION, m.SEQ, m.CLEFT, m.CRIGHT, m.REVCOMP, g.DESCRIPTION, g.GENE_TYPE, ",
+                 "g.OFFICIAL_NAME ",
+                 "FROM bi.EG_GENE_INFO g, genome.gti_gene_map_a@genome m ",
+                 "where TO_CHAR(g.GENEID)=m.RO_GENE_ID AND TAX_ID = '",taxid, "'", sep="")
   rs <- dbSendQuery(con, state)
   while(!dbHasCompleted(rs)) {
     ann <- fetch(rs, n=-1)
   }
   dbClearResult(rs)
   dbDisconnect(con)
-  colnames(ann) <- c("GeneID", "GeneSymbol", "LocusTag", "Synonyms", "xrefs",
-                     "Chromosome", "MapLocation", "Description", "GeneType",
-                     "Symbol", "GeneName", "OtherDesignations", "ModifDate")
+  colnames(ann) <- c("GeneID", "GeneSymbol", "Synonyms", "xrefs",
+                     "Chromosome", "MapLocation",
+                     "MappedChromosome", "LeftCoord", "RightCoord", "RevComp",
+                     "Description", "GeneType",
+                     "GeneName")
+  ## post-precessing
+  ann$MappedChromosome <- gsub("^CHR", "", as.character(ann$MappedChromosome))
+  ann$RevComp <- ifelse(ann$RevComp>0, TRUE, FALSE)
+  uniqMapped <- with(ann, tapply(paste(MappedChromosome, LeftCoord, RightCoord),
+                                 factor(GeneID), length)) == 1L
+  isUniq <- uniqMapped[match(ann$GeneID, names(uniqMapped))]
+  ann$UniqueMapped <- isUniq
   rownames(ann) <- NULL
   return(ann)
 }

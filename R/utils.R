@@ -1,5 +1,7 @@
-ORACLE.BIA.USER <- "biread"
-ORACLE.BIA.PWD <- "biread"
+ORACLE.BIA.USER <- "bi"
+ORACLE.BIA.PWD <- "bi"
+ORACLE.BIN.USER <- "genome"
+ORACLE.BIN.PWD <- "genome"
 ORACLE.BASE <- "/opt/oracle"
 ORACLE.HOME <- "/opt/oracle/client/10/run_1"
 ## ORACLE.LIB <- ":/opt/oracle/client/10/run_1/lib"
@@ -18,6 +20,9 @@ ORACLE.HOME <- "/opt/oracle/client/10/run_1"
 ##  Sys.setenv("LD_LIBRARY_PATH"=new.path)
 }
 
-newcon <- function() {
+newconBIA <- function() {
   dbConnect(ORA, user=ORACLE.BIA.USER, password=ORACLE.BIA.PWD, db="bia")
+}
+newconBIN <- function() {
+  dbConnect(ORA, user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD, db="bin")
 }

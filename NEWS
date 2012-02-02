@@ -1,6 +1,7 @@
 Version 1.0-12 (2012-02-02)
   + gtiTaxAnnotation returns MappedChr, CoordLeft, CoordRight and RevComp for chromosome-mapping information, by outer joining the genome.gti_gene_map_a@genome table
   + Internal: connection to the bia server ia authenticated by bi.
+  + gtiChipAnnotation (and downstream annotateProbesets) uses 'bi.EG_GENE_INFO.OFFICIAL_SYMBOL' for GeneSymbol instead of 'bi.AFFYCHIP_XREF_LL.GN'
 
 Version 1.0-11 (2012-02-01)
   + Add gtiTaxAnnotation.Rd to get annotations belonging to the given TaxonID.

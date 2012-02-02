@@ -4,7 +4,7 @@ gtiChipAnnotation <- function(chip) {
     stop("'chip' cannot be be missing. Use 'gtiChipnames()' to see supported chip names")
   }
   con <- newconBIA()
-  state <- paste("SELECT a.AFFY_ID, a.LL, a.GN, e.OFFICIAL_NAME, a.SINGLE_LL,a.PCHIP_NAME ",
+  state <- paste("SELECT a.AFFY_ID, a.LL, e.OFFICIAL_SYMBOL, e.OFFICIAL_NAME, a.SINGLE_LL,a.PCHIP_NAME ",
                  "FROM bi.AFFYCHIP_XREF_LL a, bi.EG_GENE_INFO e ",
                  "where a.LL = e.GENEID ",
                  "AND PCHIP_NAME='",chip, "'", sep="")

@@ -1,5 +1,10 @@
+Version 1.0-12 (2012-02-02)
+  + gtiTaxAnnotation returns MappedChr, CoordLeft, CoordRight and RevComp for chromosome-mapping information, by outer joining the genome.gti_gene_map_a@genome table
+  + Internal: connection to the bia server ia authenticated by bi.
+
 Version 1.0-11 (2012-02-01)
   + Add gtiTaxAnnotation.Rd to get annotations belonging to the given TaxonID.
+  + Change newcon to newconBIA, add newconBIN to prepare for connection to the BIN server
 
 Version 1.0-10 (2012-01-25)
   + annotateIDs sets the queried IDs in its column, which affects annotateProbesets, annotateGeneIDs and annotateGeneSymbols

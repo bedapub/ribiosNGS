@@ -1,5 +1,5 @@
 gtiChiptypes <- function(include.desc=FALSE) {
-  con <- newcon()
+  con <- newconBIA()
   rs <- dbSendQuery(con,
                     "SELECT PCHIP_NAME, DESCR FROM bi.AFFYCHIP_NAMES")
   while(!dbHasCompleted(rs)) {

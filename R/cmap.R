@@ -46,7 +46,7 @@ cmap <- function(rnks, up, down,
     cscore.bg.len <- sapply(cscore.bg, length)
     p.bg <- p.bg.adj <- numeric(nlevels(group))
 
-    p.bg.valid <- !(nonnull.bg < 0.50 | mean.cscore.bg == 0 | cscore.bg.len==1L)
+    p.bg.valid <- !(nonnull.bg < 0.50 | mean.cscore.bg == 0 | cscore.bg.len<=1L)
     p.bg[!p.bg.valid] <- p.bg.adj[!p.bg.valid] <- 1L
 
     ks.bg <- sapply(cscore.bg[p.bg.valid],
@@ -83,7 +83,11 @@ cmap <- function(rnks, up, down,
   q <- min(cscores)
   S[cscores>0] <- cscores[cscores>0]/p
   S[cscores<0] <- -cscores[cscores<0]/q
-  Sg <- tapply(S, group, mean)[inds]
+  if(!missing(group) && permG>0) {
+    Sg <- tapply(S, group, mean)[inds]
+  } else {
+    Sg <- rep(NA, length(S))
+  }
 
   ind <- rind[order(S, ksups, decreasing=FALSE)]
   res <- data.frame(index=ind,

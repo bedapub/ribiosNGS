@@ -12,15 +12,17 @@ output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
 getHelp <- existArg("h") | existArg("help")
 if(is.null(uptags.file) || is.null(downtags.file) || is.null(output.file) || getHelp) {
   qqmsg(paste("\nUsage: cmap_reposition.Rscript -uptags filename1 -downtags filename2 -outfile outfile OPTS\n\n",
-              "-uptags filename1\tUp-regulated probesets in your experiment: one probeset each line\n",
-              "-downtags filename2\tDown-regulated probesets in your experiment: one probeset each line\n",
+              "-uptags filename1\tUp-regulated probesets in your experiment, one feature per line\n",
+              "-downtags filename2\tDown-regulated probesets in your experiment, one feature per line\n",
               "-outfile outfile\tOutput file, currently a tab-delimited file with ranked drugs\n\n",
               
-              "Optional parameters:\n",
-              "-annotation\t\tChip type supported by GTI, or 'GeneID'. Default: HG-U133A\n",
-              "\t\t\tCurrently ONLY HG-U133A is supported\n",
-              "-permB\t\t\tNumber of permutations to calculate P values for KS statistics. Default: 0 (no permutation)\n",
-              "-verbose\t\tAn positive integer (1-9) or 0 indicating the level of verbosing. Default: 0 (no verbose)\n",
+              "OPT may include \n",
+              "-annotation\t\tEither 'HG-U133A' (native of Cmap) or 'GeneID' (by GTI-based mapping).\n",
+              "\t\t\tDefault: HG-U133A\n",
+              "-permB\t\t\tNumber of permutations to calculate P values for KS statistics.\n",
+              "\t\t\tDefault: 10000\n",
+              "-verbose\t\tA non-negative integer between 0 and 9, indicating verbosing level.\n",
+              "\t\t\tDefault: 0 (not verbose)\n",
               "\n",
               collapse=" "),
         status=1L)
@@ -31,7 +33,6 @@ libordie(ribiosIO)
 libordie(ribiosAnnotation)
 libordie(ribiosReposition, minVer="1.0.2")
 
-
 ## option: annotation and permB
 annotation <- getArg("annotation", onlyArg="HG-U133A", missingArg="HG-U133A")
 isGtiChiptype <- function(x) x %in% gtiChiptypes()
@@ -41,15 +42,14 @@ if(annotation != "HG-U133A" || annotation != "GeneID") {
           status=1L)
   }
 }
-permB.char <- getArg("permB", onlyArg=0, missingArg=0)
-permB <- parseNumVec(permB.char, expLen=1L, failVal=0L)
-verbose <- parseNumVec(getArg("verbose", onlyArg=1L, missingArg=0L),
-                       expLen=1L, failVal=1L) > 0
-vMessage <- function(...) if(verbose) message(...)
+permB.char <- getArg("permB", onlyArg="10000", missingArg="10000")
+permB <- parseNumVec(permB.char, expLen=1L, failVal=10000L)
+VB <- parseNumVec(getArg("verbose", onlyArg=1L, missingArg=0L),
+                       expLen=1L, failVal=1L)
 
 ## load cmap data (SLOW)
 cmap.data.file <- "/DATA/bi/apps/drugReposition/cmap_build02_rank_gti.RData"
-vMessage("Loading connectivity map data")
+verbose("Loading connectivity map data", global=VB, this=1L)
 if(!loadFile(cmap.data.file)) {
   qqmsg("Connectivity Map data not found at ", cmap.data.file,
         "\nThe program is existing. Please contact the maintainer of the program",
@@ -73,6 +73,7 @@ if(length(intersect(ups, downs))!=0) {
 
 up.ind <- match(ups, featureNames(conmap.gti))
 down.ind <- match(downs, featureNames(conmap.gti))
+group <- pData(conmap.gti)$cmap_name
 
 ## HG-U133A specific
 if(!any(!is.na(up.ind)) || !any(!is.na(down.ind))) {
@@ -82,11 +83,12 @@ if(!any(!is.na(up.ind)) || !any(!is.na(down.ind))) {
         status=-2)
 }
 
-vMessage("Analysis running")
+verbose("Analysis running", global=VB, this=1L)
 cmap.res <- cmap(rnks=exprs(conmap.gti),
                  up=up.ind,
                  down=down.ind,
-                 permB=permB)
+                 group=group,
+                 permG=permB)
 cmap.pd <- pData(conmap.gti)[cmap.res$index,
                              c("cmap_name", "concentration_M_",
                                "duration_h_", "cell")]

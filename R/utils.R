@@ -6,6 +6,9 @@ ORACLE.BASE <- "/opt/oracle"
 ORACLE.HOME <- "/opt/oracle/client/10/run_1"
 ## ORACLE.LIB <- ":/opt/oracle/client/10/run_1/lib"
 
+## maximum vector length in the IN syntax
+ORACLE.IN.NMAX <- 1000L
+
 .onLoad <- function(libname, pkgname) {
   assign("ORA", Oracle(), pos=sys.frame())
   obase <- Sys.getenv("ORACLE_BASE")

@@ -1,3 +1,21 @@
+Version 1.0-15 (2012-02-10)
+  + gtiChiptypes uses genome.CHIP_ARRAY_TYPES@bin table to report GTI-supported chip types. Comparing previous versions, the default behavior is not changing. By settign 'include.desc=TRUE', more details are returned, includeing Technology and Species.
+  + gtiChipAnnotation uses genome.chip_probeset_gene and genome.GTI_GENES internally, in order to be 100% synchronized with GTI. The resulting data.frame keeps consistency, although the isSingleGeneID column is always set to TRUE since only uniquely mapped probesets are stored. Provisionally this column shall be removed in the future version.
+  + We export the hapmapSnp and illuminaSnp functions thanks to Isabelle's help. They are able to query SNP annotation and genomic contexts with user input.
+
+Version 1.0-14 (2012-02-07)
+  + Add isGtiChiptype to check user input with GTI-supported chiptypes	
+  + Change the default order of 'db' in the querydb function to c("bia", "bin")
+  + gtiChipAnnotation has been substantially refactored: that for queries <1000 items, the filtering is done by the IN syntax of SQL instead by R. Doing so saves much overhead of transfering large tables between SQL and R. A benchmark with random sampled GeneIDs (see codes in the test directory) showed a 5-10x better performance measured by the running time.
+  + gtiChipAnnotation documentation has been correspondingly updated	
+  + ORACLE.IN.NMAX constant variable is exported: the maximum length of the vector in the IN query syntax
+  + Add mappedProbesets to get all probesets that map to given Entrez GeneIDs.
+  + We have solved the mysterious issue of example codes in the ribiosAnnotation package:by wrapping example codes with options(error=utils:recover) and options(error=NULL), the examples can be executed now in the check process without issuing error. Although we do not really know why this is the case, this information should be shared with all developers who have had similar problems. 
+
+Version 1.0-13 (2012-02-03)
+  + Add querydb to make generic db queries
+  + Add chrLen to query chromosome lengths in supported organisms
+
 Version 1.0-12 (2012-02-02)
   + gtiTaxAnnotation returns MappedChr, CoordLeft, CoordRight and RevComp for chromosome-mapping information, by outer joining the genome.gti_gene_map_a@genome table
   + Internal: connection to the bia server ia authenticated by bi.

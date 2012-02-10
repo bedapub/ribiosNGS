@@ -1,16 +1,31 @@
+## import
+importFrom(ROracle, Oracle)
+
+## export
 export(gtiChiptypes,
-       gtiChipnames) ## synonymous
+       isGtiChiptype,
+       gtiChipnames,
+       gtiArraytypes) ## synonymous
 
 export(gtiChipAnnotation,
        gtiTaxAnnotation)
+
+export(querydb, formatIn)
 
 export(annotateProbesets,
        annotateProbeIDs,
        annotateGeneIDs,
        annotateGeneSymbols)
-
 export(gti2bioc, bioc2gti)
 
+export(mappedProbesets)
+
+export(chrLen)
+
+export(hapmapSnp,
+       illuminaSnp)
+
+export(ORACLE.IN.NMAX)
 
 ## deprecated functions
 export(affychipNames,
@@ -18,5 +33,3 @@ export(affychipNames,
        raceChiptypes,
        raceChipnames,
        raceChipAnnotation)
-
-importFrom(ROracle, Oracle)

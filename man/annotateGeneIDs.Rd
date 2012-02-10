@@ -45,9 +45,11 @@ annotateGeneSymbols(ids, chip = "HG-U133_PLUS_2", keepProbeID = TRUE)
   See \code{\link{annotateProbesets}} to get annotation for probesets.
 }
 \examples{
-\dontrun{
+options(error=utils::recover)
+
 annotateGeneIDs(ids=c(780, 5982, 3310, NA), chip="HG-U133_PLUS_2")
 annotateGeneIDs(ids=c(780, 5982, 3310, NULL), chip="HG-U133_PLUS_2")
 annotateGeneSymbols(ids=c("DDR1", "RFC2", "HSPA6", "HSAP6"), chip="HUMAN_REFSEQ-8")
-}
+
+options(error=NULL)
 }

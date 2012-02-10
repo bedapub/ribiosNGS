@@ -31,11 +31,13 @@ annotateIDs(ids, chip, column)
   \code{\link{annotateProbesets}},  \code{\link{annotateGeneIDs}} and \code{\link{annotateGeneSymbols}}.
 }
 \examples{
-\dontrun{
+options(error=utils::recover)
+
 annotateIDs(ids=c("GI_38327631-A", "GI_31563533-I", "GI_42822885-S", NA),chip="HUMAN_REFSEQ-8", column="ProbeID")
 annotateIDs(ids=c("780", "5982", "3310", NA),chip="HUMAN_REFSEQ-8", column="GeneID")
 annotateIDs(ids=c("DDR1", "RFC2", "HSPA6", "HSAP6"),chip="HUMAN_REFSEQ-8", column="GeneSymbol")
-}
+
+options(error=NULL)
 }
 % internal keyword: since annotateIDs is used internally
 \keyword{ internal }

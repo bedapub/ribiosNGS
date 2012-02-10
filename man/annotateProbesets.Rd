@@ -51,7 +51,8 @@ Jitao David Zhang <jitao_david.zhang@roche.com>
   probesets in a chip.
 }
 \examples{
-\dontrun{
+options(error=utils::recover)
+
 myprobes <- c("1000_at", "1004_at", "1002_f_at", "nonsense_at")
 annotateProbesets(myprobes, chip="HG_U95A")
 
@@ -65,5 +66,6 @@ annotateProbesets(myprobes2, chip="U133_X3P")
 ## when using wrong chip it is likely that many (if not all)
 ## features will not be annotated
 annotateProbesets(myprobes2, chip="HGU_95A")
-}
+
+options(error=NULL)
 }

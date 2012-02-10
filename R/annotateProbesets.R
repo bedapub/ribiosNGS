@@ -1,6 +1,6 @@
 annotateIDs <- function(ids, chip="HG-U133_PLUS_2", column="ProbeID") {
   ids <- as.character(ids)
-  chipAnn <- gtiChipAnnotation(chip)
+  chipAnn <- gtiChipAnnotation(chip, inCol=column, inValues=ids)
   chipAnnOrd <- matchColumn(ids, chipAnn, column)
   
   if(identical(anyDuplicated(ids), 0L) & !any(is.na(ids))) {

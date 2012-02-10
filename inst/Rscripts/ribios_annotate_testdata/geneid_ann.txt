@@ -1,0 +1,6 @@
+"ProbeID" "GeneID" "GeneSymbol" "GeneName" "isSingleGeneID" "Chip"
+6376 6376 "CX3CL1" "chemokine (C-X3-C motif) ligand 1" TRUE "HG-U133_PLUS_2"
+3162 3162 "HMOX1" "heme oxygenase (decycling) 1" TRUE "HG-U133_PLUS_2"
+8694 8694 "DGAT1" "diacylglycerol O-acyltransferase 1" TRUE "HG-U133_PLUS_2"
+7038 7038 "TG" "thyroglobulin" TRUE "HG-U133_PLUS_2"
+780 780 "DDR1" "discoidin domain receptor tyrosine kinase 1" TRUE "HG-U133_PLUS_2"

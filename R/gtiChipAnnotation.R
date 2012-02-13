@@ -37,7 +37,8 @@ gtiChipAnnotation <- function(chip,
   colnames(ann) <- c("ProbeID", "GeneID", "GeneSymbol", "GeneName", "isSingleGeneID", "Chip")
   asg <- as.logical(ann[,"isSingleGeneID"])
   ann[,"isSingleGeneID"] <- asg
-  ann[is.na(asg),"isSingleGeneID"] <- FALSE
+  if(any(is.na(asg)))
+    ann[is.na(asg),"isSingleGeneID"] <- FALSE
   
   if(hasInCol && !filterInSQL) {
     filter <- ann[, inCol] %in% inValues

@@ -1,3 +1,7 @@
+Version 1.0-16 (2012-02-13)
+  + the ORA object assignment is done after exporting ORACLE.BASE and ORACLE.LIB, to adapt to the newest version (1.1-1) of ROracle package
+  + the gtiChipAnnotation function does not break when no probeset was annotated (due to logical(0) before)
+
 Version 1.0-15 (2012-02-10)
   + gtiChiptypes uses genome.CHIP_ARRAY_TYPES@bin table to report GTI-supported chip types. Comparing previous versions, the default behavior is not changing. By settign 'include.desc=TRUE', more details are returned, includeing Technology and Species.
   + gtiChipAnnotation uses genome.chip_probeset_gene and genome.GTI_GENES internally, in order to be 100% synchronized with GTI. The resulting data.frame keeps consistency, although the isSingleGeneID column is always set to TRUE since only uniquely mapped probesets are stored. Provisionally this column shall be removed in the future version.

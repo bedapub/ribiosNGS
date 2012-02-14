@@ -1,5 +1,7 @@
 #include "ribios_demo.h"
 
+#include "sequtil.h"
+
 SEXP bios_revcomp (SEXP seq) {
   Stringa inputSeq = stringCreate(10);
   const char* from = "acgtumrwsykvhdbxnACGTUMRWSYKVHDBXN.-*";

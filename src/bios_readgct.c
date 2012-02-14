@@ -1,10 +1,9 @@
-#include <R.h>
-#include <log.h>
-#include <math.h>
+#include "ribios_demo.h"
+
 #include <format.h>
 #include <linestream.h>
+#include <rofutil.h>
 
-#include "ribios_demo.h"
 
 SEXP bios_readgct(SEXP filename, SEXP keepdesc) {
   LineStream ls;

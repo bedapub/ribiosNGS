@@ -3,13 +3,8 @@
 
 #include <R.h>
 #include <Rinternals.h>
-#include "arg.h"
 #include "log.h"
-#include "format.h"
 #include "array.h"
-#include "rofutil.h"
-#include "sequtil.h"
-
 
 // convention used here: functions independent of BIOS functionalities begins with c_,
 // those dependent on BIOS will begin with bios_

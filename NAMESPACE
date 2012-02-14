@@ -1,6 +1,7 @@
-##exportPattern("^[[:alpha:]]+")
+export(revcomp, revcompNative, makeSeq)
 
-export(printInt, getPi)
-export(repA, revcomp)
+export(makeGctLines, makeTempGct, readGct, readGctNative)
 
-useDynLib(ribiosPrototype, c_printInt, c_getPi, bios_repA, bios_revcomp);
+export(nalimov)
+
+useDynLib(ribiosDemo, bios_revcomp, bios_readgct, bios_nalimov)

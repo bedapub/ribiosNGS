@@ -15,7 +15,7 @@ input.files <- getArg("infile")
 gethelp <- existArg("h") | existArg("help")
 
 if(!hasVal(input.files) | gethelp) {
-  message(paste("\nUsage: drawHeatmap.R -infile infile1 [infile2] [...] -outfile outfile1 [outfile2] [...] OPTS\n",
+  message(paste("\nUsage: drawHeatmap.Rscript -infile infile1 [infile2] [...] -outfile outfile1 [outfile2] [...] OPTS\n",
                 "OPTS can be one or more of following optional parameters:\n",
                 "# data scaling\n\t",
                 "[-scale none/row/column]\n",
@@ -45,9 +45,9 @@ revC <- unname(logpar["revC"])
 dendrogram <- getArg("dendrogram")
 if(!dendrogram %in% c("both", "row", "column", "none"))
   dendrogram <- "both"
-hclustMethod <- getArg("hclust",onlyArg="complete", missingArg="complete")
-if(!hclustMethod %in% c("complete", "ward", "single", "average", "mcquitty", "median", "centroid"))
-  hclustMethod <- "complete"
+hclustMethod <- getArg("hclust",onlyArg="ward", missingArg="ward")
+if(!hclustMethod %in% c("ward", "complete", "single", "average", "mcquitty", "median", "centroid"))
+  hclustMethod <- "ward"
 distMethod <- getArg("dist", onlyArg="euclidean", missingArg="euclidean")
 if(!distMethod %in% c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"))
   distMethod <- "euclidean"

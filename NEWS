@@ -1,3 +1,6 @@
+2012-02-14 v1.1-2
+  + biosHeatmap.Rscript uses Ward as the default clustering method, replacing the "Complete" method. Thanks to the suggestion by Gonzalo.
+
 2011-12-08 v1.1.1
   + inst/Rscript/geneset_xyplot.Rscript adds dependency on the ribiosIO package
   + inst/Rscript/geneset_xyplot.Rscript now makes sure the rownames are not duplicated

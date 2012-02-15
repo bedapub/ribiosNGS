@@ -1,5 +1,6 @@
 Version 0.99.1 (2012-02-15)
   + Fixing bug in the revcompNative routine: the complementary base of U is A, not T.
+  + revcompNative supports N now
 
 Version 0.99.0 (2012-02-14)
   + Establish the ribiosDemo package

@@ -9,6 +9,6 @@ revcomp <- function(x) {
 revcompNative <- function(x) {
   chars <- strsplit(x,"")
   chars.rev <- lapply(chars, rev)
-  dict <- c("A"="T", "G"="C", "C"="G", "T"="A", "U"="A")
+  dict <- c("A"="T", "G"="C", "C"="G", "T"="A", "U"="A", "N"="N")
   sapply(chars.rev, function(x) paste(dict[x], collapse=""))
 }

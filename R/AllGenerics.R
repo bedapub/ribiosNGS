@@ -21,6 +21,11 @@ setMethod("rowscale", c("ExpressionSet","ANY", "ANY"), function(object, center, 
     center <- TRUE
   if(missing(scale))
     scale <- TRUE
-  exprs(object) <- t(scale(t(exprs(object)),center=center, scale=scale))
+  if(storageMode(object)!="lockedEnvironment")
+    warning("The storageMode of the input object is not 'lockedEnvironment': exprs is replaced by row-scaled values\n",
+            "To prevent damaging the data integrity, set the storageMode to 'lockedEnvironment'")
+  
+  exprs(object) <- t(scale(t(exprs(object)),
+                           center=center, scale=scale))
   return(object)
 })

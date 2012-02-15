@@ -1,3 +1,6 @@
+Version 1.0-13 (Feb 15, 2012)
+  + The rowscale method warns if the input ExpressionSet does not have 'lockedEnvironment' as storageMode
+
 Version 1.0-12 (Jan 09, 2012)
   + Low-level functions for computational drug repositioning has been refactored into the ribiosReposition package: ksScore, cmap and connScore. Currently there is no dependency of ribiosExpression on ribiosReposition, therefore users of these functions must explicitly load the ribiosReposition package.
 

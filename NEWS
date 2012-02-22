@@ -1,0 +1,8 @@
+Version 1.0-1 (2012-02-22)
+  + Make cookie as a parameter to queryUrl and queryExpressionData
+  + bakeCookie function provides the 'verbose' option
+  + (Internal) Use 'basicTextGatherer' to keep postForm function quiet when needed
+  + Add ribiosIO and RCurl as dependencies
+ 
+Version 1.0-0 (2012-02-18)
+  + Add ribiosUDIS package to the ribios toolbox

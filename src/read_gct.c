@@ -65,6 +65,8 @@ SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
 	SET_STRING_ELT(colnames, i, 
 		       mkChar(textItem(it, i+2)));
     } else {
+      if(arrayMax(it)<=2)
+	continue; // empty line
       SET_STRING_ELT(rownames, ind-2,
 		     mkChar(textItem(it, 0)));
       if(keep)

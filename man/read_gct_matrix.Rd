@@ -1,17 +1,24 @@
 \name{read_gct_matrix}
 \alias{read_gct}
 \alias{read_gct_matrix}
+\alias{read_gctstr_matrix}
 \title{
   Calling C routine to read GCT file into a matrix
 }
 \description{
-  The function \code{read_gct_matrix} calls the C routine \code{read_gct} to read GCT file into a matrix
+  The function \code{read_gct_matrix} calls the C routine
+  \code{read_gct} to read GCT file into a matrix.
+
+  The function \code{read_gctstr_matrix} calls the C rountine as well,
+  to parse a character string in the GCT file format into a matrix.
 }
 \usage{
 read_gct_matrix(gct.file, keep.desc=TRUE)
+read_gctstr_matrix(string, keep.desc=TRUE)
 }
 \arguments{
   \item{gct.file}{Character, name of a gct-format file}
+  \item{string}{Character string, a character string in the GCT-file format}
   \item{keep.desc}{Logical, whether the description of features should
     be returned as an attribute of the matrix}
 }
@@ -38,4 +45,7 @@ sample.gct.file <- file.path(idir, "test.gct")
 
 test.mat <- read_gct_matrix(sample.gct.file, keep.desc=TRUE)
 test.simmat <- read_gct_matrix(sample.gct.file, keep.desc=FALSE)
+
+sample.gct.string <- paste(readLines(sample.gct.file),collapse="\n")
+teststr.mat <- read_gctstr_matrix(sample.gct.string, keep.desc=TRUE)
 }

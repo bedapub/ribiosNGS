@@ -6,5 +6,5 @@
 #define CALLMETHOD_DEF(fun, numArgs) {#fun, (DL_FUNC) &fun, numArgs}
 
 // public functions
-SEXP read_gct (SEXP filename, SEXP keepdesc);
+SEXP read_gct (SEXP filename, SEXP pchr, SEXP keepdesc);
 #endif

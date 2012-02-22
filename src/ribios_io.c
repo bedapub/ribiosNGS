@@ -3,7 +3,7 @@
 
 static const R_CallMethodDef callMethods[] = {
   /* read_gct.c */
-  CALLMETHOD_DEF(read_gct, 2),
+  CALLMETHOD_DEF(read_gct, 3),
 
   {NULL, NULL, 0}
 };

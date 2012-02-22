@@ -6,7 +6,8 @@
 
 #include "ribios_io.h"
 
-SEXP read_gct(SEXP filename, SEXP keepdesc) {
+// read_gct can read from either a file or a character string
+SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
   LineStream ls;
   char* line;
 
@@ -15,15 +16,27 @@ SEXP read_gct(SEXP filename, SEXP keepdesc) {
   int i;
   Texta it;
   double *pmat;
+  char *gctsource;
   SEXP rownames, colnames, desc, dimnames;
   SEXP ans,res;
   
-  const char* fn=CHAR(STRING_ELT(filename,0));
-  char* fname = strdup(fn); // strcpy will give hard-to-debug memory error!!
   int keep = asLogical(keepdesc);
   if(keep == NA_LOGICAL) error("'keep.desc' must be TRUE or FALSE");
-
-  ls = ls_createFromFile(fname);
+  
+  if(filename != R_NilValue && pchr != R_NilValue) {
+    error("Only one of 'filename' and 'pchr' can be not NULL");
+  } else if (filename == R_NilValue && pchr == R_NilValue) {
+    error("Either 'filename' or 'pchr' must be non-NULL");
+  } else if (filename != R_NilValue) {
+    const char* fn=CHAR(STRING_ELT(filename,0));
+    gctsource = strdup(fn); // strcpy will give hard-to-debug memory error!!
+    ls = ls_createFromFile(gctsource);
+  } else {
+    const char* fn=CHAR(STRING_ELT(pchr, 0));
+    gctsource = strdup(fn);
+    ls = ls_createFromBuffer(gctsource);
+  }
+  
   while(line = ls_nextLine(ls)) {
     if(line[0] == '#')
       continue;
@@ -84,7 +97,7 @@ SEXP read_gct(SEXP filename, SEXP keepdesc) {
     setAttrib(ans, install("desc"), desc);
   
   ls_destroy(ls);
-  free(fname); 
+  free(gctsource); 
   if(keep) {
     UNPROTECT(5);
   } else {

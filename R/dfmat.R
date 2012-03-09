@@ -15,8 +15,7 @@ headhead <- function(x, m=6L, n=6L,...) {
 
 tailtail <- function(x, m = 6L, n = 6L,
                      addrownums = TRUE,
-                     addcolnums = TRUE,...) 
-{
+                     addcolnums = TRUE,...) {
     stopifnot(length(m) == 1L & length(n) == 1L)
     mrx <- nrow(x)
     ncx <- ncol(x)
@@ -79,15 +78,7 @@ removeColumns <- function(data.frame, columns, drop=FALSE) {
   return(data.frame)
 }
 
-matchColumnIndex <- function(vector, data.frame, column) {
-  stopifnot(is.data.frame(data.frame) & column %in% colnames(data.frame))
-  index <- match(vector, data.frame[, column])
-  return(index)
-}
-matchColumn <- function(vector, data.frame, column) {
-  index <- matchColumnIndex(vector, data.frame, column)
-  return(data.frame[index,])
-}
+
 
 ## change column names
 replaceByMatch <- function(vector, old.items, new.items) {

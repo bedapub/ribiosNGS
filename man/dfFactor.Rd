@@ -9,7 +9,7 @@
 dfFactor(df, sample.group)
 }
 \arguments{
-  \item{dataframe}{A \code{data.frame}}
+  \item{df}{A \code{data.frame}}
   \item{sample.group}{A character, number or a vector of factors, from
     which the factor vector should be deciphered. See details below.}
 }

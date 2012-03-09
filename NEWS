@@ -1,3 +1,17 @@
+Version 1.0-11 (2012-03-09)
+  + Add matrix2longdf function to convert a matrix into long format data.frame
+  + Add extname function to get extension of file names
+  + Add openFileDevice function to open a display device as a file, preparing to print plots to the file.
+
+Version 1.0-10 (2012-02-10)
+  + Both matchColumnIndex and matchColumn function supports both column index and column names, and the matching of row names.
+  + Both matchColumnIndex and matchColumn supports the multi parameter, specifying the behaviour of function in multiple-matching cases.
+  + matchColumnIndex over-writes the column with the master vector: also in the case of multiple mapping.
+  + Documentations have been added for matchColumn and matchColumnIndex.
+
+Version 1.0-9 (2012-02-06)
+  + Add verbose function to allow verbose-level specific printing of verbose information, especially useful in programs with user interfaces.
+
 Version 1.0-8 (2012-01-18)
   + The library function is checked for the support of "quietly" option in libordie by checking the base package version (>=2.13.0 supports quietly=TRUE)
 

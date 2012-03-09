@@ -3,5 +3,14 @@ exportPattern("^[[:alpha:]]+")
 export(summarizeRows, summarizeColumns, summarizeCols)
 export(isError)
 
+export(matchColumnIndex, matchColumn)
+
+export(matrix2longdf)
+
+export(extname)
+
+export(qqmsg)
+export(verbose)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils, .registration=TRUE)

@@ -1,0 +1,16 @@
+Position
+Caudate_Nucleus
+Cerebellum.bam
+Cerebral_Cortex
+Frontal_Lobe
+Hippocampus
+Medulla_Oblongata
+Nucleus_Accumbens
+Pons
+Putamen
+Temporal_Lobe
+Whole_Brain_Takara
+MAQCB_Ambion
+Hypothalamus
+Thalamus
+

@@ -9,12 +9,12 @@
   queries, fetching results, and disconnection. 
 }
 \usage{
-querydb(sqlComm, db = c("bia", "bin"))
+querydb(sqlComm, db = c("bia", "bin", "red"))
 }
 \arguments{
   \item{sqlComm}{A SQL query, a SELECT command.}
   \item{db}{Characters: which Oracle database should be connected?
-    Currently \emph{bia} and \emph{bin} are supported.}
+    Currently \emph{bia}, \emph{bin} and \emph{red} are supported.}
 }
 \details{
   The \emph{sqlComm} parameter must not end with comma (;).

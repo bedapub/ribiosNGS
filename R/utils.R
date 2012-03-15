@@ -1,5 +1,7 @@
 ORACLE.BIA.USER <- "bi"
 ORACLE.BIA.PWD <- "bi"
+ORACLE.RED.USER <- "red"
+ORACLE.RED.PWD <- "red"
 ORACLE.BIN.USER <- "genome"
 ORACLE.BIN.PWD <- "genome"
 ORACLE.BASE <- "/opt/oracle"
@@ -28,4 +30,7 @@ newconBIA <- function() {
 }
 newconBIN <- function() {
   dbConnect(ORA, user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD, db="bin")
+}
+newconRED <- function() {
+  dbConnect(ORA, user=ORACLE.RED.USER, password=ORACLE.RED.PWD, db="bia")
 }

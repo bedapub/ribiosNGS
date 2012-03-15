@@ -1,8 +1,8 @@
 Package: ribiosAnnotation
 Type: Package
-Title: Annotation of human genes, RNAs and proteins in the BIOS system
-Version: 1.0-16
-Date: 2012-02-13
+Title: Annotation of genes, RNAs and proteins in the BIOS system
+Version: 1.0-18
+Date: 2012-03-15
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>, with inputs and feedbacks from TRS BEDA team.
 Maintainer:  Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Annotate human genes, RNAs and proteins with information deposited in the Oracle database of the BIOS system. 

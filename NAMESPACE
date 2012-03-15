@@ -25,6 +25,11 @@ export(chrLen)
 export(hapmapSnp,
        illuminaSnp)
 
+export(humanOrthologs,
+       humanUniqOrtholog,
+       nonhumanOrthologs,
+       nonhumanUniqOrtholog)
+
 export(ORACLE.IN.NMAX)
 
 ## deprecated functions

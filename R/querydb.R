@@ -1,9 +1,11 @@
-querydb <- function(sqlComm, db=c("bia", "bin")) {
+querydb <- function(sqlComm, db=c("bia", "bin", "red")) {
   db <- match.arg(db)
   if(db=="bia") {
     con <- newconBIA()
   } else if (db=="bin") {
     con <- newconBIN()
+  } else if (db=="red") {
+    con <- newconRED()
   }
   
   rs <- dbSendQuery(con, sqlComm)
@@ -17,12 +19,14 @@ querydb <- function(sqlComm, db=c("bia", "bin")) {
 
 
 ## select in: large IN queries
-querydbSelectIn <- function(sqlComm, inCol, inValues, db=c("bia", "bin")) {
+querydbSelectIn <- function(sqlComm, inCol, inValues, db=c("bia", "bin", "red")) {
   db <- match.arg(db)
   if(db=="bia") {
     con <- newconBIA()
   } else if (db=="bin") {
     con <- newconBIN()
+  } else if (db=="red") {
+    con <- newconRED()
   }
   inValues <- unique(inValues)
   if(length(inValues) <= ORACLE.IN.NMAX) {

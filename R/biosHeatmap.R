@@ -385,8 +385,8 @@ biosHeatmap <- function (x,
   if (is.null(margins) || !is.numeric(margins) || length(margins)!=2) {
     xlab.mar <- ifelse(!is.null(xlab) && length(xlab)==1,2,0.2)
     ylab.mar <- ifelse(!is.null(ylab) && length(ylab)==1,2,0.2)
-    margins <- c(max(strwidth(labCol, unit="inch", cex=cexCol),na.rm=TRUE)/par("csi")+xlab.mar,
-                 max(strwidth(labRow, unit="inch", cex=cexRow),na.rm=TRUE)/par("csi")+ylab.mar)
+    margins <- c(max(strwidth(labCol, units="inch", cex=cexCol),na.rm=TRUE)/par("csi")+xlab.mar,
+                 max(strwidth(labRow, units="inch", cex=cexRow),na.rm=TRUE)/par("csi")+ylab.mar)
   }
 
   if (!missing(RowSideColors)) {
@@ -515,7 +515,7 @@ biosHeatmap <- function (x,
       main <- paste(main, collapse="\n")
     }
     ## Todo: not quite sure whether the unit here is correct
-    main.width <- strwidth(main, unit="figure", cex=op[["cex.main"]])
+    main.width <- strwidth(main, units="figure", cex=op[["cex.main"]])
     if(main.width<1) main.width <- 1
     main.cex <- op[["cex.main"]]*main.width*(lwid[2]/sum(lwid))*0.8
     title(main, cex.main=main.cex)

@@ -6,6 +6,7 @@ suppressMessages(library(ribiosArg))
 infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
 outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
 samplefile <- getArg("samplefile", onlyArg=NULL, missingArg=NULL)
+featurefile <- getArg("featurefile", onlyArg=NULL, missingArg=NULL)
 
 getHelp <- existArg("h") | existArg("help")
 
@@ -17,7 +18,8 @@ if(is.null(infile) || is.null(outfile) || getHelp) {
               "-infile FILE\tinput tab-delimited files\n",
               "-outfile FILE\toutput figure. Supports PDF, TIFF and PNG\n",
               "Optional parameters:\n",
-              "-samplefile FILE\tSample annotation file\n"),
+              "-samplefile FILE\tSample annotation file\n",
+              "-featurefile FILE\tFeature annotation file, indicating where separation lines should be drawn, can be one number per line or a headless tab-delimited table\n"),
         status=1L)
 }
 libordie(lattice)
@@ -31,61 +33,48 @@ if(!file.exists(infile)) {
 intbl <- read.table(infile)
 position <- intbl[,1L]
 inmat <- as.matrix(intbl[,-1L])
+inmat.ncol <- ncol(inmat)
 
 sampleAnno <- NULL
 if(!is.null(samplefile)) {
   if(!file.exists(samplefile)) {
-    qqmsg("Given sample annotation file does not exist", status=1L)
-  }
-  sampleAnno <- readLines(samplefile)
-  sampleAnno <- sampleAnno[sampleAnno!=""]
-  if(length(sampleAnno)==ncol(intbl)) {
-    sampleAnno <- sampleAnno[-1]
-  } else if (length(sampleAnno)!=ncol(inmat)) {
-    warning("Given sample annotation file does not contain exact same lines as of samples. It is neglected")
-    sampleAnno <- NULL
-  }
-}
-
-
-mat2df <- function(mat, rnames, cnames) {
-  if(missing(rnames)) rnames <- rownames(mat)
-  if(missing(cnames)) cnames <- rownames(mat)
-  
-  if(is.null(rnames))
-    rnames <- 1:nrow(mat)
-  if(is.null(cnames))
-    cnames <- 1:ncol(mat)
-  value <- as.vector(mat)
-  rn <- rep(rnames, ncol(mat))
-  cn <- rep(cnames, each=nrow(mat))
-  return(data.frame(row=rn,
-                    column=cn,
-                    value=value))
-}
-getFileType <- function(filename) {
-  gsub(".*\\.(\\w{3,4})", "\\1", outfile)
-}
-openDevice <- function(filename) {
-  filetype <- getFileType(filename)
-  if(filetype=="pdf") {
-    pdf(outfile, width=10, height=10)
-  } else if (filetype=="png") {
-    png(outfile, width=10, height=10, units="in", res=300)
-  } else if(filetype=="tiff") {
-    tiff(outfile, width=10, height=10, units="in", res=300)
+    warning("Given sample annotation file does not exist")
   } else {
-    warning("Unrecognized output format. PDF will be used\n")
+    sampleAnno <- readLines(samplefile)
+    sampleAnno <- sampleAnno[sampleAnno!=""]
+    if(length(sampleAnno)==ncol(intbl)) {
+      sampleAnno <- sampleAnno[-1]
+    } else if (length(sampleAnno)!=inmat.ncol) {
+      warning("Given sample annotation file does not contain exact same lines as of samples. It is neglected")
+      sampleAnno <- NULL
+    }
   }
 }
 
-indf <- mat2df(inmat, rnames=position, cnames=sampleAnno)
+featureAt <- NULL
+if(!is.null(featurefile)) {
+  if(!file.exists(featurefile)) {
+    warning("Given feature annotation file does not exist")
+  } else {
+    featureAnno <- data.matrix(read.table(featurefile, sep="\t"))
+    featureAt <- as.vector(featureAnno)
+  }
+}
+
+indf <- matrix2longdf(inmat, row.names=position, col.names=sampleAnno)
 indf$column <- factor(indf$column, levels=unique(indf$column))
+panel.xyplot.feature <- function(...) {
+  panel.abline(v=featureAt, col="lightgray", lty=2)
+  panel.xyplot(...)
+}
 covplot <- xyplot(value ~ row | column, data=indf, as.table=TRUE, type="h",
                 xlab="Position", ylab="Coverage",
-                scales=list(x=list(rot=90, alternating=1, tck=c(1,0)),
-                  y=list(alternating=1, tck=c(1,0))))
-openDevice(outfile)
+                  layout=c(1L, inmat.ncol),
+                  panel=panel.xyplot.feature,
+                  scales=list(x=list(alternating=1, tck=c(1,0)),
+                    y=list(alternating=1, tck=c(1,0))))
+indheight <- pmax(5, inmat.ncol)
+openFileDevice(outfile, width=7, height=indheight)
 print(covplot)
 dev.off()
 

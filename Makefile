@@ -1,1 +1,1 @@
-../ribios-Makefile
+/SOFT/bi/apps/ribios/ribios/Makefile

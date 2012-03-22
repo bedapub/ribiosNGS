@@ -1,10 +1,11 @@
-#include "ribios_utils.h"
 #include <R_ext/Rdynload.h>
+#include "ribios_utils.h"
+#include "endec.h"
+#include "die.h"
 
 static const R_CallMethodDef callMethods[] = {
-  /* fme_cor.c */
-  CALLMETHOD_DEF(fme_cor, 1),
-
+  /* pwdecode.c */
+  CALLMETHOD_DEF(pwdecode, 1),
   {NULL, NULL, 0}
 };
 

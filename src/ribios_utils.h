@@ -7,5 +7,4 @@
 
 #define CALLMETHOD_DEF(fun, numArgs) {#fun, (DL_FUNC) &fun, numArgs}
 
-SEXP fme_cor (SEXP mat);
 #endif

@@ -1,3 +1,7 @@
+Version 1.0-12 (2012-03-22)
+  + Add pwdecode function (with C backend) to decode passwords encypted with pwencode command-line tool
+  + (Internal) pwdecode has a parsimonious Makevar file. And it successfully avoids the die mechanism of BIOS system by providing a imposter macro.
+
 Version 1.0-11 (2012-03-09)
   + Add matrix2longdf function to convert a matrix into long format data.frame
   + Add extname function to get extension of file names

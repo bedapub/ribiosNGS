@@ -1,0 +1,108 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+## constants
+MAXCONN.DEFAULT <- 0L
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+maxconn <- getArg("maxConnector", onlyArg=MAXCONN.DEFAULT, missingArg=MAXCONN.DEFAULT)
+## level.limit = maxconn+1, since it measures the path step length
+level.limit <- parseNumVec(maxconn, expLen=1L, failVal=MAXCONN.DEFAULT)+1L
+
+getHelp <- existArg("h") | existArg("help")
+
+if(is.null(infile) || is.null(outfile) || getHelp) {
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              "[-maxConnector INT] -infile FILE -outfile FILE\n",
+              "Mandatory parameter:\n",
+              "-infile FILE\tInput Entrez GeneIDs, one GeneID per line\n",
+              "-outfile FILE\tOutput file. By default outputs are printed in standard output, e.g. screen.\n",
+              "Optional parameters:\n",
+              "-maxConnector INT\tMax number of connectors in network expansion. Default:0 (no network expansion).\n",
+              sep=" "))
+}
+## INPUT
+if(!file.exists(infile))
+  qqmsg("ERROR: 'infile' not found\n", status=1L)
+geneids <- readLines(infile)
+geneids <- unique(geneids[!is.na(geneids) & geneids!="NA"])
+
+## annotation
+libordie(ribiosAnnotation)
+
+## build interaction network
+sql <- paste("SELECT",
+             "INT_ID as ID, GENE1, GENE_SYM1, INT_TYPE as type, EFFECT, GENE2, GENE_SYM2, SOURCE",
+             "FROM bi2.ronet_intdb_snap",
+             "WHERE SOURCE IN ('KEGG','REACTOME', 'ariadne-RESNET6')",
+             sep=" ")
+all.tbl <- querydb(sql,db="bia", user="biread", password="biread")
+all.tbl <- subset(all.tbl, !is.na(GENE1) & !is.na(GENE2))
+ftM <- as.matrix(all.tbl[,c("GENE1", "GENE2")])
+ftM <- unique(ftM)
+
+## graph library
+libordie(RBGL)
+Gd <- ftM2graphNEL(ftM, edgemode="directed")
+
+## validate input nodes
+input.ids <- intersect(nodes(Gd), geneids)
+missingNodes <- setdiff(geneids, c(NA, nodes(Gd)))
+if(length(input.ids)==0)
+  qqmsg("No ids found in the interaction database.", status=2L)
+
+## find subnetwork
+if(level.limit<=1L) {
+  expand.ids <- input.ids
+} else {
+  G <- ugraph(Gd) ## very slow (ca. 60s)
+  
+  gene.start <- rep(input.ids[-length(input.ids)],
+                    (length(input.ids)-1):1)
+  gene.end <- unlist(sapply(1:(length(input.ids)-1),
+                            function(x) input.ids[(x+1):length(input.ids)]))
+  
+  if(level.limit <=3) {
+    input.nei <- adj(G, input.ids)
+    neighbors <- unique(c(input.ids, unlist(input.nei)))
+    nG <- subGraph(neighbors, G)
+    gs <- sp.between(nG, start=gene.start, finish=gene.end)
+  } else {
+    gs <- sp.between(G, start=gene.start, finish=gene.end)
+  }
+  
+  gs.levels <- sapply(gs, function(x) x$length)
+  gs.outLevel <- is.na(gs.levels) | gs.levels > level.limit
+  gs.raw <- gs
+  gs <- gs.raw[!gs.outLevel]
+  
+  expand.idList <- sapply(gs, function(x) x$path_detail)
+  expand.ids <- unique(c(input.ids, unlist(expand.idList)))
+}
+
+expandG <- subGraph(expand.ids, Gd)
+fullExpandG <- addNode(missingNodes, expandG)
+
+## visualization for debugging
+if(vis <- FALSE){
+  libordie(Rgraphviz)
+  ncols <- makeNodeAttrs(fullExpandG, fillcolor=ifelse(nodes(fullExpandG) %in% geneids, "lightblue", "orange"))
+  plot(fullExpandG, nodeAttrs=ncols)
+}
+
+## output
+libordie(igraph)
+outG <- igraph.from.graphNEL(fullExpandG)
+outG.names <- get.vertex.attribute(outG, "name")
+id2sym <- c(all.tbl$GENE_SYM1, all.tbl$GENE_SYM2)
+names(id2sym) <- c(all.tbl$GENE1, all.tbl$GENE2)
+V(outG)$label <- unname(id2sym[outG.names])
+outG.missLabel <- is.na(V(outG)$label)
+V(outG)$label[outG.missLabel] <- outG.names[outG.missLabel]
+write.graph(outG, file=outfile, format="gml")
+
+qqmsg(status=0L)

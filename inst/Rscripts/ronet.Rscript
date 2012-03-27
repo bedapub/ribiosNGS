@@ -5,6 +5,8 @@ suppressMessages(library(ribiosArg))
 
 ## constants
 MAXCONN.DEFAULT <- 0L
+## supported out formats: defined as igraph::write.graph
+SUPP.OUT.FORMATS <- c("edgelist", "pajek", "ncol", "lgl", "graphml", "dimacs", "gml", "dot")
 
 infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
 outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
@@ -25,11 +27,23 @@ if(is.null(infile) || is.null(outfile) || getHelp) {
               "-maxConnector INT\tMax number of connectors in network expansion. Default:0 (no network expansion).\n",
               sep=" "))
 }
+## OUTPUT
+outformat <- extname(outfile)
+if(is.na(outformat)) {
+  warning("Outfile format not detected by extension name: gml format will be used")
+  outformat <- "gml"
+} else if(!outformat %in% SUPP.OUT.FORMATS) {
+  qqmsg("ERROR: outfile format not supported. Please use one of the following formats as file name extension\n\t",
+        paste(SUPP.OUT.FORMATS, collapse=", "),
+        status=1L)
+}
+
 ## INPUT
 if(!file.exists(infile))
   qqmsg("ERROR: 'infile' not found\n", status=1L)
 geneids <- readLines(infile)
 geneids <- unique(geneids[!is.na(geneids) & geneids!="NA"])
+
 
 ## annotation
 libordie(ribiosAnnotation)
@@ -43,11 +57,21 @@ sql <- paste("SELECT",
 all.tbl <- querydb(sql,db="bia", user="biread", password="biread")
 all.tbl <- subset(all.tbl, !is.na(GENE1) & !is.na(GENE2))
 ftM <- as.matrix(all.tbl[,c("GENE1", "GENE2")])
-ftM <- unique(ftM)
+ftM.isUniq <- !duplicated(ftM)
+ftM <- ftM[ftM.isUniq,]
+## interaction type
+ftM.type <- all.tbl[,"TYPE"]
+hasEffect <- !is.na(all.tbl[,"EFFECT"])
+ftM.type[hasEffect] <- paste(ftM.type[hasEffect], all.tbl[hasEffect, "EFFECT"], sep="_")
+ftM.type <- ftM.type[ftM.isUniq]
 
 ## graph library
 libordie(RBGL)
 Gd <- ftM2graphNEL(ftM, edgemode="directed")
+edgeDataDefaults(Gd, "label") <- ""
+edgeData(Gd, from=all.tbl[ftM.isUniq, "GENE1"],
+         to=all.tbl[ftM.isUniq, "GENE2"],
+         attr="label") <- ftM.type
 
 ## validate input nodes
 input.ids <- intersect(nodes(Gd), geneids)
@@ -103,6 +127,6 @@ names(id2sym) <- c(all.tbl$GENE1, all.tbl$GENE2)
 V(outG)$label <- unname(id2sym[outG.names])
 outG.missLabel <- is.na(V(outG)$label)
 V(outG)$label[outG.missLabel] <- outG.names[outG.missLabel]
-write.graph(outG, file=outfile, format="gml")
+write.graph(outG, file=outfile, format=outformat)
 
 qqmsg(status=0L)

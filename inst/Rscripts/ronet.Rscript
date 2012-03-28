@@ -29,13 +29,11 @@ if(is.null(infile) || is.null(outfile) || getHelp) {
 }
 ## OUTPUT
 outformat <- extname(outfile)
-if(is.na(outformat)) {
-  warning("Outfile format not detected by extension name: gml format will be used")
+if(is.na(outformat) || !outformat %in% SUPP.OUT.FORMATS) {
+  warning("Outfile format not detected. GML format is used\n",
+          "Please use one of the following formats as file name extension\n\t",
+          paste(SUPP.OUT.FORMATS, collapse=", "))
   outformat <- "gml"
-} else if(!outformat %in% SUPP.OUT.FORMATS) {
-  qqmsg("ERROR: outfile format not supported. Please use one of the following formats as file name extension\n\t",
-        paste(SUPP.OUT.FORMATS, collapse=", "),
-        status=1L)
 }
 
 ## INPUT

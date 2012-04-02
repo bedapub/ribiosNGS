@@ -1,5 +1,9 @@
+2012-04-02 v1.1-5
+  + coverage-plot.Rscript supports now sequence annotation
+
 2012-03-19 v1.1-4
   + Add -featurefile option to the coverage-plot.Rscript to allow drawing exon boundary lines.
+  + partial matching of the parameter unit (should be units) in the strwidth function called by biosHeatmap is solved
 
 2012-03-09 v1.1-3
   + Add coverage-plot.Rscript in the Rscript directory.

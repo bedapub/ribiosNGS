@@ -1,3 +1,6 @@
+Version 1.0-14 (Apr 03, 2012)
+  + The deprecation message of remainHighestVarProbe and keepHighestVarProbe have been updated
+
 Version 1.0-13 (Feb 15, 2012)
   + The rowscale method warns if the input ExpressionSet does not have 'lockedEnvironment' as storageMode
 

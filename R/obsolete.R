@@ -1,9 +1,9 @@
 remainHighestVarProbe <- function(eset, probe.index.name) {
-  .Deprecated(new="keepMaxVarProbe", package="ribiosExpression")
+  .Deprecated(new="keepMaxStatProbe", package="ribiosExpression")
   keepMaxStatProbe(eset, probe.index.name, stat=sd, na.rm=TRUE)
 }
 keepHighestVarProbe <- function(eset, probe.index.name) {
-  .Deprecated(new="keepMaxVarProbe", package="ribiosExpression")
+  .Deprecated(new="keepMaxStatProbe", package="ribiosExpression")
   keepMaxStatProbe(eset, probe.index.name, stat=sd, na.rm=TRUE)
 }
 

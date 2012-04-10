@@ -1,7 +1,11 @@
+Version 1.0-9 (2012-04-10)
+  + Add 'read_fasta' and 'write_fasta' functions to import/export FASTA-format sequence files
+
 Version 1.0-8 (2012-02-22)
   + C-function 'read_gct' has been modified to support both file and character string from which the GCT file is read. The later possibility is important for the data import from UDIS. This was achieved by the ls_createFromBuffer function in BIOS.
   + On the R-function level, read_gct_matrix and read_exprs_matrix have no API changes, although internally their codes have been updated to reflect the change above
   + A new R function named 'read_gctstr_matrix' has been added: it parses a string in the GCT format and returns a matrix, exactly the same as 'read_gct_matrix' treating a GCT file.
+  + (Internal) 'read_gct' more robustly parsing GCT line: in case of empty line, the parser skips it (which is common in the last line of UDIS outputs)
 
 Version 1.0-7 (2012-01-09)
   + Add loadFile from the ribios package

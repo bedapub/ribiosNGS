@@ -6,5 +6,8 @@ export(read_gmt_list,
 export(read_gct_matrix,
        read_gctstr_matrix)
 
+export(read_fasta,
+       write_fasta)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosIO, .registration=TRUE)

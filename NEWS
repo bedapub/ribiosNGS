@@ -1,3 +1,6 @@
+Version 1.0-2 (2012-04-11)
+  + ronet.Rscript: output isInput attribute of nodes, indicating whether a node was of input (1) or of connectors (0)
+
 Version 1.0-1 (2012-03-27)
   + ronet.Rscript: support edge type and automatic recognition of output file formats
 

@@ -125,6 +125,8 @@ names(id2sym) <- c(all.tbl$GENE1, all.tbl$GENE2)
 V(outG)$label <- unname(id2sym[outG.names])
 outG.missLabel <- is.na(V(outG)$label)
 V(outG)$label[outG.missLabel] <- outG.names[outG.missLabel]
+V(outG)$isInput <- as.integer(outG.names %in% geneids)
+
 write.graph(outG, file=outfile, format=outformat)
 
 qqmsg(status=0L)

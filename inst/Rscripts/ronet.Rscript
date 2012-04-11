@@ -13,6 +13,7 @@ outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
 maxconn <- getArg("maxConnector", onlyArg=MAXCONN.DEFAULT, missingArg=MAXCONN.DEFAULT)
 ## level.limit = maxconn+1, since it measures the path step length
 level.limit <- parseNumVec(maxconn, expLen=1L, failVal=MAXCONN.DEFAULT)+1L
+removeConnectorEdges <- existArg("noConnectorEdges")
 
 getHelp <- existArg("h") | existArg("help")
 
@@ -25,6 +26,7 @@ if(is.null(infile) || is.null(outfile) || getHelp) {
               "-outfile FILE\tOutput file. By default outputs are printed in standard output, e.g. screen.\n",
               "Optional parameters:\n",
               "-maxConnector INT\tMax number of connectors in network expansion. Default:0 (no network expansion).\n",
+              "-noConnectorEdges\tIf specified, edges between connectors are removed. Default: off (edges among connectors are returned).\n",
               sep=" "))
 }
 ## OUTPUT
@@ -109,6 +111,20 @@ if(level.limit<=1L) {
 expandG <- subGraph(expand.ids, Gd)
 fullExpandG <- addNode(missingNodes, expandG)
 
+if(removeConnectorEdges) {
+  linkers <- setdiff(expand.ids, geneids)
+  full.edges <- edges(fullExpandG)
+  edge.labels <- sapply(seq(along=full.edges),
+                        function(x) paste(names(full.edges)[x], full.edges[[x]], sep="|"))
+  edge.pairs <- strsplit(unlist(edge.labels), "\\|")
+  linker.edges <- sapply(edge.pairs, function(x) length(x)==2L & all(x %in% linkers))
+  if(any(linker.edges)) {
+    linker.froms <- sapply(edge.pairs[linker.edges], "[[", 1L)
+    linker.tos <- sapply(edge.pairs[linker.edges], "[[", 2L)
+    fullExpandG <- removeEdge(from=linker.froms, to=linker.tos, fullExpandG)
+  }
+}
+
 ## visualization for debugging
 if(vis <- FALSE){
   libordie(Rgraphviz)
@@ -127,6 +143,52 @@ outG.missLabel <- is.na(V(outG)$label)
 V(outG)$label[outG.missLabel] <- outG.names[outG.missLabel]
 V(outG)$isInput <- as.integer(outG.names %in% geneids)
 
-write.graph(outG, file=outfile, format=outformat)
+## customed export function for GML
+exportGML <- function(graph, filename) {
+  file <- file(filename, "w")
+  cat("Creator \"ribiosNetwork\"\n", file=file)
+  cat("Version 1.0\n", file=file)
+  cat("graph\n[\n", file=file)
+  cat("  directed", as.integer(is.directed(graph)), "\n", file=file)
+  for (i in seq_len(vcount(graph))) {
+    cat("  node\n  [\n", file=file)
+    cat("    id", i-1, "\n", file=file)
+    cat("    name \"", V(graph)$name[i], "\"\n", file=file, sep="")
+    cat("    label \"", V(graph)$label[i], "\"\n", file=file, sep="")
+    cat("    graphics\n    [\n", file=file)
+    cat("      w 45 \n", file=file, sep="")
+    cat("      h 45 \n", file=file, sep="")
+    cat("      type \"", ifelse(V(graph)$isInput[i]==1, "ellipse", "diamond"), "\"\n", file=file, sep="")
+    cat("    ]\n", file=file)
+    cat("  ]\n", file=file)
+  }
+  el <- get.edgelist(graph, names=FALSE)
+  for (i in seq_len(nrow(el))) {
+    elabel <- E(graph)$label[i]
+    cat("  edge\n  [\n", file=file)
+    cat("    source", el[i,1], "\n", file=file)
+    cat("    target", el[i,2], "\n", file=file)
+    cat("    label \"",  elabel, "\"\n", file=file, sep="")
+    cat("    graphics\n    [\n", file=file)
+    cat("      source_arrow 0\n", file=file, sep="")
+    target.arrow <- 12
+    if(grepl("positive", elabel, ignore.case=TRUE)) {
+      target.arrow <- 3
+    } else if (grepl("negative", elabel, ignore.case=TRUE)) {
+      target.arrow <- 15
+    }
+    cat("      target_arrow ", target.arrow, "\n", file=file, sep="")
+    cat("    ]\n", file=file)
+    cat("  ]\n", file=file)
+  }
+  cat("]\n", file=file)
+  close(file)
+}
+
+if(outformat=="gml") {
+  exportGML(outG, file=outfile)
+} else {
+  write.graph(outG, file=outfile, format=outformat)
+}
 
 qqmsg(status=0L)

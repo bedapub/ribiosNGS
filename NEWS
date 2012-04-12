@@ -1,3 +1,7 @@
+Version 1.0-3 (2012-04-12)
+  + exportGML is refactored into the ribiosNetwork package (previously in ronet.Rscript)
+  + dummy function is removed
+
 Version 1.0-2 (2012-04-11)
   + ronet.Rscript: output isInput attribute of nodes, indicating whether a node was of input (1) or of connectors (0)
 

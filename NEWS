@@ -1,3 +1,6 @@
+Version 1.0-2 (2012-04-13)
+  + Print connection string to stdout in case queryExpressionData failed to get gct file, for diagnostic purposes
+
 Version 1.0-1 (2012-02-22)
   + Make cookie as a parameter to queryUrl and queryExpressionData
   + bakeCookie function provides the 'verbose' option

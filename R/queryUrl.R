@@ -20,6 +20,7 @@ queryExpressionData <- function(studyid="NCS_tissue_rat",
     return(mat)
   } else {
     cat(str)
+    cat("\nConnection string:", queryCGI, "\n")
     return(NULL)
   }
 }

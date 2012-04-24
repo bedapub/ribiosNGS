@@ -1,3 +1,8 @@
+Version 1.0-3 (2012-04-24)
+  + ribiosUDIS depends on ribiosAuth for authentification (getting cookie)
+  + Hide bakeCookie function since it is not used any more, and it will be deleted in near future releases
+  + queryUrl and queryExpressionData call bioinfoCookie() internally to get cookies
+
 Version 1.0-2 (2012-04-13)
   + Print connection string to stdout in case queryExpressionData failed to get gct file, for diagnostic purposes
 

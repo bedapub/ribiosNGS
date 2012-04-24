@@ -1,4 +1,5 @@
-queryUrl <- function(url, cookie) {
+queryUrl <- function(url) {
+  cookie <- bioinfoCookie()
   if(missing(cookie) || is.null(cookie))
     stop('No authentication cookie was detected. Call \"bakeCookie\" to make one.')
   postForm(url,
@@ -7,14 +8,13 @@ queryUrl <- function(url, cookie) {
            style="post")
 }
 
-queryExpressionData <- function(studyid="NCS_tissue_rat",
-                                cookie) {
+queryExpressionData <- function(studyid="NCS_tissue_rat") {
   EXP.CGI <- "http://udisdev.roche.com/udiscgiqa/expressionData_cgi"
   queryCGI <- sprintf("%s?query=%s&studyidexternal=%s&studydomain=undefined&format=%s&outdest=browser",
                       EXP.CGI,
                       "signals", studyid, "gct")
-  str <- queryUrl(queryCGI, cookie)
-  if(nchar(str)>50 && !grepl("^#err", str)) {
+  str <- queryUrl(queryCGI)
+  if(nchar(str)>50 && !grepl("^#err", str) && !grepl("^http", str)) {
     mat <- read_gctstr_matrix(str, keep.desc=TRUE)
     rm(str)
     return(mat)

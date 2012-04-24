@@ -1,0 +1,9 @@
+Package: ribiosAuth
+Type: Package
+Title: Authentification for bioinfo infrastructure
+Version: 0.9.0
+Date: 2012-04-24
+Author: Jitao David Zhang <jitao_david.zhang@roche.com>
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: Functions for user authentification in Roche bioinformatics system
+License: LGPL-2

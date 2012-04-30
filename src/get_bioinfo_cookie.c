@@ -6,15 +6,12 @@
 #include "html.h"
 #include "format.h"
 #include "linestream.h"
-
-#define URL_IDNET  "http://bioinfo.bas.roche.com:8080/htbin/identwwwbicgi?application"
-
+#include "get_bioinfo_cookie.h" 
 
 SEXP get_bioinfo_cookie () {
   int recLen=0;
   char *outs;
-  char *items[] = {"appname", "apppassword", "user"};
-  char *values[] = {"ribios", "alohomora", ""};
+
   SEXP res, cmdSexp, cmdexpr, ans=R_NilValue;
   ParseStatus status;
   

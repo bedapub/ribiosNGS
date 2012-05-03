@@ -1,3 +1,10 @@
+Version 1.0-4 (2012-05-03)
+  + Document queryURL
+  + Rename queryExpressionData to getUDISexpression
+  + getUDISexpression now supports downloading and parsing phenotype (aka meta) data
+  + Two fucntions, buildUDISexpURL and meta2pd, have been refactored from the getUDISexpression function to alleviate functionalities of buidling query URL and parsing metadata respectively.
+  + Document getUDISexpression
+
 Version 1.0-3 (2012-04-24)
   + ribiosUDIS depends on ribiosAuth for authentification (getting cookie)
   + Hide bakeCookie function since it is not used any more, and it will be deleted in near future releases

@@ -1,4 +1,5 @@
-export(queryUrl,
-       queryExpressionData)
+export(queryUrl)
+
+export(getUDISexpression)
 
 ##export(bakeCookie)

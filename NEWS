@@ -1,3 +1,6 @@
+Version 1.0-5 (2012-05-04)
+  + The AnnotatedDataFrame object in meta2pd function is created with new to be compatible with older Biobase packages (e.g. R-2.13.2 installed on UDIS)
+
 Version 1.0-4 (2012-05-03)
   + Document queryURL
   + Rename queryExpressionData to getUDISexpression

@@ -20,8 +20,9 @@ meta2pd <- function(str) {
   colnames(df) <- df.cnames
   metaData <- data.frame(labelDescription=sl.df[2L,,drop=TRUE],
                          rownames=df.cnames)
-  pd <- AnnotatedDataFrame(data=df,
-                           varMetadata=metaData)
+  pd <- new("AnnotatedDataFrame",
+            data=df,
+            varMetadata=metaData)
   return(pd)
 }
 

@@ -1,3 +1,6 @@
+Version 1.0-10 (2012-05-07)
+  + src/Makevar has been cleaned up: removing hard-coded dependencies, instead using BIOS defined variables.
+
 Version 1.0-9 (2012-04-10)
   + Add 'read_fasta' and 'write_fasta' functions to import/export FASTA-format sequence files
 

@@ -2,6 +2,8 @@ setGeneric("annotate",
            function(object, target, check.target, ...) standardGeneric("annotate"))
 
 annChar <- function(object, target, check.target=FALSE) {
+  if(!require(ribiosAnnotation))
+    stop("Missing 'ribiosAnnotation' package: the annotation functionality is not available.")
   if(check.target) {
     has.target <- target %in% gtiChiptypes()
     if(!has.target)

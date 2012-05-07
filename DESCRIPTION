@@ -1,8 +1,8 @@
 Package: ribiosDemo
 Type: Package
 Title: A demo of R interfacing to BIOS functionalities
-Version: 0.99.1
-Date: 2012-02-15
+Version: 0.99.2
+Date: 2012-05-07
 Author: Jitao David Zhang, Martin Ebeling and Clemens Broger
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: The ribiosDemo package provides prototypes and examples demonstrating how to call APIs defined by the BIOS system from R. We hope this package assists programmers new to BIOS and/or to R to establish crosstalks between two systems. Whoever interested is welcomed to study the source code and make contributions.

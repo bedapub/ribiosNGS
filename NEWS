@@ -1,3 +1,6 @@
+Version 0.99.2 (2012-05-07)
+  + src/Makevar has been cleaned up: no hard-coded dependencies, and removing several redundant including calls
+
 Version 0.99.1 (2012-02-15)
   + Fixing bug in the revcompNative routine: the complementary base of U is A, not T.
   + revcompNative supports N now

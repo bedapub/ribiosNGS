@@ -1,5 +1,6 @@
 Version 1.0-15 (May 07, 2012)
   + The ribiosAnnotation package has been removed from the dependency list (due to the strong dependency of Oracle libraries), and has been now listed as Suggested
+  + Add comp_diff.Rscript to inst/Rscript
 
 Version 1.0-14 (Apr 03, 2012)
   + The deprecation message of remainHighestVarProbe and keepHighestVarProbe have been updated

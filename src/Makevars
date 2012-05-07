@@ -4,12 +4,6 @@ include $(BIOINFOCONFDIR)/prpidefs.make
 R_INC=$(R_HOME)/src/include/
 
 PKG_CFLAGS=$(PRPIINC)
+
 ## The pwdecode.c is linked to, since BIOS uses static libraries and it is not possible to be linked to a static library
 PKG_LIBS=$(CPICFLAGS) -I$(R_INC) $(PRPISRC)/pwdecode.c
-
-
-## parsimonious (both -shared and -fPIC are required)
-## gcc -shared -fPIC endec.c /SOFT/bi/bios/src/libdev/pwdecode.c die.c -I/SOFT/bi/apps/R/devel/trunk/include/ -I/SOFT/bi/bios/src/libdev -o endec.so
-##endec.so:endec.c
-## $(CC) $(SHLIB_LDFLAGS) $(CPICFLAGS) endec.c $(PRPISRC)/pwdecode.c die.c -I$(R_INC) -I$(PRPISRC) -o endec.so
-

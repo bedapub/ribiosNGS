@@ -20,7 +20,7 @@ pwdecode(password)
   details.
 
   Note that since R does not support strings embedding null values
-  (\code{\\000}}, the password to be decoded has to be given with two
+  (\code{\\000}), the password to be decoded has to be given with two
 slashes, e.g. \sQuote{ \\\\001\\\\000\\\\129\\\\235}.
 }
 \value{

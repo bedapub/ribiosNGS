@@ -1,17 +1,15 @@
 include $(BIOINFOCONFDIR)/prpidefs.make
 
 ## No R specific settings are needed, they are automatically handled by R CMD SHLIB
-BIOS_SRC_LIBDEV=/SOFT/bi/bios/src/libdev
-BIOS_ROOF_MISC=/SOFT/bi/bioc/bios/roof/misc
 R_INC=$(R_HOME)/src/include/
 
 PKG_CFLAGS=$(PRPIINC)
 ## The pwdecode.c is linked to, since BIOS uses static libraries and it is not possible to be linked to a static library
-PKG_LIBS=$(CPICFLAGS) -I$(R_INC) $(BIOS_SRC_LIBDEV)/pwdecode.c
+PKG_LIBS=$(CPICFLAGS) -I$(R_INC) $(PRPISRC)/pwdecode.c
 
 
 ## parsimonious (both -shared and -fPIC are required)
 ## gcc -shared -fPIC endec.c /SOFT/bi/bios/src/libdev/pwdecode.c die.c -I/SOFT/bi/apps/R/devel/trunk/include/ -I/SOFT/bi/bios/src/libdev -o endec.so
 ##endec.so:endec.c
-## $(CC) $(SHLIB_LDFLAGS) $(CPICFLAGS) endec.c $(BIOS_SRC_LIBDEV)/pwdecode.c die.c -I$(R_INC) -I$(BIOS_SRC_LIBDEV) -o endec.so
+## $(CC) $(SHLIB_LDFLAGS) $(CPICFLAGS) endec.c $(PRPISRC)/pwdecode.c die.c -I$(R_INC) -I$(PRPISRC) -o endec.so
 

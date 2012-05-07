@@ -1,3 +1,8 @@
+Version 1.0-13 (2012-05-07)
+  + srv/Makevars now use bioenv defined variable names, instead of hard-coding dependencies
+  + Minor change in the pwdecode documentation
+  + The version has been installed on biostat server
+
 Version 1.0-12 (2012-03-22)
   + Add pwdecode function (with C backend) to decode passwords encypted with pwencode command-line tool
   + (Internal) pwdecode has a parsimonious Makevar file. And it successfully avoids the die mechanism of BIOS system by providing a imposter macro.

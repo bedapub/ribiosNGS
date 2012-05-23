@@ -58,7 +58,7 @@ if(!is.null(featurefile)) {
   if(!file.exists(featurefile)) {
     warning("Given feature annotation file does not exist")
   } else {
-    featureAnno <- data.matrix(read.table(featurefile, sep="\t"))
+    featureAnno <- data.matrix(read.table(featurefile))
     featureAt <- as.vector(featureAnno)
   }
 }

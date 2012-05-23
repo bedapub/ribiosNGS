@@ -1,3 +1,13 @@
+2012-05-23 v1.1-8
+  + Distance function changed from dist to robustDist: NA values will be replaced by the maximum value of the distance matrix
+
+2012-04-30 v1.1-7
+  + featureFile of coverage-plot.Rscript can use either tab or space as column delimiters
+  + inst/extdata/test-coverage-plot-featureInfo.txt uses a correct format
+
+2012-04-15 v1.1-6
+  + Add exprs-boxplot.Rscript to draw matrix-like boxplots from command line
+
 2012-04-02 v1.1-5
   + coverage-plot.Rscript supports now sequence annotation
 

@@ -8,6 +8,9 @@ export(bound,
        boundNorm,
        guessWH)
 
+## robustDist for biosHeatmap
+export(robustDist)
+
 ## color for factors
 export(brewer.pal.factorLevels,
        brewer.pal.factor)

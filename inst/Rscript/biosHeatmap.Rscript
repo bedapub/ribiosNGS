@@ -1,7 +1,7 @@
 #!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
 
-## Version 1.0.7
-## Jitao David Zhang <jitao_david.zhang@roche.com>, Nov 2011
+## Version 1.0.8
+## Jitao David Zhang <jitao_david.zhang@roche.com>, May 2012
 
 suppressMessages(library(ribiosArg))
 suppressMessages(library(ribiosIO))
@@ -188,7 +188,7 @@ for(i in seq(along=input.tbl)) {
               dendrogram=dendrogram,
               Rowv=Rowv,
               Colv=Colv,
-              distfun=function(x) dist(x, method=distMethod),
+              distfun=function(x) robustDist(x, method=distMethod),
               hclustfun=function(x) hclust(x, method=hclustMethod),
               symm=symm,
               

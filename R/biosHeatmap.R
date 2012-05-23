@@ -60,14 +60,14 @@ guessWH <- function(nrow, ncol,
   lgratio <- 0.8
   xlab.factor <- ylab.factor <- 1.25
   
-  if(is.na(cexRow)) cexRow <- 1L
-  if(is.na(cexCol)) cexCol <- 1L
-  if(is.null(rownames)) rownames <- as.character(seq(1:nrow))
-  if(is.null(colnames)) colnames <- as.character(seq(1:ncol))
-  if(is.na(xlab) || xlab=="") {
+  if(missing(cexRow) || is.na(cexRow)) cexRow <- 1L
+  if(missing(cexCol) || is.na(cexCol)) cexCol <- 1L
+  if(missing(rownames) || is.null(rownames)) rownames <- as.character(seq(1:nrow))
+  if(missing(colnames) || is.null(colnames)) colnames <- as.character(seq(1:ncol))
+  if(missing(xlab) || is.na(xlab) || xlab=="") {
     xlab.factor <- 0
   }
-  if(is.na(ylab) || ylab=="") {
+  if(missing(ylab) || is.na(ylab) || ylab=="") {
     ylab.factor <- 0
   }
   
@@ -75,7 +75,7 @@ guessWH <- function(nrow, ncol,
   lgwidth <- pmax(log10(ncol),lgminw)
   twidth <- hmwidth+lgwidth
   lg.wf <- lgwidth/twidth
-  if(!is.na(width)) {
+  if(!missing(width) && !is.na(width)) {
     if(lg.wf*width<lgminw) {
       lgwidth <- lgminw
       hmwidth <- width-lgwidth
@@ -88,7 +88,7 @@ guessWH <- function(nrow, ncol,
   hmheight <- pmax(hm.min.hei, nrow*chr.hei*row.factor*cexRow + max(chr.wid*cexCol*nchar(colnames), na.rm=TRUE)+chr.hei*row.factor*xlab.factor) ## rows + colname + xlab*2
   lgheight <- pmax(log10(nrow), lgminh)
   theight <- hmheight+lgheight
-  if(is.na(height)) height <- theight
+  if(missing(height) || is.na(height)) height <- theight
   lg.hf <- lgheight/theight
   ## the legend's height should not exceed 0.8 of its width for a nice visualization
   ## and if so, it is set to 0.8 of the width (or 1 if the result is smaller than 1)

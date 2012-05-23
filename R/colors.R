@@ -39,6 +39,7 @@ colorpanel <- function (n, low, mid, high) {
 ## colors for factors
 ## .factorLevels returns the color used along the levels, whereas .factor return 1:1 mapping from levels to colors
 brewer.pal.factorLevels <- function(factor, name="Greys") {
+  if(!require(RColorBrewer)) retuen(NULL)
   nlevel <- nlevels(factor)
   cols <- brewer.pal(nlevel, name)
   names(cols) <- levels(factor)
@@ -46,6 +47,7 @@ brewer.pal.factorLevels <- function(factor, name="Greys") {
 }
 
 brewer.pal.factor <- function(factor, name="Greys") {
+  if(!require(RColorBrewer)) retuen(NULL)
   colbase <- brewer.pal.factorLevels(factor=factor, name=name)
   cols <- colbase[factor]
   return(cols)

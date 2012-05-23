@@ -1,5 +1,11 @@
 2012-05-23 v1.1-8
   + Distance function changed from dist to robustDist: NA values will be replaced by the maximum value of the distance matrix
+  + Add documentation for following functions: blackwhite, whiteblack, redblackblue, blueblackred, whiteblueblackheat, threecolor.panels, twocolor.panels, display.threecolor.panels, display.twocolor.panels
+  + Remove the export of heat.color: it is not part of the ribiosPlot package, instead of grDevices
+  + Add documentation for bound, boundNorm, colorpanel, brewer.pal.factor and brewer.pal.factorLevels
+  + Add documentation for guessWH
+  + Substiantially updated the documentation for biosHeatmap
+  + Add two test files
 
 2012-04-30 v1.1-7
   + featureFile of coverage-plot.Rscript can use either tab or space as column delimiters

@@ -1,6 +1,9 @@
+Version 1.0-17 (Jun 05, 2012)
+  + limma2gsea.Rscript garantees from now on NO replicated gene symbols after orthologue mapping: in case of several non-human gene IDs mapped to the same human orthologue, only the gene with the highest avg. expression will be used
+  + (TODO): ribiosAnnotation should have easier way to annotate human GeneID with GeneSymbol and GeneNames. Currently it uses chip. 
+
 Version 1.0-16 (Jun 04, 2012)
   + Add limma2gsea.Rscript to inst/Rscript, its testing file test-limma2gsea.txt to inst/extdata, as well as test-limma2gsea.bash to inst/Rscript
-  + (TODO): ribiosAnnotation should have easier way to annotate human GeneID with GeneSymbol and GeneNames. Currently it uses chip. 
 
 Version 1.0-15 (May 07, 2012)
   + The ribiosAnnotation package has been removed from the dependency list (due to the strong dependency of Oracle libraries), and has been now listed as Suggested

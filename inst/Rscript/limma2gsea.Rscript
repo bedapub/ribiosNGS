@@ -9,7 +9,7 @@ chiptype <- getArg("chiptype", onlyArg=NULL, missingArg=NA)
 
 ##DEBUG <- Sys.getenv("RSCRIPT_DEBUG") != ""
 ##if(DEBUG) {
-##  infile <- "top.CPD.1.1h.txt"
+##  infile <- "~/samba_mount/transfer/top.CPD.1.1h.txt"
 ##  outfile <- "test.CPD.1.1h.rnk"
 ##  chiptype <- "RAT230_2"
 ##}
@@ -69,31 +69,40 @@ if(!all(int.cols %in% colnames(intbl))) {
 ## annotate
 int.anno <- annotateProbesets(as.character(intbl[,"ProbeID"]),
                               chip=chiptype)
-tbl <- cbind(intbl, GeneID=int.anno$GeneID,
-             GeneSymbol=int.anno$GeneSymbol)
+tbl <- data.frame(intbl)
+tbl$GeneID <- int.anno$GeneID
+tbl$GeneSymbol <- int.anno$GeneSymbol
+
 
 ## max avg
-tbl.geneid <- factor(tbl$GeneID)
-tbl.ind <- 1:nrow(tbl)
-tbl.stat <- tbl[,stat]
-tbl.avg <- tbl[,"AvgExprs"]
-tbl.maxInd <- tapply(tbl.ind, tbl.geneid, function(x) x[which.max(tbl.avg[x])])
-tbl.rnkStat <- tbl.stat[tbl.maxInd]
-tbl.rnkSymbol <- tbl[tbl.maxInd,"GeneSymbol"]
-tbl.rnk <- data.frame(GeneID=levels(tbl.geneid), GeneSymbol=tbl.rnkSymbol, value=tbl.rnkStat, row.names=NULL)
+maxByCol <- function(df, index.name, max.name) {
+  stopifnot(!missing(index.name) && !missing(max.name) && all(c(index.name,max.name) %in% colnames(df)))
+  inds <- factor(df[, index.name])
+  vals <- df[, max.name]
+  rn <- 1:nrow(df)
+  maxInd <- tapply(rn, inds, function(x) x[which.max(vals[x])])
+  df[maxInd,]
+}
+tbl.rnk <- maxByCol(tbl, index.name="GeneID", max.name="AvgExprs")
+tbl.rnkStat <- tbl.rnk[, stat]
+tbl.rnkAvg <- tbl.rnk[,"AvgExprs"]
 
 if(orthologue) {
   tbl.ort <- humanOrthologs(tbl.rnk$GeneID)
   ort.ids <- unlist(tbl.ort)
   ort.stat <- rep(tbl.rnkStat, sapply(tbl.ort, length))
-  ort.symbol <- annotateGeneIDs(ort.ids)$GeneSymbol ## TODO: make this step more efficient
-  res <- data.frame(GeneID=ort.ids, GeneSymbol=ort.symbol, value=ort.stat)
+  ort.avg <- rep(tbl.rnkAvg, sapply(tbl.ort, length))
+  ort.symbol <- factor(annotateGeneIDs(ort.ids)$GeneSymbol) ## TODO: make this step more efficient
+  ## max
+  res.raw <- data.frame(GeneID=ort.ids, GeneSymbol=ort.symbol, value=ort.stat, AvgExprs=ort.avg)
+  colnames(res.raw)[3L] <- stat
+  res <- maxByCol(res.raw, index.name="GeneSymbol", max.name="AvgExprs")
 } else {
   res <- tbl.rnk
 }
 
 res <- subset(res, !GeneSymbol %in% c("-", "") & !is.na(GeneSymbol))
-res <- sortByCol(res, "value")
-write.table(res[,c("GeneSymbol", "value")], file=outfile, quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+res <- sortByCol(res, stat)
+write.table(res[,c("GeneSymbol", stat)], file=outfile, quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
 
 qqmsg(status=0L)

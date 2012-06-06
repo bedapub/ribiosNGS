@@ -1,3 +1,7 @@
+2012-06-06 v1.1-9
+  + exprs-boxplot.Rscript has been added to GIT and is now able to handle user-specified ylim values
+  + Cleaned up test files and Rscript folders
+
 2012-05-23 v1.1-8
   + Distance function changed from dist to robustDist: NA values will be replaced by the maximum value of the distance matrix
   + Add documentation for following functions: blackwhite, whiteblack, redblackblue, blueblackred, whiteblueblackheat, threecolor.panels, twocolor.panels, display.threecolor.panels, display.twocolor.panels

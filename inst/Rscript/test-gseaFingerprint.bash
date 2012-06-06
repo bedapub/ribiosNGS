@@ -1,0 +1,1 @@
+./gseaFingerprint.Rscript -infile ../extdata/test-gseaFingerprint.txt -stat q

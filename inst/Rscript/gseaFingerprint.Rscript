@@ -1,0 +1,53 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+source("/apps/bi/apps/ribios/ribiosGSEA/R/fingerprint.R")
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+stat <- getArg("stat", onlyArg=NULL, missingArg=NULL)
+outfile <- getArg("outfile", onlyArg=NULL, missingArg="")
+getHelp <- existArg("h") | existArg("help")
+
+## BEGIN DEBUG
+DEBUG_SYMBOL <- Sys.getenv("RIBIOS_SCRIPT_DEBUG")
+DEBUG <- DEBUG_SYMBOL != "" || interactive()
+if(DEBUG) {
+  infile <- "../extdata/test-gseaFingerprint.txt"
+  stat <- "q"
+  outfile <- ""
+  getHelp <- FALSE
+}
+## END DEBUG
+
+validInfile <- !is.null(infile) && file.exists(infile)
+validStat <- !is.null(stat) && stat %in% c("es", "nes", "q")
+
+if(!validInfile || !validStat || is.null(outfile) || getHelp) {
+  qqmsg(paste("Usage:",
+              scriptName(),
+              " -infile FILE -stat es/nes/q [-outfile FILE]\n\n",
+              "-infile FILE\tText file, one GSEA result directory each line\n",
+              "-stat es/nes/q\tOne of three statistics: Enrichment Score (es), Normalized Enrichment Score (nes), Q-value (q)\n",
+              "-outfile FILE\tOutput file for fingerprint matrix. Using stdout if not provided\n",
+              sep=""),
+        status=1L)
+
+}
+
+dir.exists <- function(x) file.exists(x) & file.info(x)$isdir
+gdirs <- readLines(infile)
+gdirs.exist <- dir.exists(gdirs)
+if(any(!gdirs.exist)) {
+  baddirs <- gdirs[!gdirs.exist]
+  msg <- paste("Following directories seem not to be valid GSEA output directories:\n  ",
+               paste(baddirs, collapse="\n  "),"\n",sep="")
+  qqmsg(status=2L)
+}
+
+mat <- gseaFingerprintMatrix(gdirs, value=stat)
+write.table(mat, file=outfile, quote=FALSE, dec=".",
+            sep="\t", row.names=TRUE, col.names=NA)
+
+qqmsg(status=0L)

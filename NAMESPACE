@@ -1,0 +1,5 @@
+## trigger analysis
+## export(biosGSEA)
+
+## GSEA fingerprints
+export(gseaQvalue, gseaES, gseaFingerprint, gseaFingerprintMatrix)

@@ -1,0 +1,5 @@
+Version 1.0-0 (Jun 06, 2012)
+  + Establish the ribiosGSEA package
+  + Refactor GSEA-related functions from other packages
+  + Add functions used to extract fingerprints from GSEA results
+

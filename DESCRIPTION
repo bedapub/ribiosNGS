@@ -1,8 +1,8 @@
 Package: ribiosUtils
 Type: Package
 Title: Utilities for R native data structures and functions
-Version: 1.0-13
-Date: 2012-05-07
+Version: 1.0-14
+Date: 2012-06-06
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description:  Utilities for R native data structures and functions

@@ -1,3 +1,6 @@
+Version 1.0-14 (2012-06-06)
+  + Add functions for scripting uses: setDebug, unsetDebug, isDebugging and isInteractiveDebugging
+
 Version 1.0-13 (2012-05-07)
   + srv/Makevars now use bioenv defined variable names, instead of hard-coding dependencies
   + Minor change in the pwdecode documentation

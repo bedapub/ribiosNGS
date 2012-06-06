@@ -1,0 +1,78 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+
+if(is.null(infile) || is.null(outfile) || getHelp)
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              " -infile FILE -outfile FILE\n",
+              "Mandatory parameter:\n",
+              "-infile FILE\tInput matrix, first column contains features/genes and first row samples. \n",
+              "-outfile FILE\tOutput file. By default PDF file.\n\n",
+	      "OPTional parameters may include\n",
+              "-ylim a,b\tComma-separated numbers giving the lower and upper limit of the y-axis\n",
+              sep=""),
+        status=1L)
+
+
+
+if(!file.exists(infile))
+  qqmsg(sprintf("%s not exist!\n", infile), status=1L)
+
+
+##---------- read in file ----------##
+txt <- read.table(infile, header=TRUE, sep="\t", comment.char='', check.name=FALSE, strip.white=TRUE)
+rsnames <- colnames(txt)
+## remove \n
+rsnames <- gsub("\\\n", "", rsnames)
+
+txt.naCol <- apply(txt, 2L, function(x) all(is.na(x) | x==""))
+txt.naRow <- apply(txt, 1L, function(x) all(is.na(x) | x==""))
+
+txt <- txt[!txt.naRow, !txt.naCol, drop=FALSE]
+colnames(txt) <- rsnames[!txt.naCol]
+txt.class <- sapply(1:ncol(txt), function(x) class(txt[,x]))
+txt.num <- txt.class=="numeric"
+if(!any(txt.num))
+  qqmsg("No numeric columns detected in input file. Existing", status=2L)
+if(all(txt.num))
+  qqmsg("No name column detected in input file. Existing", status=2L)
+
+mat <- data.matrix(txt[,txt.num])
+snames <- colnames(txt)[txt.num]
+sfac <- factor(snames, levels=unique(snames))
+ffac <- apply(txt[, !txt.num, drop=FALSE], 1L, function(x) paste(x, collapse="_"))
+
+
+
+##---------- plotting ----------##
+libordie("lattice")
+libordie("ribiosPlot")
+
+openFileDevice(outfile, height=8L, width=12L)
+ypretty <- pretty(mat)
+if(existArg("ylim")) {
+  ylim <- getArg("ylim", onlyArg=NULL, missingArg=NULL)
+  ylims <- parseNumVec(ylim,
+                       expLen=2L,
+                       failVal=c(ypretty[1], ypretty[length(ypretty)]))
+} else {
+  ylims <- c(ypretty[1], ypretty[length(ypretty)])
+}
+for(i in seq(along=ffac)) {
+  gene <- ffac[i]
+  aa <- boxplot(mat[i,] ~ sfac,
+                main=gene, xlab="Condition", ylab="Expression",
+                ylim=ylims, col="lightblue")
+  gn <- split(mat[i,], sfac)
+  for(j in 1:nlevels(sfac))
+    points(rep(j, length(gn[[j]])), gn[[j]], pch=4)
+}
+dev.off()
+
+qqmsg(status=0L)

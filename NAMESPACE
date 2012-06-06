@@ -5,10 +5,10 @@ importFrom("ribiosUtils", "rowscale")
 export("rowscale")
 export("keepMaxStatProbe")
 
-## GSEA
-export("biosGSEAannotations",
-       BIOS_GSEA_ANNOTATION_DIR,
-       "biosGSEA")
+## GSEA -- moved to ribiosGSEA package
+## export("biosGSEAannotations",
+##       BIOS_GSEA_ANNOTATION_DIR,
+##       "biosGSEA")
 
 ## IO: import
 export("readExprsMatrix")

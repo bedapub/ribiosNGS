@@ -1,3 +1,6 @@
+Version 1.0-18 (Jun 06, 2012)
+  + Refactor GSEA-related functions that are not dependent on the Biobase data structure to the ribiosGSEA package
+
 Version 1.0-17 (Jun 05, 2012)
   + limma2gsea.Rscript garantees from now on NO replicated gene symbols after orthologue mapping: in case of several non-human gene IDs mapped to the same human orthologue, only the gene with the highest avg. expression will be used
   + (TODO): ribiosAnnotation should have easier way to annotate human GeneID with GeneSymbol and GeneNames. Currently it uses chip. 

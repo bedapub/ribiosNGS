@@ -52,14 +52,16 @@ openFileDevice(filename, width = 7, height = 7)
   \code{\link{tiff}} and \code{\link{bmp}} for file formats.
 }
 \examples{
-tempfile1 <- paste(tempfile(), ".pdf", sep="")
-openFileDevice(tempfile1)
-plot(rnorm(100), rnorm(100))
-dev.off()
+if(interactive()) {
+  tempfile1 <- paste(tempfile(), ".pdf", sep="")
+  openFileDevice(tempfile1)
+  plot(rnorm(100), rnorm(100))
+  dev.off()
 
-tempfile2 <- paste(tempfile(), ".png", sep="")
-openFileDevice(tempfile2, width=5, height=5)
-plot(rnorm(100), rnorm(100))
-dev.off()
+  tempfile2 <- paste(tempfile(), ".png", sep="")
+  openFileDevice(tempfile2, width=5, height=5)
+  plot(rnorm(100), rnorm(100))
+  dev.off()
+}
 }
 

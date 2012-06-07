@@ -15,7 +15,7 @@ export(verbose)
 export(pwdecode)
 
 export(setDebug, unsetDebug,
-       isDebugging, isInteractiveDebugging)
+       isDebugging, isIntDebugging)
 
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils)

@@ -2,7 +2,7 @@
 \alias{setDebug}
 \alias{unsetDebug}
 \alias{isDebugging}
-\alias{isInteractiveDebugging}
+\alias{isIntDebugging}
 \title{
   Functions for command-line Rscript debugging
 }
@@ -14,13 +14,13 @@
 setDebug()
 unsetDebug()
 isDebugging()
-isInteractiveDebugging()
+isIntDebugging()
 }
 \details{
   \code{setDebug} sets the environmental variable
   \code{RIBIOS_SCRIPT_DEBUG} as \code{TRUE}. \code{unsetDebug} unsets
   the variable. \code{isDebugging} checks whether the variable is set or
-  not. \code{isInteractiveDebugging} tests whether the scripts runs
+  not. \code{isIntDebugging} tests whether the scripts runs
   interactively or runs in the debugging mode. The last one can be
   useful when debugging Rscript in a R session.
 
@@ -28,14 +28,14 @@ isInteractiveDebugging()
   unset) the \code{RIBIOS_SCRIPT_DEBUG} variable in order to activate
   (inactivate) certain trunks of codes. This can be automated via
   \code{isDebugging}, or probably more conveniently, by
-  \code{isInteractiveDebugging}: if the script runs in an interactive
+  \code{isIntDebugging}: if the script runs in an interactive
   mode, or the debugging flag is set, the function returns \code{TRUE}.
 }
 \value{
   \code{setDebug} and \code{unsetDebug} returns an invisible value
   indicating whether the variable setting (unsetting) was successful.
 
-  \code{isDebugging} and \code{isInteractiveDebugging} returns logical
+  \code{isDebugging} and \code{isIntDebugging} returns logical
   values.
 }
 \author{
@@ -48,4 +48,5 @@ setDebug()
 print(isDebugging())
 unsetDebug()
 print(isDebugging())
+print(isIntDebugging())
 }

@@ -1,3 +1,6 @@
+Version 1.0-1 (Jun 07, 2012)
+  + gseaFingerprints.Rscript: remove empty lines from input file
+
 Version 1.0-0 (Jun 06, 2012)
   + Establish the ribiosGSEA package
   + Refactor GSEA-related functions from other packages

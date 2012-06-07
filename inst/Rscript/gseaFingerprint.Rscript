@@ -3,8 +3,6 @@
 suppressMessages(library(ribiosUtils))
 suppressMessages(library(ribiosArg))
 
-source("/apps/bi/apps/ribios/ribiosGSEA/R/fingerprint.R")
-
 infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
 stat <- getArg("stat", onlyArg=NULL, missingArg=NULL)
 outfile <- getArg("outfile", onlyArg=NULL, missingArg="")
@@ -24,7 +22,7 @@ if(DEBUG) {
 validInfile <- !is.null(infile) && file.exists(infile)
 validStat <- !is.null(stat) && stat %in% c("es", "nes", "q")
 
-if(!validInfile || !validStat || is.null(outfile) || getHelp) {
+if(is.null(infile) || is.null(stat) || is.null(outfile) || getHelp) {
   qqmsg(paste("Usage:",
               scriptName(),
               " -infile FILE -stat es/nes/q [-outfile FILE]\n\n",
@@ -36,14 +34,25 @@ if(!validInfile || !validStat || is.null(outfile) || getHelp) {
 
 }
 
+if(!file.exists(infile))
+  qqmsg(paste("ERROR: '", infile, "' cannot be found. Program existing",sep=""),
+        status=1L)
+if(!stat %in% c("es", "nes", "q"))
+  qqmsg("ERROR: 'stat' must be one of the following values: q, es, nes",
+        status=1L)
+
+
+libordie(ribiosGSEA) 
+
 dir.exists <- function(x) file.exists(x) & file.info(x)$isdir
 gdirs <- readLines(infile)
+gdirs <- gdirs[gdirs!=""]
 gdirs.exist <- dir.exists(gdirs)
 if(any(!gdirs.exist)) {
   baddirs <- gdirs[!gdirs.exist]
   msg <- paste("Following directories seem not to be valid GSEA output directories:\n  ",
                paste(baddirs, collapse="\n  "),"\n",sep="")
-  qqmsg(status=2L)
+  qqmsg(msg, status=2L)
 }
 
 mat <- gseaFingerprintMatrix(gdirs, value=stat)

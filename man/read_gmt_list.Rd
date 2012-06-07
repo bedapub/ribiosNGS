@@ -1,6 +1,6 @@
 \name{read_gmt_list}
-\alias{read_gmt}
 \alias{read_gmt_list}
+\alias{read_gmt}
 \title{
   Calling C routine to read GMT file into a list
 }

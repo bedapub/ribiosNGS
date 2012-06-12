@@ -28,7 +28,9 @@ if (is.null(infile) || getHelp) {
               "-chiptype TYPE\tChip type supported by GTI\n",
               "-outfile FILE\tRnk file used by GSEA. Written to stdout if omitted\n",
               "-stat STAT\tStatistic to be used in Rnk file, either 'logFC' (default) or 't'\n",
+              "-fulltable\tReturn a full tab-delimited table, instead of only GSEA-used columns\n",
               "-orthologue\tMap human orthologs\n\n",
+	      
               "Call '", scriptName(), " -chiptype' to display supported chip types\n", sep=""),
         status=1L)
 }
@@ -56,6 +58,9 @@ if(!is.null(chiptype) && !chiptype %in% gtiChiptypes())
   qqmsg(paste(chiptype, " is not supported by GTI.\n",
               "Call '", scriptName(), " -chiptype' to display supported chip types\n", sep=""),
         status=2L)
+
+## return full table
+fulltable <- existArg("fulltable")
 
 ## input table
 intbl <- read.table(infile, header=TRUE)
@@ -112,8 +117,13 @@ if(!any(duplicated(tbl$GeneSymbol)) && !orthologue) {
   }
 }
 
+
 res <- subset(res, !GeneSymbol %in% c("-", "") & !is.na(GeneSymbol))
 res <- sortByCol(res, stat)
-write.table(res[,c("GeneSymbol", stat)], file=outfile, quote=FALSE, sep="\t", row.names=FALSE, col.names=FALSE)
+if(!fulltable) {
+  res <- res[,c("GeneSymbol", stat)]
+}
+col.names <- ifelse(fulltable, TRUE, FALSE)
+write.table(res, file=outfile, quote=FALSE, sep="\t", row.names=FALSE, col.names=col.names)
 
 qqmsg(status=0L)

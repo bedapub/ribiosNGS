@@ -1,3 +1,6 @@
+Version 1.0-19 (Jun 12, 2012)
+  + limma2gsea.Rscript is updated: (1) the AvgExprs field name can be "AvgExprs" or "AveExpr" (2) the script is accelerated in case of no duplicating GeneSymbols & no orthologue mapping needed
+
 Version 1.0-18 (Jun 06, 2012)
   + Refactor GSEA-related functions that are not dependent on the Biobase data structure to the ribiosGSEA package
 

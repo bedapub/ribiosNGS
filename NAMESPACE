@@ -10,7 +10,7 @@ export(gtiChiptypes,
 export(gtiChipAnnotation,
        gtiTaxAnnotation)
 
-export(querydb, formatIn)
+export(querydb, formatIn, querydbSelectIn)
 
 export(annotateProbesets,
        annotateProbeIDs,

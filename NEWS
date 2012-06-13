@@ -1,3 +1,12 @@
+Version 1.2-0 (2012-06-12)
+  + annotateProbesets, annotateGeneIDs and annotateGeneSymbols are substantially improved: they use now GTI tables, and are able to map orthologues.
+  + querydbSelectIn has been exported, and documented.
+  + TODO: currently the password are saved in clear text. This should be encoded.
+
+Version 1.1-0 (2012-03-22)
+  + querydb and querydbSelectIn have been refactored. They now accept db, user and password as inputs to provide more flexibility for programmer. The change is however transparent to end users, they should not have to remember which database to connect to and what are authentication details.
+  + TODO: currently the password are saved in clear text. This should be encoded.
+
 Version 1.0-18 (2012-03-15)
   + Add humanOrthologs, humanUniqOrtholog, nonhumanOrthologs and nonhumanUniqOrtholog to get ortholog information from GTI
 

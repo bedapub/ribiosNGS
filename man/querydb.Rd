@@ -9,12 +9,13 @@
   queries, fetching results, and disconnection. 
 }
 \usage{
-querydb(sqlComm, db = c("bia", "bin", "red"))
+querydb(sqlComm, db = "bia", user = "biread", password = "biread")
 }
 \arguments{
   \item{sqlComm}{A SQL query, a SELECT command.}
-  \item{db}{Characters: which Oracle database should be connected?
-    Currently \emph{bia}, \emph{bin} and \emph{red} are supported.}
+  \item{db}{Characters, which Oracle database should be connected?}
+  \item{user}{Characters, user name for login}
+  \item{password}{Characters, password for login}
 }
 \details{
   The \emph{sqlComm} parameter must not end with comma (;).
@@ -35,8 +36,9 @@ querydb(sqlComm, db = c("bia", "bin", "red"))
   \code{dbClearResult} and \code{dbDisconnect}.
 }
 \examples{
-\dontrun{
-querydb("SELECT * FROM genome_sequence WHERE DB='HUMANN'", db="bin")
-}
+options(error=utils::recover)
+querydb("SELECT * FROM genome_sequence WHERE DB='HUMANN'", db="bin",
+user="genome", password="genome")
+options(error=NULL)
 }
 

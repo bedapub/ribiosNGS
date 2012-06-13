@@ -1,13 +1,5 @@
-querydb <- function(sqlComm, db=c("bia", "bin", "red")) {
-  db <- match.arg(db)
-  if(db=="bia") {
-    con <- newconBIA()
-  } else if (db=="bin") {
-    con <- newconBIN()
-  } else if (db=="red") {
-    con <- newconRED()
-  }
-  
+querydb <- function(sqlComm, db="bia", user="biread", password="biread") {
+  con <- dbConnect(ORA, user=user, password=password, db=db)
   rs <- dbSendQuery(con, sqlComm)
   while (!dbHasCompleted(rs)) {
     ann <- fetch(rs, n = -1)
@@ -19,19 +11,13 @@ querydb <- function(sqlComm, db=c("bia", "bin", "red")) {
 
 
 ## select in: large IN queries
-querydbSelectIn <- function(sqlComm, inCol, inValues, db=c("bia", "bin", "red")) {
-  db <- match.arg(db)
-  if(db=="bia") {
-    con <- newconBIA()
-  } else if (db=="bin") {
-    con <- newconBIN()
-  } else if (db=="red") {
-    con <- newconRED()
-  }
+querydbSelectIn <- function(sqlComm, inCol, inValues,
+                            db="bia", user="biread", password="biread") {
+  con <- dbConnect(ORA, user=user, password=password, db=db)
   inValues <- unique(inValues)
   if(length(inValues) <= ORACLE.IN.NMAX) {
     state <- paste(sqlComm, inCol, "IN", formatIn(inValues), collapse=" ");
-    querydb(state, db=db)
+    querydb(state, db=db, user=user, password=password)
   } else {
     nob <- ceiling(length(inValues)/ORACLE.IN.NMAX)
     res <- vector("list", nob)

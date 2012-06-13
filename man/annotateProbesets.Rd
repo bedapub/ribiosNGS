@@ -6,14 +6,18 @@
 }
 \description{
   Annotate probesets in chip types supported, as listed by the
-  \code{\link{gtiChiptypes}} function.
+  \code{\link{gtiChiptypes}} function. If no chip type is given,
+  the function will automatically map probesets to genes via GTI.
 }
 \usage{
-annotateProbesets(ids, chip = "HG-U133_PLUS_2")
+annotateProbesets(ids, chip, orthologue=FALSE)
 }
 \arguments{
   \item{ids}{Probeset identifiers}
-  \item{chip}{Chip type identifier}
+  \item{chip}{Chip type identifier, for example
+    \code{HG-U133_PLUS_2}. If missing (or \code{NA}, \code{NULL},
+    \dQuote{any} and empty string), automatic mapping is done via GTI.}
+  \item{orthologue}{Logical, should be human orthologues be returned?}
 }
 \details{
   \code{annotateProbeIDs} is a synonym of \code{annotateProbesets}.
@@ -31,17 +35,23 @@ annotateProbesets(ids, chip = "HG-U133_PLUS_2")
   ids are unique, they are used as row names of the resulting
   \code{data.frame}; otherwise the row names is set to \code{NULL},
   which when printed will be shown as incremental integers.
+
+  If \code{orthologue} is set to \code{TRUE}, orthologue information is returned.
 }
 \references{
-\url{http://bioinfo.bas.roche.com:8080/apps/affychip/}
+\url{http://bioinfo.bas.roche.com:8080/apps/gti/architecture/gtiora.html}
 }
 \author{
 Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \note{
-  Internally the function calls the \code{gtiChipAnnotation} to first
-  query all annotations about the given chip. Subsequently they are
-  matched against queried probesets, returning their annotations only.
+  If the \code{chip} option is given, internally the function calls the
+  \code{gtiChipAnnotation} to first query all annotations about the
+  given chip. Subsequently they are  matched against queried probesets,
+  returning their annotations only.
+
+  If no \code{chip} is given, the function tries to fetch annotation
+  information from GTI tables.
 }
 
 \seealso{
@@ -66,6 +76,10 @@ annotateProbesets(myprobes2, chip="U133_X3P")
 ## when using wrong chip it is likely that many (if not all)
 ## features will not be annotated
 annotateProbesets(myprobes2, chip="HGU_95A")
+
+## automatically mapping
+annotateProbesets(c("1373268_at", "1002_f_at", "103416_at"))
+annotateProbesets(c("1373268_at", "1002_f_at", "103416_at"), orthologue=TRUE)
 
 options(error=NULL)
 }

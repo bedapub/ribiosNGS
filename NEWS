@@ -1,3 +1,6 @@
+Version 1.0-12 (2012-06-12)
+  + Add 'isGctFile' function to determine whether an input file complies with the GCT file format.
+
 Version 1.0-11 (2012-06-07)
   + read_gmt_list manual page puts the keyword "read_gmt_list" earlier to "read_gmt" in order to make help searching easier
 

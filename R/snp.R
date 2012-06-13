@@ -22,8 +22,8 @@ hapmapSnp <- function(ids,
   state <- sprintf(state.format,
                    paste(state.sel, collapse=","))
   ann <- querydbSelectIn(state,
-                  "a.SNP_ID", ids,
-                  "bin")
+                         "a.SNP_ID", ids,
+                         db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   colnames(ann) <- cnames
   ann$Chromosome <- gsub("^CHR", "", ann$Chromosome)
   
@@ -51,7 +51,7 @@ illuminaSnp <- function(ids,
                    paste(state.sel, collapse=","))
   ann <- querydbSelectIn(state,
                   "a.SNP_ID", ids,
-                  "bin")
+                  db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   colnames(ann) <- cnames
   ann$Chromosome <- gsub("^CHR", "", ann$Chromosome)
   res <- matchColumn(ids, ann, "SNP_ID", multi=genes)

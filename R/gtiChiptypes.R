@@ -1,7 +1,7 @@
 gtiChiptypes <- function(include.desc=FALSE) {
 
   state <- "SELECT ARRAY_TYPE, TECHNOLOGY, SPECIES, DESCRIPTION FROM genome.CHIP_ARRAY_TYPES"
-  df <- querydb(state, "bin")
+  df <- querydb(state, db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   if(include.desc) {
     res <- df
     colnames(res) <- c("Chiptype", "Technology", "Species", "Description")

@@ -33,7 +33,7 @@ gtiChipAnnotation <- function(chip,
     stop("'inCol' and 'inVal' must be both specified or left as missing simultaneously\n")
   }
   
-  ann <- querydb(state, db="bin")
+  ann <- querydb(state, db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   colnames(ann) <- c("ProbeID", "GeneID", "GeneSymbol", "GeneName", "isSingleGeneID", "Chip")
   asg <- as.logical(ann[,"isSingleGeneID"])
   ann[,"isSingleGeneID"] <- asg

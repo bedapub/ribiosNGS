@@ -1,7 +1,16 @@
+## bi@bia
 ORACLE.BIA.USER <- "bi"
 ORACLE.BIA.PWD <- "bi"
+## bi2@bia
+ORACLE.BIA2.USER <- "bi2"
+ORACLE.BIA2.PWD <- "wolf"
+## biread@bia
+ORACLE.BIARO.USER <- "biread"
+ORACLE.BIARO.PWD <- "biread"
+## red
 ORACLE.RED.USER <- "red"
 ORACLE.RED.PWD <- "red"
+## genome
 ORACLE.BIN.USER <- "genome"
 ORACLE.BIN.PWD <- "genome"
 ORACLE.BASE <- "/opt/oracle"
@@ -25,12 +34,11 @@ ORACLE.IN.NMAX <- 1000L
 ##  Sys.setenv("LD_LIBRARY_PATH"=new.path)
 }
 
-newconBIA <- function() {
-  dbConnect(ORA, user=ORACLE.BIA.USER, password=ORACLE.BIA.PWD, db="bia")
-}
-newconBIN <- function() {
-  dbConnect(ORA, user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD, db="bin")
-}
-newconRED <- function() {
-  dbConnect(ORA, user=ORACLE.RED.USER, password=ORACLE.RED.PWD, db="bia")
-}
+## shortcuts for common connections
+newconBIA <- function() dbConnect(ORA, user=ORACLE.BIA.USER, password=ORACLE.BIA.PWD, db="bia")
+newconBIA2 <- function() dbConnect(ORA, user=ORACLE.BIA2.USER, password=ORACLE.BIA2.PWD, db="bia")
+newconBIARO <- function() dbConnect(ORA, user=ORACLE.BIARO.USER, password=ORACLE.BIARO.PWD, db="bia")
+newconBIN <- function() dbConnect(ORA, user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD, db="bin")
+newconRED <- function() dbConnect(ORA, user=ORACLE.RED.USER, password=ORACLE.RED.PWD, db="bia")
+
+  

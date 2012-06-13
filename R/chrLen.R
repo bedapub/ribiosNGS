@@ -8,17 +8,11 @@ chrLen <- function(organism=c("human", "mouse", "rat")) {
     db <- "RATN"
   }
   
-  con <- newconBIN()
   state <- paste("SELECT SEQ, DESCR, SEQLEN, RANK ",
                  "FROM genome_sequence ",
                  "WHERE DB='", db, "'", sep="")
-  
-  rs <- dbSendQuery(con, state)
-  while (!dbHasCompleted(rs)) {
-    ann <- fetch(rs, n = -1)
-  }
-  dbClearResult(rs)
-  dbDisconnect(con)
+  ann <- querydb(state, db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+
   colnames(ann) <- c("Chromosome", "Description", "Length", "Rank")
   ann$Chromosome <- gsub("^CHR","", ann$Chromosome)
   rownames(ann) <- NULL

@@ -41,4 +41,19 @@ newconBIARO <- function() dbConnect(ORA, user=ORACLE.BIARO.USER, password=ORACLE
 newconBIN <- function() dbConnect(ORA, user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD, db="bin")
 newconRED <- function() dbConnect(ORA, user=ORACLE.RED.USER, password=ORACLE.RED.PWD, db="bia")
 
-  
+## format IN syntax
+formatIn <- function(x)
+  paste("(",paste("'", x, "'", sep="", collapse=","),")", sep="")
+
+## obsolete (depcreated) functions
+biosCurrentGeneSymbol <- function(...) {
+  .Deprecated("gtiChipAnnotation",
+              package="ribiosAnnotation")
+  gtiChipAnnotation(...)
+}
+
+raceChipAnnotation <- function(...) {
+  .Deprecated("gtiChipAnnotation",
+              package="ribiosAnnotation")
+  gtiChipAnnotation(...)
+}

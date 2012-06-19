@@ -4,30 +4,39 @@ suppressMessages(library(ribiosArg))
 suppressMessages(library(ribiosUtils))
 	
 filename <- getArg("infile", onlyArg=NULL, missingArg=NULL)
-outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
 getHelp <- existArg("h") | existArg("help")
+hasNoheader <- existArg("noheader")
+hasHeader <- existArg("header")
+knownHeader <- (hasNoheader && !hasHeader) || (!hasNoheader && hasHeader)
 
-if(is.null(filename) || is.null(outfile) ||getHelp) {
+if(is.null(filename) || getHelp || !knownHeader) {
+  if(!knownHeader) message("\nERROR: -noheader/-header missing")
+  if(is.null(filename)) message("\nERROR: -infile missing")
+  
   qqmsg(paste("\nUsage:",
               scriptName(),
-              "-infile FILE(s) -outfile FILE OPTS\n",
+              "-infile FILE(s) OPTS\n",
               "Mandatory parameters\n",
               "-infile FILE(s)\tTab-delimited file(s), with at least two columns\n",
+
               "\t\t\tthe KEYs in the first and the VALUEs in the second.\n",
               "\t\t\tTables are inner joined (merged) with keys\n",
-              "-outfile FILE\t\tTab-delimited file as output\n\n",
+              "-header/-noheader\tSpecify whether the tables have headers or not\n\n",
               "Optional parameters\n",
               "-noheader\t\tIf present first rows in input will NOT be treated as headers\n",
+              "-outfile FILE\t\tTab-delimited file as output. When missing writing to stdout.\n",
               "-outheaders\t\tIf present they will replace the input file names\n",
               "\t\t\tIf there is one extra string, it will be used as header for key\n",
               "\t\t\tas output table column names\n"),
         status=1L)
 }
 
+noheader <- hasNoheader
+outfile <- getArg("outfile", onlyArg="", missingArg="")
 basefilename <- function(filename) gsub("(.*)\\..*$", "\\1", filename)
 fl <- length(filename)
 
-noheader <- existArg("noheader")
+
 outheaders <- getArg("outheaders", onlyArg=NULL, missingArg=NULL)
 if(fl<2) {
   qqmsg("Error: at least 2 input files are required to perform merging\n",
@@ -48,15 +57,15 @@ if(is.null(outheaders)) {
 
 tbls <- lapply(filename,
                read.table, sep="\t", header=!noheader, check.names=FALSE)
-myWrite <- function(x, file) write.table(x, file=file, quote=TRUE, sep="\t", row.names=FALSE,
-                                         col.names=TRUE)
-tbl.merge <- merge(tbls[[1]], tbls[[2]],by=1L, all=TRUE)
+tbl.merge <- merge(tbls[[1]], tbls[[2]],by=1L, all=TRUE, suffixes=c("1", "1y"))
 if(length(tbls)>=3) {
   for(i in seq(3, length(tbls))) {
-    tbl.merge <- merge(tbl.merge, tbls[[i]], by=1L, all=TRUE)
+    tbl.merge <- merge(tbl.merge, tbls[[i]], by=1L, all=TRUE,suffixes=c(i, paste(i, "y",sep="")))
   }
 }
 colnames(tbl.merge) <- outheaders
+myWrite <- function(x, file) write.table(x, file=file, quote=TRUE, sep="\t", row.names=FALSE,
+                                         col.names=TRUE)
 myWrite(x=tbl.merge, file=outfile)
 
 qqmsg(status=0L)

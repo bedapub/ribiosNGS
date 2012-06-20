@@ -19,7 +19,7 @@ stopifnot(all(isGtiChiptype(tolower(ehkChips), exceptions=c("Alster", "Elbe"), i
 
 mychip <- "HG-U133_PLUS_2"
 mychip.anno <- gtiChipAnnotation(mychip)
-stopifnot(all(c("ProbeID", "GeneID", "GeneSymbol", "GeneName", "isSingleGeneID", "Chip") %in% colnames(mychip.anno)))
+stopifnot(all(c("ProbeID", "GeneID", "GeneSymbol", "GeneName", "Chip") %in% colnames(mychip.anno)))
 stopifnot(any(!is.na(mychip.anno$ProbeID)))
 mychip.reanno <- annotateProbesets(sample(mychip.anno$ProbeID, 20),
                                    mychip)

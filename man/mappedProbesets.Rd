@@ -4,7 +4,7 @@
   Find all mapped probesets to given Entrez GeneIDs in a chip
 }
 \description{
-  The function fetched all probesets that map to Entrez GeneIDs of user
+  The function fetches all probesets that map to Entrez GeneIDs of user
   input in a specified chip type.
 
   See Details for the different from the
@@ -17,14 +17,12 @@
 
 }
 \usage{
-mappedProbesets(geneids, chip = "HG-U133_PLUS_2", isSingleGeneID = FALSE, unlist = FALSE)
+mappedProbesets(geneids, chip = "HG-U133_PLUS_2", unlist = FALSE)
 }
 \arguments{
   \item{geneids}{A vector of Entrez GeneIDs, given in integers or characters
     representing integers of GeneIDs.}
   \item{chip}{Mandatory, a character string, chiptype.}
-  \item{isSingleGeneID}{Logical. If set to \code{TRUE}, only probesets
-    mapped to unique GeneIDs will be returned.}
   \item{unlist}{Logical. If set to \code{TRUE}, the result will be a
     character vector; otherwise, it will be a list indexed by Entrez
     GeneIDs for which at least one probesets were found.}
@@ -56,8 +54,7 @@ mappedProbesets(geneids, chip = "HG-U133_PLUS_2", isSingleGeneID = FALSE, unlist
 options(error=utils::recover)
 myGeneIDs <- c(1,1234,1432, 245908)
 mappedProbesets(myGeneIDs, chip="HG-U133_PLUS_2")
-mappedProbesets(myGeneIDs, chip="HG-U133_PLUS_2", isSingleGeneID=TRUE)
-mappedProbesets(myGeneIDs, chip="HG-U133_PLUS_2", isSingleGeneID=TRUE,
-unlist=TRUE)
+mappedProbesets(myGeneIDs, chip="HG-U133_PLUS_2")
+mappedProbesets(myGeneIDs, chip="HG-U133_PLUS_2", unlist=TRUE)
 options(error=NULL)
 }

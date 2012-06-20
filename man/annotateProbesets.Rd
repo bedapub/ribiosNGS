@@ -8,6 +8,9 @@
   Annotate probesets in chip types supported, as listed by the
   \code{\link{gtiChiptypes}} function. If no chip type is given,
   the function will automatically map probesets to genes via GTI.
+
+  The function is a wrapper of \code{gtiChiptype} (when \code{chip} is
+  given) and \code{annotateAnyProbeset} (when \code{chip} is missing).
 }
 \usage{
 annotateProbesets(ids, chip, orthologue=FALSE)
@@ -24,9 +27,7 @@ annotateProbesets(ids, chip, orthologue=FALSE)
   
   The concept \sQuote{Probesets} here can either refer to a set of
   probes, or a single probe, depending on manufacturing techniques used
-  by the microarray vendor. As long as the chip type is supported, and
-  the ID is listed in the \code{affychip_xref_ll} table in Oracle, they
-  can be annotated.
+  by the microarray vendor. 
 }
 \value{
   A \code{data.frame} annotating probesets.
@@ -50,15 +51,16 @@ Jitao David Zhang <jitao_david.zhang@roche.com>
   given chip. Subsequently they are  matched against queried probesets,
   returning their annotations only.
 
-  If no \code{chip} is given, the function tries to fetch annotation
-  information from GTI tables.
+  If no \code{chip} is given, the function calls
+  \code{annotateAnyProbeset} to annotate probesets.
 }
 
 \seealso{
   See \code{\link{gtiChiptypes}} for supported chip types.
 
   See \code{\link{gtiChipAnnotation}} to get annotation for all
-  probesets in a chip.
+  probesets in a chip, \code{\link{annotateAnyProbeset}} to get
+  annotations for probesets from unknown chiptype(s).
 }
 \examples{
 options(error=utils::recover)

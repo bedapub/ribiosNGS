@@ -7,15 +7,21 @@ export(gtiChiptypes,
        gtiChipnames,
        gtiArraytypes) ## synonymous
 
-export(gtiChipAnnotation,
-       gtiTaxAnnotation)
+export(gtiTaxAnnotation)
 
-export(querydb, formatIn, querydbSelectIn)
+export(querydb, formatIn, querydbSelectIn, querydbTmpTbl)
 
-export(annotateProbesets,
-       annotateProbeIDs,
-       annotateGeneIDs,
+export(guessChiptype)
+
+export(annotateAnyProbeset,
+       gtiChipAnnotation,
+       annotateChip,
+       annotateProbesets,
+       annotateProbeIDs)
+
+export(annotateGeneIDs,
        annotateGeneSymbols)
+
 export(gti2bioc, bioc2gti)
 
 export(mappedProbesets)
@@ -25,7 +31,8 @@ export(chrLen)
 export(hapmapSnp,
        illuminaSnp)
 
-export(humanOrthologs,
+export(annotateHumanOrthologs,
+       humanOrthologs,
        humanUniqOrtholog,
        nonhumanOrthologs,
        nonhumanUniqOrtholog)

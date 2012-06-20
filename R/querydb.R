@@ -60,7 +60,7 @@ fillOneColTmpTbl <- function(con,  values) {
 querydbTmpTbl <- function(sqlComm, inCol, inValues,
                           db="bia", user="biread", password="biread") {
   con <- dbConnect(ORA, user=user, password=password, db=db)
-  inValues <- unique(inValues)
+  inValues <- unique(as.character(inValues))
   fillOneColTmpTbl(con=con, values=inValues)
   hasFrom <- grepl("from", sqlComm, ignore.case=TRUE)
   hasWhere <- grepl("where", sqlComm, ignore.case=TRUE)

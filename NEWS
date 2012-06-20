@@ -1,3 +1,12 @@
+Version 2.0-0 (2012-06-20)
+  + Substantial upgrades of following functions: annotateProbesets, annotateGeneIDs and annotateGeneSymbols
+  + For probesets mapping, three functions are available for different scenarios: gtiChipAnnotation, annotateAnyProbeset, and guessChiptype
+  + Consistently map probesets, GeneIDs and GeneSymbols to Orthologues
+  + Add annotateHumanOrthologs to map any Entrez GeneID to human orthologues
+  + Add querydbTmpTbl to fill temporary table with user inputs and perform JOIN actions.
+  + Speed-up several functions
+  + Next major release will make the package work both with ROracle or RJDBC.
+
 Version 1.2-0 (2012-06-12)
   + annotateProbesets, annotateGeneIDs and annotateGeneSymbols are substantially improved: they use now GTI tables, and are able to map orthologues.
   + querydbSelectIn has been exported, and documented.

@@ -1,3 +1,6 @@
+Version 1.0-15 (2012-06-20)
+  + matchColumnIndex is not a little more efficient in doing the multiple matching. However it requires substantion re-coding in C to make it as efficient as normal match. The work is ongoing.
+
 Version 1.0-14 (2012-06-06)
   + Add functions for scripting uses: setDebug, unsetDebug, isDebugging and isIntDebugging
 

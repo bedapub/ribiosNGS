@@ -14,17 +14,17 @@ matchColumnIndex <- function(vector,
   } else {
     target <- data.frame[, column]
   }
-  
+
+  ## multiple mapping is now VERY SLOW: due to be accelerated by C.
   if(multi)
     index <- lapply(vector, function(x) {
-      res <- target %in% x
-      if(any(res))
-        return(which(target %in% x))
-      else
-        return(NA)
+      res <- which(target %in% x)
+      if(length(res)>0) return(res)
+      return(NA)
     })
   else
     index <- match(vector, target)
+  
   return(index)
 }
 

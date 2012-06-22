@@ -42,8 +42,6 @@ isGctFile(file)
 \examples{
 myInFile <- system.file("extdata/test.gct", package="ribiosIO")
 isGctFile(myInFile)
+myInfileLS <- system.file("extdata/test_lessStrict.gct", package="ribiosIO")
+isGctFile(myInfileLS)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

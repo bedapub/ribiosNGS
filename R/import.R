@@ -12,7 +12,11 @@ readExprsMatrix <- function(x) {
 
 ## import ChipFetcher output files as ExpressionSet
 ChipFetcher2ExpressionSet <- function(filename,
-                                      annotation="HG-U133A") {
+                                      doAnnotation=TRUE,
+                                      chip,
+                                      orthologue=FALSE) {
+  if(missing(chip)) chip <- ""
+  
   pre.scan <- scan(filename, what="character", sep="\n", nmax=200L, quiet=TRUE)
   probe.start <- grep("^[0-9]", pre.scan)[1L]
   ncols <- length(strsplit(pre.scan[probe.start],"\t")[[1L]])
@@ -29,15 +33,21 @@ ChipFetcher2ExpressionSet <- function(filename,
                              sep="\t")
   exprs.matrix <- data.matrix(exprs.matrix)
   feature.names <- rownames(exprs.matrix)
-  
-  feature.data.frame <- annotateProbesets(feature.names, annotation)
+
+  if(doAnnotation)  {
+    if(require(ribiosAnnotation)) {
+      feature.data.frame <- annotateProbesets(feature.names, chip, orthologue=orthologue)
+    } else {
+      warning("ribiosAnnotation is not available. Features are not annotated")
+    }
+  }
   colnames(exprs.matrix) <- rownames(pheno.data.frame)
   
   expSet <- new("ExpressionSet",
                 exprs=exprs.matrix,
                 phenoData=new("AnnotatedDataFrame", pheno.data.frame),
                 featureData=new("AnnotatedDataFrame", feature.data.frame))
-  annotation(expSet) <- annotation
+  annotation(expSet) <- chip
   rm(exprs.matrix, pheno.data.frame, feature.data.frame)
   gc(reset=TRUE)
   return(expSet)
@@ -46,7 +56,11 @@ ChipFetcher2ExpressionSet <- function(filename,
 
 ## import partek files
 partek2ExpressionSet <- function(filename,
-                                 annotation="illuminaHumanv3.db") {
+                                 doAnnotation=TRUE,
+                                 chip,
+                                 orthologue=FALSE) {
+  if(missing(chip)) chip <- ""
+    
   if(annotation == "illuminaHumanv3.db") {
     probeFmt <- "^ILMN"
   } else {
@@ -65,7 +79,13 @@ partek2ExpressionSet <- function(filename,
   raw.char <- rawt[probeStart:nrow(rawt),]
   raw.exp <- matrix(as.numeric(raw.char),
                     nrow=nrow(raw.char), ncol=ncol(raw.char), dimnames=dimnames(raw.char))
-  rf <- annotateProbesets(rownames(raw.exp), annotation)
+  if(doAnnotation)  {
+    if(require(ribiosAnnotation)) {
+      rf <- annotateProbesets(rownames(raw.exp), chip, orthologue=orthologue)
+    } else {
+      warning("ribiosAnnotation is not available. Features are not annotated")
+    }
+  }
   eset <- new("ExpressionSet",
               exprs=raw.exp,
               featureData=new("AnnotatedDataFrame", rf),

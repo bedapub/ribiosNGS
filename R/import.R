@@ -12,7 +12,6 @@ readExprsMatrix <- function(x) {
 
 ## import ChipFetcher output files as ExpressionSet
 ChipFetcher2ExpressionSet <- function(filename,
-                                      doAnnotation=TRUE,
                                       chip,
                                       orthologue=FALSE) {
   if(missing(chip)) chip <- ""
@@ -34,12 +33,10 @@ ChipFetcher2ExpressionSet <- function(filename,
   exprs.matrix <- data.matrix(exprs.matrix)
   feature.names <- rownames(exprs.matrix)
 
-  if(doAnnotation)  {
-    if(require(ribiosAnnotation)) {
-      feature.data.frame <- annotateProbesets(feature.names, chip, orthologue=orthologue)
-    } else {
-      warning("ribiosAnnotation is not available. Features are not annotated")
-    }
+  if(require(ribiosAnnotation)) {
+    feature.data.frame <- annotateProbesets(feature.names, chip, orthologue=orthologue)
+  } else {
+    warning("ribiosAnnotation is not available. Features are not annotated")
   }
   colnames(exprs.matrix) <- rownames(pheno.data.frame)
   
@@ -56,7 +53,6 @@ ChipFetcher2ExpressionSet <- function(filename,
 
 ## import partek files
 partek2ExpressionSet <- function(filename,
-                                 doAnnotation=TRUE,
                                  chip,
                                  orthologue=FALSE) {
   if(missing(chip)) chip <- ""
@@ -79,12 +75,10 @@ partek2ExpressionSet <- function(filename,
   raw.char <- rawt[probeStart:nrow(rawt),]
   raw.exp <- matrix(as.numeric(raw.char),
                     nrow=nrow(raw.char), ncol=ncol(raw.char), dimnames=dimnames(raw.char))
-  if(doAnnotation)  {
-    if(require(ribiosAnnotation)) {
-      rf <- annotateProbesets(rownames(raw.exp), chip, orthologue=orthologue)
-    } else {
-      warning("ribiosAnnotation is not available. Features are not annotated")
-    }
+  if(require(ribiosAnnotation)) {
+    rf <- annotateProbesets(rownames(raw.exp), chip, orthologue=orthologue)
+  } else {
+    warning("ribiosAnnotation is not available. Features are not annotated")
   }
   eset <- new("ExpressionSet",
               exprs=raw.exp,

@@ -5,7 +5,7 @@ keepMaxStatProbe <- function(eset, probe.index.name, keepNAprobes=TRUE,
                              stat=function(x) mean(x,na.rm=TRUE),...) {
   stopifnot(!missing(probe.index.name) && probe.index.name %in% colnames(fData(eset)))
   if(is.character(stat)) {
-    stat <- get(stat, env=parent.frame())
+    stat <- get(stat, envir=parent.frame())
   }
 
   if (!is.function(stat)) {

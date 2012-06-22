@@ -1,19 +1,17 @@
 \name{ChipFetcher2ExpressionSet}
 \alias{ChipFetcher2ExpressionSet}
 \title{
-  Import ChipFetcher export files into an \code{ExpressionSet} object.
+  Import ChipFetcher export files into an ExpressionSet object.
 }
 \description{
   Import files exported by Roche web-tool \code{ChipFetcher} into an
   \code{ExpressionSet} object.
 }
 \usage{
-ChipFetcher2ExpressionSet(filename, doAnnotation=TRUE, chip, orthologue = FALSE)
+ChipFetcher2ExpressionSet(filename, chip, orthologue = FALSE)
 }
 \arguments{
   \item{filename}{Exported file name of ChipFetcher}
-  \item{doAnnotation}{Logical, whether features should be
-    annotated. \code{TRUE} by default}
   \item{chip}{Chip type used to annotate the features,
     e.g. \code{HG-U133_PLUS_2}. In case missing, chips are automatically
     mapped. Assigning the value of \code{chip} accelerates the probe
@@ -23,7 +21,7 @@ ChipFetcher2ExpressionSet(filename, doAnnotation=TRUE, chip, orthologue = FALSE)
 }
 \details{
   \code{chip} and \code{orthologue} are only valid when
-  \code{doAnnotaiton} is set to \code{TRUE}.
+  \code{ribiosAnnotation} is available.
 }
 \value{
   An \code{ExpressionSet} object.

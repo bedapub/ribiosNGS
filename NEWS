@@ -1,5 +1,5 @@
 Version 1.0-20 (Jun 21, 2012)
-  + ChipFetcher2ExpressionSet: add options doAnnotation and orthologue, changing the parameter "annotation" to "name". Now user can decide whether to annotate featuers, and if so, user can specify whether the human orthologue should be used. See annotateProbesets function in ribiosAnnotation package
+  + ChipFetcher2ExpressionSet: add option orthologue, changing the parameter "annotation" to "name". Now user can decide whether to explicitly specify a chip name; independently, user can specify whether the human orthologue should be used. See annotateProbesets function in ribiosAnnotation package
   + ChipFecther2ExpressionSet function has now been documented
   + keepMaxStatProbe uses function(x) mean(x, na.rm=TRUE) as default function
 

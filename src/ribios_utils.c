@@ -2,6 +2,7 @@
 #include "ribios_utils.h"
 #include "endec.h"
 #include "die.h"
+#include "mmatch.h"
 
 static const R_CallMethodDef callMethods[] = {
   /* pwdecode.c */

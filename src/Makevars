@@ -6,4 +6,4 @@ R_INC=$(R_HOME)/src/include/
 PKG_CFLAGS=$(PRPIINC)
 
 ## The pwdecode.c is linked to, since BIOS uses static libraries and it is not possible to be linked to a static library
-PKG_LIBS=$(CPICFLAGS) -I$(R_INC) $(PRPISRC)/pwdecode.c
+PKG_LIBS=$(CPICFLAGS) -I$(R_INC) $(PRPISRC)/pwdecode.c $(PRPISRC)/hlrmisc.c $(PRPISRC)/array.c

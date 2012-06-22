@@ -3,6 +3,8 @@ exportPattern("^[[:alpha:]]+")
 export(summarizeRows, summarizeColumns, summarizeCols)
 export(isError)
 
+export(mmatch)
+
 export(matchColumnIndex, matchColumn)
 
 export(matrix2longdf)

@@ -1,3 +1,8 @@
+Version 1.0-16 (2012-06-22)
+  + Add mmatch function: It performs efficient multiple matching between vectors using BIOS-C codes. Thanks to Roland Schmucki for sharing C codes.
+  + Documentation and test files were added for mmatch
+  + matchColumnIndex (and consequently matchColumn) uses mmatch for multiple matching, improving speed drastically
+
 Version 1.0-15 (2012-06-20)
   + matchColumnIndex is not a little more efficient in doing the multiple matching. However it requires substantion re-coding in C to make it as efficient as normal match. The work is ongoing.
 

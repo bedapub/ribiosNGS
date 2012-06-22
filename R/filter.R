@@ -2,7 +2,7 @@
 ## since it requires the AnnotationDbi package, which is bulky to load
 
 keepMaxStatProbe <- function(eset, probe.index.name, keepNAprobes=TRUE,
-                             stat=sd,...) {
+                             stat=function(x) mean(x,na.rm=TRUE),...) {
   stopifnot(!missing(probe.index.name) && probe.index.name %in% colnames(fData(eset)))
   if(is.character(stat)) {
     stat <- get(stat, env=parent.frame())

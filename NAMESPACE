@@ -1,7 +1,6 @@
 importFrom("ribiosIO", "read_gct_matrix")
 importFrom("ribiosUtils", "rowscale")
 
-
 export("rowscale")
 export("keepMaxStatProbe")
 

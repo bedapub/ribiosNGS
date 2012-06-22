@@ -1,3 +1,8 @@
+Version 1.0-20 (Jun 21, 2012)
+  + ChipFetcher2ExpressionSet: add options doAnnotation and orthologue, changing the parameter "annotation" to "name". Now user can decide whether to annotate featuers, and if so, user can specify whether the human orthologue should be used. See annotateProbesets function in ribiosAnnotation package
+  + ChipFecther2ExpressionSet function has now been documented
+  + keepMaxStatProbe uses function(x) mean(x, na.rm=TRUE) as default function
+
 Version 1.0-19 (Jun 12, 2012)
   + limma2gsea.Rscript is updated: (1) the AvgExprs field name can be "AvgExprs" or "AveExpr" (2) the script is accelerated in case of no duplicating GeneSymbols & no orthologue mapping needed
   + limma2gsea.Rscript adds a new option "-fulltable":if specified, it returns a full table of statistics.

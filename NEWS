@@ -1,3 +1,6 @@
+Version 1.0-13 (2012-06-21)
+  + isGctFile is less strict now regarding to spaces
+
 Version 1.0-12 (2012-06-12)
   + Add 'isGctFile' function to determine whether an input file complies with the GCT file format.
 

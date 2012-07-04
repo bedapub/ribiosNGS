@@ -43,7 +43,7 @@ SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
 
     it = textFieldtokP(line, "\t");
     if(ind == 0) { // dim line
-      if(arrayMax(it)!=2) {
+      if(arrayMax(it)<2) {
 	error("The second line of GCT does not have two elements separated by tab");
 	return R_NilValue;
       }

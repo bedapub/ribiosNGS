@@ -1,3 +1,6 @@
+Version 1.0-14 (2012-07-04)
+  + read_gct C file: the second line is less strict, allowing empty cells after the first two columns
+
 Version 1.0-13 (2012-06-21)
   + isGctFile is less strict now regarding to spaces
 

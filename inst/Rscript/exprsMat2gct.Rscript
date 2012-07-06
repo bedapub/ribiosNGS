@@ -1,0 +1,30 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+
+if(is.null(infile) || getHelp)
+  qqmsg(paste("Usage:",
+              scriptName(),
+              "-infile FILE [-outfile FILE]\n",
+              "-infile FILE\tInput tab-delimited file in the matrix form\n",
+              "Optional:\n",
+              "-outfile FILE\tgct output file name. File is wrriten to stdout if missing.\n",sep=""),
+        status=1L)
+
+outfile <- getArg("outfile", onlyArg=stdout(), missingArg=stdout())
+
+libordie(ribiosIO)
+libordie(ribiosExpression)
+
+exprsMatrix2gct <- function(file, outfile=stdout()) {
+  tbl <- read_exprs_matrix(file)
+  eset <- new("ExpressionSet", exprs=tbl)
+  writeGct(eset, file=outfile)
+}
+exprsMatrix2gct(infile, outfile)
+
+qqmsg(status=0L)

@@ -1,3 +1,6 @@
+Version 1.0-21 (Jul 06, 2012)
+  + add exprsMat2gct.Rscript to convert between expression matrix files and GCT files
+
 Version 1.0-20 (Jun 21, 2012)
   + ChipFetcher2ExpressionSet: add option orthologue, changing the parameter "annotation" to "name". Now user can decide whether to explicitly specify a chip name; independently, user can specify whether the human orthologue should be used. See annotateProbesets function in ribiosAnnotation package
   + ChipFecther2ExpressionSet function has now been documented

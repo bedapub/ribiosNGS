@@ -8,9 +8,9 @@ read_exprs_matrix <- function(x) {
     return(mat)
   } else {
     if (any(grepl("\t", x.con))) { ## tab-delimited file
-      df <- read.table(x, sep="\t", row.names=NULL, header=TRUE, check.names=FALSE)
+      df <- read.table(x, sep="\t", row.names=NULL, header=TRUE, check.names=FALSE, comment.char="")
     } else { ## space-delimited file
-      df <- read.table(x, sep="", row.names=NULL, header=TRUE, check.names=FALSE)
+      df <- read.table(x, sep="", row.names=NULL, header=TRUE, check.names=FALSE, comment.char="")
     }
     mat <- data.matrix(df[,-1L])
     rownames(mat) <- df[,1L]

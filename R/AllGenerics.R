@@ -29,3 +29,4 @@ setMethod("rowscale", c("ExpressionSet","ANY", "ANY"), function(object, center, 
                            center=center, scale=scale))
   return(object)
 })
+

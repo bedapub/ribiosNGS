@@ -1,6 +1,6 @@
 \name{writeGctCls}
-\alias{writeGct}
 \alias{writeCls}
+\alias{writeGct}
 \alias{writeGctCls}
 \alias{eset2gct}
 \alias{eset2cls}
@@ -12,23 +12,26 @@
   function internally to write two files.
 }
 \usage{
-writeGct(eset, file=stdout(), feature.name.col, feature.desc.col)
+writeGct(obj, file, feat.name, feat.desc)
 writeCls(eset, file=stdout(), sample.group.col)
-writeGctCls(eset, file.base, feature.name.col, sample.group.col,
+writeGctCls(eset, file.base, feat.name, sample.group.col,
 write.add.fData.file=TRUE, write.add.pData.file=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{eset}{An object of the \code{eSet} class, for example an
     \code{ExpressionSet} object}
-  \item{file}{Name of the Gct/Cls file}
+  \item{obj}{A matrix or \code{ExpressionSet} object, which shall be
+    written in GCT format}
+  \item{file}{Name of the Gct/Cls file. If left missing, the file is
+    printed on the standard output.}
   \item{file.base}{For writeGctCls, the base name of the two files: the
     suffix (.gct and .cls) will be appended}
-  \item{feature.desc.col}{Integer or character, indicating which column
+  \item{feat.desc}{Integer or character, indicating which column
     of the featureData should be used as feature names; if missing,
     results of the \code{featureNames} function will be used as
     identifiers in the Gct file. See details.}
-  \item{feature.name.col}{Integer or character, indicating which column
+  \item{feat.name}{Integer or character, indicating which column
     of the featureData should be used as feature descriptions. If the
     value is missing, the Description column of the Gct file will be
     left blank}
@@ -41,7 +44,7 @@ write.add.fData.file=TRUE, write.add.pData.file=TRUE)
     should be written into a file named \code{${file.base}.add.pData.txt}}
 }
 \details{
-  The \code{feature.name.col} option specifies what identifiers should
+  The \code{feat.name} option specifies what identifiers should
   be used for features (probesets). When the value is missing,
   \code{featureNames} is called to provide feature identifiers.
 

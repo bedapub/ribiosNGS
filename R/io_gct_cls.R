@@ -3,29 +3,29 @@
 ##------------------------------##
 
 ## Export ExpressionSet into gct/cls files
-writeGct <- function(eset, file=stdout(),
-                     feature.name.col,
-                     feature.desc.col)  {
-  prefix <- paste("#1.2", "\n",
-                  nrow(eset), "\t", ncol(eset),sep="")
-  writeLines(prefix,file)
-  
-  if(missing(feature.name.col)) {
-    fnames <- featureNames(eset)
-  } else {
-    fnames <- fData(eset)[, feature.name.col]
-  }
-  if(missing(feature.desc.col)) {
-    fdesc <- ""
-  } else {
-    fdesc <- fData(eset)[, feature.desc.col]
-  }
-  df <- data.frame(NAME=fnames,
-                   Description="")
-  df <- cbind(df, exprs(eset))
-  suppressWarnings(write.table(df, file=file, append=TRUE, quote=FALSE, sep="\t",
-                               row.names=FALSE, col.names=TRUE, na=""))
+setGeneric("writeGct", function(obj, file, feat.name, feat.desc) standardGeneric("writeGct"))
+setMethod("writeGct",
+          c("matrix", "ANY", "ANY", "ANY"),
+          function(obj, file, feat.name, feat.desc) {
+            if(missing(file)) file <- stdout()
+            write_gct(obj, file=file, feat.name=feat.name, feat.desc=feat.desc)
+          })
+getDfCol <- function(df, name) {
+  nameInF <- ncol(df)>=1 & length(name)==1 && (name %in% colnames(df) || name %in% 1:ncol(df))
+  if(nameInF) return(df[, name])
+  return(name)
 }
+setMethod("writeGct",
+          c("ExpressionSet", "ANY", "ANY", "ANY"),
+          function(obj, file, feat.name, feat.desc) {
+            fd <- fData(obj)
+            if(!missing(feat.name))
+              feat.name <- getDfCol(fd, feat.name)
+            if(!missing(feat.desc))
+              feat.desc <- getDfCol(fd, feat.desc)
+            writeGct(exprs(obj), file=file, feat.name=feat.name, feat.desc)
+          })
+
 writeCls <- function(eset, file=stdout(), sample.group.col) {
   if(missing(sample.group.col)) {
     stop("Sample groups must be given by the sample.group.col\n")
@@ -40,13 +40,13 @@ writeCls <- function(eset, file=stdout(), sample.group.col) {
 }
 writeGctCls <- function(eset,
                         file.base,
-                        feature.name.col,
+                        feat.name,
                         sample.group.col,
                         write.add.fData.file=TRUE,
                         write.add.pData.file=TRUE) {
   gct.file <- paste(file.base, ".gct", sep="")
   cls.file <- paste(file.base, ".cls", sep="")
-  writeGct(eset, file=gct.file, feature.name.col=feature.name.col)
+  writeGct(eset, file=gct.file, feat.name=feat.name)
   writeCls(eset, file=cls.file, sample.group.col=sample.group.col)
   if(write.add.fData.file) {
     add.fData.file <- paste(file.base, ".add.fData.txt", sep="")

@@ -1,3 +1,8 @@
+Version 1.0-15 (2012-07-10)
+  + Add write_gct function to export Matrix in gct format
+  + read_exprs_matrix does not interpret hashes ("#") as comment char any more
+  + Migrate the "exprsMat2gct.Rscript" from ribiosExpression to ribiosIO
+
 Version 1.0-14 (2012-07-04)
   + read_gct C file: the second line is less strict, allowing empty cells after the first two columns
 

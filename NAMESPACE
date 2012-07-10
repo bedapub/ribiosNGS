@@ -6,7 +6,8 @@ export(read_gmt_list,
 export(isGctFile)
 
 export(read_gct_matrix,
-       read_gctstr_matrix)
+       read_gctstr_matrix,
+       write_gct)
 
 export(read_fasta,
        write_fasta)

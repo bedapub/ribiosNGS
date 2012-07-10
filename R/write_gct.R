@@ -10,7 +10,8 @@ write_gct <- function(matrix, file=stdout(), feat.name, feat.desc) {
   }
   if(missing(feat.desc) || is.null(feat.desc)) {
     feat.desc <- ""
-  } 
+  }
+  if(identical(file, "")) file <- stdout()
   prefix <- paste("#1.2", "\n", nrow(matrix), "\t", ncol(matrix), 
                   sep = "")
   writeLines(prefix, file)

@@ -27,7 +27,7 @@ libordie("ribiosIO")
 libordie("ribiosPlot")
 libordie("ape")
 
-rddir <- system.path("extdata", package="ribiosNetwork")
+rddir <- system.file("extdata", package="ribiosNetwork")
 rdfile <- file.path(rddir, "tggate-gsea-PathEsHc.RData")
 if(!loadFile(rdfile))
   qqmsg("TG-GATES Pathway Tree Backbone not found", status=1L)

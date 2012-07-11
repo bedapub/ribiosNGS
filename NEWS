@@ -1,3 +1,7 @@
+Version 1.0-4 (2012-07-11)
+  + Add pathSigTree.Rscript to visualized pathway signature tree with TG-GATES results
+  + Add binary tree and testing data for pathSigTree.Rscript
+
 Version 1.0-3 (2012-04-12)
   + exportGML is refactored into the ribiosNetwork package (previously in ronet.Rscript)
   + dummy function is removed

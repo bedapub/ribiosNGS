@@ -1,3 +1,6 @@
+Version 1.0-16 (2012-07-12)
+  + read_exprs_matrix uses a more stringent grep to detect GCT files
+
 Version 1.0-15 (2012-07-10)
   + Add write_gct function to export Matrix in gct format
   + read_exprs_matrix does not interpret hashes ("#") as comment char any more

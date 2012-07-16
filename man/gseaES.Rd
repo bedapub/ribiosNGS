@@ -23,7 +23,7 @@ gseaES(file, normalized = FALSE)
     q-value (FDR)? It can be set to the number of permutation tests divided
     by \code{1}. By default \code{1/10000}}
   \item{log}{Valid for q value: whether the FDR q value should be
-    transformed by natural logarithm. By default \code{FALSE}}
+    transformed by base-10 (log10) logarithm. By default \code{FALSE}}
   \item{posLog}{Valid for q value: whether the logged FDR q value should be
     negated to get positive value.This is useful when the sign of
     \code{q} is used to distinguish between positive and negative

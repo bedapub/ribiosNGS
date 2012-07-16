@@ -1,14 +1,17 @@
 \name{extname}
+\alias{basefilename}
 \alias{extname}
 \title{
-  Get the extension(s) of file name(s)
+  Get the base and extension(s) of file name(s)
 }
 \description{
-  Many files have extensions in their names, for instance the \code{pdf}
-  in the file name \code{mybook.pdf}. The \code{extname} function
-  extracts this bit of information from one or more file names.
+  Many files have base and extensions in their names, for instance for
+  the file \code{mybook.pdf}, the base is \code{mybook} and the
+  extension is \code{pdf}. \code{basefilename} \code{extname} functions
+  extract these information from one or more file names.
 }
 \usage{
+basefilename(x)
 extname(x)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -17,14 +20,14 @@ extname(x)
     coereced to characters}
 }
 \value{
-  The file name extension as characters, of the same length as the input
+  The base file name or the extension as characters, of the same length as the input
   file name character. In case that a file name does not contain a
   extension, \code{NA} will be returned.
 }
 \note{
   In case there are multiple dots in the input file name, the last field
-  will be taken as the extension. For instance for file
-  \code{test.out.txt}, the returned extension is \code{txt}.
+  will be taken as the extension, and the rest as the base name. For instance for file
+  \code{test.out.txt}, returned base name is \code{test.out} and extension is \code{txt}.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>
@@ -35,5 +38,11 @@ extname("sequence.in.fasta")
 extname(c("/path/mybook.pdf", "test.doc"))
 extname("README")
 extname("/path/my\ home/Holiday Plan.txt")
+
+basefilename("mybook.pdf")
+basefilename("sequence.in.fasta")
+basefilename(c("/path/mybook.pdf", "test.doc"))
+basefilename("README")
+basefilename("/path/my\ home/Holiday Plan.txt")
 }
 

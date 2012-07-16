@@ -20,7 +20,7 @@ dfFactor(df, sample.group)
   Step 1: It tries to find a column in the \code{data.frame} with
     the name as given by \code{sample.group}. If found, this column is
     transformed into a factor if not and returned.
-  Step 2: It tries to interpret the \code{sample.grou} as an
+  Step 2: It tries to interpret the \code{sample.group} as an
     integer, as the index of the column in the \code{data.frame} giving
     the factor.
   Step 3: When \code{sample.group} itself is a vector of

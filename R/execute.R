@@ -1,7 +1,4 @@
-BIOS_GSEA_ANNOTATION_DIR <- "/DATA/bi/httpd_8080/htdoc/apps/gsea/annotations"
-biosGSEAannotations <- function(pattern=".*",...) {
-  dir(BIOS_GSEA_ANNOTATION_DIR, pattern=pattern,...)
-}
+gseaChiptypes <- function(pattern=".*",...) dir(GSEA_ANNOTATION_DIR, pattern=pattern,...)
 
 ## An example of running GSEA on montale
 ##/SOFT/bi/apps/java/c/bin/java -Xmx2500m -classpath .:/SOFT/bi/apps/gsea/GSEA2-2.02/my_gsea2.jar xtools.gsea.GseaPreranked
@@ -25,7 +22,7 @@ biosGSEA <- function(files,
   if(!grepl("\\.chip$", chip))
     chip <- paste(chip, ".chip", sep="")
 
-  chip.file <- file.path(BIOS_GSEA_ANNOTATION_DIR,
+  chip.file <- file.path(GSEA_ANNOTATION_DIR,
                          chip)
   stopifnot(file.exists(chip.file))
   
@@ -50,7 +47,7 @@ biosGSEA <- function(files,
                             as.integer(plotTopX),
                             file.path(outdir,paste("GSEA", gsub("\\..*$", "", basename(files[i])), sep="_"))
                             )
-    system(gsea.command, inter=FALSE, ignore.stderr=FALSE, wait=TRUE)
+    system(gsea.command, intern=FALSE, ignore.stderr=FALSE, wait=TRUE)
   }
 }
 

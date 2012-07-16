@@ -56,7 +56,6 @@ gseaFingerprint <- function(gseaDir, value=c("q", "es", "nes"), threshold=1E-4, 
 
 gseaFingerprintMatrix <- function(gseaDirs, value="es",...) {
   hs.fps <- lapply(gseaDirs,gseaFingerprint, value=value,...)
-  browser()
   isNull <- sapply(hs.fps, is.null)
   if(all(isNull))
     stop("No valid GSEA output directories were detected.\n",

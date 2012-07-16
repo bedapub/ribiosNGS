@@ -3,3 +3,5 @@
 
 ## GSEA fingerprints
 export(gseaQvalue, gseaES, gseaFingerprint, gseaFingerprintMatrix)
+
+export(buildGSEAcomm)

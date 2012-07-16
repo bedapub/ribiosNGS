@@ -1,3 +1,9 @@
+Version 1.0-2 (Jul 16, 2012)
+  + gseaFingerprintMatrix: omit empty directories
+  + gseaFingerprintMatrix: stops if all input directories are detected NOT to be GSEA result folders
+  + gseaQvalue: q-values is given in -log10(p) instead of -log(p) (base-10) to make interpretation easier
+  + Add buildGSEAcomm: build bash commands to run GSEA. Able to deal with irregular file names
+
 Version 1.0-1 (Jun 07, 2012)
   + gseaFingerprints.Rscript: remove empty lines from input file
 

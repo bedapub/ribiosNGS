@@ -6,7 +6,7 @@ gseaQvalue <- function(file, threshold=1E-4, log=FALSE, posLog=FALSE) {
   if(!is.null(threshold) && !is.na(threshold))
     q[q<threshold] <- threshold
   if(log)
-    q <- log(q)
+    q <- log10(q)
   if(posLog)
     q <- (-q)
   return(data.frame(name=name, value=q))
@@ -56,9 +56,17 @@ gseaFingerprint <- function(gseaDir, value=c("q", "es", "nes"), threshold=1E-4, 
 
 gseaFingerprintMatrix <- function(gseaDirs, value="es",...) {
   hs.fps <- lapply(gseaDirs,gseaFingerprint, value=value,...)
-  fps <- hs.fps[!sapply(hs.fps, is.null)]
-  gseaNames <- gsub("\\.GseaPreranked\\.[0-9]*$", "", basename(gseaDirs))
+  browser()
+  isNull <- sapply(hs.fps, is.null)
+  if(all(isNull))
+    stop("No valid GSEA output directories were detected.\n",
+         "Please make sure that input directories are GSEA result folders (not their parent folders)\n")
+  fps <- hs.fps[!isNull]
   fps.names <- unique(unlist(lapply(fps, function(x) x[,1L])))
+  
+  gseaNames <- gsub("\\.GseaPreranked\\.[0-9]*$", "", basename(gseaDirs))
+  gseaNames <- gseaNames[!isNull]
+  
   fpsMat <- matrix(NA, nrow=length(fps.names), ncol=length(fps),
                    dimnames=list(fps.names, gseaNames))
   for(i in seq(along=fps)) {

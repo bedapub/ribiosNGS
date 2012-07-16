@@ -51,6 +51,8 @@ export(isDir, checkDir, assertDir,
 
 export(allIdentical)
 
+export(libordie)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils)
 

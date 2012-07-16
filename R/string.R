@@ -1,5 +1,12 @@
-nField <- function(str, split="\t",...)
+nField <- function(str, split="\t",...) {
+  .Deprecated("countTokens", package="ribiosUtils")
+  countTokens(str=str, split=split,...)
+}
+
+countTokens <- function(str, split="\t",...) {
+  str <- as.character(str)
   sapply(strsplit(str, split, ...), length)
+}
 
 strtoken <- function(x, split, index, ...) {
   x <- as.character(x)

@@ -1,43 +1,6 @@
-headhead <- function(x, m=6L, n=6L,...) {
-  stopifnot(length(n) == 1L && length(m) == 1L)
-  n <- if (n < 0L)
-    max(ncol(x) + n, 0L)
-  else
-    min(n, ncol(x))
 
-  m <- if (m < 0L)
-    max(nrow(x) + m, 0L)
-  else
-    min(m, nrow(x))
 
-  x[seq_len(m), seq_len(n), drop = FALSE]
-}
-
-tailtail <- function(x, m = 6L, n = 6L,
-                     addrownums = TRUE,
-                     addcolnums = TRUE,...) {
-    stopifnot(length(m) == 1L & length(n) == 1L)
-    mrx <- nrow(x)
-    ncx <- ncol(x)
-    m <- if (m < 0L) 
-        max(mrx + m, 0L)
-    else min(m, mrx)
-    n <- if (n < 0L)
-      max(ncx + n, 0L)
-    else min(n, ncx)
-    
-    sel.row <- seq.int(to = mrx, length.out = m)
-    sel.col <- seq.int(to = ncx, length.out = n)
-    
-    ans <- x[sel.row, sel.col, drop = FALSE]
-    if (addrownums && is.null(rownames(x))) 
-        rownames(ans) <- paste("[", sel.row, ",]", sep = "")
-    if (addcolnums && is.null(colnames(x))) 
-        colnames(ans) <- paste("[", sel.col, ",]", sep = "")
-    ans
-}
-
-orderByDimnames <- function(x,row.decreasing=FALSE, col.decreasing=FALSE) {
+sortByDimnames <- function(x,row.decreasing=FALSE, col.decreasing=FALSE) {
   x <- x[order(rownames(x), decreasing=row.decreasing),]
   x <- x[, order(colnames(x), decreasing=col.decreasing)]
   return(x)
@@ -63,11 +26,6 @@ putColsFirst <- function(data.frame, columns) {
   return(data.frame)
 }
 
-placeColumnsFirst <- function(data.frame, columns) {
-  .Deprecated("putColsFirst","ribiosUtils")
-  putColsFirst(data.frame, columns)
-}
-
 removeColumns <- function(data.frame, columns, drop=FALSE) {
   col.names <- colnames(data.frame)
   if(!any(columns %in% col.names)) {
@@ -77,8 +35,6 @@ removeColumns <- function(data.frame, columns, drop=FALSE) {
   data.frame <- data.frame[,setdiff(col.names, columns), drop=drop]
   return(data.frame)
 }
-
-
 
 ## change column names
 replaceByMatch <- function(vector, old.items, new.items) {
@@ -96,7 +52,6 @@ replaceColumnNames <- function(data.frame, old.names, new.names) {
   colnames(data.frame) <- new.col.names
   return(data.frame)
 }
-
 
 sortByCol <- function (data.frame, columns,
                        na.last = TRUE,
@@ -133,10 +88,4 @@ dfFactor <- function(df, sample.group) {
   }
   if(!is.factor(fac)) fac <- factor(fac)
   return(fac)
-}
-
-
-sampleFactor <- function(pdata, sample.group) {
-  .Deprecated("dfFactor", package="ribiosUtils")
-  dfFactor(pdata, sample.group)
 }

@@ -129,7 +129,7 @@ annotateProbesets <- function(ids, chip, orthologue=FALSE) {
   if(missing(chip) || notValid(chip)) {
     annotateAnyProbeset(ids, orthologue=orthologue)
   } else {
-    gtiChipAnnotation(chip, ids=ids)
+    gtiChipAnnotation(chip, ids=ids, orthologue=orthologue)
   }
 }
 

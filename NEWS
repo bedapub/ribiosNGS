@@ -1,3 +1,6 @@
+Version 2.0-1 (2012-07-16)
+  + annotateProbesets: If the option 'chip' is not missing, 'gtiChipAnnotation' takes over the orthologue mapping task, which was missing in previous versions.
+
 Version 2.0-0 (2012-06-20)
   + Substantial upgrades of following functions: annotateProbesets, annotateGeneIDs and annotateGeneSymbols
   + For probesets mapping, three functions are available for different scenarios: gtiChipAnnotation, annotateAnyProbeset, and guessChiptype

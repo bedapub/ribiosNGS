@@ -1,4 +1,4 @@
-exportPattern("^[[:alpha:]]+")
+export(atofMatrix)
 
 export(summarizeRows, summarizeColumns, summarizeCols)
 export(isError)
@@ -7,9 +7,17 @@ export(mmatch)
 
 export(matchColumnIndex, matchColumn)
 
-export(matrix2longdf)
+export(putColsFirst, sortByDimnames,
+       removeColumns,
+       replaceColumnNames,
+       sortByCol)
 
-export(extname)
+export(rowscale)
+export(matrix2longdf,stringDataFrame2numericMatrix)
+
+export(dfFactor)
+
+export(basefilename, extname)
 
 export(qqmsg)
 export(verbose)
@@ -19,5 +27,34 @@ export(pwdecode)
 export(setDebug, unsetDebug,
        isDebugging, isIntDebugging)
 
+export(refactor, relevels,
+       cutInterval, refactorNum)
+
+export(atomGrep, orderedGrep)
+
+export(strtoken, countTokens)
+
+export(reload)
+
+export(stubborngc)
+
+export(headhead, tailtail)
+
+export(uniqueLength)
+
+export(openFileDevice)
+
+export(na.false)
+
+export(isDir, checkDir, assertDir,
+       checkFile, assertFile)
+
+export(allIdentical)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils)
+
+##--------------------##
+## Deprecation
+##--------------------##
+export(nField)

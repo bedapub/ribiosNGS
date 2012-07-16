@@ -67,3 +67,10 @@ cutInterval <- function(x, interval=100,
                ...)
   return(x.cut)
 }
+
+refactorNum <- function(x, decreasing=FALSE) {
+  x <- factor(as.character(x))
+  new.levels <- sort(as.numeric(levels(x)),
+                     decreasing=decreasing)
+  factor(x, levels=new.levels)
+}

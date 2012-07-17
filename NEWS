@@ -1,3 +1,6 @@
+Version 1.0-23 (Jul 17, 2012)
+  + Bug fix in readGct: if input feature names have duplicates, the exprs matrix row names are changed.
+
 Version 1.0-22 (Jul 10, 2012)
   + Move exprsMat2gct.Rscript to the ribiosIO package since it no longer requires functionality in ribiosExpression
   + writeGct has been refactored for matrix in ribiosIO, and the function has been re-implemented as a S4-method for matrix and ExpressionSet

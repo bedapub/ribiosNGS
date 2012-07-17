@@ -69,6 +69,7 @@ readGct <- function(gct.file) {
   if(any(duplicated(fnames))) {
     warning("Duplicated feature names detected, they will be made unique.\n")
     fnames <- make.unique(fnames)
+    rownames(mat) <- fnames
   }
   res <- new("ExpressionSet",
              exprs=mat,

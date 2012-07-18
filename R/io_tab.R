@@ -1,7 +1,7 @@
 writeEset <- function(eset,exprs.file,fData.file,pData.file) {
   write.table(exprs(eset),
               exprs.file,
-              sep="\t", row.names=TRUE, col.names=TRUE)
+              sep="\t", row.names=TRUE, col.names=TRUE, quote=FALSE)
   if(!missing(fData.file) && !is.null(fData.file))
     write.table(fData(eset),
                 fData.file,

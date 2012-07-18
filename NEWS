@@ -1,3 +1,7 @@
+Version 1.0-24 (Jul 18, 2012)
+  + Bug fix in writeEset: expresion matrix is written without quotes
+  + New script: keepMaxMeanProbes.Rscript filters duplicated genes by taking the one with maximum average expression
+
 Version 1.0-23 (Jul 17, 2012)
   + Bug fix in readGct: if input feature names have duplicates, the exprs matrix row names are changed.
 

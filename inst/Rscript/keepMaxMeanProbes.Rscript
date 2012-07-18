@@ -1,0 +1,41 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+##------------------------------------------------------------##
+## Two-Group Differential expression analysis with limma
+##------------------------------------------------------------##
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosUtils))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+if(is.null(infile) | getHelp) {
+  qqmsg("Usage:",
+        scriptName(),
+        "-infile FILE [-outfile FILE]\n",
+        "-infile FILE\tInput tab-delimited file with samples as header, and the first column of gene names (GeneID or GeneSymbol)\n",
+        "Optional\n",
+        "-outfile FILE\tOutput file\n",
+        sep="")
+}
+
+libordie(ribiosIO)
+libordie(ribiosExpression)
+
+outfile <- getArg("outfile", onlyArg=stdout(), missingArg=stdout())
+tbl <- read_exprs_matrix(infile)
+ids <- rownames(tbl)
+rownames(tbl) <- NULL
+eset <- new("ExpressionSet",
+            exprs=tbl,
+            featureData=new("AnnotatedDataFrame", data.frame(GeneID=ids)))
+eset.uniq <- keepMaxStatProbe(eset, probe.index.name="GeneID", keepNAprobes=FALSE)
+featureNames(eset.uniq) <- fData(eset.uniq)$GeneID
+
+if(is.character(outfile) && extname(outfile)=="gct") {
+  write_gct(exprs(eset.uniq), file=outfile, feat.name=fData(eset.uniq)$GeneID)
+} else {
+  write.table(exprs(eset.uniq), file=outfile, sep="\t", quote=FALSE)
+}
+
+qqmsg(status=0L)

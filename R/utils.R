@@ -34,6 +34,8 @@ hasOracle <- function() {
 
 .onAttach <- function(libname, pkgname) {
   if(hasOracle()) {
+    ##    require(ROracle)
+    attachNamespace("ROracle")
     obase <- Sys.getenv("ORACLE_BASE")
     ohome <- Sys.getenv("ORACLE_HOME")
     if(identical(obase, "") || identical(obase, ".") || !"client" %in% dir(obase)) {
@@ -43,6 +45,8 @@ hasOracle <- function() {
       Sys.setenv("ORACLE_HOME"=ORACLE.HOME)
     }
     assign("ORA", Oracle(), pos=sys.frame())
+  } else {
+    ## require(RJDBC)
   }
 }
 

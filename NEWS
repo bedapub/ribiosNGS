@@ -1,3 +1,7 @@
+Version 3.0-0 (2012-07-26)
+  + Substantial updates of querydb, querydbSelectIn and querydbTmpTbl to support annotating anywhere. 
+  + From this version, ribiosAnnotation does not strictly depend on the availability of Oracle client library. It can run anywhere with JDBC accessing Oracle data.
+
 Version 2.0-1 (2012-07-16)
   + annotateProbesets: If the option 'chip' is not missing, 'gtiChipAnnotation' takes over the orthologue mapping task, which was missing in previous versions.
 

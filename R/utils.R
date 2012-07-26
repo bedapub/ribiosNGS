@@ -1,3 +1,6 @@
+##--------------------##
+## constants
+##--------------------##
 ## bi@bia
 ORACLE.BIA.USER <- "bi"
 ORACLE.BIA.PWD <- "bi"
@@ -16,36 +19,58 @@ ORACLE.BIN.PWD <- "genome"
 ORACLE.BASE <- "/opt/oracle"
 ORACLE.HOME <- "/opt/oracle/client/10/run_1"
 ## ORACLE.LIB <- ":/opt/oracle/client/10/run_1/lib"
-
 ## maximum vector length in the IN syntax
 ORACLE.IN.NMAX <- 1000L
 
-.onLoad <- function(libname, pkgname) {
-  obase <- Sys.getenv("ORACLE_BASE")
-  ohome <- Sys.getenv("ORACLE_HOME")
-  if(identical(obase, "") || identical(obase, ".") || !"client" %in% dir(obase)) {
-    Sys.setenv("ORACLE_BASE"=ORACLE.BASE)
+
+## function to test whether Oracle is available
+hasOracle <- function() {
+  sqlOut <- system("sqlplus -v", ignore.stderr=TRUE, ignore.stdout=TRUE)
+  sqlOut == 0
+}
+
+## onload / onAttach
+## .onLoad <- function(libname, pkgname) {}
+
+.onAttach <- function(libname, pkgname) {
+  if(hasOracle()) {
+    obase <- Sys.getenv("ORACLE_BASE")
+    ohome <- Sys.getenv("ORACLE_HOME")
+    if(identical(obase, "") || identical(obase, ".") || !"client" %in% dir(obase)) {
+      Sys.setenv("ORACLE_BASE"=ORACLE.BASE)
+    }
+    if(identical(ohome, "") || identical(ohome, ".") || !"bin" %in% dir(ohome)) {
+      Sys.setenv("ORACLE_HOME"=ORACLE.HOME)
+    }
+    assign("ORA", Oracle(), pos=sys.frame())
   }
-  if(identical(ohome, "") || identical(ohome, ".") || !"bin" %in% dir(ohome)) {
-    Sys.setenv("ORACLE_HOME"=ORACLE.HOME)
+}
+
+## automatically establish a connection, depending on whether Oracle client is installed
+ribiosCon <- function(db="bia", user="biread", password="biread", forceJDBC=FALSE) {
+  if(hasOracle() & !forceJDBC) {
+    con <- dbConnect(ORA, user = user, password = password, db = db)
+  } else {
+    require("RJDBC", character.only=TRUE)
+    drv <- JDBC("oracle.jdbc.OracleDriver",
+                system.file("drivers", "ojdbc14.jar", package="ribiosAnnotation"))
+    port <- switch(EXPR=db, bia=15000, bin=15001)
+    str <- paste("jdbc:oracle:thin:", user, "/", password, "@", db, ".kau.roche.com:", port, sep="")
+    con <- dbConnect(drv,str)
   }
-  assign("ORA", Oracle(), pos=sys.frame())
-##  new.path <- paste(Sys.getenv("LD_LIBRARY_PATH"), ORACLE.LIB, sep=":");
-##  Sys.setenv("LD_LIBRARY_PATH"=new.path)
+  return(con)
 }
 
 ## shortcuts for common connections
-newconBIA <- function() dbConnect(ORA, user=ORACLE.BIA.USER, password=ORACLE.BIA.PWD, db="bia")
-newconBIA2 <- function() dbConnect(ORA, user=ORACLE.BIA2.USER, password=ORACLE.BIA2.PWD, db="bia")
-newconBIARO <- function() dbConnect(ORA, user=ORACLE.BIARO.USER, password=ORACLE.BIARO.PWD, db="bia")
-newconBIN <- function() dbConnect(ORA, user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD, db="bin")
-newconRED <- function() dbConnect(ORA, user=ORACLE.RED.USER, password=ORACLE.RED.PWD, db="bia")
+newconBIA <- function() ribiosCon(db="bia", user=ORACLE.BIA.USER, password=ORACLE.BIA.PWD)
+newconBIA2 <- function() ribiosCon(db="bia", user=ORACLE.BIA2.USER, password=ORACLE.BIA2.PWD)
+newconBIARO <- function() ribiosCon(db="bia", user=ORACLE.BIARO.USER, password=ORACLE.BIARO.PWD)
+newconBIN <- function() ribiosCon(db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+newconRED <- function() ribiosCon(db="bin", user=ORACLE.RED.USER, password=ORACLE.RED.PWD)
 
-## format IN syntax
-formatIn <- function(x)
-  paste("(",paste("'", x, "'", sep="", collapse=","),")", sep="")
-
-## obsolete (depcreated) functions
+##----------------------------------------##
+## deprecated functions
+##----------------------------------------##
 biosCurrentGeneSymbol <- function(...) {
   .Deprecated("gtiChipAnnotation",
               package="ribiosAnnotation")

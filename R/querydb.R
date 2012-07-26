@@ -1,10 +1,19 @@
 RIBIOS_TMP_TBL <- "RIBIOS_ID_TMP"
+RIBIOS_JDBC_TMP_TBL <- "RIBIOS_JDBC_ID_TMP"
 
-querydb <- function(sqlComm, db="bia", user="biread", password="biread") {
-  con <- dbConnect(ORA, user=user, password=password, db=db)
+## format IN syntax
+formatIn <- function(x) paste("(",paste("'", x, "'", sep="", collapse=","),")", sep="")
+tmpTbl <- function(forceJDBC=FALSE) ifelse(hasOracle() & !forceJDBC, RIBIOS_TMP_TBL, RIBIOS_JDBC_TMP_TBL)
+
+querydb <- function(sqlComm, db="bia", user="biread", password="biread", forceJDBC=FALSE) {
+  isORA <- hasOracle() & !forceJDBC
+  con <- ribiosCon(db=db, user=user, password=password, forceJDBC=forceJDBC)
   rs <- dbSendQuery(con, sqlComm)
-  while (!dbHasCompleted(rs)) {
-    ann <- fetch(rs, n = -1)
+  if(isORA) {
+    while (!dbHasCompleted(rs))
+      ann <- fetch(rs, n = -1)
+  } else {
+    ann <- fetch(rs, n=-1)
   }
   dbClearResult(rs)
   dbDisconnect(con)
@@ -14,22 +23,27 @@ querydb <- function(sqlComm, db="bia", user="biread", password="biread") {
 
 ## select in: large IN queries
 querydbSelectIn <- function(sqlComm, inCol, inValues,
-                            db="bia", user="biread", password="biread") {
-  con <- dbConnect(ORA, user=user, password=password, db=db)
-  inValues <- unique(inValues)
-  if(length(inValues) <= ORACLE.IN.NMAX) {
-    state <- paste(sqlComm, inCol, "IN", formatIn(inValues), collapse=" ");
-    querydb(state, db=db, user=user, password=password)
+                            db="bia", user="biread", password="biread",
+                            forceJDBC=FALSE) {
+  isORA <- hasOracle() & !forceJDBC
+  inValues <- unique(as.character(inValues))
+  if (length(inValues) <= ORACLE.IN.NMAX) {
+    state <- paste(sqlComm, inCol, "IN", formatIn(inValues), 
+                   collapse = " ")
+    querydb(state, db = db, user = user, password = password, forceJDBC=forceJDBC)
   } else {
+    con <- ribiosCon(db = db, user = user, password = password, forceJDBC=forceJDBC)
     nob <- ceiling(length(inValues)/ORACLE.IN.NMAX)
     res <- vector("list", nob)
-    for(i in 1:nob) {
-      ind <- seq((i-1)*ORACLE.IN.NMAX+1L,
-               i*ORACLE.IN.NMAX)
+    for (i in 1:nob) {
+      ind <- seq((i - 1) * ORACLE.IN.NMAX + 1L, i * ORACLE.IN.NMAX)
       state <- paste(sqlComm, inCol, "IN", formatIn(inValues[ind]))
       rs <- dbSendQuery(con, state)
-      while (!dbHasCompleted(rs)) {
-        ann <- fetch(rs, n = -1)
+      if(isORA) {
+        while (!dbHasCompleted(rs))
+          ann <- fetch(rs, n = -1)
+      } else {
+        ann <- fetch(rs, n=-1)
       }
       dbClearResult(rs)
       res[[i]] <- ann
@@ -42,39 +56,60 @@ querydbSelectIn <- function(sqlComm, inCol, inValues,
 
 ## The temporary table is created one a new Oracle() instance (e.g. a new R session) is made
 ## The table content is private to the session
-## ON OCMMIT DELETE ROWS: the rows are cleared after dbDisconnects(db) is run
+## ON OCMMIT DELETE ROWS: the rows are cleared after dbCommit() is run
 fillOneColTmpTbl <- function(con,  values) {
-  if(!dbExistsTable(con, RIBIOS_TMP_TBL)) {
-    state <- paste("CREATE GLOBAL TEMPORARY TABLE",
-                   RIBIOS_TMP_TBL,
-                   "(ID VARCHAR2(100) NOT NULl PRIMARY KEY) ON COMMIT DELETE ROWS")
-    rs <- dbSendQuery(con, state)
+  values <- as.character(values)
+  isORA <- inherits(con, "OraConnection")
+  if(isORA) {
+    if (!dbExistsTable(con, RIBIOS_TMP_TBL)) {
+      state <- paste("CREATE GLOBAL TEMPORARY TABLE", RIBIOS_TMP_TBL, 
+                     "(ID VARCHAR2(100) NOT NULl PRIMARY KEY) ON COMMIT DELETE ROWS")
+      rs <- dbSendQuery(con, state)
+    }
+    inputDf <- data.frame(ID = values)
+    state2 <- paste("insert into", RIBIOS_TMP_TBL, "(ID) values (:1)")
+    rs <- dbSendQuery(con, state2, data = inputDf)
+    return(dbHasCompleted(rs))
+  } else {
+    if(!dbExistsTable(con, RIBIOS_JDBC_TMP_TBL)) {
+      state <- paste("CREATE GLOBAL TEMPORARY TABLE", RIBIOS_JDBC_TMP_TBL, 
+                     "(ID VARCHAR2(100) NOT NULl PRIMARY KEY) ON COMMIT PRESERVE ROWS")
+      rs <- dbSendUpdate(con, state)
+    }
+    state2 <- paste("insert into",RIBIOS_JDBC_TMP_TBL, " (ID) values (?)")
+    ## TODO: SLOW: batch insert is desired
+    for(i in seq(along=values))
+      rs <- dbSendUpdate(con, state2, values[i])
+    return(TRUE)
   }
-  inputDf <- data.frame(IDs=as.character(values))
-  state2 <- paste("insert into", RIBIOS_TMP_TBL, "(ID) values (:1)")
-  rs <- dbSendQuery(con, state2, data=inputDf)
-  return(dbHasCompleted(rs))
 }
 
 ## querydbTmpTbl shows principles of using temporary table. The SQL building is not finished: currently it only supports WHERE-free syntax
 querydbTmpTbl <- function(sqlComm, inCol, inValues,
-                          db="bia", user="biread", password="biread") {
-  con <- dbConnect(ORA, user=user, password=password, db=db)
+                          db="bia", user="biread", password="biread", forceJDBC=FALSE) {
+  isORA <- hasOracle() & !forceJDBC
+  con <- ribiosCon(db=db, user=user, password=password, forceJDBC=forceJDBC)
   inValues <- unique(as.character(inValues))
-  fillOneColTmpTbl(con=con, values=inValues)
-  hasFrom <- grepl("from", sqlComm, ignore.case=TRUE)
-  hasWhere <- grepl("where", sqlComm, ignore.case=TRUE)
-  if(!hasFrom) stop("Cannot find 'from' in the SQL command line\n")
-  if(hasWhere) {
-    state <- gsub("WHERE",
-                    paste(",", RIBIOS_TMP_TBL," t WHERE t.ID=", inCol, " AND ", sep=""), sqlComm, ignore.case=TRUE)
+  TMP_TBL <- tmpTbl(forceJDBC=forceJDBC)
+  fillOneColTmpTbl(con = con, values = inValues)
+  hasFrom <- grepl("from", sqlComm, ignore.case = TRUE)
+  hasWhere <- grepl("where", sqlComm, ignore.case = TRUE)
+  if (!hasFrom) 
+    stop("Cannot find 'from' in the SQL command line\n")
+  if (hasWhere) {
+    state <- gsub("WHERE", paste(",", TMP_TBL, " t WHERE t.ID=", 
+                                 inCol, " AND ", sep = ""), sqlComm, ignore.case = TRUE)
   } else {
-    sqlComm <- gsub("FROM", paste("FROM ", RIBIOS_TMP_TBL, " t,", sep=""), sqlComm, ignore.case=TRUE)
-    state <- paste(sqlComm, " WHERE ", inCol, "=t.ID",sep="")
+    sqlComm <- gsub("FROM", paste("FROM ", TMP_TBL, 
+                                  " t,", sep = ""), sqlComm, ignore.case = TRUE)
+    state <- paste(sqlComm, " WHERE ", inCol, "=t.ID", sep = "")
   }
   rs <- dbSendQuery(con, state)
-  while (!dbHasCompleted(rs)) {
-    ann <- fetch(rs, n = -1)
+  if(isORA) {
+    while (!dbHasCompleted(rs))
+      ann <- fetch(rs, n = -1)
+  } else {
+    ann <- fetch(rs, n=-1)
   }
   dbClearResult(rs)
   dbDisconnect(con)

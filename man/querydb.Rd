@@ -9,13 +9,17 @@
   queries, fetching results, and disconnection. 
 }
 \usage{
-querydb(sqlComm, db = "bia", user = "biread", password = "biread")
+querydb(sqlComm, db = "bia", user = "biread", password = "biread", forceJDBC=FALSE)
 }
 \arguments{
   \item{sqlComm}{A SQL query, a SELECT command.}
   \item{db}{Characters, which Oracle database should be connected?}
   \item{user}{Characters, user name for login}
   \item{password}{Characters, password for login}
+  \item{forceJDBC}{Logical, forcing the user of JDBC interface to fetch
+    data from Oracle servers. By default it is set to \code{FALSE}, since
+    the JDBC interface is slower than native ROracle implementation. This
+    option is largely for debugging purposes.}
 }
 \details{
   The \emph{sqlComm} parameter must not end with comma (;).

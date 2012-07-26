@@ -6,7 +6,8 @@
   temporary table with user inptu values.
 }
 \usage{
-querydbTmpTbl(sqlComm, inCol, inValues, db = "bia", user = "biread", password = "biread")
+querydbTmpTbl(sqlComm, inCol, inValues, db = "bia", user = "biread",
+password = "biread", forceJDBC=FALSE)
 }
 \arguments{
   \item{sqlComm}{Character string of SQL command. The command can be
@@ -18,6 +19,10 @@ querydbTmpTbl(sqlComm, inCol, inValues, db = "bia", user = "biread", password = 
   \item{db}{Database}
   \item{user}{User name}
   \item{password}{User password}
+  \item{forceJDBC}{Logical, forcing the user of JDBC interface to fetch
+    data from Oracle servers. By default it is set to \code{FALSE}, since
+    the JDBC interface is slower than native ROracle implementation. This
+    option is largely for debugging purposes.}
 }
 \details{
   This function is intended to be used by developer or advanced users

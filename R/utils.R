@@ -25,8 +25,13 @@ ORACLE.IN.NMAX <- 1000L
 
 ## function to test whether Oracle is available
 hasOracle <- function() {
-  sqlOut <- system("sqlplus -v", ignore.stderr=TRUE, ignore.stdout=TRUE)
-  sqlOut == 0
+  canQuite <- "ignore.stdout" %in% names(as.list(args(system)))
+  if(canQuite) {
+    return(system("sqlplus -v", ignore.stderr=TRUE, ignore.stdout=TRUE)==0)
+  } else {
+    sqlOut <- system("sqlplus -v", intern=TRUE, ignore.stderr=TRUE)
+    return(length(sqlOut)>0)
+  }
 }
 
 ## onload / onAttach

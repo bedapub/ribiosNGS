@@ -114,7 +114,7 @@ fullExpandG <- addNode(missingNodes, expandG)
 ## remove edges between connectors
 if(removeConnectorEdges) {
   linkers <- setdiff(expand.ids, geneids)
-  full.edges <- edges(fullExpandG)
+  full.edges <- graph::edges(fullExpandG)
   edge.labels <- sapply(seq(along=full.edges),
                         function(x) paste(names(full.edges)[x], full.edges[[x]], sep="|"))
   edge.pairs <- strsplit(unlist(edge.labels), "\\|")

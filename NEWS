@@ -1,3 +1,5 @@
+Version 1.0-5 (2012-07-30)
+  + ronet.Rscript: package namespace "graph" appended before the edges function: due to an update of the igraph package which now has a function named "edges" as well
 Version 1.0-4 (2012-07-11)
   + Add pathSigTree.Rscript to visualized pathway signature tree with TG-GATES results
   + Add binary tree and testing data for pathSigTree.Rscript

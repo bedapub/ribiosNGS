@@ -1,3 +1,6 @@
+Version 3.0-1 (2012-08-22)
+  + Bug fix: querydbTmpTbl works well with NA values. Remaining bug: if no valid identifiers are given, the function stops and reports error.
+
 Version 3.0-0 (2012-07-26)
   + Substantial updates of querydb, querydbSelectIn and querydbTmpTbl to support annotating anywhere. 
   + From this version, ribiosAnnotation does not strictly depend on the availability of Oracle client library. It can run anywhere with JDBC accessing Oracle data.

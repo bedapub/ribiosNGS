@@ -59,6 +59,7 @@ querydbSelectIn <- function(sqlComm, inCol, inValues,
 ## ON OCMMIT DELETE ROWS: the rows are cleared after dbCommit() is run
 fillOneColTmpTbl <- function(con,  values) {
   values <- as.character(values)
+  values[is.na(values)] <- "NA"
   isORA <- inherits(con, "OraConnection")
   if(isORA) {
     if (!dbExistsTable(con, RIBIOS_TMP_TBL)) {

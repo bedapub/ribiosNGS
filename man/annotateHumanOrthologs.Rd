@@ -20,7 +20,9 @@ annotateHumanOrthologs(geneids, multiOrth = FALSE)
 \value{
   A \code{data.frame} containing following columns:
   \item{OrigGeneID}{Entrez Gene ID in query}
-  \item{TaxID}{Taxonomy ID of input Entrez Gene ID}
+  \item{OrigTaxID}{Taxonomy ID of input Entrez Gene ID}
+  \item{TaxID}{Taxonomy ID of orthologue Entrez Gene ID. Currently it is
+  fixed as 9606, the human TaxID.}
   \item{GeneID}{Entrez Gene ID of human orthologue gene}
   \item{GeneSymbol}{GeneSymbol of human orthologue gene}
 }

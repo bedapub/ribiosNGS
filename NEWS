@@ -1,3 +1,7 @@
+Version 3.0-2 (2012-08-27)
+  + Bug fix: annotateHumanOrthologs returns a data.frame of five columns (previous four), adding a column OrigTaxID holding the TaxID of querying GeneIDs. The column GeneID is fixed as 9606, the TaxID of human.
+  + Add internal function annotateHumanOrthologsNoOrigTax to remove OrigTaxID column, used by internal functions to make orthologue mapping.
+
 Version 3.0-1 (2012-08-22)
   + Bug fix: querydbTmpTbl works well with NA values. Remaining bug: if no valid identifiers are given, the function stops and reports error.
 

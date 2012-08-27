@@ -18,15 +18,19 @@ notValid <- function(x)  is.null(x) || is.na(x) || tolower(x)=="any" || x==""
 ## TODO: gtiChipAnnotation adds support for othologue mapping
 annotateHumanOrthologs <- function(geneids, multiOrth=FALSE) {
   geneids <- unique(geneids)
-  comm <- paste("SELECT a.RO_GENE_ID2, a.TAX_ID2, a.RO_GENE_ID1, b.GENE_SYMBOL",
+  comm <- paste("SELECT a.RO_GENE_ID2, a.TAX_ID2, 9606 as TaxID, a.RO_GENE_ID1, b.GENE_SYMBOL",
                 "FROM genome.GTI_ORTHOLOGS a, genome.GTI_GENES b",
                 "WHERE a.RO_GENE_ID1=b.RO_GENE_ID AND a.TAX_ID1 ='9606'")
   ort <- querydbTmpTbl(comm,
                        "a.RO_GENE_ID2",
                        geneids, "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
-  colnames(ort) <- c("OrigGeneID", "TaxID", "GeneID", "GeneSymbol")
+  colnames(ort) <- c("OrigGeneID", "OrigTaxID", "TaxID", "GeneID", "GeneSymbol")
   res <- matchColumn(geneids, ort, "OrigGeneID", multi=multiOrth)
   return(res)
+}
+annotateHumanOrthologsNoOrigTax <- function(...) {
+  res <- annotateHumanOrthologs(...)
+  return(res[,-2L])
 }
 
 gtiChipAnnotation <- function(chip,ids, orthologue=FALSE, multiOrth=FALSE) {
@@ -55,7 +59,7 @@ gtiChipAnnotation <- function(chip,ids, orthologue=FALSE, multiOrth=FALSE) {
     res <- ann
   } else {
     colnames(ann) <- c("ProbeID", "OrigGeneID", "OrigGeneSymbol", "GeneName", "Chip", "OrigTaxID")
-    ort <- annotateHumanOrthologs(ann$OrigGeneID, multiOrth=multiOrth)
+    ort <- annotateHumanOrthologsNoOrigTax(ann$OrigGeneID, multiOrth=multiOrth)
     if(multiOrth) {
       res <- merge(ann, ort, by="OrigGeneID", all.x=TRUE)
     } else {
@@ -111,7 +115,7 @@ annotateAnyProbeset <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   }
   if(orthologue) {
     colnames(ann) <- c("ProbeID", "OrigGeneID", "OrigGeneSymbol", "GeneName", "Chip", "OrigTaxID")
-    ort <- annotateHumanOrthologs(ann$OrigGeneID, multiOrth=multiOrth)
+    ort <- annotateHumanOrthologsNoOrigTax(ann$OrigGeneID, multiOrth=multiOrth)
     if(multiOrth) {
       res <- merge(ann, ort, by="OrigGeneID", all.x=TRUE)
     } else {
@@ -151,7 +155,7 @@ annotateGeneIDs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   } else {
     colnames(ann) <- conames
     cn <- "OrigGeneID"
-    ort <- annotateHumanOrthologs(ann$OrigGeneID, multiOrth=multiOrth)
+    ort <- annotateHumanOrthologsNoOrigTax(ann$OrigGeneID, multiOrth=multiOrth)
     if(multiOrth) {
       res <- merge(ann, ort, by="OrigGeneID", all.x=TRUE)
     } else {
@@ -188,7 +192,7 @@ annotateGeneSymbols <- function(ids,
   } else {
     colnames(ann) <- c("OrigGeneID", "OrigGeneSymbol", "OrigGeneName", "OrigTaxID")
     cn <- "OrigGeneSymbol"
-    ort <- annotateHumanOrthologs(ann$OrigGeneID, multiOrth=multiOrth)
+    ort <- annotateHumanOrthologsNoOrigTax(ann$OrigGeneID, multiOrth=multiOrth)
     if(multiOrth) {
       res <- merge(ann, ort, by="OrigGeneID", all.x=TRUE)
     } else {

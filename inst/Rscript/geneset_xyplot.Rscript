@@ -11,6 +11,7 @@ gethelp <- existArg("h") | existArg("help")
 
 if(!hasVal(input.files) | gethelp) {
   message(paste("Usage: geneset_xyplot.Rscript -infile infile ... OPTS\n",
+		"infile can be in gct or tab-delimited format\n",
                 "OPTS can be one or more of following optional parameters:\n",
                 "# Outfile\n\t",
                 "[-outfile outfile1 ...] Output file(s), can be omitted\n",

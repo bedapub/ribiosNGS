@@ -12,7 +12,7 @@ if(is.null(infile) || is.null(outfile) || getHelp)
               scriptName(),
               " -infile FILE -outfile FILE\n",
               "Mandatory parameter:\n",
-              "-infile FILE\tInput matrix, first column contains features/genes and first row samples. \n",
+              "-infile FILE\tInput gct file or tab-delimited file, first column contains features/genes and first row samples. \n",
               "-outfile FILE\tOutput file. By default PDF file.\n\n",
 	      "OPTional parameters may include\n",
               "-ylim a,b\tComma-separated numbers giving the lower and upper limit of the y-axis\n",
@@ -26,7 +26,8 @@ if(!file.exists(infile))
 
 
 ##---------- read in file ----------##
-txt <- read.table(infile, header=TRUE, sep="\t", comment.char='', check.name=FALSE, strip.white=TRUE)
+libordie("ribiosIO")
+txt <- read_exprs_matrix(infile)
 rsnames <- colnames(txt)
 ## remove \n
 rsnames <- gsub("\\\n", "", rsnames)

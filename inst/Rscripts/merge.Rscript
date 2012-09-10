@@ -56,7 +56,8 @@ if(is.null(outheaders)) {
 }
 
 tbls <- lapply(filename,
-               read.table, sep="\t", header=!noheader, check.names=FALSE)
+               read.table, sep="\t", header=!noheader, check.names=FALSE, quote="\"")
+
 tbl.merge <- merge(tbls[[1]], tbls[[2]],by=1L, all=TRUE, suffixes=c("1", "1y"))
 if(length(tbls)>=3) {
   for(i in seq(3, length(tbls))) {

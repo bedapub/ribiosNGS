@@ -1,0 +1,129 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosUtils))
+	
+filename <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+doCor <- existArg("cor")
+doCorr <- existArg("corr")
+doLm <- existArg("lm")
+doLog <- existArg("log")
+if(doCor && doCorr)
+  qqmsg("Error:specify either '-cor' or '-corr'", status=1L)
+
+if(is.null(filename) || getHelp) {
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              "-infile FILE OPTS\n",
+              "Mandatory parameters\n",
+              "-infile FILE\tOne tab-delimited file, with at least three columns with keys in the first column\n",
+		"\nOptional parameters\n",
+              "-outfile\t\tIf present, the PDF/PNG file is saved with this name (automatic format detection)\n",
+              "-lm\t\tPerform linear regression and draw the regression line\n",
+              "-cor\t\tCalculate correlation\n",
+              "-corr\t\tCalculate correlation^2\n",
+              "-log\t\tPerform log10 transformation before plotting\n"),
+        status=1L)
+}
+
+libordie(ribiosPlot)
+basefilename <- function(x) gsub("(.*)\\..*$", "\\1", basename(x))
+
+outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+device <- "pdf"
+if(is.null(outfile)) {
+  outfile <- paste(basefilename(filename), ".pdf", sep="")
+} else {
+  if(grepl(".*pdf$", outfile, ignore.case=TRUE)) {
+  } else if (grepl(".*png$", outfile, ignore.case=TRUE)) {
+    device <- "png"
+  } else {
+    outfile <- paste(outfile, ".pdf", sep="")
+  }
+}
+
+
+tbl <- read.table(filename, sep="\t", head=TRUE, check.names=FALSE)
+if(ncol(tbl)<3) {
+  qqmsg("Error: input file has less than three columns. Program exiting...\n",
+        status=1L)
+}
+tblCns <- colnames(tbl)
+key <- tblCns[1]
+xlabel <- tblCns[2]
+ylabel <- tblCns[3]
+x <- tbl[,2]
+y <- tbl[,3]
+panel.cor <- function(x, y, digits=2, prefix="", cex.cor, corr, ...)
+  {
+    panel.smooth(x, y, cex = 1, col.smooth = "red", span = 2/3, iter = 3, ...) 
+    r <- cor(x, y, use="complete.obs")
+    if(doCorr)
+      r <- r^2
+    legend("topleft",cex=1.2, bty="n",
+           paste(ifelse(doCorr, "r^2", "r"), "=",
+                 sprintf("%1.3g", r), sep=""))
+  }
+
+
+if(identical(device, "pdf")) {
+  pdf(outfile)
+} else if (identical(device, "png")) {
+  png(outfile)
+}
+## PLOT
+if(ncol(tbl)==3) {
+  xd <- ifelse(!doLog, list(x), list(log10(x)))[[1]]
+  yd <- ifelse(!doLog, list(y), list(log10(y)))[[1]]
+  xd[is.infinite(xd)] <- NA
+  yd[is.infinite(yd)] <- NA
+  if(doLog) {
+    xlabel <- paste(xlabel, "[log10]")
+    ylabel <- paste(ylabel, "[log10]")
+  }
+  plot(xd, yd, main=key, xlab=xlabel, ylab=ylabel)
+##  if(doLm) {
+##    fittable <- !is.na(yd) & !is.na(xd)
+##    if(sum(fittable)>=3) {
+##      fit <- lm(yd[fittable] ~ xd[fittable])
+##      abline(fit, col="red", lty=2L)
+##    }
+##  }
+  corxy <- cor(x,y, use="complete.obs")
+  if(doCor) {
+    legend("topleft",
+           sprintf("r=%1.3g", corxy), bty="n")
+  } else if (doCorr) {
+    corxy <- corxy*corxy
+    legend("topleft",
+           sprintf("r^2=%1.3g", corxy), bty="n")
+  }
+} else if (ncol(tbl)>3) {
+  tmat <- data.matrix(tbl[,-1L])
+  if(doLog)
+    tmat <- log10(tmat)
+  tmat[is.infinite(tmat)] <- NA
+  if(doCor || doCorr) {
+    upp <- panel.cor
+  } else {
+    upp <- panel.smooth
+  }
+  pairs(tmat,  main=key, upper.panel=upp)
+}
+
+dev.off()
+##get values of the 3rd column which contains the legend of each point
+#remove suffix from file name
+
+##if(doLegend && nlevels(class)>1) {
+##  legend("topleft",
+##         pch=1:nlevels(class),
+##         col=1:nlevels(class),
+##         legend=levels(class))
+##}
+
+
+qqmsg(status=0L)
+
+

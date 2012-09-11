@@ -1,3 +1,6 @@
+Version 1.0-25 (Sep 11, 2012)
+  + Improvement in readCls: error messages provide more informative details for mal-formated file.
+
 Version 1.0-24 (Jul 18, 2012)
   + Bug fix in writeEset: expresion matrix is written without quotes
   + New script: keepMaxMeanProbes.Rscript filters duplicated genes by taking the one with maximum average expression

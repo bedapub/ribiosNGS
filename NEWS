@@ -1,3 +1,6 @@
+2012-01-24: v1.0-5
+  + Add RscriptName function to get the file name of the current Rscript
+
 2011-12-19: v1.0-4
   + The parseNumVec parameter accepts NULL as expLen value, in order to parse variable-length number vectors
 

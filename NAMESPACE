@@ -2,3 +2,5 @@ export("getArg",
        "existArg")
 
 export("parseNumVec")
+
+export("scriptName")

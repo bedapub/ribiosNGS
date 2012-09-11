@@ -12,7 +12,7 @@ if(is.null(infile) || is.null(outfile) || getHelp)
               scriptName(),
               " -infile FILE -outfile FILE\n",
               "Mandatory parameter:\n",
-              "-infile FILE\tInput gct file or tab-delimited file, first column contains features/genes and first row samples. \n",
+              "-infile FILE\tInput matrix, first column contains features/genes and first row samples. \n",
               "-outfile FILE\tOutput file. By default PDF file.\n\n",
 	      "OPTional parameters may include\n",
               "-ylim a,b\tComma-separated numbers giving the lower and upper limit of the y-axis\n",
@@ -26,8 +26,29 @@ if(!file.exists(infile))
 
 
 ##---------- read in file ----------##
-libordie("ribiosIO")
-txt <- read_exprs_matrix(infile)
+libordie(ribiosIO)
+myRead <- function(x) {
+ x <- path.expand(x)
+ if (!file.exists(x)) 
+   stop(paste(x, "does not exist\n"))
+ x.con <- readLines(con = x, n = 3L, warn = FALSE)
+ if (grepl("^\\#1\\.2", x.con[1L])) {
+   mat <- .Call("read_gct", x, NULL, keep.desc = FALSE)
+   return(mat)
+ }
+ else {
+   if (any(grepl("\t", x.con))) {
+     df <- read.table(x, sep = "\t", row.names = NULL, 
+                      header = TRUE, check.names = FALSE, comment.char = "")
+   }
+   else {
+     df <- read.table(x, sep = "", row.names = NULL, header = TRUE, 
+                      check.names = FALSE, comment.char = "")
+   }
+   return(df)
+ }
+}
+txt <- myRead(infile)
 rsnames <- colnames(txt)
 ## remove \n
 rsnames <- gsub("\\\n", "", rsnames)
@@ -41,14 +62,16 @@ txt.class <- sapply(1:ncol(txt), function(x) class(txt[,x]))
 txt.num <- txt.class=="numeric"
 if(!any(txt.num))
   qqmsg("No numeric columns detected in input file. Existing", status=2L)
-if(all(txt.num))
-  qqmsg("No name column detected in input file. Existing", status=2L)
+if(all(txt.num)) {
+  ffac <- rownames(txt)
+} else {
+  ffac <- apply(txt[, !txt.num, drop=FALSE],
+                1L, function(x) paste(x, collapse="_"))
+}
 
 mat <- data.matrix(txt[,txt.num])
 snames <- colnames(txt)[txt.num]
 sfac <- factor(snames, levels=unique(snames))
-ffac <- apply(txt[, !txt.num, drop=FALSE], 1L, function(x) paste(x, collapse="_"))
-
 
 
 ##---------- plotting ----------##

@@ -2,7 +2,7 @@
   + Improvement: exprs-boxplot.Rscript works with GCT file as well. This was made available by replacing 'read.table' with 'read_exprs_matrix'.
 
 2012-08-22 v1.1-11
-  + Bug fix: boundNorm works well with NAs.
+  + Bug fix: boundNorm works now well with NAs.
 
 2012-06-07 v1.1-10
   + brewer.pal.factor and brewer.pal.factorLevels fix tipp errors

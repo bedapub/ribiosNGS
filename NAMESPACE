@@ -5,6 +5,8 @@ export(isError)
 
 export(mmatch)
 
+export(munion, mintersect, msetdiff)
+
 export(matchColumnIndex, matchColumn)
 
 export(putColsFirst, sortByDimnames,

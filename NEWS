@@ -1,5 +1,6 @@
 Version 1.0-18 (2012-10-01)
   + Add munion, mintersect and msetdiff for _m_ultiple-set operations.
+  + Add midentical to test whether all objects are identical
 
 Version 1.0-16 (2012-06-22)
   + Add mmatch function: It performs efficient multiple matching between vectors using BIOS-C codes. Thanks to Roland Schmucki for sharing C codes.

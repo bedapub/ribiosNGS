@@ -4,8 +4,8 @@ export(summarizeRows, summarizeColumns, summarizeCols)
 export(isError)
 
 export(mmatch)
-
 export(munion, mintersect, msetdiff)
+export(midentical)
 
 export(matchColumnIndex, matchColumn)
 

@@ -73,9 +73,9 @@ for(i in seq(along=input.files)) {
                   head=FALSE, sep="\t",
                   stringsAsFactor=FALSE)[,1L]
   if(isGeneID) { ## GeneID: use a chip (HG_U133PLUS2) to annotate genes
-    res <- annotateGeneIDs(ids=txt, chip="HG-U133_PLUS_2", keepProbeID=FALSE)
+    res <- annotateGeneIDs(ids=txt)
   } else if (isGeneSymbol) {
-    res <- annotateGeneSymbols(ids=txt, chip="HG-U133_PLUS_2", keepProbeID=FALSE)
+    res <- annotateGeneSymbols(ids=txt)
   } else {
     res <- annotateProbesets(ids=txt, chip=chipType)
   }

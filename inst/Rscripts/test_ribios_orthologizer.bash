@@ -1,7 +1,14 @@
 #!/bin/bash
 
-RSCRIPT=/SOFT/bi/apps/R/bdeRscript
-PDIR=/SOFT/bi/apps/ribios/ribiosAnnotation/inst/Rscripts
+if [ -z ${RSCRIPT} ]; then
+  RSCRIPT=/SOFT/bi/apps/R/bdeRscript;
+fi
+
+if [ -z ${PKGROOT} ]; then
+  PKGROOT=/SOFT/bi/apps/ribios/ribiosAnnotation/
+fi
+
+PDIR=${PKGROOT}/inst/Rscripts
 PROG=${PDIR}/ribios_orthologizer.Rscript
 INDIR=${PDIR}/../extdata/ribios_orthologizer_testdata/
 OUTDIR=${INDIR}

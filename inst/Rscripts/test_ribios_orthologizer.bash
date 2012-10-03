@@ -22,20 +22,20 @@ ${RSCRIPT} ${PROG} -chiptype
 
 echo
 echo "==[Orthologize GeneID]=="
-${RSCRIPT} ./ribios_orthologizer.Rscript -infile ${INDIR}/rat-geneid.txt -chiptype GeneID
+${RSCRIPT} ${PROG} -infile ${INDIR}/rat-geneid.txt -chiptype GeneID
 
 echo
 echo "==[Orthologize GeneSymbol, do NOT remove unmapped ones]=="
-${RSCRIPT} ./ribios_orthologizer.Rscript -infile ${INDIR}/rat-genesymbol.txt -chiptype genesymbol
+${RSCRIPT} ${PROG} -infile ${INDIR}/rat-genesymbol.txt -chiptype genesymbol
 
 echo
 echo "==[Orthologize GeneSymbol, remove unmapped ones]=="
-${RSCRIPT} ./ribios_orthologizer.Rscript -infile ${INDIR}/rat-genesymbol.txt -chiptype genesymbol -delUnmapped
+${RSCRIPT} ${PROG} -infile ${INDIR}/rat-genesymbol.txt -chiptype genesymbol -delUnmapped
 
 echo
 echo "==[Orthologize probesets, given the chiptype]=="
-${RSCRIPT} ./ribios_orthologizer.Rscript -infile ${INDIR}/rat-probesets.txt -chiptype RAT230_2
+${RSCRIPT} ${PROG} -infile ${INDIR}/rat-probesets.txt -chiptype RAT230_2
 
 echo
 echo "==[Orthologize probesets, without chiptype (SLOW)]=="
-${RSCRIPT} ./ribios_orthologizer.Rscript -infile ${INDIR}/rat-probesets.txt
+${RSCRIPT} ${PROG} -infile ${INDIR}/rat-probesets.txt

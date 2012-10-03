@@ -1,3 +1,6 @@
+Version 3.0-3 (2012-10-03)
+  + Add ribios_orthologizer.Rscript to convert identifiers (GeneID, GeneSymbol or probesets) from other organisms to human
+
 Version 3.0-2 (2012-08-27)
   + Bug fix: annotateHumanOrthologs returns a data.frame of five columns (previous four), adding a column OrigTaxID holding the TaxID of querying GeneIDs. The column GeneID is fixed as 9606, the TaxID of human.
   + Add internal function annotateHumanOrthologsNoOrigTax to remove OrigTaxID column, used by internal functions to make orthologue mapping.

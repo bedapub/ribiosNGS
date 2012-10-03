@@ -28,6 +28,7 @@ useage <- function() {
 }
 
 ## load library
+libordie(ribiosUtils, minVer="1.0-19")
 libordie(ribiosAnnotation)
 libordie(ribiosIO)
 
@@ -48,9 +49,6 @@ if(!checkFile(infile))
 if(length(outfile) != length(infile))
   qqmsg("Error: infile number does not equal to outfile number.\n",
         "Program existing.", status=2L)
-
-imatch <- function(x, table,...) match(tolower(x), tolower(table),...)
-imatchv <- function(x,table,...) table[imatch(x, table,...)]
 
 supp.feat <- c("GeneSymbol", "GeneID")
 feature <- imatchv(feature, supp.feat)

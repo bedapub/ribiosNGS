@@ -1,0 +1,5 @@
+"ProbeID"	"GeneID"	"GeneSymbol"	"GeneName"	"Chip"	"TaxID"
+"203552_at"	"11183"	"MAP4K5"	"mitogen-activated protein kinase kinase kinase kinase 5"	"HG-U133_PLUS_2"	9606
+"203557_at"	NA	NA	NA	NA	NA
+"203557_s_at"	"5092"	"PCBD1"	"pterin-4 alpha-carbinolamine dehydratase/dimerization cofactor of hepatocyte nuclear factor 1 alpha"	"HG-U133_PLUS_2"	9606
+"203336_s_at"	"9270"	"ITGB1BP1"	"integrin beta 1 binding protein 1"	"HG-U133_PLUS_2"	9606

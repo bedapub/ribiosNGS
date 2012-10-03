@@ -1,0 +1,6 @@
+"GeneID"	"GeneSymbol"	"GeneName"	"TaxID"
+6376	"CX3CL1"	"chemokine (C-X3-C motif) ligand 1"	9606
+3162	"HMOX1"	"heme oxygenase (decycling) 1"	9606
+8694	"DGAT1"	"diacylglycerol O-acyltransferase 1"	9606
+7038	"TG"	"thyroglobulin"	9606
+780	"DDR1"	"discoidin domain receptor tyrosine kinase 1"	9606

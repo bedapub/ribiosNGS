@@ -1,3 +1,6 @@
+Version 1.0-3 (Oct 02, 2012)
+  + gseaFingerprint is now able to deal with cases where the phenotypes are now named in default as 'pos' and 'neg'. Since in such cases, the order of positive/negative is not clearly defined, we use the alphabetic order of phenotype names as 'pos' and 'neg'.
+
 Version 1.0-2 (Jul 16, 2012)
   + gseaFingerprintMatrix: omit empty directories
   + gseaFingerprintMatrix: stops if all input directories are detected NOT to be GSEA result folders

@@ -27,6 +27,13 @@ gseaFingerprint <- function(gseaDir, value=c("q", "es", "nes"), threshold=1E-4, 
   pos.xls <- grep("gsea_report_for_.*_pos_.*\\.xls", xls)
   neg.xls <- grep("gsea_report_for_.*_neg_.*\\.xls", xls)
 
+  if(length(xls)==2 & length(pos.xls)==0 & length(neg.xls)==0) {
+    keywords <- gsub("gsea_report_for_(.*)_[0-9]*\\.xls", "\\1", xls)
+    kw <- tolower(keywords)
+    pos.xls <- order(kw)[1L]
+    neg.xls <- order(kw)[2L]
+  }
+  
   if(length(pos.xls)==1L) {
     if(value=="q") {
       poss <- gseaQvalue(file.path(gseaDir, xls[pos.xls]), threshold=threshold, log=TRUE, posLog=TRUE)

@@ -2,7 +2,7 @@
 
 PDIR=/SOFT/bi/apps/ribios/ribiosAnnotation/inst/Rscripts
 PROG=${PDIR}/ribios_annotate.Rscript
-INDIR=${PDIR}/ribios_annotate_testdata
+INDIR=${PDIR}/../extdata/ribios_annotate_testdata
 OUTDIR=${INDIR}
 
 echo "====Examples of ribios_annotate.Rscript===="

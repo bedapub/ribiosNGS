@@ -1,4 +1,7 @@
-Version 1.0-18 (2012-10-01)
+Version 1.0-19 (2012-10-03)
+  + Add matchv, imatch, imatchv, ipmatch, ipmatchv for case-insentative matches
+
+Version 1.0-18 (2012-10-02)
   + Add munion, mintersect and msetdiff for _m_ultiple-set operations.
   + Add midentical to test whether all objects are identical
 

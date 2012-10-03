@@ -7,6 +7,8 @@ export(mmatch)
 export(munion, mintersect, msetdiff)
 export(midentical)
 
+export(imatch, imatchv, ipmatch, ipmatchv, matchv)
+
 export(matchColumnIndex, matchColumn)
 
 export(putColsFirst, sortByDimnames,

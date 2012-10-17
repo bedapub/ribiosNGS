@@ -24,6 +24,7 @@ export(dfFactor)
 export(basefilename, extname)
 
 export(qqmsg)
+export(haltifnot)
 export(verbose)
 
 export(pwdecode)

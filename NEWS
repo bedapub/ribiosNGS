@@ -1,3 +1,6 @@
+Version 1.0-20 (2012-10-17)
+  + Add haltifnot, a function adapted from 'stopifnot', to print informative error messages
+
 Version 1.0-19 (2012-10-03)
   + Add matchv, imatch, imatchv, ipmatch, ipmatchv for case-insentative matches
 

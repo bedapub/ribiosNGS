@@ -208,3 +208,12 @@ annotateGeneSymbols <- function(ids,
   return(res)
 }
 
+annotateAnyID <- function(ids, chiptype, orthologue=FALSE) {
+  if(identical(tolower(ids), tolower("GeneID"))) {
+    annotateGeneIDs(ids=ids, orthologue=orthologue)
+  } else if (identical(tolower(ids), tolower("GeneSymbol"))) {
+    annotateGeneSymbols(ids=ids, orthologue=orthologue)
+  } else {
+    annotateProbesets(ids=ids, orthologue=orthologue)
+  }
+}

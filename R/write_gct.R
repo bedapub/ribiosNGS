@@ -8,7 +8,9 @@ write_gct <- function(matrix, file=stdout(), feat.name, feat.desc) {
   } else {
     stopifnot(length(feat.name)==nrow(matrix))
   }
-  if(missing(feat.desc) || is.null(feat.desc)) {
+  if(!is.null(mdesc <- attr(matrix, "desc"))) {
+    feat.desc <- mdesc
+  } else if(missing(feat.desc) || is.null(feat.desc)) {
     feat.desc <- ""
   }
   if(identical(file, "")) file <- stdout()

@@ -1,8 +1,8 @@
 mset <- function(func, ...) {
   li <- list(...)
   if(length(li)==1L) li <- li[[1L]]
+  if(length(li)==1L) return(li[[1]])
   
-  stopifnot(length(li)>=2L)
   res <- do.call(func, list(li[[1L]], li[[2L]]))
   if(length(li)>2L)
     for(i in 3L:length(li))

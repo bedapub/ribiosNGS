@@ -22,6 +22,10 @@ isGtiChiptype <- function(x, exceptions, ignore.case=FALSE) {
   x %in% gct
 }
 
+scriptChiptypes <- function() {
+  return(c("GeneID", "GeneSymbol",gtiChiptypes()))
+}
+
 gtiChipnames <- function(...) {gtiChiptypes(...)}
 gtiArraytypes <- function(...) {gtiChiptypes(...)}
   

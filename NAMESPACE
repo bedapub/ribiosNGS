@@ -9,6 +9,8 @@ export(gtiChiptypes,
        gtiChipnames,
        gtiArraytypes) ## synonymous
 
+export(scriptChiptypes) ## shortcut for chiptypes supported by ribios scripts
+
 export(gtiTaxAnnotation)
 
 export(querydb, formatIn, querydbSelectIn, querydbTmpTbl)
@@ -20,6 +22,8 @@ export(annotateAnyProbeset,
        annotateChip,
        annotateProbesets,
        annotateProbeIDs)
+
+export(annotateAnyID) ## shortcut for annotateGeneID, annotateGeneSymbol and annotateProbesets
 
 export(annotateGeneIDs,
        annotateGeneSymbols)

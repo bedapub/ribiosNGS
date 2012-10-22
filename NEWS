@@ -1,3 +1,6 @@
+Version 3.0-4 (2012-10-22)
+  + Add scriptChiptypes and annotateAnyID to simply annotations in Rscripts
+
 Version 3.0-3 (2012-10-03)
   + Add ribios_orthologizer.Rscript to convert identifiers (GeneID, GeneSymbol or probesets) from other organisms to human
 

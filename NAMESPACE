@@ -9,6 +9,8 @@ export(read_gct_matrix,
        read_gctstr_matrix,
        write_gct)
 
+export(read_cls)
+
 export(read_fasta,
        write_fasta)
 

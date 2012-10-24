@@ -8,7 +8,7 @@
   called, producing an error message defined by the \emph{msg} parameter.
 }
 \usage{
-haltifnot(..., msg = "Error undefined. Please contact developer")
+haltifnot(..., msg = "Error undefined. Please contact the developer")
 }
 \arguments{
   \item{\dots}{any number of \sQuote{logical} R expressions, which

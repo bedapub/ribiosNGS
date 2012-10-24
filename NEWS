@@ -1,3 +1,6 @@
+Version 1.0-26 (Oct 24, 2012)
+  + The main body of readCls has been moved to ribiosIO::read_cls. readCls becomes a synonym for comptability.
+
 Version 1.0-25 (Sep 11, 2012)
   + Improvement in readCls: error messages provide more informative details for mal-formated file.
 

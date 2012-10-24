@@ -1,8 +1,8 @@
 Package: ribiosExpression
 Type: Package
 Title: Expression analysis component of ribios
-Version: 1.0-25
-Date: 2012-09-11
+Version: 1.0-26
+Date: 2012-10-24
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Data structures and functions for expression analysis

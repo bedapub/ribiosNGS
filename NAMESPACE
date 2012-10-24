@@ -1,5 +1,6 @@
 importFrom("ribiosIO", "read_gct_matrix")
 importFrom("ribiosIO", "write_gct")
+importFrom("ribiosIO", "read_cls")
 importFrom("ribiosUtils", "rowscale")
 
 export("rowscale")

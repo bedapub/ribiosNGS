@@ -15,7 +15,7 @@ read_cls <- function (cls.file) {
     if (length(fn) != indims[1L]) {
         stop("In cls file there are number-indexed samples than indicated in the header line.\n ")
     }
-    sf <- as.factor(fn)
-    levels(sf) <- slevels
+    sf <- factor(slevels[fn+1],
+                 levels=slevels)
     return(sf)
 }

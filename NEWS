@@ -1,5 +1,6 @@
 version 1.0-18 (2012-10-24)
   + read_cls has been added. The readCls function in the ribiosExpression package will be used as a synonym
+  + Fix bug in read_cls: the factor order has been fixed
 
 Version 1.0-17 (2012-10-22)
   + write_gct uses the 'desc' attribute of input matrix if available

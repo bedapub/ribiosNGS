@@ -1,4 +1,5 @@
-haltifnot <- function(..., msg="Error undefined. Please contact developer") {
+haltifnot <- function(...,
+                      msg="Error undefined. Please contact the developer") {
   n <- length(ll <- list(...))
   if (n == 0L)
     return(invisible())

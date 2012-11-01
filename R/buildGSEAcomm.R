@@ -15,7 +15,7 @@ gseaLns <- function(filename, pattern="file", fileext=".rnk") {
 
 buildGSEAcomm <- function(rnkFiles,
                           gmtFile=DEFAULT_GMT,
-                          chipFile=DEFAULT_CHIP,
+                          chipFile,
                           nperm=1000L,
                           collapse=FALSE,
                           plotTopX=25,
@@ -29,8 +29,13 @@ buildGSEAcomm <- function(rnkFiles,
   mkOutDir <- paste("mkdir -p", outdir,"\n", sep=" ")
 
   stopifnot(file.exists(gmtFile))
-  if(!file.exists(chipFile))
-    stop("Specified chip not found. Please call 'gseaChiptypes()' to find out supported chiptypes\n")
+  if(!missing(chipFile)) {
+    if(!file.exists(chipFile))
+      stop("Specified chip not found. Please call 'gseaChiptypes()' to find out supported chiptypes\n")
+    chip <- paste("-chip", chipFile)
+  } else {
+    chip <- ""
+  }
   
   gsea.command.template <- paste(c(ifelse(addShebang, "#!/bin/bash\n", ""),
                                    mkOutDir,
@@ -38,7 +43,7 @@ buildGSEAcomm <- function(rnkFiles,
                                    "(time ", JAVA_BIN, "-Xmx2500m",
                                    "-classpath ", GSEA_JAR, " xtools.gsea.GseaPreranked",
                                    "-gmx %s",
-                                   "-chip %s",
+                                   chip,
                                    "-rnk %s -rpt_label %s -nperm %d -collapse %s",
                                    "-mode Max_probe -norm meandiv -include_only_symbols true",
                                    "-scoring_scheme weighted -make_sets true -plot_top_x %d",
@@ -63,7 +68,6 @@ buildGSEAcomm <- function(rnkFiles,
     gsea.commands[i] <- sprintf(gsea.command.template,
                                 linkRf, linkOf,
                                 gmtFile,
-                                chipFile,
                                 rfTemp,
                                 label,
                                 as.integer(nperm),

@@ -13,14 +13,15 @@
   GSEA program.
 }
 \usage{
-buildGSEAcomm(rnkFiles, gmtFile = DEFAULT_GMT, chipFile = DEFAULT_CHIP, nperm = 1000L, collapse = FALSE, plotTopX = 25, outdir = "./", addShebang = TRUE)
+buildGSEAcomm(rnkFiles, gmtFile = DEFAULT_GMT, chipFile, nperm = 1000L, collapse = FALSE, plotTopX = 25, outdir = "./", addShebang = TRUE)
 }
 \arguments{
   \item{rnkFiles}{Two-column rank files as GSEA input: genes and
     statistics, without quoting, tab-delimited.}
   \item{gmtFile}{Gmt file of gene signatures, by default we use the
     RoNet GMT file.}
-  \item{chipFile}{Chip type used to translate identifiers}
+  \item{chipFile}{Chip type used to translate identifiers. If missing,
+    the input rnk file must have Gene Symbols as identifiers.}
   \item{nperm}{Number of permutations: currently only feature-permutatin
     is supported.}
   \item{collapse}{Logical, whether features should be collapsed or

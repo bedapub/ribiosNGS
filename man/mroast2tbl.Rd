@@ -21,16 +21,17 @@ mroast2tbl(mres)
   Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \seealso{
-  \code{\link{mroast}}
+  \code{\link[limma]{mroast}}
 }
 \examples{
-require(limma)
-set.seed(1887)
-y <- matrix(rnorm(100*4),100,4)
-design <- cbind(Intercept=1,Group=c(0,0,1,1))
-iset1 <- 1:5
-y[iset1,3:4] <- y[iset1,3:4]+3
-iset2 <- 6:10
-mres <- mroast(list(set1=iset1,set2=iset2),y,design,contrast=2)
-mroast2tbl(mres)
+if(require(limma)) {
+  set.seed(1887)
+  y <- matrix(rnorm(100*4),100,4)
+  design <- cbind(Intercept=1,Group=c(0,0,1,1))
+  iset1 <- 1:5
+  y[iset1,3:4] <- y[iset1,3:4]+3
+  iset2 <- 6:10
+  mres <- mroast(list(set1=iset1,set2=iset2),y,design,contrast=2)
+  mroast2tbl(mres)
+}
 }

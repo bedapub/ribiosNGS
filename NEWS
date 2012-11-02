@@ -1,3 +1,6 @@
+Version 1.0-19 (2012-11-01)
+  + Add new function 'write_gmt_list' to export GMT lists
+
 version 1.0-18 (2012-10-24)
   + read_cls has been added. The readCls function in the ribiosExpression package will be used as a synonym
   + Fix bug in read_cls: the factor order has been fixed

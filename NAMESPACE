@@ -1,6 +1,8 @@
 export(read_gmt_list,
-       read_exprs_matrix,
-       iofile,
+       write_gmt)
+
+export(read_exprs_matrix)
+export(iofile,
        loadFile)
 
 export(isGctFile)

@@ -18,6 +18,15 @@ ChipFetcher2ExpressionSet <- function(filename,
   
   pre.scan <- scan(filename, what="character", sep="\n", nmax=200L, quiet=TRUE)
   probe.start <- grep("^[0-9]", pre.scan)[1L]
+  ## in case probes do not have the name starting with [0-9]:
+  ##    we rely on the line "is_Scalebase" to be the last line of phenotype
+  ##    but is_Scalebase is not found either, we stop the function reporting an error (which should be fixed later)
+  if(is.na(probe.start)) {
+    scale.start <- grep("is_Scalebase", pre.scan)[1L]
+    haltifnot(!is.na(scale.start),
+              msg="The function can not detect where the expression matrix starts. Nor can it find a line starting with is_Scalebase. Please report the error to the developer")
+    probe.start <- scale.start + 1L
+  }
   ncols <- length(strsplit(pre.scan[probe.start],"\t")[[1L]])
   
   pheno.last.line <- probe.start - 1L
@@ -29,7 +38,7 @@ ChipFetcher2ExpressionSet <- function(filename,
   exprs.matrix <- read.table(filename, skip=pheno.last.line,
                              row.names=1L,
                              colClasses=c("character", rep("numeric", ncols-2L)),
-                             sep="\t")
+                             sep="\t", comment.char="")
   exprs.matrix <- data.matrix(exprs.matrix)
   feature.names <- rownames(exprs.matrix)
 

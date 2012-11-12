@@ -32,7 +32,7 @@ eset <- new("ExpressionSet",
 eset.uniq <- keepMaxStatProbe(eset, probe.index.name="GeneID", keepNAprobes=FALSE)
 featureNames(eset.uniq) <- fData(eset.uniq)$GeneID
 
-if(is.character(outfile) && extname(outfile)=="gct") {
+if(is.character(outfile) && !is.na(extname(outfile)) && extname(outfile)=="gct") {
   write_gct(exprs(eset.uniq), file=outfile, feat.name=fData(eset.uniq)$GeneID)
 } else {
   write.table(exprs(eset.uniq), file=outfile, sep="\t", quote=FALSE)

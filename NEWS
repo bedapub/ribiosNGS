@@ -1,3 +1,9 @@
+Version 1.0-28 (Nov 12, 2012)
+  + Debug keepMaxMeanProbes.Rscript: extname returns NA if not found, therefore an addition check is added to make sure not NA is returned.
+
+Version 1.0-27 (Oct 26, 2012)
+  + Function extension in ChipFetcher2ExpressionSet: now non-Affymetrix probesets are supported as well.
+
 Version 1.0-26 (Oct 24, 2012)
   + The main body of readCls has been moved to ribiosIO::read_cls. readCls becomes a synonym for comptability.
 

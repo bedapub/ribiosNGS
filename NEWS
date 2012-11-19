@@ -1,3 +1,12 @@
+Version 1.0-5 (Nov 19, 2012)
+  + New feature of gmtIndices: invalid Gene Symbols ("", "-") are removed
+
+Version 1.0-4 (Nov 01, 2012)
+  + New function added, mroast2tbl, to reformat result lists of limma::mroast into data frame.
+  + New function added, gmtIndices.Rd, to get integer indices of genes in GMT gene set lists from a vector of gene symbols. Used by functions such as 'mroast' and 'camera' in the limma package.
+  + New function added, filterGmtByGeneCount, to filter gmt lists by gene counts.
+  + Improvement of buildGSEAcomm: CHIP_FILE is no longer a mandatory parameter. When the option is missing, the GSEA tool performs no mapping between rnk-file identifiers and GMT-file identifiers, for instance when both files use official gene symbols.
+
 Version 1.0-3 (Oct 02, 2012)
   + gseaFingerprint is now able to deal with cases where the phenotypes are now named in default as 'pos' and 'neg'. Since in such cases, the order of positive/negative is not clearly defined, we use the alphabetic order of phenotype names as 'pos' and 'neg'.
 

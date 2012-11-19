@@ -1,7 +1,10 @@
-## trigger analysis
-## export(biosGSEA)
 
 ## GSEA fingerprints
 export(gseaQvalue, gseaES, gseaFingerprint, gseaFingerprintMatrix)
 
 export(buildGSEAcomm)
+
+## limma adapting functions
+export(mroast2tbl)
+export(filterGmtByGeneCount,
+       gmtIndices)

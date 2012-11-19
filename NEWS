@@ -1,3 +1,6 @@
+Version 1.0-29 (Nov 19, 2012)
+  + Add new functionality in keepMaxMeanProbes.Rscript: able to read from .CHIP file
+
 Version 1.0-28 (Nov 12, 2012)
   + Debug keepMaxMeanProbes.Rscript: extname returns NA if not found, therefore an addition check is added to make sure not NA is returned.
 

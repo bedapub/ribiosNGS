@@ -1,5 +1,7 @@
 Version 1.0-29 (Nov 19, 2012)
   + Add new functionality in keepMaxMeanProbes.Rscript: able to read from .CHIP file
+  + keepMaxMeanProbes.Rscript now does not depend on the S4 class ExpressionSet anymore, therefore much faster. Next step it will be moved out of ribiosExpression, since it is only dependent on ribiosIO and ribiosUtils
+  + TODO: keepMaxStatProbe needs to be refactored, since its logic has been implemented in the more generic version keepMaxStatRow in ribiosUtils
 
 Version 1.0-28 (Nov 12, 2012)
   + Debug keepMaxMeanProbes.Rscript: extname returns NA if not found, therefore an addition check is added to make sure not NA is returned.

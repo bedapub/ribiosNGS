@@ -1,6 +1,14 @@
+Version 1.0-24 (2012-11-19)
+  + Add new function: keepMaxStatRow, as a S4-object-independent implementation of the 'keepMaxStatProbe' function in ribiosExpression.It is faster and more generic.
+  + extname adds an option to allow values other than NA returned if not found.
+
+Version 1.0-23 (2012-11-02)
+  + Internal changes: functions dealing with checking existence of files/directories are centralized in file_dir.R 
+
 Version 1.0-22 (2012-10-24)
   + haltifnot: a typo was fixed in the msg
   + assertFile: error message is now more informative, printing files that do not exist.
+
 Version 1.0-21 (2012-10-22)
   + Debugging set.R: mset.R does not fail with a vector as input: the vector is simply returned.
 

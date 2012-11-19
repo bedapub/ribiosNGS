@@ -8,5 +8,6 @@
 // public functions
 SEXP read_gct (SEXP filename, SEXP pchr, SEXP keepdesc);
 SEXP write_gct (SEXP list, SEXP filename);
+SEXP read_chip (SEXP filename);
 
 #endif

@@ -13,6 +13,8 @@ export(read_gct_matrix,
 
 export(read_cls)
 
+export(read_chip)
+
 export(read_fasta,
        write_fasta)
 

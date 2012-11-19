@@ -1,3 +1,6 @@
+Version 1.0-20 (2012-11-19)
+  + Add new function 'read_chip' to read chip files
+
 Version 1.0-19 (2012-11-01)
   + Add new function 'write_gmt_list' to export GMT lists
 

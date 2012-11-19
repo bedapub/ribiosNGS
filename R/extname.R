@@ -10,11 +10,11 @@ basefilename <- function(x) {
   })
 }
 
-extname <- function(x) {
+extname <- function(x, ifnotfound=NA) {
   ## NOT GOOD: without extension names will return the whole name
   ## gsub(".*\\.(\\w*)", "\\1", basename(as.character(x)))
   if(!all(is.character(x))) x <- as.character(x)
   sapply(strsplit(basename(x), "\\."), function(f) {
-    ifelse(length(f)==1, NA, f[length(f)])
+    ifelse(length(f)==1, ifnotfound, f[length(f)])
   })
 }

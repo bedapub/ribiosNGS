@@ -12,12 +12,14 @@
 }
 \usage{
 basefilename(x)
-extname(x)
+extname(x, ifnotfound=NA)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{Character vector of file names; other classes will be
     coereced to characters}
+  \item{ifnotfound}{If no extension name was found, the value to be
+    returned. Default is \code{NA}}
 }
 \value{
   The base file name or the extension as characters, of the same length as the input
@@ -37,6 +39,7 @@ extname("mybook.pdf")
 extname("sequence.in.fasta")
 extname(c("/path/mybook.pdf", "test.doc"))
 extname("README")
+extname("README", ifnotfound="")
 extname("/path/my\ home/Holiday Plan.txt")
 
 basefilename("mybook.pdf")

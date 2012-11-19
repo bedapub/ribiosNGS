@@ -21,35 +21,29 @@ if(is.null(infile) | getHelp) {
 }
 
 libordie(ribiosIO)
-libordie(ribiosExpression)
+assertFile(infile)
 chipfile <- getArg("chipfile", onlyArg=NULL, missingArg=NULL)
-if(!is.null(chipfile)) {
+if(!is.null(chipfile))
   assertFile(chipfile)
-}
 
 outfile <- getArg("outfile", onlyArg=stdout(), missingArg=stdout())
 tbl <- read_exprs_matrix(infile)
-ids <- rownames(tbl)
-rownames(tbl) <- NULL
-if(is.null(chipfile)) {
-  fd <- new("AnnotatedDataFrame", data.frame(GeneSymbol=ids))
-} else {
+keys <- rownames(tbl)
+if(!is.null(chipfile)) {
   chip <- read_chip(chipfile)
-  fdd <- matchColumn(ids, chip, "ProbeID") ## fd contains 'GeneSymbol'
-  fd <- new("AnnotatedDataFrame", fdd)
-}
+  keys <- matchColumn(keys, chip, "ProbeID")$GeneSymbol ## fd contains 'GeneSymbol'
+} 
 
-eset <- new("ExpressionSet",
-            exprs=tbl,
-            featureData=fd)
-eset.uniq <- keepMaxStatProbe(eset, probe.index.name="GeneSymbol", keepNAprobes=FALSE)
-featureNames(eset.uniq) <- fData(eset.uniq)$GeneSymbol
+eset.uniq <- keepMaxStatRow(tbl,
+                            keys=keys,
+                            keepNArows=FALSE,
+                            levels="rownames")
 
-outext <- extname(outfile)
-if(is.character(outfile) && !is.na(outext) && outext=="gct") {
-  write_gct(exprs(eset.uniq), file=outfile, feat.name=fData(eset.uniq)$GeneSymbol)
+outext <- extname(outfile,ifnotfound="")
+if(is.character(outfile)&& outext=="gct") {
+  write_gct(eset.uniq, file=outfile)
 } else {
-  write.table(exprs(eset.uniq), file=outfile, sep="\t", quote=FALSE)
+  write.table(eset.uniq, file=outfile, sep="\t", quote=FALSE)
 }
 
 qqmsg(status=0L)

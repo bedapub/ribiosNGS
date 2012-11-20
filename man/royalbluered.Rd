@@ -8,6 +8,8 @@
 \alias{redblue}
 \alias{redblackblue}
 \alias{blueblackred}
+\alias{blackyellowred}
+\alias{blackgoldred}
 \alias{whiteblueblackheat}
 \alias{threecolor.panels}
 \alias{display.threecolor.panels}

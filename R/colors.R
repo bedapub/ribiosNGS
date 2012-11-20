@@ -74,6 +74,8 @@ bluered <- function(n) colorpanel(n, "blue", "white", "red")
 redblue <- function(n) colorpanel(n, "red", "white", "blue")
 blueblackred <- function(n) colorpanel(n, "blue", "black", "red")
 redblackblue <- function(n) colorpanel(n, "red", "black", "blue")
+blackyellowred <- function(n) colorRampPalette(c("black", "darkred", "red2", "goldenrod1", "yellow"))(n)
+blackgoldred <- function(n) colorpanel(n, "black", "goldenrod1", "red2")
 
 ##-------------------- l3 color systems --------------------##
 whiteblueblackheat <- function(n) colorRampPalette(c("white", "blue", "blue3", "black", "red3", "red", "yellow"))(n)
@@ -107,6 +109,7 @@ threecolor.panels <- function() {
            "bluered", "redblue",
            "redblackblue", "blueblackred",
            "heat.colors",
+           "blackyellowred", "blackgoldred", 
            "whiteblueblackheat"))
 }
 

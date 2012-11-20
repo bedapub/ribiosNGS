@@ -17,3 +17,13 @@ isInvalid <- function (x)
         return(all(is.na(x)))
     else return(FALSE)
 }
+
+idev <- function(...) {
+  if(interactive())
+    dev.print(...)
+}
+
+ipdf <- function(file, ...) {
+  if(interactive())
+    dev.print(pdf, file=file, useDingbats=FALSE,...)
+}

@@ -28,6 +28,8 @@ export(royalbluered,
        redblue,
        blueblackred,
        redblackblue,
+       blackyellowred,
+       blackgoldred,
        whiteblueblackheat)
 
 ## two-colors
@@ -45,3 +47,5 @@ export(twocolor.panels,
        threecolor.panels,
        display.threecolor.panels,
        display.twocolor.panels)
+
+export(idev, ipdf)

@@ -18,11 +18,12 @@ exportGML <- function(igraph, filename) {
     cat("  ]\n", file=file)
   }
   el <- get.edgelist(igraph, names=FALSE)
+  min.ind <- min(el)
   for (i in seq_len(nrow(el))) {
     elabel <- E(igraph)$label[i]
     cat("  edge\n  [\n", file=file)
-    cat("    source", el[i,1]-1, "\n", file=file)
-    cat("    target", el[i,2]-1, "\n", file=file)
+    cat("    source", el[i,1]-min.ind, "\n", file=file)
+    cat("    target", el[i,2]-min.ind, "\n", file=file)
     cat("    label \"",  elabel, "\"\n", file=file, sep="")
     cat("    graphics\n    [\n", file=file)
     cat("      source_arrow 0\n", file=file, sep="")

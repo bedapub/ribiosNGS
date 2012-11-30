@@ -1,3 +1,6 @@
+Version 1.0-6 (2012-11-30)
+  + exportGML: node indices of the edge lists were wrong: the index started from 1 instead of 0. Fixed.
+
 Version 1.0-5 (2012-07-30)
   + ronet.Rscript: package namespace "graph" appended before the edges function: due to an update of the igraph package which now has a function named "edges" as well
 Version 1.0-4 (2012-07-11)

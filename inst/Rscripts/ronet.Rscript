@@ -11,6 +11,7 @@ SUPP.OUT.FORMATS <- c("edgelist", "pajek", "ncol", "lgl", "graphml", "dimacs", "
 infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
 outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
 maxconn <- getArg("maxConnector", onlyArg=MAXCONN.DEFAULT, missingArg=MAXCONN.DEFAULT)
+isGeneSymbol <- existArg("genesymbol")
 ## level.limit = maxconn+1, since it measures the path step length
 level.limit <- parseNumVec(maxconn, expLen=1L, failVal=MAXCONN.DEFAULT)+1L
 removeConnectorEdges <- !existArg("connectorEdges")
@@ -25,6 +26,7 @@ if(is.null(infile) || is.null(outfile) || getHelp)
               "-infile FILE\tInput Entrez GeneIDs, one GeneID per line\n",
               "-outfile FILE\tOutput file. By default outputs are printed in standard output, e.g. screen.\n",
               "Optional parameters:\n",
+	      "-genesymbol\tInput identifiers are not GeneIDs, but official gene symbols.\n",
               "-maxConnector INT\tMax number of connectors in network expansion. Default:0 (no network expansion).\n",
               "-connectorEdges\tIf specified, edges between connectors are returned. Default: no edges among connectors.\n",
               sep=" "))
@@ -45,7 +47,12 @@ if(is.na(outformat) || !outformat %in% SUPP.OUT.FORMATS) {
 if(!file.exists(infile))
   qqmsg("ERROR: 'infile' not found\n", status=1L)
 geneids <- readLines(infile)
+if(isGeneSymbol) {
+  anno <- annotateGeneSymbols(geneids, organism="human")
+  geneids <- anno$GeneID
+}
 geneids <- unique(geneids[!is.na(geneids) & geneids!="NA"])
+
 
 ## build interaction network
 sql <- paste("SELECT",

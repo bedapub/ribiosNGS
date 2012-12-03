@@ -1,6 +1,6 @@
 Version 1.0-7 (2012-12-03)
   + ronet.Rscript: add an option "-genesymbol" to support using GeneSymbol as input identifiers
-  + TODO: in the output graph, GeneIDs should be tranlated into GeneSymbols whenever possible
+  + ronet.Rscript: in the output graph, GeneIDs are converted into GeneSymbols whenever possible. Only if the conversion fails the GeneIDs are returned as node names.
 
 Version 1.0-6 (2012-11-30)
   + exportGML: node indices of the edge lists were wrong: the index started from 1 instead of 0 in newer version of igraph. Fixed.

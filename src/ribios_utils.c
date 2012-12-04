@@ -3,6 +3,7 @@
 #include "endec.h"
 #include "die.h"
 #include "mmatch.h"
+#include "trim.h"
 
 static const R_CallMethodDef callMethods[] = {
   /* pwdecode.c */

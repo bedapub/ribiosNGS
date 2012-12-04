@@ -48,6 +48,10 @@ if(is.na(outformat) || !outformat %in% SUPP.OUT.FORMATS) {
 if(!file.exists(infile))
   qqmsg("ERROR: 'infile' not found\n", status=1L)
 geneids <- readLines(infile)
+geneids <- unique(geneids[!is.na(geneids) & geneids!="" & geneids!="NA"])
+geneids <- geneids[!grepl("^#", geneids)]
+geneids <- gsub("^\\s*", "", geneids)
+geneids <- gsub("\\s*$", "", geneids)
 if(isGeneSymbol) {
   anno <- annotateGeneSymbols(geneids, organism="human")
   geneids <- anno$GeneID

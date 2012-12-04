@@ -1,3 +1,6 @@
+Version 1.0-8 (2012-12-04)
+  + ronet.Rscript: bug fix: input GeneID/GeneSymbols, input strings are first trimmed of empty strings
+
 Version 1.0-7 (2012-12-03)
   + ronet.Rscript: add an option "-genesymbol" to support using GeneSymbol as input identifiers
   + ronet.Rscript: in the output graph, GeneIDs are converted into GeneSymbols whenever possible. Only if the conversion fails the GeneIDs are returned as node names.

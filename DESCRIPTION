@@ -1,8 +1,8 @@
 Package: ribiosNetwork
 Type: Package
 Title: Network analysis in RIBIOS
-Version: 1.0-7
-Date: 2012-12-03
+Version: 1.0-8
+Date: 2012-12-04
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Network analysis toolbox in RIBIOS

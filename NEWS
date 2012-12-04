@@ -1,3 +1,6 @@
+Version 1.0-25 (2012-12-04)
+  + Add new function: trim, to trim (strip) leading and/or tailing spaces
+
 Version 1.0-24 (2012-11-19)
   + Add new function: keepMaxStatRow, as a S4-object-independent implementation of the 'keepMaxStatProbe' function in ribiosExpression.It is faster and more generic.
   + extname adds an option to allow values other than NA returned if not found.

@@ -1,6 +1,12 @@
-export("getArg",
-       "existArg")
+export("getArg","existArg")
 
 export("parseNumVec")
 
 export("scriptName")
+
+export("argParse",
+       "argGet",
+       "argGetPos",
+       "argPresent")
+
+useDynLib(ribiosArg)

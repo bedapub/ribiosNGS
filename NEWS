@@ -1,3 +1,6 @@
+2013-01-04: v1.1-0
+  + Add BIOS-style command-line parser: argParser, argGet, argGetPos and argPresent. 
+
 2012-01-24: v1.0-5
   + Add RscriptName function to get the file name of the current Rscript
 

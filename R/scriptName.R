@@ -1,5 +1,5 @@
 scriptName <- function() {
-  filename <- grep("--file=", commandArgs(), val=TRUE)
+  filename <- grep("--file=", commandArgs(), value=TRUE)
   lf <- length(filename)
   if(lf>1) {
     warning("Multiple --file options found, only using the first")

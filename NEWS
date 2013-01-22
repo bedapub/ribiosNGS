@@ -1,3 +1,6 @@
+Version 3.0-6 (2013-01-22)
+  + annotateHumanOrthologs: the output data.frame puts shorter GeneSymbols in front of longer ones in case one ID is mapped to several items; useful for reducing mismatch rates in annotating orthologues.
+
 Version 3.0-5 (2012-10-24)
   + annotateAnyID passes on the 'chip' option to annotateProbesets
 

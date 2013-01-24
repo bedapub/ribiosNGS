@@ -7,14 +7,11 @@
   Prepare R for an interactive script
 }
 \usage{
-scriptInit(dumpto = "ribios.dump")
-}
-\arguments{
-  \item{dumpto}{Dump file name in case of errors}
 }
 \details{
   The function prepares R for an interactive session (e.g. in a
-  script). Currently it defines behaviour in case of errors. 
+  script). Currently it defines behaviour in case of errors: a file
+  named \dQuote{ribios.dump} is written.
 }
 \value{
   Side effect is used.
@@ -30,7 +27,3 @@ scriptInit(dumpto = "ribios.dump")
 scriptInit()
 }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

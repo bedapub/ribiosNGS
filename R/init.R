@@ -1,3 +1,3 @@
-scriptInit <- function(dumpto="ribios.dump") {
-  options(error=quote({dump.frames(dumpto, to.file=TRUE); q()}))
+scriptInit <- function() {
+  options(error=quote({dump.frames("ribios.dump", to.file=TRUE); quit(save="no", status=1L)}))
 }

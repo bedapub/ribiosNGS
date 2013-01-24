@@ -1,3 +1,6 @@
+2013-01-23: v1.1-1
+  + Add scriptInit to prepare R for the script
+
 2013-01-04: v1.1-0
   + Add BIOS-style command-line parser: argParser, argGet, argGetPos and argPresent. 
 

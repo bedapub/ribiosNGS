@@ -9,4 +9,6 @@ export("argParse",
        "argGetPos",
        "argPresent")
 
+export("scriptInit")
+
 useDynLib(ribiosArg)

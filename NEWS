@@ -1,3 +1,7 @@
+2013-01-28: v1.1-2
+  + argParse: now optargs and reqargs can be set to NULL without causing the R session to crash
+  + The log.h module of bios has been replaced by the local mimics, in order not to crash the R session in case problems. Note that however arg_init() and arg_try() still must be called before argGet() and argPresent(). Otherwise the program will end reporting the segfault "memory not mapped".
+
 2013-01-23: v1.1-1
   + Add scriptInit to prepare R for the script
 

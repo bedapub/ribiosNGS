@@ -1,5 +1,5 @@
 argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
-    allComm <- commandArgs(FALSE)
+  allComm <- commandArgs(FALSE)
   if("--args" %in% allComm) {
     indFile <- grep("^--file=", allComm)
     allComm[indFile] <- gsub("^--file=", "", allComm[indFile]) ## script name
@@ -8,6 +8,8 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
   } else {
     comm <- allComm[-c(1:2)]
   }
+  if(is.null(optargs)) optargs <- ""
+  if(is.null(reqargs)) reqargs <- ""
   argc <- as.integer(length(comm))
   res <- .Call("rarg_parse",
                argc,

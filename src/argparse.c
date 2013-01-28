@@ -1,3 +1,4 @@
+#include <Rinternals.h>
 #include "argparse.h"
 #include "stdlib.h"
 #include "string.h"

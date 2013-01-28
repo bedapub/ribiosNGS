@@ -3,4 +3,4 @@ include $(BIOINFOCONFDIR)/prpidefs.make
 R_INC=$(R_HOME)/src/include/
 CFLAGSL=$(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
 PKG_CFLAGS=$(CFLAGSL) $(PRPIINC)
-PKG_LIBS=-fPIC $(CPICFLAGS) -I$(BIOINFOCONFDIR) $(PRPISRC)/array.c $(PRPISRC)/format.c $(PRPISRC)/log.c $(PRPISRC)/hlrmisc.c $(PRPISRC)/arg.c
+PKG_LIBS=-fPIC $(CPICFLAGS) -I$(BIOINFOCONFDIR) $(PRPISRC)/array.c $(PRPISRC)/format.c $(PRPISRC)/hlrmisc.c $(PRPISRC)/arg.c 

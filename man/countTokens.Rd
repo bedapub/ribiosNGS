@@ -1,6 +1,6 @@
 \name{countTokens}
 \alias{countTokens}
-\alias{nFields}
+\alias{nField}
 \title{
   Count tokens by splitting strings
 }

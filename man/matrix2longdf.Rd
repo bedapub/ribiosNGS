@@ -9,7 +9,8 @@
   data.frames can be useful in data visualization and modelling.
 }
 \usage{
-matrix2longdf(mat, row.names, col.names)
+matrix2longdf(mat, row.names, col.names, longdf.colnames=c("row",
+"column", "value"))
 }
 \arguments{
   \item{mat}{A matrix}
@@ -20,6 +21,8 @@ matrix2longdf(mat, row.names, col.names)
   \item{col.names}{Charater, column names to appear in the
     \code{data.frame}. The rule of handling missing or NULL parameters
     is the same as \code{row.names} described above.}
+  \item{longdf.colnames}{Character, column names of the output long data
+  frame}
 }
 \details{
   The function converts a matrix into a three-column, \sQuote{long}
@@ -44,5 +47,6 @@ test.mat <- matrix(1:12, ncol=4, nrow=3, dimnames=list(LETTERS[1:3],
 LETTERS[1:4]))
 print(test.mat)
 print(matrix2longdf(test.mat))
+print(matrix2longdf(test.mat, longdf.colnames=c("From", "To", "Time")))
 }
 

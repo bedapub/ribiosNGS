@@ -1,10 +1,12 @@
-export(atofMatrix)
+export(asNumMatrix,
+       stringDataFrame2numericMatrix,
+       atofMatrix)
 
 export(summarizeRows, summarizeColumns, summarizeCols)
 export(isError)
 
 export(mmatch)
-export(munion, mintersect, msetdiff)
+export(munion, mintersect, msetdiff, compTwoVecs)
 export(midentical)
 
 export(imatch, imatchv, ipmatch, ipmatchv, matchv)
@@ -17,7 +19,8 @@ export(putColsFirst, sortByDimnames,
        sortByCol)
 
 export(rowscale)
-export(matrix2longdf,stringDataFrame2numericMatrix)
+export(matrix2longdf,
+       longdf2matrix)
 
 export(dfFactor)
 
@@ -35,7 +38,7 @@ export(setDebug, unsetDebug,
 export(refactor, relevels,
        cutInterval, refactorNum)
 
-export(atomGrep, orderedGrep)
+##export(atomGrep, orderedGrep)
 
 export(strtoken, countTokens)
 
@@ -45,7 +48,7 @@ export(stubborngc)
 
 export(headhead, tailtail)
 
-export(uniqueLength)
+export(uniqueLength, ulen)
 
 export(openFileDevice)
 

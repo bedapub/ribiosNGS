@@ -6,16 +6,20 @@ sortByDimnames <- function(x,row.decreasing=FALSE, col.decreasing=FALSE) {
   return(x)
 }
 
-atofMatrix <- function(x) {
+asNumMatrix <- function(x) {
   mat <- apply(x, 2, as.numeric)
   dimnames(mat) <- dimnames(x)
   return(mat)
 }
-
-stringDataFrame2numericMatrix <- function(data.frame) {
-  .Deprecated("atofMatrix",
+atofMatrix <- function(data.frame) {
+  .Deprecated("asNumMatrix",
               package="ribiosUtils")
-  atofMatrix(data.frame)
+  asNumMatrix(data.frame)
+}
+stringDataFrame2numericMatrix <- function(data.frame) {
+  .Deprecated("asNumMatrix",
+              package="ribiosUtils")
+  asNumMatrix(data.frame)
 }
 
 putColsFirst <- function(data.frame, columns) {

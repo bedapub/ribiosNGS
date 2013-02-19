@@ -44,18 +44,18 @@ relevels <- function(x, refs) {
 ##  checkException(relvels(teams, c(cup, "SF")))
 ##}
 
-cutInterval <- function(x, interval=100,
+cutInterval <- function(x, step=1,
                         labelOption=c("cut.default", "left", "right"),
                         include.lowest=FALSE, right=TRUE, dig.lab=3, ordered_result=FALSE,...) {
   labelOption <- match.arg(labelOption,
                      c("left", "right", "cut.default"))
   x.max <- max(x, na.rm=TRUE)
   x.min <- min(x, na.rm=TRUE)
-  cut.up <- ifelse(x.max %% interval==0,
-                   x.max %/% interval, x.max %/%interval+1)*interval
-  cut.low <- ifelse(x.min %/% interval==0,
-                    0, interval * (x.min %/% interval))
-  cut.scale <- seq(from=cut.low, to=cut.up, by=interval)
+  cut.up <- ifelse(x.max %% step==0,
+                   x.max %/% step, x.max %/%step+1)*step
+  cut.low <- ifelse(x.min %/% step==0,
+                    0, step * (x.min %/% step))
+  cut.scale <- seq(from=cut.low, to=cut.up, by=step)
   labels <- NULL
   if(labelOption=="left") {
     labels <- cut.scale[-length(cut.scale)]

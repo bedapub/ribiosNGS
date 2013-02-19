@@ -1,5 +1,6 @@
 ## sofar only accepts character
-reload <- function(pkg, pos=2) {
+reload <- function(pkg) {
+  pkg <- as.character(substitute(pkg))
   name <- sprintf("package:%s", pkg)
 
   if(name %in% search())

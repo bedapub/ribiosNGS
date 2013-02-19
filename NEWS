@@ -1,3 +1,8 @@
+Version 1.0-26 (2013-02-19)
+  + A substantial update of helping pages. Now almost every function exported by the ribiosUtils package has manuals and examples.
+  + Add longdf2matrix to convert long-format data frame into matrix.
+  + add compTwoVecs to compare two vectors using set operations
+
 Version 1.0-25 (2012-12-04)
   + Add new function: trim, to trim (strip) leading and/or tailing spaces
 

@@ -1,3 +1,6 @@
+Version 1.0-21 (2013-02-20)
+  + read_exprs_matrix can handle matrix input file in case the second column is non-numeic (e.g. descriptions)
+
 Version 1.0-20 (2012-11-19)
   + Add new function 'read_chip' to read chip files
 

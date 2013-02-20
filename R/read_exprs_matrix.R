@@ -12,8 +12,14 @@ read_exprs_matrix <- function(x) {
     } else { ## space-delimited file
       df <- read.table(x, sep="", row.names=NULL, header=TRUE, check.names=FALSE, comment.char="")
     }
-    mat <- data.matrix(df[,-1L])
-    rownames(mat) <- df[,1L]
+    if(is.integer(df[,2L]) || is.numeric(df[,2L]))  { ## second column is numeric
+      mat <- data.matrix(df[,-1L])
+      rownames(mat) <- df[,1L]
+    } else { ## second column is not numeric
+      mat <- data.matrix(df[, c(-1L, -2L)])
+      rownames(mat) <- df[,1L]
+      attr(mat, "desc") <- as.character(df[,2L])
+    }
     return(mat)
   }
 }

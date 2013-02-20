@@ -32,7 +32,13 @@ read_exprs_matrix(x)
   tabs in case it needs to be parsed.
 
   From ribiosIO version 1.0.2, this function supports duplicated row
-  names. 
+  names.
+
+  From ribiosIO version 1.0-21, this function supports matrix file in
+  which the second column is not numeric. This can happen, for instance,
+  if the user decides to include descriptions. If such descriptions are
+  detected, they are stored in the attribute \dQuote{desc} so as to be
+  later written into gct files.
 }
 \seealso{
   The function calls internally the \code{read_gct_matrix} function to
@@ -49,5 +55,8 @@ read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix.tsv"))
 
 ## import space-separated file
 read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix.txt"))
+
+## import tab-separted file with descriptions
+read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix_desc.tsv"))
 }
 

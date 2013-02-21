@@ -35,6 +35,10 @@ write_gct(matrix, file = stdout(), feat.name, feat.desc)
 \value{
   Texts printed in \code{stdout()} or in output file.
 }
+\note{
+  From version 1.0-22, write_gct is able to handle zero-row matrix (see
+  examples below)
+}
 \author{
     Jitao David Zhang <jitao_david.zhang@roche.com>
 }
@@ -57,6 +61,7 @@ write_gct(tmpMatrix, feat.name=c("F1", "F2", "F3"), feat.desc=NA)
 write_gct(tmpMatrix, feat.name=c("F1", "F2", "F3"), feat.desc=
 c("Feature 1", "Feature 2", "Feature 3"))
 
-
+## special case: 0-row matrix
+write_gct(tmpMatrix[c(FALSE,FALSE,FALSE),,drop=FALSE])
 }
 

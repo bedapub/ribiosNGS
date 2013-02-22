@@ -14,10 +14,12 @@ read_exprs_matrix <- function(x) {
     }
     if(is.integer(df[,2L]) || is.numeric(df[,2L]))  { ## second column is numeric
       mat <- data.matrix(df[,-1L,drop=FALSE])
+      colnames(mat) <- colnames(df)[c(-1L)]
       rownames(mat) <- df[,1L]
     } else { ## second column is not numeric
       mat <- data.matrix(df[, c(-1L, -2L),drop=FALSE])
       rownames(mat) <- df[,1L]
+      colnames(mat) <- colnames(df)[c(-1L, -2L)]
       attr(mat, "desc") <- as.character(df[,2L])
     }
     return(mat)

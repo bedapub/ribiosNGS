@@ -1,6 +1,7 @@
 Version 1.0-23 (2013-02-22)
   + Bug fix: read_exprs_matrix used "matrix" as column name in case the input file has only one column; now it is fixed
   + read_exprs_matrix reads in description of gct files
+  + read_exprs_matrix keeps column names of tab-delimited files, even if they are duplicated
 
 Version 1.0-22 (2013-02-21)
   + write_gct handles 0-row matrix

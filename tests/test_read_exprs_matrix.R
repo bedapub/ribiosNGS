@@ -25,8 +25,14 @@ assertIdentical(read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matr
 ## import space-separated file (without/with colname for the first column)
 assertIdentical(read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix.txt")),
                 input.matrix)
-assertIdentical(read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix_full.txt")),
+assertIdentical(read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix.txt")),
                 input.matrix)
+
+## import txt/gct files with duplicate colnames
+ctxt <- read_exprs_matrix(file.path(testfile.path, "test_colnames.txt"))
+stopifnot(identical(colnames(ctxt), c("S1", "S1", "S2", "S2")))
+cgct <- read_exprs_matrix(file.path(testfile.path, "test_colnames.gct"))
+stopifnot(identical(colnames(cgct), c("S1", "S1", "S2", "S2")))
 
 ## how to deal with multiple row names
 ## moaning with anyDuplicate(rnames) is a hard-coded feature of read.table

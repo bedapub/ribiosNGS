@@ -7,7 +7,9 @@ input.matrix <- matrix(c(1,2,3,2,3,4,3,4,5), nrow=3, byrow=TRUE, dimnames=list(c
 input.gct <- read_exprs_matrix(file.path(testfile.path,"test_read_exprs_matrix.gct"))
 storage.mode(input.matrix) <- "integer"
 storage.mode(input.gct) <- "integer" ## make the comparison easier
-stopifnot(identical(input.gct, input.matrix))
+input.gct.removeAttr <- input.gct
+attr(input.gct.removeAttr, "desc") <- NULL
+stopifnot(identical(input.gct.removeAttr, input.matrix))
 
 ## import gmt
 testgmt <- file.path(testfile.path, "test.gmt")

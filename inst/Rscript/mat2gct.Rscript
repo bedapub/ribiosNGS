@@ -9,7 +9,7 @@ getHelp <- existArg("h") | existArg("help")
 if(is.null(infile) || getHelp)
   qqmsg(paste("Usage:",
               scriptName(),
-              "-infile FILE [-outfile FILE]\n",
+              " -infile FILE [-outfile FILE]\n",
               "-infile FILE\tInput tab-delimited file in the matrix form\n",
               "Optional:\n",
               "-outfile FILE\tgct output file name. File is wrriten to stdout if missing.\n",sep=""),

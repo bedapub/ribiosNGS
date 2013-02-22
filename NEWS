@@ -1,3 +1,9 @@
+Version 1.0-23 (2013-02-22)
+  + Bug fix: read_exprs_matrix used "matrix" as column name in case the input file has only one column; now it is fixed
+
+Version 1.0-22 (2013-02-21)
+  + write_gct handles 0-row matrix
+
 Version 1.0-21 (2013-02-20)
   + read_exprs_matrix can handle matrix input file in case the second column is non-numeic (e.g. descriptions)
 

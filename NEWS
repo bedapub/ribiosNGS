@@ -1,3 +1,6 @@
+2013-02-22 v1.1-15
+  + Update exprs-boxplot.Rscript to boxplot.Rscript. New function includes (1) correct display of long labels (2) accepts gct or tab-delimited files (3) automatically guess the width of the figure, and (4) display feature descriptions whenever possible
+
 2012-10-20 v1.1-14
   + Add two functions to simplify plotting in Rscripts: idev and ipdf
   + Add two color panels: blackyellowred and blackgoldred

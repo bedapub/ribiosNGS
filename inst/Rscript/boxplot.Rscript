@@ -37,8 +37,8 @@ sfac <- factor(snames, levels=unique(snames))
 
 
 ##---------- plotting ----------##
-guess.width <- pmax(6L, nlevels(sfac))
-openFileDevice(outfile, height=6L, width=guess.width)
+guess.width <- pmax(8L, nlevels(sfac))
+openFileDevice(outfile, height=8L, width=guess.width)
 ypretty <- pretty(mat)
 if(argPresent("ylim")) {
   ylim <- argGet("ylim")
@@ -56,7 +56,7 @@ for(i in seq(along=ffac)) {
                 ylim=ylims, col="lightblue", xaxt="n")
   axis(side=1L, at=1:nlevels(sfac), labels=FALSE)
   xlabels <- levels(sfac)
-  xlabels.cex <- sapply(strwidth(xlabels), function(x) ifelse(x<1, 1, 1.05/x))
+  xlabels.cex <- 0.95/max(strwidth(xlabels),na.rm=TRUE)
   ##xlabels.line <- sapply(strwidth(xlabels), function(x) ifelse(x<1, 1, 2))
   xlabels.line <- 1L
   mtext(xlabels,

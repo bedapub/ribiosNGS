@@ -1,11 +1,13 @@
 \name{cossim}
 \alias{cossim}
-\title{Cosine similarity}
+\alias{cosdist}
+\title{Cosine similarity and distance}
 \description{
-  Cosine similarity between two vectors
+  Cosine similarity (distance) between two vectors
 }
 \usage{
 cossim(x, y, na.rm = TRUE)
+cosdist(x, y, na.rm = TRUE)
 }
 \arguments{
   \item{x}{Integer or numeric vector}
@@ -23,7 +25,7 @@ cossim(x, y, na.rm = TRUE)
   If \code{na.rm} is set \code{TRUE}, \code{NA} values are ignored.
 }
 \value{
-  Numeric, the cosine similarity between two input vectors.
+  Numeric, the cosine similarity (distance) between two input vectors.
 }
 \references{
   \url{http://en.wikipedia.org/wiki/Cosine_similarity}
@@ -42,4 +44,8 @@ testVal3 <- c(rnorm(9), NA)
 cossim(testVal1, testVal2)
 cossim(testVal1, testVal3, na.rm=TRUE)
 cossim(testVal1, testVal3, na.rm=FALSE)
+
+cosdist(testVal1, testVal2)
+cosdist(testVal1, testVal3, na.rm=TRUE)
+cosdist(testVal1, testVal3, na.rm=FALSE)
 }

@@ -1,3 +1,6 @@
+Version 1.0-1 (2013-02-25)
+  + cossim and cosdist have been updated to work with matrices. Using matrix manipulation much accelerates the calculation.
+
 Version 1.0-0 (2013-02-22)
   + New package ribiosMath for mathematic and statistical functions in ribios
   + Add function cossim for cosine similarity

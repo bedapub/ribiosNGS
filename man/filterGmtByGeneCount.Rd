@@ -17,17 +17,21 @@ filterGmtByGeneCount(gmtlist, min = 5L, max = 1000L)
 }
 \note{
   Duplicated genes in genesets are only counted once.
+
+  This function is replaced by \code{geneCountFilter} from version \code{1.0-6}.
 }
 \value{
   A GMT list with filtered gene sets.
 }
 \examples{
+\dontrun{
 if(require(ribiosIO)) {
   test.gmt <- read_gmt_list(system.file("extdata", "test.gmt",
 package="ribiosIO"))
   length(test.gmt)
   test.gmt.filter <- filterGmtByGeneCount(test.gmt, min=1022, max=1032)
   length(test.gmt.filter)
+}
 }
 }
 

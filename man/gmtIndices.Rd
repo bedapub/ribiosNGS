@@ -19,6 +19,9 @@ gmtIndices(gmtlist, symbols)
   \item{symbols}{A vector of gene symbols, with which the indices are
     determined. See example.}
 }
+\note{
+ This function is replaced by \code{matchGenes} from version \code{1.0-6}.
+}
 \value{
   A list of integers, with names of the input list. 
 }
@@ -29,10 +32,12 @@ gmtIndices(gmtlist, symbols)
   \code{\link[ribiosIO]{read_gmt_list}} of the \code{ribiosIO} package.
 }
 \examples{
+\dontrun{
 foo.list <- list(list(name="Set1", description="", genes=c("HSV", "FCB","BVB")),
                  list(name="Set2", description="", genes=c("HSV","FCN")),
                  list(name="Set3", description="", genes=c("HAN","FCN", "FSC")))
 symbols <- c("HSV", "BVB", "HAN", "FCN", "FCB")
 gmtIndices(foo.list, symbols)
+}
 }
 

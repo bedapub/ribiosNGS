@@ -13,28 +13,71 @@ perm <- function(exp, templates, exp.dist,
   return(res)
 }
 
-## TODO (David): Add weights options to support negative markers
-## TODO (David): Make cosdist working with NA values in the matrix
-
-ntp <- function(matrix, genesets.ind,
-                row.scale=TRUE, Nrand=1000) {
-  haltifnot(all(sapply(genesets.ind, function(x) is.numeric(x))),
-            msg="'genesets.ind' must be a named list of integers indices of gene sets")
-  
-  normed.exp <- rowscale(matrix)
+ntpTemplates <- function(genesets, featureNames) {
+  genesets.ind <- matchGenes(genesets, featureNames)
   genesets.uniqueInd <- unique(unlist(genesets.ind))
-  nonCls <- ifelse(length(genesets.ind)==2L, -1L, 0L)
+  nonCls <- ifelse(length(genesets)==2L, -1L, 0L)
   templates <- sapply(genesets.ind,
                       function(x) ifelse(genesets.uniqueInd %in% x, 1L, nonCls))
-  colnames(templates) <- names(genesets.ind)
-  rownames(templates) <- genesets.uniqueInd
+  classes <- gsNames(genesets)
+  colnames(templates) <- classes
+  rownames(templates) <- featureNames[genesets.uniqueInd]
+  res <- list(index=genesets.uniqueInd,
+              classes=classes,
+              templates=templates)
+  class(res) <- "ntpTemplates"
+  return(res)
+}
+ntpBiTemplates <- function(genesetsPos, genesetsNeg, featureNames) {
+  haltifnot(length(genesetsPos)==length(genesetsNeg),
+            msg="Positive and negative gene sets must be of the same length")
+  gsPos.ind <- matchGenes(genesetsPos, featureNames)
+  gsNeg.ind <- matchGenes(genesetsNeg, featureNames)
+  gs.uind <- unique(c(unlist(gsPos.ind),
+                      unlist(gsNeg.ind)))
+  templates <- sapply(seq(along=gsPos.ind),
+                      function(x) {
+                        res <- rep(0L, length=length(gs.uind))
+                        res[gs.uind %in% gsPos.ind[[x]]] <- 1L
+                        res[gs.uind %in% gsNeg.ind[[x]]] <- -1L
+                        return(res)
+                      })
+  classes <- gsNames(genesetsPos)
+  colnames(templates) <- classes
+  rownames(templates) <- featureNames[gs.uind]
+  res <- list(index=gs.uind,
+              classes=classes,
+              templates=templates)
+  class(res) <- "ntpTemplates"
+  return(res)
+}
+
+print.ntpTemplates <- function(x,...) {
+  cat("A NTP-template of", length(x$index), "genes",
+      "and", length(x$classes), "classes\n")
+}
+
+templates <- function(x) UseMethod("templates")
+templates.ntpTemplates <- function(x) x$templates
+
+## TODO (David): Make cosdist working with NA values in the matrix
+ntp <- function(matrix, ntpTemplates,
+                row.scale=TRUE, Nrand=1000) {
+  haltifnot(is(ntpTemplates, "ntpTemplates"),
+            msg="'templates' must be a ntpTemplates. Use function 'ntpTemplates' or 'ntpBiTemplates' to produce such an object")
+
+  if(row.scale) matrix <- rowscale(matrix)
+
+  genesets.uniqueInd <- ntpTemplates$index
+  classes <- ntpTemplates$classes
+  templates <- ntpTemplates$templates
 
   gct.template.dist <- cosdist(templates,
-                               normed.exp[genesets.uniqueInd,])
-  gct.template.dist.p <- perm(normed.exp, templates,
+                               matrix[genesets.uniqueInd,])
+  gct.template.dist.p <- perm(matrix, templates,
                               gct.template.dist, Nrand=Nrand)
   gct.pred.ind <- apply(gct.template.dist, 2L, function(x) which(x==min(x)))
-  gct.pred <- sapply(1:ncol(gct.template.dist), function(x) rownames(gct.template.dist)[gct.pred.ind[x]])
+  gct.pred <- sapply(1:ncol(gct.template.dist), function(x) classes[gct.pred.ind[x]])
   gct.pred.p <- sapply(1:ncol(gct.template.dist),
                        function(x) gct.template.dist.p[gct.pred.ind[x], x])
   res <- list(prediction=gct.pred,

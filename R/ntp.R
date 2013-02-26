@@ -55,6 +55,7 @@ ntpBiTemplates <- function(genesetsPos, genesetsNeg, featureNames) {
 print.ntpTemplates <- function(x,...) {
   cat("A NTP-template of", length(x$index), "genes",
       "and", length(x$classes), "classes\n")
+  cat("Use 'templates(x)' to view the template matrix\n")
 }
 
 templates <- function(x) UseMethod("templates")

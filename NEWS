@@ -1,6 +1,7 @@
 Version 1.0-6 (Feb 26, 2013)
   + Add function ntp to implement the Nearest Template Prediction Algorithm
   + Add functions readGmt, gsNames, gsDescs, gsGenes, geneCountFilter, etc. to manipulate GeneSets objects from GMT files
+  + Add ntpTemplates and ntpBiTemplates to construct NTP-templates from GeneSets.
 
 Version 1.0-5 (Nov 19, 2012)
   + New feature of gmtIndices: invalid Gene Symbols ("", "-") are removed

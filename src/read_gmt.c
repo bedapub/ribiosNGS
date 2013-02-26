@@ -23,7 +23,7 @@ SEXP read_gmt(SEXP filename) {
   ls=ls_createFromFile(fname);
   while(line=ls_nextLine(ls)) {
     it=textStrtok(line, "\t");
-    if(arrayMax(it)<3) continue;
+    if(arrayMax(it)<2) continue;
     textAdd(names, textItem(it, 0));
     textAdd(descs, textItem(it, 1));
     array(genes,ind,Texta)=textCreate(arrayMax(it)-2);

@@ -1,3 +1,6 @@
+Version 1.0-24 (2013-02-26)
+  + Bug fix: read_gmt_list now supports gene set without any gene.
+
 Version 1.0-23 (2013-02-22)
   + Bug fix: read_exprs_matrix used "matrix" as column name in case the input file has only one column; now it is fixed
   + read_exprs_matrix reads in description of gct files

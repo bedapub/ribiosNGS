@@ -1,4 +1,4 @@
-#include "cossim.h"
+#include "ribios_math.h"
 
 using namespace Rcpp;
 

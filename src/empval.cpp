@@ -1,4 +1,4 @@
-#include "empval.h"
+#include "ribios_math.h"
 
 RcppExport SEXP empval(SEXP a, SEXP b) {
   //Implementation inspired by https://r-forge.r-project.org/scm/viewvc.php/*checkout*/papers/BatesEddelbuettel/bb.r?root=rcpp

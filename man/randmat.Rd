@@ -2,7 +2,7 @@
 \alias{randmat}
 \title{Making a random matrix by sampling}
 \description{
-  Generating a random matrix by sampling a numeric vector.
+  Generating a column-wise random matrix by sampling a numeric vector.
 }
 \usage{
 randmat(vec, size, N)

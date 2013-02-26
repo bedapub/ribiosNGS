@@ -1,3 +1,5 @@
 export("cossim", "cosdist")
 
+export("empval")
+
 useDynLib(ribiosMath)

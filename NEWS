@@ -1,3 +1,6 @@
+Version 1.0-2 (2013-02-26)
+  + Add function empval to calculate empirical p values from Monte Carlo methods
+
 Version 1.0-1 (2013-02-25)
   + cossim and cosdist have been updated to work with matrices. Using matrix manipulation much accelerates the calculation.
 

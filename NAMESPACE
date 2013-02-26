@@ -1,4 +1,3 @@
-
 ## GSEA fingerprints
 export(gseaQvalue, gseaES, gseaFingerprint, gseaFingerprintMatrix)
 
@@ -8,3 +7,19 @@ export(buildGSEAcomm)
 export(mroast2tbl)
 export(filterGmtByGeneCount,
        gmtIndices)
+
+## GMT functions
+export(readGmt, gsNames, gsDescs, gsGenes,
+       matchGenes,
+       geneCount, geneCountFilter)
+S3method(print, GeneSets)
+S3method(gsNames, GeneSets)
+S3method(gsDescs, GeneSets)
+S3method(gsGenes, GeneSets)
+S3method("[", GeneSets)
+S3method(matchGenes, GeneSets)
+S3method(geneCount, GeneSets)
+S3method(geneCountFilter, GeneSets)
+
+## Nearest Template Prediction (ntp) algorithm
+export(ntp)

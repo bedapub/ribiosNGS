@@ -4,5 +4,5 @@ library(ribiosUDIS)
 ##exampleURL <- "http://udisdev.roche.com/udiscgiqa/expressionData_cgi?query=signals&studyidexternal=NCS_tissue_rat&studydomain=undefined&format=gct&outdest=browser"
 ##myQuery <- queryUrl(exampleURL, cookie)
 
-system.time(test <- getUDISexpression(studyid="NCS_tissue_rat"))
+system.time(test <- getUDISexpression(studyIdExt="GSE20986"))
 stopifnot(is(test, "ExpressionSet"))

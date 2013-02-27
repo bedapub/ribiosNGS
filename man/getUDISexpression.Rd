@@ -4,41 +4,42 @@
   Get ExpressionSet from studies in UDIS Expression Database
 }
 \description{
-  The function queries Expression Database of UDIS by study identifier,
+  The function queries Expression Database of UDIS by external study identifier,
   and returns an annotated \code{ExpressionSet} object.
 }
 \usage{
-getUDISexpression(studyid = "NCS_tissue_rat")
+getUDISexpression(studyIdExt = "GSE20986")
 }
 \arguments{
-  \item{studyid}{Character string, study identifier}
+  \item{studyIdExt}{Character string, study identifier}
 }
 \details{
   The function first tries to get signals of the specified study. If it
   fails, for example due to an non-existing identifier or complications
   due to multiple platforms within one study, an error message will be
-  printed and a \code{NULL} value will be returned. Otherwise, it further queries the phenotype data (known
-  as \code{meta} in UDIS). Once both pieces are ready, the function
-  builds an \code{ExpressionSet} object. 
+  printed and a \code{NULL} value will be returned.
+
+  If signals are successfully acquired, it further queries feature
+  annotation and phenotype data (known as \code{meta} data in
+  UDIS). Once all pieces are ready, the function
+  builds and returns an \code{ExpressionSet} object. 
 }
 \value{
   An \code{ExpressionSet} object when the query succeeded, otherwise \code{NULL}.
 }
 \references{
-  \url{http://udisdev.roche.com/udiscgiqa/expressionData_cgi}
+  \url{http://udis.roche.com/apps/expression/api_help2.html}
 }
 \author{
   Jitao David Zhang
 }
 \note{
-  The function may need extensive testing, especially in the parsing of
-  phenotype data. And the parsing of phenotype data may be optimized
-  with C code when necessary in the future.
-
-  Currently the feature/probesets annotation is not embedded. It will be
-  implemented once UDIS has its own integrated annotation system.
+  From version 1.1-0 the function points to the productive server of
+  UDIS, and supports feature annotation.
 }
 \examples{
 ## here we might want to have a smaller dataset for demo
-myEset <- getUDISexpression(studyid="NCS_tissue_rat")
+\dontrun{
+myEset <- getUDISexpression(studyIdExt="GSE20986")
+}
 }

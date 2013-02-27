@@ -1,12 +1,13 @@
 Package: ribiosGSEA
 Type: Package
 Title: RIBIOS functions for Gene Set Enrichment Analysis
-Version: 1.0-6
-Date: 2013-02-26
+Version: 1.0-7
+Date: 2013-02-27
 Author: Jitao David Zhang
 Maintainer: Jitao David/SOFT/bi/apps/ribios/ribiosGSEA/man/ Zhang <jitao_david.zhang@roche.com>
 Description: Gene set enrichment analysis is part of the Roche Bioinformatics pipeline. The ribiosGSEA package provides functions and command-line scripts to trigger an analysis, and to perform integrative analysis of GSEA results.
 Depends: ribiosUtils, ribiosIO, ribiosMath (>= 1.0-2), multicore
 Suggests: limma (>= 3.5-9)
 License: LGPL-2
+LinkingTo: Rcpp
 LazyLoad: yes

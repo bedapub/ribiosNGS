@@ -22,8 +22,10 @@ S3method(geneCount, GeneSets)
 S3method(geneCountFilter, GeneSets)
 
 ## Nearest Template Prediction (ntp) algorithm
-export(templates)
+export(list2mat)
 export(ntpTemplates, ntpBiTemplates)
 S3method(print, ntpTemplates)
-S3method(templates, ntpTemplates)
 export(ntp)
+
+## Use Dynamic Lib
+useDynLib(ribiosGSEA)

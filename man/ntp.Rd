@@ -1,6 +1,5 @@
 \name{ntp}
 \alias{ntp}
-\alias{templates}
 \alias{ntpTemplates}
 \alias{ntpBiTemplates}
 \title{Nearest Template Prediction Algorithm}
@@ -12,8 +11,6 @@
 ntpTemplates(genesets, featureNames)
 ntpBiTemplates(genesetsPos, genesetsNeg, featureNames)
 ntp(matrix, ntpTemplates, row.scale = TRUE, Nrand = 1000)
-
-templates(x)
 }
 \arguments{
   \item{genesets}{A GeneSets S3-object, probably returned by
@@ -34,8 +31,6 @@ templates(x)
     compared to each other directly, this option should be set to \code{TRUE}.}
   \item{Nrand}{Number of permutations to determine empirical p-values of
     prediction. By default 1000.}
-
-  \item{x}{A \code{ntpTemplates} object.}
 }
 \details{
   The algorithm runs in two steps. First a set of templates must be
@@ -49,9 +44,6 @@ templates(x)
 
   In the second step predictions are done by comparing signature gene
   expression profiles of the expression matrix to the templates.
-
-  \code{templates} is a handy function to look up the underlying matrix
-  of an \code{ntpTemplates} object.
 }
 \value{
   \code{ntpTemplates} or \code{ntpBiTemplates} returns a
@@ -108,8 +100,6 @@ testTemplates <- ntpTemplates(testGeneSet, rownames(testExp))
 ## Second step: running the NTP algorithm
 testNtpRes <- ntp(testExp, testTemplates, row.scale=TRUE, Nrand=1000)
 
-## examine the templates
-templates(testTemplates)
 
 ## test ntpBiTemplates
 posGmtFile <- system.file("extdata/gmts/posGS.gmt",

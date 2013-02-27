@@ -15,18 +15,9 @@ perm <- function(exp, templates, exp.dist,
 
 ntpTemplates <- function(genesets, featureNames) {
   genesets.ind <- matchGenes(genesets, featureNames)
-  genesets.uniqueInd <- unique(unlist(genesets.ind))
-  nonCls <- ifelse(length(genesets)==2L, -1L, 0L)
-  templates <- sapply(genesets.ind,
-                      function(x) ifelse(genesets.uniqueInd %in% x, 1L, nonCls))
-  classes <- gsNames(genesets)
-  colnames(templates) <- classes
-  rownames(templates) <- featureNames[genesets.uniqueInd]
-  res <- list(index=genesets.uniqueInd,
-              classes=classes,
-              templates=templates)
-  class(res) <- "ntpTemplates"
-  return(res)
+  templates <- list2mat(genesets.ind)
+  class(templates) <- c("ntpTemplates", "matrix")
+  return(templates)
 }
 ntpBiTemplates <- function(genesetsPos, genesetsNeg, featureNames) {
   haltifnot(length(genesetsPos)==length(genesetsNeg),
@@ -44,22 +35,16 @@ ntpBiTemplates <- function(genesetsPos, genesetsNeg, featureNames) {
                       })
   classes <- gsNames(genesetsPos)
   colnames(templates) <- classes
-  rownames(templates) <- featureNames[gs.uind]
-  res <- list(index=gs.uind,
-              classes=classes,
-              templates=templates)
-  class(res) <- "ntpTemplates"
-  return(res)
+  rownames(templates) <- gs.uind
+  class(templates) <- c("ntpTemplates", "matrix")
+  return(templates)
 }
 
-print.ntpTemplates <- function(x,...) {
+print.ntpTemplates <- function(x,verbose=TRUE, ...) {
   cat("A NTP-template of", length(x$index), "genes",
       "and", length(x$classes), "classes\n")
-  cat("Use 'templates(x)' to view the template matrix\n")
+  if(verbose) NextMethod("print")
 }
-
-templates <- function(x) UseMethod("templates")
-templates.ntpTemplates <- function(x) x$templates
 
 ## TODO (David): Make cosdist working with NA values in the matrix
 ntp <- function(matrix, ntpTemplates,
@@ -69,9 +54,9 @@ ntp <- function(matrix, ntpTemplates,
 
   if(row.scale) matrix <- rowscale(matrix)
 
-  genesets.uniqueInd <- ntpTemplates$index
-  classes <- ntpTemplates$classes
-  templates <- ntpTemplates$templates
+  genesets.uniqueInd <- as.integer(rownames(ntpTemplates))
+  classes <- colnames(ntpTemplates)
+  templates <- ntpTemplates
 
   gct.template.dist <- cosdist(templates,
                                matrix[genesets.uniqueInd,])

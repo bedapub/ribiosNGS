@@ -1,3 +1,6 @@
+Version 1.0-3 (2013-02-27)
+  + Removing package dependence on Rcpp: so far the package is placed under "LinkingTo" it runs fine.
+
 Version 1.0-2 (2013-02-26)
   + Add function empval to calculate empirical p values from Monte Carlo methods
   + Add function randmat to generate a column-wise random matrix by sampling a numeric vector many times

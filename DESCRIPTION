@@ -1,8 +1,8 @@
 Package: ribiosUDIS
 Type: Package
 Title: Access UDIS in ribios
-Version: 1.1-0
-Date: 2013-02-27
+Version: 1.1-1
+Date: 2013-02-28
 Author: Jitao David Zhang, with inputs from Yuan Wang, Said Aktas, Clemens Brogers and Detlef Wolf
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Access UDIS in ribios via APIs specified in UDIS.

@@ -14,7 +14,9 @@ buildUDISexpURL <- function(studyIdExt,
 
 meta2pd <- function(str) {
   ## note how to use textConnection to read csv from string
-  df <- read.csv(textConnection(str), sep="\t", header=TRUE)
+  con <- textConnection(str)
+  df <- read.csv(con, sep="\t", header=TRUE)
+  close(con)
   metaData <- data.frame(labelDescription=colnames(df),
                          row.names=colnames(df))
   pd <- new("AnnotatedDataFrame",

@@ -1,3 +1,6 @@
+Version 1.1-1 (2013-02-28)
+  + Bug fix: meta2pd (internal function) closes text connection once finishing the use.
+
 Version 1.1-0 (2013-02-27)
   + The productive UDIS server is now used for query (before the dev machine was used)
   + Function getUDISexprsession has been updated to be compatible with the current UDIS query API specifications

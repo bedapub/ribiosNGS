@@ -1,3 +1,6 @@
+Version 1.0-25 (2013-02-28) 
+  + Add function read_pheno to import pheno data information
+
 Version 1.0-24 (2013-02-26)
   + Bug fix: read_gmt_list now supports gene set without any gene.
 

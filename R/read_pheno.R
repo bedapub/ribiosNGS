@@ -10,3 +10,22 @@ read_pheno <- function(file) {
   }
   return(tbl)
 }
+
+read_pheno_factor <- function(file) {
+  lns <- readLines(file)
+  txt <- paste(lns, collapse="\n")
+  if(length(lns)==3 && grepl("^#", lns[2])) {
+    sclass <- read_cls(textConnection(txt))
+  } else {
+    tbl <- read.csv(textConnection(txt), sep="\t", header=TRUE)
+    if(ncol(tbl)==1) {
+      sclass <- factor(tbl[,1L], levels=unique(tbl[,1L]))
+    } else {
+      isCov <- apply(tbl, 2L, function(x) length(unique(x)) != 1 && length(unique(x)) != nrow(tbl))
+      subtbl <- tbl[,isCov,drop=FALSE]
+      classes <- apply(subtbl, 1L, paste, collapse="_")
+      sclass <- factor(classes, levels=unique(classes))
+    }
+  }
+  return(sclass)
+}

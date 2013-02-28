@@ -12,7 +12,8 @@ export(read_gct_matrix,
        write_gct)
 
 export(read_cls,
-       read_pheno)
+       read_pheno,
+       read_pheno_factor)
 
 export(read_chip)
 

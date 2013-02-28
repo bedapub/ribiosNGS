@@ -1,23 +1,24 @@
 read_pheno <- function(file) {
   lns <- readLines(file)
-  txt <- paste(lns, collapse="\n")
+  txt <- textConnection(paste(lns, collapse="\n"))
   if(length(lns)==3 && grepl("^#", lns[2])) {
-    sclass <- read_cls(textConnection(txt))
+    sclass <- read_cls(txt)
     tbl <- data.frame(Array=seq(along=sclass),
                       Class=sclass)
   } else {
-    tbl <- read.csv(textConnection(txt), sep="\t", header=TRUE)
+    tbl <- read.csv(txt, sep="\t", header=TRUE)
   }
+  close(txt)
   return(tbl)
 }
 
 read_pheno_factor <- function(file) {
   lns <- readLines(file)
-  txt <- paste(lns, collapse="\n")
+  txt <- textConnection(paste(lns, collapse="\n"))
   if(length(lns)==3 && grepl("^#", lns[2])) {
-    sclass <- read_cls(textConnection(txt))
+    sclass <- read_cls(txt)
   } else {
-    tbl <- read.csv(textConnection(txt), sep="\t", header=TRUE)
+    tbl <- read.csv(txt, sep="\t", header=TRUE)
     if(ncol(tbl)==1) {
       sclass <- factor(tbl[,1L], levels=unique(tbl[,1L]))
     } else {
@@ -27,5 +28,6 @@ read_pheno_factor <- function(file) {
       sclass <- factor(classes, levels=unique(classes))
     }
   }
+  close(txt)
   return(sclass)
 }

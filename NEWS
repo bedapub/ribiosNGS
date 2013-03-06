@@ -1,3 +1,6 @@
+Version 1.0-4 (2013-03-06)
+  + cossim works now with y missing.
+
 Version 1.0-3 (2013-02-27)
   + Removing package dependence on Rcpp: so far the package is placed under "LinkingTo" it runs fine.
 

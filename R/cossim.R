@@ -1,4 +1,5 @@
 cossim <- function(x,y, na.rm=TRUE) {
+  if(missing(y)) y <- x
   xIsMatrix <- is.matrix(x)
   yIsMatrix <- is.matrix(y)
   if(!xIsMatrix && !yIsMatrix) {

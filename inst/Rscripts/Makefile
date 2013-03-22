@@ -11,12 +11,12 @@ test:
 
 	time ${PDIR}/Rscripts/ronet.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 1 -outfile /tmp/test-ronet-max1-ce.gml -connectorEdges
 
-testPublic:
-	time ${PDIR}/Rscripts/ronet-public.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 0 -outfile /tmp/test-ronet-public.abc
+testEvaluation:
+	time ${PDIR}/Rscripts/ronet-evaluation.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 0 -outfile /tmp/test-ronet-evaluation.abc
 
-	time ${PDIR}/Rscripts/ronet-public.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 0 -outfile /tmp/test-ronet-public.gml
-	time ${PDIR}/Rscripts/ronet-public.Rscript -infile ${PDIR}/extdata/test-ronet-genesymbols.txt -genesymbol -maxConnector 1 -outfile /tmp/test-ronet-public-genesymbol.gml
-	time ${PDIR}/Rscripts/ronet-public.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 1 -outfile /tmp/test-ronet-public-max1.gml
-	time ${PDIR}/Rscripts/ronet-public.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 5 -outfile /tmp/test-ronet-public-max5.gml
+	time ${PDIR}/Rscripts/ronet-evaluation.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 0 -outfile /tmp/test-ronet-evaluation.gml
+	time ${PDIR}/Rscripts/ronet-evaluation.Rscript -infile ${PDIR}/extdata/test-ronet-genesymbols.txt -genesymbol -maxConnector 1 -outfile /tmp/test-ronet-evaluation-genesymbol.gml
+	time ${PDIR}/Rscripts/ronet-evaluation.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 1 -outfile /tmp/test-ronet-evaluation-max1.gml
+	time ${PDIR}/Rscripts/ronet-evaluation.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 5 -outfile /tmp/test-ronet-evaluation-max5.gml
 
-	time ${PDIR}/Rscripts/ronet-public.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 1 -outfile /tmp/test-ronet-public-max1-ce.gml -connectorEdges
+	time ${PDIR}/Rscripts/ronet-evaluation.Rscript -infile ${PDIR}/extdata/test-ronet-geneids.txt -maxConnector 1 -outfile /tmp/test-ronet-evaluation-max1-ce.gml -connectorEdges

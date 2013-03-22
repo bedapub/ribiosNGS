@@ -59,14 +59,23 @@ if(isGeneSymbol) {
 geneids <- unique(geneids[!is.na(geneids) & geneids!="NA"])
 
 
-## build interaction network
-sql <- paste("SELECT",
+## build interaction network from Adriane and others
+sql.old <- paste("SELECT",
+             "INT_ID as ID, GENE1, GENE_SYM1, INT_TYPE as type, EFFECT, GENE2, GENE_SYM2, SOURCE",
+             "FROM bi2.ronet_intdb_snap",
+             "WHERE SOURCE = 'ariadne-RESNET6' AND GENE1 IS NOT NULL AND GENE2 IS NOT NULL",
+             sep=" ")
+all.tbl.old <- querydb(sql.old,db="bia", user="biread", password="biread")
+sql.new <- paste("SELECT",
              "INT_ID as ID, GENE1, GENE_SYM1, INT_TYPE as type, EFFECT, GENE2, GENE_SYM2, SOURCE",
              "FROM bi2.RONET_INTERACTIONS_MAPPED_IT",
              "WHERE SOURCE IN ('StringDB', 'REACTOME', 'PC', 'KEGG', 'Human MAP Kinase interactome') AND GENE1 IS NOT NULL AND GENE2 IS NOT NULL",
              sep=" ")
-all.tbl <- querydb(sql,db="bia", user="biread", password="biread")
-all.tbl <- subset(all.tbl, !is.na(GENE1) & !is.na(GENE2))
+all.tbl.new <- querydb(sql.new,db="bia", user="biread", password="biread")
+
+all.tbl <- rbind(all.tbl.old, all.tbl.new)
+rm(all.tbl.old); rm(all.tbl.new);
+
 ftM <- as.matrix(all.tbl[,c("GENE1", "GENE2")])
 ftM.isUniq <- !duplicated(ftM)
 ftM <- ftM[ftM.isUniq,]
@@ -80,8 +89,7 @@ ftM.type <- ftM.type[ftM.isUniq]
 libordie(RBGL)
 Gd <- ftM2graphNEL(ftM, edgemode="directed")
 edgeDataDefaults(Gd, "label") <- ""
-ftM.type <- edgeData(Gd,
-                     from=as.character(all.tbl[ftM.isUniq, "GENE1"]),
+ftM.type <- edgeData(Gd, from=as.character(all.tbl[ftM.isUniq, "GENE1"]),
                      to=as.character(all.tbl[ftM.isUniq, "GENE2"]),
                      attr="label")
 

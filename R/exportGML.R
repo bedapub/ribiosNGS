@@ -1,4 +1,11 @@
 ## customed Cytoscape/yEd-friendly export function for GML
+fixNodeLabel <- function(name) {
+  res <- vector("character", length=length(name))
+  invalid <- grepl("^-*$", name)
+  res[invalid] <- ""
+  res[!invalid] <- name[!invalid]
+  return(res)
+}
 exportGML <- function(igraph, filename) {
   file <- file(filename, "w")
   cat("Creator \"ribiosNetwork\"\n", file=file)
@@ -9,7 +16,7 @@ exportGML <- function(igraph, filename) {
     cat("  node\n  [\n", file=file)
     cat("    id", i-1, "\n", file=file)
     cat("    name \"", V(igraph)$name[i], "\"\n", file=file, sep="")
-    cat("    label \"", V(igraph)$label[i], "\"\n", file=file, sep="")
+    cat("    label \"", fixNodeLabel(V(igraph)$label[i]), "\"\n", file=file, sep="")
     cat("    graphics\n    [\n", file=file)
     cat("      w 45 \n", file=file, sep="")
     cat("      h 45 \n", file=file, sep="")

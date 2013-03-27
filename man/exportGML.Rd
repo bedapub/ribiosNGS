@@ -43,7 +43,7 @@ exportGML(igraph, filename)
 }
 \examples{
 g <- barabasi.game(100, directed=FALSE)
-V(g)$label <- paste("node", 1:100, sep="")
+V(g)$label <- c(paste("node", 1:99, sep=""),"--")
 V(g)$name <- 1:100
 V(g)$isInput <- rbinom(100,1, 0.5)
 E(g)$label <- "Expression"

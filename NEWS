@@ -1,0 +1,6 @@
+Version 1.0.1 (2013-04-03)
+  + Rename the package as ribiosDiwa, and update the package
+  + Add git control
+
+Version 1.0.0 (2011-07-27)
+  + Prepare the package in a Bioconductor package format

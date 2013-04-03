@@ -39,10 +39,14 @@ method=c("spearman", "pearson", "kendall"), permutation=NULL)
     \item Index: Indices of TFs
     \item RIF1: RIF1 scores
     \item RIF2: RIF2 scores
-    \item RIF1.p: empirical p value of RIF1 score by permutating samples
+    \item RIF1.pos.p: empirical p value of RIF1 score larger than the
+    statistic of permutating samples
     (\code{NA} when \code{permutation=NULL})
-    \item RIF2.p: empirical p value of RIF2 score by permutating samples
+    \item RIF1.neg.p: empirical p value of RIF1 score less than the
+    statistic of permutating samples
     (\code{NA} when \code{permutation=NULL})
+    \item RIF2.pos.p: similar to \code{RIF1.pos.p}
+    \item RIF2.neg.p: similar to \code{RIF1.neg.p}
   }
 }
 \references{

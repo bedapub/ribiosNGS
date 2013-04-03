@@ -33,8 +33,10 @@ RIFscore <- function(matrix,
   res <- data.frame(Index=reg.ind,
                     RIF1=RIF1,
                     RIF2=RIF2,
-                    RIF1.p=NA,
-                    RIF2.p=NA)
+                    RIF1.pos.p=NA,
+                    RIF1.neg.p=NA,
+                    RIF2.pos.p=NA,
+                    RIF2.neg.p=NA)
   
   ## Calculate p values by sample permutation
   if(!is.null(permutation)) {
@@ -56,8 +58,10 @@ RIFscore <- function(matrix,
       return(data.frame(RIF1=RIF1, RIF2=RIF2))
     })
     for(i in seq(along=reg.ind)) {
-      res$RIF1.p[i] <- empval(res[i, 2], sapply(bRIFs, function(x) x[i, 1]))
-      res$RIF2.p[i] <- empval(res[i, 3], sapply(bRIFs, function(x) x[i, 2]))
+      res$RIF1.pos.p[i] <- empval(res[i, 2], sapply(bRIFs, function(x) x[i, 1]))
+      res$RIF1.neg.p[i] <- 1-res$RIF1.pos.p[i]
+      res$RIF2.pos.p[i] <- empval(res[i, 3], sapply(bRIFs, function(x) x[i, 2]))
+      res$RIF2.neg.p[i] <- 1-res$RIF2.pos.p[i]
     }
   }
 

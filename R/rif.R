@@ -13,7 +13,7 @@ RIFscore <- function(matrix,
     coefs <- levels(fac)
   } else {
     haltifnot(length(coefs)==2 & is.character(coefs) & all(coefs %in% levels(fac)),
-              "'coef' must be a vector of two characters, giving levels of 'fac' to be compared.")
+              msg="'coef' must be a vector of two characters, giving levels of 'fac' to be compared.")
   }
 
   isX <- fac==coefs[1]

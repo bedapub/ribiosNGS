@@ -1,8 +1,8 @@
 Package: ribiosDiwa
 Type: Package
 Title: Differential Wiring Analysis
-Version: 1.0.1
-Date: 2013-04-03
+Version: 1.0-2
+Date: 2013-04-04
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Differential wiring analysis with microarray profiling data. 

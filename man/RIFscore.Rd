@@ -39,6 +39,8 @@ method=c("spearman", "pearson", "kendall"), permutation=NULL)
     \item Index: Indices of TFs
     \item RIF1: RIF1 scores
     \item RIF2: RIF2 scores
+    \item RIF1.rank: Rank of RIF1 scores (ascending)
+    \item RIF2.rank: Rank of RIF2 scores (ascending)
     \item RIF1.pos.p: empirical p value of RIF1 score larger than the
     statistic of permutating samples
     (\code{NA} when \code{permutation=NULL})

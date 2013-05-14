@@ -1,3 +1,7 @@
+Version 1.2-0 (2013-05-14) 
+  + Supports queries with studyidexternal, studyid, studytitle, and datasetid
+  + Due to the support of multiple identifiers, the parameter name of getUDISexpression is changed from 'studyIdExternal" to 'id'
+
 Version 1.1-1 (2013-02-28)
   + Bug fix: meta2pd (internal function) closes text connection once finishing the use.
 

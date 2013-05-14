@@ -8,10 +8,14 @@
   and returns an annotated \code{ExpressionSet} object.
 }
 \usage{
-getUDISexpression(studyIdExt = "GSE20986")
+getUDISexpression(id = "GSE20986",idType=c("studyIdExternal",
+"studyId", "studyTitle", "datasetId"))
 }
 \arguments{
-  \item{studyIdExt}{Character string, study identifier}
+  \item{id}{Character string, study identifier}
+  \item{idType}{Character string, type of the identifier. By default the
+  ID is treated as study ID external (\sQuote{studyIdExternal}); alternatives include SSIS internal
+  study ID (\sQuote{studyId}), SSID study title (\sQuote{studyTitle}),  and dataset id \sQuote{datasetId}}
 }
 \details{
   The function first tries to get signals of the specified study. If it
@@ -40,6 +44,12 @@ getUDISexpression(studyIdExt = "GSE20986")
 \examples{
 ## here we might want to have a smaller dataset for demo
 \dontrun{
-myEset <- getUDISexpression(studyIdExt="GSE20986")
+myEset1_1 <- getUDISexpression(id="GSE20986")
+myEset1_2 <- getUDISexpression(id="GSE20986", idType="studyIdExternal")
+
+myEset2_1 <- getUDISexpression(id=1211, idType="datasetId")
+myEset2_2 <- getUDISexpression(id=3084, idType="studyId")
+myEset2_3 <- getUDISexpression(id="UUO_Mouse_Chugai", idtype="studyTitle")
+myEset2_4 <- getUDISexpression(id="UUO_Mouse_Chugai", idtype="studyIdExternal")
 }
 }

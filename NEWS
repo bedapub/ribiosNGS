@@ -1,3 +1,6 @@
+2013-05-15: v1.1-3
+  + Add new paramter 'default' to argGet and argGetPos to make the function safer in case the parameter is not specificied
+
 2013-01-28: v1.1-2
   + argParse: now optargs and reqargs can be set to NULL without causing the R session to crash
   + The log.h module of bios has been replaced by the local mimics, in order not to crash the R session in case problems. Note that however arg_init() and arg_try() still must be called before argGet() and argPresent(). Otherwise the program will end reporting the segfault "memory not mapped".

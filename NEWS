@@ -1,3 +1,6 @@
+Version 1.0-27 (2013-05-15)
+  + Move scriptInit from ribiosArg to ribiosUtils
+
 Version 1.0-26 (2013-02-19)
   + A substantial update of helping pages. Now almost every function exported by the ribiosUtils package has manuals and examples.
   + Add longdf2matrix to convert long-format data frame into matrix.

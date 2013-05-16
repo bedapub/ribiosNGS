@@ -1,5 +1,3 @@
-
-
 sortByDimnames <- function(x,row.decreasing=FALSE, col.decreasing=FALSE) {
   x <- x[order(rownames(x), decreasing=row.decreasing),]
   x <- x[, order(colnames(x), decreasing=col.decreasing)]
@@ -93,3 +91,8 @@ dfFactor <- function(df, sample.group) {
   if(!is.factor(fac)) fac <- factor(fac)
   return(fac)
 }
+
+## variable columns
+isVarCol <- function(df) return(apply(df, 2L, ulen) > 1)
+isInvarCol <- function(df) !isVarCol(df)
+removeInvarCol <- function(df) df[,isVarCol(df), drop=FALSE]

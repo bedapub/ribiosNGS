@@ -1,3 +1,6 @@
+Version 1.0-26 (2013-05-31)
+  + read_gct_matrix prints detailed error messages if the number of columns does not match in the 2nd and the 3rd line.
+
 Version 1.0-25 (2013-02-28) 
   + Add function read_pheno to import pheno data information
 

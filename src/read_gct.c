@@ -19,7 +19,7 @@ SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
   char *gctsource;
   SEXP rownames, colnames, desc, dimnames;
   SEXP ans,res;
-  
+  Stringa err=stringCreate(100);
   int keep = asLogical(keepdesc);
   if(keep == NA_LOGICAL) error("'keep.desc' must be TRUE or FALSE");
   
@@ -45,7 +45,6 @@ SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
     if(ind == 0) { // dim line
       if(arrayMax(it)<2) {
 	error("The second line of GCT does not have two elements separated by tab");
-	return R_NilValue;
       }
       nrow = atoi(textItem(it, 0));
       ncol = atoi(textItem(it, 1));
@@ -59,7 +58,11 @@ SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
     } else if (ind == 1) { // sample line
 
       if(arrayMax(it) != ncol + 2) {
-	error("Sample number differs from the 2nd and 3rd line");
+	stringPrintf(err,
+		     "Sample number differs from the specification in the 2nd line (%d), and sample names in the 3rd line (%d)",
+		     arrayMax(it)-2, ncol);
+	error(string(err));
+	stringDestroy(err);
       }
       for(i=0; i<arrayMax(it)-2;i++)
 	SET_STRING_ELT(colnames, i, 
@@ -82,7 +85,6 @@ SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
 
   // double check dimension
   if(nrow != ind - 2) {
-    Stringa err = stringCreate(100);
     stringPrintf(err,
 		 "GCT format error: feature number differs from the record in the 2nd line (%d) and rest of the file (%d). Check file consistency.",
 		 nrow, ind-2);
@@ -98,6 +100,7 @@ SEXP read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
   if(keep)
     setAttrib(ans, install("desc"), desc);
   
+  stringDestroy(err);
   ls_destroy(ls);
   free(gctsource); 
   if(keep) {

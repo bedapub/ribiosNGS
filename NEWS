@@ -1,3 +1,6 @@
+Version 1.0-11 (2013-06-05)
+  + Add TextMining_I2E and manual as supported databases
+
 Version 1.0-10 (2013-03-27)
   + Add aux function fixNodeLabel to fix dash-only gene labels, which cause cytoscape error.
 

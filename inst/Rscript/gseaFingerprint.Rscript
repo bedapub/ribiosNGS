@@ -6,6 +6,7 @@ suppressMessages(library(ribiosArg))
 infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
 stat <- getArg("stat", onlyArg=NULL, missingArg=NULL)
 outfile <- getArg("outfile", onlyArg=NULL, missingArg="")
+sortBy <- getArg("sortBy", onlyArg="name", missingArg="name")
 getHelp <- existArg("h") | existArg("help")
 
 ## BEGIN DEBUG
@@ -25,10 +26,14 @@ validStat <- !is.null(stat) && stat %in% c("es", "nes", "q")
 if(is.null(infile) || is.null(stat) || is.null(outfile) || getHelp) {
   qqmsg(paste("Usage:",
               scriptName(),
-              " -infile FILE -stat es/nes/q [-outfile FILE]\n\n",
-              "-infile FILE\tText file, one GSEA result directory each line\n",
-              "-stat es/nes/q\tOne of three statistics: Enrichment Score (es), Normalized Enrichment Score (nes), Q-value (q)\n",
-              "-outfile FILE\tOutput file for fingerprint matrix. Using stdout if not provided\n",
+              " -infile FILE -stat es/nes/q [-outfile FILE] [-sortBy maxAbsStat|meanStat]\n\n",
+              "-infile: Text file, one GSEA result directory each line\n",
+              "-stat es/nes/q: One of three statistics: \n",
+              "  Enrichment Score (es), Normalized Enrichment Score (nes), Q-value (q)\n",
+              "-outfile: Output file for fingerprint matrix.\n",
+              "  Using stdout when missing\n",
+              "-sortBy: sort the table by the maximum of statistics in absolute values ('maxAbsStat'), or the mean value of raw values('meanStat').\n",
+              "  No sorting is done when missing: gene sets are ordered alphabetically\n",
               sep=""),
         status=1L)
 
@@ -56,6 +61,16 @@ if(any(!gdirs.exist)) {
 }
 
 mat <- gseaFingerprintMatrix(gdirs, value=stat)
+if(identical(tolower(sortBy), "maxabsstat")) {
+  matOrd <- order(apply(mat, 1L, function(x) max(x, na.rm=TRUE)), decreasing=TRUE)
+} else if (identical(tolower(sortBy), "meanstat")) {
+  matOrd <- order(apply(mat, 1L, function(x) mean(abs(x), na.rm=TRUE)), decreasing=TRUE)
+} else {
+  warning("Unrecognized -sortBy option: no sorting is performed\n")
+  matOrd <- 1:nrow(mat)
+}
+  mat <- mat[matOrd,,drop=FALSE]
+
 write.table(mat, file=outfile, quote=FALSE, dec=".",
             sep="\t", row.names=TRUE, col.names=NA)
 

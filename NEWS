@@ -1,3 +1,6 @@
+Version 1.0-29 (2013-06-27)
+  + summarizeRows and summarizeColumns keep column/row names of the input matrix
+
 Version 1.0-28 (2013-05-16)
   + Add removeInvarCol to remove invariable columns from a data frame or matrix
 

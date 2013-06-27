@@ -14,6 +14,7 @@ summarizeRows <- function(matrix,
   mat.fun <- t(sapply(ind.by.fac,
                       function(x) apply2(matrix[x,,drop=FALSE],
                                          fun=fun)))
+  colnames(mat.fun) <- colnames(matrix)
   return(mat.fun)
 }
 
@@ -34,6 +35,7 @@ summarizeColumns <- function(matrix,
   mat.fun <- sapply(ind.by.fac,
                     function(x) apply1(matrix[,x,drop=FALSE],
                                        fun=fun))
+  rownames(mat.fun) <- rownames(matrix)
   return(mat.fun)
 }
 

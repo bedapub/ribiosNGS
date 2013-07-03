@@ -32,7 +32,8 @@ getUDISexpression(id = "GSE20986",idType=c("studyIdExternal",
   An \code{ExpressionSet} object when the query succeeded, otherwise \code{NULL}.
 }
 \references{
-  \url{http://udis.roche.com/apps/expression/api_help2.html}
+  See
+  \url{http://bioinfo.bas.roche.com:8080/apps/ribios/ribiosUDIS-demo/ribiosUDIS-demo.html} for a demo.
 }
 \author{
   Jitao David Zhang

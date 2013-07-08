@@ -1,3 +1,7 @@
+Version 3.1-0 (2013-07-08)
+  + annotateHumanOrthologs: if multiple human orthologs were found and when multiple orthologues are not required, the one with the smallest GeneID (as integer) will be reported as the orthologue.
+  + Remove illuminaSnp function: the table has been deleted in the database.
+
 Version 3.0-6 (2013-01-22)
   + annotateHumanOrthologs: the output data.frame puts shorter GeneSymbols in front of longer ones in case one ID is mapped to several items; useful for reducing mismatch rates in annotating orthologues.
 

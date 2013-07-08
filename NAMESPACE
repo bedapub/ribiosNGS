@@ -34,8 +34,7 @@ export(mappedProbesets)
 
 export(chrLen)
 
-export(hapmapSnp,
-       illuminaSnp)
+export(hapmapSnp)
 
 export(annotateHumanOrthologs,
        humanOrthologs,

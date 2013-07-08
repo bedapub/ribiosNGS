@@ -1,6 +1,5 @@
 \name{hapmapSnp}
 \alias{hapmapSnp}
-\alias{illuminaSnp}
 \title{
   Get HAPMAP SNP annotation and chromosomal location
 }
@@ -11,7 +10,6 @@
 }
 \usage{
 hapmapSnp(ids, genes = FALSE, flanking = FALSE)
-illuminaSnp(ids, genes = FALSE)
 }
 \arguments{
   \item{ids}{A character vector, containing SNP identifiers}
@@ -29,10 +27,6 @@ illuminaSnp(ids, genes = FALSE)
   the same row number as the length of the input vector, since it is
   quite common that a SNP is annotated with two nearest genes (up- and
   down-stream). User may want to check their results for these cases manually.
-
-  The \code{illuminaSnp} function probably reads the SNP table prodived by the Illumina company
-  (this assition shall be checked for truth). It should be used
-  cautiously since we are not quite sure about the data annotation procedure.
 }
 \value{
   A \code{data.frame} object containing at least following columns:
@@ -70,8 +64,6 @@ hapmapSnp(snpIds, flanking=TRUE, genes=TRUE)
 hapmapSnp(snpIds, flanking=TRUE, genes=FALSE)
 hapmapSnp(snpIds, flanking=FALSE, genes=TRUE)
 
-illuminaSnp(snpIds)
-illuminaSnp(snpIds, genes=TRUE)
 options(error=NULL)
 }
 

@@ -25,10 +25,12 @@ annotateHumanOrthologs <- function(geneids, multiOrth=FALSE) {
                        "a.RO_GENE_ID2",
                        geneids, "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
   colnames(ort) <- c("OrigGeneID", "OrigTaxID", "TaxID", "GeneID", "GeneSymbol")
-  ort <- sortByCol(ort, "GeneSymbol", decreasing=FALSE) ## genesymbols with fewer characters come first
+  hGeneIDs <- as.integer(ort$GeneID)
+  ort <- ort[order(hGeneIDs, decreasing=FALSE),] ## Smaller GeneIDs come first
   res <- matchColumn(geneids, ort, "OrigGeneID", multi=multiOrth)
   return(res)
 }
+
 annotateHumanOrthologsNoOrigTax <- function(...) {
   res <- annotateHumanOrthologs(...)
   return(res[,-2L])

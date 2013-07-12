@@ -24,3 +24,5 @@ system.time(myEset2_4 <- getUDISexpression(id="UUO_Mouse_Chugai", idType="studyI
 myIden(myEset2_1, myEset2_2)
 myIden(myEset2_1, myEset2_3)
 myIden(myEset2_1, myEset2_4)
+
+myEset3_1 <- getUDISexpression(id=3220, idtype="studyid",probeproptype="HUMANEG_ID", probeprop=7350)

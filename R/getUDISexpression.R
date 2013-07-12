@@ -3,13 +3,21 @@ UDIS_QUERY_CGI <- "http://udis.roche.com:8080/query/api"
 
 buildUDISexpURL <- function(id,
                             idtype,
-                            querytype=c("expr", "meta", "probe")) {
+                            querytype=c("expr", "meta", "probe"),...) {
+  params <- list(...)
+  if(length(params)>0) {
+    addparams <- paste("&",
+                       paste(names(params), sapply(params, "[[", 1L),
+                       sep="=", collapse="&"),sep="")
+  } else {
+    addparams <- ""
+  }
   querytype <- match.arg(querytype)
   paste(UDIS_QUERY_CGI,
         "?entitytype=analysisgroup",
         "&querytype=",querytype,
         "&", idtype, "=", id,
-        "&format=matrix",sep="")
+        "&format=matrix",addparams, sep="")
 }
 
 
@@ -29,15 +37,15 @@ meta2pd <- function(str) {
 ## As of Feb 2013, NCS_tissue_rat does not work. Use GSE20986 as example
 ## TODO (David): Add verbose mode
 ## TODO (David): Design another function to more complicated queries
-getUDISexpression <- function(id="GSE20986",idType=c("studyIdExternal", "studyId", "studyTitle", "datasetId")) {
+getUDISexpression <- function(id="GSE20986",idType=c("studyIdExternal", "studyId", "studyTitle", "datasetId"), ...) {
   idType <- match.arg(idType)
   idtype <- tolower(idType)
-  turl <- buildUDISexpURL(id=id, idtype=idtype)
+  turl <- buildUDISexpURL(id=id, idtype=idtype, ...)
   str <- queryUrl(turl)
   if(grepl("^#1.2", str)) { ## valid GCT file
     mat <- read_gctstr_matrix(str, keep.desc=TRUE)
     purl <- buildUDISexpURL(id=id, idtype=idtype, querytype="meta")
-    furl <- buildUDISexpURL(id=id, idtype=idtype, querytype="probe")
+    furl <- buildUDISexpURL(id=id, idtype=idtype, querytype="probe", ...)
     metastr <- queryUrl(purl)
     featstr <- queryUrl(furl)
     pd <- meta2pd(metastr)

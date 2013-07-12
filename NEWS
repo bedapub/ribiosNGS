@@ -1,3 +1,6 @@
+Version 1.2-2 (2013-07-12)
+  + buildUDISexpURL and getUDISexpression supports dots (...) to add any parameter-value pairs to the API query
+  
 Version 1.2-1 (2013-07-03)
   + getUDISexpression documentation: a link to the demo is added to the reference
 

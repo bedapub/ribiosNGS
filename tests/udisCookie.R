@@ -25,4 +25,4 @@ myIden(myEset2_1, myEset2_2)
 myIden(myEset2_1, myEset2_3)
 myIden(myEset2_1, myEset2_4)
 
-myEset3_1 <- getUDISexpression(id=3220, idType="studyid",probeproptype="HUMANEG_ID", probeprop=7350)
+myEset3_1 <- getUDISexpression(id=3220, idType="studyId",probeproptype="HUMANEG_ID", probeprop=7350)

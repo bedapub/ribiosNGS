@@ -1,3 +1,7 @@
+Version 1.2-3 (2013-07-15)
+  + buildUDISexpURL accepts one parameter (addparams), and getUDISexpression passes addparams (produced from dots) to expr, meta, and feat queries.
+  + NOTE: It is not yet clear whether extra parameters for a certain type of query (e.g. property for expr) is safely ignored. It remains to be tested.
+
 Version 1.2-2 (2013-07-12)
   + buildUDISexpURL and getUDISexpression supports dots (...) to add any parameter-value pairs to the API query
   

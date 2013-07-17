@@ -4,7 +4,7 @@ openFileDevice <- function(filename, width=7, height=7) {
   if(identical(filetype,"pdf")) {
     pdf(filename, width=width, height=height)
   } else if (identical(filetype, "png")) {
-    png(filename, width=width, height=height, units="in", res=RES_INCH)
+    png(filename, width=width, height=height, units="in", type="cairo", res=RES_INCH)
   } else if(identical(filetype,"tiff") || identical(filetype, "tif")) {
     tiff(filename, width=width, height=height, units="in", res=RES_INCH)
   } else if(identical(filetype, "bmp")) {

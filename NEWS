@@ -1,3 +1,6 @@
+Version 1.0-31 (2013-07-19)
+  + qqmsg only quits R when the session is not interactive.
+
 Version 1.0-30 (2013-07-17)
   + openFileDevice use cairo as the PNG engine, since X11 engine does not seem to work in a non-interactive session
 

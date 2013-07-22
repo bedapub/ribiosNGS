@@ -8,7 +8,7 @@
 #define rstr2c(x) strdup(CHAR(STRING_ELT((x),0)))
 #define rstrVec2c(x,i) strdup(CHAR(STRING_ELT((x),(i))))
 #define checkInit()   if(!arg_isInit()) { \
-    REprintf("arg_init()/arg_try() has not been called\n"); \
+    REprintf("Error: arg_init()/arg_try() has not been called\n"); \
     return(R_NilValue); \
   }
 
@@ -54,7 +54,8 @@ SEXP rarg_getPos(SEXP arg, SEXP pos) {
 }
 
 SEXP rarg_present(SEXP arg) {
-  checkInit();
+  if(!arg_isInit())
+    return(FALSE);
   int pre=arg_present(rstr2c(arg));
   return(ScalarLogical(pre));
 }

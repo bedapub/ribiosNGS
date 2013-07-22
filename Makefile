@@ -15,9 +15,11 @@
 ifneq ($(BICOSN), bas)
 	R:= /SOFT/bi/apps/R/devel/trunk/bin/R
 	CHECKADD:= ${CHECKADD} --no-manual ## for envcheck
+	CGI_DIR := /SOFT/bi/httpd_8080/bicgidev
 else
 	R:= R
 	CHECKADD:= ${CHECKADD} --no-latex
+	CGI_DIR := /SOFT/bi/httpd_8080/bicgi
 endif 
 
 PKG          := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
@@ -26,6 +28,7 @@ PKG_VERSION  := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2
 
 PKG_ROOT_DIR := $(shell pwd)
 PKG_SRC_DIR := $(PKG_ROOT_DIR)/src
+
 
 install: 
 	@echo '====== Installing Package ======'
@@ -56,3 +59,7 @@ clean:
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@(find . -type f -name ".Rhistory" -exec rm '{}' \;)
 	@echo ' '
+
+cgi:
+	@echo '====== Install CGI ======'
+	cp-p inst/Rscript/Rcgi.R $(CGI_DIR)

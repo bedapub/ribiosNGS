@@ -19,7 +19,8 @@ for(i in seq(along=pars))
 cat("</ol><div>")
 
 ## parse CGI parameter and make plot
-title <- ifelse(is.na(pars["main"]), NULL, pars["main"])
+title=NULL
+if("main" %in% names(pars)) title <- pars["main"]
 
 png("/DATA/bi/httpd_8080/htdoc/sawitmp/test3.png", type="cairo")
 curve(log10, main=title)

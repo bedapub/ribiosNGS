@@ -21,6 +21,10 @@ brewer.pal.factorLevels(factor, name = "Greys")
   by the input factor as well. \code{brewer.pal.factorLevels} returns a
   color vector of the length of the factor level, and the colors are
   named by the levels. See examples below.
+
+  From version 1.1-16, the color palette is automatically
+  reduced/expanded when the levels of input factors underlies or exceeds
+  the minimum and maximum colors. See example below.
 }
 \value{
   Named HTML RGB colors.
@@ -32,5 +36,11 @@ brewer.pal.factorLevels(factor, name = "Greys")
 myFac <- factor(c("HSV", "BVB", "FCB", "HSV", "BVB", "HSV"))
 brewer.pal.factor(myFac, name="Set1")
 brewer.pal.factorLevels(myFac, name="Set1")
+
+myLongFac <- factor(paste("Sample", 1:20))
+brewer.pal.factor(myLongFac, name="Set1")
+
+myShortFac <- factor(paste("Sample", 1:2))
+brewer.pal.factor(myShortFac, name="Set1")
 }
 

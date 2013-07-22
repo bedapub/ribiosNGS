@@ -41,16 +41,21 @@ colorpanel <- function (n, low, mid, high) {
 brewer.pal.factorLevels <- function(factor, name="Greys") {
   if(!require(RColorBrewer)) return(NULL)
   nlevel <- nlevels(factor)
-  cols <- brewer.pal(nlevel, name)
+  ncol <- bound(nlevel, 3L, brewer.pal.info[name, "maxcolors"])
+  cols <- brewer.pal(ncol, name)
+  if(nlevel<3) {
+    cols <- cols[1:nlevel]
+  } else if (nlevel>ncol) {
+    cols <- colorRampPalette(cols)(nlevel)
+  }
   names(cols) <- levels(factor)
   return(cols)
 }
 
 brewer.pal.factor <- function(factor, name="Greys") {
-  if(!require(RColorBrewer)) return(NULL)
   colbase <- brewer.pal.factorLevels(factor=factor, name=name)
-  cols <- colbase[factor]
-  return(cols)
+  if(is.null(colbase)) return(NULL)
+  return(colbase[factor])
 }
 
 ## colors

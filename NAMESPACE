@@ -1,0 +1,7 @@
+export(cgiInit, cgiHeader, cgiParams)
+
+export(cgiGet2Post, cgiGet2PostReset)
+
+
+## .registration=TRUE is only valid when the routines have been registered
+useDynLib(ribiosCGI)

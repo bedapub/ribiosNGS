@@ -24,12 +24,14 @@ if("main" %in% names(pars)) title <- pars["main"]
 lty <- 1
 if("lty" %in% names(pars)) lty <- as.integer(pars["lty"])
 
-tmp <- tempfile(pattern="file", tmpdir="/DATA/bi/httpd_8080/htdoc/sawitmp/",
-                fileext=".png")
-tmpurl <- paste("http://bioinfo.bas.roche.com:8080/sawitmp/",
-                basename(tmp), sep="")
+tmp <- tmpWebFile(pattern="file", fileext=".png")
+tmpurl <- tmpWebURL(tmp)
+
 png(tmp, type="cairo")
 curve(log10, main=title, lty=lty)
 invisible(dev.off())
 cat("<div><img src='", tmpurl, "'/></div>", sep="")
+cat("<div class=\"system\" style=\"visibility:none;\">")
 invisible(system("echo \"rm -f /DATA/bi/httpd_8080/htdoc/sawitmp/test3.png\" | at now + 5 minutes ", intern=TRUE))
+cat("</div>")
+cat("Value of cgiIsCGI():", cgiIsCGI())

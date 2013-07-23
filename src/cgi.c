@@ -5,6 +5,10 @@
 #include "ribios_cgi.h"
 #include "cgi.h"
 
+SEXP r_cgiIsCGI() {
+  return ScalarLogical(cgiIsCGI());
+}
+
 SEXP r_cgiInit() {
   cgiInit();
   return R_NilValue;

@@ -5,6 +5,7 @@
 #define cStrItem(x, i) hlr_strdup((char *)(STRING_ELT((x),(i))))
 #define setNames(x, names) setAttrib((x), R_NamesSymbol, (names))
 
+extern SEXP r_cgiIsCGI();
 extern SEXP r_cgiInit();
 extern SEXP r_cgiGet2Post();
 extern SEXP r_cgiGet2PostReset();

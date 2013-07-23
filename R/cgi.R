@@ -1,3 +1,7 @@
+cgiIsCGI <- function() {
+  .Call("r_cgiIsCGI")
+}
+
 cgiInit <- function() {
   invisible(.Call("r_cgiInit"))
 }

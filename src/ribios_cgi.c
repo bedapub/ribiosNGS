@@ -3,6 +3,7 @@
 #include "cgi.h"
 
 static const R_CallMethodDef callMethods[] = {
+  CALLMETHOD_DEF(r_cgiIsCGI, 0),
   CALLMETHOD_DEF(r_cgiInit, 0),
   CALLMETHOD_DEF(r_cgiGet2Post, 0),
   CALLMETHOD_DEF(r_cgiGet2PostReset, 0),

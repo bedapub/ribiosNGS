@@ -16,7 +16,7 @@ pars <- cgiParams()
 cat("<div>Input parameters:<ol>")
 for(i in seq(along=pars))
   cat("<li>", names(pars)[i], "=", pars[i], "</li>")
-cat("</ol><div>")
+cat("</ol></div>")
 
 ## parse CGI parameter and make plot
 title="Try appending '?main=A plot' to the URL"
@@ -24,8 +24,12 @@ if("main" %in% names(pars)) title <- pars["main"]
 lty <- 1
 if("lty" %in% names(pars)) lty <- as.integer(pars["lty"])
 
-png("/DATA/bi/httpd_8080/htdoc/sawitmp/test3.png", type="cairo")
+tmp <- tempfile(pattern="file", tmpdir="/DATA/bi/httpd_8080/htdoc/sawitmp/",
+                fileext=".png")
+tmpurl <- paste("http://bioinfo.bas.roche.com:8080/sawitmp/",
+                basename(tmp), sep="")
+png(tmp, type="cairo")
 curve(log10, main=title, lty=lty)
 invisible(dev.off())
-cat("<div><img src='http://bioinfo.bas.roche.com:8080/sawitmp/test3.png'/></div>")
+cat("<div><img src='", tmpurl, "'/></div>", sep="")
 invisible(system("echo \"rm -f /DATA/bi/httpd_8080/htdoc/sawitmp/test3.png\" | at now + 5 minutes ", intern=TRUE))

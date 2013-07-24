@@ -1,24 +1,32 @@
 \name{openFileDevice}
 \alias{openFileDevice}
+\alias{closeFileDevice}
 \title{
   Open a device as a file preparing for plotting in the file
 }
 \description{
-  The function opens a device of the type specified by the file
+  The function \code{openFileDevice} opens a device of the type specified by the file
   extension name. It such prepares the file for visualizing data. User
-  must call \code{dev.off} once the writing (plotting) to the device is finished.
+  must call \code{dev.off} once the writing (plotting) to the device is
+  finished.
+
+  \code{closeFileDevice} quietly closes the current device: it does not
+  print the information of the next device.
 }
 \usage{
-openFileDevice(filename, width = 7, height = 7)
+openFileDevice(filename, width = 7, height = 7, dpi=300L)
+closeFileDevice()
 }
 \arguments{
   \item{filename}{Character, file name to be written to. The type of
     file is determined by the extension. See details below.}
   \item{width}{Number, figure width of the file in \emph{inch}.}
   \item{height}{Number, figure height of the file in \emph{inch}.}
+  \item{dpi}{Number, resolution as \dQuote{dots per inch}. For
+    publication 300dpi is usually enough.}
 }
 \details{
-  This function calls \code{extname} to determine the file type to be
+  The function \code{openFileDevice} calls \code{extname} to determine the file type to be
   drawn in. Currently supported types include \code{PDF}, \code{tiff}
   (\code{tif}), \code{bmp}, \code{jpeg} (\code{jpeg}). When the file
   type is not recognized, the \code{PDF} format is used as a fallback.
@@ -36,7 +44,7 @@ openFileDevice(filename, width = 7, height = 7)
   post-precessing of figures.
 }
 \value{
-  This function is used for its side effect.
+  Both functions are used for its side effect.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>
@@ -56,12 +64,12 @@ if(interactive()) {
   tempfile1 <- paste(tempfile(), ".pdf", sep="")
   openFileDevice(tempfile1)
   plot(rnorm(100), rnorm(100))
-  dev.off()
+  closeFileDevice()
 
   tempfile2 <- paste(tempfile(), ".png", sep="")
   openFileDevice(tempfile2, width=5, height=5)
   plot(rnorm(100), rnorm(100))
-  dev.off()
+  closeFileDevice()
 }
 }
 

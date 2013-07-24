@@ -13,5 +13,7 @@ extern SEXP r_cgiGet2PostReset();
 extern SEXP r_cgiHeader(SEXP);
 extern SEXP r_cgiParameters();
 extern SEXP r_cgiParam(SEXP, SEXP, SEXP);
+extern SEXP r_cgiEncodeWord(SEXP);
+extern SEXP r_cgiDecodeWord(SEXP);
 
 #endif

@@ -18,11 +18,7 @@ SEXP r_cgiInit() {
 SEXP r_cgiGet2Post() {
   char *res=cgiGet2Post();
   if(res) {
-    SEXP rres;
-    PROTECT(rres=allocVector(STRSXP, 1));
-    SET_STRING_ELT(rres, 0, mkChar(res));
-    UNPROTECT(1);
-    return(rres);
+    return mkString(res);
   }
   return R_NilValue;
 }
@@ -100,11 +96,27 @@ SEXP r_cgiParam(SEXP r_param, SEXP ignore_case, SEXP r_default) {
   stringDestroy(value);
 
   if(str) {
-    PROTECT(res=allocVector(STRSXP, 1));
-    SET_STRING_ELT(res, 0, mkChar(str));
-    UNPROTECT(1);
-    return res;
+    return mkString(str);
   } else {
     return r_default;
   }
+}
+
+SEXP r_cgiEncodeWord(SEXP word) {
+  static Stringa value;
+  stringCreateOnce(value, 16);
+  static char *s;
+  
+  s=cStr(word);
+  cgiEncodeWord(s, value);
+  return mkString(string(value));
+}
+
+SEXP r_cgiDecodeWord(SEXP word) {
+  static Stringa value;
+  stringCreateOnce(value, 16);
+  
+  stringCpy(value, cStr(word));
+  cgiDecodeWord(value);
+  return mkString(string(value));
 }

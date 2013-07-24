@@ -5,7 +5,7 @@ export(cgiIsCGI, cgiInit, cgiHeader,
 export(cgiGet2Post, cgiGet2PostReset)
 
 export(cgiNumParam, cgiCateParam,
-       cgiEnumParam, cgiColParam, cgiLogiParam,
+       cgiEnumParam, cgiStrParam, cgiLogiParam,
        cgiFuncParam, cgiPairParam)
 
 export(RIBIOS_CGI_TMP_DIR, RIBIOS_CGI_TMP_URL)

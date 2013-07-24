@@ -70,16 +70,13 @@ cgiCateParam <- function(name, ignore.case=FALSE,
 }
 cgiEnumParam <- cgiCateParam
 
-## cgiColParam: parse color-name CGI parameters
-cgiColParam <- function(name, ignore.case=FALSE, default=1L) {
+## cgiStrParam: parse string CGI parameters
+cgiStrParam <- function(name, ignore.case=FALSE, default=NULL) {
   x <- cgiParam(name, ignore.case=ignore.case, default=NULL)
   if(is.null(x)) return(default)
   x <- gsub("\"", "", x)
-  x <- strsplit(x, ",| ")[[1]]
-  x <- x[x!=""]
+  x <- strsplit(x, " ")[[1]]
   if(length(x)==0) return(default)
-  if(all(grepl("^[0-9]*$", x)))
-    return(as.integer(x))
   return(x)
 }
 

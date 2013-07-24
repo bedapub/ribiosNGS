@@ -11,7 +11,7 @@ rmat <- function(..., days=NULL, hours=NULL, minutes=NULL, dry=TRUE) {
   if(!is.null(minutes) && !is.na(nmin <- as.numeric(minutes)))
     count=count + nmin
   files <- paste(as.character(unlist(list(...))), collapse=" ")
-  comm <- sprintf("echo rm -rf %s | at now + %.0f minutes",
+  comm <- sprintf("echo rm -f %s | at now + %.0f minutes",
                   files, count)
   if(dry) {
     return(comm)

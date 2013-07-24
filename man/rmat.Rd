@@ -1,15 +1,15 @@
 \name{rmat}
 \alias{rmat}
-\title{Remove directories and files at a specified time interval from now}
+\title{Remove temporary files at a specified time interval from now}
 \description{
-  Send a \code{at} job to remove  (probably temporary) directory files at a
-  specified time interval from now
+  Send a \code{at} job to remove (probably temporary) files in the
+  future with a specified time interval from now
 }
 \usage{
 rmat(..., days = NULL, hours = NULL, minutes = NULL, dry = TRUE)
 }
 \arguments{
-  \item{\dots}{Files and/or directories to be removed}
+  \item{\dots}{Files to be removed}
   \item{days}{Numeric, interval in days}
   \item{hours}{Numeric, interval in hours}
   \item{minutes}{Numeric, interval in minutes}
@@ -17,8 +17,7 @@ rmat(..., days = NULL, hours = NULL, minutes = NULL, dry = TRUE)
     returned and files are not really removed.}
 }
 \details{
-  The command will delete files and directories recursively, and there
-  is usually no way to get deleted files back. \emph{So make sure you know
+  The command will delete files, and there is usually no way to get deleted files back. \emph{So make sure you know
   what you are doing!}
 
   Days, hours, and minutes can be given in a mixed way: they will be

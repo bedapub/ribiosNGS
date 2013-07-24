@@ -1,6 +1,11 @@
 export(cgiIsCGI, cgiInit, cgiHeader, cgiParams, cgiParam)
 
+
 export(cgiGet2Post, cgiGet2PostReset)
+
+export(cgiNumParam, cgiCateParam,
+       cgiEnumParam, cgiColParam, cgiLogiParam,
+       cgiFuncParam)
 
 export(RIBIOS_CGI_TMP_DIR, RIBIOS_CGI_TMP_URL)
 

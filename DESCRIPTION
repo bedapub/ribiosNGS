@@ -6,5 +6,6 @@ Date: 2013-07-24
 Author: Jitao David Zhang
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: ribiosCGI package implements interface to the CGI module in the BIOS library, which allows R running as CGI backend.
+Depends: ribiosUtils (>= 1.0-20)
 License: LGPL-3
 LazyLoad: yes

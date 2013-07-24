@@ -13,10 +13,16 @@ cat("<h1>Hello world!</h1>The webpage is rendered by R and ribiosCGI at",
 
 ## show CGI parameters
 pars <- cgiParams()
-cat("<div>Input parameters:<ol>")
+cat("<div>All input parameters:<ol>")
 for(i in seq(along=pars))
   cat("<li>", names(pars)[i], "=", pars[i], "</li>")
 cat("</ol></div>")
+
+cat("<div>Query specific parameters:<ol>")
+cat("<li> main=", cgiParam("main", ignore.case=FALSE, default="not specified"), "</li>");
+cat("<li> xLaB=", cgiParam("xlab", ignore.case=TRUE, default=NULL), "</li>");
+cat("<li> yLaB=", cgiParam("ylab", ignore.case=TRUE, default=NULL), "</li>");
+cat("</ol>")
 
 ## parse CGI parameter and make plot
 title="Try appending '?main=A plot' to the URL"

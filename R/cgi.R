@@ -22,3 +22,7 @@ cgiHeader <- function(header) {
 cgiParams <- function() {
   return(.Call("r_cgiParameters"))
 }
+
+cgiParam <- function(name, ignore.case=FALSE, default=NULL) {
+  return(.Call("r_cgiParam", as.character(name), as.logical(ignore.case), default))
+}

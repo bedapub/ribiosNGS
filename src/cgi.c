@@ -1,3 +1,4 @@
+#include "format.h"
 #include "log.h"
 #include "http.h"
 #include "html.h"
@@ -65,4 +66,45 @@ SEXP r_cgiParameters() {
   textDestroy(values);
   UNPROTECT(2);
   return(r_values);
+}
+
+int myStrEqual(char* a, char* b) {
+  return strEqual(a, b);
+}
+int myStrCaseEqual(char* a, char* b) {
+  return strCaseEqual(a, b);
+}
+
+SEXP r_cgiParam(SEXP r_param, SEXP ignore_case, SEXP r_default) {
+  if(r_param == R_NilValue) return(R_NilValue);
+
+  int i=1;
+  Stringa item=stringCreate(16);
+  Stringa value=stringCreate(16);
+
+  char *param=cStr(r_param);
+  char *str=NULL;
+
+  SEXP res;
+  int (*fPtr)(char*, char*);
+  fPtr=cBool(ignore_case) ? &myStrCaseEqual : &myStrEqual;
+
+  while(cgiGetNextPair(&i, item, value)) {
+      if((*fPtr)(string(item), param)) {
+	str=hlr_strdup(string(value));
+	break;
+      }
+  }
+  
+  stringDestroy(item);
+  stringDestroy(value);
+
+  if(str) {
+    PROTECT(res=allocVector(STRSXP, 1));
+    SET_STRING_ELT(res, 0, mkChar(str));
+    UNPROTECT(1);
+    return res;
+  } else {
+    return r_default;
+  }
 }

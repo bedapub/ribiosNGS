@@ -1,4 +1,4 @@
-export(cgiIsCGI, cgiInit, cgiHeader, cgiParams)
+export(cgiIsCGI, cgiInit, cgiHeader, cgiParams, cgiParam)
 
 export(cgiGet2Post, cgiGet2PostReset)
 

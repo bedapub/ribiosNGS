@@ -2,7 +2,7 @@
 \alias{cgiParams}
 \title{Get key-value parameter pairs from CGI}
 \description{
-  The function get key-value parameter pairs from CGI.
+  The function get key-value pairs of CGI parameters as a named character vector.
 }
 \usage{
 cgiParams()
@@ -18,10 +18,15 @@ cgiParams()
   Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \seealso{
-  \code{\link{cgiInit}}, \code{\link{cgiHeader}}
+  For preceeding operations, see \code{\link{cgiInit}},
+  \code{\link{cgiGet2Post}}, and \code{\link{cgiHeader}}. To get the
+  value of one particular parameter, see \code{\link{cgiParam}}.
 }
 \examples{
 \dontrun{
+cgiInit()
+cgiGet2Post()
+cgiHeader("text/html")
 cgiParams()
 }
 }

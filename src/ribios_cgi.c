@@ -9,6 +9,7 @@ static const R_CallMethodDef callMethods[] = {
   CALLMETHOD_DEF(r_cgiGet2PostReset, 0),
   CALLMETHOD_DEF(r_cgiHeader, 1),
   CALLMETHOD_DEF(r_cgiParameters, 0),
+  CALLMETHOD_DEF(r_cgiParam, 3),
   {NULL, NULL, 0}
 };
 

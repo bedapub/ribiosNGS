@@ -1,2 +1,5 @@
+Version 1.0-2 (2013-07-24)
+  + Add function cgiParam to query one parameter a time
+
 Version 1.0-0 (2013-07-22)
   + ribiosCGI package added to ribios

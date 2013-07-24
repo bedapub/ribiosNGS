@@ -19,6 +19,14 @@ cgiHeader <- function(header) {
                   as.character(header)))
 }
 
+cgiEncodeWord <- function(word) {
+  .Call("r_cgiEncodeWord", as.character(word));
+}
+
+cgiDecodeWord <- function(word) {
+  .Call("r_cgiDecodeWord", as.character(word));
+}
+
 cgiParams <- function() {
   return(.Call("r_cgiParameters"))
 }

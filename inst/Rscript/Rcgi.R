@@ -22,6 +22,9 @@ cat("<div>Query specific parameters:<ol>")
 cat("<li> main=", cgiParam("main", ignore.case=FALSE, default="not specified"), "</li>");
 cat("<li> xLaB=", cgiParam("xlab", ignore.case=TRUE, default=NULL), "</li>");
 cat("<li> yLaB=", cgiParam("ylab", ignore.case=TRUE, default=NULL), "</li>");
+cat("<li> pairs=");
+print(cgiPairParam("pairs"))
+cat("</li>")
 cat("</ol>")
 
 ## parse CGI parameter and make plot

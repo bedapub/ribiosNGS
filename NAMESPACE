@@ -51,7 +51,7 @@ export(headhead, tailtail)
 
 export(uniqueLength, ulen)
 
-export(openFileDevice)
+export(openFileDevice, closeFileDevice)
 
 export(na.false)
 
@@ -65,6 +65,8 @@ export(libordie)
 export(keepMaxStatRow)
 
 export(trim)
+
+export(qsystem, rmat)
 
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils)

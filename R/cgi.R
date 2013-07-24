@@ -110,7 +110,7 @@ cgiPairParam <- function(name, ignore.case=FALSE,
                          default=data.frame(keys=character(),values=character()),
                          sep=":", collapse=" ") {
   x <- cgiParam(name, ignore.case=ignore.case, default=NULL)
-  if(is.null(x)) return(x)
+  if(is.null(x)) return(default)
   x <- strsplit(x, paste(collapse, "| ", sep=""))[[1]]
   x <- x[x!=""]
   if(length(x)==0) return(default)

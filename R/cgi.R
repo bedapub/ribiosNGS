@@ -104,16 +104,20 @@ cgiFuncParam <- function(name, ignore.case=FALSE, default=NULL) {
 
 ## cgiPairParam: parse CGI parameters as key-value pairs
 cgiPairParam <- function(name, ignore.case=FALSE,
-                         default=data.frame(keys=character(),values=character()),
-                         sep=":", collapse=" ") {
+                         default=NULL,
+                         sep=":", collapse="\\+") {
   x <- cgiParam(name, ignore.case=ignore.case, default=NULL)
   if(is.null(x)) return(default)
-  x <- strsplit(x, paste(collapse, "| ", sep=""))[[1]]
-  x <- x[x!=""]
+  x <- strsplit(x, collapse)[[1]]
   if(length(x)==0) return(default)
   sepl <- strsplit(x, sep)
-  haltifnot(all(sapply(sepl,length)==2),
-            msg=paste("'", name, "' do not have valid pairs", sep=""))
+  if(!all(sapply(sepl, length)==2)) {
+    badPairs <- sapply(sepl,length)!=2
+    warning("Following pairs are not valid and discarded:\n",
+            paste(sepl[badPairs],sep=":", collapse=", "))
+    sepl <- sepl[!badPairs]
+  }
+  if(length(sepl)==0) return(default)
   keys <- sapply(sepl, "[[", 1L)
   values <- sapply(sepl, "[[", 2L)
   return(data.frame(keys=keys, values=values))

@@ -6,8 +6,8 @@
 }
 \usage{
   cgiPairParam(name, ignore.case=FALSE,
-               default=data.frame(keys=character(),values=character()),
-               sep=":", collapse=" ")
+               default=NULL,
+               sep=":", collapse="\\\\+")
 }
 \arguments{
   \item{name}{Character, CGI parameter name}

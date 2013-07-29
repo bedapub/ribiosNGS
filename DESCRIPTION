@@ -1,10 +1,11 @@
 Package: ribiosArg
 Type: Package
 Title: Command-line argument handling in R scripting
-Version: 1.1-4
-Date: 2013-07-22
+Version: 1.1-5
+Date: 2013-07-29
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Functions to handle command-line arguments in R scripting
+Depends: ribiosUtils
 License: GPL-3
 LazyLoad: yes

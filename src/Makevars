@@ -6,4 +6,4 @@ CFLAGSL= $(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
 PKG_CFLAGS=$(CFLAGSL) $(PRPIINC)
 
 ## BIOS uses static libraries and it is not possible to be linked to a static library
-PKG_LIBS=$(CPICFLAGS) -I$(BIOINFOCONFDIR) $(PRPISRC)/log.c $(PRPISRC)/html.c $(PRPISRC)/array.c $(PRPISRC)/format.c $(PRPISRC)/hlrmisc.c $(PRPISRC)/linestream.c 
+PKG_LIBS=$(CPICFLAGS) -I$(BIOINFOCONFDIR) $(PRPISRC)/log.c $(PRPISRC)/html.c $(PRPISRC)/array.c $(PRPISRC)/format.c $(PRPISRC)/hlrmisc.c $(PRPISRC)/linestream.c $(PRPISRC)/rofutil.c 

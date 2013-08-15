@@ -1,3 +1,6 @@
+Version 1.0-4 (2013-08-15)
+  + cgiSendFile sends an existing file to the client
+
 Version 1.0-3 (2013-07-25)
   + cgiPairParam uses + as the default collapser (which is the case in POST requests)
 

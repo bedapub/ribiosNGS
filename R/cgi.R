@@ -19,6 +19,14 @@ cgiHeader <- function(header) {
                   as.character(header)))
 }
 
+cgiSendFile <- function(file, header=NULL) {
+  assertFile(file <- as.character(file))
+  if(!is.null(header)) header <- as.character(header)
+  
+  invisible(.Call("r_cgiSendFile",
+                  file, header));
+}
+
 cgiEncodeWord <- function(word) {
   .Call("r_cgiEncodeWord", as.character(word));
 }

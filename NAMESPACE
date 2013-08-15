@@ -8,6 +8,8 @@ export(cgiNumParam, cgiCateParam,
        cgiEnumParam, cgiStrParam, cgiLogiParam,
        cgiFuncParam, cgiPairParam)
 
+export(cgiSendFile)
+
 export(RIBIOS_CGI_TMP_DIR, RIBIOS_CGI_TMP_URL)
 
 export(tmpWebFile, tmpWebURL)

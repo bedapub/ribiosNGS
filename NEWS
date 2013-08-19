@@ -1,3 +1,7 @@
+2013-08-19 v1.1-17
+  + Add new 3-color comb: cyanblackyellow and yellowbackyan 
+  + add jitter.xyplot
+
 2013-07-22 v1.1-16
   + brewer.pal.factor automatically adjusts the size of color palettes according to the input factor and the maxcolor information provided by brewer.pal.info
   + PCA plotting functions have been refactored

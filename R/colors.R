@@ -78,6 +78,8 @@ greenred <- function(n) colorpanel(n, "green", "black", "red")
 bluered <- function(n) colorpanel(n, "blue", "white", "red")
 redblue <- function(n) colorpanel(n, "red", "white", "blue")
 blueblackred <- function(n) colorpanel(n, "blue", "black", "red")
+cyanblackyellow <- function(n) colorpanel(n, "#9BD0EC", "black", "#FCF6C3")
+yellowblackcyan <- function(n) colorpanel(n, "#FCF6C3", "black", "#9BD0EC")
 redblackblue <- function(n) colorpanel(n, "red", "black", "blue")
 blackredyellow <- function(n) colorRampPalette(c("black", "darkred", "red2", "goldenrod1", "yellow"))(n)
 blackgoldred <- function(n) colorpanel(n, "black", "goldenrod1", "red2")
@@ -113,6 +115,7 @@ threecolor.panels <- function() {
            "redgreen", "greenred",
            "bluered", "redblue",
            "redblackblue", "blueblackred",
+           "cyanblackyellow", "yellowblackcyan",
            "heat.colors",
            "blackredyellow", "blackgoldred", 
            "whiteblueblackheat"))

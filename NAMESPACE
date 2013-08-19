@@ -28,6 +28,8 @@ export(royalbluered,
        redblue,
        blueblackred,
        redblackblue,
+       cyanblackyellow,
+       yellowblackcyan,
        blackredyellow,
        blackgoldred,
        whiteblueblackheat)
@@ -47,5 +49,7 @@ export(twocolor.panels,
        threecolor.panels,
        display.threecolor.panels,
        display.twocolor.panels)
+
+export(jitter.xyplot)
 
 export(idev, ipdf)

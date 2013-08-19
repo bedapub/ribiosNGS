@@ -7,6 +7,8 @@
 \alias{bluered}
 \alias{redblue}
 \alias{redblackblue}
+\alias{cyanblackyellow}
+\alias{yellowblackcyan}
 \alias{blueblackred}
 \alias{blackredyellow}
 \alias{blackgoldred}
@@ -29,6 +31,8 @@ redblackblue(n)
 blueblackred(n)
 blackredyellow(n)
 blackgoldred(n)
+cyanblackyellow(n)
+yellowblackcyan(n)
 whiteblueblackheat(n)
 
 threecolor.panels()

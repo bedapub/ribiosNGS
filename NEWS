@@ -1,3 +1,6 @@
+Version 3.1-1 (2013-10-11)
+  + add annotateEnsembl to annotate ENSEMBL identifiers
+
 Version 3.1-0 (2013-07-08)
   + annotateHumanOrthologs: if multiple human orthologs were found and when multiple orthologues are not required, the one with the smallest GeneID (as integer) will be reported as the orthologue.
   + Remove illuminaSnp function: the table has been deleted in the database.

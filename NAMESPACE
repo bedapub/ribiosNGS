@@ -28,6 +28,8 @@ export(annotateAnyID) ## shortcut for annotateGeneID, annotateGeneSymbol and ann
 export(annotateGeneIDs,
        annotateGeneSymbols)
 
+export(annotateEnsembl)
+
 export(gti2bioc, bioc2gti)
 
 export(mappedProbesets)

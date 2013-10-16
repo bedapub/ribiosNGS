@@ -11,6 +11,12 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
   if(is.null(optargs)) optargs <- ""
   if(is.null(reqargs)) reqargs <- ""
   argc <- as.integer(length(comm))
+  usage <- paste(usage,
+                 ifelse(grepl("\n$", usage), "", "\n"),
+                 "Command line: ",
+                 paste0(commandArgs(trailingOnly=FALSE), collapse=" "),
+                 "\n",
+                 sep="")
   res <- .Call("rarg_parse",
                argc,
                as.character(comm),
@@ -18,7 +24,7 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
                as.character(reqargs),
                as.character(usage))
   if(argc != res) {
-    cat(usage,"\n")
+    cat(usage)
     quit(save="no")
   }
   return(invisible(res))

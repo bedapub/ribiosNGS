@@ -1,5 +1,9 @@
+2013-10-16: v1.1-6
+  + argParse function prints the command line if fails to parse the needed parameters. It helps debugging the input.
+
 2013-07-29: v1.1-5
   + add parseStrings and parsePairs
+  + From v1.1-5 ribiosArgs depends on ribiosUtils.
 
 2013-07-14: v1.1-4
   + argPresent returns FALSE if arg_init and/or arg_initTry has not been called

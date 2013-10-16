@@ -40,7 +40,8 @@ hasOracle <- function() {
 .onAttach <- function(libname, pkgname) {
   if(hasOracle()) {
     ##    require(ROracle)
-    attachNamespace("ROracle")
+    if(!"package:ROracle" %in% search())
+      attachNamespace("ROracle")
     obase <- Sys.getenv("ORACLE_BASE")
     ohome <- Sys.getenv("ORACLE_HOME")
     if(identical(obase, "") || identical(obase, ".") || !"client" %in% dir(obase)) {

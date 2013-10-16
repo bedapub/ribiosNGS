@@ -24,8 +24,7 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
                as.character(reqargs),
                as.character(usage))
   if(argc != res) {
-    cat(usage)
-    quit(save="no")
+    qqmsg(usage)
   }
   return(invisible(res))
 }

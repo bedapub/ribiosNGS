@@ -1,7 +1,7 @@
 #!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
 
 library(ribiosArg)
-usage <- sprintf("Usage:%s -infile INFILE -outfile OUTFILE [-a Low Up] [-b] [-c Mid] [-d]\
+usage <- sprintf("%s -infile INFILE -outfile OUTFILE [-a Low Up] [-b] [-c Mid] [-d]\
   -infile: input file\
   -outfile: output file\
   -a LOW UP: thresholds\

@@ -1,3 +1,6 @@
+Version 1.0-27 (2013-11-14)
+  + write_gmt supports now simple lists as input as well
+
 Version 1.0-26 (2013-05-31)
   + read_gct_matrix prints detailed error messages if the number of columns does not match in the 2nd and the 3rd line.
 

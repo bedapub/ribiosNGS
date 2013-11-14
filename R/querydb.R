@@ -60,6 +60,7 @@ querydbSelectIn <- function(sqlComm, inCol, inValues,
 fillOneColTmpTbl <- function(con,  values) {
   values <- as.character(values)
   values[is.na(values)] <- "NA"
+  values[values==""] <- "NA"
   isORA <- inherits(con, "OraConnection")
   if(isORA) {
     if (!dbExistsTable(con, RIBIOS_TMP_TBL)) {
@@ -91,6 +92,7 @@ querydbTmpTbl <- function(sqlComm, inCol, inValues,
   isORA <- hasOracle() & !forceJDBC
   con <- ribiosCon(db=db, user=user, password=password, forceJDBC=forceJDBC)
   inValues <- unique(as.character(inValues))
+  
   TMP_TBL <- tmpTbl(forceJDBC=forceJDBC)
   fillOneColTmpTbl(con = con, values = inValues)
   hasFrom <- grepl("from", sqlComm, ignore.case = TRUE)

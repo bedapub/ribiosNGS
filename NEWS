@@ -1,3 +1,6 @@
+Version 3.1-3 (2013-11-14)
+  + fillOneColTmpTbl:empty values are handled correctly.
+
 Version 3.1-2 (2013-10-16)
   + Debug: in .onAttach, the ROracle namespace is not attached when it has been attached before. It fixes a bug that ribiosAnnotation refuses to be loaded when the ROracle package has been loaded before
 

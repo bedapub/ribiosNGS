@@ -1,3 +1,6 @@
+Version 1.0-28 (2013-12-02)
+  + read_gmt_list uses gene-set names as the names of the returning list
+
 Version 1.0-27 (2013-11-14)
   + write_gmt supports now simple lists as input as well
 

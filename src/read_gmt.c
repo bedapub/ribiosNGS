@@ -8,7 +8,7 @@
 SEXP read_gmt(SEXP filename) {
   LineStream ls;
   char* line;
-  SEXP res, item, glist, lname;
+  SEXP res, item, glist, lname, rname;
   int ind=0,i=0, j=0;
 
   const char* fn=CHAR(STRING_ELT(filename, 0));
@@ -37,10 +37,12 @@ SEXP read_gmt(SEXP filename) {
   
   PROTECT(res=allocVector(VECSXP, ind));
   PROTECT(lname=allocVector(STRSXP, 3));
+  PROTECT(rname=allocVector(STRSXP, ind));
   SET_STRING_ELT(lname, 0, mkChar("name"));
   SET_STRING_ELT(lname, 1, mkChar("description"));
   SET_STRING_ELT(lname, 2, mkChar("genes"));
   for(i=0;i<ind;i++) {
+    SET_STRING_ELT(rname, i, mkChar(textItem(names, i)));
     PROTECT(glist=allocVector(STRSXP, arrayMax(arru(genes, i, Texta))));
     PROTECT(item=allocVector(VECSXP, 3));
     SET_VECTOR_ELT(item, 0, mkString(textItem(names, i)));  // alternative: ScalarString(mkChar())
@@ -54,11 +56,13 @@ SEXP read_gmt(SEXP filename) {
     UNPROTECT(2);
   }
   
+  setAttrib(res, R_NamesSymbol, rname);
+
   textDestroy(it);
   textDestroy(names);
   textDestroy(descs);
   arrayDestroy(genes);
 
-  UNPROTECT(2);
+  UNPROTECT(3);
   return(res);
 }

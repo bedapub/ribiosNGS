@@ -1,6 +1,6 @@
 \name{read_gct_matrix}
-\alias{read_gct}
 \alias{read_gct_matrix}
+\alias{read_gct}
 \alias{read_gctstr_matrix}
 \title{
   Calling C routine to read GCT file into a matrix

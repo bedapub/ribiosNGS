@@ -65,19 +65,15 @@ partek2ExpressionSet <- function(filename,
                                  chip,
                                  orthologue=FALSE) {
   if(missing(chip)) chip <- ""
-    
-  if(annotation == "illuminaHumanv3.db") {
-    probeFmt <- "^ILMN"
-  } else {
-    stop("this function only supports illuminaHumanv3.db so far. Please contact support if other type should be needed")
-  }
   
   raw <- read.csv(filename, sep="\t")
   rawt <- t(raw)
   rm(raw)
+
+  probeFmt <- "^ILMN"
   probeLns <- grep(probeFmt, rownames(rawt))
   if(length(probeLns)==0)
-    stop("No probes found\n")
+    stop("No probes found: currently only supporting Illumina data\n")
   probeStart <- min(probeLns)
   
   rp <- data.frame(t(rawt[1:probeStart-1L,]))

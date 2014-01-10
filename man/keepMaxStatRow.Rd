@@ -1,5 +1,7 @@
 \name{keepMaxStatRow}
 \alias{keepMaxStatRow}
+\alias{isMaxStatRow}
+\alias{keepMaxStatRowInd}
 \title{
   KEEP ROWS WITH THE MAXIMUM STATISTIC
 }
@@ -10,7 +12,13 @@
   higheest statistic specified by the user.
 }
 \usage{
-keepMaxStatRow(matrix, keys, keepNArows = TRUE, stat = function(x) mean(x, na.rm = TRUE), levels = c("rownames", "attribute", "discard"), ...)
+isMaxStatRow(matrix, keys, keepNArows = TRUE, stat = function(x) mean(x,
+na.rm = TRUE),  ...)
+keepMaxStatRowInd(matrix, keys, keepNArows = TRUE, stat = function(x) mean(x,
+na.rm = TRUE),  ...)
+keepMaxStatRow(matrix, keys, keepNArows = TRUE, stat = function(x)
+mean(x, na.rm = TRUE), levels = c("rownames", "attribute", "discard"),
+...)
 }
 \arguments{
   \item{matrix}{A numeric matrix}
@@ -32,7 +40,13 @@ keepMaxStatRow(matrix, keys, keepNArows = TRUE, stat = function(x) mean(x, na.rm
   \item{\dots}{Other parameters passed to the \code{stat} function}
 }
 \details{
-  See examples
+  \code{isMaxStatRow} returns a logical vector, with rows with maximal
+  statistics each key as \code{TRUE} and otherwise as
+  \code{FALSE}. \code{keepMaxStatRowInd} returns the integer indices of
+  such rows. Finally \code{keepMaxStatRow} returns the resulting
+  matrices.
+  
+  For use see examples
 }
 \value{
   A numeric matrix with rows mapped to unique keys, selected by the
@@ -49,6 +63,13 @@ mat1 <- matrix(c(1,3,4,-5,
                  7,9,5,3,
                  0,1,4,3), ncol=4, byrow=TRUE)
 keys1 <- c("A", "B", "A", "B")
+
+isMaxStatRow(mat1, keys1, stat=myFun1)
+isMaxStatRow(mat1, keys1, stat=myFun2)
+
+keepMaxStatRowInd(mat1, keys1, stat=myFun1)
+keepMaxStatRowInd(mat1, keys1, stat=myFun2)
+
 keepMaxStatRow(mat1, keys1, stat=myFun1)
 keepMaxStatRow(mat1, keys1, stat="myFun2")
 keepMaxStatRow(mat1, keys1, stat="myFun2", levels="discard")
@@ -65,6 +86,10 @@ mat2 <- matrix(c(1,3,4,5,
                  NA, 4, 3,NA), ncol=4, byrow=TRUE,
                dimnames=list(LETTERS[1:9], NULL))
 keys2 <- c("A", "B", "A", "B", NA, NA, "C", "A", "D")
+
+isMaxStatRow(mat2, keys2, keepNArows=FALSE, stat=myFun1)
+keepMaxStatRowInd(mat2, keys2, keepNArows=FALSE, stat=myFun1)
+
 keepMaxStatRow(mat2, keys2, keepNArows=FALSE, stat=myFun1)
 keepMaxStatRow(mat2, keys2, keepNArows=TRUE, stat=myFun1)
 keepMaxStatRow(mat2, keys2, keepNArows=TRUE, stat=myFun1, levels="discard")

@@ -11,6 +11,7 @@ checkDir <- function(...) {
 assertDir <- function(...) {
   haltifnot(checkDir(...),
             msg="Not all directories exist\n")
+  return(invisible(TRUE))
 }
 
 ## files
@@ -20,7 +21,7 @@ checkFile <- function(...) {
 }
 assertFile <- function(...) {
   af <- checkFile(...)
-  if(af) return(invisible(NULL))
+  if(af) return(invisible(TRUE))
   
   x <- unlist(list(...))
   notfound <- x[!file.exists(x)]

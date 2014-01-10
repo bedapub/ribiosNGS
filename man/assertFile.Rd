@@ -21,8 +21,8 @@ assertFile(...)
   cause the script fail.
 }
 \value{
-  \code{checkFile} returns logical vector. \code{assertFile} is used for
-  side effects.
+  \code{checkFile} returns logical vector. \code{assertFile} returns an
+  invisible \code{TRUE} if files exist, otherwise halts and prints error messages.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>

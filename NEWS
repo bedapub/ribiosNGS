@@ -1,3 +1,11 @@
+Version 1.0-34 (2014-01-10)
+  + assertFile and assertDir returns invisible \code{TRUE} in case the files/directories exist.
+  + basefilename and extname add option 'lower.case'
+  + Add writeLog to write loggings
+
+Version 1.0-33 (2013-08-14)
+  + keepMaxStatRow has been refactored, giving isMaxStatRow (keepMaxStatRowInd) to return logical/integer vector
+
 Version 1.0-32 (2013-07-24)
   + Add qsystem to run system commands quietly
   + Add rmat to remove file/directories at a future time point

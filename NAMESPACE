@@ -34,7 +34,8 @@ export(pwdecode)
 
 export(setDebug, unsetDebug,
        isDebugging, isIntDebugging)
-export("scriptInit")
+export(scriptInit)
+export(writeLog)
 
 export(refactor, relevels,
        cutInterval, refactorNum)
@@ -62,7 +63,7 @@ export(allIdentical)
 
 export(libordie)
 
-export(keepMaxStatRow)
+export(isMaxStatRow, keepMaxStatRowInd, keepMaxStatRow)
 
 export(trim)
 

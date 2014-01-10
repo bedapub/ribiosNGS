@@ -11,8 +11,8 @@
   extract these information from one or more file names.
 }
 \usage{
-basefilename(x)
-extname(x, ifnotfound=NA)
+basefilename(x, lower.case=FALSE)
+extname(x, ifnotfound=NA, lower.case=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,6 +20,7 @@ extname(x, ifnotfound=NA)
     coereced to characters}
   \item{ifnotfound}{If no extension name was found, the value to be
     returned. Default is \code{NA}}
+  \item{lower.case}{Logical, should the names returned in lower case?}
 }
 \value{
   The base file name or the extension as characters, of the same length as the input
@@ -47,5 +48,8 @@ basefilename("sequence.in.fasta")
 basefilename(c("/path/mybook.pdf", "test.doc"))
 basefilename("README")
 basefilename("/path/my\ home/Holiday Plan.txt")
+
+basefilename("myBook.pdf", lower.case=TRUE)
+extname("myBook.PDF", lower.case=TRUE)
 }
 

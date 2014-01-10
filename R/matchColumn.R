@@ -42,7 +42,7 @@ matchColumn <- function(vector,
   if(!(is.numeric(column) && identical(as.integer(column), 0L))) {
     res[, column] <- vector
   } else {
-    vec <- make.unique(vector)
+    vec <- make.unique(as.character(vector))
     if(!any(is.na(vec)))
       rownames(res) <- vec
     else

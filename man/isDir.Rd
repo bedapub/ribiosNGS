@@ -26,8 +26,9 @@ assertDir(...)
   \code{checkDir} is synonymous to \code{isDir}
 }
 \value{
-  \code{isDir} returns logical vector; \code{assertDir} is used for side
-  effects (stops if directory does not exist), often in scripts.
+  \code{isDir} returns logical vector.
+
+  \code{assertDir} returns an invisible \code{TRUE} if directories exist, otherwise halts and prints error messages.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>

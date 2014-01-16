@@ -13,8 +13,8 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
   argc <- as.integer(length(comm))
   usage <- paste(usage,
                  ifelse(grepl("\n$", usage), "", "\n"),
-                 "[Last call: ",
-                 paste0(commandArgs(trailingOnly=FALSE), collapse=" "),
+                 "\n[Last call: ",
+                 paste(commandArgs(trailingOnly=FALSE), collapse=" "),
                  "]\n",
                  sep="")
   res <- .Call("rarg_parse",

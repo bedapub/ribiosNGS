@@ -17,6 +17,8 @@ export(read_cls,
 
 export(read_chip)
 
+export(read_rocheNGS_exprs)
+
 export(read_fasta,
        write_fasta)
 

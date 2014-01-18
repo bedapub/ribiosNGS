@@ -2,8 +2,10 @@
 #include <R_ext/Rdynload.h>
 
 static const R_CallMethodDef callMethods[] = {
-  /* read_gct.c */
   CALLMETHOD_DEF(read_gct, 3),
+  CALLMETHOD_DEF(write_gmt, 2),
+  CALLMETHOD_DEF(read_chip, 1),
+  CALLMETHOD_DEF(read_rocheNGS_exprs, 1),
 
   {NULL, NULL, 0}
 };

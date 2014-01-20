@@ -1,3 +1,5 @@
+importFrom(methods, setMethod)
+
 export(asNumMatrix,
        stringDataFrame2numericMatrix,
        atofMatrix)
@@ -35,7 +37,8 @@ export(pwdecode)
 export(setDebug, unsetDebug,
        isDebugging, isIntDebugging)
 export(scriptInit)
-export(writeLog)
+
+export(registerLog, clearLog, flushLog, doLog, writeLog)
 
 export(refactor, relevels,
        cutInterval, refactorNum)

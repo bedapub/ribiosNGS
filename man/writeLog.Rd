@@ -1,5 +1,6 @@
 \name{writeLog}
 \alias{writeLog}
+\alias{doLog}
 \title{
   Write text as log to a connection
 }
@@ -8,6 +9,7 @@
 }
 \usage{
 writeLog(..., con = stdout(), level = 0)
+doLog(..., level=0)
 }
 \arguments{
   \item{\dots}{Texts that will be collapsed with spaces}
@@ -16,10 +18,22 @@ writeLog(..., con = stdout(), level = 0)
   before the message. See examples}
 }
 \details{
-  The function can be used to log outputs and/or running status of scripts.
+  The function \code{writeLog} can be used to log outputs and/or running
+  status of scripts to \emph{one connection}. To use it one does \emph{not} need to run
+  \code{registerLog} first.
+
+  In contrast, \code{doLog} can be used to log on multiple connections
+  that are registered by \code{registerLog}. Therefore, to register
+  logger(s) with \code{registerLog} is a prerequisite of calling
+  \code{doLog}. Internally \code{doLog} calls \code{writeLog}
+  sequentially to make multiple-connection logging.
 }
 \value{
   Side effect is used.
+}
+\seealso{
+  \code{registerLog} to register more than one loggers so that
+  \code{doLog} can write to them sequentially.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>

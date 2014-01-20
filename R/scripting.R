@@ -6,6 +6,9 @@ scriptInit <- function() {
   if(interactive()) {
     setDebug()
   } else {
-    options(error=quote({dump.frames("ribios.dump", to.file=TRUE); quit(save="no", status=1L)}))
+    options(error=quote({
+      dump.frames("ribios.dump", to.file=TRUE);
+      quit(save="no", status=1L)
+    }))
   }
 }

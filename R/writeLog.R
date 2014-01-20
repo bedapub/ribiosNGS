@@ -28,9 +28,9 @@ flushLog <- function() {
 
 registerLog <- function(...) {
   x <- list(...)
-  if(length(x)==0 || is.null(x) || is.na(x)) {
+  if(length(x)==0 || (length(x)==1 && (is.null(x[[1]]) || is.na(x[[1]])))) {
     setLoggers(NULL);
-    return();
+    return(invisible(NULL));
   }
   cons <- lapply(x, function(xx) {
     if(is(xx, "connection")) {

@@ -1,3 +1,6 @@
+Version 1.0-5 (2013-01-22)
+  + pairs.Rscript has been put into /SOFT/bi/apps/ribios/scripts/pairs.
+
 Version 1.0-4 (Sep 10, 2012)
   + Bug in merge.Rscript read.table does not recognize single quote (') as quote character
 

@@ -27,3 +27,13 @@ ipdf <- function(file, ...) {
   if(interactive())
     dev.print(pdf, file=file, useDingbats=FALSE,...)
 }
+pdf2png <- function(..., convert="convert", density=300, outdir=NULL, wait=FALSE) {
+  files <- unlist(list(...))
+  assertFile(files)
+  if(is.null(outdir)) outdir <- dirname(files)
+  outfiles <- file.path(outdir,
+                        sprintf("%s.png", basefilename(files)))
+  comms <- sprintf("%s -density %d %s %s", convert, density, files, outfiles)
+  for(i in seq(along=comms))
+    system(comms[i], wait=wait)
+}

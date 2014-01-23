@@ -1,4 +1,6 @@
 importFrom(grDevices, heat.colors)
+importFrom(lattice, panel.xyplot)
+importFrom(ribiosUtils, assertFile, basefilename)
 
 ## biosHeatmap
 export(biosHeatmap)
@@ -53,3 +55,5 @@ export(twocolor.panels,
 export(jitter.xyplot)
 
 export(idev, ipdf)
+
+export(pdf2png)

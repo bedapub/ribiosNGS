@@ -1,3 +1,9 @@
+2014-01-23 v1.1-19
+  + Add ribiosUtils to the dependency list of ribiosPlot
+
+2014-01-22 v1.1-18
+  + add pdf2png to convert arbitrary PDF files to PNG
+
 2013-08-19 v1.1-17
   + Add new 3-color comb: cyanblackyellow and yellowbackyan 
   + add jitter.xyplot

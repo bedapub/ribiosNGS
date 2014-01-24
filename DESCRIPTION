@@ -1,0 +1,10 @@
+Package: snowballs520824fcdf
+Title: snowballs520824fcdf
+Version: 1.38.0
+Created: Thu Jan 23 16:39:30 2014
+Author: UDIS
+Description: A package containing an environment representing the GPL16569_SNOWBALL_genelevel.cdf file.
+Maintainer: Laura Badi <laura.badi@roche.com>
+License: LGPL
+biocViews: AnnotationData, AffymetrixChip, cdf, snowballs520824f, Sus scrofa
+Depends: utils

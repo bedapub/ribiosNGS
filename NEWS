@@ -1,3 +1,9 @@
+Version 1.0-36 (2014-01-24)
+  + writeLog and doLog use 'fmt' as the first parameter
+
+Version 1.0-35 (2014-01-20)
+  + Add a generic logging mechanism. User (especially script programmer) can use registerLog/doLog to write log messages into arbitrary number of loggers, which can be either files or connections.
+
 Version 1.0-34 (2014-01-10)
   + assertFile and assertDir returns invisible \code{TRUE} in case the files/directories exist.
   + basefilename and extname add option 'lower.case'

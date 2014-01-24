@@ -66,19 +66,27 @@ registerLog <- function(...) {
   return(invisible(NULL))
 }
 
-writeLog <- function(..., con=stdout(), level=0) {
+writeLog <- function(fmt, ..., con=stdout(), level=0) {
   format <- paste("[%s] ",
                   paste(rep(" ", level), collapse=""),
                   "%s", sep="")
+  rlist <- list(...)
+  if(length(rlist)==0) {
+    txt <- fmt
+  } else if (length(rlist)==1 && is.null(rlist[[1]])) {  ## in case the first value is NULL
+    txt <- fmt
+  } else {
+    txt <- sprintf(fmt, ...)
+  }
   text <- sprintf(format,
                   format(Sys.time(),"%y-%m-%d %X"),
-                  paste(list(...), collapse=" "))      
+                  txt)
   writeLines(text, con=con)
 }
 
-doLog <- function(..., level=0) {
+doLog <- function(fmt, ..., level=0) {
   loggers <- getLoggers()
   if(!is.null(loggers))
     for(i in seq(along=loggers))
-      writeLog(..., con=loggers[[i]], level=level)
+      writeLog(fmt, ..., con=loggers[[i]], level=level)
 }

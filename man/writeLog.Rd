@@ -8,11 +8,12 @@
   Write text as log to a connection
 }
 \usage{
-writeLog(..., con = stdout(), level = 0)
-doLog(..., level=0)
+writeLog(fmt, ..., con = stdout(), level = 0)
+doLog(fmt, ..., level=0)
 }
 \arguments{
-  \item{\dots}{Texts that will be collapsed with spaces}
+  \item{fmt}{Format string to passed on to sprintf}
+  \item{\dots}{Parameters passed on to sprintf}
   \item{con}{A connection, for instance a file (or its name) or \code{stdout()}}
   \item{level}{Logging level: each higher level will add one extra space
   before the message. See examples}
@@ -47,4 +48,11 @@ writeLog("Message 2", level=1)
 writeLog("Message 3", level=1)
 writeLog("Message 3 (special)", level=4)
 writeLog("End of the log");
+
+## log with format
+writeLog("This is Message \%d", 1)
+writeLog("Square of 2 is \%2.2f", sqrt(2))
+
+## NA is handled automatically
+writeLog("This is a not available value: \%s", NA, level=1)
 }

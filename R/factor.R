@@ -35,6 +35,8 @@ relevels <- function(x, refs) {
   return(x)
 }
 
+ofactor <- function(x,...) factor(x, levels=unique(as.character(x)),...)
+
 ##test.relevels <- function() {
 ##  cup <- c("HSV","FCBayern","KSC","VfB")
 ##  teams <- factor(cup)

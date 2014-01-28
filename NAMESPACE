@@ -43,6 +43,8 @@ export(registerLog, clearLog, flushLog, doLog, writeLog)
 export(refactor, relevels,
        cutInterval, refactorNum)
 
+export(ofactor)
+
 ##export(atomGrep, orderedGrep)
 
 export(strtoken, countTokens)

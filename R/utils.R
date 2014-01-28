@@ -36,4 +36,5 @@ pdf2png <- function(..., convert="convert", density=300, outdir=NULL, wait=FALSE
   comms <- sprintf("%s -density %d %s %s", convert, density, files, outfiles)
   for(i in seq(along=comms))
     system(comms[i], wait=wait)
+  return(invisible(outfiles))
 }

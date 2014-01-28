@@ -20,7 +20,7 @@ pdf2png(..., convert = "convert", density = 300, outdir=NULL, wait = FALSE)
   \item{wait}{Logical, should the function wait until the conversion is finished?}
 }
 \value{
-  No returning value: side effect is used.
+  PNG file names are returned invisibly.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>

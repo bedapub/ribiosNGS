@@ -55,4 +55,5 @@ writeLog("Square of 2 is \%2.2f", sqrt(2))
 
 ## NA is handled automatically
 writeLog("This is a not available value: \%s", NA, level=1)
+writeLog("This is a NULL value: \%s", NULL, level=1)
 }

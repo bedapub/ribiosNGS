@@ -74,7 +74,7 @@ writeLog <- function(fmt, ..., con=stdout(), level=0) {
   if(length(rlist)==0) {
     txt <- fmt
   } else if (length(rlist)==1 && is.null(rlist[[1]])) {  ## in case the first value is NULL
-    txt <- fmt
+    txt <- sprintf(fmt, "NULL")
   } else {
     txt <- sprintf(fmt, ...)
   }

@@ -52,6 +52,9 @@ export(twocolor.panels,
        display.threecolor.panels,
        display.twocolor.panels)
 
+## histogram functions
+export(qHist, xclipHist)
+
 export(jitter.xyplot)
 
 export(idev, ipdf)

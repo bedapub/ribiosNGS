@@ -11,7 +11,7 @@ openFileDevice <- function(filename, width=7, height=7, dpi=300L) {
   } else if(identical(filetype, "jpeg") || identical(filetype, "jpg")) {
     jpeg(filename, width=width, height=height, units="in", res=dpi, quality=90)
   } else {
-    warning("Unrecognized output format. PDF will be used")
+    warning("Unrecognized output format '", filetype, "'. PDF will be used")
     pdf(filename, width=width, height=height, useDingbats=FALSE)
   }
 }

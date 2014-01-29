@@ -1,0 +1,10 @@
+Package: ribiosQC
+Type: Package
+Title: Functionalities and data structures for expression data QC
+Version: 1.0-0
+Date: 2014-01-28
+Author: Jitao David Zhang <jitao_david.zhang@roche.com>
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: ribiosQC collects bits and pieces of functions and data structures for expression data QC into one package. Its primary use is for Roche bioinformatics microarray/NGS expression pipeline.
+Depends: Biobase, ribiosUtils, ribiosArg
+License: GPL-3

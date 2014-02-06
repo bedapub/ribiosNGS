@@ -1,3 +1,6 @@
+Version 1.2-5 (2014-02-06)
+  + getUDISexpression checks the consistency between fData and exprs: if not, name matching is done
+
 Version 1.2-3 (2013-07-15)
   + buildUDISexpURL accepts one parameter (addparams), and getUDISexpression passes addparams (produced from dots) to expr, meta, and feat queries.
   + NOTE: It is not yet clear whether extra parameters for a certain type of query (e.g. property for expr) is safely ignored. It remains to be tested.

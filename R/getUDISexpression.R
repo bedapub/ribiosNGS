@@ -54,14 +54,21 @@ getUDISexpression <- function(id="GSE20986",idType=c("studyIdExternal", "studyId
     metastr <- queryUrl(purl)
     featstr <- queryUrl(furl)
     pd <- meta2pd(metastr)
+    ## pheno data row names do not necessarily match the exprs matrix columns. So DONOT USE THESE CODES.
+    ## if(nrow(pd)!=ncol(mat) || !identical(sampleNames(pd), colnames(mat))) {
+    ##  pd.ind <- match(colnames(mat), sampleNames(pd))
+    ##  pd <- pd[pd.ind,]
+    ## }
     sampleNames(pd) <- colnames(mat)
     
     fd <- meta2pd(featstr)
-    if(nrow(fd)!=nrow(mat) || !identical(featureNames(fd), rownames(mat))) {
-      fd.ind <- match(rownames(mat), featureNames(fd))
+    fdFeatNames <- pData(fd)[,1L]
+    if(nrow(fd)!=nrow(mat) || !identical(rownames(mat), fdFeatNames)) {
+      fd.ind <- match(rownames(mat), fdFeatNames)
       fd <- fd[fd.ind,]
     }
     featureNames(fd) <- rownames(mat)
+    
     eset <- new("ExpressionSet", exprs=mat, phenoData=pd, featureData=fd)
     rm(str, metastr, featstr)
     return(eset)

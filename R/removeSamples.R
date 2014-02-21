@@ -8,6 +8,9 @@ removeSamples <- function(eset, exclSamples) {
   if(!all(isQcLabel) && !all(isSampleName)) {
     qqmsg("Following (to be excluded) sample names are not valid:",
           paste(setdiff(exclSamples, c(qcLabels, sampleNames)), collapse=","),
+          "\n",
+          "Allowed names:",
+          paste(qcLabels, collapse=","),
           status=1L)
   } else if(all(isQcLabel)) {
     idxOut <- match(exclSamples, qcLabels )

@@ -70,8 +70,6 @@ SEXP rarg_getPos(SEXP arg, SEXP pos) {
 
 SEXP rarg_present(SEXP arg) {
   checkInit();
-  if(!arg_isInit())
-    return(FALSE);
   int pre=arg_present(rstr2c(arg));
   return(ScalarLogical(pre));
 }

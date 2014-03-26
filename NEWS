@@ -1,3 +1,6 @@
+Version 0.9.2 (2013-03-26)
+  + New pREDiLogin server is now used to authenticate and to bake cookies.
+
 Version 0.9.1 (2012-04-30)
   + Sensitive information are capsuled in a separate file
 

@@ -1,5 +1,7 @@
 ## import
 ## importFrom(ROracle, Oracle)
+importFrom(DBI)
+importFrom(ribiosUtils)
 
 export(hasOracle, ribiosCon)
 

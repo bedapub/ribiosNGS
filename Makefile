@@ -13,7 +13,7 @@
 ################################################################################
 ## conditional: choose R version depending on the BICOSN value
 ifneq ($(BICOSN), bas)
-	R:= /SOFT/bi/apps/R/devel/trunk/bin/R
+	R:= /SOFT/bi/apps/R/develR
 	CHECKADD:= ${CHECKADD} --no-manual ## for envcheck
 else
 	R:= R

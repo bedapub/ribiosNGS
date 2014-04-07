@@ -1,6 +1,7 @@
-options(cores=6L)
+
 perm <- function(exp, templates, exp.dist,
                  Nrand=1000) {
+  options(cores=8L)
   mat <- mclapply(1:ncol(exp), function(nc) {
     vec <- exp[, nc, drop=TRUE]
     rvec <- randmat(vec, nrow(templates), as.integer(Nrand))

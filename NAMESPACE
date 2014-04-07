@@ -1,25 +1,44 @@
-## GSEA fingerprints
-export(gseaQvalue, gseaES, gseaFingerprint, gseaFingerprintMatrix)
+## import
+importFrom("methods", setClass, setGeneric, setMethod)
+importFrom("XML", xmlAttrs, xmlTreeParse, xmlRoot, xmlChildren, xmlName)
+importFrom("multicore", mclapply)
+import(ribiosIO)
+import(ribiosMath)
+import(ribiosUtils)
 
+exportClass(GeneSets,
+            gseaResItem, annoGseaResItem,
+            annoGseaRes, annoGseaResList)
+
+## S4 methods
+export(gsName, gsDesc, gsGenes, gsGeneValues,
+       "gsGenes<-", "gsGeneValues<-",
+       isGseaCoreEnrich,
+       gseaES, gseaNES, gseaNP, gseaFDR, gseaFWER,
+       gsGeneIndices, gseaESprofile,
+       gseaCoreEnrichThr, gseaCoreEnrichGenes,
+       annoGseaResItem, annoGseaRes)
+
+## export
+export(GSEA_DATA_DIR, GSEA_ANNOTATION_DIR,
+       GSEA_GENESET_DIR,
+       JAVA_BIN, GSEA_JAR, DEFAULT_GMT, DEFAULT_CHIP)
+
+## GSEA fingerprints
+export(gseaQvalue, gseaES,
+       gseaFingerprint, gseaFingerprintMatrix)
+
+## GSEA command-line executables
 export(buildGSEAcomm)
 
 ## limma adapting functions
 export(mroast2tbl)
-export(filterGmtByGeneCount,
-       gmtIndices)
 
 ## GMT functions
-export(readGmt, gsNames, gsDescs, gsGenes,
+export(readGmt, 
        matchGenes,
        geneCount, geneCountFilter)
-S3method(print, GeneSets)
-S3method(gsNames, GeneSets)
-S3method(gsDescs, GeneSets)
-S3method(gsGenes, GeneSets)
-S3method("[", GeneSets)
-S3method(matchGenes, GeneSets)
-S3method(geneCount, GeneSets)
-S3method(geneCountFilter, GeneSets)
+S3method("[", "GeneSets")
 
 ## Nearest Template Prediction (ntp) algorithm
 export(list2mat)
@@ -27,5 +46,8 @@ export(ntpTemplates, ntpBiTemplates)
 S3method(print, ntpTemplates)
 export(ntp)
 
+## parsing GSEA methods
+export(parseDTG, parseGSEAdir, parseGSEAedb, parseGSEAres)
+       
 ## Use Dynamic Lib
-useDynLib(ribiosGSEA)
+## useDynLib(ribiosGSEA)

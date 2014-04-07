@@ -12,7 +12,7 @@ gseaQvalue <- function(file, threshold=1E-4, log=FALSE, posLog=FALSE) {
   return(data.frame(name=name, value=q))
 }
 ## read enrichment scores from GSEA output files
-gseaES <- function(file, normalized=FALSE) {
+gseaESfromFile <- function(file, normalized=FALSE) {
   tbl <- read.table(file, sep="\t", header=TRUE)
   name <- tbl[,1L]
   vc <- ifelse(normalized, "NES", "ES")
@@ -39,7 +39,7 @@ gseaFingerprint <- function(gseaDir, value=c("q", "es", "nes"), threshold=1E-4, 
       poss <- gseaQvalue(file.path(gseaDir, xls[pos.xls]), threshold=threshold, log=TRUE, posLog=TRUE)
     } else {
       nes <- ifelse(value=="nes", TRUE, FALSE)
-      poss <- gseaES(file.path(gseaDir, xls[pos.xls]), normalized=nes)
+      poss <- gseaESfromFile(file.path(gseaDir, xls[pos.xls]), normalized=nes)
     }
   } else {
     poss <- NULL
@@ -49,7 +49,7 @@ gseaFingerprint <- function(gseaDir, value=c("q", "es", "nes"), threshold=1E-4, 
       negs <- gseaQvalue(file.path(gseaDir, xls[neg.xls]), threshold=threshold, log=TRUE, posLog=FALSE)
     } else {
       nes <- ifelse(value=="nes", TRUE, FALSE)
-      negs <- gseaES(file.path(gseaDir, xls[neg.xls]), normalized=nes)
+      negs <- gseaESfromFile(file.path(gseaDir, xls[neg.xls]), normalized=nes)
     }
   } else {
     negs <- NULL

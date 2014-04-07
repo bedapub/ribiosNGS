@@ -25,13 +25,11 @@ filterGmtByGeneCount(gmtlist, min = 5L, max = 1000L)
 }
 \examples{
 \dontrun{
-if(require(ribiosIO)) {
   test.gmt <- read_gmt_list(system.file("extdata", "test.gmt",
 package="ribiosIO"))
   length(test.gmt)
   test.gmt.filter <- filterGmtByGeneCount(test.gmt, min=1022, max=1032)
   length(test.gmt.filter)
-}
 }
 }
 

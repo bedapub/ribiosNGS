@@ -50,6 +50,7 @@ buildGSEAcomm(rnkFiles, gmtFile = DEFAULT_GMT, chipFile, nperm = 1000L, collapse
   Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \examples{
+\dontrun{
 rnkFiles <- system.file("extdata", c("test-1.rnk", "test-2.rnk"),
 package="ribiosGSEA")
 gmt <- system.file("extdata", "20120716-path.ronet.roche.symbols.gmt",
@@ -57,4 +58,5 @@ package="ribiosGSEA")
 chip <- system.file("extdata", "20120716-GENE_SYMBOL.chip", package="ribiosGSEA")
 (comms <- buildGSEAcomm(rnkFiles, gmtFile = gmt, chip = chip, nperm = 1000L, collapse = FALSE, plotTopX = 25, outdir = "./", addShebang = TRUE))
 cat(comms[1])
+}
 }

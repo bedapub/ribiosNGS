@@ -1,3 +1,9 @@
+Version 1.0-9 (Dec 02, 2013)
+  + Variables such as GSEA_GENESET_DIR are exported.
+
+Version 1.0-8 (Jun 28, 2013)
+  + gseaFingerprint.Rscript does not warn when -sortBy is not specified
+
 Version 1.0-7 (Feb 27, 2013)
   + Add list2mat, transforming first-level lists to adjacency matrix
   + ntpTemplates are updated so that it directly inherits a matrix

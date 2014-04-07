@@ -26,13 +26,13 @@ validStat <- !is.null(stat) && stat %in% c("es", "nes", "q")
 if(is.null(infile) || is.null(stat) || is.null(outfile) || getHelp) {
   qqmsg(paste("Usage:",
               scriptName(),
-              " -infile FILE -stat es/nes/q [-outfile FILE] [-sortBy maxAbsStat|meanStat]\n\n",
+              " -infile FILE -stat es/nes/q [-outfile FILE] [-sortBy maxAbsStat|meanStat|name]\n\n",
               "-infile: Text file, one GSEA result directory each line\n",
               "-stat es/nes/q: One of three statistics: \n",
               "  Enrichment Score (es), Normalized Enrichment Score (nes), Q-value (q)\n",
               "-outfile: Output file for fingerprint matrix.\n",
               "  Using stdout when missing\n",
-              "-sortBy: sort the table by the maximum of statistics in absolute values ('maxAbsStat'), or the mean value of raw values('meanStat').\n",
+              "-sortBy: sort the table by the maximum of statistics in absolute values ('maxAbsStat'), or the mean value of raw values('meanStat'), or name.\n",
               "  No sorting is done when missing: gene sets are ordered alphabetically\n",
               sep=""),
         status=1L)
@@ -66,7 +66,8 @@ if(identical(tolower(sortBy), "maxabsstat")) {
 } else if (identical(tolower(sortBy), "meanstat")) {
   matOrd <- order(apply(mat, 1L, function(x) mean(abs(x), na.rm=TRUE)), decreasing=TRUE)
 } else {
-  warning("Unrecognized -sortBy option: no sorting is performed\n")
+  if(!identical(tolower(sortBy), "name"))
+    warning("Unrecognized -sortBy option: no sorting is performed\n")
   matOrd <- 1:nrow(mat)
 }
   mat <- mat[matOrd,,drop=FALSE]

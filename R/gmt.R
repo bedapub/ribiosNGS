@@ -5,8 +5,7 @@ readGmt <- function(file) {
 
 `[.GeneSets` <- function(x,i, ...) {
   r <- NextMethod("[")
-  class(r) <- "GeneSets"
-  r
+  as(r, "GeneSets")
 }
 
 

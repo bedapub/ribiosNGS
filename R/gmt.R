@@ -10,7 +10,7 @@ readGmt <- function(file) {
 
 
 matchGenes <- function(x, vec, na.rm=TRUE) {
-  if(is(x, "GeneSets"))
+  if(!is(x, "GeneSets"))
     stop("'x' must be a 'GeneSets' object")
   haltifnot(is.vector(vec),
             msg="'vec' must be a vector of gene names")
@@ -25,7 +25,7 @@ matchGenes <- function(x, vec, na.rm=TRUE) {
 }
 
 geneCount <- function(x,i) {
-  if(is(x, "GeneSets"))
+  if(!is(x, "GeneSets"))
     stop("'x' must be a 'GeneSets' object")
   res <- sapply(x, function(xx) uniqueLength(xx$genes))
   if(!missing(i)) res <- res[i]
@@ -34,7 +34,7 @@ geneCount <- function(x,i) {
 }
 
 geneCountFilter <- function(x, min, max) {
-  if(is(x, "GeneSets"))
+  if(!is(x, "GeneSets"))
     stop("'x' must be a 'GeneSets' object")
   gmt.count <- sapply(x, function(xx) uniqueLength(xx$genes))
   sel <- rep(TRUE, length(x))

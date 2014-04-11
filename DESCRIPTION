@@ -9,6 +9,6 @@ Description: Gene set enrichment analysis is part of the Roche Bioinformatics pi
 Depends: multicore, ribiosIO, ribiosMath, ribiosUtils, methods, XML
 Suggests: limma (>= 3.5-9)
 License: LGPL-2
-Collate: utils.R AllClasses.R AllMethods.R buildGSEAcomm.R execute.R fingerprint.R gmt.R limmaFuncs.R list2mat.R ntp.R parseGSEA.R 
+Collate: utils.R AllClasses.R AllMethods.R buildGSEAcomm.R camera.R execute.R fingerprint.R gmt.R limmaFuncs.R list2mat.R ntp.R parseGSEA.R 
 LinkingTo: Rcpp
 LazyLoad: yes

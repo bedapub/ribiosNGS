@@ -48,6 +48,9 @@ export(ntp)
 
 ## parsing GSEA methods
 export(parseDTG, parseGSEAdir, parseGSEAedb, parseGSEAres)
-       
+
+## camera methods
+export(biosCamera, mcamera)
+
 ## Use Dynamic Lib
-## useDynLib(ribiosGSEA)
+useDynLib(ribiosGSEA)

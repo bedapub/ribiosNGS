@@ -1,3 +1,11 @@
+Version 1.1-2 (Apr 11, 2014)
+  + Bug fix in matchGenes and geneCounts.
+
+Version 1.1-1 (Apr 07, 2014)
+  + parseGSEA functions are added to parse all relevant information from a GSEA output directory
+  + gsName, gsDesc, and gsGenes are harmonized for both GSEA results parsing and general GMT file parsing
+  + Classes and methods are added to handle gene sets and GSEA results
+
 Version 1.0-9 (Dec 02, 2013)
   + Variables such as GSEA_GENESET_DIR are exported.
 

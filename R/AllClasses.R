@@ -1,5 +1,5 @@
 setClass("gseaResItem",
-         slots=c(geneset="character",
+         representation=list(geneset="character",
            "es"="numeric",
            "nes"="numeric",
            "np"="numeric",
@@ -10,7 +10,7 @@ setClass("gseaResItem",
            "coreEnrichThr"="numeric"))
 
 setClass("annoGseaResItem",
-         slots=c("gsGenes"="character",
+         representation=list("gsGenes"="character",
            "gsGeneValues"="numeric"),
          contains="gseaResItem")
 

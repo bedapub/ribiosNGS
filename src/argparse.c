@@ -55,6 +55,10 @@ SEXP rarg_parse(SEXP argc, SEXP argv, SEXP optargs, SEXP reqargs, SEXP usage) {
   return(ScalarInteger(res));
 }
 
+SEXP rarg_isInit() {
+  return ScalarLogical(arg_isInit());
+}
+
 SEXP rarg_get(SEXP arg) {
   checkInit();
   char* carg=rstr2c(arg);

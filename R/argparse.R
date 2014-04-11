@@ -29,6 +29,8 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
   return(invisible(res))
 }
 
+argIsInit <- function() .Call("rarg_isInit")
+
 argPresent <- function(opt) .Call("rarg_present", opt)
 argGetPos <- function(opt, ind=1L, default=NULL) {
   if(argPresent(opt))

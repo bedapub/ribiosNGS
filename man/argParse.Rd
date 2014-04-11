@@ -1,4 +1,5 @@
 \name{argParse}
+\alias{argIsInit}
 \alias{argParse}
 \alias{argGet}
 \alias{argGetPos}
@@ -13,6 +14,7 @@
 \usage{
 argParse(optargs, reqargs, usage = paste(scriptName(), "-h"))
 
+argIsInit()
 argPresent(opt)
 argGet(opt, default=NULL)
 argGetPos(opt, ind=1L, default=NULL)
@@ -70,6 +72,7 @@ session quits while printing the error message.
 \dontrun{
 argParse("verbose threshold,2", "infile outfile", usage="prog [-infile
 ]infile [-outfile ]outfile [-verbose] [-threshold MIN MAX]")
+argIsInit()
 argPresent("verbose")
 argGet("threshold") ## ==argGetPos("threshold", 1)
 argGetPos("threshold",2)

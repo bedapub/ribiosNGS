@@ -1,3 +1,5 @@
+importFrom("ribiosUtils", "trim")
+
 export("getArg","existArg")
 
 export("parseNumVec", parsePairs, parseStrings)
@@ -5,6 +7,7 @@ export("parseNumVec", parsePairs, parseStrings)
 export("scriptName")
 
 export("argParse",
+       "argIsInit",
        "argGet",
        "argGetPos",
        "argPresent")

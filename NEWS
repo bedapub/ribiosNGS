@@ -1,3 +1,7 @@
+Version 1.1-3 (Apr 14, 2014)
+  + Remove mroast2tbl since the latest version of limma is already returning a data.frame
+  + add gmthyper and gmthyperList functions to perform Fisher test with GMT files
+  + clean up gseaES and gseaQvalue functions
 Version 1.1-2 (Apr 11, 2014)
   + Bug fix in matchGenes and geneCounts.
 

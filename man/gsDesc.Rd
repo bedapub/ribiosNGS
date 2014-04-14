@@ -1,9 +1,9 @@
-\name{gsDescs}
-\alias{gsDescs}
+\name{gsDesc}
+\alias{gsDesc}
 \title{GeneSets Descriptions}
-\description{GeneSets descriptions}
+\description{GeneSets description}
 \usage{
-gsDescs(x, i)
+gsDesc(x, i)
 }
 \arguments{
   \item{x}{An GeneSets S3-object, probably returned from \code{readGmt}}
@@ -17,11 +17,11 @@ gsDescs(x, i)
   Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \seealso{
-  \code{\link{gsNames}},\code{\link{gsGenes}}
+  \code{\link{gsName}},\code{\link{gsGenes}}
 }
 \examples{
 sample.gmt.file <- system.file("extdata", "test.gmt",package="ribiosIO")
 test.gmt <- readGmt(sample.gmt.file)
-gsDescs(test.gmt)
-gsDescs(test.gmt, c(1,2))
+gsDesc(test.gmt)
+gsDesc(test.gmt, c(1,2))
 }

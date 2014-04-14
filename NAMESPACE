@@ -62,6 +62,7 @@ export(openFileDevice, closeFileDevice)
 export(na.false)
 
 export(isDir, checkDir, assertDir,
+       createDir,
        checkFile, assertFile)
 
 export(allIdentical)

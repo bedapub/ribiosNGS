@@ -1,3 +1,10 @@
+Version 1.0-39 (2014-04-14)
+  + scriptInit set options(warn=-1) in order to supress unwanted warnings
+  + add createDir for scripting
+
+Version 1.0-38 (2014-01-28)
+  + doLog updates
+
 Version 1.0-36 (2014-01-24)
   + writeLog and doLog use 'fmt' as the first parameter
 

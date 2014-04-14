@@ -13,7 +13,7 @@
 ################################################################################
 ## conditional: choose R version depending on the BICOSN value
 ifneq ($(BICOSN), bas)
-	R:= /SOFT/bi/bin/Rdevel
+	R:= /SOFT/bi/bin/R-devel
 else
 	R:= /SOFT/bi/bin/R
 endif 

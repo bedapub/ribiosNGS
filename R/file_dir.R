@@ -14,6 +14,14 @@ assertDir <- function(...) {
   return(invisible(TRUE))
 }
 
+createDir <- function(dir,showWarnings=FALSE, recursive=FALSE, mode="0777") {
+  if(!checkDir(dir))
+    dir.create(path=dir, showWarnings=showWarnings, recursive=recursive, mode=mode)
+  if(!checkDir(dir))
+    stop("Directory access not possible: %s", dir)
+  return(invisible(NULL))
+}
+
 ## files
 checkFile <- function(...) {
   x <- unlist(list(...))

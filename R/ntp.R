@@ -34,7 +34,7 @@ ntpBiTemplates <- function(genesetsPos, genesetsNeg, featureNames) {
                         res[gs.uind %in% gsNeg.ind[[x]]] <- -1L
                         return(res)
                       })
-  classes <- gsNames(genesetsPos)
+  classes <- gsName(genesetsPos)
   colnames(templates) <- classes
   rownames(templates) <- gs.uind
   class(templates) <- c("ntpTemplates", "matrix")

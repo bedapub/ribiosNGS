@@ -20,16 +20,16 @@ matchGenes <- function(x, vec, na.rm=TRUE) {
     if(na.rm) ind <- ind[!is.na(ind)]
     return(ind)
   })
-  names(gs.indices) <- gsNames(x)
+  names(gs.indices) <- gsName(x)
   return(gs.indices)
 }
 
-geneCount <- function(x,i) {
+geneCount <- function(x,i=NULL) {
   if(!is(x, "GeneSets"))
     stop("'x' must be a 'GeneSets' object")
   res <- sapply(x, function(xx) uniqueLength(xx$genes))
   if(!missing(i)) res <- res[i]
-  names(res) <- gsNames(x, i)
+  names(res) <- gsName(x, i)
   return(res)
 }
 

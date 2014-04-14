@@ -23,7 +23,7 @@ setMethod("gsName", "gseaResItem", function(object) return(object@geneset))
 setMethod("gsName", "annoGseaRes", function(object) sapply(object, gsName))
 setMethod("gsName", "GeneSets", function(object, i) {
   res <- sapply(object, function(x) x$name)
-  if(!missing(i)) res <- res[i]
+  if(!missing(i) && !is.null(i)) res <- res[i]
   return(res)
 })
 
@@ -261,3 +261,6 @@ setMethod("show", "annoGseaRes", function(object) {
   cat(str)
 })
 
+## back compatibility
+gsNames <- gsName
+gsDescs <- gsDesc

@@ -1,6 +1,6 @@
-\name{gseaES}
-\alias{gseaQvalue}
-\alias{gseaES}
+\name{gseaResES}
+\alias{gseaResQvalue}
+\alias{gseaResES}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
   Read GSEA statistic for pathway fingerprinting
@@ -10,8 +10,8 @@
   normalized Enrichement Score [NES]) to profile pathway activitities.
 }
 \usage{
-gseaQvalue(file, threshold = 1e-04, log = FALSE, posLog = FALSE)
-gseaES(file, normalized = FALSE)
+gseaResQvalue(file, threshold = 1e-04, log = FALSE, posLog = FALSE)
+gseaResES(file, normalized = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -34,7 +34,7 @@ gseaES(file, normalized = FALSE)
 }
 \details{
   In many cases we want to extract pathway signatures from a set of
-  experiments. Both \code{gseaQvalue} and \code{gseaES} can read GSEA
+  experiments. Both \code{gseaResQvalue} and \code{gseaES} can read GSEA
   output files and extract desired statistic: q-value, ES or NES.
 
   See the GSEA document for definitions of the three values. For
@@ -72,10 +72,10 @@ gsea.dir <- system.file(package="ribiosGSEA",
 gsea.file <- file.path(gsea.dir,
 "gsea_report_for_na_neg_1336489010730.xls")
 
-gsea.q <- gseaQvalue(gsea.file)
-gsea.logq <- gseaQvalue(gsea.file, log=TRUE)
-gsea.logq.pos <- gseaQvalue(gsea.file, log=TRUE, posLog=TRUE)
+gsea.q <- gseaResQvalue(gsea.file)
+gsea.logq <- gseaResQvalue(gsea.file, log=TRUE)
+gsea.logq.pos <- gseaResQvalue(gsea.file, log=TRUE, posLog=TRUE)
 
-gsea.es <- gseaES(gsea.file)
-gsea.nes <- gseaES(gsea.file, normalized=TRUE)
+gsea.es <- gseaResES(gsea.file)
+gsea.nes <- gseaResES(gsea.file, normalized=TRUE)
 }

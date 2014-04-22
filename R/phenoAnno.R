@@ -7,11 +7,16 @@ annoEset <- function(eset, file=NULL, strict=FALSE) {
                      sep="\t", check.names=FALSE, row.names=NULL) ## row.names=NULL forces row numbering
     pdNames <- cel2samplename(pD[,1L])
     sampInd <- imatch(sampNames, pdNames) ## sampNames (sample names from input file) must have one or more rows in pD (sample names from sample annotation file) by matching the names.
-    if(strict) {
-      if(any(is.na(sampInd)))
+    if(any(is.na(sampInd))) {
+      badSamples <- paste(sampNames[is.na(sampInd)], collapse=",")
+      if(strict) {
         qqmsg("Error: following sample names have no phenoData associated:",
-              paste(sampNames[is.na(sampInd)], collapse=","),
+              badSamples,
               status=1L)
+      } else {
+        warning("Warning: following sample names have no phenoData associated:",
+                badSamples)
+      }
     }
     revInd <- imatch(pdNames, sampNames); hasCel <- !is.na(revInd) ## it is tolerated if the sample annotation file have rows that do not have CEL files
     pd <- pD[hasCel,,drop=FALSE]

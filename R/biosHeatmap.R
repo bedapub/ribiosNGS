@@ -175,10 +175,10 @@ biosHeatmap <- function (x,
   else if (Colv == "Rowv" && !isTRUE(Rowv)) 
     Colv <- FALSE
   if (length(di <- dim(x)) != 2 || !is.numeric(x)) 
-    stop("`x' must be a numeric matrix")
+    stop("'x' must be a numeric matrix")
   nr <- di[1];nc <- di[2]
   if (nr <= 1 || nc <= 1) 
-    stop("`x' must have at least 2 rows and 2 columns")
+    stop("'x' must have at least 2 rows and 2 columns")
 
   if (missing(cellnote)) 
     cellnote <- matrix("", ncol = ncol(x), nrow = nrow(x))
@@ -188,7 +188,7 @@ biosHeatmap <- function (x,
       if (is.logical(Colv) && (Colv)) 
         dendrogram <- "column"
       else dedrogram <- "none"
-      warning("Discrepancy: Rowv is FALSE, while dendrogram is `", 
+      warning("Discrepancy: Rowv is FALSE, while dendrogram is '", 
               dendrogram, "'. Omitting row dendogram.")
     }
   }
@@ -198,7 +198,7 @@ biosHeatmap <- function (x,
       if (is.logical(Rowv) && (Rowv)) 
         dendrogram <- "row"
       else dendrogram <- "none"
-      warning("Discrepancy: Colv is FALSE, while dendrogram is `", 
+      warning("Discrepancy: Colv is FALSE, while dendrogram is '", 
               dendrogram, "'. Omitting column dendogram.")
     }
   }

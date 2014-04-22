@@ -2,6 +2,9 @@ importFrom(grDevices, heat.colors)
 importFrom(lattice, panel.xyplot)
 importFrom(ribiosUtils, assertFile, basefilename)
 
+## utils
+export(compPar)
+
 ## biosHeatmap
 export(biosHeatmap)
 
@@ -52,8 +55,14 @@ export(twocolor.panels,
        display.threecolor.panels,
        display.twocolor.panels)
 
+export(compPar)
+
 ## histogram functions
 export(qHist, xclipHist)
+export(histMat)
+
+## PCA
+export(plotPCA)
 
 export(jitter.xyplot)
 

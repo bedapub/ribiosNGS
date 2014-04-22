@@ -1,3 +1,27 @@
+## compop
+compPar<- function() return(par(mar=c(3,3,1.5,1.5), mgp=c(2,1,0)))
+                            
+## symmetric range
+symrange <- function(x, mid=0) {
+  xrange <- range(x[!is.infinite(x)], na.rm=TRUE)
+  maxabs <- max(abs(xrange-mid))
+  return(c(mid-maxabs, mid+maxabs))
+}
+
+## non null value
+nonNull <- function(x, default, length=NULL, defaultNULL.ok=FALSE) {
+  if(is.null(default) & !defaultNULL.ok)
+    stop("'default' is not allowed to be NULL")
+  if(is.null(x)) {
+    res <- default
+  } else {
+    res <- x
+  }
+  if(!missing(length))
+    res <- rep(res, length.out=length)
+  return(res)
+}
+
 bound <- function(x,low,high)  pmin(pmax(x, low),high)
 
 boundNorm <- function(x,

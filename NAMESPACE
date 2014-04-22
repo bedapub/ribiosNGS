@@ -14,3 +14,5 @@ export("cel2samplename")
 export("getSeqFiles", "registerSeqFile")
 
 export("getPCAlist", "getOrdList")
+
+export("normByGroup")

@@ -1,6 +1,13 @@
 ## compop
 compPar<- function() return(par(mar=c(3,3,1.5,1.5), mgp=c(2,1,0)))
-                            
+
+## get an matrix layout that is as near as a square
+squareLayout <- function(n) {
+  ncol <- ceiling(sqrt(n))
+  nrow <- n %/% ncol+ ifelse(n %% ncol >0, 1, 0)
+  return(c(nrow, ncol))
+}
+
 ## symmetric range
 symrange <- function(x, mid=0) {
   xrange <- range(x[!is.infinite(x)], na.rm=TRUE)
@@ -61,4 +68,10 @@ pdf2png <- function(..., convert="convert", density=300, outdir=NULL, wait=FALSE
   for(i in seq(along=comms))
     system(comms[i], wait=wait)
   return(invisible(outfiles))
+}
+intRange <- function(x, na.rm=TRUE) {
+  range <- range(x, na.rm=na.rm)
+  range[1] <- floor(range[1])
+  range[2] <- ceiling(range[2])
+  return(range)
 }

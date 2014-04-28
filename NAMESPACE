@@ -4,6 +4,8 @@ importFrom(ribiosUtils, assertFile, basefilename)
 
 ## utils
 export(compPar)
+export(squareLayout)
+export(intRange)
 
 ## biosHeatmap
 export(biosHeatmap)

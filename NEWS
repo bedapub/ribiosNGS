@@ -1,5 +1,6 @@
 2014-04-28 v1.1-23
   + Add intRange (integer range) and squareLayout (square matrix layout of plots)
+  + pdf2png now runs on UDIS machine (rbaus024) as well
 
 2014-04-22 v1.1-22
   + add histMat to visualize matrices with histograms

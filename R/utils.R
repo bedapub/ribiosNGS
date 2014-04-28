@@ -64,6 +64,11 @@ pdf2png <- function(..., convert="convert", density=300, outdir=NULL, wait=FALSE
   if(is.null(outdir)) outdir <- dirname(files)
   outfiles <- file.path(outdir,
                         sprintf("%s.png", basefilename(files)))
+
+  ## mon udis machine, ghostscript has to be added to the path
+  if(Sys.info()[["nodename"]]=="rbaus024.bas.roche.com") {
+    convert <- "PATH=/apps64/ghostscript-9.10/bin/:${PATH} /apps64/imagemagick/bin/convert"
+  }
   comms <- sprintf("%s -density %d %s %s", convert, density, files, outfiles)
   for(i in seq(along=comms))
     system(comms[i], wait=wait)

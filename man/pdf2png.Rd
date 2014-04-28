@@ -12,7 +12,9 @@ pdf2png(..., convert = "convert", density = 300, outdir=NULL, wait = FALSE)
 }
 \arguments{
   \item{\dots}{PDF files}
-  \item{convert}{Name of the convert program}
+  \item{convert}{Name of the convert program. It is overwritten if the
+    program is running on the udis machine (rbaus024). See the code for
+    more details.}
   \item{density}{DPI. Default 300 is good enough for publications in
     most biology/medicine journals}
   \item{outdir}{Output directory. If the value is \code{NULL}, the

@@ -22,5 +22,7 @@ export(read_rocheNGS_exprs)
 export(read_fasta,
        write_fasta)
 
+export(write.tableList)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosIO, .registration=TRUE)

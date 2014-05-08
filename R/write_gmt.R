@@ -13,5 +13,5 @@ write_gmt <- function(gmt, file, description=NULL) {
     stop("Unrecognized GMT list: it is either a list of gene symbols, or a list of a three-element list with name, description, and genes")
   }
     
-  invisible(.Call("write_gmt", gout, as.character(file)))
+  invisible(.Call("c_write_gmt", gout, as.character(file)))
 }

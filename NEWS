@@ -1,5 +1,6 @@
 Version 1.0-31 (2014-05-08)
   + writeList is renamed as write.tableList, and its documentation has been added.
+  + C-level functions are renamed to avoid confusions with R function names
 
 Version 1.0-30 (2014-05-07)
   + Add writeList function to write a series of tables

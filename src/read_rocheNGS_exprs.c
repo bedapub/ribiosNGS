@@ -5,7 +5,7 @@
 
 #include "ribios_io.h"
 
-SEXP read_rocheNGS_exprs (SEXP filename) {
+SEXP c_read_rocheNGS_exprs (SEXP filename) {
   LineStream ls;
   char* line;
   const int MAND_NCOL=6; // the first column is the row name, and column 2-6 are mandatory

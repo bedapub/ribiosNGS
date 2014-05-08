@@ -3,7 +3,7 @@
 
 #include "ribios_io.h"
 
-SEXP write_gmt(SEXP list, SEXP filename) {
+SEXP c_write_gmt(SEXP list, SEXP filename) {
   SEXP gmtItem;
   SEXP genes;
   char* fcopy=strdup(STRING_VALUE(filename));

@@ -5,7 +5,7 @@
 
 #include "ribios_io.h"
 
-SEXP read_chip(SEXP filename) {
+SEXP c_read_chip(SEXP filename) {
   LineStream ls;
   Texta it;
   char* line;

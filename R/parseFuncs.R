@@ -45,7 +45,7 @@ parseStrings <- function(str, collapse=",", trim=TRUE, ...) {
 
 ## makeFactor and parseFactor
 
-makeFactor <- function(groups, levels, make.names=TRUE) {
+makeFactor <- function(groups, levels=NULL, make.names=TRUE) {
   if(missing(levels) || is.null(levels)) {
     if(is.factor(groups)) {
       levels <- levels(groups)
@@ -71,7 +71,7 @@ makeFactor <- function(groups, levels, make.names=TRUE) {
   }
   return(groups)
 }
-parseFactor <- function(rgroups, rlevels, make.names=TRUE, collapse=",") { ## CL=command line
+parseFactor <- function(rgroups, rlevels=NULL, make.names=TRUE, collapse=",") { ## CL=command line
   if(is.null(rgroups))
     stop("raw string of groups cannot be NULL")
   groups <- unname(parseStrings(rgroups, collapse=collapse))

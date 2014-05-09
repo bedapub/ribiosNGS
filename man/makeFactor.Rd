@@ -10,8 +10,8 @@
   factors with groups and levels.
 }
 \usage{
-makeFactor(groups, levels, make.names = TRUE)
-parseFactor(rgroups, rlevels, make.names = TRUE, collapse=",")
+makeFactor(groups, levels=NULL, make.names = TRUE)
+parseFactor(rgroups, rlevels=NULL, make.names = TRUE, collapse=",")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -59,6 +59,10 @@ parseFactor(rgroup, rlevels)
 groups <- c("ATest", "Control", "Control", "ATest")
 levels <- c("Control", "ATest")
 makeFactor(groups, levels)
+
+## if 'groups' is a factor and 'levels' NULL or missing, its levels are respected
+groups <- factor(c("B", "C", "A", "D"), levels=c("D","C","A","B"))
+makeFactor(groups)
 
 \dontrun{
 groups <- c("ATest", "Control", "Control", "ATest")

@@ -2,7 +2,12 @@ importFrom("ribiosUtils", "trim")
 
 export("getArg","existArg")
 
-export("parseNumVec", parsePairs, parseStrings)
+export("parseNumVec",
+       "parsePairs",
+       "parseStrings")
+
+export("makeFactor",
+       "parseFactor")
 
 export("scriptName")
 

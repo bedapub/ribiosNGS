@@ -1,3 +1,7 @@
+2014-05-09: v1.1-10
+  + parseStrings and parsePairs return NULL in case the input parameter is NULL.
+  + Export parseFactor and makeFactor
+
 2014-03-11: v1.1-7
   + rarg_get checks initialization to avoid segmentation error when called by a script
 

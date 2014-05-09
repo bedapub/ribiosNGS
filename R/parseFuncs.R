@@ -46,8 +46,14 @@ parseStrings <- function(str, collapse=",", trim=TRUE, ...) {
 ## makeFactor and parseFactor
 
 makeFactor <- function(groups, levels, make.names=TRUE) {
-  if(missing(levels) || is.null(levels))
-    levels <- levels(factor(groups))
+  if(missing(levels) || is.null(levels)) {
+    if(is.factor(groups)) {
+      levels <- levels(groups)
+    } else {
+      levels <- levels(factor(groups))
+    }
+  }
+
   if(!all(groups %in% levels)) {
     missing.groups <- setdiff(groups, levels)
     stop("Following groups were not in levels:", paste(missing.groups, collapse=","),"\n")

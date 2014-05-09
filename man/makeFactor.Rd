@@ -31,6 +31,10 @@ parseFactor(rgroups, rlevels, make.names = TRUE, collapse=",")
   checked for syntactic validity in R in order to make design/contrast
   matrix construction easier.
 
+  If \code{levels} is unspecified or \code{NULL}, it will be set as the
+  existing levels if \code{groups} is a factor, otherwise the alphabetical
+  order levels (which may vary depending on the locale).
+
   \code{parseFactor} is a wrapper of \code{makeFactor} that accepts raw
   command-line inputs to build factors.
 }

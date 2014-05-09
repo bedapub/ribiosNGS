@@ -67,7 +67,7 @@ makeFactor <- function(groups, levels=NULL, make.names=TRUE) {
                      levels(groups.back)[isChanged],
                      levels(groups)[isChanged])
       warning("The following group names has been changed:\n",
-              paste(msg, collapse="\n");
+              paste(msg, collapse="\n"))
     }
   }
   return(groups)

@@ -18,6 +18,9 @@ parseStrings(str, collapse = ",", trim=TRUE, ...)
 \details{
   In case of multiple separators, they can be given by concatenating
   with piple signs, e.g. \code{,|\\t}.
+
+  If input string is \code{NULL}, the function returns \code{NULL}. This
+  can be useful in case the parameter is optional and not specified.
 }
 \value{A vector of character strings}
 \author{Jitao David Zhang}

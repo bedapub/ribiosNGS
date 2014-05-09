@@ -17,6 +17,11 @@ trim = TRUE, ...)
 \details{
   The function parses parameters in the form of
   \code{KEY1=VAL1,KEY2=VAL2,KEY3=VAL3} into \code{data.frame}.
+
+  
+  If input string is \code{NULL}, the function returns \code{NULL}. This
+  can be useful in case the parameter is optional and not specified.
+
 }
 \value{
   A two-column \code{data.frame}

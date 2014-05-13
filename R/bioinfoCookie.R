@@ -6,8 +6,10 @@ bioinfoCookie <- function(force.refresh=FALSE) {
 
   ## no existing bioinfo cookie
   out <- .Call("get_bioinfo_cookie")
-  raw.cookie <- grep("^Set-Cookie",strsplit(out, "\r\n")[[1]],value=TRUE)[[1]]
-  hot.cookie <- gsub("Set-Cookie: ", "", raw.cookie)
+  rawCookie <- grep("^Set-Cookie",strsplit(out, "\r\n")[[1]],value=TRUE)
+  if(length(rawCookie)<1)
+    stop("Failed to get cookie, please contact the developer. Debugging information: ", out)
+  hot.cookie <- gsub("Set-Cookie: ", "", rawCookie[[1]])
   Sys.setenv("RIBIOS_BIOINFO_COOKIE"=hot.cookie)
   return(hot.cookie)
 }

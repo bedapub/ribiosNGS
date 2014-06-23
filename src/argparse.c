@@ -2,8 +2,9 @@
 #include "argparse.h"
 #include "stdlib.h"
 #include "string.h"
+#include "format.h"
+#include "rlog.h"
 #include "arg.h"
-#include "log.h"
 #include "hlrmisc.h"
 
 #define rstr2c(x) strdup(CHAR(STRING_ELT((x),0)))
@@ -16,23 +17,22 @@
 
 char* msg="";
 
-void usagef (int level)
-{
+void usagef (int level) {
   usage(msg);
 }
 
 SEXP rarg_parse(SEXP argc, SEXP argv, SEXP optargs, SEXP reqargs, SEXP usage) {
-  R_len_t nv=length(argv);
+  int i;
+  int rargc;
   static char **rargv=NULL;
   static char *oargs=NULL;
   static char *rargs=NULL;
-  int i;
 
-  int rargc=asInteger(argc);
+  rargc=asInteger(argc);
   if(!rargv)
-    rargv=(char **)hlr_calloc(rargc, sizeof(char *));
+    rargv= (char **)hlr_calloc (argc,sizeof (char *));
   
-  for(i=0;i<nv;i++) {
+  for(i=0;i<rargc;i++) {
     hlr_free(rargv[i]);
     rargv[i]=rstrVec2c(argv, i);
   }
@@ -41,15 +41,12 @@ SEXP rarg_parse(SEXP argc, SEXP argv, SEXP optargs, SEXP reqargs, SEXP usage) {
   msg=rstr2c(usage);
 
 #ifdef DEBUG
-  Rprintf("argc=%d\nOpt=%s\nReq=%s\n",rargc, oargs, rargs);
-
-  printf("rargc=%d\n", rargc);
+  Rprintf("rargc=%d\n", rargc);
   for(i=0; i<rargc; i++)
-    printf("[%d]=%s\n", i, rargv[i]);
-  printf("oargs=%s\n", oargs);
-  printf("rargs=%s\n", rargs);
+    Rprintf("  rargv[%d]=%s\n", i, rargv[i]);
+  Rprintf("oargs=%s\n", oargs);
+  Rprintf("rargs=%s\n", rargs);
 #endif
-
 
   int res=arg_init(rargc, rargv, oargs, rargs, usagef);
   return(ScalarInteger(res));

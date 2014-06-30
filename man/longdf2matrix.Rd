@@ -36,7 +36,6 @@ score=c(3, 1, 1, 0))
 longdf2matrix(test.df, row.col=1L, column.col=2L, value.col=3L)
 
 data(Indometh)
-longdf2matrix(Indometh, row.col="time", column.col="Subject",
-value.col="conc")
+longdf2matrix(Indometh, row.col="time", column.col="Subject",value.col="conc")
 longdf2matrix(Indometh, row.col="Subject", column.col="time", value.col="conc")
 }

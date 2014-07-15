@@ -43,7 +43,8 @@ longdf2matrix <- function(df, row.col = 1L, column.col = 2L, value.col = 3L) {
   r.ind <- match(sub[,1L], subrows)
   c.ind <- match(sub[,2L], subcols)
   m.ind <- (c.ind-1)*length(subrows) + r.ind
-  stopifnot(length(m.ind)==length(subrows)*length(subcols))
+  if(length(m.ind)!=length(subrows)*length(subcols))
+    warning("Missing values detected\n")
   mat <- matrix(NA, nrow=length(subrows), ncol=length(subcols))
   mat[m.ind] <- sub[,3L]
   rownames(mat) <- subrows

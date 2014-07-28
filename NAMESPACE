@@ -24,5 +24,7 @@ export(read_fasta,
 
 export(write.tableList)
 
+export(find_ampliseq, read_ampliseq, find_and_read_ampliseq)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosIO, .registration=TRUE)

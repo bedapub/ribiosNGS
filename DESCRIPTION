@@ -1,12 +1,12 @@
 Package: ribiosPlot
 Type: Package
 Title: Plotting module of ribios for visualization
-Version: 1.1-23
-Date: 2014-04-28
+Version: 1.1-25
+Date: 2014-07-30
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Data structures, pre-compiled color palettes, functions for visualization of omics data.
-Depends: grDevices, lattice, ribiosUtils
-Suggests: latticeExtra, RColorBrewer, ribiosArg, plotrix
+Depends: grDevices, lattice, ribiosUtils(>= 1.0-41), RColorBrewer, methods
+Suggests: latticeExtra, ribiosArg, plotrix
 License: GPL-3
 LazyLoad: yes

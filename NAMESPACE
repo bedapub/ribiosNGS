@@ -1,10 +1,16 @@
-importFrom(grDevices, heat.colors)
+importFrom(grDevices, heat.colors, colorRampPalette)
 importFrom(lattice, panel.xyplot)
-importFrom(ribiosUtils, assertFile, basefilename)
+importFrom(ribiosUtils, assertFile, basefilename, chosenFew)
+importFrom(methods, setClass, setGeneric, setMethod)
+importFrom(RColorBrewer, brewer.pal)
+
+## class
+exportClass(fcol)
+exportMethods(fcol, fcbase)
 
 ## utils
 export(compPar)
-export(squareLayout)
+export(sqlayout)
 export(intRange)
 
 ## biosHeatmap
@@ -19,6 +25,7 @@ export(bound,
 export(robustDist)
 
 ## color for factors
+export(fcbrewer)
 export(brewer.pal.factorLevels,
        brewer.pal.factor)
 

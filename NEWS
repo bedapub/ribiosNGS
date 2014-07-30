@@ -1,3 +1,6 @@
+Version 1.0-41 (2014-07-30)
+  + Add chosenFew to print long vectors
+
 Version 1.0-40 (2014-06-30)
   + longdf2matrix is updated to be more efficient. Instead of using 'reshape', it builds the matrix directly by populating the elements.
 

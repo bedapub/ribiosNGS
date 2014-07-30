@@ -57,6 +57,7 @@ biosHeatmap(x,
             ylab = NULL,
             labRow = NULL,
             labCol = NULL,
+            cexMain = NULL,
             cexRow = pmin(1, 0.2 + 1/log10(nr)), 
             cexCol = pmin(1, 0.2 + 1/log10(nc)),
             
@@ -108,7 +109,7 @@ biosHeatmap(x,
   \item{linecol}{Level trace color}
   \item{main,xlab,ylab}{Heatmap title, X and Y axis labels}
   \item{labRow,labCol}{Row and column labels}
-  \item{cexRow,cexCol}{Row and column label font sizes}
+  \item{cexMain,cexRow,cexCol}{Title, row and column label font sizes}
   \item{ColSideColors,RowSideColors}{Column and row side colors}
   \item{color.key.title}{Color key title}
   \item{key}{Logical, whether key should be drawn}

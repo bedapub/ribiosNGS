@@ -13,7 +13,9 @@
   an informative visualization.
 }
 \usage{
-plotPCA(x, choices = c(1, 2), text = FALSE, points = list(pch = NULL, col = NULL, cex = NULL, bg = NULL, lwd = NULL, lty = NULL), grid = FALSE, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ...)
+plotPCA(x, choices = c(1, 2), text = FALSE, points = list(pch = NULL,
+col = NULL, cex = NULL, bg = NULL, lwd = NULL, lty = NULL), arrows =
+FALSE, grid = FALSE, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ...)
 }
 \arguments{
   \item{x}{A \code{prcomp} object produced by the \code{prcomp} function}
@@ -23,6 +25,7 @@ plotPCA(x, choices = c(1, 2), text = FALSE, points = list(pch = NULL, col = NULL
     \sQuote{Details}}
   \item{points}{A logical value or a list of options to pinpoint
     samples. See  \sQuote{details}}
+  \item{arrows}{A logical or a list of options to draw arrows.}
   \item{grid}{Logical value, indicating whether grid lines should be
     added to the plot.}
   \item{xlim}{xlim of the plot. Automatically determined if missing.}
@@ -34,12 +37,13 @@ plotPCA(x, choices = c(1, 2), text = FALSE, points = list(pch = NULL, col = NULL
   \item{\dots}{Other parameters passed to \code{plot}}
 }
 \details{
-  The values for \code{text} and \code{points} can be
+  The values for \code{text}, \code{points} and \code{arrows} can be
   \enumerate{
     \item Logical. If \code{FALSE}, no text or point is added.
-    \item List. A list containing options passed to \code{text} and
-    \code{points} respectively, such as \code{col}, \code{cex}, and
-    \code{pos} (only for \code{text}.
+    \item List. A list containing options passed to \code{text},
+    \code{points}, and \code{arrows} respectively, such as \code{col},
+    \code{cex}, \code{lwd}, \code{lty}, \code{code}, \code{length},
+    \code{angle}, and  \code{pos} (only for \code{text}.
     \item A vector of character strigns (only for \code{text})
   }
   See examples below.

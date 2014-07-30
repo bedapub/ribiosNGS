@@ -133,6 +133,7 @@ biosHeatmap <- function (x,
                          ylab = NULL,
                          labRow = NULL,
                          labCol = NULL,
+                         cexMain=NULL,
                          cexRow = pmin(1, 0.2 + 1/log10(nr)), 
                          cexCol = pmin(1, 0.2 + 1/log10(nc)),
                          
@@ -497,10 +498,12 @@ biosHeatmap <- function (x,
       main <- paste(main, collapse="\n")
     }
     ## Todo: not quite sure whether the unit here is correct
-    main.width <- strwidth(main, units="figure", cex=op[["cex.main"]])
-    if(main.width<1) main.width <- 1
-    main.cex <- op[["cex.main"]]*main.width*(lwid[2]/sum(lwid))*0.8
-    title(main, cex.main=main.cex)
+    if(is.null(cexMain)) {
+      main.width <- strwidth(main, units="figure", cex=op[["cex.main"]])    
+      if(main.width<0.33) main.width <- 0.33
+      cexMain <- op[["cex.main"]]/main.width*(lwid[length(lwid)]/sum(lwid))*0.8
+    }
+    title(main, cex.main=cexMain)
   }
   if (key) {
     par(mar = c(1.8, 1, 1, 1), cex = 0.75, mgp=c(1,0.5,0))

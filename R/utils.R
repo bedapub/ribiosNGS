@@ -2,11 +2,12 @@
 compPar<- function() return(par(mar=c(3,3,1.5,1.5), mgp=c(2,1,0)))
 
 ## get an matrix layout that is as near as a square
-squareLayout <- function(n) {
+sqlayout <- function(n) {
   ncol <- ceiling(sqrt(n))
   nrow <- n %/% ncol+ ifelse(n %% ncol >0, 1, 0)
   return(c(nrow, ncol))
 }
+
 
 ## symmetric range
 symrange <- function(x, mid=0) {

@@ -3,7 +3,7 @@
 \alias{brewer.pal.factorLevels}
 \title{Build brewer.pal colors from factor}
 \description{
-  Build brewer.pal colors from factors.
+  Build brewer.pal colors from factors (DEPRECATED)
 }
 \usage{
 brewer.pal.factor(factor, name = "Greys")
@@ -15,6 +15,9 @@ brewer.pal.factorLevels(factor, name = "Greys")
   \item{name}{Color panel name to be passed to \code{brewer.pal}}
 }
 \details{
+  The functionality has been replaced by \code{fcbrewer}. The functions
+  will be removed in the future release.
+  
   The function is useful to build named RGB color values from
   factors. \code{brewer.pal.factor} return a color-HTML-string
   vector as the same length of the input factor vector, which is named
@@ -33,6 +36,7 @@ brewer.pal.factorLevels(factor, name = "Greys")
   Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \examples{
+\dontrun{
 myFac <- factor(c("HSV", "BVB", "FCB", "HSV", "BVB", "HSV"))
 brewer.pal.factor(myFac, name="Set1")
 brewer.pal.factorLevels(myFac, name="Set1")
@@ -42,5 +46,6 @@ brewer.pal.factor(myLongFac, name="Set1")
 
 myShortFac <- factor(paste("Sample", 1:2))
 brewer.pal.factor(myShortFac, name="Set1")
+}
 }
 

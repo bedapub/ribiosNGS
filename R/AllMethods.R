@@ -11,7 +11,6 @@ setMethod("show", "fcol", function(object) {
   bcol <- fcbase(object)
   cat("Factor-matching colors\n",
       "Colors: (", length(acol), "):", ribiosUtils::chosenFew(acol),"\n",
-      "Base colors (", length(bcol), "):", fcbase(object), "\n",
+      "Base colors (", length(bcol), "):", ribiosUtils::chosenFew(fcbase(object)), "\n",
       sep="")
-      
 })

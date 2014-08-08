@@ -3,10 +3,10 @@
 \title{GeneSet names}
 \description{Gene set names}
 \usage{
-gsNames(x, i)
+gsNames(object, i)
 }
 \arguments{
-  \item{x}{An GeneSets S3-object, probably returned from \code{readGmt}}
+  \item{object}{An GeneSets S3-object, probably returned from \code{readGmt}}
   \item{i}{Subsetting index; if missing, names of all gene sets
     are returned. }
 }

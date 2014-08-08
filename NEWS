@@ -1,7 +1,11 @@
+Version 1.1-4 (Aug 08, 2014)
+  + Add parseGmt function to transform a GMT file into a list of integer indices that is directly applicable for downstream analysis
+
 Version 1.1-3 (Apr 14, 2014)
   + Remove mroast2tbl since the latest version of limma is already returning a data.frame
   + add gmthyper and gmthyperList functions to perform Fisher test with GMT files
   + clean up gseaES and gseaQvalue functions
+
 Version 1.1-2 (Apr 11, 2014)
   + Bug fix in matchGenes and geneCounts.
 

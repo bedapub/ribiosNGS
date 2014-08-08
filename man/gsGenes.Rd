@@ -5,10 +5,10 @@
   Get genes stored in GeneSet objects
 }
 \usage{
-gsGenes(x, i)
+gsGenes(object, i)
 }
 \arguments{
-  \item{x}{An GeneSets S3-object, probably returned from \code{readGmt}}
+  \item{object}{An GeneSets S3-object, probably returned from \code{readGmt}}
   \item{i}{Subsetting index; if missing, descriptions of all gene sets
     are returned.}
 }

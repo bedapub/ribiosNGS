@@ -40,9 +40,10 @@ export(gseaResQvalue, gseaResES,
 export(buildGSEAcomm)
 
 ## GMT functions
-export(readGmt, 
+export(readGmt, parseGmt,
        matchGenes,
        geneCount, geneCountFilter)
+
 S3method("[", "GeneSets")
 
 ## Fisher test (using hypergeometric test)

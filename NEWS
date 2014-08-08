@@ -1,3 +1,6 @@
+Version 1.0-42 (2014-08-08)
+  + Modify summarizeRows and summarizeColumns so that they accept additional parameters and pass them to the function
+
 Version 1.0-41 (2014-07-30)
   + Add chosenFew to print long vectors
 

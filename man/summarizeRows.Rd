@@ -10,9 +10,9 @@
   level by a factor vector.
 }
 \usage{
-summarizeRows(matrix, factor, fun = mean)
-summarizeColumns(matrix, factor, fun = mean)
-summarizeCols(matrix, factor, fun = mean)
+summarizeRows(matrix, factor, fun = mean, ...)
+summarizeColumns(matrix, factor, fun = mean, ...)
+summarizeCols(matrix, factor, fun = mean, ...)
 }
 \arguments{
   \item{matrix}{A numeric matrix}
@@ -21,6 +21,7 @@ summarizeCols(matrix, factor, fun = mean)
     \code{ncol(matrix)} (for \code{summarizeColumns}).}
   \item{fun}{A function or a name for a function, the summarizing
     function applied to rows/columns sharing the same level}
+  \item{...}{Further parameters passed to the function}
 }
 \details{
   \code{NA} levels are neglected, and corresponding rows/columns will

@@ -12,7 +12,7 @@
   returns command-line parameters by the convention used in BIOS.
 }
 \usage{
-argParse(optargs, reqargs, usage = paste(scriptName(), "-h"))
+argParse(optargs, reqargs, usage = paste(scriptName(), "-h"), strict=TRUE)
 
 argIsInit()
 argPresent(opt)
@@ -32,6 +32,9 @@ argGetPos(opt, ind=1L, default=NULL)
     least one non-optional value is given.}
   \item{usage}{A character string to be printed if the command-line
     option parsing fails}
+  \item{strict}{Logical, are extra un-prefixed parameters allowed? If
+    set to \code{TRUE}, the un-prefixed parameters (which must be at the
+    end of the command line) will be returned as a character vector.}
   \item{opt}{Name of a command line option}
   \item{ind}{Index of the value to be fetched, see below.}
   \item{default}{Value to be returned if the opt was missing}
@@ -52,8 +55,9 @@ argGetPos(opt, ind=1L, default=NULL)
   \code{default} value will be returned.
 }
 \value{
-\code{argParse} is used for the side effects.It returns (invisibly) the
-number of parameters it parsed.
+\code{argParse} is used for the side effects. If \code{strict} is set to
+\code{TRUE}, an invisible \code{NULL} is returned; otherwise, extra
+un-prefixed parameters are returned as an invisible character vector 
 
 \code{argGet} and \code{argGetPos} returns a character
 string. \code{argPresent} returns a boolean value.

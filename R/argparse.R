@@ -1,4 +1,4 @@
-argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
+argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h"), strict=TRUE) {
   if(isDebugging()) {
     message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode")
     return(invisible(NULL))
@@ -27,10 +27,17 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h")) {
                as.character(optargs),
                as.character(reqargs),
                as.character(usage))
-  if(argc != res) {
-    qqmsg(usage)
+  if(strict) {
+    if(argc != res)
+      qqmsg(usage)
+    return(invisible(NULL))
+  } else {
+    if(argc >= (res+1)) {
+      return(invisible(comm[(res+1):argc]))
+    } else {
+      return(NULL)
+    }
   }
-  return(invisible(res))
 }
 
 argIsInit <- function() .Call("rarg_isInit")

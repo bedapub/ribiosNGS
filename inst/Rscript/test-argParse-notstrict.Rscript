@@ -1,0 +1,21 @@
+#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+
+library(ribiosArg)
+usage <- sprintf("%s -infile INFILE -outfile OUTFILE [-a Low Up] [-b] [-c Mid] [-d]\
+  -infile: input file\
+  -outfile: output file\
+  -a LOW UP: thresholds\
+  -b: Add b\
+  -c: Mid point\
+  -d: Multiply by d", scriptName())
+
+res <- argParse(optargs="b a,2 c,1 d", reqargs="infile outfile", usage=usage, strict=FALSE)
+cat("infile:", argGet("infile"),"\n")
+cat("outfile:", argGet("outfile"),"\n")
+cat("c:", argGet("c"), "\n")
+cat("a[1]:", argGetPos("a",1), "\n")
+cat("a[2]:", argGetPos("a",2), "\n")
+cat("b:", argPresent("b"), "\n")
+cat("d:", argPresent("d"), "\n")
+cat("d:", argGet("d"), "\n")
+cat("extra parameters:", paste(res, collapse=" "), "\n")

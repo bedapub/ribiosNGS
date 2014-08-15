@@ -13,6 +13,16 @@ getLoggers <- function() {
 setLoggers <- function(loggers) {
   assignInNamespace("RIBIOS_LOGGERS", loggers, ns="ribiosUtils")
 }
+appendLoggers <- function(con.list) {
+  loggers <- getLoggers()
+  loggers.desc <- sapply(loggers, function(x) summary(x)$description)
+  con.descs <- sapply(con.list, function(x) summary(x)$description)
+  new.loggers <- !con.descs %in% loggers.desc & !duplicated(con.descs)
+  if(any(new.loggers)) {
+    loggers <- append(loggers, con.list[new.loggers])
+    setLoggers(loggers)
+  }
+}
 
 ## exported funcs
 clearLog <- function() {
@@ -26,7 +36,7 @@ flushLog <- function() {
       flush(loggers[[i]])
 }
 
-registerLog <- function(...) {
+registerLog <- function(..., append=FALSE) {
   x <- list(...)
   if(length(x)==0 || (length(x)==1 && (is.null(x[[1]]) || is.na(x[[1]])))) {
     setLoggers(NULL);
@@ -38,7 +48,7 @@ registerLog <- function(...) {
     } else  if(is.character(xx)) {
       if(xx=="-") {
         return(stdout());
-      } else if(file.exists(xx)) {
+      } else if(file.exists(xx) && append) {
         logcon <- file(xx, "a")
       } else {
         logcon <- file(xx, "w")
@@ -47,9 +57,7 @@ registerLog <- function(...) {
     }
     stop("Input parameters must be either connection or file names.")
   })
-  loggers <- getLoggers()
-  cons <- append(loggers, cons)
-  setLoggers(cons)
+  appendLoggers(cons)
   
   ## When the R session ends, RIBIOS_LOGGERS should be closed whenever possible
   myLast <- function(x) {

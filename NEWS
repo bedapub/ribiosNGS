@@ -1,3 +1,7 @@
+Version 1.0-43 (2014-08-15)
+  + registerLog adds an extra option, append=FALSE, to provide alternative behavior to the logging machinary. Note that the default behaviour has changed from this version: previously files are only appended and never overwritten; from now on an existing file will be overwritten unless the append option is manually set to TRUE.
+  + (Internal) add appendLogger function, which checks redundancy of loggers by the connection description string, in order to avoid appending loggers that have been in the list again.
+
 Version 1.0-42 (2014-08-08)
   + Modify summarizeRows and summarizeColumns so that they accept additional parameters and pass them to the function
 

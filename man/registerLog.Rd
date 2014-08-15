@@ -12,7 +12,7 @@
   openning and closing the connections.
 }
 \usage{
-registerLog(...)
+registerLog(..., append=FALSE)
 clearLog()
 flushLog()
 }
@@ -20,6 +20,9 @@ flushLog()
 \arguments{
   \item{\dots}{Arbitrary numbers of file names (character strings) or
     connection objects (see example). }
+  \item{append}{Logical, log will be appended to the existing file but
+    not overwriting. Only valid for files but not for connections such
+    as standard output.}
 }
 \details{
   Input parameters can be either character strings or connections (such as the

@@ -180,9 +180,9 @@ for(i in seq(along=input.tbl)) {
   lwids <- wh$lwid
   lheis <- wh$lhei
   width <- wh$width
-  height <- wh$height
+  height <- pmin(wh$height, 200L)
 
-  pdf(output.filenames[i], width=width, height=height)
+  openFileDevice(output.filenames[i], width=width, height=height)
   biosHeatmap(curtbl,
               ## dendrogram control
               dendrogram=dendrogram,
@@ -226,7 +226,7 @@ for(i in seq(along=input.tbl)) {
 
               ## zlims
               zlim=zlim)
-  dev.off()
+  closeFileDevice()
 }
 
 quit(save="no", status=0)

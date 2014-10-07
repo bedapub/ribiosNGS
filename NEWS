@@ -1,3 +1,6 @@
+2014-10-07: v1.1-13
+  + argParse: the function now works with the latest Rscript. The change is that the script files are more consistently handled by Rscript (in the form of Rscript FILE) and R (R -f FILE or R --file=FILE). The function has been updated to adapt to this change.
+
 2014-08-15: v1.1-12
   + argParse: add an extra option 'strict=TRUE'. If set to FALSE, the function will return command-line parameters that were not appended with a prefix (e.g. -prefix PARAMETER). 
   + Note that argParse's return value has changed: by default it returns an invisible \code{NULL} (before it returns the invisible length of valid parameters). If strict=TRUE, it returns the extra parameters as an invisible character vector

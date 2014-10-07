@@ -4,14 +4,28 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h"), strict=T
     return(invisible(NULL))
   }
   allComm <- commandArgs(FALSE)
-  if("--args" %in% allComm) {
-    indFile <- grep("^--file=", allComm)
-    allComm[indFile] <- gsub("^--file=", "", allComm[indFile]) ## script name
-    allComm <- allComm[-c(1:(indFile-1))]
-    comm <- allComm[!grepl("^--", allComm)]
+  isFile <- grepl("^--file=", allComm)
+  isF <- grepl("^-f", allComm)
+  if( any(isFile) ) {
+    find <- which(isFile)
+    allComm[find] <- gsub("^--file=", "", allComm[find])
+    allComm <- allComm[-c(1:(find-1))]
+  } else if (any(isF)) {
+    find <- which(isF)
+    allComm <- allComm[-c(1:find)]
   } else {
-    comm <- allComm[-c(1:2)]
+    stop("This should not happen: no parameters in the form of '-f' or '--f' is detected. Please contact the developer")
   }
+  comm <- allComm[!grepl("^--", allComm)]
+  ## the following code was valid till R-3.0.x. 
+  ##  if("--args" %in% allComm) {
+  ##    indFile <- grep("^--file=", allComm)
+  ##    allComm[indFile] <- gsub("^--file=", "", allComm[indFile]) ## script name
+  ##    allComm <- allComm[-c(1:(indFile-1))]
+  ##    comm <- allComm[!grepl("^--", allComm)]
+  ##  } else {
+  ##    comm <- allComm[-c(1:2)]
+  ##  }
   if(is.null(optargs)) optargs <- ""
   if(is.null(reqargs)) reqargs <- ""
   argc <- as.integer(length(comm))

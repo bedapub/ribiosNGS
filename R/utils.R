@@ -70,6 +70,7 @@ ribiosCon <- function(db="bia", user="biread", password="biread", forceJDBC=FALS
   if(hasOracle() & !forceJDBC) {
     con <- dbConnect(ORA, user = user, password = password, db = db)
   } else {
+    options(java.parameters = "-Xmx4g" ) ## increase the heap size before the RJDBC package is loaded
     suppressWarnings(suppressMessages(hasJDBC <- require("RJDBC", character.only=TRUE)))
     if(!hasJDBC)
       stop("No JDBC package installed: please run 'install.packages('RJDBC')' first and then load ribiosAnnotation again.")

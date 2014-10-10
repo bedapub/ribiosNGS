@@ -1,3 +1,6 @@
+Version 3.1-6 (2014-10-10)
+  + Java heap size is set to 4g before library loading if RJDBC has to be used. This will eliminate memory error messages due to insufficient heap size.
+
 Version 3.1-5 (2014-07-08)
   + Add annotatemRNAs to translate mRNA accession numbers to GeneIDs. 
   + Todo: there are redundant codes in annotateProbesets.R, with regard to multiple annotation methods. They should be cleaned-up.

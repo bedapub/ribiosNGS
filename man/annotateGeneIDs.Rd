@@ -1,18 +1,20 @@
 \name{annotateGeneIDs}
 \alias{annotateGeneIDs}
 \alias{annotateGeneSymbols}
+\alias{annotatemRNAs}
 \title{
-  Annotate GeneIDs or GeneSymbols
+  Annotate GeneIDs, GeneSymbols, or mRNA accession numbers.
 }
 \description{
-  Annotate GeneIDs or GeneSymbols, optionally with human orthologue mappings
+  Annotate GeneIDs, GeneSymbols or mRNA accesion numbers, optionally with human orthologue mappings
 }
 \usage{
 annotateGeneIDs(ids, orthologue=FALSE, multiOrth=FALSE)
 annotateGeneSymbols(ids, organism=c("human", "mouse", "rat", "any"),orthologue=FALSE, multiOrth=FALSE)
+annotatemRNAs(ids, orthologue=FALSE, multiOrth=FALSE)
 }
 \arguments{
-  \item{ids}{Character vector, GeneIDs or GeneSymbols of query. It can contain \code{NA} or \code{NULL}}
+  \item{ids}{Character vector, GeneIDs, GeneSymbols or mRNAs of query. It can contain \code{NA} or \code{NULL}}
   \item{organism}{Character string, specifies the organism from which
     input gene symbols com from. This option is only valid for
     GeneSymbol since it is commonly not unique.In case of \sQuote{any},
@@ -94,5 +96,7 @@ orthologue=TRUE)
 annotateGeneSymbols(ids=c("Cdk2", "CDK4", "Mapk14"),organism="mouse", orthologue=TRUE)
 annotateGeneSymbols(ids=c("Cdk2", "CDK4", "Mapk14"),organism="any", orthologue=TRUE)
 
+## Annotate mRNA
+annotatemRNAs(c("NM_007158", "NM_001007553"))
 options(error=NULL)
 }

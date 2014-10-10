@@ -1,3 +1,7 @@
+Version 3.1-5 (2014-07-08)
+  + Add annotatemRNAs to translate mRNA accession numbers to GeneIDs. 
+  + Todo: there are redundant codes in annotateProbesets.R, with regard to multiple annotation methods. They should be cleaned-up.
+
 Version 3.1-4 (2014-04-02)
   + ribiosCon tests whether RJDBC exists before it tries the JDBC option
   + Add importFrom DBI and ribiosUtils

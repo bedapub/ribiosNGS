@@ -23,7 +23,8 @@ export(annotateAnyProbeset,
        gtiChipAnnotation,
        annotateChip,
        annotateProbesets,
-       annotateProbeIDs)
+       annotateProbeIDs,
+       annotatemRNAs)
 
 export(annotateAnyID) ## shortcut for annotateGeneID, annotateGeneSymbol and annotateProbesets
 

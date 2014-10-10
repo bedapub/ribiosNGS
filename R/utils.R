@@ -32,6 +32,15 @@ hasOracle <- function() {
     sqlOut <- system("sqlplus -v", intern=TRUE, ignore.stderr=TRUE)
     return(length(sqlOut)>0)
   }
+
+##  has <- require("ROracle", quietly=TRUE, warn.conflicts=FALSE)
+##  if(!has) {
+##    message("No ROracle is detected. Trying to install ...")
+##    install.packages("ROracle", repos="http://stat.ethz.ch/CRAN",
+##                     dependencies=TRUE, quiet=TRUE)
+##    has <- require("ROracle", quietly=TRUE, warn.conflicts=FALSE)
+##  }
+##  return(has)
 }
 
 ## onload / onAttach

@@ -220,3 +220,33 @@ annotateAnyID <- function(ids, chiptype, orthologue=FALSE) {
     annotateProbesets(ids=ids, chip=chiptype, orthologue=orthologue)
   }
 }
+
+annotatemRNAs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
+  comm <- paste("SELECT a.item_id, c.RO_GENE_ID ,c.GENE_SYMBOL, c.DESCRIPTION, 'NA' AS chip, c.TAX_ID ",
+                " FROM genome.GTI_GENE_ITEMS a, ",
+                " GTI_GENES c",
+                " WHERE a.item_type_id in (3,4) AND a.ro_gene_id=c.ro_gene_id", sep="")
+  cnames <- c("mRNA", "GeneID", "GeneSymbol", "GeneName", "Chip", "TaxID")
+  conames <- c(cnames, c("OrigTaxID", "OrigGeneID", "OrigGeneSymbol"))
+  ann <- querydbTmpTbl(comm,
+                       "lower(a.item_id)",
+                       tolower(ids), "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
+  if(!orthologue) {
+    colnames(ann) <- cnames
+    res <- ann
+  }
+  if(orthologue) {
+    colnames(ann) <- c("mRNA", "OrigGeneID", "OrigGeneSymbol", "GeneName", "Chip", "OrigTaxID")
+    ort <- annotateHumanOrthologsNoOrigTax(ann$OrigGeneID, multiOrth=multiOrth)
+    if(multiOrth) {
+      res <- merge(ann, ort, by="OrigGeneID", all.x=TRUE)
+    } else {
+      ort.re <- matchColumn(ann$OrigGeneID, ort, "OrigGeneID", multi=FALSE)
+      res <- cbind(ann, ort.re[,-1L])
+    }
+    res <- putColsFirst(res, conames)
+  }
+  res <- matchColumn(ids, res, "mRNA", multi=orthologue && multiOrth)
+  rownames(res) <- id2rownames(res$mRNA)
+  return(res)
+}

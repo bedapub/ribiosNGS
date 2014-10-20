@@ -1,6 +1,8 @@
 2014-07-30 v1.1-25
   + Add function fcbrewer to handle factor-matching colors
   + Improved manual pages
+  + sqlayout is renamed into squareLayout
+  + Rename compPar to compactPar
 
 2014-07-01 v1.1-24
   + biosHeatmap: the cex main size is now better guessed. The multiply factor is set to 2 at least.

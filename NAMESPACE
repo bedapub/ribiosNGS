@@ -77,6 +77,10 @@ export(trim)
 
 export(qsystem, rmat)
 
+export(silencio)
+
+export(assertDesign, assertContrast, assertDesignContrast)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils)
 

@@ -13,12 +13,12 @@
 ################################################################################
 ## conditional: choose R version depending on the BICOSN value
 ifneq ($(BICOSN), bas)
-	R:= /SOFT/bi/apps/R/devel/trunk/bin/R
-	CHECKADD:= ${CHECKADD} --no-manual ## for envcheck
+	R:= R-devel 
 else
 	R:= R
-	CHECKADD:= ${CHECKADD} --no-latex
 endif 
+
+CHECKADD:=${CHECKADD} --no-manual
 
 PKG          := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
 PKG_VERSION  := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)

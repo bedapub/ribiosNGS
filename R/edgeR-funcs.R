@@ -35,6 +35,7 @@ edgeBuild <- function(x, design, robust=FALSE) {
 #' The function tests differentially expressed genes using generalized linear model likelihood-ratio tests
 #' A single contrast vector is allowed
 #'
+#' @keywords internal
 #' @param fit An \code{DGEGLM} object produced by \code{glmFit}
 #' @param contrast a vector of contrasts
 #' @return A data frame containing information about differential expression
@@ -45,7 +46,9 @@ edgeBuild <- function(x, design, robust=FALSE) {
 #' design <- cbind(baseline=c(1,1,1,1), x=c(1,1,-1,-1))
 #' edgeObj <- edgeBuild(expression, design)
 #' edgeFit <- glmFit(edgeObj, design)
+#' \dontrun{
 #' edgeFitTest <- edgeTestContrast(edgeFit, contrast=c(0,1))
+#' }
 edgeTestContrast <- function(fit, contrast) {
   stopifnot(is.vector(contrast))
   lrt <- glmLRT(fit, contrast=contrast)

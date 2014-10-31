@@ -22,9 +22,12 @@ expression <- matrix(rnbinom(10000,mu=5,size=2),ncol=4)
 design <- cbind(baseline=c(1,1,1,1), x=c(1,1,-1,-1))
 edgeObj <- edgeBuild(expression, design)
 edgeFit <- glmFit(edgeObj, design)
+\dontrun{
 edgeFitTest <- edgeTestContrast(edgeFit, contrast=c(0,1))
+}
 }
 \seealso{
 \code{\link{glmFit}} to produce the input object, \code{\link{edgeTest}} to run the test for a contrast matrix.
 }
+\keyword{internal}
 

@@ -1,1 +1,13 @@
-exportPattern("^[[:alpha:]]+")
+importFrom("ribiosUtils",
+           "assertContrast", "assertDesign", "assertDesignContrast")
+
+import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is only available in newer versions of edgeR. Using importFrom explicitly will cause the package fail to install on stable R.
+
+##importFrom("edgeR", DGEList, calcNormFactors,
+##           estimateGLMRobustDisp,
+##           estimateGLMCommonDisp,
+##           estimateGLMTrendedDisp,
+##           estimateGLMTagwiseDisp,
+##           glmLRT, glmFit, topTags)
+##
+export(edgeBuild, edgeTest,edgeTestContrast, edgeRun)

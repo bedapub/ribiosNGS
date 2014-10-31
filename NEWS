@@ -1,3 +1,8 @@
+Version 1.0-6 (2014-10-31)
+  + Start using roxygen2
+  + edgeR workflow has been wrapped into functions edgeBuild, edgeTest, and edgeRun.
+  + remove edge.DGE function since it is not used anymore.
+
 Version 1.0-5 (2013-01-22)
   + pairs.Rscript has been put into /SOFT/bi/apps/ribios/scripts/pairs.
 

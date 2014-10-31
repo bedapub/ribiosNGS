@@ -10,4 +10,4 @@ import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is onl
 ##           estimateGLMTagwiseDisp,
 ##           glmLRT, glmFit, topTags)
 ##
-export(edgeBuild, edgeTest,edgeTestContrast, edgeRun)
+export(edgeBuild, edgeTest,edgeRun)

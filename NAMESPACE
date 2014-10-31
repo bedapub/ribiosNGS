@@ -26,5 +26,7 @@ export(write.tableList)
 
 export(find_ampliseq, read_ampliseq, find_and_read_ampliseq)
 
+export(writeMatrix, readMatrix)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosIO, .registration=TRUE)

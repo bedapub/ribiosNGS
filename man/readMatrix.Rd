@@ -10,6 +10,9 @@ readMatrix(file, row.names = TRUE)
 
 \item{row.names}{Logical, whether the first column contains row names (should be consistent with the settign in \code{writeMatrix})}
 }
+\value{
+Matrix
+}
 \description{
 \code{readMatrix} reads a matrix written by \code{writeMatrix} into a R session
 }

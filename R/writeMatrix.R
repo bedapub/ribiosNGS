@@ -31,7 +31,7 @@ writeMatrix <- function(x, file, row.names=TRUE) {
 #'
 #' @param file file to be read in
 #' @param row.names Logical, whether the first column contains row names (should be consistent with the settign in \code{writeMatrix})
-#' @return NULL
+#' @return Matrix
 #' @examples
 #' test.mat <- matrix(rnorm(1000), nrow=10, dimnames=list(LETTERS[1:10], 1:100))
 #' tmpfile <- tempfile()
@@ -45,8 +45,9 @@ readMatrix <- function(file, row.names=TRUE) {
   } else {
     row.names <- 1L
   }
-  read.table(file, header=TRUE, sep="\t", quote="",
-             row.names=row.names,
-             dec=".", check.names=FALSE, strip.white=TRUE,
-             comment.char="")
+  res <- read.table(file, header=TRUE, sep="\t", quote="",
+                    row.names=row.names,
+                    dec=".", check.names=FALSE, strip.white=TRUE,
+                    comment.char="")
+  as.matrix(res)
 }

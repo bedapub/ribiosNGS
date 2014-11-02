@@ -408,6 +408,31 @@ isUnsetSigFilter <- function(object) {
 }
 
 
+## annotation
+annotateDataFrame <- function(df, annotation, key) {
+  stopifnot(is.data.frame(annotation))
+  if(!missing(key)) {
+    keys <- annotation[, key]
+  } else {
+    keys <- rownames(annotation)
+  }
+  ind <- match(rownames(df), keys)
+  df.anno <- annotation[ind,]
+  if(any(!colnames(df.anno) %in% colnames(df))) {
+    res <- cbind(df.anno, df)
+  } else {
+    res <- df
+  }
+  rownames(res) <- rownames(df)
+  return(res)
+}
+annotateGenes <- function(edgeResult, annotation, key) {
+  dt <- dgeTables(edgeResult)
+  annodt <- lapply(dt, function(x) annotateDataFrame(x, annotation, key))
+  edgeResult@dgeTables <- annodt
+  return(edgeResult)
+}
+                          
 setGeneric("plotBCV", function(x, ...) standardGenerics("plotBCV"))
 setMethod("plotBCV", "DGEList", function(x, ...) {
   edgeR::plotBCV(x, ...)

@@ -1,34 +1,173 @@
+ESF_POSLOGFC_DEFAULT <- 0
+ESF_NEGLOGFC_DEFAULT <- 0
+ESF_LOGCPM_DEFAULT <- -Inf
+ESF_LR_DEFAULT <- 0
+ESF_PVALUE_DEFAULT <- 1
+ESF_FDR_DEFAULT <- 1
+
+setClass("EdgeSigFilter",
+         representation=list("posLogFC"="numeric",
+           "negLogFC"="numeric",
+           "logCPM"="numeric",
+           "LR"="numeric",
+           "pValue"="numeric",
+           "FDR"="numeric"),
+         prototype=list(posLogFC=ESF_POSLOGFC_DEFAULT,
+           negLogFC=ESF_NEGLOGFC_DEFAULT ,
+           logCPM=ESF_LOGCPM_DEFAULT,
+           LR=ESF_LR_DEFAULT,
+           pValue=ESF_PVALUE_DEFAULT,
+           FDR=ESF_FDR_DEFAULT),
+         validity=function(object) {
+           stopifnot(validPosLogFC <- object@posLogFC >= 0)
+           stopifnot(validNegLogFC <- object@negLogFC <= 0)
+           stopifnot(validLR <- object@LR>=0)
+           stopifnot(validPvalue <- object@pValue >= 0 & object@pValue <= 1)
+           stopifnot(validFDR <- object@FDR >= 0 & object@FDR <= 1)
+           return(validPosLogFC & validNegLogFC & validLR & validPvalue & validFDR)
+         })
+posLogFC <- function(edgeSigFilter) edgeSigFilter@posLogFC
+negLogFC <- function(edgeSigFilter) edgeSigFilter@negLogFC
+logCPM <- function(edgeSigFilter) edgeSigFilter@logCPM
+LR <- function(edgeSigFilter) edgeSigFilter@LR
+pValue <- function(edgeSigFilter) edgeSigFilter@pValue
+FDR <- function(edgeSigFilter) edgeSigFilter@FDR
+isUnsetPosLogFC <- function(edgeSigFilter) posLogFC(edgeSigFilter)==ESF_POSLOGFC_DEFAULT
+isUnsetNegLogFC <- function(edgeSigFilter) negLogFC(edgeSigFilter)==ESF_NEGLOGFC_DEFAULT
+isUnsetLogCPM <- function(edgeSigFilter) logCPM(edgeSigFilter)==ESF_LOGCPM_DEFAULT
+isUnsetLR <- function(edgeSigFilter) LR(edgeSigFilter)==ESF_LR_DEFAULT
+isUnsetPValue <- function(edgeSigFilter) pValue(edgeSigFilter)==ESF_PVALUE_DEFAULT
+isUnsetFDR <- function(edgeSigFilter) FDR(edgeSigFilter)==ESF_FDR_DEFAULT
+
+setMethod("show", "EdgeSigFilter", function(object) {
+  title <- "Edge Significantly Expressed Genes Filter"
+  msgs <- c()
+  if(!isUnsetPosLogFC(object))
+    msgs <- c(msgs,
+                  sprintf("posLogFC filter set: logFC>=%f", posLogFC(object)))
+  if(!isUnsetNegLogFC(object))
+    msgs <- c(msgs,
+                  sprintf("negLogFC filter set: logFC<=%f", negLogFC(object)))
+  if(!isUnsetLogCPM(object))
+    msgs <- c(msgs,
+                  sprintf("logCPM filter set: logCPM>=%f", logCPM(object)))                  
+  if(!isUnsetLR(object))
+    msgs <- c(msgs,
+                 sprintf("LR filter set: LR>=%f", LR(object)))
+  if(!isUnsetPValue(object))
+    msgs <- c(msgs,
+                  sprintf("pValue filter set: pValue<=%f", pValue(object)))
+  if(!isUnsetFDR(object))
+    msgs <- c(msgs,
+                  sprintf("FDR filter set: FDR<=%f", FDR(object)))
+  if(length(msgs)==0L)
+    msgs <- c(msgs, "No active filter set")
+  messages <- paste(paste(title,
+                          paste("*", msgs, collapse="\n"),
+                          sep="\n"), "\n", sep="")
+  
+  cat(messages)
+  return(invisible(messages))
+})
+
+`posLogFC<-` <- function(edgeSigDegFilter, value) {
+  edgeSigDegFilter@posLogFC <- value
+  return(edgeSigDegFilter)
+}
+`negLogFC<-` <- function(edgeSigDegFilter, value) {
+  edgeSigDegFilter@negLogFC <- value
+  return(edgeSigDegFilter)
+}
+`logFC<-` <- function(edgeSigDegFilter, value) {
+  edgeSigDegFilter@posLogFC <- abs(value)
+  edgeSigDegFilter@negLogFC <- -abs(value)
+  return(edgeSigDegFilter)
+}
+`logCPM<-` <- function(edgeSigDegFilter, value) {
+  edgeSigDegFilter@logCPM <- value
+  return(edgeSigDegFilter)
+}
+`LR<-` <- function(edgeSigDegFilter, value) {
+  edgeSigDegFilter@LR <- value
+  return(edgeSigDegFilter)
+}
+`pValue<-` <- function(edgeSigDegFilter, value) {
+  edgeSigDegFilter@pValue <- value
+  return(edgeSigDegFilter)
+}
+`FDR<-` <- function(edgeSigDegFilter, value) {
+  edgeSigDegFilter@FDR <- value
+  return(edgeSigDegFilter)
+}
+update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
+  if(!missing(logFC)) logFC(object) <- logFC
+  if(!missing(posLogFC)) posLogFC(object) <- posLogFC
+  if(!missing(negLogFC)) negLogFC(object) <- negLogFC
+  if(!missing(logCPM)) logCPM(object) <- logCPM
+  if(!missing(LR)) LR(object) <- LR
+  if(!missing(pValue)) pValue(object) <- pValue
+  if(!missing(FDR)) FDR(object) <- FDR
+  validObject(object)
+  return(object)
+}
+EdgeSigFilter <- function(logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
+  object <- new("EdgeSigFilter")
+  object <- update(object, logFC=logFC, posLogFC=posLogFC, negLogFC=negLogFC,
+                   logCPM=logCPM, LR=LR, pValue=pValue, FDR=FDR)
+  return(object)
+}
+
+
+isUnsetSigFilter <- function(object) {
+  isUnsetPosLogFC(object) & isUnsetNegLogFC(object) & isUnsetLogCPM(object) & isUnsetLR(object) & isUnsetPValue(object)  & isUnsetFDR(object)
+}
+
+ER_TCRATIO_DEFAULT <- Inf
+ER_TRENDED_DEFAULT <- Inf
+ER_AVELOGCPM_DEFAULT <- -Inf
+ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.25, FDR=0.10)
+
 setClass("EdgeResult",
          representation=list("dgeList"="DGEList",
            "dgeGLM"="DGEGLM",
+           "contrasts"="matrix",
            "dgeTables"="list",
            "isFilteredGene"="logical",
            "tcRatioCutoff"="numeric",
            "trendedCutoff"="numeric",
-           "aveLogCPMCutoff"="numeric"))
-EdgeResult <- function(dgeList, dgeGLM, dgeTables) {
+           "aveLogCPMCutoff"="numeric",
+           "sigFilter"="EdgeSigFilter"),
+         prototype=list(tcRatioCutoff=ER_TCRATIO_DEFAULT,
+           trendedCutoff=ER_TRENDED_DEFAULT,
+           aveLogCPMCutoff=ER_AVELOGCPM_DEFAULT,
+           sigFilter=ER_SIGFILTER_DEFAULT))
+
+EdgeResult <- function(dgeList, dgeGLM, contrasts, dgeTables) {
   new("EdgeResult",
-      dgeList=dgeList, dgeGLM=dgeGLM, dgeTables=dgeTables,
-      isFilteredGene=rep(TRUE, nrow(getCounts(dgeList))),
-      tcRatioCutoff=Inf,
-      trendedCutoff=Inf,
-      aveLogCPMCutoff=-Inf)
+      dgeList=dgeList, dgeGLM=dgeGLM, contrasts=contrasts, dgeTables=dgeTables,
+      isFilteredGene=rep(TRUE, nrow(getCounts(dgeList))))
 }
 dgeList <- function(edgeResult) return(edgeResult@dgeList)
 dgeGML <- function(edgeResult) return(edgeResult@dgeGLM)
+contrastMatrix <- function(edgeResult)  {return(edgeResult@contrasts)}
 dgeTables <- function(edgeResult) return(edgeResult@dgeTables)
 dgeFilteredTables <- function(edgeResult) {
   filtered <- filteredGenes(edgeResult)
   tables <- dgeTables(edgeResult)
   lapply(tables, function(x) x[rownames(x) %in% filtered,])
 }
+sigFilter <- function(edgeResult) return(edgeResult@sigFilter)
 isFilteredGene <- function(edgeResult) return(edgeResult@isFilteredGene)
-hasTcRatioCutoff <- function(edgeResult) {!is.infinite(edgeResult@tcRatioCutoff)}
 tcRatioCutoff <- function(edgeResult) {return(edgeResult@tcRatioCutoff)}
-hasTrendedCutoff <- function(edgeResult) {!is.infinite(edgeResult@trendedCutoff)}
+isUnsetTcRatioCutoff <- function(edgeResult) {tcRatioCutoff(edgeResult) == ER_TCRATIO_DEFAULT}
 trendedCutoff <- function(edgeResult) {return(edgeResult@trendedCutoff)}
-hasAveLogCPMCutoff <- function(edgeResult) {return(!is.infinite(edgeResult@aveLogCPMCutoff))}
+isUnsetTrendedCutoff <- function(edgeResult) {trendedCutoff(edgeResult) == ER_TRENDED_DEFAULT}
 aveLogCPMCutoff <- function(edgeResult) {return(edgeResult@aveLogCPMCutoff)}
+isUnsetAveLogCPMCutoff <- function(edgeResult) {return(aveLogCPMCutoff(edgeResult) == ER_AVELOGCPM_DEFAULT)}
+
+
+contrastNames <- function(edgeResult) {return(names(edgeResult@dgeTables))}
+designMatrix <- function(edgeResult)  {return(dgeGML(edgeResult)$design)}
 
 `isFilteredGene<-` <- function(edgeResult, value) {
   edgeResult@isFilteredGene <- value
@@ -49,25 +188,55 @@ aveLogCPMCutoff <- function(edgeResult) {return(edgeResult@aveLogCPMCutoff)}
   edgeResult@aveLogCPMCutoff <- value
   return(updateIsFilterGene(edgeResult))
 }
+unsetTcRatioCutoff <- function(edgeResult) {
+  tcRatioCutoff(edgeResult) <- ER_TCRATIO_DEFAULT
+  return(edgeResult)
+}
+unsetTrendedCutoff <- function(edgeResult) {
+  trendedCutoff(edgeResult) <- ER_TRENDED_DEFAULT
+  return(edgeResult)
+}
+unsetAveLogCPMCutoff <- function(edgeResult) {
+  aveLogCPMCutoff(edgeResult) <- ER_AVELOGCPM_DEFAULT
+  return(edgeResult)
+}
 
+`sigFilter<-` <- function(edgeResult, value) {
+  edgeResult@sigFilter <- value
+  return(edgeResult)
+}
+updateSigFilter <- function(edgeResult, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
+  sf <- sigFilter(edgeResult)
+  sf <- update(sf,
+               logFC=logFC, posLogFC=posLogFC, negLogFC=negLogFC, logCPM=logCPM, LR=LR, pValue=pValue, FDR=FDR)
+  sigFilter(edgeResult) <- sf
+  return(edgeResult)
+}
+
+ER_SHOW_SEP <- paste(rep("-", 40), collapse="")
 setMethod("show", "EdgeResult", function(object) {
   summary <- sprintf("EdgeResult object: %d genes, %d samples, %d contrasts",
                      nrow(getCounts(dgeList(edgeRes))),
                      ncol(getCounts(dgeList(edgeRes))),
                      length(object@dgeTables))
   showBCV <- "Call plotBCV() to visualize biological coefficient of variance"
-  tcrInfo <- ifelse(hasTcRatioCutoff(object),
+  tcrInfo <- ifelse(!isUnsetTcRatioCutoff(object),
                        sprintf("* Trended/Common BCV ratio cutoff=%f", tcRatioCutoff(object)),
-                       "* Call tcRatioCutoff() to set the trended/common BCV ratio threshold")
-  trendedInfo <- ifelse(hasTrendedCutoff(object),
+                       "* Call tcRatio() to set the trended/common BCV ratio threshold")
+  trendedInfo <- ifelse(!isUnsetTrendedCutoff(object),
                         sprintf("* Trended BCV ratio cutoff=%f", trendedCutoff(object)),
-                        "* Call trendedCutoff() to set the trended BCV ratio threshold")
-  aveLogCPMInfo <- ifelse(hasAveLogCPMCutoff(object),
+                        "* Call trended() to set the trended BCV ratio threshold")
+  aveLogCPMInfo <- ifelse(!isUnsetAveLogCPMCutoff(object),
                         sprintf("* Average LogCPM (copies per million) cutoff=%f", aveLogCPMCutoff(object)),
-                        "* Call aveLogCPMCutoff() to set the average LogCPM threshold")
+                        "* Call aveLogCPM() to set the average LogCPM threshold")
   filterInfo <- sprintf("Genes passing current filters: %d", sum(isFilteredGene(object)))
-  messages <- paste(summary, showBCV, tcrInfo, trendedInfo, aveLogCPMInfo, filterInfo, "", sep="\n")
+  sigFilterInfo <-  sprintf("* Significant DGE filter (call updateSigFilter() to update the settings): \n%s",
+                            show(sigFilter(object)))
+  messages <- paste(summary, showBCV,
+                    ER_SHOW_SEP, tcrInfo, trendedInfo, aveLogCPMInfo, filterInfo,
+                    ER_SHOW_SEP, sigFilterInfo, "", sep="\n")
   cat(messages)
+  return(invisible(messages))
 })
 
 
@@ -166,12 +335,12 @@ setMethod("plotBCV", "EdgeResult", function(x, ...) {
   if(!all(isFilter)) {
     points(aveLogCPM(x)[!isFilter], tagwiseBCV(x)[!isFilter], col="lightgray", pch=16, cex=0.2)
   }
-  if(hasTcRatioCutoff(x)) {
+  if(!isUnsetTcRatioOff(x)) {
     aveLogCPM.thr <- tcRatioAveLog(x)
     abline(v=aveLogCPM.thr, col="black", lty=1)
     texty <- (par("usr")[4]-par("usr")[3])*0.9+par("usr")[3]
     text(aveLogCPM.thr,texty, sprintf("Trended/Common BCV<=%.1f (%d genes)",
-                                      tcRatioCutoff(x), sum(isTcRatioFiltered(x))),
+                                      tcRatio(x), sum(isTcRatioFiltered(x))),
          adj=-0.01)
   }
 })
@@ -220,7 +389,10 @@ edgeBuild <- function(x, design, robust=FALSE) {
 #' @param contrast a vector of contrasts
 #' @return A data frame containing information about differential expression
 #' @seealso \code{\link{glmFit}} to produce the input object, \code{\link{edgeTest}} to run the test for a contrast matrix.
-#' 
+#'
+#' @note
+#' The function checks that the resulting table must contain the following columns: logFC, logCPM, LR, PValue, FDR
+#'
 #' @examples
 #' expression <- matrix(rnbinom(10000,mu=5,size=2),ncol=4)
 #' design <- cbind(baseline=c(1,1,1,1), x=c(1,1,-1,-1))
@@ -233,6 +405,7 @@ edgeTestContrast <- function(fit, contrast) {
   stopifnot(is.vector(contrast))
   lrt <- glmLRT(fit, contrast=contrast)
   x <- topTags(lrt, n=nrow(lrt$table))$table
+  stopifnot(all(c("logFC", "logCPM", "LR", "PValue", "FDR") %in% colnames(x)))
   return(x)
 }
 
@@ -261,7 +434,7 @@ edgeTestContrast <- function(fit, contrast) {
 #' stopifnot(identical(names(edgeTest3), c("C1", "C2")))
 #' @export
 edgeTest <- function(fit,  contrasts) {
-  if(is.vector(contrasts)) contrasts <- cbind(contrasts)
+  contrasts <- as.matrix(contrasts)
   assertContrast(fit$design, contrasts)
   toptables <- apply(contrasts, 2, function(x)
                     edgeTestContrast(fit, x))
@@ -297,8 +470,9 @@ edgeTest <- function(fit,  contrasts) {
 edgeRun <- function(x, design, contrasts, robust=FALSE) {
   dge <- edgeBuild(x, design, robust=robust)
   fit <- glmFit(dge, design)
+  contrasts <- as.matrix(contrasts)
   test <- edgeTest(fit, contrasts)
-  return(EdgeResult(dge, fit, test))
+  return(EdgeResult(dge, fit, contrasts, test))
 }
 
 ## zhangj83 2014-10-31

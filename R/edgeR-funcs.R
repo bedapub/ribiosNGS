@@ -432,7 +432,8 @@ annotateGenes <- function(edgeResult, annotation, key) {
   edgeResult@dgeTables <- annodt
   return(edgeResult)
 }
-                          
+
+
 setGeneric("plotBCV", function(x, ...) standardGenerics("plotBCV"))
 setMethod("plotBCV", "DGEList", function(x, ...) {
   edgeR::plotBCV(x, ...)
@@ -453,6 +454,13 @@ setMethod("plotBCV", "EdgeResult", function(x, ...) {
   }
 })
 
+## report
+writeDgeTables <- function(edgeResult) {
+  contrasts <- contrastNames(edgeResult)
+  outfiles <- sprintf("topTable-%s.txt", contrasts)
+  tables <- lapply(contrasts, function(x) dgeFilteredTable(edgeResult, x))
+  write.tableList(tables, outfiles)
+}
 
 #' Build DGEList object ready for generalized linear model fitting
 #'

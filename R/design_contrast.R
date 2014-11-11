@@ -8,6 +8,8 @@
 #' design <- matrix(1:20, ncol=5)
 #' assertDesign(nsample, design)
 assertDesign <- function(nsample, design) {
+  if(!is.numeric(nsample) | length(nsample)!=1)
+    stop('nsample must be an integer representing the sample size')
   if(nsample != nrow(design))
     stop("Number of rows of the design matrix (",
          nrow(design), ") must equal the sample size (", nsample, ")")

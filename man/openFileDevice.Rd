@@ -14,7 +14,7 @@
   print the information of the next device.
 }
 \usage{
-openFileDevice(filename, width = 7, height = 7, dpi=300L)
+openFileDevice(filename, width = 7, height = 7, dpi=300L, family)
 closeFileDevice()
 }
 \arguments{
@@ -24,6 +24,7 @@ closeFileDevice()
   \item{height}{Number, figure height of the file in \emph{inch}.}
   \item{dpi}{Number, resolution as \dQuote{dots per inch}. For
     publication 300dpi is usually enough.}
+  \item{family}{Font family name. Only applicable to PDF files}
 }
 \details{
   The function \code{openFileDevice} calls \code{extname} to determine the file type to be

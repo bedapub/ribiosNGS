@@ -10,13 +10,10 @@ getDefaultFontFamily <- function() {
 }
 openFileDevice <- function(filename, width=7, height=7, dpi=300L, family) {
   filetype <- extname(filename)
-  if(missing(family)) {
-    family <- getDefaultFontFamily()
-  }
   if(identical(filetype,"pdf")) {
     pdf(filename, width=width, height=height, useDingbats=FALSE, family=family)
   } else if (identical(filetype, "png")) {
-    png(filename, width=width, height=height, units="in", type="cairo", res=dpi, family=family)
+    png(filename, width=width, height=height, units="in", type="cairo", res=dpi) ## family option not applicable since it can not be missing as in the case of PDF
   } else if(identical(filetype,"tiff") || identical(filetype, "tif")) {
     tiff(filename, width=width, height=height, units="in", res=dpi)
   } else if(identical(filetype, "bmp")) {

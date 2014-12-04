@@ -1,6 +1,8 @@
 importFrom("ribiosUtils",
            "assertContrast", "assertDesign", "assertDesignContrast")
 
+importFrom("methods", "show")
+## for MPS
 import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is only available in newer versions of edgeR. Using importFrom explicitly will cause the package fail to install on stable R.
 
 ##importFrom("edgeR", DGEList, calcNormFactors,
@@ -10,4 +12,21 @@ import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is onl
 ##           estimateGLMTagwiseDisp,
 ##           glmLRT, glmFit, topTags)
 ##
+
+exportClasses(EdgeResult)
+
+export("tcRatioCutoff<-", "trendedCutoff<-", "aveLogCPMCutoff<-")
+export(contrastNames)
+export(annotateGenes)
+export(sigGene, sigGenes, sigGeneCounts)
+
+exportMethods(BCV)
+exportMethods(show, plotBCV)
+
+export(writeDgeTables)
+
+## MPS specific (TODO: to be factored into ribiosMP)
+export(mpsAnnotateReporters)
+export(doFisher)
+
 export(edgeBuild, edgeTest,edgeRun)

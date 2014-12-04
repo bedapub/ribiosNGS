@@ -1,3 +1,7 @@
+Version 1.0-7 (2014-11-03)
+  + add EdgeResult object
+  + Export functions needed for MPS
+
 Version 1.0-6 (2014-10-31)
   + Start using roxygen2
   + edgeR workflow has been wrapped into functions edgeBuild, edgeTest, and edgeRun.

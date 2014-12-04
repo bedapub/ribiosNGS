@@ -106,7 +106,7 @@ myFisher <- function(reporters, background, assoc, key) {
   assoc <- subset(assoc, GeneID %in% background)
   keys <- assoc[,key]
   bg <- assoc[,"GeneID"]
-  bg.by.keys <- split(bg, keys)
+  bg.by.keys <- lapply(split(bg, keys), function(x) unique(x))
   if(length(bg.by.keys)==0)
     stop("no valid keys found in myFisher: probably the index is wrong. Check the GCT file.")
   keyLevels <- names(bg.by.keys)
@@ -119,9 +119,9 @@ myFisher <- function(reporters, background, assoc, key) {
   x10 <- total.set - sig.set
   x11 <- grand.total - total.sig - total.set + sig.set
   xs <- lapply(seq(along=x00),
-               function(x) matrix(c(x00[x], x01, x10[x], x11), nrow=2, byrow=TRUE))
+               function(x) matrix(c(x00[x], x01[x], x10[x], x11[x]), nrow=2, byrow=TRUE))
   names(xs) <- keyLevels
-  fishers <- lapply(xs, function(x) fisher.test(x, alternative="greater"))
+  fishers <- lapply(xs, function(x) fisher.test(x, alternative="greater", conf.int=FALSE, workspace=1E7))
   pVals <- sapply(fishers, function(x) x$p.value)
   FDR <- p.adjust(pVals, "BH")
   genes <- sapply(bg.by.keys, function(x) paste(intersect(reporters, x), collapse=","))

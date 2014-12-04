@@ -222,8 +222,8 @@ updateSigFilter <- function(edgeResult, logFC, posLogFC, negLogFC, logCPM, LR, p
 ER_SHOW_SEP <- paste(rep("-", 40), collapse="")
 setMethod("show", "EdgeResult", function(object) {
   summary <- sprintf("EdgeResult object: %d genes, %d samples, %d contrasts",
-                     nrow(getCounts(dgeList(edgeRes))),
-                     ncol(getCounts(dgeList(edgeRes))),
+                     nrow(getCounts(dgeList(object))),
+                     ncol(getCounts(dgeList(object))),
                      length(object@dgeTables))
   showBCV <- "Call plotBCV() to visualize biological coefficient of variance"
   tcrInfo <- ifelse(!isUnsetTcRatioCutoff(object),

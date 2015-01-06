@@ -12,6 +12,7 @@ exportMethods(fcol, fcbase)
 export(compactPar)
 export(squareLayout)
 export(intRange)
+export(p2asterisk)
 
 ## biosHeatmap
 export(biosHeatmap)

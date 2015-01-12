@@ -1,4 +1,4 @@
-#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 library(ribiosArg)
 usage <- sprintf("%s -infile INFILE -outfile OUTFILE [-a Low Up] [-b] [-c Mid] [-d]\

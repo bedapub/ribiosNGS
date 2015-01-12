@@ -1,3 +1,7 @@
+2015-01-12: v1.1-14
+  + argParse: the function now works with -e and --args options of R and Rscript
+  + Pending: writing tests to make sure argParse works (see ~/sandbox/knitr-example/Makefile for examples)
+
 2014-10-07: v1.1-13
   + argParse: the function now works with the latest Rscript. The change is that the script files are more consistently handled by Rscript (in the form of Rscript FILE) and R (R -f FILE or R --file=FILE). The function has been updated to adapt to this change.
 

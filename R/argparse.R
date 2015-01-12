@@ -6,16 +6,25 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h"), strict=T
   allComm <- commandArgs(FALSE)
   isFile <- grepl("^--file=", allComm)
   isF <- grepl("^-f", allComm)
+  isE <- grepl("^-e", allComm)
+  isArgs <- grepl("^--args", allComm)
+  isE <- grepl("^-e", allComm)
   if( any(isFile) ) {
     find <- which(isFile)
     allComm[find] <- gsub("^--file=", "", allComm[find])
     allComm <- allComm[-c(1:(find-1))]
   } else if (any(isF)) {
     find <- which(isF)
-    allComm <- allComm[-c(1:find)]
+    allComm <- allComm[-(1:find)]
+  } else if (any(isArgs)) {
+    find <- which(isArgs)
+    allComm <- allComm[-(1:find)]
+  } else if (any(isE)) {
+    efind <- which(isE)
+    allComm <- allComm[-(1:(efind+1))]
   } else {
     stop("This should not happen: no parameters in the form of '-f' or '--f' is detected. Please contact the developer")
-  }
+  } 
   comm <- allComm[!grepl("^--", allComm)]
   ## the following code was valid till R-3.0.x. 
   ##  if("--args" %in% allComm) {

@@ -76,12 +76,12 @@ fillOneColTmpTbl <- function(con,  values) {
     if(!dbExistsTable(con, RIBIOS_JDBC_TMP_TBL)) {
       state <- paste("CREATE GLOBAL TEMPORARY TABLE", RIBIOS_JDBC_TMP_TBL, 
                      "(ID VARCHAR2(100) NOT NULl PRIMARY KEY) ON COMMIT PRESERVE ROWS")
-      rs <- dbSendUpdate(con, state)
+      rs <- RJDBC::dbSendUpdate(con, state)
     }
     state2 <- paste("insert into",RIBIOS_JDBC_TMP_TBL, " (ID) values (?)")
     ## TODO: SLOW: batch insert is desired
     for(i in seq(along=values))
-      rs <- dbSendUpdate(con, state2, values[i])
+      rs <- RJDBC::dbSendUpdate(con, state2, values[i])
     return(TRUE)
   }
 }

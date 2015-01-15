@@ -6,7 +6,7 @@ Date: 2014-10-10
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>, with inputs and feedbacks from BEDA team.
 Maintainer:  Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Retrieve annotation information of genes, RNAs and proteins from the Oracle database of the BIOS system. 
-Depends: ribiosUtils, DBI
+Imports: ribiosUtils,DBI
 Suggests: ROracle, RJDBC
 LazyData: true
 License: GPL-3

@@ -1,7 +1,8 @@
 ## import
 ## importFrom(ROracle, Oracle)
-importFrom(DBI)
-importFrom(ribiosUtils)
+importFrom(DBI, dbConnect, dbExistsTable, dbSendQuery, dbHasCompleted, 
+           fetch, dbClearResult, dbDisconnect)
+importFrom(ribiosUtils, matchColumn, putColsFirst)
 
 export(hasOracle, ribiosCon)
 

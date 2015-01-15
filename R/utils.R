@@ -59,7 +59,7 @@ hasOracle <- function() {
     if(identical(ohome, "") || identical(ohome, ".") || !"bin" %in% dir(ohome)) {
       Sys.setenv("ORACLE_HOME"=ORACLE.HOME)
     }
-    assign("ORA", Oracle(), pos=sys.frame())
+    assign("ORA", ROracle::Oracle(), pos=sys.frame())
   } else {
     ## require(RJDBC)
   }
@@ -71,11 +71,11 @@ ribiosCon <- function(db="bia", user="biread", password="biread", forceJDBC=FALS
     con <- dbConnect(ORA, user = user, password = password, db = db)
   } else {
     options(java.parameters = "-Xmx4g" ) ## increase the heap size before the RJDBC package is loaded
-    suppressWarnings(suppressMessages(hasJDBC <- require("RJDBC", character.only=TRUE)))
+    suppressWarnings(suppressMessages(hasJDBC <- requireNamespace("RJDBC")))
     if(!hasJDBC)
       stop("No JDBC package installed: please run 'install.packages('RJDBC')' first and then load ribiosAnnotation again.")
-    drv <- JDBC("oracle.jdbc.OracleDriver",
-                system.file("drivers", "ojdbc14.jar", package="ribiosAnnotation"))
+    drv <- RJDBC::JDBC("oracle.jdbc.OracleDriver",
+                       system.file("drivers", "ojdbc14.jar", package="ribiosAnnotation"))
     port <- switch(EXPR=db, bia=15000, bin=15001)
     str <- paste("jdbc:oracle:thin:", user, "/", password, "@", db, ".kau.roche.com:", port, sep="")
     con <- dbConnect(drv,str)

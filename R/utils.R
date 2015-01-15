@@ -26,14 +26,6 @@ ORACLE.IN.NMAX <- 1000L
 ## function to test whether Oracle is available
 hasOracle <- function() {
   return(requireNamespace("ROracle", quietly=TRUE))
-##  has <- require("ROracle", quietly=TRUE, warn.conflicts=FALSE)
-##  if(!has) {
-##    message("No ROracle is detected. Trying to install ...")
-##    install.packages("ROracle", repos="http://stat.ethz.ch/CRAN",
-##                     dependencies=TRUE, quiet=TRUE)
-##    has <- require("ROracle", quietly=TRUE, warn.conflicts=FALSE)
-##  }
-##  return(has)
 }
 
 ## onload / onAttach

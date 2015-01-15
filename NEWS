@@ -1,3 +1,7 @@
+Version 3.1-7 (2015-01-15)
+  + hasOracle uses now the 'requireNamespace' function to test whether ROracle can be loaded or not. This is more robust than testing the binary of sqlplus.
+  + No Depends packages any more. Both ribiosUtils and DBI are imported from.
+
 Version 3.1-6 (2014-10-10)
   + Java heap size is set to 4g before library loading if RJDBC has to be used. This will eliminate memory error messages due to insufficient heap size.
 

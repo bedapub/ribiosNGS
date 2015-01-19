@@ -1,7 +1,11 @@
 importFrom("ribiosUtils",
-           "assertContrast", "assertDesign", "assertDesignContrast")
-
+           "haltifnot","assertContrast", "assertDesign", "assertDesignContrast")
+importFrom("Biobase", "featureNames")
 importFrom("methods", "show")
+importFrom("lattice", "xyplot")
+importFrom("ribiosGSA", "geneSetPerm")
+importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
+
 ## for MPS
 import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is only available in newer versions of edgeR. Using importFrom explicitly will cause the package fail to install on stable R.
 
@@ -30,3 +34,53 @@ export(mpsAnnotateReporters)
 export(doFisher)
 
 export(edgeBuild, edgeTest,edgeRun)
+
+## for riboseq
+exportClasses(RiboSeq,
+              riboSeqAnalysisObject)
+
+exportMethods(RiboSeq,
+              normalize,
+              countRNA, countRPF,
+              cpmRNA, cpmRPF,
+              cpmRNAGroupSum, cpmRPFGroupSum,
+              cpmFilter,
+              featureNames)
+
+
+export(translationEfficiency,
+       doEdgeR,
+       doBabel,
+       summarizeBabel,
+       mergeBabelEdgeR,
+       babelAllRnks)
+
+S3method(xyplot, RiboSeq)
+
+export(riboseq.panel,
+       xyplot, xyplot.RiboSeq,
+       riboseq.panel,
+       plotRNAMDS,
+       plotRPFMDS,
+       refBoxplot)
+
+export(write.tableList)
+
+export(readGseaGeneSet,
+       doGeneSetTests)
+
+## riboseq analysis object
+exportMethods(setRnks)
+export(cpmBoxplotFile,
+       exprsScatterFile,
+       mdsFile,
+       teBoxplotFile,
+       logFCscatterFile,
+       babelVolcanoFile,
+       rspaceFile,
+       upstreamFile,
+       functionFile,
+       pathwayFile,
+       fullTableFile,
+       rnkFiles)
+export(writeHTML)

@@ -472,7 +472,11 @@ writeDgeTables <- function(edgeResult) {
 #'
 #' @param x a numerical matrix or any object that can be transformed as such
 #' @param design design matrix (subject to dimensionality check)
+#' @param group group vector or factor (see \code{\link{DGEList}})
+#' @param genes data frame for gene or feature annotation (see \code{\link{DGEList}})
+#' @param remove.zeros logical, whether or not remove zeros (see \code{\link{DGEList}})
 #' @param robust Whether robust estimation (Zhou \emph{et al.}, NAR 2014) should be used
+#'
 #' @return A DGEList object with dispersions estimated, ready for \code{glmFit}.
 #' @seealso \code{glmFit} to fit a generalized linear model
 #' @examples
@@ -480,9 +484,13 @@ writeDgeTables <- function(edgeResult) {
 #' design <- cbind(baseline=c(1,1,1,1), x=c(1,1,-1,-1))
 #' edgeObj <- edgeBuild(expression, design)
 #' @export
-edgeBuild <- function(x, design, robust=FALSE) {
+edgeBuild <- function(x, design,
+                      group=rep(1, ncol(counts)),
+                      genes=NULL,
+                      remove.zeros=FALSE,
+                      robust=FALSE) {
   x <- as.matrix(x)
-  dge <- DGEList(counts=x)
+  dge <- DGEList(counts=x, group=group, genes=genes, remove.zeros=remove.zeros)
   dge <- calcNormFactors(dge, method="TMM")
   if(robust) {
     dge <- estimateGLMRobustDisp(dge, design)

@@ -13,19 +13,19 @@
 ################################################################################
 ## conditional: choose R version depending on the BICOSN value
 ifneq ($(BICOSN), bas)
-	R:= R-devel 
+	R= R-devel 
 else
-	R:= R
+	R= R
 endif 
 
-CHECKADD:=${CHECKADD} --no-manual
+CHECKADD=:${CHECKADD} --no-manual
 
-PKG          := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
-PKG_VERSION  := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
+PKG          = $(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
+PKG_VERSION  = $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
 
 
-PKG_ROOT_DIR := $(shell pwd)
-PKG_SRC_DIR := $(PKG_ROOT_DIR)/src
+PKG_ROOT_DIR = `pwd`
+PKG_SRC_DIR = $(PKG_ROOT_DIR)/src
 
 install: 
 	@echo '====== Installing Package ======'

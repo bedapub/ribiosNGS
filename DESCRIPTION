@@ -1,8 +1,8 @@
 Package: ribiosNGS
 Type: Package
-Title: NGS commands for ribios
-Version: 1.0-7
-Date: 2014-11-03
+Title: NGS utilities for ribios
+Version: 1.0-8
+Date: 2015-01-15
 Author: Jitao David Zhang and Roland Schmucki
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: NGS tasks in ribios, for instance differetial gene expression
@@ -10,5 +10,5 @@ Description: NGS tasks in ribios, for instance differetial gene expression
 Depends:
     edgeR,ribiosAnnotation
 Imports:
-    ribiosUtils,methods
+    ribiosUtils,methods,Biobase,lattice,ribiosGSA
 License: GPL-3

@@ -12,8 +12,8 @@ mpsReporterCount <- function() {
             "count")[,1L]
 }
 mpsReporter <- function() {
-  sql2table("SELECT GENEID, GENESYMBOL FROM MPS_REPORTER",
-            c("GeneID", "GeneSymbol"))
+  sql2table("SELECT GENEID, GENESYMBOL, AMPLICON, GENENAME, AMPLISEQ_LABEL FROM MPS_REPORTER",
+            c("GeneID", "GeneSymbol", "Amplicon", "GeneName", "Label"))
 }
 
 mpsReporterAssocPathway <- function() {
@@ -103,6 +103,7 @@ mpsReporterDownRCTM <- function() {
 
 MPS_REPORTER_COUNT <- mpsReporterCount()
 myFisher <- function(reporters, background, assoc, key) {
+  ## note that some reporters and background genes may be not annotated -> they should be left out
   assoc <- subset(assoc, GeneID %in% background)
   keys <- assoc[,key]
   bg <- assoc[,"GeneID"]
@@ -111,7 +112,7 @@ myFisher <- function(reporters, background, assoc, key) {
     stop("no valid keys found in myFisher: probably the index is wrong. Check the GCT file.")
   keyLevels <- names(bg.by.keys)
   sig.set <- sapply(bg.by.keys, function(x) sum(reporters %in% x))
-  total.sig <- length(reporters)
+  total.sig <- sum(reporters %in% bg)
   total.set <- sapply(bg.by.keys, length)
   grand.total <- ulen(assoc$GeneID)
   x00 <- sig.set
@@ -127,9 +128,9 @@ myFisher <- function(reporters, background, assoc, key) {
   genes <- sapply(bg.by.keys, function(x) paste(intersect(reporters, x), collapse=","))
   res <- data.frame(set=keyLevels,
                     sigInSet=x00,
-                    sigAll=x01,
-                    setSize=x10,
-                    total=x11,
+                    sigNotInSet=x01,
+                    notSigInSet=x10,
+                    notSigNotInSet=x11,
                     p=pVals, FDR=FDR, reporters=genes, row.names=NULL)
   res <- sortByCol(res, "p", decreasing=FALSE)
   return(res)
@@ -141,6 +142,9 @@ sigFisher <- function(edgeResult, contrast, assoc, key) {
   diff.reporters <- sigGene(edgeResult, contrast)
   stopifnot(length(pos.reporters)+length(neg.reporters)==length(diff.reporters))
   background <- filteredGenes(edgeResult)
+  stopifnot(all(pos.reporters %in% background))
+  stopifnot(all(neg.reporters %in% background))
+  stopifnot(all(diff.reporters %in% background))
   posFisher <- myFisher(pos.reporters, background, assoc=assoc, key=key)
   negFisher <- myFisher(neg.reporters, background, assoc=assoc, key=key)
   diffFisher <- myFisher(diff.reporters, background, assoc=assoc, key=key)
@@ -272,74 +276,82 @@ doFisher <- function(edgeRes) {
   doLog("Perform gene-level analysis", level=1)
   doLog("Perform upstream regulator analysis", level=2)
   upGenes <- upGeneFishers(edgeRes)
+  write.table(upGenes, "upGenes.txt")
+  
   doLog("Perform upstream regulator analysis using positively regulated reporters", level=3)
   upPosGenes <- upPosGeneFishers(edgeRes)
+  write.table(upPosGenes, "upPosGenes.txt")
+  
   doLog("Perform upstream regulator analysis using negatively regulated reporters", level=3)
   upNegGenes <- upNegGeneFishers(edgeRes)
+  write.table(upNegGenes, "upNegGenes.txt")
+  
   doLog("Perform downstream regulator analysis", level=2)
   downGenes <- downGeneFishers(edgeRes)
+  write.table(downGenes, "downGenes.txt")
+  
   doLog("Perform downstream regulator analysis using positively regulated reporters", level=3)
   downPosGenes <- downPosGeneFishers(edgeRes)
+  write.table(downPosGenes, "downPosGenes.txt")
+  
   doLog("Perform downstream regulator analysis using negatively regulated reporters", level=3)
   downNegGenes <- downNegGeneFishers(edgeRes)
-
-  doLog("Export gene-level analysis results", level=2)
-  write.table(upGenes, "upGenes.txt")
-  write.table(upPosGenes, "upPosGenes.txt")
-  write.table(upNegGenes, "upNegGenes.txt")
-  write.table(downGenes, "downGenes.txt")
-  write.table(downPosGenes, "downPosGenes.txt")
   write.table(downNegGenes, "downNegGenes.txt")
   
   doLog("Perform pathway-level analysis", level=1)
   doLog("Perform pathway association analysis", level=2)
   assocPathway <- assocPathwayFishers(edgeRes)
+  write.table(assocPathway, "assocPathway.txt")
+  
   doLog("Perform upstream pathway analysis", level=2)
   upPathway <- upPathwayFishers(edgeRes)
+  write.table(upPathway, "upPathway.txt")
+  
   doLog("Perform upstream pathway analysis using positively regulated genes", level=3)
   upPosPathway <- upPosPathwayFishers(edgeRes)
+  write.table(upPosPathway, "upPosPathway.txt")
+  
   doLog("Perform upstream pathway analysis using negatively regulated genes", level=3)
   upNegPathway <- upNegPathwayFishers(edgeRes)
+  write.table(upNegPathway, "upNegPathway.txt")
+  
   doLog("Perform downstream pathway analysis", level=2)
   downPathway <- downPathwayFishers(edgeRes)
+  write.table(downPathway, "downPathway.txt")
+  
   doLog("Perform downstream pathway analysis using positively regulated genes", level=3)
   downPosPathway <- downPosPathwayFishers(edgeRes)
+  write.table(downPosPathway, "downPosPathway.txt")
+  
   doLog("Perform downstream pathway analysis using negatively regulated genes", level=3)
   downNegPathway <- downNegPathwayFishers(edgeRes)
-
-  doLog("Export pathway-level analysis results", level=2)
-  write.table(assocPathway, "assocPathway.txt")
-  write.table(upPathway, "upPathway.txt")
-  write.table(upPosPathway, "upPosPathway.txt")
-  write.table(upNegPathway, "upNegPathway.txt")
-  write.table(downPathway, "downPathway.txt")
-  write.table(downPosPathway, "downPosPathway.txt")
   write.table(downNegPathway, "downNegPathway.txt")
 
   
   doLog("Perform reactome-based analysis", level=1)
   doLog("Perform association reactome pathway analysis", level=2)
   assocRCTM <- assocRCTMFishers(edgeRes)
+  write.table(assocRCTM, "assocRCTM.txt")
+  
   doLog("Perform upstream reactome pathway analysis", level=2)
   upRCTM <- upRCTMFishers(edgeRes)
+  write.table(upRCTM, "upRCTM.txt")
+  
   doLog("Perform downstream reactome pathway analysis", level=2)
   downRCTM <- downRCTMFishers(edgeRes)
-
-  doLog("Export reactome analysis results", level=2)
-  write.table(assocRCTM, "assocRCTM.txt")
-  write.table(upRCTM, "upRCTM.txt")
   write.table(downRCTM, "downRCTM.txt")
   
   doLog("Load GO-based analysis", level=1)
   doLog("Perform association GO analysis", level=2)
   assocGO <- assocGOFishers(edgeRes)
+  write.table(assocGO, "assocGO.txt")
+  
   doLog("Perform upstream GO analysis", level=2)
   upGO <- upGOFishers(edgeRes)
+  write.table(upGO, "upGO.txt")
+  
   doLog("Perform downstream GO analysis", level=2)
   downGO <- downGOFishers(edgeRes)
-  
-  write.table(assocGO, "assocGO.txt")
-  write.table(upGO, "upGO.txt")
   write.table(downGO, "downGO.txt")
 }
 

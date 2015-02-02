@@ -1,4 +1,4 @@
-#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 ##------------------------------------------------------------##
 ## Two-Group Differential expression analysis with limma

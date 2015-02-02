@@ -66,6 +66,8 @@ stat=function(x) mean(x, na.rm=TRUE), ...)
 }
 
 \examples{
+library(Biobase)
+
 example.mat <- matrix(c(1,1,3,4, 2,2,3,3, 4,5,6,7, 7,8,9,10), ncol=4, byrow=TRUE)
 example.eset <- new("ExpressionSet", exprs=example.mat)
 

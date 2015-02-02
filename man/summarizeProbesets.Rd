@@ -8,7 +8,7 @@
 }
 \usage{
 summarizeProbesets(eset, index.name, fun = mean, keep.nonindex = FALSE,
-keep.featureNames = FALSE)
+keep.featureNames = FALSE, ...)
 }
 \arguments{
   \item{eset}{An \code{ExpressionSet} object}
@@ -23,7 +23,9 @@ keep.featureNames = FALSE)
     summarized into one value representing, for example, one gene (by
     GeneID), one arbitrary probeset is used to name the value when this option is set
     to \code{TRUE}. Otherwise the GeneID will be used as the name of the
-    value. In case no summary was possible, for instance the index is \code{NA}, old feature names are kept any way.}
+    value. In case no summary was possible, for instance the index is
+    \code{NA}, old feature names are kept any way.}
+  \item{...}{Futher parameters passed to the function}
 }
 \details{
   \code{summarizeRows} is called internally by \code{summarizeProbesets}
@@ -51,6 +53,7 @@ ribios.inval.mean <- summarizeProbesets(ribios.ExpressionSet,
 index.name="GeneID", fun=mean, keep.nonindex=TRUE)
 
 ## the underlying method
+library(ribiosUtils)
 ribios.meanMat <- summarizeRows(exprs(ribios.ExpressionSet),
 fData(ribios.ExpressionSet)$GeneID, mean)
 stopifnot(identical(exprs(ribios.mean), ribios.meanMat))

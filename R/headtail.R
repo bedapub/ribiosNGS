@@ -1,3 +1,13 @@
+headtail <- function(vec, head=2, tail=1, collapse=", ") {
+  vec <- as.character(vec)
+  if(length(vec)<=(head+tail)) {
+    nvec <- vec
+  } else {
+    nvec <- c(vec[1:head], "...", vec[(length(vec)-tail+1):length(vec)])
+  }
+  return(paste(nvec, collapse=collapse))
+}
+
 headhead <- function(x, m=6L, n=6L) {
   stopifnot(length(n) == 1L && length(m) == 1L)
   n <- ifelse(n<0L,

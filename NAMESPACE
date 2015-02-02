@@ -1,7 +1,10 @@
 importFrom("ribiosIO", "read_gct_matrix")
 importFrom("ribiosIO", "write_gct")
 importFrom("ribiosIO", "read_cls")
-importFrom("ribiosUtils", "rowscale")
+importFrom("ribiosIO", "read_exprs_matrix")
+importFrom("ribiosUtils", "rowscale", "summarizeRows", "removeInvarCol", "dfFactor")
+importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
+importFrom("graph", "connComp")
 
 export("rowscale")
 export("keepMaxStatProbe")
@@ -36,7 +39,9 @@ export("formatGmt")
 export("mergeEset")
 
 ## summarization/collapsing
-export(summarizeProbesets)
+export(summarizeProbesets,
+       summarizeSamples,
+       poolReplicates, avgReplicates)
 
 ## transformation
 export("matrixToLongTable")

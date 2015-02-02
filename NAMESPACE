@@ -53,7 +53,7 @@ export(reload)
 
 export(stubborngc)
 
-export(headhead, tailtail)
+export(headtail, headhead, tailtail)
 
 export(uniqueLength, ulen)
 

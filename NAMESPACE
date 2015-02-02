@@ -5,6 +5,11 @@ importFrom("methods", "show")
 importFrom("lattice", "xyplot")
 importFrom("ribiosGSA", "geneSetPerm")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
+importFrom("BiocGenerics", "counts")
+importFrom("ribiosExpression",
+           "groups", "designMatrix", "contrastMatrix")
+importFrom("edgeR",
+           "aveLogCPM")
 
 ## for MPS
 import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is only available in newer versions of edgeR. Using importFrom explicitly will cause the package fail to install on stable R.
@@ -19,17 +24,21 @@ import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is onl
 
 exportClasses(EdgeResult)
 
-export("tcRatioCutoff<-", "trendedCutoff<-", "aveLogCPMCutoff<-")
 export(contrastNames)
-export(annotateGenes)
 export(sigGene, sigGenes, sigGeneCounts)
 
-exportMethods(BCV)
-exportMethods(show, plotBCV)
+export(filterByCpm,
+       estimateGLMDisp, fitGLM, testGLM)
+
+exportMethods(BCV, show, plotBCV,
+              normalize,
+              dgeList, normFactors, cpmFilter,
+              EdgeObject)
 
 export(writeDgeTables)
 
 ## MPS specific (TODO: to be factored into ribiosMP)
+export(readMPS)
 export(mpsAnnotateReporters)
 export(doFisher)
 

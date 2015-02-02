@@ -1,9 +1,6 @@
-setClass("RiboSeq",
-         representation=list(RNA="DGEList",
-           RPF="DGEList",
-           groups="factor"))
 
-setGeneric("RiboSeq", function(RNA, RPF, groups, ...) standardGeneric("RiboSeq"))
+
+
 setMethod("RiboSeq", c("DGEList", "DGEList", "vector"), function(RNA, RPF, groups) {
   if(!is.factor(groups)) {
     message("coerencing groups as factors")
@@ -46,7 +43,7 @@ setMethod("RiboSeq", c("matrix", "matrix", "vector"), function(RNA, RPF, groups)
 
 
 ## normalization
-setGeneric("normalize", function(object, ...) standardGeneric("normalize"))
+
 setMethod("normalize", "RiboSeq",
           function(object, method=c("TMM","RLE", "upperquartile", "none"), ...) {
             object@RNA <- calcNormFactors(object@RNA, method=method, ...)
@@ -55,13 +52,9 @@ setMethod("normalize", "RiboSeq",
           })
 
 ## extract cpm
-setGeneric("countRNA", function(object) standardGeneric("countRNA"))
-setGeneric("countRPF", function(object) standardGeneric("countRPF"))
 setMethod("countRNA", "RiboSeq", function(object) object@RNA$counts)
 setMethod("countRPF", "RiboSeq", function(object) object@RPF$counts)
 
-setGeneric("cpmRNA", function(object) standardGeneric("cpmRNA"))
-setGeneric("cpmRPF", function(object) standardGeneric("cpmRPF"))
 setMethod("cpmRNA", "RiboSeq", function(object) cpm(object@RNA))
 setMethod("cpmRPF", "RiboSeq", function(object) cpm(object@RPF))
 
@@ -76,8 +69,6 @@ ctsum <- function(matrix, fac, na.rm=TRUE) {
   ctapply(matrix, fac, function(x) rowSums(x, na.rm=TRUE))
 }
 
-setGeneric("cpmRNAGroupSum", function(object) standardGeneric("cpmRNAGroupSum"))
-setGeneric("cpmRPFGroupSum", function(object) standardGeneric("cpmRPFGroupSum"))
 setMethod("cpmRNAGroupSum", "RiboSeq", function(object)
           ctsum(cpmRNA(object), object@groups))
 
@@ -103,7 +94,6 @@ minGroupSampleSize <- function(riboSeq) {
   return(min(table(groups)))
   
 }
-setGeneric("cpmFilter", function(object) standardGeneric("cpmFilter"))
 setMethod("cpmFilter", c("RiboSeq"), function(object) {
   cpm.rna <- cpmRNA(object)
   cpm.rpf <- cpmRPF(object)
@@ -503,48 +493,8 @@ doGeneSetTests <- function(rnks, anno,
 
 ## riboseq analysis object
 
-setClass("riboSeqAnalysisObject",
-         representation=list(nFeature.RNA.raw="integer",
-           nSample.RNA.raw="integer",
-           nFeature.RPF.raw="integer",
-           nSample.RPF.raw="integer",
-           nFeature.comb.raw="integer",
-           nSample.comb.raw="integer",
-           nFeature.filter="integer",
-           nSample.filter="integer",
-           groups="factor",
-           contrasts="character",
-           nBootstrap="integer",
-           outdir="character",
-           plot.cpmBoxplot="character",
-           plot.exprsScatter="character",
-           plot.MDS="character",
-           plot.teBoxplot="character",
-           plot.logFCscatter="character",
-           plot.babelVolcano="character",
-           file.rspace="character",
-           file.fulltable="character",
-           rnkNames="character",
-           file.rnks="character",
-           file.upstream="character",
-           file.function="character",
-           file.pathway="character",
-           file.indexHTML="character"),
-         prototype=list(outdir=getwd(),
-           plot.cpmBoxplot="cpm-boxplots.pdf",
-           plot.exprsScatter="exprs-scatterplot.pdf",
-           plot.MDS="MDS-RNA-RPF.pdf",
-           plot.teBoxplot="boxplot-TErates.pdf",
-           plot.logFCscatter="scatterplot-logFC.RPF-logFC.RNA.pdf",
-           plot.babelVolcano="volcano-plot.pdf",
-           file.rspace="ribioseq-analysis-workspace.RData",
-           file.fulltable="riboseq-analysis-results.txt",
-           file.upstream="riboseq-analysis-upstreamAnalysis.txt",
-           file.function="riboseq-analysis-functionalAnalysis.txt",
-           file.pathway="riboseq-analysis-pathwayAnalysis.txt",
-           file.indexHTML="index.html"))
 
-setGeneric("convertPDF2PNG", function(object, ...) standardGeneric("convertPDF2PNG"))
+
 pngFilename <- function(filename, full.names=FALSE) {
   res <- file.path(dirname(filename),
                    paste(basefilename(filename), ".png", sep=""))
@@ -565,7 +515,7 @@ setMethod("convertPDF2PNG", "riboSeqAnalysisObject",
             pdf2png(plotFiles, outdir=outd, outfile=outfile, wait=TRUE)
             return(outfile)
           })
-setGeneric("setRnks", function(object, names) standardGeneric("setRnks"))
+
 setMethod("setRnks", c("riboSeqAnalysisObject"),
           function(object, names) {
             object@rnkNames <- names

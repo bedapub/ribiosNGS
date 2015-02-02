@@ -1,7 +1,7 @@
 ## functions for MPS
 
 sql2table <- function(sql, colnames) {
-  res <- querydb(sql, db="bia", user="bi2", password="wolf")
+  res <- ribiosAnnotation::querydb(sql, db="bia", user="bi2", password="wolf")
   if(!missing(colnames)) {
     colnames(res) <- colnames
   }

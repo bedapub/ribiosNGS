@@ -18,7 +18,7 @@ else
 	R= R
 endif 
 
-CHECKADD=:${CHECKADD} --no-manual
+CHECKADD:=${CHECKADD} --no-manual
 
 PKG          = $(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
 PKG_VERSION  = $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)

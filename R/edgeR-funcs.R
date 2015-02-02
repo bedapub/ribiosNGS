@@ -1,31 +1,94 @@
-ESF_POSLOGFC_DEFAULT <- 0
-ESF_NEGLOGFC_DEFAULT <- 0
-ESF_LOGCPM_DEFAULT <- -Inf
-ESF_LR_DEFAULT <- 0
-ESF_PVALUE_DEFAULT <- 1
-ESF_FDR_DEFAULT <- 1
+setMethod("EdgeObject",
+          c("matrix", "DesignContrast"),
+          function(object, designContrast, genes=NULL, remove.zeros=FALSE) {
+            dgeList <- DGEList(counts=object,
+                               group= groups(designContrast),
+                               genes=genes, remove.zeros=remove.zeros)
+            new("EdgeObject",
+                dgeList=dgeList,
+                designContrast=designContrast)
+          })
+setMethod("EdgeObject",
+          c("FeatAnnoExprs", "DesignContrast"),
+          function(object, designContrast, remove.zeros=FALSE) {
+            dgeList <- DGEList(counts=object@exprs,
+                               group=groups(designContrast),
+                               genes=object@genes, remove.zeros=remove.zeros)
+            new("EdgeObject",
+                dgeList=dgeList,
+                designContrast=designContrast)
+          })
+minGroupCount <- function(edgeObj) {
+  groups <- groups(edgeObj@designContrast)
+  return(min(table(groups)))
+}
+filterByCpm <- function(edgeObj,
+                        minCPM=1,
+                        minCount=minGroupCount(edgeObj)) {
+  cpm <- cpm(edgeObj@dgeList)
+  filter <- apply(cpm, 1, function(x) sum(x>=minCPM)>=minCount)
+  edgeObj@dgeList <- edgeObj@dgeList[filter,]
+  return(edgeObj)
+}
 
-setClass("EdgeSigFilter",
-         representation=list("posLogFC"="numeric",
-           "negLogFC"="numeric",
-           "logCPM"="numeric",
-           "LR"="numeric",
-           "pValue"="numeric",
-           "FDR"="numeric"),
-         prototype=list(posLogFC=ESF_POSLOGFC_DEFAULT,
-           negLogFC=ESF_NEGLOGFC_DEFAULT ,
-           logCPM=ESF_LOGCPM_DEFAULT,
-           LR=ESF_LR_DEFAULT,
-           pValue=ESF_PVALUE_DEFAULT,
-           FDR=ESF_FDR_DEFAULT),
-         validity=function(object) {
-           stopifnot(validPosLogFC <- object@posLogFC >= 0)
-           stopifnot(validNegLogFC <- object@negLogFC <= 0)
-           stopifnot(validLR <- object@LR>=0)
-           stopifnot(validPvalue <- object@pValue >= 0 & object@pValue <= 1)
-           stopifnot(validFDR <- object@FDR >= 0 & object@FDR <= 1)
-           return(validPosLogFC & validNegLogFC & validLR & validPvalue & validFDR)
-         })
+setMethod("normalize", "EdgeObject", function(object, ...) {
+  object@dgeList <- calcNormFactors(object@dgeList, ...)
+  return(object)
+})
+
+setMethod("cpmRNA", "EdgeObject", function(object) {
+  return(cpm(object@dgeList))
+})
+setMethod("counts", "EdgeObject", function(object) {
+  return(object@dgeList$counts)
+})
+setMethod("normFactors", "DGEList", function(object) {
+  return(object$samples$norm.factors)
+})
+setMethod("normFactors", "EdgeObject", function(object) {
+  return(normFactors(object@dgeList))
+})
+setMethod("groups", "EdgeObject", function(object) {
+  return(groups(object@designContrast))
+})
+
+setGeneric("estimateGLMDisp", function(object) standardGeneric("estimateGLMDisp"))
+setMethod("estimateGLMDisp", "EdgeObject", function(object) {
+  dge <- object@dgeList
+  design <- designMatrix(object@designContrast)
+  ##dge <- estimateGLMCommonDisp(dge, design, verbose=FALSE)
+  ##dge <- estimateGLMTrendedDisp(dge, design, verbose=FALSE)
+  ##dge <- estimateGLMTagwiseDisp(dge, design)
+  dge <- estimateDisp(dge, design)
+  object@dgeList <- dge
+  return(object)
+})
+
+setGeneric("fitGLM", function(object,...) standardGeneric("fitGLM"))
+setMethod("fitGLM", "EdgeObject", function(object, ...) {
+  fit <- glmFit(object@dgeList,
+                design=designMatrix(object@designContrast),
+                ...)
+  return(fit)
+})
+
+setGeneric("testGLM", function(object, fit) standardGeneric("testGLM"))
+setMethod("testGLM", c("EdgeObject", "DGEGLM"),
+          function(object, fit) {
+  contrasts <- contrastMatrix(object@designContrast)
+  toptables <- apply(contrasts, 2, function(x) {
+    lrt <- glmLRT(fit, contrast=x)
+    x <- topTags(lrt, n=nrow(lrt$table))$table
+    assertEdgeToptable(x)
+    return(x)
+  })
+
+  return(EdgeResult(edgeObj=object,
+                    dgeGLM=fit,
+                    dgeTables=toptables))
+})
+
+
 posLogFC <- function(edgeSigFilter) edgeSigFilter@posLogFC
 negLogFC <- function(edgeSigFilter) edgeSigFilter@negLogFC
 logCPM <- function(edgeSigFilter) edgeSigFilter@logCPM
@@ -70,142 +133,23 @@ setMethod("show", "EdgeSigFilter", function(object) {
   return(invisible(messages))
 })
 
-`posLogFC<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@posLogFC <- value
-  return(edgeSigDegFilter)
-}
-`negLogFC<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@negLogFC <- value
-  return(edgeSigDegFilter)
-}
-`logFC<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@posLogFC <- abs(value)
-  edgeSigDegFilter@negLogFC <- -abs(value)
-  return(edgeSigDegFilter)
-}
-`logCPM<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@logCPM <- value
-  return(edgeSigDegFilter)
-}
-`LR<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@LR <- value
-  return(edgeSigDegFilter)
-}
-`pValue<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@pValue <- value
-  return(edgeSigDegFilter)
-}
-`FDR<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@FDR <- value
-  return(edgeSigDegFilter)
-}
-update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
-  if(!missing(logFC)) logFC(object) <- logFC
-  if(!missing(posLogFC)) posLogFC(object) <- posLogFC
-  if(!missing(negLogFC)) negLogFC(object) <- negLogFC
-  if(!missing(logCPM)) logCPM(object) <- logCPM
-  if(!missing(LR)) LR(object) <- LR
-  if(!missing(pValue)) pValue(object) <- pValue
-  if(!missing(FDR)) FDR(object) <- FDR
-  validObject(object)
-  return(object)
-}
-EdgeSigFilter <- function(logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
-  object <- new("EdgeSigFilter")
-  object <- update(object, logFC=logFC, posLogFC=posLogFC, negLogFC=negLogFC,
-                   logCPM=logCPM, LR=LR, pValue=pValue, FDR=FDR)
-  return(object)
-}
 
-ER_TCRATIO_DEFAULT <- Inf
-ER_TRENDED_DEFAULT <- Inf
-ER_AVELOGCPM_DEFAULT <- -Inf
-ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.25, FDR=0.10)
 
-setClass("EdgeResult",
-         representation=list("dgeList"="DGEList",
-           "dgeGLM"="DGEGLM",
-           "contrasts"="matrix",
-           "dgeTables"="list",
-           "isFilteredGene"="logical",
-           "tcRatioCutoff"="numeric",
-           "trendedCutoff"="numeric",
-           "aveLogCPMCutoff"="numeric",
-           "sigFilter"="EdgeSigFilter"),
-         prototype=list(tcRatioCutoff=ER_TCRATIO_DEFAULT,
-           trendedCutoff=ER_TRENDED_DEFAULT,
-           aveLogCPMCutoff=ER_AVELOGCPM_DEFAULT,
-           sigFilter=ER_SIGFILTER_DEFAULT))
-
-EdgeResult <- function(dgeList, dgeGLM, contrasts, dgeTables) {
-  new("EdgeResult",
-      dgeList=dgeList, dgeGLM=dgeGLM, contrasts=contrasts, dgeTables=dgeTables,
-      isFilteredGene=rep(TRUE, nrow(getCounts(dgeList))))
-}
-dgeList <- function(edgeResult) return(edgeResult@dgeList)
 dgeGML <- function(edgeResult) return(edgeResult@dgeGLM)
-contrastMatrix <- function(edgeResult)  {return(edgeResult@contrasts)}
+
 dgeTables <- function(edgeResult) return(edgeResult@dgeTables)
 dgeTable <- function(edgeResult, contrast) return(edgeResult@dgeTables[[contrast]])
-dgeFilteredTable <- function(edgeResult, contrast) {
-  filtered <- filteredGenes(edgeResult)
-  table <- dgeTable(edgeResult, contrast)
-  table[rownames(table) %in% filtered,]
-}
-dgeFilteredTables <- function(edgeResult) {
-  filtered <- filteredGenes(edgeResult)
-  tables <- dgeTables(edgeResult)
-  lapply(tables, function(x) x[rownames(x) %in% filtered,])
-}
+
+
+
+sigFilter <- function(edgeResult) return(edgeResult@sigFilter)
+
 sigDge <- function(edgeResult, contrast) {
   table <- dgeFilteredTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
 }
 
-sigFilter <- function(edgeResult) return(edgeResult@sigFilter)
-isFilteredGene <- function(edgeResult) return(edgeResult@isFilteredGene)
-tcRatioCutoff <- function(edgeResult) {return(edgeResult@tcRatioCutoff)}
-isUnsetTcRatioCutoff <- function(edgeResult) {tcRatioCutoff(edgeResult) == ER_TCRATIO_DEFAULT}
-trendedCutoff <- function(edgeResult) {return(edgeResult@trendedCutoff)}
-isUnsetTrendedCutoff <- function(edgeResult) {trendedCutoff(edgeResult) == ER_TRENDED_DEFAULT}
-aveLogCPMCutoff <- function(edgeResult) {return(edgeResult@aveLogCPMCutoff)}
-isUnsetAveLogCPMCutoff <- function(edgeResult) {return(aveLogCPMCutoff(edgeResult) == ER_AVELOGCPM_DEFAULT)}
-
-
 contrastNames <- function(edgeResult) {return(names(edgeResult@dgeTables))}
-designMatrix <- function(edgeResult)  {return(dgeGML(edgeResult)$design)}
-
-`isFilteredGene<-` <- function(edgeResult, value) {
-  edgeResult@isFilteredGene <- value
-  return(edgeResult)
-}
-`tcRatioCutoff<-` <- function(edgeResult, value) {
-  stopifnot(length(value)==1)
-  edgeResult@tcRatioCutoff <- value
-  return(updateIsFilterGene(edgeResult))
-}
-`trendedCutoff<-` <- function(edgeResult, value) {
-  stopifnot(length(value)==1)
-  edgeResult@trendedCutoff <- value
-  return(updateIsFilterGene(edgeResult))
-}
-`aveLogCPMCutoff<-` <- function(edgeResult, value) {
-  stopifnot(length(value)==1)
-  edgeResult@aveLogCPMCutoff <- value
-  return(updateIsFilterGene(edgeResult))
-}
-unsetTcRatioCutoff <- function(edgeResult) {
-  tcRatioCutoff(edgeResult) <- ER_TCRATIO_DEFAULT
-  return(edgeResult)
-}
-unsetTrendedCutoff <- function(edgeResult) {
-  trendedCutoff(edgeResult) <- ER_TRENDED_DEFAULT
-  return(edgeResult)
-}
-unsetAveLogCPMCutoff <- function(edgeResult) {
-  aveLogCPMCutoff(edgeResult) <- ER_AVELOGCPM_DEFAULT
-  return(edgeResult)
-}
 
 `sigFilter<-` <- function(edgeResult, value) {
   edgeResult@sigFilter <- value
@@ -219,123 +163,30 @@ updateSigFilter <- function(edgeResult, logFC, posLogFC, negLogFC, logCPM, LR, p
   return(edgeResult)
 }
 
-ER_SHOW_SEP <- paste(rep("-", 40), collapse="")
+
 setMethod("show", "EdgeResult", function(object) {
   summary <- sprintf("EdgeResult object: %d genes, %d samples, %d contrasts",
                      nrow(getCounts(dgeList(object))),
                      ncol(getCounts(dgeList(object))),
                      length(object@dgeTables))
   showBCV <- "Call plotBCV() to visualize biological coefficient of variance"
-  tcrInfo <- ifelse(!isUnsetTcRatioCutoff(object),
-                       sprintf("* Trended/Common BCV ratio cutoff=%f", tcRatioCutoff(object)),
-                       "* Call tcRatio() to set the trended/common BCV ratio threshold")
-  trendedInfo <- ifelse(!isUnsetTrendedCutoff(object),
-                        sprintf("* Trended BCV ratio cutoff=%f", trendedCutoff(object)),
-                        "* Call trended() to set the trended BCV ratio threshold")
-  aveLogCPMInfo <- ifelse(!isUnsetAveLogCPMCutoff(object),
-                        sprintf("* Average LogCPM (copies per million) cutoff=%f", aveLogCPMCutoff(object)),
-                        "* Call aveLogCPM() to set the average LogCPM threshold")
-  filterInfo <- sprintf("Genes passing current filters: %d", sum(isFilteredGene(object)))
   sigFilterInfo <-  sprintf("* Significant DGE filter (call updateSigFilter() to update the settings): \n%s",
                             show(sigFilter(object)))
+  ER_SHOW_SEP <- paste(rep("-", 40), collapse="")
   messages <- paste(summary, showBCV,
-                    ER_SHOW_SEP, tcrInfo, trendedInfo, aveLogCPMInfo, filterInfo,
                     ER_SHOW_SEP, sigFilterInfo, "", sep="\n")
   cat(messages)
   return(invisible(messages))
 })
 
-
-
-naOrSqrt <- function(x) {
-  if(is.null(x)) { return (NA)}
-  return(sqrt(x))
-}
-setGeneric("commonBCV", function(x) standardGeneric("commonBCV"))
-setGeneric("tagwiseBCV", function(x) standardGeneric("tagwiseBCV"))
-setGeneric("trendedBCV", function(x) standardGeneric("trendedBCV"))
-setMethod("commonBCV", "DGEList", function(x) {
-  naOrSqrt(x$common.dispersion)
-})
-setMethod("tagwiseBCV", "DGEList", function(x) {
-  naOrSqrt(x$tagwise.dispersion)
-})
-setMethod("trendedBCV", "DGEList", function(x) {
-  naOrSqrt(x$trended.dispersion)
-})
-setMethod("commonBCV", "EdgeResult", function(x)  {
-  commonBCV(dgeList(x))
-})
-setMethod("tagwiseBCV", "EdgeResult", function(x)  {
-  tagwiseBCV(dgeList(x))
-})
-setMethod("trendedBCV", "EdgeResult", function(x)  {
-  trendedBCV(dgeList(x))
-})
-setGeneric("BCV", function(x) standardGeneric("BCV"))
-setMethod("BCV", "DGEList", function(x) {
-  A <- x$AveLogCPM
-  if(is.null(getDispersion(x))) stop("No dispersion available")
-  res <- data.frame(aveLogCPM=A,
-                    commonBCV = commonBCV(x),
-                    tagwiseBCV=tagwiseBCV(x),
-                    trendedBCV=trendedBCV(x))
-  rownames(res) <- rownames(x$counts)
-  return(res)
-})
-
-setMethod("BCV", "EdgeResult", function(x) {
-  BCV(dgeList(x))
-})
-
-
-setMethod("aveLogCPM", "EdgeResult", function(y, ...) {
-  return(aveLogCPM(dgeList(y)))
-})
-
-tcRatio <- function(edgeResult) {
-  trendedBCV(edgeResult)/commonBCV(edgeResult)
+getGenes <- function(edgeResult) {
+  rownames(edgeR::getCounts(dgeList(edgeResult)))
 }
 
-isTcRatioFiltered <- function(edgeResult) {
-  tcRatio(edgeResult)<=tcRatioCutoff(edgeResult)
+geneCount <- function(edgeResult) {
+  nrow(edgeR::getCounts(dgeList(dgeTest)))
 }
 
-isTrendedFiltered <- function(edgeResult) {
-  trendedBCV(edgeResult)<=trendedCutoff(edgeResult)
-}
-
-isAveLogCPMFiltered <- function(edgeResult) {
-  aveLogCPM(edgeResult)>=aveLogCPMCutoff(edgeResult)
-}
-
-tcRatioAveLog <- function(edgeResult) {
-  isFilter <- isTcRatioFiltered(edgeResult)
-  aveExp <- aveLogCPM(edgeResult)
-  min(aveExp[isFilter], na.rm=TRUE)
-}
-
-getGenes <- function(edgeResult) rownames(getCounts(dgeList(edgeResult)))
-emptyFilter <- function(edgeResult)
-  rep(TRUE, nrow(getCounts(dgeList(edgeResult))))
-updateIsFilterGene <- function(edgeResult) {
-  gf <- emptyFilter(edgeResult)
-  gf <- gf & isTcRatioFiltered(edgeResult)
-  gf <- gf & isTrendedFiltered(edgeResult)
-  gf <- gf & isAveLogCPMFiltered(edgeResult)
-  isFilteredGene(edgeResult) <- gf
-  return(edgeResult)
-}
-
-allGenesCount <- function(edgeResult) {
-  length(isFilteredGene(edgeResult))
-}
-filteredGenes <- function(edgeResult) {
-  getGenes(edgeResult)[isFilteredGene(edgeResult)]
-}
-filteredGenesCount <- function(edgeResult) {
-  sum(isFilteredGene(edgeResult))
-}
 assertEdgeToptable <- function(x) {
   stopifnot(is.data.frame(x)
             & all(c("logFC", "logCPM", "LR", "PValue", "FDR") %in% colnames(x)))
@@ -394,12 +245,11 @@ sigNegGenes <- function(edgeResult) {
   return(res)
 }
 sigGeneCounts <- function(edgeResult) {
-  allCount <- allGenesCount(edgeResult)
-  fg <- filteredGenesCount(edgeResult)
+  allCount <- geneCount(edgeResult)
   posCounts <- sapply(sigPosGenes(edgeResult), ulen)
   negCounts <- sapply(sigNegGenes(edgeResult), ulen)
   total <- posCounts+negCounts
-  res <- data.frame(positive=posCounts, negCounts=negCounts, sum=total, expressed=fg, all=allCount)
+  res <- data.frame(positive=posCounts, negCounts=negCounts, sum=total, all=allCount)
   return(res)
 }
 
@@ -409,50 +259,49 @@ isUnsetSigFilter <- function(object) {
 
 
 ## annotation
-annotateDataFrame <- function(df, annotation, key) {
-  stopifnot(is.data.frame(annotation))
-  if(!missing(key)) {
-    keys <- annotation[, key]
-  } else {
-    keys <- rownames(annotation)
-  }
-  ind <- match(rownames(df), keys)
-  df.anno <- annotation[ind,]
-  if(any(!colnames(df.anno) %in% colnames(df))) {
-    res <- cbind(df.anno, df)
-  } else {
-    res <- df
-  }
-  rownames(res) <- rownames(df)
-  return(res)
+
+annotateMPS <- function(mat) {
+  ampl <- attr(mat, "desc")
+  stopifnot(!is.null(ampl) & all(grepl("^AMPL", ampl)))
+  reporters <- mpsReporter()
+  genes <- matchColumn(ampl, reporters, "Amplicon")
+  rownames(genes) <- ampl
+  return(genes)
 }
-annotateGenes <- function(edgeResult, annotation, key) {
-  dt <- dgeTables(edgeResult)
-  annodt <- lapply(dt, function(x) annotateDataFrame(x, annotation, key))
-  edgeResult@dgeTables <- annodt
-  return(edgeResult)
+readMPS <- function(file) {
+  tbl <- read_exprs_matrix(file)
+  genes <- annotateMPS(tbl)
+  tbl <- data.matrix(tbl)
+  return(new("FeatAnnoExprs",
+             exprs=tbl,
+             genes=genes))
 }
+##annotateDataFrame <- function(df, annotation, key) {
+##  stopifnot(is.data.frame(annotation))
+##  if(!missing(key)) {
+##    keys <- annotation[, key]
+##  } else {
+##    keys <- rownames(annotation)
+##  }
+##  ind <- match(rownames(df), keys)
+##  df.anno <- annotation[ind,]
+##  if(any(!colnames(df.anno) %in% colnames(df))) {
+##    res <- cbind(df.anno, df)
+##  } else {
+##    res <- df
+##  }
+##  rownames(res) <- rownames(df)
+##  return(res)
+##}
+##annotateGenes <- function(edgeResult, annotation, key) {
+##  dt <- dgeTables(edgeResult)
+##  annodt <- lapply(dt, function(x) annotateDataFrame(x, annotation, key))
+##  edgeResult@dgeTables <- annodt
+##  return(edgeResult)
+##}
 
 
-setGeneric("plotBCV", function(x, ...) standardGenerics("plotBCV"))
-setMethod("plotBCV", "DGEList", function(x, ...) {
-  edgeR::plotBCV(x, ...)
-})
-setMethod("plotBCV", "EdgeResult", function(x, ...) {
-  edgeR::plotBCV(dgeList(x), ...,)
-  isFilter <- isFilteredGene(x)
-  if(!all(isFilter)) {
-    points(aveLogCPM(x)[!isFilter], tagwiseBCV(x)[!isFilter], col="lightgray", pch=16, cex=0.2)
-  }
-  if(!isUnsetTcRatioCutoff(x)) {
-    aveLogCPM.thr <- tcRatioAveLog(x)
-    abline(v=aveLogCPM.thr, col="black", lty=1)
-    texty <- (par("usr")[4]-par("usr")[3])*0.9+par("usr")[3]
-    text(aveLogCPM.thr,texty, sprintf("Trended/Common BCV<=%.1f (%d genes)",
-                                      tcRatioCutoff(x), sum(isTcRatioFiltered(x))),
-         adj=-0.01)
-  }
-})
+
 
 ## report
 writeDgeTables <- function(edgeResult) {
@@ -599,29 +448,3 @@ edgeRun <- function(x, design, contrasts, robust=FALSE) {
   return(EdgeResult(dge, fit, contrasts, test))
 }
 
-## zhangj83 2014-10-31
-## the following two functions are going to be factored out
-##edgeR.DGE <- function(path=".",
-##                      targets.file="Targets.txt",
-##                      normFactor.method="RLE") {
-##  target.file.full <- file.path(path,targets.file)
-##  if(!file.exists(target.file.full))
-##    stop("target.file not found at ", target.file.full)
-##  targets <- read.delim(file=target.file.full,
-##                        stringsAsFactors=FALSE)
-##  data <- readDGE(targets, path=path, comment.char="#", head=FALSE)
-##  d <- calcNormFactors(data, method=normFactor.method)
-##  d <- estimateCommonDisp(d)
-##  d
-##}
-##
-##edgeR.sumCountByGroup <- function(data,
-##                                  group.colName="group"){
-##  if(!group.colName %in% colnames(data$sample))
-##    stop("'group.colName' must be one of the following:\n",
-##         paste(colnames(data$sample), collapse=","))
-##  do.call(cbind,
-##          tapply(1:ncol(data$counts),
-##                 data$sample[,group.colName],
-##                 function(x) rowSums(data$counts[,x,drop=FALSE])))
-##}

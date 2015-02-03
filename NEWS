@@ -1,3 +1,11 @@
+2015-02-03 v1.1-28
+  + fix bug in heat function: return (n)
+
+2015-01-06 v1.1-26
+  + add compactTrellis() and setCompactTrellis() to simplify preparing compact figures for publications
+  + add function p2asterisk to map p values to conventionally used asterisk symbols of p-values
+  + use roxygen2 to manage documentation
+
 2014-07-30 v1.1-25
   + Add function fcbrewer to handle factor-matching colors
   + Improved manual pages

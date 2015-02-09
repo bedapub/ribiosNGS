@@ -45,7 +45,7 @@ parseStrings <- function(str, collapse=",", trim=TRUE, ...) {
 
 ## makeFactor and parseFactor
 
-makeFactor <- function(groups, levels=NULL, make.names=TRUE) {
+makeFactor <- function(groups, levels=NULL, make.names=TRUE, verbose=FALSE) {
   if(missing(levels) || is.null(levels)) {
     if(is.factor(groups)) {
       levels <- levels(groups)
@@ -60,14 +60,17 @@ makeFactor <- function(groups, levels=NULL, make.names=TRUE) {
   }
   groups <- factor(groups, levels=levels)
   if(make.names) {
-    groups.back <- groups; levels(groups) <- make.names(levels(groups))
+    groups.back <- groups
+    levels(groups) <- make.unique(make.names(levels(groups)))
     if(!identical(levels(groups.back), levels(groups))) {
       isChanged <- levels(groups.back)!=levels(groups)
-      msg <- sprintf("%s->%s",
-                     levels(groups.back)[isChanged],
-                     levels(groups)[isChanged])
-      warning("The following group names has been changed:\n",
-              paste(msg, collapse="\n"))
+      if(verbose) {
+        msg <- sprintf("%s->%s",
+                       levels(groups.back)[isChanged],
+                       levels(groups)[isChanged])
+        warning("The following group names has been changed:\n",
+                paste(msg, collapse="\n"))
+      }
     }
   }
   return(groups)

@@ -10,7 +10,7 @@
   factors with groups and levels.
 }
 \usage{
-makeFactor(groups, levels=NULL, make.names = TRUE)
+makeFactor(groups, levels=NULL, make.names = TRUE, verbose=FALSE)
 parseFactor(rgroups, rlevels=NULL, make.names = TRUE, collapse=",")
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,6 +22,7 @@ parseFactor(rgroups, rlevels=NULL, make.names = TRUE, collapse=",")
   \item{rgroups}{Command-line input raw group string}
   \item{rlevels}{Command-line input levels, can be missing or NULL.}
   \item{collapse}{Collapse character used in command line}
+  \item{verbose}{Logical, whether renaming of syntactically invalid contrast names should be warned.}
 }
 \details{
   \code{makeFactor} checks whether all unique values of the

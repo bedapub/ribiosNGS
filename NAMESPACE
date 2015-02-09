@@ -2,12 +2,12 @@ importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast")
 importFrom("Biobase", "featureNames")
 importFrom("methods", "show")
-importFrom("lattice", "xyplot")
+importFrom("lattice", "xyplot", "barchart")
 importFrom("ribiosGSA", "geneSetPerm")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts")
 importFrom("ribiosExpression",
-           "groups", "designMatrix", "contrastMatrix")
+           "groups", "dispGroups", "designMatrix", "contrastMatrix")
 importFrom("edgeR",
            "aveLogCPM")
 
@@ -30,18 +30,21 @@ export(sigGene, sigGenes, sigGeneCounts)
 export(filterByCpm,
        estimateGLMDisp, fitGLM, testGLM)
 
-exportMethods(BCV, show, plotBCV,
+exportMethods(BCV, show,
+              plotBCV,
+              volcanoPlot,
               normalize,
               dgeList, normFactors, cpmFilter,
               EdgeObject)
 
+export(dgeTables, dgeTable)
 export(writeDgeTables)
 
 ## MPS specific (TODO: to be factored into ribiosMP)
 export(readMPS)
 export(mpsAnnotateReporters)
 export(doFisher)
-
+export(sigGeneBarchart)
 export(edgeBuild, edgeTest,edgeRun)
 
 ## for riboseq

@@ -27,3 +27,5 @@ setGeneric("BCV", function(x) standardGeneric("BCV"))
 setGeneric("plotBCV", function(x, ...) standardGeneric("plotBCV"))
 
 setGeneric("EdgeObject", function(object, designContrast, ...) standardGeneric("EdgeObject"))
+
+setGeneric("volcanoPlot", function(object,...) standardGeneric("volcanoPlot"))

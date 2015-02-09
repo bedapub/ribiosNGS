@@ -48,9 +48,7 @@ setMethod("normFactors", "DGEList", function(object) {
 setMethod("normFactors", "EdgeObject", function(object) {
   return(normFactors(object@dgeList))
 })
-setMethod("groups", "EdgeObject", function(object) {
-  return(groups(object@designContrast))
-})
+
 
 setGeneric("estimateGLMDisp", function(object) standardGeneric("estimateGLMDisp"))
 setMethod("estimateGLMDisp", "EdgeObject", function(object) {
@@ -137,15 +135,31 @@ setMethod("show", "EdgeSigFilter", function(object) {
 
 dgeGML <- function(edgeResult) return(edgeResult@dgeGLM)
 
-dgeTables <- function(edgeResult) return(edgeResult@dgeTables)
-dgeTable <- function(edgeResult, contrast) return(edgeResult@dgeTables[[contrast]])
 
+dgeTable <- function(edgeResult, contrast=NULL) {
+  tbls <- edgeResult@dgeTables
+  if(is.null(contrast)) {
+    return(tbls)
+  } else {
+    return(tbls[[contrast]])
+  }
+}
+dgeTableList <- function(edgeResult, contrast=NULL) {
+  tbls <- edgeResult@dgeTables
+  if(is.null(contrast)) {
+    res <- tbls
+  } else {
+    res <- tbls[contrast]
+  }
+  return(res)
+}
+dgeTables <- function(edgeResult) dgeTable(edgeResult, contrast=NULL)
 
 
 sigFilter <- function(edgeResult) return(edgeResult@sigFilter)
 
 sigDge <- function(edgeResult, contrast) {
-  table <- dgeFilteredTable(edgeResult, contrast)
+  table <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
 }
 
@@ -249,8 +263,33 @@ sigGeneCounts <- function(edgeResult) {
   posCounts <- sapply(sigPosGenes(edgeResult), ulen)
   negCounts <- sapply(sigNegGenes(edgeResult), ulen)
   total <- posCounts+negCounts
-  res <- data.frame(positive=posCounts, negCounts=negCounts, sum=total, all=allCount)
+  res <- data.frame(posCount=posCounts,
+                    negCount=negCounts,
+                    posnegCount=posCounts+negCounts,
+                    all=allCount)
   return(res)
+}
+
+sigGeneBarchart <- function(edgeResult,
+                            scales=list(x=list(rot=45),
+                              y=list(alternating=1, tck=c(1,0))),
+                            stack=TRUE,
+                            ylab="Significant DEGs",
+                            col=c("positive"="orange",
+                              "negative"="lightblue"),
+                              auto.key=TRUE, 
+                            ...) {
+  counts <- sigGeneCounts(edgeResult)
+  contrasts <- ribiosUtils::ofactor(contrastNames(dgeTest))
+  positive <- counts$posCount
+  negative <- counts$negCount
+  lattice::barchart(positive + negative ~ contrasts,
+                    stack=stack,
+                    ylab=ylab,
+                    scales=scales,
+                    par.settings=list(superpose.polygon=list(col=col)),
+                    auto.key=auto.key,
+                    ...)
 }
 
 isUnsetSigFilter <- function(object) {

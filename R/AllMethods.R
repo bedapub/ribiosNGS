@@ -4,6 +4,9 @@ setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 setMethod("designMatrix", "EdgeObject", function(object) designMatrix(object@designContrast))
 setMethod("designMatrix", "EdgeResult", function(object) designMatrix(object@designContrast))
 
+setMethod("contrastMatrix", "EdgeObject", function(object) contrastMatrix(object@designContrast))
+setMethod("contrastMatrix", "EdgeResult", function(object) contrastMatrix(object@designContrast))
+
 naOrSqrt <- function(x) {
   if(is.null(x)) { return (NA)}
   return(sqrt(x))
@@ -54,4 +57,47 @@ setMethod("plotBCV", "EdgeObject", function(x, ...) {
 })
 setMethod("plotBCV", "EdgeResult", function(x, ...) {
   edgeR::plotBCV(dgeList(x), ...,)
+})
+
+## groups
+setMethod("groups", "EdgeObject", function(object) {
+  return(groups(object@designContrast))
+})
+setMethod("dispGroups", "EdgeObject", function(object) {
+  return(dispGroups(object@designContrast))
+})
+
+## volcanoPlot
+setMethod("volcanoPlot", "EdgeResult",
+          function(object, contrast=NULL,
+                   freeRelation=FALSE,
+                   colramp=ribiosPlot::heat,
+                   ...) {
+  tables <- dgeTableList(object, contrast)
+  logFCs <- unlist(sapply(tables, function(x) x$logFC))
+  ps <- unlist(sapply(tables, function(x) x$PValue))
+  if(!freeRelation) {
+    logFC.range <- quantile(logFCs, c(0.01, 0.99), na.rm=TRUE)
+    pValue.range <- quantile(ps, c(0.01, 0.99), na.rm=TRUE)
+    xlim <- logFC.range
+    ylim <- c(0, max(-log10(pValue.range)))
+  }
+
+  op <- ribiosPlot::compactPar()
+  on.exit(par(op))
+  par(mfrow=grDevices::n2mfrow(length(tables)))
+  for(i in seq(along=tables)) {
+    if(freeRelation) {
+      with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
+                                      colramp=colramp,
+                                      main=names(tables[i]),...))
+    }  else {
+      with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
+                                      colramp=colramp,
+                                      main=names(tables[i]),
+                                      xlim=xlim, ylim=ylim, ...))
+    }
+    abline(h=0, col="lightgray")
+    abline(v=0, col="lightgray")
+  }
 })

@@ -7,22 +7,35 @@ design2group <- function(designMatrix) {
   levels(res) <- sprintf("AutoGroup_%02d", 1:nlevels(res))
   return(res)
 }
-DesignContrast <- function(designMatrix, contrastMatrix, groups=NULL) {
+DesignContrast <- function(designMatrix, contrastMatrix, groups=NULL, dispLevels=NULL) {
   if(is.null(groups))
     groups <- design2group(designMatrix)
+  if(is.null(dispLevels))
+    dispLevels <- levels(groups)
   new("DesignContrast",
       design=designMatrix,
       contrasts=contrastMatrix,
-      groups=groups)
+      groups=groups,
+      dispLevels=dispLevels)
 }
 
-groups <- function(designContrast) return(designContrast@groups)
-designMatrix <- function(designContrast) return(designContrast@design)
-contrastMatrix <- function(designContrast) return(designContrast@contrasts)
+setMethod("groups", "DesignContrast", function(object) {
+  return(object@groups)
+})
+setMethod("dispGroups", "DesignContrast", function(object) {
+  groups <- object@groups
+  levels(groups) <- object@dispLevels
+  return(groups)
+})
+setMethod("designMatrix", "DesignContrast", function(object) {
+  return(object@design)
+})
+setMethod("contrastMatrix", "DesignContrast", function(object) {
+  return(object@contrasts)
+})
 setMethod("designVariables", "DesignContrast", function(object) {
   return(colnames(designMatrix(object)))
 })
-
 ## functions to parse designs and contrasts from files or command-line inputs
 parseContrastStr <- function(contrastStr) {
   contrasts <- parseStrings(contrastStr)
@@ -37,23 +50,25 @@ parseContrastStr <- function(contrastStr) {
   }
   return(contrasts)
 }
-parseDesignContrastStr <- function(groupsStr, levelStr, contrastStr) {
-  groups <- parseFactor(groupsStr, rlevels=levelStr, make.names=FALSE)
+parseDesignContrastStr <- function(groupsStr, levelStr, dispLevelStr, contrastStr) {
+  groups <- parseFactor(groupsStr, rlevels=levelStr, make.names=TRUE)
   levels <- levels(groups)
-  notvalid <- (levels != make.names(levels))
-  if (any(notvalid)) 
-    stop("The levels must by syntactically valid names in R, see help(make.names).  Non-valid names: ", 
-         paste(levels[notvalid], collapse = ","))
   contrast.vec <- parseContrastStr(contrastStr)
   design <- model.matrix(~0+groups)
   colnames(design) <- levels
   contrasts <- makeContrasts(contrasts=contrasts.vec, levels=levels)
   colnames(contrasts) <- names(contrast.vec)
+  dispLevels <- parseStrings(dispLevels)
+  if(is.null(dispLevels)) {
+    dispLevels <- levels(groups)
+  }
   res <- DesignContrast(designMatrix=design,
                         contrastMatrix=contrasts,
-                        groups=groups)
+                        groups=groups,
+                        dispLevels=dispLevels)
   return(res)
 }
+
 parseDesignContrastFile <- function(designFile, contrastFile, groupsStr=NULL, levelStr=NULL) {
   assertFile(designFile)
   assertFile(contrastFile)
@@ -74,13 +89,14 @@ parseDesignContrastFile <- function(designFile, contrastFile, groupsStr=NULL, le
                         groups=groups)
 }
 parseDesignContrast <- function(designFile=NULL, contrastFile=NULL,
-                                sampleGroups=NULL, groupLevels=NULL, contrasts=NULL) {
+                                sampleGroups=NULL, groupLevels=NULL, dispLevels=NULL,
+                                contrasts=NULL) {
   if(!is.null(designFile) & !is.null(contrastFile)) {
     return(parseDesignContrastFile(designFile=designFile,
                                    contrastFile=contrastFile,
                                    groupsStr=groupLevels, levelStr=groupLevels))
   } else if (!is.null(sampleGroups) & !is.null(contrasts)) {
-    return(parseDesignContrastStr(sampleGroups, groupLevels, contrasts))
+    return(parseDesignContrastStr(sampleGroups, groupLevels, dispLevels, contrasts))
   } else {
     stop("Provide either a design matrix and a contrast matrix, or sample groups and contrasts")
   }

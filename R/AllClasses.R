@@ -1,11 +1,16 @@
 setClass("DesignContrast",
          representation=list(design="matrix",
            contrasts="matrix",
-           groups="factor"),
+           groups="factor",
+           dispLevels="character"),
          validity=function(object) {
-           stopifnot(valid.gd <- length(object@groups)==nrow(object@design))
-           stopifnot(valid.dc <- ncol(object@design)==nrow(object@contrasts))
-           return(valid.gd & valid.dc)
+           ribiosUtils::haltifnot(valid.gd <- length(object@groups)==nrow(object@design))
+           ribiosUtils::haltifnot(valid.gr <- length(object@dispLevels)==nlevels(object@groups),
+                                  msg=sprintf("Length of displayed levels (%d) does not match the levels of groups (%d)\n",
+                                    length(object@dispLevels),
+                                    nlevels(object@groups)))
+           ribiosUtils::haltifnot(valid.dc <- ncol(object@design)==nrow(object@contrasts))
+           return(valid.gd & valid.gr & valid.dc)
          })
 
 setMethod("show", "DesignContrast", function(object) {

@@ -6,6 +6,13 @@ importFrom("ribiosUtils", "rowscale", "summarizeRows", "removeInvarCol", "dfFact
 importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
 importFrom("graph", "connComp")
 
+## export classes
+exportClasses(DesignContrast)
+
+## export generics
+exportMethods(groups, dispGroups)
+
+## export methods
 export("rowscale")
 export("keepMaxStatProbe")
 
@@ -58,6 +65,6 @@ export("annotate", "reannotate")
 export(remainHighestVarProbe, keepHighestVarProbe, rankByCol, eset2gct, eset2cls)
 
 ## design-contrast
-exportClasses(DesignContrast)
 export(DesignContrast,
+       groups, designMatrix, contrastMatrix,
        parseDesignContrast)

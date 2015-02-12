@@ -7,6 +7,10 @@ setMethod("designMatrix", "EdgeResult", function(object) designMatrix(object@des
 setMethod("contrastMatrix", "EdgeObject", function(object) contrastMatrix(object@designContrast))
 setMethod("contrastMatrix", "EdgeResult", function(object) contrastMatrix(object@designContrast))
 
+setMethod("contrastNames", "EdgeObject", function(object) colnames(contrastMatrix(object)))
+setMethod("contrastNames", "EdgeResult", function(object) colnames(contrastMatrix(object)))
+
+
 naOrSqrt <- function(x) {
   if(is.null(x)) { return (NA)}
   return(sqrt(x))

@@ -133,12 +133,11 @@ ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.25, FDR=0.10)
 
 
 setClass("EdgeResult",
-         representation=list("dgeList"="DGEList",
-           "designContrast"="DesignContrast",
-           "dgeGLM"="DGEGLM",
+         representation=list("dgeGLM"="DGEGLM",
            "dgeTables"="list",
            "sigFilter"="EdgeSigFilter"),
-         prototype=list(sigFilter=ER_SIGFILTER_DEFAULT))
+         prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
+         contains="EdgeObject")
 
 EdgeResult <- function(edgeObj,
                        dgeGLM,

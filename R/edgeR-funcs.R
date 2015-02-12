@@ -163,8 +163,6 @@ sigDge <- function(edgeResult, contrast) {
   sf <- sigFilter(edgeResult)
 }
 
-contrastNames <- function(edgeResult) {return(names(edgeResult@dgeTables))}
-
 `sigFilter<-` <- function(edgeResult, value) {
   edgeResult@sigFilter <- value
   return(edgeResult)

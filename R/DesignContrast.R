@@ -56,9 +56,9 @@ parseDesignContrastStr <- function(groupsStr, levelStr, dispLevelStr, contrastSt
   contrast.vec <- parseContrastStr(contrastStr)
   design <- model.matrix(~0+groups)
   colnames(design) <- levels
-  contrasts <- makeContrasts(contrasts=contrasts.vec, levels=levels)
+  contrasts <- makeContrasts(contrasts=contrast.vec, levels=levels)
   colnames(contrasts) <- names(contrast.vec)
-  dispLevels <- parseStrings(dispLevels)
+  dispLevels <- parseStrings(dispLevelStr)
   if(is.null(dispLevels)) {
     dispLevels <- levels(groups)
   }

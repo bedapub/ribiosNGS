@@ -1,3 +1,6 @@
+Version 1.0-33 (Feb 12, 2015)
+  + parseDesignContrastStr fixes two errors
+
 Version 1.0-32 (Feb 09, 2015)
   + Add DesignContrast object
 

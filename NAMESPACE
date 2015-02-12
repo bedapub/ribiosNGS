@@ -7,7 +7,7 @@ importFrom("ribiosGSA", "geneSetPerm")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts")
 importFrom("ribiosExpression",
-           "groups", "dispGroups", "designMatrix", "contrastMatrix")
+           "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames")
 importFrom("edgeR",
            "aveLogCPM")
 
@@ -24,7 +24,6 @@ import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is onl
 
 exportClasses(EdgeResult)
 
-export(contrastNames)
 export(sigGene, sigGenes, sigGeneCounts)
 
 export(filterByCpm,

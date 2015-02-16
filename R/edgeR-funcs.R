@@ -22,7 +22,7 @@ minGroupCount <- function(edgeObj) {
   groups <- groups(edgeObj@designContrast)
   return(min(table(groups)))
 }
-filterByCpm <- function(edgeObj,
+filterByCPM <- function(edgeObj,
                         minCPM=1,
                         minCount=minGroupCount(edgeObj)) {
   cpm <- cpm(edgeObj@dgeList)
@@ -301,7 +301,7 @@ annotateMPS <- function(mat) {
   ampl <- attr(mat, "desc")
   stopifnot(!is.null(ampl) & all(grepl("^AMPL", ampl)))
   reporters <- mpsReporter()
-  genes <- matchColumn(ampl, reporters, "Amplicon")
+  genes <- matchColumn(ampl, greporters, "Amplicon")
   rownames(genes) <- ampl
   return(genes)
 }
@@ -341,10 +341,11 @@ readMPS <- function(file) {
 
 
 ## report
-writeDgeTables <- function(edgeResult) {
+writeDgeTables <- function(edgeResult, outdir=getwd()) {
   contrasts <- contrastNames(edgeResult)
-  outfiles <- sprintf("topTable-%s.txt", contrasts)
-  tables <- lapply(contrasts, function(x) dgeFilteredTable(edgeResult, x))
+  outfiles <- file.path(outdir,
+                        sprintf("topTable-%s.txt", contrasts))
+  tables <- lapply(contrasts, function(x) dgeTable(edgeResult, x))
   write.tableList(tables, outfiles)
 }
 
@@ -485,3 +486,9 @@ edgeRun <- function(x, design, contrasts, robust=FALSE) {
   return(EdgeResult(dge, fit, contrasts, test))
 }
 
+## plotMDS
+plotMDS.EdgeObject <- function(x, ...) {
+  plotMDS(dgeList(x), ...)
+}
+
+## sniff annotation

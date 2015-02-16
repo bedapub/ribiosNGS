@@ -1,15 +1,17 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast")
-importFrom("Biobase", "featureNames")
+importFrom("Biobase", "featureNames", "fData")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
 importFrom("ribiosGSA", "geneSetPerm")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
-importFrom("BiocGenerics", "counts")
+importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
-           "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames")
+           "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames", "annotate")
 importFrom("edgeR",
-           "aveLogCPM")
+           "cpm", "aveLogCPM")
+importFrom("graphics", "pairs")
+importFrom("limma", "plotMDS")
 
 ## for MPS
 import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is only available in newer versions of edgeR. Using importFrom explicitly will cause the package fail to install on stable R.
@@ -22,22 +24,34 @@ import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is onl
 ##           glmLRT, glmFit, topTags)
 ##
 
-exportClasses(EdgeResult)
+## for RNA-seq analysis
+exportClasses(EdgeResult, EdgeObject)
 
 export(sigGene, sigGenes, sigGeneCounts)
 
-export(filterByCpm,
+export(filterByCPM,
        estimateGLMDisp, fitGLM, testGLM)
 
 exportMethods(BCV, show,
               plotBCV,
-              volcanoPlot,
               normalize,
               dgeList, normFactors, cpmFilter,
               EdgeObject)
 
+export(annotate)
 export(dgeTables, dgeTable)
 export(writeDgeTables)
+
+export(modLogCPM)
+export(voom)
+export(commonDisp, "commonDisp<-", hasCommonDisp, setCommonDispIfMissing)
+
+export(normBoxplot)
+
+export(plotMDS.EdgeObject) ## S3 function from limma
+export(pairs.EdgeResult) ## S3 function from graphics
+export(volcanoPlot)
+export(smearPlot)
 
 ## MPS specific (TODO: to be factored into ribiosMP)
 export(readMPS)

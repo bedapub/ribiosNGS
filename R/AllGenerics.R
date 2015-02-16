@@ -29,3 +29,17 @@ setGeneric("plotBCV", function(x, ...) standardGeneric("plotBCV"))
 setGeneric("EdgeObject", function(object, designContrast, ...) standardGeneric("EdgeObject"))
 
 setGeneric("volcanoPlot", function(object,...) standardGeneric("volcanoPlot"))
+setGeneric("smearPlot", function(object,...) standardGeneric("smearPlot"))
+
+setGeneric("modLogCPM", function(object, ...) standardGeneric("modLogCPM"))
+
+setGeneric("voom", function(object, ...) standardGeneric("voom"))
+
+setGeneric("commonDisp", function(object) standardGeneric("commonDisp"))
+setGeneric("commonDisp<-", function(object,value) standardGeneric("commonDisp<-"))
+setGeneric("hasCommonDisp", function(object) standardGeneric("hasCommonDisp"))
+setGeneric("setCommonDispIfMissing", function(object, common.disp) standardGeneric("setCommonDispIfMissing"))
+
+setGeneric("sniffFeatures", function(object) standardGeneric("sniffFeatures"))
+
+setGeneric("isAnnotated", function(object) standardGeneric("isAnnotated"))

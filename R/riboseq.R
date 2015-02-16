@@ -314,9 +314,13 @@ refBoxplot <- function(x, xlab=NULL, ylab=NULL, main=NULL, hline=NULL, vline=NUL
   boxplot(x, xlab=xlab, ylab=ylab, main=main, add=TRUE,...)
 }
 
-write.tableList <- function(list, files, ...) {
+write.tableList <- function(list, files,
+                            quote=FALSE, sep="\t", row.names=FALSE, ...) {
+  col.names <- ifelse(row.names, NA, TRUE)
   for(i in seq(along=list))
-    write.table(list[[i]], files[[i]], ...)
+    write.table(list[[i]], files[[i]],
+                quote=quote, sep=sep,
+                row.names=row.names, col.names=col.names, dec=".", ...)
 }
 
 setMethod("featureNames", "RiboSeq", function(object) {

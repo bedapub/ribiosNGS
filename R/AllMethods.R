@@ -71,7 +71,61 @@ setMethod("dispGroups", "EdgeObject", function(object) {
   return(dispGroups(object@designContrast))
 })
 
+## boxplot
+normFactorBoxplot <- function(edgeObj,...) {
+  strwidth.inch <- strwidth(dispGroups(edgeObj),
+                            units="inch")
+  op <- par(mai=c(quantile(strwidth.inch, 0.95)+0.5,
+              par("mai")[2:4]*c(1, 0.8, 0.8)))
+  on.exit(par(op))
+  boxplot(normFactors(edgeObj)~dispGroups(edgeObj), las=3,...)
+  abline(h=1, col="lightgray")
+}
+modLogCPMBoxplot <- function(edgeObj, ...) {
+  sample.names <- colnames(dgeList(edgeObj)$counts)
+  modLogCPM <- modLogCPM(edgeObj)
+  strwidth.inch <- strwidth(sample.names,
+                            units="inch")
+  op <- par(mai=c(quantile(strwidth.inch, 0.95)+0.5,
+              par("mai")[2:4]*c(1, 0.8, 0.8)))
+  on.exit(par(op))
+  boxplot(modLogCPM, las=3,...)
+  avg <- median(modLogCPM, na.rm=TRUE)
+  abline(h=avg, col="lightgray")
+}
+
+nonNull <- function(x, val) return(ifelse(is.null(x), val, x))
+setMethod("boxplot", "EdgeObject",
+          function(x, type=c("normFactors","modLogCPM"), xlab="", ylab=NULL, main="", ...) {
+            type <- match.arg(type)
+            if(type=="normFactors") {
+              ylab <- nonNull(ylab, "Normalization factors")
+              normFactorBoxplot(x, xlab=xlab, ylab=ylab, main=main, ...)
+            } else if (type=="modLogCPM") {
+              ylab <- nonNull(ylab, "log2(moderated cpm)")
+              modLogCPMBoxplot(x, xlab=xlab, ylab=ylab, main=main,...)
+            } 
+          })
+
+normBoxplot <- function(before.norm, after.norm, ...) {
+  op <- par(mfrow=c(1,2))
+  on.exit(par(op))
+  boxplot(before.norm, type="modLogCPM", main="Before norm.", ...)
+  boxplot(after.norm, type="modLogCPM", main="After norm.", ...)
+}
+
 ## volcanoPlot
+quantileRange <- function(x, outlier=0.01, symmetric=TRUE) {
+  quants <- c(outlier/2, 1-outlier/2)
+  qts <- quantile(x, quants, na.rm=TRUE)
+  if(symmetric) {
+    mm <- max(abs(qts))
+    res <- c(-mm, mm)
+  } else {
+    res <- qts
+  }
+  return(res)
+}
 setMethod("volcanoPlot", "EdgeResult",
           function(object, contrast=NULL,
                    freeRelation=FALSE,
@@ -81,15 +135,15 @@ setMethod("volcanoPlot", "EdgeResult",
   logFCs <- unlist(sapply(tables, function(x) x$logFC))
   ps <- unlist(sapply(tables, function(x) x$PValue))
   if(!freeRelation) {
-    logFC.range <- quantile(logFCs, c(0.01, 0.99), na.rm=TRUE)
-    pValue.range <- quantile(ps, c(0.01, 0.99), na.rm=TRUE)
+    logFC.range <- quantileRange(logFCs, outlier=0.01, symmetric=TRUE)
+    pValue.range <- quantileRange(ps, outlier=0.01, symmetric=FALSE)
     xlim <- logFC.range
     ylim <- c(0, max(-log10(pValue.range)))
   }
 
   op <- ribiosPlot::compactPar()
   on.exit(par(op))
-  par(mfrow=grDevices::n2mfrow(length(tables)))
+  op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
   for(i in seq(along=tables)) {
     if(freeRelation) {
       with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
@@ -104,4 +158,259 @@ setMethod("volcanoPlot", "EdgeResult",
     abline(h=0, col="lightgray")
     abline(v=0, col="lightgray")
   }
+  par(op2)
+})
+
+customSmearPlot <- function(tbl, main, 
+                              xlab = "Average logCPM", 
+                              ylab = "logFC", pch = 19, cex = 0.2, smearWidth = 0.5, panel.first = grid(), 
+                              smooth.scatter = FALSE, lowess = FALSE, ...) {
+  edgeR::maPlot(x=NULL, y=NULL,
+                logAbundance=tbl$logCPM,
+                logFC=tbl$logFC,
+                xlab = xlab, ylab = ylab, 
+                pch = pch, cex = cex, smearWidth = smearWidth,
+                panel.first = panel.first, smooth.scatter = smooth.scatter, 
+                lowess = lowess, 
+                main=main,
+              ...)
+}
+setMethod("smearPlot", "EdgeResult",
+          function(object, contrast=NULL, freeRelation=FALSE,
+                   xlab = "Average logCPM", 
+                   ylab = "logFC", pch = 19, cex = 0.2, smearWidth = 0.5, panel.first = grid(), 
+                   smooth.scatter = FALSE, lowess = FALSE,...) {
+              tables <- dgeTableList(object, contrast)
+              logFCs <- unlist(sapply(tables, function(x) x$logFC))
+              logCPMs <- unlist(sapply(tables, function(x) x$logCPM))
+              if(!freeRelation) {
+                logFC.range <- quantile(logFCs, c(0.01, 0.99), na.rm=TRUE)
+                logCPM.range <- quantile(logCPMs, c(0.01, 0.99), na.rm=TRUE)
+                xlim <- logCPM.range
+                ylim <- logFC.range
+              }
+              
+              op <- ribiosPlot::compactPar()
+              on.exit(par(op))
+              op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
+              for(i in seq(along=tables)) {
+                if(freeRelation) {
+                  customSmearPlot(tables[[i]], main=names(tables)[i], ...)
+                }  else {
+                  customSmearPlot(tables[[i]], main=names(tables)[i],
+                                                  xlim=xlim, ylim=ylim,
+                                                  ...)
+                }
+              }
+              par(op2)
+          })
+
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
+  usr <- par("usr"); on.exit(par(usr))
+  par(usr = c(0, 1, 0, 1))
+  corr <- cor(x,y)
+  r <- abs(corr)
+  scale.factor <- ifelse(r<0.2, 0.2, r)
+  col <- ifelse(corr>0, "red2", "royalblue")
+  txt <- format(c(corr, 0.123456789), digits = digits)[1]
+  txt <- paste0(prefix, txt)
+  if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+  text(0.5, 0.5, txt, cex = cex.cor * scale.factor, col=col)
+}
+
+panel.lmSmooth <- function(x,y, col = par("col"), bg = NA, pch = par("pch"), 
+                      cex = 0.8, ...) {
+
+  corr <- cor(x,y, use="complete")
+  corr.col <-ifelse(corr<0, "royalblue", "red2")
+
+  abline(h=0, v=0, col="lightgray")
+  abline(lm(y~x))
+  
+  panel.smooth(x,y, col=col, bg=bg, pch=pch,
+               cex=cex, col.smooth=corr.col, ...)
+
+  legend("topleft",
+         sprintf("r=%1.2f", corr), bty="n",
+         text.col=corr.col)
+
+}
+
+pairs.EdgeResult <- function(x, lower.panel=panel.lmSmooth, upper.panel=panel.cor,
+                             freeRelation=TRUE,
+                             pch=19, ...) {
+  dgeTbls <- dgeTables(x)
+  ufeat <- unique(unlist(lapply(dgeTbls, rownames)))
+  logFCs <- sapply(dgeTbls, function(x) matchColumn(ufeat, x, 0L)$logFC)
+  if(freeRelation) {
+    xlim <- ylim <- quantileRange(logFCs, outlier=0.01)
+  } else {
+    xlim <- ylim <- NULL
+  }
+  pairs(logFCs, lower.panel=lower.panel, upper.panel=NULL, pch=pch, xlim=xlim, ylim=ylim, ...)
+}
+
+## modLogCPM (moderated log CPM)
+setMethod("modLogCPM", "DGEList", function(object, prior.count=2) {
+  return(cpm(object, prior.count=prior.count, log=TRUE))
+})
+setMethod("modLogCPM", "EdgeObject", function(object) {
+  return(modLogCPM(dgeList(object)))
+})
+
+## voom
+setMethod("voom", "DGEList", function(object,...) {
+  limma::voom(object, ...)
+})
+setMethod("voom", "matrix", function(object,...) {
+  limma::voom(object, ...)
+})
+setMethod("voom", "ExpressionSet", function(object,...) {
+  limma::voom(object, ...)
+})
+setMethod("voom", "EdgeObject", function(object,...) {
+  limma::voom(dgeList(object),
+              design=designMatrix(object),
+              ...)
+})
+
+## common disp
+setMethod("commonDisp", "DGEList", function(object) {
+  return(object$common.dispersion)
+})
+setMethod("commonDisp", "EdgeObject", function(object) {
+  return(commonDisp(dgeList(object)))
+})
+setMethod("hasCommonDisp", "DGEList", function(object) {
+  disp <- commonDisp(object)
+  return(!is.na(disp) & !is.null(disp))
+})
+
+setMethod("hasCommonDisp", "EdgeObject", function(object) {
+  return(hasCommonDisp(dgeList(object)))
+})
+
+setReplaceMethod("commonDisp", c("DGEList", "numeric"), function(object, value) {
+  object$common.dispersion <- common.disp
+  return(object)
+})
+setReplaceMethod("commonDisp", c("EdgeObject", "numeric"), function(object, value) {
+  object@dgeList$common.dispersion <- common.disp
+  return(object)
+})
+localSetCommonDispIfMissing <- function(object, common.disp) {
+  if(!hasCommonDisp(object)) {
+    commonDisp(object) <- common.disp
+  }
+  return(object)
+}
+setMethod("setCommonDispIfMissing", c("DGEList","numeric"), function(object, common.disp) {
+  localSetCommonDispIfMissing(object, common.disp)
+})
+setMethod("setCommonDispIfMissing", c("EdgeObject","numeric"), function(object, common.disp) {
+  localSetCommonDispIfMissing(object, common.disp)
+})
+
+## cpm
+cpm.EdgeObject <- function(x,...) {
+  cpm(dgeList(x), ...)
+}
+
+## sniff features
+setMethod("featureNames", "EdgeObject", function(object) {
+  return(rownames(dgeList(object)$counts))
+})
+
+isValidID <- function(featNames) {
+  invalid <- is.na(featNames) || featNames=="" || featNames=="-"
+  return(!invalid)
+}
+validIDs <- function(featNames) {
+  return(featNames[isValidID(featNames)])
+}
+likeGeneID <- function(featNames) grepl("^[0-9]*$", featNames)
+likeGeneSymbol <- function(featNames) grepl("^[A-Za-z][A-Za-z0-9]*$", featNames)
+likeRefSeq <- function(featNames) grepl("^[N|X][M|R|G|P]_[0-9]+\\.?[0-9]*$", featNames)
+likeEnsembl <- function(featNames) grepl("^ENS[T|G|P][0-9]+$", featNames)
+
+setMethod("sniffFeatures", "EdgeObject", function(object) {
+  featNames <- featureNames(object)
+  positive.thr <- 0.5
+  vnames <- validIDs(featNames)
+  geneIdsLike <- likeGeneID(vnames)
+  if(mean(geneIdsLike)>=positive.thr) {
+    return("GeneID")
+  }
+  geneSymbolsLike <- likeGeneSymbol(vnames)
+  if(mean(geneSymbolsLike)>=positive.thr) {
+    return("GeneSymbol")
+  }
+  refseqLike <- likeRefSeq(vnames)
+  if(mean(refseqLike)>=positive.thr) {
+    return("RefSeq")
+  }
+  ensemblLike <- likeEnsembl(vnames)
+  if(mean(ensemblLike)>=positive.thr) {
+    return("EnsEMBL")
+  }
+  return("Unknown")
+})
+
+setMethod("annotate", c("EdgeObject","character", "logical"),
+          function(object, target, check.target) {
+            target <- match.arg(target,
+                                choices=c("GeneID", "GeneSymbol", "RefSeq", "EnsEMBL", "Automatic", "Unknown"))
+            if(target=="Automatic") {
+              target <- sniffFeatures(object)
+            }
+            if(target=="Unknown") {
+              ## no annotations available
+              object@dgeList$annotation <- NULL
+              return(object)
+            }
+            feats <- featureNames(object)
+            isValidFeat <- isValidID(feats)
+            if(target=="GeneID") {
+              anno <- annotateGeneIDs(feats)
+            } else if (target=="GeneSymbol") {
+              anno <- annotateGeneSymbols(feats)
+            } else if (target=="RefSeq") {
+              anno <- annotateRefSeqs(feats)
+            } else if (target=="EnsEMBL") {
+              anno <- annotateEnsembl(feats)
+            }
+            if(check.target) {
+              positive.thr <- 0.5
+              validFeatGeneID <- anno$GeneID[isValidFeat]
+              isBadGuess <- mean(is.na(validFeatGeneID))>=positive.thr
+              if(isBadGuess) {
+                object@dgeList$annotation <- NULL
+                return(object)
+              }
+            }
+
+            object@dgeList$annotation <- target
+            object@dgeList$genes <- anno
+            return(object)
+          })
+setMethod("annotate", c("EdgeObject","character", "missing"),
+          function(object, target) {
+            annotate(object, "Automatic", TRUE)
+          })
+
+setMethod("annotate", c("EdgeObject","missing", "missing"),
+          function(object) {
+            annotate(object, "Automatic")
+          })
+
+setMethod("annotation", "EdgeObject", function(object) {
+  return(object@dgeList$annotation)
+})
+
+setMethod("fData", "EdgeObject", function(object) {
+  return(object@dgeList$genes)
+})
+
+setMethod("isAnnotated", "EdgeObject", function(object) {
+  return(!is.null(annotation(object)))
 })

@@ -69,7 +69,9 @@ parseDesignContrastStr <- function(groupsStr, levelStr, dispLevelStr, contrastSt
   return(res)
 }
 
-parseDesignContrastFile <- function(designFile, contrastFile, groupsStr=NULL, levelStr=NULL) {
+parseDesignContrastFile <- function(designFile, contrastFile,
+                                    groupsStr=NULL, levelStr=NULL,
+                                    dispLevelStr) {
   assertFile(designFile)
   assertFile(contrastFile)
   if(!is.null(groupsStr)) {
@@ -84,9 +86,14 @@ parseDesignContrastFile <- function(designFile, contrastFile, groupsStr=NULL, le
   }
   design <- readMatrix(designFile)
   contrast <- readMatrix(contrastFile)
+  dispLevels <- parseStrings(dispLevelStr)
+  if(is.null(dispLevels)) {
+    dispLevels <- levels(groups)
+  }
   res <- DesignContrast(designMatrix=design,
                         contrastMatrix=contrast,
-                        groups=groups)
+                        groups=groups,
+                        dispLevels=dispLevels)
 }
 parseDesignContrast <- function(designFile=NULL, contrastFile=NULL,
                                 sampleGroups=NULL, groupLevels=NULL, dispLevels=NULL,
@@ -94,9 +101,14 @@ parseDesignContrast <- function(designFile=NULL, contrastFile=NULL,
   if(!is.null(designFile) & !is.null(contrastFile)) {
     return(parseDesignContrastFile(designFile=designFile,
                                    contrastFile=contrastFile,
-                                   groupsStr=groupLevels, levelStr=groupLevels))
+                                   groupsStr=sampleGroups,
+                                   levelStr=groupLevels,
+                                   dispLevelStr=dispLevels))
   } else if (!is.null(sampleGroups) & !is.null(contrasts)) {
-    return(parseDesignContrastStr(sampleGroups, groupLevels, dispLevels, contrasts))
+    return(parseDesignContrastStr(groupsStr=sampleGroups,
+                                  levelStr=groupLevels,
+                                  dispLevelStr=dispLevels,
+                                  contrastStr=contrasts))
   } else {
     stop("Provide either a design matrix and a contrast matrix, or sample groups and contrasts")
   }

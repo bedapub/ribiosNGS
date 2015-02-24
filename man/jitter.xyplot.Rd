@@ -24,6 +24,8 @@ jitter.xyplot(x, y, N = 20, factor = 1, ...)
   Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \examples{
+library(lattice)
+
 testX <- gl(8,5)
 testY <- rnorm(40)
 xyplot(testY ~ testX)

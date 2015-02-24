@@ -8,7 +8,8 @@
   dpi) PNG files.
 }
 \usage{
-pdf2png(..., convert = "convert", density = 300, outdir=NULL, wait = FALSE)
+pdf2png(..., convert = "convert", density = 300, outdir=NULL,
+outfile=NULL, wait = FALSE)
 }
 \arguments{
   \item{\dots}{PDF files}
@@ -18,11 +19,16 @@ pdf2png(..., convert = "convert", density = 300, outdir=NULL, wait = FALSE)
   \item{density}{DPI. Default 300 is good enough for publications in
     most biology/medicine journals}
   \item{outdir}{Output directory. If the value is \code{NULL}, the
-    output files will be written in the same directory as the input file}
+    output files will be written in the same directory as the input
+    file}
+  \item{outfile}{Output file names. If the value is \code{NULL}, the
+    output file names will be basename of the input PDF files appended
+    with the \code{.png} suffix. If given, its length must equal the
+    length of PDF files.}
   \item{wait}{Logical, should the function wait until the conversion is finished?}
 }
 \value{
-  PNG file names are returned invisibly.
+  Output file names are returned invisibly.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>
@@ -36,7 +42,8 @@ pdf2png(..., convert = "convert", density = 300, outdir=NULL, wait = FALSE)
   dev.off()
 
   pdf2png(pdffile)
-  
+  pdf2png(pdffile, outfile="test.png")
+
   testfile <- system.file("/doc/intro.pdf", package="limma")
   if(file.exists(testfile)) {
     pdf2png(testfile, outdir=tmpdir)

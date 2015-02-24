@@ -13,6 +13,7 @@
 \alias{blackredyellow}
 \alias{blackgoldred}
 \alias{whiteblueblackheat}
+\alias{heat}
 \alias{threecolor.panels}
 \alias{display.threecolor.panels}
 \title{Three-color panels}
@@ -34,6 +35,7 @@ blackgoldred(n)
 cyanblackyellow(n)
 yellowblackcyan(n)
 whiteblueblackheat(n)
+heat(n)
 
 threecolor.panels()
 display.threecolor.panels(nc=20)

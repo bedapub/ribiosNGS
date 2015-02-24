@@ -71,7 +71,7 @@ pdf2png <- function(..., convert="convert", density=300, outdir=NULL, outfile=NU
 
   ## mon udis machine, ghostscript has to be added to the path
   if(Sys.info()[["nodename"]]=="rbaus024.bas.roche.com") {
-    convert <- "export MODULEPATH=${MODULEPATH}:/apps64/etc/modulefiles/; module load misc-0.1; module load ghostscript-9.10; module load ImageMagick-6.7.5-4; PATH=/apps64/ghostscript-9.10/bin/:${PATH} convert"
+    convert <- "PATH=/apps64/ghostscript-9.10/bin/:/apps64/ImageMagick-6.7.5-4/bin/:${PATH} convert"
   }
   comms <- sprintf("%s -density %d %s %s", convert, density, files, outfile)
   for(i in seq(along=comms))

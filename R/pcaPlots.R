@@ -144,7 +144,7 @@ plotPCAloading <- function(loadings, x=1L, y=2L, circle=FALSE, title="", subtitl
   text(loadings[,x],loadings[,y],rownames(loadings),cex=1, adj=c(1.2,1), xpd=T)
   title(main=title,outer=TRUE)
   title(sub=subtitle,outer=TRUE,line=-0.5)
-  if(circle && require("plotrix")) {
+  if(circle) {
     plotrix::draw.circle(x=0,y=0,radius=1,border="grey",lwd=2)
   }
 }

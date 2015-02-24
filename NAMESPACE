@@ -1,5 +1,5 @@
-importFrom(grDevices, heat.colors, colorRampPalette)
-importFrom(lattice, panel.xyplot)
+importFrom(grDevices, heat.colors, colorRampPalette, blues9)
+importFrom(lattice, panel.xyplot, col.whitebg, lattice.options)
 importFrom(ribiosUtils, assertFile, basefilename, chosenFew, haltifnot)
 importFrom(methods, setClass, setGeneric, setMethod)
 importFrom(RColorBrewer, brewer.pal, brewer.pal.info)
@@ -13,6 +13,8 @@ export(compactPar)
 export(squareLayout)
 export(intRange)
 export(p2asterisk)
+export(compactTrellis,
+       setCompactTrellis)
 
 ## biosHeatmap
 export(biosHeatmap)
@@ -47,7 +49,8 @@ export(royalbluered,
        yellowblackcyan,
        blackredyellow,
        blackgoldred,
-       whiteblueblackheat)
+       whiteblueblackheat,
+       heat)
 
 ## two-colors
 export(blackyellow,

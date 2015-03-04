@@ -129,7 +129,7 @@ EdgeSigFilter <- function(logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
   return(object)
 }
 
-ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.25, FDR=0.10)
+ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.5, FDR=0.05)
 
 
 setClass("EdgeResult",

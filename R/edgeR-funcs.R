@@ -275,8 +275,8 @@ sigGeneBarchart <- function(edgeResult,
                             ylab="Significant DEGs",
                             col=c("positive"="orange",
                               "negative"="lightblue"),
-                            logy=TRUE,
-                              auto.key=FALSE, 
+                            logy=FALSE,
+                            auto.key=list(columns=2),
                             ...) {
   counts <- sigGeneCounts(edgeResult)
   contrasts <- ribiosUtils::ofactor(contrastNames(dgeTest))
@@ -490,7 +490,7 @@ edgeRun <- function(x, design, contrasts, robust=FALSE) {
 }
 
 groupCol <- function(edgeObj, panel="Set1") {
-  fcbrewer(dispGroups(edgeObj)
+  fcbrewer(dispGroups(edgeObj))
 }
 ## plotMDS
 plotMDS.EdgeObject <- function(x, col, ...) {

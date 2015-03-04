@@ -193,8 +193,8 @@ setMethod("smearPlot", "EdgeResult",
               logFCs <- unlist(sapply(tables, function(x) x$logFC))
               logCPMs <- unlist(sapply(tables, function(x) x$logCPM))
               if(!freeRelation) {
-                logFC.range <- quantile(logFCs, c(0.01, 0.99), na.rm=TRUE)
-                logCPM.range <- quantile(logCPMs, c(0.01, 0.99), na.rm=TRUE)
+                logFC.range <- quantile(logFCs, c(0.0005, 0.9995), na.rm=TRUE)
+                logCPM.range <- quantile(logCPMs, c(0.0005, 0.9995), na.rm=TRUE)
                 xlim <- logCPM.range
                 ylim <- logFC.range
               }

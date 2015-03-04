@@ -271,22 +271,25 @@ sigGeneCounts <- function(edgeResult) {
 sigGeneBarchart <- function(edgeResult,
                             scales=list(x=list(rot=45),
                               y=list(alternating=1, tck=c(1,0))),
-                            stack=TRUE,
+                            stack=FALSE,
                             ylab="Significant DEGs",
                             col=c("positive"="orange",
                               "negative"="lightblue"),
-                              auto.key=TRUE, 
+                            logy=TRUE,
+                              auto.key=FALSE, 
                             ...) {
   counts <- sigGeneCounts(edgeResult)
   contrasts <- ribiosUtils::ofactor(contrastNames(dgeTest))
   positive <- counts$posCount
   negative <- counts$negCount
+  scales$y$log <- ifelse(logy, 10, FALSE)
   lattice::barchart(positive + negative ~ contrasts,
                     stack=stack,
                     ylab=ylab,
                     scales=scales,
                     par.settings=list(superpose.polygon=list(col=col)),
                     auto.key=auto.key,
+                    origin=0,
                     ...)
 }
 
@@ -486,8 +489,12 @@ edgeRun <- function(x, design, contrasts, robust=FALSE) {
   return(EdgeResult(dge, fit, contrasts, test))
 }
 
+groupCol <- function(edgeObj, panel="Set1") {
+  fcbrewer(dispGroups(edgeObj)
+}
 ## plotMDS
-plotMDS.EdgeObject <- function(x, ...) {
+plotMDS.EdgeObject <- function(x, col, ...) {
+  
   plotMDS(dgeList(x), ...)
 }
 

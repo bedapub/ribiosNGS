@@ -130,6 +130,7 @@ setMethod("volcanoPlot", "EdgeResult",
           function(object, contrast=NULL,
                    freeRelation=FALSE,
                    colramp=ribiosPlot::heat,
+                   multipage=FALSE,
                    ...) {
   tables <- dgeTableList(object, contrast)
   logFCs <- unlist(sapply(tables, function(x) x$logFC))
@@ -141,9 +142,12 @@ setMethod("volcanoPlot", "EdgeResult",
     ylim <- c(0, max(-log10(pValue.range)))
   }
 
-  op <- ribiosPlot::compactPar()
-  on.exit(par(op))
-  op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
+  if(!multipage) {
+    op <- ribiosPlot::compactPar()
+    on.exit(par(op))
+    op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
+  }
+  
   for(i in seq(along=tables)) {
     if(freeRelation) {
       with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
@@ -158,7 +162,10 @@ setMethod("volcanoPlot", "EdgeResult",
     abline(h=0, col="lightgray")
     abline(v=0, col="lightgray")
   }
-  par(op2)
+
+  if(!multipage) {
+    par(op2)
+  }
 })
 
 customSmearPlot <- function(tbl, main, 
@@ -179,7 +186,9 @@ setMethod("smearPlot", "EdgeResult",
           function(object, contrast=NULL, freeRelation=FALSE,
                    xlab = "Average logCPM", 
                    ylab = "logFC", pch = 19, cex = 0.2, smearWidth = 0.5, panel.first = grid(), 
-                   smooth.scatter = FALSE, lowess = FALSE,...) {
+                   smooth.scatter = FALSE, lowess = FALSE,
+                   multipage=FALSE,
+                   ...) {
               tables <- dgeTableList(object, contrast)
               logFCs <- unlist(sapply(tables, function(x) x$logFC))
               logCPMs <- unlist(sapply(tables, function(x) x$logCPM))
@@ -189,10 +198,12 @@ setMethod("smearPlot", "EdgeResult",
                 xlim <- logCPM.range
                 ylim <- logFC.range
               }
-              
-              op <- ribiosPlot::compactPar()
-              on.exit(par(op))
-              op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
+
+              if(!multipage) {
+                op <- ribiosPlot::compactPar()
+                on.exit(par(op))
+                op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
+              }
               for(i in seq(along=tables)) {
                 if(freeRelation) {
                   customSmearPlot(tables[[i]], main=names(tables)[i], ...)
@@ -202,7 +213,9 @@ setMethod("smearPlot", "EdgeResult",
                                                   ...)
                 }
               }
-              par(op2)
+              if(!multipage) {
+                par(op2)
+              }
           })
 
 panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {

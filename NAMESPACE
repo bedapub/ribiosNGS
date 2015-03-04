@@ -1,5 +1,5 @@
 importFrom("ribiosUtils",
-           "haltifnot","assertContrast", "assertDesign", "assertDesignContrast")
+           "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen")
 importFrom("Biobase", "featureNames", "fData")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")

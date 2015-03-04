@@ -36,7 +36,8 @@ exportMethods(BCV, show,
               plotBCV,
               normalize,
               dgeList, normFactors, cpmFilter,
-              EdgeObject)
+              EdgeObject,
+              isAnnotated)
 
 export(annotate)
 export(dgeTables, dgeTable)
@@ -52,6 +53,9 @@ export(plotMDS.EdgeObject) ## S3 function from limma
 export(pairs.EdgeResult) ## S3 function from graphics
 export(volcanoPlot)
 export(smearPlot)
+
+
+export(isAnnotated)
 
 ## MPS specific (TODO: to be factored into ribiosMP)
 export(readMPS)

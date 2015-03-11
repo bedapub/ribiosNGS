@@ -1,4 +1,6 @@
-write_gct <- function(matrix, file=stdout(), feat.name, feat.desc) {
+## TODO: if attr(matrix, "desc") is not NULL, feat.desc is silently ignored - needs to be fixed
+## 09.11.2014 zhangj83
+write_gct <- function(matrix, file=stdout(), feat.name, feat.desc, na="") {
   if(missing(feat.name)) {
     feat.name <- rownames(matrix)
     if(is.null(feat.name)) {
@@ -22,7 +24,7 @@ write_gct <- function(matrix, file=stdout(), feat.name, feat.desc) {
     df <- cbind(df, matrix)
     suppressWarnings(write.table(df, file=file, append=TRUE,
                                  quote=FALSE, sep="\t",
-                                 row.names=FALSE, col.names=TRUE, na=""))
+                                 row.names=FALSE, col.names=TRUE, na=na))
   } else {
     if(is.null(colnames(matrix))) {
       warning("'matrix' is empty and has NULL as col names. Integer indices are used.\n")

@@ -7,7 +7,7 @@
   Write matrix in GCT file format
 }
 \usage{
-write_gct(matrix, file = stdout(), feat.name, feat.desc)
+write_gct(matrix, file = stdout(), feat.name, feat.desc, na="")
 }
 \arguments{
   \item{matrix}{A numeric matrix}
@@ -18,6 +18,7 @@ write_gct(matrix, file = stdout(), feat.name, feat.desc)
     of the same length as the row number of the input matrix.}
   \item{feat.desc}{Character vector, optional. Feature descriptions; if
     missing, empty strings will be used as descriptions.}
+  \item{na}{Character string, how 'NA' values will be printed?}
 }
 \details{
   Input matrix will be transformed into the GCT format. The transformed

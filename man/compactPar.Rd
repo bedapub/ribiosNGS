@@ -7,7 +7,12 @@
   Compact par setting
 }
 \usage{
-compactPar()
+compactPar(mar=c(3,3,1.5,1.5), mgp=c(2,1,0), ...)
+}
+\arguments{
+  \item{mar}{marginal option passed to \code{par}}
+  \item{mgp}{margin line option passed to \code{par}}
+  \item{...}{other parameters passed to \code{par}} 
 }
 \details{
   For compact figures

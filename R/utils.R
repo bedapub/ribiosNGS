@@ -1,5 +1,5 @@
 ## compop
-compactPar<- function() return(par(mar=c(3,3,1.5,1.5), mgp=c(2,1,0)))
+compactPar<- function(mar=c(3,3,1.5,1.5), mgp=c(2,1,0),...) return(par(mar=mar, mgp=mgp, ...))
 
 ## get an matrix layout that is as near as a square
 squareLayout <- function(n) {

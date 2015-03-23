@@ -62,7 +62,7 @@ export(readMPS)
 export(mpsAnnotateReporters)
 export(doFisher)
 export(sigGeneBarchart)
-export(edgeBuild, edgeTest,edgeRun)
+## export(edgeBuild, edgeTest,edgeRun)
 
 ## for riboseq
 exportClasses(RiboSeq,
@@ -113,3 +113,12 @@ export(cpmBoxplotFile,
        fullTableFile,
        rnkFiles)
 export(writeHTML)
+
+export(mpsReporterAssocPathway,
+       mpsReporterUpstream,
+       mpsReporterUpstreamPos,
+       mpsReporterUpstreamNeg,
+       mpsReporterDownstream,
+       mpsReporterAssocGO,
+       mpsReporterAssocRCTM)
+       

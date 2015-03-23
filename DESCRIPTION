@@ -10,5 +10,5 @@ Description: NGS tasks in ribios, for instance differetial gene expression
 Depends:
     edgeR,ribiosAnnotation, ribiosExpression
 Imports:
-    ribiosUtils,methods,Biobase,lattice,ribiosGSA,BiocGenerics,ribiosPlot,graphics
+    ribiosUtils,methods,Biobase,lattice,ribiosGSA,BiocGenerics,ribiosPlot,graphics,limma
 License: GPL-3

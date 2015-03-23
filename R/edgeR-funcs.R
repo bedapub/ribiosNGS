@@ -304,7 +304,7 @@ annotateMPS <- function(mat) {
   ampl <- attr(mat, "desc")
   stopifnot(!is.null(ampl) & all(grepl("^AMPL", ampl)))
   reporters <- mpsReporter()
-  genes <- matchColumn(ampl, greporters, "Amplicon")
+  genes <- matchColumn(ampl, reporters, "Amplicon")
   rownames(genes) <- ampl
   return(genes)
 }

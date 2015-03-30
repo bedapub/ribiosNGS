@@ -38,6 +38,7 @@ exportMethods(BCV, show,
               dgeList, normFactors, cpmFilter,
               EdgeObject,
               isAnnotated)
+exportMethods(commonDisp, "commonDisp<-")
 
 export(annotate)
 export(dgeTables, dgeTable)
@@ -45,7 +46,7 @@ export(writeDgeTables)
 
 export(modLogCPM)
 export(voom)
-export(commonDisp, "commonDisp<-", hasCommonDisp, setCommonDispIfMissing)
+export(hasCommonDisp, setCommonDispIfMissing)
 
 export(normBoxplot)
 
@@ -122,3 +123,8 @@ export(mpsReporterAssocPathway,
        mpsReporterAssocGO,
        mpsReporterAssocRCTM)
        
+
+export(minGroupCount,
+       countByGroup,
+       maxCountByGroup,
+       hasNoReplicate)

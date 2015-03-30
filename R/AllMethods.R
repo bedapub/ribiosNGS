@@ -304,11 +304,11 @@ setMethod("hasCommonDisp", "EdgeObject", function(object) {
 })
 
 setReplaceMethod("commonDisp", c("DGEList", "numeric"), function(object, value) {
-  object$common.dispersion <- common.disp
+  object$common.dispersion <- value
   return(object)
 })
 setReplaceMethod("commonDisp", c("EdgeObject", "numeric"), function(object, value) {
-  object@dgeList$common.dispersion <- common.disp
+  object@dgeList$common.dispersion <- value
   return(object)
 })
 localSetCommonDispIfMissing <- function(object, common.disp) {

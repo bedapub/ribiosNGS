@@ -22,6 +22,16 @@ minGroupCount <- function(edgeObj) {
   groups <- groups(edgeObj@designContrast)
   return(min(table(groups)))
 }
+countByGroup <- function(edgeObj) {
+  groups <- groups(edgeObj@designContrast)
+  return(table(groups))
+}
+maxCountByGroup <- function(edgeObj) {
+  return(max(countByGroup(edgeObj)))
+}
+hasNoReplicate <- function(edgeObj) {
+  return(maxCountByGroup(edgeObj)<=1)
+}
 filterByCPM <- function(edgeObj,
                         minCPM=1,
                         minCount=minGroupCount(edgeObj)) {
@@ -349,7 +359,7 @@ writeDgeTables <- function(edgeResult, outdir=getwd()) {
   outfiles <- file.path(outdir,
                         sprintf("topTable-%s.txt", contrasts))
   tables <- lapply(contrasts, function(x) dgeTable(edgeResult, x))
-  write.tableList(tables, outfiles)
+  write.tableList(tables, outfiles, row.names=TRUE)
 }
 
 ###' Build DGEList object ready for generalized linear model fitting

@@ -86,7 +86,8 @@ setMethod("gseaFWER", "annoGseaResList", function(object) {
   res <- vec2mat(fwers, sort.by="mean", decreasing=FALSE)
   return(res)
 })
-          
+
+
 setMethod("gsGeneIndices", "gseaResItem", function(object) return(object@geneIndices))
 setMethod("gseaESprofile", "gseaResItem", function(object) return(object@esProfile))
 
@@ -135,6 +136,7 @@ setMethod("gseaCoreEnrichGenes", "annoGseaRes", function(object) {
   names(res) <- gsName(object)
   return(res)
 })
+gseaLeadingEdgeGenes <- gseaCoreEnrichGenes
 
 setMethod("gsGenes<-", c("annoGseaResItem", "character"), function(object,value) {
   object@gsGenes <- value
@@ -261,6 +263,35 @@ setMethod("show", "annoGseaRes", function(object) {
   cat(str)
 })
 
+## extending functions
+gseaScore <- function(x, type=c("fdr", "p", "fwer")) {
+  type <- match.arg(type)
+  if(type=="fdr") {
+    val <- gseaFDR(x)
+  } else if (type=="p") {
+    val <- gseaNP(x)
+  } else if (type=="fwer") {
+    val <- gseaFWER(x)
+  }
+  val[val==0] <- min(val[val!=0], na.rm=TRUE)
+  res <- -log10(val) * sign(gseaES(x))
+  return(res)
+}
+
+gseaScores <- function(..., names=NULL, type=c("fdr", "p", "fwer")) {
+  ll <- list(...)
+  scores <- lapply(ll, gseaScore, type=type)
+  setnames <- munion(lapply(scores, names))
+  res <- as.data.frame(sapply(scores, function(x) x[match(setnames, names(x))]))
+  rownames(res) <- setnames
+  if(!is.null(names)) {
+    haltifnot(length(names)==length(ll), msg="names length must match the input list")
+    colnames(res) <- names
+  }
+  return(res)
+}
+
 ## back compatibility
 gsNames <- gsName
 gsDescs <- gsDesc
+

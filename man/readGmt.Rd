@@ -19,7 +19,9 @@ readGmt(file)
 }
 \value{A \code{GeneSets} object}
 \seealso{
-  \code{\link{read_gmt_list}}
+  \code{\link{read_gmt_list}} for the C-level function, and
+  \code{\link{parseGmt}} for a one-stop solution to parse GMT files
+  ready for downstream analysis.
 }
 \examples{
 sample.gmt.file <- system.file("extdata", "test.gmt",package="ribiosIO")

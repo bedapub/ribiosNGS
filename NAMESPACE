@@ -1,7 +1,7 @@
 ## import
 importFrom("methods", setClass, setGeneric, setMethod)
 importFrom("XML", xmlAttrs, xmlTreeParse, xmlRoot, xmlChildren, xmlName)
-importFrom("multicore", mclapply)
+importFrom("parallel", mclapply)
 importFrom("Rcpp", evalCpp)
 import(ribiosIO)
 import(ribiosMath)
@@ -17,8 +17,10 @@ export(gsName, gsDesc, gsGenes, gsGeneValues,
        isGseaCoreEnrich,
        gseaES, gseaNES, gseaNP, gseaFDR, gseaFWER,
        gsGeneIndices, gseaESprofile,
-       gseaCoreEnrichThr, gseaCoreEnrichGenes,
+       gseaCoreEnrichThr, gseaCoreEnrichGenes, gseaLeadingEdgeGenes,
        annoGseaResItem, annoGseaRes)
+
+export(gseaScore, gseaScores)
 
 ## for back-compatibility
 export(gsNames, gsDescs)

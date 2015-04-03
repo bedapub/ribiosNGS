@@ -1,4 +1,4 @@
-#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 suppressMessages(library(ribiosUtils))
 suppressMessages(library(ribiosArg))

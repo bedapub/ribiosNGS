@@ -1,4 +1,7 @@
 gmthyper <- function(genes, background, gmtlist) {
+  genes <- unique(genes)
+  background <- unique(background)
+
   stopifnot(all(genes %in% background))
   gsgenes <- lapply(gsGenes(gmtlist), intersect, background)
 

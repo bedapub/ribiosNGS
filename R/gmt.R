@@ -45,11 +45,34 @@ geneCountFilter <- function(x, min, max) {
 }
 
 ## public methods
-readGmt <- function(file) {
-  res <- read_gmt_list(file)
-  as(res, "GeneSets")
+GeneSets <- function(list, name) {
+  res <- new("GeneSets",list)
+  res@name <- name
+  return(res)
 }
-
+readGmt <- function(file, name=basefilename(file)) {
+  rl <- read_gmt_list(file)
+  res <- GeneSets(rl, name=name)
+  return(res)
+}
+readGmts <- function(..., names=NULL) {
+  files.list <- list(...)
+  files <- unlist(files.list, use.names=TRUE)
+  fnames <- names(files)
+  if(!is.null(fnames))
+    names <- fnames
+  if(is.null(names)) {
+    names <- basefilename(files)
+  } else {
+    haltifnot(length(files)==length(names),
+              msg="'names' must have the same length as 'files'")
+  }
+  res <- lapply(seq(along=files), function(i)
+                readGmt(files[i], name=names[i]))
+  names(res) <- names
+  res <- as(res, "GeneSetsList")
+  return(res)
+}
 parseGmt <- function(file, vec, min, max) {
   res <- read_gmt_list(file)
   res <- as(res, "GeneSets")

@@ -16,5 +16,11 @@ setClass("annoGseaResItem",
 
 setClass("annoGseaRes", contains="list")
 setClass("annoGseaResList", contains="list") #3 a list of annoGseaRes objects
-setClass("GeneSets", contain="list")
-
+setClass("GeneSet",
+         representation=list(name="character",
+           desc="character",
+           genes="character"))
+setClass("GeneSets",
+         representation=list(name="character"),
+         contain="list")
+setClass("GeneSetsList", contain="list")

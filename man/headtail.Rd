@@ -22,12 +22,12 @@ headtail(vec, head = 2, tail = 1, collapse = ", ")
 \author{Jitao David Zhang <jitao_david.zhang@roche.com>}
 \seealso{\code{\link{head}}, \code{\link{tail}}}
 \examples{
-testVec1 <- LETTERS[10]
+testVec1 <- LETTERS[1:10]
 headtail(testVec1)
 headtail(testVec1, head=3, tail=3)
 headtail(testVec1, head=3, tail=3, collapse="|")
 
-testVec2 <- letters[3]
+testVec2 <- letters[1:3]
 headtail(testVec2, head=1, tail=1)
 headtail(testVec2, head=2, tail=1)
 }

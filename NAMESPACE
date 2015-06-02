@@ -5,6 +5,7 @@ importFrom("ribiosIO", "read_exprs_matrix")
 importFrom("ribiosUtils", "rowscale", "summarizeRows", "removeInvarCol", "dfFactor", "headtail")
 importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
 importFrom("graph", "connComp")
+importFrom("limma", "makeContrasts")
 
 ## export classes
 exportClasses(DesignContrast)

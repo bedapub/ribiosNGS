@@ -1,5 +1,6 @@
 Version 0.99.3 (2015-06-02)
   + fn is free()d once the function reaches its end
+  + revcomp: the C version is renamed from revcomp to su_revcomp in bioinfo lib
 
 Version 0.99.2 (2012-05-07)
   + src/Makevar has been cleaned up: no hard-coded dependencies, and removing several redundant including calls

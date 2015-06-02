@@ -35,7 +35,7 @@ SEXP bios_revcomp (SEXP seq) {
     resChar = string(inputSeq);
     
     // reverse and complement    
-    revcomp(resChar);
+    su_revcomp(resChar);
     
     // assign returning values
     SET_STRING_ELT(res, i, mkChar(resChar));

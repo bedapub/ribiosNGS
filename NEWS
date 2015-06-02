@@ -1,3 +1,10 @@
+Version 1.0-48 (2015-06-02)
+  + strings in trim.c was freed after they are created by strdup
+
+Version 1.0-47 (2015-05-05)
+  + The package is fully compatible now with bioinfolib (i.e. public version of bios) and tested for the new bioinformatics server
+
+
 Version 1.0-44 (2014-10-30)
   + Add \code{assertDesign}, \code{assertContrast}, and \code{assertDesignContrast}
   + Start using Roxygen2 to make inline documentations (really a cool tool!)

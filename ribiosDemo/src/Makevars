@@ -1,0 +1,12 @@
+include $(BIOINFOCONFDIR)/biosdefs.make
+
+## No R specific settings are needed, they are automatically handled by R CMD SHLIB
+
+## BIOS specific
+
+CFLAGSL= $(CFLAGS) $(defines)
+
+PKG_CFLAGS= $(CFLAGSL) $(BIOSINC)
+
+PKG_LIBS=-fPIC -I$(BIOINFOCONFDIR) $(BIOSKERNSRC)/log.c $(BIOSKERNSRC)/arg.c $(BIOSKERNSRC)/format.c $(BIOSKERNSRC)/array.c $(BIOSKERNSRC)/hlrmisc.c $(BIOSKERNSRC)/sequtil.c $(BIOSKERNSRC)/linestream.c $(BIOSKERNSRC)/statistics.c  $(BIOSKERNSRC)/recipes.c $(BIOSKERNSRC)/matvec.c $(BIOSKERNSRC)/combi.c
+

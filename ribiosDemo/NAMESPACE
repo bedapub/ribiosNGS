@@ -1,0 +1,7 @@
+export(revcomp, revcompNative, makeSeq)
+
+export(makeGctLines, makeTempGct, readGct, readGctNative)
+
+export(nalimov)
+
+useDynLib(ribiosDemo, bios_revcomp, bios_readgct, bios_nalimov)

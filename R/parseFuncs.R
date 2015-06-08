@@ -1,5 +1,8 @@
 parseNumVec <- function(str, expLen=2, failVal=c(5,5), sep=",") {
   ## for cases like 2, 2 (note tht extra blank after the comma)
+  if(is.null(str))
+    return(failVal)
+
   str <- paste(str, collapse=sep)
 
   ## remove quotings if any
@@ -14,7 +17,6 @@ parseNumVec <- function(str, expLen=2, failVal=c(5,5), sep=",") {
   if(!is.null(expLen)) {
     isNum <- isNum && length(str) == expLen
   }
-  
   if(isNum) {
     return(as.numeric(str))
   } else {

@@ -1,3 +1,9 @@
+2015-06-08: v1.1-16
+  + parseNumVec solves a bug when the input str is NULL the returned value is garanteed to be failVal
+
+2015-02-09: v1.1-15
+  + makeFactor: add 'verbose=FALSE' option. Warning messages are only printed if it is set to TRUE.
+
 2015-01-12: v1.1-14
   + argParse: the function now works with -e and --args options of R and Rscript
   + Pending: writing tests to make sure argParse works (see ~/sandbox/knitr-example/Makefile for examples)

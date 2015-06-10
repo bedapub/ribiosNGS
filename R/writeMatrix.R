@@ -31,7 +31,8 @@ writeMatrix <- function(x, file, row.names=TRUE) {
 #'
 #' @param file file to be read in
 #' @param row.names Logical, whether the first column contains row names (should be consistent with the settign in \code{writeMatrix})
-#' @return Matrix
+#' @param as.matrix Logical, whether the data.frame object should be cast into a matrix
+#' @return Matrix when \code{as.matrix} is set to \code{TRUE} and otherwise data.frame
 #' @examples
 #' test.mat <- matrix(rnorm(1000), nrow=10, dimnames=list(LETTERS[1:10], 1:100))
 #' tmpfile <- tempfile()
@@ -39,7 +40,7 @@ writeMatrix <- function(x, file, row.names=TRUE) {
 #' readin.mat <- readMatrix(tmpfile)
 #' if(require(ribiosUtils)) identicalMatrix(test.mat, readin.mat)
 
-readMatrix <- function(file, row.names=TRUE) {
+readMatrix <- function(file, row.names=TRUE, as.matrix=TRUE) {
   if(!row.names) {
     row.names <- NULL
   } else {
@@ -49,5 +50,9 @@ readMatrix <- function(file, row.names=TRUE) {
                     row.names=row.names,
                     dec=".", check.names=FALSE, strip.white=TRUE,
                     comment.char="")
-  as.matrix(res)
+  if(as.matrix) {
+    return(as.matrix(res))
+  } else {
+    return(res)
+  }
 }

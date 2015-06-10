@@ -85,7 +85,6 @@ SEXP bios_readgct(SEXP filename, SEXP keepdesc) {
     setAttrib(ans, install("desc"), desc);
   
   ls_destroy(ls);
-  free(fname); 
   if(keep) {
     UNPROTECT(5);
   } else {

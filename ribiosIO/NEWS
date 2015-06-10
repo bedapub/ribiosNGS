@@ -1,0 +1,120 @@
+Version 1.0-35 (2015-06-10)
+  + readMatrix added optio 'as.matrix'
+
+Version 1.0-34 (2015-03-11)
+  + Add parameter to control NA format in write_gct
+
+Version 1.0-32 (2014-10-31)
+  + Start using roxygen2
+  + Add writeMatrix and readMatrix to export/import numerical matrices from non-quoted tsv files.
+
+Version 1.0-31 (2014-05-08)
+  + writeList is renamed as write.tableList, and its documentation has been added.
+  + C-level functions are renamed to avoid confusions with R function names
+
+Version 1.0-30 (2014-05-07)
+  + Add writeList function to write a series of tables
+
+Version 1.0-28 (2013-12-02)
+  + read_gmt_list uses gene-set names as the names of the returning list
+
+Version 1.0-27 (2013-11-14)
+  + write_gmt supports now simple lists as input as well
+
+Version 1.0-26 (2013-05-31)
+  + read_gct_matrix prints detailed error messages if the number of columns does not match in the 2nd and the 3rd line.
+
+Version 1.0-25 (2013-02-28) 
+  + Add function read_pheno to import pheno data information
+
+Version 1.0-24 (2013-02-26)
+  + Bug fix: read_gmt_list now supports gene set without any gene.
+
+Version 1.0-23 (2013-02-22)
+  + Bug fix: read_exprs_matrix used "matrix" as column name in case the input file has only one column; now it is fixed
+  + read_exprs_matrix reads in description of gct files
+  + read_exprs_matrix keeps column names of tab-delimited files, even if they are duplicated
+
+Version 1.0-22 (2013-02-21)
+  + write_gct handles 0-row matrix
+
+Version 1.0-21 (2013-02-20)
+  + read_exprs_matrix can handle matrix input file in case the second column is non-numeic (e.g. descriptions)
+
+Version 1.0-20 (2012-11-19)
+  + Add new function 'read_chip' to read chip files
+
+Version 1.0-19 (2012-11-01)
+  + Add new function 'write_gmt_list' to export GMT lists
+
+version 1.0-18 (2012-10-24)
+  + read_cls has been added. The readCls function in the ribiosExpression package will be used as a synonym
+  + Fix bug in read_cls: the factor order has been fixed
+
+Version 1.0-17 (2012-10-22)
+  + write_gct uses the 'desc' attribute of input matrix if available
+  + Add  inst/Rscript/subsetGctByGmt.Rscript: Subset GCT file by one or more genesets defined in a GMT file
+
+Version 1.0-16 (2012-07-12)
+  + read_exprs_matrix uses a more stringent grep to detect GCT files
+
+Version 1.0-15 (2012-07-10)
+  + Add write_gct function to export Matrix in gct format
+  + read_exprs_matrix does not interpret hashes ("#") as comment char any more
+  + Migrate the "exprsMat2gct.Rscript" from ribiosExpression to ribiosIO
+
+Version 1.0-14 (2012-07-04)
+  + read_gct C file: the second line is less strict, allowing empty cells after the first two columns
+
+Version 1.0-13 (2012-06-21)
+  + isGctFile is less strict now regarding to spaces
+
+Version 1.0-12 (2012-06-12)
+  + Add 'isGctFile' function to determine whether an input file complies with the GCT file format.
+
+Version 1.0-11 (2012-06-07)
+  + read_gmt_list manual page puts the keyword "read_gmt_list" earlier to "read_gmt" in order to make help searching easier
+
+Version 1.0-10 (2012-05-07)
+  + src/Makevar has been cleaned up: removing hard-coded dependencies, instead using BIOS defined variables.
+
+Version 1.0-9 (2012-04-10)
+  + Add 'read_fasta' and 'write_fasta' functions to import/export FASTA-format sequence files
+
+Version 1.0-8 (2012-02-22)
+  + C-function 'read_gct' has been modified to support both file and character string from which the GCT file is read. The later possibility is important for the data import from UDIS. This was achieved by the ls_createFromBuffer function in BIOS.
+  + On the R-function level, read_gct_matrix and read_exprs_matrix have no API changes, although internally their codes have been updated to reflect the change above
+  + A new R function named 'read_gctstr_matrix' has been added: it parses a string in the GCT format and returns a matrix, exactly the same as 'read_gct_matrix' treating a GCT file.
+  + (Internal) 'read_gct' more robustly parsing GCT line: in case of empty line, the parser skips it (which is common in the last line of UDIS outputs)
+
+Version 1.0-7 (2012-01-09)
+  + Add loadFile from the ribios package
+
+Version 1.0.6 (2011-12-08)
+  + This version is almost warning-free (except for -Wall) and is placed in the stable release as well.
+  + An informal benchmark of read_gmt_list against native R implementation on a 4000-gene-set GMT file was done. Results suggest the C-implementation is three times faster (23s/100 files) than the R-implemtation (74/100 files).
+
+Version 1.0.5 (2011-12-08)
+  + Add the man page for read_gmt_list and iofile
+  + Use assign/get instead of their symbolic shortcuts in the iofile function to prevent R-check warning against not-found global variables
+  + Use "textStrtok" instead of "textFieldtok" since the former neglects empty fields automatically. The "P" (Preserve) variant was not necessary since the input char was not used anymore beyond the splitting.
+
+Version 1.0.4 (2011-12-07)
+  + Add the read_gmt_list function to read in gmt files
+  + Bug fix: ls_destroy() has been added to read_gmt C function (this bug had no visible effect on users, but with potential memory issues)
+
+Version 1.0.3 (2011-11-18)
+  + Add a correct version of iofile (the older version in ribios has a bug when the input paramter x has more than one values)
+
+Version 1.0.2 (2011-11-17)
+  + read_exprs_matrix function now supports the full table in case of space-delimited file.
+  + read_exprs_matrix supports duplicated row names for tab or space delimited files
+  + Wunschzettel: write a read_named_matrix routine to get around the read.table trick, which forces the data.frame structure and might be slow for large datasets
+
+Version 1.0.1 (2011-11-16)
+  + Add read_exprs_matrix for importing expression matrix from file (see help page)
+  + C rountine read_gct checks the second line with arrayMax, and stops if it is not separated by tab
+  + GCT file consistency check gives more useful information about feature numbers
+
+Version 1.0 (2011-11-15)
+  + Refactor read_gct from ribiosExpression

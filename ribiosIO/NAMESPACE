@@ -1,0 +1,34 @@
+export(read_gmt_list,
+       write_gmt)
+
+export(read_exprs_matrix)
+export(iofile,
+       loadFile)
+
+export(isGctFile)
+
+export(read_gct_matrix,
+       read_gctstr_matrix,
+       write_gct)
+
+export(read_cls,
+       read_pheno,
+       read_pheno_factor)
+
+export(read_chip)
+
+export(read_rocheNGS_exprs)
+
+export(read_fasta,
+       write_fasta)
+
+export(write.tableList)
+
+export(find_ampliseq, read_ampliseq, find_and_read_ampliseq)
+
+export(writeMatrix, readMatrix)
+
+export(read_david)
+
+## .registration=TRUE is only valid when the routines have been registered
+useDynLib(ribiosIO, .registration=TRUE)

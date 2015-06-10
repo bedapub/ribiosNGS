@@ -1,0 +1,122 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosUtils))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+gmtfile <- getArg("gmtfile", onlyArg=NULL, missingArg=NULL)
+chiptype  <- getArg("chiptype", onlyArg=NA, missingArg="GeneSymbol")
+humanize <- existArg("humanize")
+outfile <- getArg("outfile", onlyArg="out.gct", missingArg="out.gct")
+setnames <- getArg("setnames", onlyArg=NULL, missingArg=NULL)
+multifile <- existArg("multifile")
+getHelp <- existArg("h") | existArg("help")
+
+usage <- function() {
+  paste(scriptName(), " -infile FILE -gmtfile FILE [-outfile FILE] [-chiptype CHIP] [-humanize] [-setnames SET1(,SET2,...)] [-multifile]\n",
+        "Mandatory parameters\n",
+        "-infile: File of expression values in the GCT format or the tab-delimited format\n",
+        "-gmtfile: A gmt file of gene sets\n",
+        "Optional parameters\n",
+        "-outfile: Output filename. If missing, 'out.gct' is used.\n",
+        "          If '-multifile' is set (see below), the string will be used as suffix of file name\n",
+        "          For instance '-outfile xyz' will lead to output files like 'geneset_1_xyz.gct', 'geneset_2_xyz.gct', etc,\n",
+        "          and its directory will be used for all otput files.\n",
+        "-chiptype: The chip type of features in the GCT file.\n",
+        "           Can be a microarray chip name, or one of the two: 'GeneID', 'GeneSymbol'.\n",
+        "           Use '", scriptName()," -chiptype' to list all supported names\n",
+        "           If missing, input features are taken as GeneSymbols\n",
+        "-humanize:If set, identifiers of other species are converted to human GeneSymbols.\n",
+        "          Disabled if not given. Can be slow for large input GCT files.\n",
+        "-setnames: Genesets to be visualized. If missing, all gene sets are visualized.\n",
+        "           Separate set names with commas (,)\n",
+        "-multifile: If set, multiple files will be output, each containing genes from one gene set.\n",
+        sep="")
+}
+
+if(is.na(chiptype)) {
+  libordie(ribiosAnnotation, minVer="3.0-4")
+  qqmsg(paste(scriptChiptypes(), collapse="\n"),status=2L)
+}
+
+if(is.null(infile) || is.null(gmtfile) || getHelp) {
+  qqmsg(usage(), status=1L)
+}
+
+libordie(ribiosIO, minVer="1.0-17")
+
+## input GMT file
+gmtlist <- read_gmt_list(gmtfile)
+all.setnames <- sapply(gmtlist, function(x) x$name)
+if(!is.null(setnames)) {
+  setnames <- strsplit(setnames, ",")[[1]]
+  setnames.backup <- setnames
+  setnames <- ipmatchv(setnames, all.setnames)
+  if(any(is.na(setnames))) {
+    notFoundSet <- setnames.backup[is.na(setnames)]
+    qqmsg("Following sets are not found in the GMT file:\n",
+          paste(notFoundSet, collapse="\n"),"\n",
+          "Existing.\n", status=3L)
+  } else {
+    rm(setnames.backup)
+  }
+} else {
+  setnames <- sapply(gmtlist, function(x) x$name)
+}
+
+
+## organize input ExpressionSet
+mat <- read_gct_matrix(infile)
+if(!identical(ipmatch(chiptype, "GeneSymbol"),1L)) {
+  libordie(ribiosAnnotation, minVer="3.0-4")
+  suppct <- scriptChiptypes()
+  chiptype <- ipmatchv(chiptype, suppct)
+
+  anno <- annotateAnyID(ids=rownames(mat),
+                        chiptype=chiptype,
+                        orthologue=humanize)
+  gs <- anno$GeneSymbol
+} else {
+  gs <- rownames(mat)
+}
+fd <- data.frame(ID=rownames(mat),gs=gs)
+
+## extract gcts
+myWriteGct <- function(mat, file) {
+  if(nrow(mat)==0) {
+    warning("Output file '", file, "' will be empty: no genes in the geneset were found\n")
+  } else {
+    suppressWarnings(write_gct(mat, file=file))
+  }
+}
+filterMat <- function(mat, symbols, bool) {
+  setExp <- mat[bool,, drop=FALSE]
+  attr(setExp, "desc") <- paste(rownames(setExp),
+                                attr(setExp, "desc")[bool],
+                                sep="|")
+  rownames(setExp) <- as.character(symbols)[bool]
+  return(setExp)
+}
+set.ind <- match(setnames, all.setnames)
+set.genes <- lapply(set.ind, function(x) gmtlist[[x]]$genes)
+if(!multifile) {
+  setGenes <- munion(set.genes)
+  isSet <- fd$gs %in% setGenes
+  setExp <- filterMat(mat, fd$gs, isSet)
+  myWriteGct(mat=setExp,file=outfile)
+} else {
+  setExp <- lapply(set.genes, function(x) {
+    isSet <- fd$gs %in% x
+    return(filterMat(mat, fd$gs, isSet))
+  })
+  outfiles <- paste(setnames,
+                    "_",
+                    gsub("\\.gct", "", basename(outfile)),
+                    ".gct", sep="")
+  for(i in seq(along=setnames)) {
+    myWriteGct(mat=setExp[[i]],
+               file=file.path(dirname(outfile), outfiles[i]))
+  }
+} 
+
+qqmsg(status=0)

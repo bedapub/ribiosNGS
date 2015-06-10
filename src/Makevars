@@ -1,9 +1,9 @@
-include $(BIOINFOCONFDIR)/prpidefs.make
+include $(BIOINFOCONFDIR)/biosdefs.make
 
 ## No R specific settings are needed, they are automatically handled by R CMD SHLIB
 
 CFLAGSL= $(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
 
-PKG_CFLAGS= $(CFLAGSL) $(PRPIINC)
+PKG_CFLAGS= $(CFLAGSL) $(BIOSINC)
 
-PKG_LIBS=-fPIC -I$(BIOINFOCONFDIR) $(PRPISRC)/log.c $(PRPISRC)/format.c $(PRPISRC)/array.c $(PRPISRC)/hlrmisc.c $(PRPISRC)/linestream.c
+PKG_LIBS=-fPIC -I$(BIOINFOCONFDIR) $(BIOSKERNSRC)/log.c $(BIOSKERNSRC)/format.c $(BIOSKERNSRC)/array.c $(BIOSKERNSRC)/hlrmisc.c $(BIOSKERNSRC)/linestream.c

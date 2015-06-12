@@ -25,7 +25,7 @@ import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is onl
 ##
 
 ## for RNA-seq analysis
-exportClasses(EdgeResult, EdgeObject)
+exportClasses(EdgeResult, EdgeObject, EdgeGSE)
 
 export(sigGene, sigGenes, sigGeneCounts)
 
@@ -45,7 +45,9 @@ export(dgeTables, dgeTable)
 export(writeDgeTables)
 
 export(modLogCPM)
-export(voom)
+export(voom,
+       voomCamera)
+export(fullEnrichTable)
 export(hasCommonDisp, setCommonDispIfMissing)
 
 export(normBoxplot)

@@ -30,6 +30,8 @@ setMethod("RiboSeq", c("matrix", "matrix", "vector"), function(RNA, RPF, groups)
   crns <- munion(rownames(RNA), rownames(RPF))
   RNA <- RNA[match(crns, rownames(RNA)),,drop=FALSE]
   RPF <- RPF[match(crns, rownames(RPF)),,drop=FALSE]
+  RNA[is.na(RNA)] <- 0
+  RPF[is.na(RPF)] <- 0
   rownames(RNA) <- rownames(RPF) <- crns
   RNA.dge <- DGEList(counts=RNA,
                      group=groups)
@@ -328,7 +330,7 @@ setMethod("featureNames", "RiboSeq", function(object) {
 })
 
 gseaDataDir <- function() {
-  return("/DATA/bi/httpd_8080/htdoc/apps/gsea")
+  return("/data64/bi/httpd_8080/apps/gsea")
 }
 gseaGeneSetDir <- function() {
   return(file.path(gseaDataDir(),

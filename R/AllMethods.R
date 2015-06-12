@@ -9,7 +9,9 @@ setMethod("contrastMatrix", "EdgeResult", function(object) contrastMatrix(object
 
 setMethod("contrastNames", "EdgeObject", function(object) colnames(contrastMatrix(object)))
 setMethod("contrastNames", "EdgeResult", function(object) colnames(contrastMatrix(object)))
-
+setMethod("contrastNames",
+          "EdgeGSE",
+          function(object) contrastNames(as(object, "EdgeObject")))
 
 naOrSqrt <- function(x) {
   if(is.null(x)) { return (NA)}

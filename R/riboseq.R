@@ -28,8 +28,8 @@ setMethod("RiboSeq", c("matrix", "matrix", "vector"), function(RNA, RPF, groups)
             msg=sprintf("RPF file sample number (%d) does not equal group number (%d)",
               ncol(RNRPF), length(groups)))  
   crns <- munion(rownames(RNA), rownames(RPF))
-  RNA <- RNA[match(rownames(RNA), crns),,drop=FALSE]
-  RPF <- RPF[match(rownames(RPF), crns),,drop=FALSE]
+  RNA <- RNA[match(crns, rownames(RNA)),,drop=FALSE]
+  RPF <- RPF[match(crns, rownames(RPF)),,drop=FALSE]
   rownames(RNA) <- rownames(RPF) <- crns
   RNA.dge <- DGEList(counts=RNA,
                      group=groups)

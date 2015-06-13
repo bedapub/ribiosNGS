@@ -343,7 +343,7 @@ gseaGeneSetFile <- function(file.name) {
   file <- file.path(gseaGeneSetDir(),
                     file.name)
   if(!file.exists(file)) {
-    stop(file.name, "not found!")
+    stop(file.name, " not found at ", file, "!")
   }
   return(file)
 }

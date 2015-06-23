@@ -1,0 +1,145 @@
+2015-03-13 v1.1-29
+  + compactPar is now more flexible to accept parameters and to pass them to par
+
+2015-02-03 v1.1-28
+  + fix bug in heat function: return (n)
+
+2015-01-06 v1.1-26
+  + add compactTrellis() and setCompactTrellis() to simplify preparing compact figures for publications
+  + add function p2asterisk to map p values to conventionally used asterisk symbols of p-values
+  + use roxygen2 to manage documentation
+
+2014-07-30 v1.1-25
+  + Add function fcbrewer to handle factor-matching colors
+  + Improved manual pages
+  + sqlayout is renamed into squareLayout
+  + Rename compPar to compactPar
+
+2014-07-01 v1.1-24
+  + biosHeatmap: the cex main size is now better guessed. The multiply factor is set to 2 at least.
+
+2014-04-28 v1.1-23
+  + Add intRange (integer range) and squareLayout (square matrix layout of plots)
+  + pdf2png now runs on UDIS machine (rbaus024) as well
+
+2014-04-22 v1.1-22
+  + add histMat to visualize matrices with histograms
+  + add plotPCA
+
+2014-01-28 v1.1-20
+  + Add two histogram related functions: qHist for drawing histogram with quantile lines; xclipHist draws qHist with clipped x values by quantile filtering.
+
+2014-01-23 v1.1-19
+  + Add ribiosUtils to the dependency list of ribiosPlot
+
+2014-01-22 v1.1-18
+  + add pdf2png to convert arbitrary PDF files to PNG
+
+2013-08-19 v1.1-17
+  + Add new 3-color comb: cyanblackyellow and yellowbackyan 
+  + add jitter.xyplot
+
+2013-07-22 v1.1-16
+  + brewer.pal.factor automatically adjusts the size of color palettes according to the input factor and the maxcolor information provided by brewer.pal.info
+  + PCA plotting functions have been refactored
+
+2013-02-22 v1.1-15
+  + Update exprs-boxplot.Rscript to boxplot.Rscript. New function includes (1) correct display of long labels (2) accepts gct or tab-delimited files (3) automatically guess the width of the figure, and (4) display feature descriptions whenever possible
+
+2012-10-20 v1.1-14
+  + Add two functions to simplify plotting in Rscripts: idev and ipdf
+  + Add two color panels: blackyellowred and blackgoldred
+
+2012-09-11 v1.1-13
+  + Debugging: exprs-boxplot.Rscript now accepts both tab-delimited and gct files, and aggregate groups
+
+2012-09-10 v1.1-12
+  + Improvement: exprs-boxplot.Rscript works with GCT file as well. This was made available by replacing 'read.table' with 'read_exprs_matrix'.
+
+2012-08-22 v1.1-11
+  + Bug fix: boundNorm works now with NAs.
+
+2012-06-07 v1.1-10
+  + brewer.pal.factor and brewer.pal.factorLevels fix tipp errors
+
+2012-06-06 v1.1-9
+  + exprs-boxplot.Rscript has been added to GIT and is now able to handle user-specified ylim values
+  + Cleaned up test files and Rscript folders
+
+2012-05-23 v1.1-8
+  + Distance function changed from dist to robustDist: NA values will be replaced by the maximum value of the distance matrix
+  + Add documentation for following functions: blackwhite, whiteblack, redblackblue, blueblackred, whiteblueblackheat, threecolor.panels, twocolor.panels, display.threecolor.panels, display.twocolor.panels
+  + Remove the export of heat.color: it is not part of the ribiosPlot package, instead of grDevices
+  + Add documentation for bound, boundNorm, colorpanel, brewer.pal.factor and brewer.pal.factorLevels
+  + Add documentation for guessWH
+  + Substiantially updated the documentation for biosHeatmap
+  + Add two test files
+
+2012-04-30 v1.1-7
+  + featureFile of coverage-plot.Rscript can use either tab or space as column delimiters
+  + inst/extdata/test-coverage-plot-featureInfo.txt uses a correct format
+
+2012-04-15 v1.1-6
+  + Add exprs-boxplot.Rscript to draw matrix-like boxplots from command line
+
+2012-04-02 v1.1-5
+  + coverage-plot.Rscript supports now sequence annotation
+
+2012-03-19 v1.1-4
+  + Add -featurefile option to the coverage-plot.Rscript to allow drawing exon boundary lines.
+  + partial matching of the parameter unit (should be units) in the strwidth function called by biosHeatmap is solved
+
+2012-03-09 v1.1-3
+  + Add coverage-plot.Rscript in the Rscript directory.
+
+2012-02-14 v1.1-2
+  + biosHeatmap.Rscript uses Ward as the default clustering method, replacing the "Complete" method. Thanks to the suggestion by Gonzalo.
+
+2011-12-08 v1.1.1
+  + inst/Rscript/geneset_xyplot.Rscript adds dependency on the ribiosIO package
+  + inst/Rscript/geneset_xyplot.Rscript now makes sure the rownames are not duplicated
+  + To Do:  inst/Rscript/geneset_xyplot.Rscript needs a test file and a test bash script
+
+2011-12-02 v1.1.0
+  + Add whiteblueblackheat to three-color palettes (which is actually a higher-than-three color system)
+
+2011-11-23 v1.0.9
+  + Add whiteblack and blackwhite to two-color palettes
+
+2011-11-22 v1.0.8
+  + Add guessWH function to automatically guess the width/heigh ratio of heatmaps
+  + Margins are automatically determined smartly, dependent on the xlab/ylab 
+
+2011-11-17 v1.0.7
+  + biosHeatmap.Rscript: the options lwids and lheis are obsolete, since they are now exclusively determined by the input data, namely matrix dim and row/col name character lengths, with considering the minimum size of legend
+  + Wunschzettel: Check so-called all-NA lines and warns user; clustering algorithm should be made robust to all NAs.
+
+2011-11-16 v1.0.6
+  + biosHeatmap.Rscript: the data import function has been taken over by ribiosIO::read_exprs_matrix
+  + geneset_xyplot.Rscript: the data import function has been taken over by ribiosIO::read_exprs_matrix
+  + biosHeatmap.Rscript: four parameters for layout, width, height, lwid and lhei, can now be guessed from the input data. To do: lwid and lhei are not needed any more and shall be deleted from both command line and web interface
+  + biosHeatmap function: long titles (main) are wrapped into 40-character lines
+
+2011-11-15 v1.0.5
+  + add Rscript subdierectory in the inst directory, in order to hold plotting scripts
+  + add geneset_xyplot.Rscript and test_geneset_xyplot.txt into the package
+  + move biosHeatmap.Rscript into the package
+
+2011-11-10 v1.0.4
+  + export colorpanel function
+
+2011-10-10 v1.0.3
+  + add the zlim option to biosHeatmap, allowing defining color ranges by the user
+  + Makefile now checks whether the user is in the bdedev mode, if so, it will install the package to the R-devel, otherwise it is installed to the normal R version.
+
+2011-10-05 v1.0.2
+  + add turyeb (turquoise, yellow and black)
+
+2011-10-04 v1.0.1
+  + margins are now automatically guessed
+  + fine tunings of heatmap key plot parameters (mar and mgp)
+  + refactors functions in the gplots package in ribiosPlot (by using GPL-2 license), to avoid heavy dependencies of gdata
+
+2011-09-20 v1.0
+  + ribiosPlot refactors visualization functions from the ribios package. These functions are still accessible by loading the ribios package by package dependency.
+

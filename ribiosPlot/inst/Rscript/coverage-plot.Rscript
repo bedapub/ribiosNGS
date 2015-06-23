@@ -1,0 +1,95 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+samplefile <- getArg("samplefile", onlyArg=NULL, missingArg=NULL)
+featurefile <- getArg("featurefile", onlyArg=NULL, missingArg=NULL)
+seqfile <- getArg("seqfile", onlyArg=NULL, missingArg=NULL)
+
+getHelp <- existArg("h") | existArg("help")
+
+if(is.null(infile) || is.null(outfile) || getHelp) {
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              "-infile FILE -outfile FILE OPT\n",
+              "Mandatory parameters:\n",
+              "-infile FILE\tinput tab-delimited files\n",
+              "-outfile FILE\toutput figure. Supports PDF, TIFF and PNG\n",
+              "Optional parameters:\n",
+              "-samplefile FILE\tSample annotation file\n",
+              "-featurefile FILE\tFeature annotation file, indicating where separation lines should be drawn, can be one number per line or a headless tab-delimited table\n",
+              "-seqfile FILE\theaderless sequence annotation file of two columns, indicating position (1. column) and sequence character (2. column)\n"),
+        status=1L)
+}
+libordie(lattice)
+libordie(ribiosPlot)
+
+
+if(!file.exists(infile)) {
+  qqmsg("infile not found", status=1L)
+}
+
+intbl <- read.table(infile)
+position <- intbl[,1L]
+inmat <- as.matrix(intbl[,-1L])
+inmat.ncol <- ncol(inmat)
+
+sampleAnno <- NULL
+if(!is.null(samplefile)) {
+  if(!file.exists(samplefile)) {
+    warning("Given sample annotation file does not exist")
+  } else {
+    sampleAnno <- readLines(samplefile)
+    sampleAnno <- sampleAnno[sampleAnno!=""]
+    if(length(sampleAnno)==ncol(intbl)) {
+      sampleAnno <- sampleAnno[-1]
+    } else if (length(sampleAnno)!=inmat.ncol) {
+      warning("Given sample annotation file does not contain exact same lines as of samples. It is neglected")
+      sampleAnno <- NULL
+    }
+  }
+}
+
+featureAt <- NULL
+if(!is.null(featurefile)) {
+  if(!file.exists(featurefile)) {
+    warning("Given feature annotation file does not exist")
+  } else {
+    featureAnno <- data.matrix(read.table(featurefile))
+    featureAt <- as.vector(featureAnno)
+  }
+}
+
+seqAnno <- NULL
+if(!is.null(seqfile)) {
+  if(!file.exists(seqfile)) {
+    warning("Given sequence file does not exist")
+  } else {
+    seqAnno <- read.table(seqfile, sep="\t")
+  }
+}
+
+indf <- matrix2longdf(inmat, row.names=position, col.names=sampleAnno)
+indf$column <- factor(indf$column, levels=unique(indf$column))
+indf$value[indf$value==0] <- NA
+panel.xyplot.feature <- function(...) {
+  panel.abline(v=featureAt, col="lightgray", lty=2)
+  if(!is.null(seqAnno) && panel.number()==1L)
+    panel.axis(side="top", at=seqAnno[,1L], labels=seqAnno[,2L], outside=FALSE, half=FALSE, text.cex=0.5, ticks=FALSE, rot=0)
+  panel.xyplot(...)
+}
+covplot <- xyplot(value ~ row | column, data=indf, as.table=TRUE, type="h",
+                xlab="Position", ylab="Coverage",
+                  layout=c(1L, inmat.ncol),
+                  panel=panel.xyplot.feature,
+                  scales=list(x=list(alternating=1, tck=c(1,0)),
+                    y=list(alternating=1, tck=c(1,0))))
+indheight <- pmax(5, inmat.ncol)
+openFileDevice(outfile, width=7, height=indheight)
+print(covplot)
+dev.off()
+
+qqmsg(status=0L)

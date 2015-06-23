@@ -1,0 +1,87 @@
+\name{plotPCA}
+\alias{plotPCA}
+\title{
+  Visualise PCA results of expression data with the sample plot
+}
+\description{
+  \code{plotPCA} is designed to visualize sample relationships revealed
+  by PCA analysis of high-dimensional expression data. It is adapted
+  from the \code{biplot} function in the \code{stats} package, with
+  functionalities useful for sample visualization and labelling, and removing
+  the visualization of features (usually genes) in the input matrix. The
+  rationale is that in most cases there are too many features to provide
+  an informative visualization.
+}
+\usage{
+plotPCA(x, choices = c(1, 2), text = FALSE, points = list(pch = NULL,
+col = NULL, cex = NULL, bg = NULL, lwd = NULL, lty = NULL), arrows =
+FALSE, grid = FALSE, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ...)
+}
+\arguments{
+  \item{x}{A \code{prcomp} object produced by the \code{prcomp} function}
+  \item{choices}{An integer vector of length 2, indicating which PCs to
+    visualize. By default the first (X-axis) and second (Y-axis) are visualized}
+  \item{text}{A logical value or a list of options to label samples. See
+    \sQuote{Details}}
+  \item{points}{A logical value or a list of options to pinpoint
+    samples. See  \sQuote{details}}
+  \item{arrows}{A logical or a list of options to draw arrows.}
+  \item{grid}{Logical value, indicating whether grid lines should be
+    added to the plot.}
+  \item{xlim}{xlim of the plot. Automatically determined if missing.}
+  \item{ylim}{ylim of the plot. Automatically determined if missing.}
+  \item{xlab}{xlab of the plot. If missing, the PC and the explained
+    variability are shown.}
+  \item{ylab}{ylab of the plot. If missing, the PC and the explained
+    variability are shown.}
+  \item{\dots}{Other parameters passed to \code{plot}}
+}
+\details{
+  The values for \code{text}, \code{points} and \code{arrows} can be
+  \enumerate{
+    \item Logical. If \code{FALSE}, no text or point is added.
+    \item List. A list containing options passed to \code{text},
+    \code{points}, and \code{arrows} respectively, such as \code{col},
+    \code{cex}, \code{lwd}, \code{lty}, \code{code}, \code{length},
+    \code{angle}, and  \code{pos} (only for \code{text}.
+    \item A vector of character strigns (only for \code{text})
+  }
+  See examples below.
+}
+\value{
+  The value of the rotated data, namely the centered (and scaled if
+  requested) data multiplied by the rotation matrix.
+}
+\author{
+  Jitao David Zhang <jitao_david.zhang@roche.com>
+}
+\note{
+  \code{prcomp} should be called with \code{retx=TRUE}, which is the
+  default behaviour.
+}
+\seealso{
+  \code{prcomp}
+}
+\examples{
+testVal <- matrix(rnorm(10000), nrow=500)
+colnames(testVal) <- paste("Sample", 1:ncol(testVal), sep="")
+rownames(testVal) <- paste("Gene",1:nrow(testVal), sep="")
+
+testPCA <- prcomp(t(testVal), center=TRUE, scale=TRUE)
+
+
+plotPCA(testPCA)
+
+plotPCA(testPCA, points=FALSE, text=TRUE, grid=TRUE)
+
+pointsList <- list(col=1:3, bg=21,pch=22, cex=4:1, lwd=1:2, lty=2:4)
+textList <- list(col=c("orange", "royalblue"), cex=1.2, srt=15, pos=1)
+
+plotPCA(testPCA, choices=c(1,2), grid=TRUE, points=pointsList,
+text=TRUE)
+
+## visualize dimension 1:3
+rop <- par(mfrow=c(1,2), pty="s")
+plotPCA(testPCA, choices=c(1,2), grid=TRUE, points=pointsList, text=textList)
+plotPCA(testPCA, choices=c(2,3), grid=TRUE, points=pointsList, text=textList)
+}

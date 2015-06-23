@@ -1,0 +1,97 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosUtils))
+	
+filename <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+doCor <- existArg("cor")
+doCorr <- existArg("corr")
+doLm <- existArg("lm")
+doLegend <- existArg("legend")
+doLogX <- existArg("logX")
+doLogY <- existArg("logY")
+if(doCor && doCorr)
+  qqmsg("Error:specify either '-cor' or '-corr'", status=1L)
+
+if(is.null(filename) || getHelp) {
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              "-infile FILE OPTS\n",
+              "Mandatory parameters\n",
+              "-infile FILE\tinput tab-delimited files, with at least two columns\n",
+              "\nOptional parameters\n",
+              "-lm\t\tPerform linear regression and draw the regression line\n",
+              "-cor\t\tCalculate correlation\n",
+              "-corr\t\tCalculate correlation^2\n",
+              "-logX\t\tPerform log10 transformation before plotting (X axis)\n",
+              "-logY\t\tPerform log10 transformation before plotting (Y axis)\n",
+              "-legend\t\tDraw legend\n"),
+        status=1L)
+}
+
+libordie(lattice)
+libordie(ribiosPlot)
+
+
+
+tbl <- read.table(filename, sep="\t", head=TRUE, check.names=FALSE)
+tblCns <- colnames(tbl)
+xlabel <- tblCns[1]
+ylabel <- tblCns[2]
+x <- tbl[,1]
+y <- tbl[,2]
+
+##get values of the 3rd column which contains the legend of each point
+if(ncol(tbl)==3) {
+  class <- factor(tbl[,3L], levels=unique(tbl[,3L]))
+} else {
+  class <- factor(1L, length(x))
+}
+
+#linear regression curve
+
+
+
+#remove suffix from file name
+basefilename <- gsub("(.*)\\..*$", "\\1", filename)
+
+pdf(paste(basefilename, ".pdf", sep=""))
+if(doLogX && doLogY) {
+  logc <- "xy"
+} else if (doLogX) {
+  logc <- "x"
+} else if (doLogY) {
+  logc <- "y"
+} else {
+  logc <- ""
+}
+plot(x,y, pch=1:nlevels(class), log=logc,
+     main=basefilename,
+     xlab=xlabel, ylab=ylabel, col=1:nlevels(class))
+if(doLm) {
+  fit <- lm(y ~ x)
+  abline(fit, col="red", lty=2L)
+}
+if(doLegend && nlevels(class)>1) {
+  legend("topleft",
+         pch=1:nlevels(class),
+         col=1:nlevels(class),
+         legend=levels(class))
+}
+corxy <- cor(x,y)
+if(doCor) {
+  legend("topright",
+         sprintf("r=%g", corxy), bty="n")
+} else if (doCorr) {
+  corxy <- corxy*corxy
+  legend("topright",
+         sprintf("r^2=%g", corxy), bty="n")
+}
+  
+
+suppressMessages(dev.off())
+
+qqmsg(status=0L)
+
+

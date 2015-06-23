@@ -1,0 +1,103 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosPlot))
+suppressMessages(library(ribiosIO))
+
+hasVal <- function(x) length(x)>1 | (!is.logical(x))
+
+input.files <- getArg("infile")
+gethelp <- existArg("h") | existArg("help")
+
+if(!hasVal(input.files) | gethelp) {
+  message(paste("Usage: geneset_xyplot.Rscript -infile infile ... OPTS\n",
+		"infile can be in gct or tab-delimited format\n",
+                "OPTS can be one or more of following optional parameters:\n",
+                "# Outfile\n\t",
+                "[-outfile outfile1 ...] Output file(s), can be omitted\n",
+                "# Order\n\t",
+                "[-orderBy INT] The genes shall be ordered by which column\n",
+                "# Title and labels\n\t",
+                "[-main MAIN] [-xlab XLAB] [-ylab YLAB]\n",
+                "# Plot type\n\t",
+                "[-type p/l/b/c/o/h/s]\n",
+                "# layout\n\t",
+                "[-width VAL] [-height VAL]",		
+                sep=""))
+  quit(save="no", status=-1)
+}
+
+## input files
+input.ext <- file.exists(input.files)
+if(any(!input.ext)) 
+  warning("Following file(s) do not exist:\n",
+          paste(input.files[!input.ext], collapse="\t"))
+if(all(!input.ext))
+  quit(save="no", status=-2L)
+
+input.files <- input.files[input.ext]
+
+## get outfile names
+if(!existArg("outfile")) {
+  output.filenames <- NA
+} else {
+  output.files <- getArg("outfile", onlyArg=NA, missingArg=NA)
+  if(length(output.files) != length(input.ext)) {
+    output.filenames <- NA
+  } else {
+    output.filenames <- output.files[input.ext]
+  }
+}
+if(all(is.na(output.filenames))) {
+  output.filenames <- gsub("(.*)\\..*$", "\\1.pdf", input.files)
+  notpdf <- !grepl("pdf$", output.filenames)
+  output.filenames[notpdf] <- paste(output.filenames[notpdf], ".pdf", sep="")
+}
+
+## order by
+orderBy <- getArg("orderBy", onlyArg=NA, missingArg=NA)
+orderBy <- parseNumVec(orderBy, expLen=1, failVal=NA)
+
+## main
+texts <- getArg(c("main", "xlab", "ylab", "colorKeyTitle"),
+                onlyArg="", missingArg="")
+main <- paste(texts[["main"]], collapse=" ")
+xlab <- paste(texts[["xlab"]], collapse=" ")
+ylab <- paste(texts[["ylab"]], collapse=" ")
+
+## layout (width needs smart)
+width <- getArg("width", onlyArg=NA, missingArg=NA)
+width <- parseNumVec(width, expLen=1, failVal=NA)
+height <- getArg("height", onlyArg=5, missingArg=5)
+height <- parseNumVec(height, expLen=1, failVal=5)
+
+## type
+type <- getArg("type", onlyArg="p", missingArg="p")
+if(!type %in% c("p", "l", "b", "c", "o","h","s", "n")) {
+  type <- "p"
+}
+
+input.tbl <- lapply(input.files, read_exprs_matrix)
+for(i in seq(along=input.tbl)) {
+  tbl <- as.data.frame(input.tbl[[i]])
+  rownames(tbl) <- make.unique(rownames(tbl),sep="_")
+  if(is.na(width)) {
+    width <- pmax(4, 0.15*nrow(tbl))
+  }
+  pdf(output.filenames[i], width=width, height=height)
+  if(!is.na(orderBy)) {
+    tbl <- tbl[order(tbl[,orderBy]),]
+  }
+  xs <- factor(rownames(tbl), levels=unique(rownames(tbl)))
+  form <- paste(paste(paste("`", colnames(tbl), "`", sep=""), collapse="+"),
+                "~", "xs")
+  xp <- xyplot(as.formula(form), data=tbl, type=type,
+               xlab=xlab, ylab=ylab,
+               scales=list(alternating=1, tck=c(1,0),
+			x=list(rot=90)),
+               auto.key=list("top", columns=ncol(tbl)))
+  print(xp)
+  dev.off()
+}
+
+quit(save="no", status=0L)

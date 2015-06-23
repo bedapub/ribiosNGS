@@ -1,0 +1,82 @@
+importFrom(grDevices, heat.colors, colorRampPalette, blues9)
+importFrom(lattice, panel.xyplot, col.whitebg, lattice.options)
+importFrom(ribiosUtils, assertFile, basefilename, chosenFew, haltifnot)
+importFrom(methods, setClass, setGeneric, setMethod)
+importFrom(RColorBrewer, brewer.pal, brewer.pal.info)
+
+## class
+exportClass(fcol)
+exportMethods(fcol, fcbase)
+
+## utils
+export(compactPar)
+export(squareLayout)
+export(intRange)
+export(p2asterisk)
+export(compactTrellis,
+       setCompactTrellis)
+
+## biosHeatmap
+export(biosHeatmap)
+
+## biosHeatmap aux
+export(bound,
+       boundNorm,
+       guessWH)
+
+## robustDist for biosHeatmap
+export(robustDist)
+
+## color for factors
+export(fcbrewer)
+export(brewer.pal.factorLevels,
+       brewer.pal.factor)
+
+## color palettes
+export(colorpanel)
+
+## three-colors
+export(royalbluered,
+       royalredblue,
+       turyeb,
+       redgreen,
+       greenred,
+       bluered,
+       redblue,
+       blueblackred,
+       redblackblue,
+       cyanblackyellow,
+       yellowblackcyan,
+       blackredyellow,
+       blackgoldred,
+       whiteblueblackheat,
+       heat)
+
+## two-colors
+export(blackyellow,
+       yellowblack,
+       whiteblue,
+       whitered,
+       blackred,
+       blackgreen,
+       whiteblack,
+       blackwhite)
+
+## display functions
+export(twocolor.panels,
+       threecolor.panels,
+       display.threecolor.panels,
+       display.twocolor.panels)
+
+## histogram functions
+export(qHist, xclipHist)
+export(histMat)
+
+## PCA
+export(plotPCA)
+
+export(jitter.xyplot)
+
+export(idev, ipdf)
+
+export(pdf2png)

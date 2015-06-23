@@ -1,0 +1,72 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+scriptInit()
+
+usage <- paste("Visualizing 2D matrix with boxplot\n",
+scriptName(), " [-infile ]FILE [-outfile ]FILE [-ylim a,b]\
+Parameters:\
+-infile: Input file in GCT or tab-delimited format\
+-outfile: Output file name. File type is determined by suffix; by default in the PDF format\
+Optional:\
+-ylim a,b\tComma-separated numbers giving the lower and upper limit of the y-axis",sep="")
+
+argParse("ylim,1", "infile outfile", usage=usage)
+
+assertFile(infile <- argGet("infile"))
+outfile <- argGet("outfile")
+
+libordie(ribiosIO)
+libordie("lattice")
+libordie("ribiosPlot")
+
+##---------- read in file ----------##
+mat <- read_exprs_matrix(infile)
+rsnames <- trim(colnames(mat))
+colnames(mat) <- rsnames
+
+ffac <- rownames(mat)
+feat.desc <- attr(mat, "desc")
+if(!is.null(feat.desc)) {
+  ffac <- paste(ffac, " (", feat.desc, ")",sep="")
+}
+
+snames <- colnames(mat)
+sfac <- factor(snames, levels=unique(snames))
+
+
+##---------- plotting ----------##
+guess.width <- pmax(8L, nlevels(sfac))
+openFileDevice(outfile, height=8L, width=guess.width)
+ypretty <- pretty(mat)
+if(argPresent("ylim")) {
+  ylim <- argGet("ylim")
+  ylims <- parseNumVec(ylim,
+                       expLen=2L,
+                       failVal=c(ypretty[1], ypretty[length(ypretty)]))
+} else {
+  ylims <- c(ypretty[1], ypretty[length(ypretty)])
+}
+
+for(i in seq(along=ffac)) {
+  gene <- ffac[i]
+  aa <- boxplot(mat[i,] ~ sfac,
+                main=gene, xlab="Condition", ylab="Expression",
+                ylim=ylims, col="lightblue", xaxt="n")
+  axis(side=1L, at=1:nlevels(sfac), labels=FALSE)
+  xlabels <- levels(sfac)
+  xlabels.cex <- 0.95/max(strwidth(xlabels),na.rm=TRUE)
+  ##xlabels.line <- sapply(strwidth(xlabels), function(x) ifelse(x<1, 1, 2))
+  xlabels.line <- 1L
+  mtext(xlabels,
+        side=1L, at=(1:nlevels(sfac)), cex=xlabels.cex,
+        line=xlabels.line)
+  
+  gn <- split(mat[i,], sfac)
+  for(j in 1:nlevels(sfac))
+    points(rep(j, length(gn[[j]])), gn[[j]], pch=4)
+}
+dev.off()
+
+qqmsg(status=0L)

@@ -1,0 +1,11 @@
+Package: ribiosMath
+Type: Package
+Title: Mathematical and statistical tools in ribios
+Version: 1.0-6
+Date: 2013-11-22
+Author: Jitao David Zhang <jitao_david.zhang@roche.com>
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: Mathematical and statistical tools in ribios. Functions target at high performance.
+Depends: R (>= 2.10), stats
+LinkingTo: Rcpp
+License: GPL-3

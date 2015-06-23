@@ -1,0 +1,7 @@
+export("cossim", "cosdist")
+
+export("empval")
+
+export("randmat")
+
+useDynLib(ribiosMath)

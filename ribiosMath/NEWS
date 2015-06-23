@@ -1,0 +1,17 @@
+Version 1.0-4 (2013-03-06)
+  + cossim works now with y missing.
+
+Version 1.0-3 (2013-02-27)
+  + Removing package dependence on Rcpp: so far the package is placed under "LinkingTo" it runs fine.
+
+Version 1.0-2 (2013-02-26)
+  + Add function empval to calculate empirical p values from Monte Carlo methods
+  + Add function randmat to generate a column-wise random matrix by sampling a numeric vector many times
+
+Version 1.0-1 (2013-02-25)
+  + cossim and cosdist have been updated to work with matrices. Using matrix manipulation much accelerates the calculation.
+
+Version 1.0-0 (2013-02-22)
+  + New package ribiosMath for mathematic and statistical functions in ribios
+  + Add function cossim for cosine similarity
+  + Add function cosdist for cosine distance

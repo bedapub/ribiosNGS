@@ -1,0 +1,78 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+stat <- getArg("stat", onlyArg=NULL, missingArg=NULL)
+outfile <- getArg("outfile", onlyArg=NULL, missingArg="")
+sortBy <- getArg("sortBy", onlyArg="name", missingArg="name")
+getHelp <- existArg("h") | existArg("help")
+
+## BEGIN DEBUG
+DEBUG_SYMBOL <- Sys.getenv("RIBIOS_SCRIPT_DEBUG")
+DEBUG <- DEBUG_SYMBOL != "" || interactive()
+if(DEBUG) {
+  infile <- "../extdata/test-gseaFingerprint.txt"
+  stat <- "q"
+  outfile <- ""
+  getHelp <- FALSE
+}
+## END DEBUG
+
+validInfile <- !is.null(infile) && file.exists(infile)
+validStat <- !is.null(stat) && stat %in% c("es", "nes", "q")
+
+if(is.null(infile) || is.null(stat) || is.null(outfile) || getHelp) {
+  qqmsg(paste("Usage:",
+              scriptName(),
+              " -infile FILE -stat es/nes/q [-outfile FILE] [-sortBy maxAbsStat|meanStat|name]\n\n",
+              "-infile: Text file, one GSEA result directory each line\n",
+              "-stat es/nes/q: One of three statistics: \n",
+              "  Enrichment Score (es), Normalized Enrichment Score (nes), Q-value (q)\n",
+              "-outfile: Output file for fingerprint matrix.\n",
+              "  Using stdout when missing\n",
+              "-sortBy: sort the table by the maximum of statistics in absolute values ('maxAbsStat'), or the mean value of raw values('meanStat'), or name.\n",
+              "  No sorting is done when missing: gene sets are ordered alphabetically\n",
+              sep=""),
+        status=1L)
+
+}
+
+if(!file.exists(infile))
+  qqmsg(paste("ERROR: '", infile, "' cannot be found. Program existing",sep=""),
+        status=1L)
+if(!stat %in% c("es", "nes", "q"))
+  qqmsg("ERROR: 'stat' must be one of the following values: q, es, nes",
+        status=1L)
+
+
+libordie(ribiosGSEA) 
+
+dir.exists <- function(x) file.exists(x) & file.info(x)$isdir
+gdirs <- readLines(infile)
+gdirs <- gdirs[gdirs!=""]
+gdirs.exist <- dir.exists(gdirs)
+if(any(!gdirs.exist)) {
+  baddirs <- gdirs[!gdirs.exist]
+  msg <- paste("Following directories seem not to be valid GSEA output directories:\n  ",
+               paste(baddirs, collapse="\n  "),"\n",sep="")
+  qqmsg(msg, status=2L)
+}
+
+mat <- gseaFingerprintMatrix(gdirs, value=stat)
+if(identical(tolower(sortBy), "maxabsstat")) {
+  matOrd <- order(apply(mat, 1L, function(x) max(x, na.rm=TRUE)), decreasing=TRUE)
+} else if (identical(tolower(sortBy), "meanstat")) {
+  matOrd <- order(apply(mat, 1L, function(x) mean(abs(x), na.rm=TRUE)), decreasing=TRUE)
+} else {
+  if(!identical(tolower(sortBy), "name"))
+    warning("Unrecognized -sortBy option: no sorting is performed\n")
+  matOrd <- 1:nrow(mat)
+}
+  mat <- mat[matOrd,,drop=FALSE]
+
+write.table(mat, file=outfile, quote=FALSE, dec=".",
+            sep="\t", row.names=TRUE, col.names=NA)
+
+qqmsg(status=0L)

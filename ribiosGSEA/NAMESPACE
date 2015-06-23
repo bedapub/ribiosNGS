@@ -1,0 +1,67 @@
+## import
+importFrom("methods", setClass, setGeneric, setMethod)
+importFrom("XML", xmlAttrs, xmlTreeParse, xmlRoot, xmlChildren, xmlName)
+importFrom("parallel", mclapply)
+importFrom("Rcpp", evalCpp)
+import(ribiosIO)
+import(ribiosMath)
+import(ribiosUtils)
+
+exportClass(GeneSets,GeneSetsList,
+            gseaResItem, annoGseaResItem,
+            annoGseaRes, annoGseaResList)
+
+## S4 methods
+export(gsName, gsDesc, gsGenes, gsGeneValues,
+       "gsGenes<-", "gsGeneValues<-",
+       isGseaCoreEnrich,
+       gseaES, gseaNES, gseaNP, gseaFDR, gseaFWER,
+       gsGeneIndices, gseaESprofile,
+       gseaCoreEnrichThr, gseaCoreEnrichGenes, gseaLeadingEdgeGenes,
+       annoGseaResItem, annoGseaRes)
+
+export(gseaScore, gseaScores)
+
+## for back-compatibility
+export(gsNames, gsDescs)
+
+export(GSEA_DATA_DIR, GSEA_ANNOTATION_DIR,
+       GSEA_GENESET_DIR,
+       JAVA_BIN, GSEA_JAR, DEFAULT_GMT, DEFAULT_CHIP)
+
+export(gseaData, gseaAnno,
+       gseaGeneSet,
+       dirGseaGeneSet,lsGseaGeneSet,
+       javaBin, gseaJar, defaultGmt, defaultChip)
+
+## GSEA fingerprints
+export(gseaResQvalue, gseaResES,
+       gseaFingerprint, gseaFingerprintMatrix)
+
+## GSEA command-line executables
+export(buildGSEAcomm)
+
+## GMT functions
+export(readGmt, readGmts, parseGmt,
+       matchGenes,
+       geneCount, geneCountFilter)
+
+S3method("[", "GeneSets")
+
+## Fisher test (using hypergeometric test)
+export(gmthyper, gmthyperList)
+
+## Nearest Template Prediction (ntp) algorithm
+export(list2mat)
+export(ntpTemplates, ntpBiTemplates)
+S3method(print, ntpTemplates)
+export(ntp)
+
+## parsing GSEA methods
+export(parseDTG, parseGSEAdir, parseGSEAedb, parseGSEAres)
+
+## camera methods
+export(biosCamera, mcamera)
+
+## Use Dynamic Lib
+useDynLib(ribiosGSEA)

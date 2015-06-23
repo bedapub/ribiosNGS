@@ -1,0 +1,65 @@
+Version 1.1-6 (Apr 03, 2015)
+  + Clean up importing/depending packages: only methods is depended and other packages are all imported
+  + Add GeneSetsList, a list of GeneSets, to allow simultaneous testing of gene sets in multiple gmt files
+  + Add readGmts
+
+Version 1.1-5 (Aug 19, 2014)
+  + Add gseaScore and gseaScores function to extract scores from annoGseaRes object(s)
+
+Version 1.1-4 (Aug 08, 2014)
+  + Add parseGmt function to transform a GMT file into a list of integer indices that is directly applicable for downstream analysis
+
+Version 1.1-3 (Apr 14, 2014)
+  + Remove mroast2tbl since the latest version of limma is already returning a data.frame
+  + add gmthyper and gmthyperList functions to perform Fisher test with GMT files
+  + clean up gseaES and gseaQvalue functions
+
+Version 1.1-2 (Apr 11, 2014)
+  + Bug fix in matchGenes and geneCounts.
+
+Version 1.1-1 (Apr 07, 2014)
+  + parseGSEA functions are added to parse all relevant information from a GSEA output directory
+  + gsName, gsDesc, and gsGenes are harmonized for both GSEA results parsing and general GMT file parsing
+  + Classes and methods are added to handle gene sets and GSEA results
+
+Version 1.0-9 (Dec 02, 2013)
+  + Variables such as GSEA_GENESET_DIR are exported.
+
+Version 1.0-8 (Jun 28, 2013)
+  + gseaFingerprint.Rscript does not warn when -sortBy is not specified
+
+Version 1.0-7 (Feb 27, 2013)
+  + Add list2mat, transforming first-level lists to adjacency matrix
+  + ntpTemplates are updated so that it directly inherits a matrix
+
+Version 1.0-6 (Feb 26, 2013)
+  + Add function ntp to implement the Nearest Template Prediction Algorithm
+  + Add functions readGmt, gsNames, gsDescs, gsGenes, geneCountFilter, etc. to manipulate GeneSets objects from GMT files
+  + Add ntpTemplates and ntpBiTemplates to construct NTP-templates from GeneSets.
+
+Version 1.0-5 (Nov 19, 2012)
+  + New feature of gmtIndices: invalid Gene Symbols ("", "-") are removed
+
+Version 1.0-4 (Nov 01, 2012)
+  + New function added, mroast2tbl, to reformat result lists of limma::mroast into data frame.
+  + New function added, gmtIndices.Rd, to get integer indices of genes in GMT gene set lists from a vector of gene symbols. Used by functions such as 'mroast' and 'camera' in the limma package.
+  + New function added, filterGmtByGeneCount, to filter gmt lists by gene counts.
+  + Improvement of buildGSEAcomm: CHIP_FILE is no longer a mandatory parameter. When the option is missing, the GSEA tool performs no mapping between rnk-file identifiers and GMT-file identifiers, for instance when both files use official gene symbols.
+
+Version 1.0-3 (Oct 02, 2012)
+  + gseaFingerprint is now able to deal with cases where the phenotypes are now named in default as 'pos' and 'neg'. Since in such cases, the order of positive/negative is not clearly defined, we use the alphabetic order of phenotype names as 'pos' and 'neg'.
+
+Version 1.0-2 (Jul 16, 2012)
+  + gseaFingerprintMatrix: omit empty directories
+  + gseaFingerprintMatrix: stops if all input directories are detected NOT to be GSEA result folders
+  + gseaQvalue: q-values is given in -log10(p) instead of -log(p) (base-10) to make interpretation easier
+  + Add buildGSEAcomm: build bash commands to run GSEA. Able to deal with irregular file names
+
+Version 1.0-1 (Jun 07, 2012)
+  + gseaFingerprints.Rscript: remove empty lines from input file
+
+Version 1.0-0 (Jun 06, 2012)
+  + Establish the ribiosGSEA package
+  + Refactor GSEA-related functions from other packages
+  + Add functions used to extract fingerprints from GSEA results
+

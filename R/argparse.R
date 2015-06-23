@@ -58,7 +58,7 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h"), strict=T
     if(argc >= (res+1)) {
       return(invisible(comm[(res+1):argc]))
     } else {
-      return(NULL)
+      return(invisible(NULL))
     }
   }
 }
@@ -68,11 +68,19 @@ argIsInit <- function() .Call("rarg_isInit")
 argPresent <- function(opt) .Call("rarg_present", opt)
 
 argGetPos <- function(opt, ind=1L, default=NULL) {
+  if(isDebugging()) {
+    message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode. Default value is returned")
+    return(default)
+  }
   if(argPresent(opt))
     return(.Call("rarg_getPos", opt,as.integer(ind)))
   return(default)
 }
 argGet <- function(opt, default=NULL) {
+  if(isDebugging()) {
+    message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode. Default value is returned")
+    return(default)
+  }
   if(argPresent(opt))
     return(.Call("rarg_get", opt))
   return(default)

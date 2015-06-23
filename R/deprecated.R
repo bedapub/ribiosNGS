@@ -8,3 +8,6 @@ setMethod("getSampleLengths", "ISAModules", function(object) {
   .Deprecated(new="getNoSamples", package="eisa")
   sapply(getSampleNames(object), length)
 })
+feat.cond.threshold <- function(...) {
+  .Deprecated("fcFilter", "rqubic")
+}

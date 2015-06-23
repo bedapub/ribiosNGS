@@ -1,3 +1,10 @@
+Version 1.1-3 (2012-01-05)
+  + Add biosExportEV, a localized version of ExportEV, solving the error of GO/KEGG annotation when probesets are not found
+  + TODO: biosExportEV needs substatial cleaining, especially the annotation of probesets, as well as GO/KEGG annotations
+
+Version 1.1-2 (2012-01-03)
+  + Deprecate feat.cond.filter: fcFilter in the rqubic package does the job and allow to use only one filter
+
 Version 1.1-1 (2011-12-16)
   + Update the DESCRIPTION file to better describe the content and goal of the ribiosBic package
 

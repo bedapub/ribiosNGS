@@ -1,4 +1,4 @@
-#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 ## Rscript command-line interface to the QUBIC algorithm
 ## Jitao David Zhang <jitao_david.zhang@roche.com>
@@ -101,7 +101,7 @@ eset.rqubic.list <- mclapply(1:nrow(paras),
 if(nrow(paras) > 1) {
   eset.rqubic <- combineBiclusts(eset.rqubic.list)
 } else {
-  eset.rqubic <- eset.qubic.list[[1]]
+  eset.rqubic <- eset.rqubic.list[[1]]
 }
 
 writeBiclusterResults(output.file,

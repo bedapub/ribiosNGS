@@ -1,4 +1,4 @@
-#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 ## preprocessing script for biclustering tasks
 ## input: expression file
@@ -40,7 +40,7 @@ if(!file.exists(input.file)) {
 libordie(Biobase)
 libordie(ribiosIO)
 libordie(ribiosAnnotation, minVer="1.0-4")
-libordie(ribiosExpression, minVer="1.0-7")
+libordie(ribiosExpression, minVer="1.0-11")
 
 exp <- read_exprs_matrix(input.file)
 nrexp <- nrow(exp)
@@ -52,6 +52,8 @@ chipsuc <- FALSE
 psuc <- FALSE
 sfsuc <- FALSE
 clssuc <- FALSE
+
+options(warn=100)
 
 opts <- getArg(c("ffile", "pfile", "clsfile", "topvar", "summfeat", "chiptype"),
                onlyArg=NULL, missingArg=NULL)
@@ -85,7 +87,8 @@ if(!is.null(ffile)) {
     fdata <- cbind(fdata, ffdata)
   }
 }
-colnames(fdata) <- make.unique(colnames(fdata), sep="_")
+if(ncol(fdata)>1)
+  colnames(fdata) <- make.unique(colnames(fdata), sep="_")
 rownames(fdata) <- rownames(exp)
 
 ##-------------------- Sample Annotation --------------------##
@@ -105,7 +108,8 @@ if(!is.null(pfile)) {
     psuc <- TRUE    
   }
 }
-colnames(pdata) <- make.unique(colnames(pdata), sep="_")
+if(ncol(pdata)>1)
+  colnames(pdata) <- make.unique(colnames(pdata), sep="_")
 rownames(pdata) <- colnames(exp)
 
 ## build eset
@@ -113,7 +117,10 @@ eset <- new("ExpressionSet",
             exprs=exp,
             featureData=new("AnnotatedDataFrame", fdata),
             phenoData=new("AnnotatedDataFrame", pdata))
-            
+## write annotation information
+if(chipsuc)
+  annotation(eset) <- chiptype
+
 ## do invariant feature filtering
 if(!is.null(topvar)) {
   varno <- parseNumVec(topvar, expLen=1L, failVal=0L)
@@ -132,7 +139,8 @@ if(!is.null(summfeat) && !identical(tolower(summfeat), "false")) {
     eset <- summarizeProbesets(eset,
                                index.name="GeneID",
                                fun=mean,
-                               keep.nonindex=FALSE)
+                               keep.nonindex=FALSE,
+                               keep.featureNames=TRUE)
   } else if (fsuc) {
     i <- 1
     while(!identical(as.character(fdata[,i,drop=TRUE]), rownames(exp))) {
@@ -146,7 +154,8 @@ if(!is.null(summfeat) && !identical(tolower(summfeat), "false")) {
       eset <- summarizeProbesets(eset,
                                  index.name=colnames(fdata)[i],
                                  fun=mean,
-                                 keep.nonindex=FALSE)
+                                 keep.nonindex=FALSE,
+                                 keep.featureNames=TRUE)
     }
   }
 }

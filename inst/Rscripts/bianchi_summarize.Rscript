@@ -1,4 +1,4 @@
-#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 ## Summarize and report results from two or more biclustering algorithms
 ## Jitao David Zhang <jitao_david.zhang@roche.com>
@@ -26,15 +26,16 @@ if(is.null(input.file) || is.null(output.file) || is.null(exp.file) || getHelp) 
         status=1L)
 }
 
-libordie(rqubic)
+libordie(rqubic, minVer="1.1-3")
 libordie(eisa)
 libordie(ribiosAnnotation)
-libordie(ribiosExpression)
+libordie(ribiosExpression, minVer="1.0-10")
 libordie(ExpressionView)
+libordie(ribiosBic, minVer="1.1-3")
 
 if(any(!file.exists(input.file)))
   qqmsg("Error: Following input files does not exist:\n\t",
-	paste(input.file[!file.exists(input.file)], sep="\n"),
+	paste(input.file[!file.exists(input.file)], collapse="\n"),
         status=1L)
 if(!identical(length(output.file),1L))
   qqmsg("Error: -outfile option value must be of length 1\n", status=1L)
@@ -43,7 +44,7 @@ if(!identical(length(exp.file), 1L) || !file.exists(exp.file))
 
 st <- getArg("sortTime", onlyArg=NULL, missingArg=NULL)
 sortTime <- ifelse(is.null(st),
-                   st,
+                   60,
                    parseNumVec(st, 1, 60))
 
 ## build exp data
@@ -71,9 +72,12 @@ if(!is.na(ianno) && length(ianno)>0 && !identical(ianno,"")) {
 }
 ianno <- annotation(eset)
 if(identical(length(ianno),1L) && ianno %in% gtiCt) {
-  anno <- gti2bioc(annotation(eset))
-  if(!is.na(anno))
+  anno <- gti2bioc(ianno)
+  if(!is.na(anno)) {
     annotation(eset) <- anno
+  } else {
+    annotation(eset) <- "hgu133plus2"
+  }
 } else {
   annotation(eset) <- "hgu133plus2" ## backup when no valid annotation is available
 }
@@ -86,6 +90,9 @@ bics <- lapply(input.file,
                delimiter=";")
 bic <- combineBiclusts(bics)
 
+## filter bic data: single-gene or single-sample bics are filtered
+bic <- fcFilter(bic, feat.min=2L, cond.min=2L)
+
 ## order and display
 orderModules <- function(modules) {
   opt.ord.int <- OrderEV(modules)
@@ -93,9 +100,13 @@ orderModules <- function(modules) {
   return(opt.ord)
 }
 bic.order <- orderModules(bic)
-ExportEV(bic,
+
+## debug
+save.image(file="/DATA/tmp/bianchi_summarize_RData.RData")
+
+
+biosExportEV(bic,
          eset,
          order=bic.order,
          filename=output.file)
-
 qqmsg(status=0)

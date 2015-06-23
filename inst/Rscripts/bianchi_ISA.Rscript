@@ -1,4 +1,4 @@
-#!/bin/tcsh /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 ## Rscript command-line interface to the ISA algorithm
 ## Jitao David Zhang <jitao_david.zhang@roche.com>

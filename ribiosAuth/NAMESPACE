@@ -1,0 +1,3 @@
+export(bioinfoCookie)
+
+useDynLib(ribiosAuth, get_bioinfo_cookie)

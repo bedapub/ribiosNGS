@@ -1,0 +1,11 @@
+include $(BIOINFOCONFDIR)/biosdefs.make
+
+## No R specific settings are needed, they are automatically handled by R CMD SHLIB
+R_INC=$(R_HOME)/src/include/
+
+CFLAGSL= $(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
+
+PKG_CFLAGS=$(BIOSINC)
+
+## The pwdecode.c is linked to, since BIOS uses static libraries and it is not possible to be linked to a static library
+PKG_LIBS=$(CPICFLAGS) -I$(BIOINFOCONFDIR) $(BIOSKERNSRC)/pwdecode.c $(BIOSKERNSRC)/hlrmisc.c $(BIOSKERNSRC)/array.c $(BIOSKERNSRC)/format.c

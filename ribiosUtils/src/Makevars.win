@@ -1,0 +1,8 @@
+include $(BIOINFOCONFDIR)/prpidefs.make
+
+## No R specific settings are needed, they are automatically handled by R CMD SHLIB
+R_INC=$(R_HOME)/src/include/
+
+CFLAGSL= $(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
+
+PKG_CFLAGS=$(PRPIINC) $(PRPIINC)

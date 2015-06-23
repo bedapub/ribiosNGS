@@ -1,0 +1,35 @@
+\name{countTokens}
+\alias{countTokens}
+\alias{nField}
+\title{
+  Count tokens by splitting strings
+}
+\description{
+  Count tokens by splitting strings
+}
+\usage{
+countTokens(str, split = "\t", ...)
+}
+\arguments{
+  \item{str}{A character string vector}
+  \item{split}{Character used to split the strings}
+  \item{\dots}{Other parameters passed to the \code{strsplit} function}
+}
+\value{
+  Integer vector: count of tokens in the strings
+}
+\author{
+  Jitao David Zhang <jitao_david.zhang@roche.com>
+}
+\seealso{
+  \code{\link{strsplit}} to split strings, or a convenient wrapper
+  \code{\link{strtoken}} in this package.
+}
+\examples{
+myStrings <- c("HSV\t1887\tFavorite", "FCB\t1900", "FCK\t1948")
+countTokens(myStrings)
+
+## the function deals with factors as well
+countTokens(factor(myStrings))
+}
+

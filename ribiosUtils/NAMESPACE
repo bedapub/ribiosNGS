@@ -1,0 +1,91 @@
+importFrom(methods, setMethod)
+
+export(asNumMatrix,
+       stringDataFrame2numericMatrix,
+       atofMatrix)
+
+export(summarizeRows, summarizeColumns, summarizeCols)
+export(isError)
+
+export(mmatch)
+export(munion, mintersect, msetdiff, compTwoVecs)
+export(midentical)
+
+export(imatch, imatchv, ipmatch, ipmatchv, matchv)
+
+export(matchColumnIndex, matchColumn)
+
+export(putColsFirst, sortByDimnames,
+       removeColumns,
+       replaceColumnNames,
+       sortByCol)
+export(isVarCol, isInvarCol, removeInvarCol)
+export(rowscale)
+export(matrix2longdf,
+       longdf2matrix)
+
+export(dfFactor)
+
+export(basefilename, extname)
+
+export(qqmsg)
+export(haltifnot)
+export(verbose)
+
+export(pwdecode)
+
+export(setDebug, unsetDebug,
+       isDebugging, isIntDebugging)
+export(scriptInit)
+
+export(registerLog, clearLog, flushLog, doLog, writeLog)
+
+export(refactor, relevels,
+       cutInterval, refactorNum)
+
+export(ofactor)
+
+##export(atomGrep, orderedGrep)
+
+export(strtoken, countTokens)
+
+export(reload)
+
+export(stubborngc)
+
+export(headtail, headhead, tailtail)
+
+export(uniqueLength, ulen)
+
+export(chosenFew)
+
+export(openFileDevice, closeFileDevice)
+
+export(na.false)
+
+export(isDir, checkDir, assertDir,
+       createDir,
+       checkFile, assertFile)
+
+export(allIdentical)
+
+export(libordie)
+
+export(isMaxStatRow, keepMaxStatRowInd, keepMaxStatRow)
+
+export(trim)
+
+export(qsystem, rmat)
+
+export(silencio)
+
+export(assertDesign, assertContrast, assertDesignContrast)
+export(identicalMatrixValue, identicalMatrix)
+
+## .registration=TRUE is only valid when the routines have been registered
+useDynLib(ribiosUtils)
+
+##--------------------##
+## Deprecation
+##--------------------##
+export(nField)

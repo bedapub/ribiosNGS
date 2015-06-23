@@ -1,0 +1,110 @@
+\name{registerLog}
+\alias{registerLog}
+\alias{flushLog}
+\alias{clearLog}
+\title{
+  The functions \code{registerLog} and \code{doLog} provide a simple
+  mechanism to handle loggings (printing text messages to files or other
+  types of connections) in R. 
+}
+\description{
+  Users can register arbitrary numbers of loggers with \code{registerLog}, and the functions take care of low-level details such as
+  openning and closing the connections.
+}
+\usage{
+registerLog(..., append=FALSE)
+clearLog()
+flushLog()
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{\dots}{Arbitrary numbers of file names (character strings) or
+    connection objects (see example). }
+  \item{append}{Logical, log will be appended to the existing file but
+    not overwriting. Only valid for files but not for connections such
+    as standard output.}
+}
+\details{
+  Input parameters can be either character strings or connections (such as the
+  objects returned by \code{stdout()} or \code{pipe()}.
+
+  If a character string is registered as a logger, it is assumed as a
+  file name (user must make sure that it is writable/appendable). In
+  case the file exists, new logging messages will be \emph{appended};
+  otherwise if the file does  not exists, it will be created and the
+  logging messages will be \code{written} to the file.
+
+  A special case is the parameter value \code{"-"}: it will be
+  interpreted as standard output.
+
+  if a connection is registered as a logger, it must be writable in
+  order to write the logging messages.
+
+  Each parameter will be converted to a \code{connection} object, which
+  will be \code{closed} (when applicable) automatically before R quits.
+
+  If the parameter is missing (or set to \code{NA} or \code{NULL}), no
+  logging will take place.
+}
+\value{
+  No value returned: its side effect is used.
+}
+\author{
+  Jitao David Zhang <jitao_david.zhang@roche.com>
+}
+\note{
+  Currently, the loggers are stored in a variable in the namespace of
+  ribiosUtils named \code{RIBIOS_LOGGERS}. This is only for internal use of the package
+  and may change any time, therefore users are not advised to manipulate this variable directly.
+
+  To clear the registered loggers, use \code{clearLog}.To flush the
+  registered loggers, use \code{flushLog}. Usually it is not necessary
+  to use \code{flushLog} in R scripts, since by program exit the active
+  R session will automatically flush and close the connections (in
+  addition, frequent flushing may decrease the program's efficiency). However,
+  if used in interactive sessions, sometimes \code{flushLog} is needed
+  to force R write all log files to all connections that are
+  registered. 
+}
+
+\seealso{
+  \code{doLog} writes messages iteratively to each connection registered
+  by \code{registerLog}.
+}
+\examples{
+logfile1 <- tempfile()
+logfile2 <- tempfile()
+logcon3 <- stdout()
+registerLog("/dev/null")
+registerLog(logfile1)
+registerLog(logfile2)
+registerLog(logcon3)
+
+doLog("Start logging")
+doLog("Do something...")
+doLog("End logging")
+
+flushLog() ## usually not needed, see notes
+
+txt1 <- readLines(logfile1)
+txt2 <- readLines(logfile2)
+
+cat(txt1)
+cat(txt2)
+
+clearLog()
+
+registerLog(logfile1, logfile2, logcon3)
+
+doLog("Start logging - round 2")
+doLog("Do something again ...")
+doLog("End logging - for good")
+
+flushLog() ## usually not needed, see notes
+
+txt1 <- readLines(logfile1)
+txt2 <- readLines(logfile2)
+
+cat(txt1)
+cat(txt2)
+}

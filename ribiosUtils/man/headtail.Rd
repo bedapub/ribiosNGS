@@ -1,0 +1,33 @@
+\name{headtail}
+\alias{headtail}
+\title{
+Print head and tail elements of a vector
+}
+\description{
+This function prints head and tail elements of a vector for visualization purposes. See examples for its usage.
+}
+\usage{
+headtail(vec, head = 2, tail = 1, collapse = ", ")
+}
+\arguments{
+  \item{vec}{A vector of native types (e.g. character strings)}
+  \item{head}{Integer, number of head elements to be printed}
+  \item{tail}{Integer, number of tail elements to be printed}
+  \item{collapse}{Character string, used to collapse elements}
+}
+\details{
+  Head and tail elements are concatenated with ellipsis, if there are any elements that are not shown in the vector.
+}
+\value{A character string representing the vector}
+\author{Jitao David Zhang <jitao_david.zhang@roche.com>}
+\seealso{\code{\link{head}}, \code{\link{tail}}}
+\examples{
+testVec1 <- LETTERS[1:10]
+headtail(testVec1)
+headtail(testVec1, head=3, tail=3)
+headtail(testVec1, head=3, tail=3, collapse="|")
+
+testVec2 <- letters[1:3]
+headtail(testVec2, head=1, tail=1)
+headtail(testVec2, head=2, tail=1)
+}

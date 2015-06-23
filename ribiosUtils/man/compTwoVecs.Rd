@@ -1,0 +1,39 @@
+\name{compTwoVecs}
+\alias{compTwoVecs}
+\title{
+  Compare two vectors by set operations
+}
+\description{
+  Compare two vectors by set operations
+}
+\usage{
+compTwoVecs(vec1, vec2)
+}
+\arguments{
+  \item{vec1}{A vector of atomic types, e.g. integers, characters, etc.}
+  \item{vec2}{A vector of the same type as \code{vec1}}
+}
+\details{
+  Basic set operations are used to compare two vectors
+}
+\value{
+  A vector of six integer elements
+  \item{vec1.setdiff }{Number of unique items only in \code{vec1} but
+    not in \code{vec2}}
+  \item{intersect }{Number of items in both \code{vec1} and \code{vec2}}
+  \item{vec2.setdiff }{Number of unique items only in \code{vec2} but
+    not in \code{vec1}}
+  \item{vec1.ulen}{Number of unique items in \code{vec1}}
+  \item{vec2.ulen}{Number of unique items in \code{vec2}}
+  \item{union}{Number of unique items in \code{vec1} and \code{vec2}}
+}
+\author{
+  Jitao David Zhang <jitao_david.zhang@roche.com>
+}
+
+\examples{
+year1 <- c("HSV", "FCB", "BVB", "S04", "FCN")
+year2 <- c("HSV", "FCK", "S04")
+compTwoVecs(year1, year2)
+}
+

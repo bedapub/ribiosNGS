@@ -55,8 +55,10 @@ RcppExport SEXP cpp_geneSetPerm(SEXP stats,
     gsStats[i]=subsetSum(xx,indset[i]);
   }
 
+
   for(i=0;i<nsim;i++) {
     std::random_shuffle(xp.begin(), xp.end());
+    #pragma omp parallel for
     for(j=0; j<ng; j++) {
       psum=subsetSum(xp,indset[j]);
       if(psum>=gsStats[j])

@@ -1,0 +1,11 @@
+Version 1.0-4 (2013-08-15)
+  + cgiSendFile sends an existing file to the client
+
+Version 1.0-3 (2013-07-25)
+  + cgiPairParam uses + as the default collapser (which is the case in POST requests)
+
+Version 1.0-2 (2013-07-24)
+  + Add function cgiParam to query one parameter a time
+
+Version 1.0-0 (2013-07-22)
+  + ribiosCGI package added to ribios

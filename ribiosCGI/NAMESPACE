@@ -1,0 +1,18 @@
+export(cgiIsCGI, cgiInit, cgiHeader,
+       cgiEncodeWord, cgiDecodeWord,
+       cgiParams, cgiParam)
+
+export(cgiGet2Post, cgiGet2PostReset)
+
+export(cgiNumParam, cgiCateParam,
+       cgiEnumParam, cgiStrParam, cgiLogiParam,
+       cgiFuncParam, cgiPairParam)
+
+export(cgiSendFile)
+
+export(RIBIOS_CGI_TMP_DIR, RIBIOS_CGI_TMP_URL)
+
+export(tmpWebFile, tmpWebURL)
+
+## .registration=TRUE is only valid when the routines have been registered
+useDynLib(ribiosCGI)

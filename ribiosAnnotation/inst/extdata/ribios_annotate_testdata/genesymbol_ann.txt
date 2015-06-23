@@ -1,0 +1,6 @@
+"GeneID"	"GeneSymbol"	"GeneName"	"TaxID"
+"CX3CL1"	NA	NA	NA
+"HMOX1"	NA	NA	NA
+"DGAT1"	NA	NA	NA
+"DDR1"	NA	NA	NA
+"TG"	NA	NA	NA

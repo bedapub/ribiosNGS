@@ -1,0 +1,59 @@
+## import
+## importFrom(ROracle, Oracle)
+importFrom(DBI, dbConnect, dbExistsTable, dbSendQuery, dbHasCompleted, 
+           fetch, dbClearResult, dbDisconnect)
+importFrom(ribiosUtils, matchColumn, putColsFirst)
+
+export(hasOracle, ribiosCon)
+
+## export
+export(gtiChiptypes,
+       isGtiChiptype,
+       gtiChipnames,
+       gtiArraytypes) ## synonymous
+
+export(scriptChiptypes) ## shortcut for chiptypes supported by ribios scripts
+
+export(gtiTaxAnnotation)
+
+export(querydb, formatIn, querydbSelectIn, querydbTmpTbl)
+
+export(guessChiptype)
+
+export(annotateAnyProbeset,
+       gtiChipAnnotation,
+       annotateChip,
+       annotateProbesets,
+       annotateProbeIDs,
+       annotateRefSeqs,
+       annotatemRNAs)
+
+export(annotateAnyID) ## shortcut for annotateGeneID, annotateGeneSymbol and annotateProbesets
+
+export(annotateGeneIDs,
+       annotateGeneSymbols)
+
+export(annotateEnsembl)
+
+export(gti2bioc, bioc2gti)
+
+export(mappedProbesets)
+
+export(chrLen)
+
+export(hapmapSnp)
+
+export(annotateHumanOrthologs,
+       humanOrthologs,
+       humanUniqOrtholog,
+       nonhumanOrthologs,
+       nonhumanUniqOrtholog)
+
+export(ORACLE.IN.NMAX)
+
+## deprecated functions
+export(affychipNames,
+       biosCurrentGeneSymbol,
+       raceChiptypes,
+       raceChipnames,
+       raceChipAnnotation)

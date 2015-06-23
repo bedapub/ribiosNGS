@@ -1,0 +1,5 @@
+Feature	S3	S4	S5
+Mapk9	7	9	5
+Mapk14	8	5	7
+Alk	8	9	3
+NoGeneID	2	3	4

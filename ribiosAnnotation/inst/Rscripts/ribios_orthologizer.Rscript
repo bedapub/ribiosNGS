@@ -1,0 +1,114 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosUtils))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+chiptype <- getArg("chiptype", onlyArg=NA, missingArg=NULL)
+outfile <- getArg("outfile", onlyArg=stdout(), missingArg=stdout())
+getHelp <- existArg("h") | existArg("help")
+feature <- getArg("feature", onlyArg="GeneSymbol", missingArg="GeneSymbol")
+delUnmapped <- existArg("delUnmapped")
+
+useage <- function() {
+  paste("\nUseage: ",
+        scriptName(),
+        " -infile FILE [-chiptype CHIP] [-outfile FILE] [-feature GeneSymbol/GeneID] [-delUnmapped]\n",
+        "Mandatory options:\n",
+        "-infile: Input files, in tab-delimited matrix or the gct format\n",
+        "Optional parameters:\n",
+        "-chiptype: A GTI-supported chip type.\n",
+        "           'GeneID' and 'GeneSymbol' are also supported (case-insensitive)\n",
+        "           If missing, input features are taken as probesets and automatic mapping is attempted.\n",
+        "-outfile: Output file. If missing stdout is used\n",
+        "-feature: Output feature type, can be 'GeneSymbol' (default) or 'GeneID'.\n",
+        "-delUnmapped: If set, unmapped input features will be deleted in the output file.\n",
+        "Use '", scriptName(), " -chiptype' to get supported chiptypes\n",
+        collapse="")
+}
+
+## load library
+libordie(ribiosUtils, minVer="1.0-19")
+libordie(ribiosAnnotation)
+libordie(ribiosIO)
+
+## script information
+supp.types <- c(gtiChiptypes(), "GeneSymbol", "GeneID")
+if(!is.null(chiptype) & is.null(infile)) {
+  print(supp.types);
+  qqmsg(status=0L)
+} else if (is.null(infile)) {
+  qqmsg(useage(), status=1L)
+}
+
+if(!checkFile(infile))
+  qqmsg("Error: infile \"",
+        paste(infile[!file.exists(infile)], collapse=","),
+        "\" does not exist. Program existing.", status=2L)
+
+if(length(outfile) != length(infile))
+  qqmsg("Error: infile number does not equal to outfile number.\n",
+        "Program existing.", status=2L)
+
+supp.feat <- c("GeneSymbol", "GeneID")
+feature <- imatchv(feature, supp.feat)
+
+if(is.na(feature)) {
+  qqmsg("Error: 'feature' must be either 'GeneSymbol' or 'GeneID'\n",
+        "Program existing.",
+        status=2L)
+}
+
+## check annotation
+if(is.null(chiptype)) {
+  isGeneID <- isGeneSymbol <- FALSE
+} else {
+  chiptypeBackup <- chiptype
+  isGeneID <- identical(tolower(chiptype), "geneid")
+  isGeneSymbol <- identical(tolower(chiptype), "genesymbol")
+  chiptype <- imatchv(chiptype, supp.types)
+  if(is.na(chiptype)) {
+    qqmsg("Error: chitype \"", chiptypeBackup, "\" is not supported by GTI.\n",
+          "Use '", scriptName(), " -chiptype' to get the supported chiptypes.\n",
+          "Program existing.",
+          status=2L)
+  } else if (!isGeneID & !isGeneSymbol) {
+    chiptype <- supp.types[match(chiptype, supp.types)]
+  }
+}
+
+
+
+## do annotation
+doAnno <- function(file, out, del=delUnmapped) {
+  mat <- read_exprs_matrix(file)
+  fnames <- rownames(mat)
+  if(isGeneID) {
+    anno <- annotateGeneIDs(ids=fnames,
+                           orthologue=TRUE, multiOrth=FALSE)
+  } else if (isGeneSymbol) {
+    anno <- annotateGeneSymbols(ids=fnames,
+                            organism="any",
+                            orthologue=TRUE, multiOrth=FALSE)
+  } else {
+    anno <- annotateProbesets(ids=fnames,
+                              chip=chiptype, orthologue=TRUE)
+                              
+  }
+  outf <- anno[, feature]
+  if(del) {
+    sel <- !is.na(outf) & !outf %in% c("-", "")
+  } else {
+    sel <- rep(TRUE, nrow(mat))
+  }
+  write_gct(mat[sel,,drop=FALSE],
+            file=outfile,
+            feat.name=outf[sel],
+            feat.desc=rownames(mat)[sel])
+}
+
+## output
+for(i in seq(along=file))
+  doAnno(infile[i], outfile[i])
+
+qqmsg(status=0L)

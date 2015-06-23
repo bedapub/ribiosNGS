@@ -1,0 +1,5 @@
+"ProbeID"	"GeneID"	"GeneSymbol"	"GeneName"	"Chip"	"TaxID"
+"203687_at"	"6376"	"CX3CL1"	"chemokine (C-X3-C motif) ligand 1"	"HG-U133_PLUS_2"	9606
+"203665_at"	"3162"	"HMOX1"	"heme oxygenase (decycling) 1"	"HG-U133_PLUS_2"	9606
+"203669_s_at"	"8694"	"DGAT1"	"diacylglycerol O-acyltransferase 1"	"HG-U133_PLUS_2"	9606
+"203673_at"	"7038"	"TG"	"thyroglobulin"	"HG-U133_PLUS_2"	9606

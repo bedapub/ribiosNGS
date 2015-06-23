@@ -1,0 +1,5 @@
+files	group	description
+sample1.txt	groupA	sample1
+sample2.txt	groupA	sample2
+sample3.txt	groupB	sample3
+sample4.txt	groupB	sample4

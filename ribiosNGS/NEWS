@@ -1,0 +1,27 @@
+Version 1.0-12 (2015-06-12)
+  + RiboSeq fixes a bug in matching the two matrixes by row names
+
+Version 1.0-11 (2015-02-16)
+  + Substantial update of S4 classes and functions
+  + annotate added
+
+Version 1.0-7 (2014-11-03)
+  + add EdgeResult object
+  + Export functions needed for MPS
+
+Version 1.0-6 (2014-10-31)
+  + Start using roxygen2
+  + edgeR workflow has been wrapped into functions edgeBuild, edgeTest, and edgeRun.
+  + remove edge.DGE function since it is not used anymore.
+
+Version 1.0-5 (2013-01-22)
+  + pairs.Rscript has been put into /SOFT/bi/apps/ribios/scripts/pairs.
+
+Version 1.0-4 (Sep 10, 2012)
+  + Bug in merge.Rscript read.table does not recognize single quote (') as quote character
+
+Version 1.0-3 (Jun 19, 2012)
+  + Modify merge.Rscript: (1) suffixes do not cause error (2) -outfile can be missing (stdout as default) (3) -noheader/-header is a mandotory parameter now
+
+Version 1.0-2 (2011-12-20)
+  + Add documentation and testing data for edgeR.DGE

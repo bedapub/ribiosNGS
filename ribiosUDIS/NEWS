@@ -1,0 +1,50 @@
+Version 1.2-5 (2014-02-06)
+  + getUDISexpression checks the consistency between fData and exprs: if not, name matching is done
+
+Version 1.2-3 (2013-07-15)
+  + buildUDISexpURL accepts one parameter (addparams), and getUDISexpression passes addparams (produced from dots) to expr, meta, and feat queries.
+  + NOTE: It is not yet clear whether extra parameters for a certain type of query (e.g. property for expr) is safely ignored. It remains to be tested.
+
+Version 1.2-2 (2013-07-12)
+  + buildUDISexpURL and getUDISexpression supports dots (...) to add any parameter-value pairs to the API query
+  
+Version 1.2-1 (2013-07-03)
+  + getUDISexpression documentation: a link to the demo is added to the reference
+
+Version 1.2-0 (2013-05-14) 
+  + Supports queries with studyidexternal, studyid, studytitle, and datasetid
+  + Due to the support of multiple identifiers, the parameter name of getUDISexpression is changed from 'studyIdExternal" to 'id'
+
+Version 1.1-1 (2013-02-28)
+  + Bug fix: meta2pd (internal function) closes text connection once finishing the use.
+
+Version 1.1-0 (2013-02-27)
+  + The productive UDIS server is now used for query (before the dev machine was used)
+  + Function getUDISexprsession has been updated to be compatible with the current UDIS query API specifications
+
+Version 1.0-5 (2012-05-04)
+  + The AnnotatedDataFrame object in meta2pd function is created with new to be compatible with older Biobase packages (e.g. R-2.13.2 installed on UDIS)
+
+Version 1.0-4 (2012-05-03)
+  + Document queryURL
+  + Rename queryExpressionData to getUDISexpression
+  + getUDISexpression now supports downloading and parsing phenotype (aka meta) data
+  + Two fucntions, buildUDISexpURL and meta2pd, have been refactored from the getUDISexpression function to alleviate functionalities of buidling query URL and parsing metadata respectively.
+  + Document getUDISexpression
+
+Version 1.0-3 (2012-04-24)
+  + ribiosUDIS depends on ribiosAuth for authentification (getting cookie)
+  + Hide bakeCookie function since it is not used any more, and it will be deleted in near future releases
+  + queryUrl and queryExpressionData call bioinfoCookie() internally to get cookies
+
+Version 1.0-2 (2012-04-13)
+  + Print connection string to stdout in case queryExpressionData failed to get gct file, for diagnostic purposes
+
+Version 1.0-1 (2012-02-22)
+  + Make cookie as a parameter to queryUrl and queryExpressionData
+  + bakeCookie function provides the 'verbose' option
+  + (Internal) Use 'basicTextGatherer' to keep postForm function quiet when needed
+  + Add ribiosIO and RCurl as dependencies
+ 
+Version 1.0-0 (2012-02-18)
+  + Add ribiosUDIS package to the ribios toolbox

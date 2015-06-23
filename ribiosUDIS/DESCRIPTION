@@ -1,0 +1,10 @@
+Package: ribiosUDIS
+Type: Package
+Title: Access UDIS in ribios
+Version: 1.2-5
+Date: 2014-02-06
+Author: Jitao David Zhang, with inputs from Yuan Wang, Said Aktas, Clemens Brogers and Detlef Wolf
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: Access UDIS in ribios via APIs specified in UDIS.
+Depends: ribiosIO (>= 1.0-8), ribiosAuth, Biobase, RCurl
+License: LGPL-2

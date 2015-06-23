@@ -1,3 +1,11 @@
+Version 1.1-6 (Apr 03, 2015)
+  + Clean up importing/depending packages: only methods is depended and other packages are all imported
+  + Add GeneSetsList, a list of GeneSets, to allow simultaneous testing of gene sets in multiple gmt files
+  + Add readGmts
+
+Version 1.1-5 (Aug 19, 2014)
+  + Add gseaScore and gseaScores function to extract scores from annoGseaRes object(s)
+
 Version 1.1-4 (Aug 08, 2014)
   + Add parseGmt function to transform a GMT file into a list of integer indices that is directly applicable for downstream analysis
 

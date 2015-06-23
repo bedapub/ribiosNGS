@@ -1,0 +1,119 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+## Rscript command-line interface to the QUBIC algorithm
+## Jitao David Zhang <jitao_david.zhang@roche.com>
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+input.file <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+if(is.null(input.file) | is.null(output.file) | getHelp) {
+  qqmsg(paste("\nUsage: bianchi_QUBIC.Rscript -infile infile.RData -outfile outfile.bic OPTIONS\n\n",
+              "-infile infile.RData\tInput file\n",
+              "\t\t\tCan be a binary .RData file (when -binary is provided) or an expression matrix in tab-delimited or gct format\n",
+              "-outfile outfile.bic\tOutput file, recording biclusters determined by the QUBIC algorithm\n",
+              "\n",
+              "OPTIONS can be one or more of following optional parameters\n",
+              "[-binary]\t\tIf given, the input file is binary (.RData). Otherwise the input file is treated as plain text file (tab or gct)\n",
+              "[-seed integer]\tThe initial random number seed\n",
+              "\t\t\tDefault value:1234\n",
+              "[-rank num_array]\tInteger array of the discretize ranks\n",
+              "\t\t\tDefault value:1\n",
+              "[-prop num_array]\tNumber array between 0-0.5, the estimated (half) proportions of biclusters\n",
+              "\t\t\tDefault value:0.45\n",
+              "[-report integer]\tNumber of reported biclusters in each parameter setting\n",
+              "\t\t\tDefault value:20\n",
+              "[-tolerance number]\tProportion of homogenous features/samples in biclusters\n",
+              "\t\t\tDefault value:0.95\n",
+              "[-filter number]\tThreshold of biclustering filtering by overlapping\n",
+              "\t\t\tDefault value:0.25\n",
+              "[-coreno integer]\tHow many CPU cores should be used to find biclusters\n",
+              "\t\t\tDefault value:1\n",
+              "[-parafile para.out]\tIf given, the parameters are written in output file\n",
+              collapse=" "),
+        status=1L)
+}
+
+libordie(rqubic)
+libordie(ribiosExpression)
+libordie(ribiosBic)
+libordie(multicore)
+
+isBinary <- getArg("binary", onlyArg=TRUE, missingArg=FALSE)
+if(isBinary) {
+  load(input.file)
+  if(!exists("eset")) {
+    qqmsg("Error: when -binary is set, the input file must be an .RData file containing an ExpressionSet object named \"eset\".\n",
+          "'eset' was however not found in the given file. Program stops\n",
+          status=1L)
+  }
+} else {
+  eset <- readExprsMatrix(input.file)
+}
+
+opts <- getArg(c("seed", "rank",
+                 "prop", "report", "tolerance", "filter", "coreno", "parafile"),
+		onlyArg=NULL, missingArg=NULL)
+seed <- ifelse(is.null(opts[["seed"]]),
+               1234,
+               parseNumVec(opts[["seed"]],
+                           expLen=1L, failVal=1234))
+coreno <- ifelse(is.null(opts[["coreno"]]),
+                 1L,
+                 parseNumVec(opts[["coreno"]],
+                             expLen=1L, failVal=1L))
+
+set.seed(seed)
+
+myParse <- function(chr, defVal) {
+  if(is.null(opts[[chr]])) {
+    res <- defVal
+  } else {
+    res <- parseNumVec(opts[[chr]], expLen=NULL, failVal=defVal)
+  }
+  res
+}
+ranks <- myParse("rank", 1L)
+props <- myParse("prop", 0.45)
+report <- myParse("report", 20L)
+tolerance <- myParse("tolerance", 0.95)
+filter <- myParse("filter",0.25)
+
+paras <- expand.grid(ranks, props)
+qf <- function(i) {
+  rank <- paras[i,1L]; prop <- paras[i,2L]
+  eset.disc <- quantileDiscretize(eset,
+                                  rank=rank,
+                                  q=prop)
+  eset.seeds <- generateSeeds(eset.disc)
+  eset.rqubic <- quBicluster(eset.seeds, eset.disc,
+                             report.no=report,
+                             tolerance=tolerance,
+                             filter.proportion=filter)
+}
+coreno <- pmin(coreno, nrow(paras))
+eset.rqubic.list <- mclapply(1:nrow(paras),
+                             qf,
+                             mc.cores=coreno)
+
+if(nrow(paras) > 1) {
+  eset.rqubic <- combineBiclusts(eset.rqubic.list)
+} else {
+  eset.rqubic <- eset.rqubic.list[[1]]
+}
+
+writeBiclusterResults(output.file,
+                      eset.rqubic,
+                      bicName="Quantitative Biclustering Algorithm",
+                      geneNames=featureNames(eset),
+                      arrayNames=sampleNames(eset), delimiter=";")
+if(!is.null(opts[["parafile"]])) {
+  parafile <- opts[["parafile"]]
+  eset.rqubic.par <- t(data.frame(eset.rqubic@Parameters[-c(1,4)]))
+  write.table(eset.rqubic.par,
+              parafile,
+              sep="\t", row.names=TRUE, quote=FALSE, col.names=FALSE)
+}
+qqmsg(status=0L)

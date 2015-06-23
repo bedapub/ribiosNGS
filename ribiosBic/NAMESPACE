@@ -1,0 +1,35 @@
+exportPattern("^[[:alpha:]]+")
+
+#### ISAModules are so far not exported from eisa
+## import("methods")
+## importClassesFrom(eisa, ISAModules)
+## importFrom(isa2, isa.status)
+
+importFrom("Biobase", "pData<-")
+
+
+export(dcISA)
+exportClass(dcISAModules)
+
+export(splitISAModules)
+## Deprecated
+export(splitModuleByCor)
+
+export("biosExportEV")
+
+## ISA
+##export(ISA.divide.and.conquer,
+##       smartISA)
+##exportMethods("getFeatureLengths",
+##              "getUniqueFeatureLength",
+##              "getSampleLengths",
+##              "pData<-",
+##              "getAnnotatedFeatureScores")
+##exportClasses("ISAModulesComb")
+##export("feat.cond.threshold")
+##exportMethods("group", "group<-")
+##export("getBinaryWeight",
+##       "isa.weight.step",
+##       "isa.weight.iterate",
+##       "isa.weight",
+##       "ISAD")

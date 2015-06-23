@@ -1,0 +1,13 @@
+Package: ribiosBic
+Type: Package
+Title: Biclustering tools in ribios	
+Version: 1.1-3
+Date: 2012-01-05
+Author: Jitao David Zhang <jitao_david.zhang@roche.com>
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description:  This package provides implementations of biclustering algorithms that are optimized for the BIOS system. Currently two algorithms, Iterative Signature Algorithm (ISA) and QUBIC, are supported. The package provides variants of original algorithms, and functions to interpret biclustering results.
+Depends: methods, Biobase, eisa, ribiosExpression, igraph, ribiosAnnotation, ExpressionView
+Imports: isa2, eisa
+Suggests: multicore,lattice
+License: LGPL-2
+LazyLoad: yes

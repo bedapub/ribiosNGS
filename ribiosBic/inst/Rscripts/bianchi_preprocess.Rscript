@@ -1,0 +1,164 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+## preprocessing script for biclustering tasks
+## input: expression file
+## output: an RData including the ExpressionSet
+## Jitao David Zhang <jitao_david.zhang@roche.com>
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+## check minimal input and print help
+input.file <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+if(is.null(input.file) | is.null(output.file) | getHelp) {
+  qqmsg(paste("\nUsage:bianchi_preprocess.Rscript -infile in_filename -outfile out_filename OPTIONS\n\n",
+              "-infile in_filename\tInput file name, in a format supported by the ribiosIO package.\n",
+              "\t\t\tAs of Dec 2011, a tab-delimited file or a gct file.\n",
+              "-outfile out_filename\tOutput file name, ideally with the \".RData\" suffix.\n",
+              "\t\t\tAs of Dec 2011, the output file is a binary file containing an ExpressionSet object for downstream analysis.\n\n",
+              "OPTIONS can be one or more of following optional parameters:\n",
+              "[-ffile fdata_filename]\tfeature annotation file in the tab-delimited format\n",
+              "[-pfile pdata_filename]\tsample annotation file in the tab-delimited format\n",
+              "[-clsfile clsdata_filename]\tsample annotation file in the cls format\n",
+              "[-topvar integer]\t Number of features to be kept after filtering low-variance features\n",
+              "[-summfeat true/false]\t\twhether the program should try to summarize features\n",
+              "[-chiptype chip_type]\t\tExpression chip type supported by pRED\n",
+              collapse=" "),
+        status=1L)
+}
+
+if(!file.exists(input.file)) {
+  qqmsg("Error: infile \"", input.file, "\" does not exist. Program existing.",
+        status=2)
+} else if (identical(input.file, output.file)) {
+  qqmsg("Error: infile cannot have the same name as the outfile. Program existing.",
+        status=2)
+}
+
+## infile has been ready, read it
+libordie(Biobase)
+libordie(ribiosIO)
+libordie(ribiosAnnotation, minVer="1.0-4")
+libordie(ribiosExpression, minVer="1.0-11")
+
+exp <- read_exprs_matrix(input.file)
+nrexp <- nrow(exp)
+ncexp <- ncol(exp)
+
+## status labels
+fsuc <- FALSE
+chipsuc <- FALSE
+psuc <- FALSE
+sfsuc <- FALSE
+clssuc <- FALSE
+
+options(warn=100)
+
+opts <- getArg(c("ffile", "pfile", "clsfile", "topvar", "summfeat", "chiptype"),
+               onlyArg=NULL, missingArg=NULL)
+ffile <- opts[[1L]]
+pfile <- opts[[2L]]
+clsfile <- opts[[3L]]
+topvar <- opts[[4L]]
+summfeat <- opts[[5L]]
+chiptype <- opts[[6L]]
+
+##-------------------- Feature Annotation --------------------##
+## check whether the chiptype is valid
+isChipValid <- !is.null(chiptype) && tolower(chiptype) %in% tolower(gtiChipnames())
+
+## do chiptype annotation
+fdata <- data.frame(row.names=rownames(exp))
+fnames <- rownames(exp)
+if(isChipValid) {
+  cfdata <- try(annotateProbesets(id=fnames, chiptype))
+  if(!isError(cfdata)) {
+    fdata <- cbind(fdata, cfdata)
+    chipsuc <- TRUE
+  }
+}
+
+## do feature annotation
+if(!is.null(ffile)) {
+  ffdata <- try(readFKtable(ffile, fk=fnames, strict.order=FALSE))
+  if(!isError(ffdata)) {
+    fsuc <- TRUE
+    fdata <- cbind(fdata, ffdata)
+  }
+}
+if(ncol(fdata)>1)
+  colnames(fdata) <- make.unique(colnames(fdata), sep="_")
+rownames(fdata) <- rownames(exp)
+
+##-------------------- Sample Annotation --------------------##
+pdata <- data.frame(row.names=colnames(exp))
+snames <- colnames(exp)
+if(!is.null(clsfile)) {
+  cls <- try(readCls(clsfile))
+  if(!isError(cls)) {
+    pdata <- cbind(pdata, data.frame(class=cls))
+    clssuc <- TRUE
+  }
+}
+if(!is.null(pfile)) {
+  fpdata <- try(readFKtable(pfile, fk=snames, strict.order=FALSE))
+  if(!isError(fpdata)) {
+    pdata <- cbind(pdata, fpdata)
+    psuc <- TRUE    
+  }
+}
+if(ncol(pdata)>1)
+  colnames(pdata) <- make.unique(colnames(pdata), sep="_")
+rownames(pdata) <- colnames(exp)
+
+## build eset
+eset <- new("ExpressionSet",
+            exprs=exp,
+            featureData=new("AnnotatedDataFrame", fdata),
+            phenoData=new("AnnotatedDataFrame", pdata))
+## write annotation information
+if(chipsuc)
+  annotation(eset) <- chiptype
+
+## do invariant feature filtering
+if(!is.null(topvar)) {
+  varno <- parseNumVec(topvar, expLen=1L, failVal=0L)
+  varno <- pmin(varno, nrow(exp))
+  evar <- apply(exp, 1L, IQR)
+  evar.ord <- order(evar, decreasing=TRUE)
+  isVar <- evar >= evar[ evar.ord[varno] ]
+} else {
+  isVar <- rep(TRUE, nrexp)
+}
+eset <- eset[isVar,,drop=FALSE]
+
+## do feature summarizing
+if(!is.null(summfeat) && !identical(tolower(summfeat), "false")) {
+  if(chipsuc) {
+    eset <- summarizeProbesets(eset,
+                               index.name="GeneID",
+                               fun=mean,
+                               keep.nonindex=FALSE,
+                               keep.featureNames=TRUE)
+  } else if (fsuc) {
+    i <- 1
+    while(!identical(as.character(fdata[,i,drop=TRUE]), rownames(exp))) {
+      i <- i+1;
+      if(i>ncol(fdata)) {
+        i <- NULL
+        break;
+      }
+    }
+    if(!is.null(i)) {
+      eset <- summarizeProbesets(eset,
+                                 index.name=colnames(fdata)[i],
+                                 fun=mean,
+                                 keep.nonindex=FALSE,
+                                 keep.featureNames=TRUE)
+    }
+  }
+}
+## write ExpressionSet in file
+save(eset, file=output.file)
+qqmsg(status=0)

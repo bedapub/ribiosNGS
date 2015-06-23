@@ -1,0 +1,10 @@
+Package: ribiosPCA
+Type: Package
+Title: Princple Component Analysis in ribios
+Version: 1.0-0
+Date: 2011-12-20
+Author: Jitao David Zhang <jitao_david.zhang@roche.com>
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: Doing robust principle component analysis with ribios.
+Depends: methods,Biobase,rrcov
+License: GPL (>=2)

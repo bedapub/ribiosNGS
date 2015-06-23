@@ -1,0 +1,71 @@
+2015-06-08: v1.1-16
+  + parseNumVec solves a bug when the input str is NULL the returned value is garanteed to be failVal
+
+2015-02-09: v1.1-15
+  + makeFactor: add 'verbose=FALSE' option. Warning messages are only printed if it is set to TRUE.
+
+2015-01-12: v1.1-14
+  + argParse: the function now works with -e and --args options of R and Rscript
+  + Pending: writing tests to make sure argParse works (see ~/sandbox/knitr-example/Makefile for examples)
+
+2014-10-07: v1.1-13
+  + argParse: the function now works with the latest Rscript. The change is that the script files are more consistently handled by Rscript (in the form of Rscript FILE) and R (R -f FILE or R --file=FILE). The function has been updated to adapt to this change.
+
+2014-08-15: v1.1-12
+  + argParse: add an extra option 'strict=TRUE'. If set to FALSE, the function will return command-line parameters that were not appended with a prefix (e.g. -prefix PARAMETER). 
+  + Note that argParse's return value has changed: by default it returns an invisible \code{NULL} (before it returns the invisible length of valid parameters). If strict=TRUE, it returns the extra parameters as an invisible character vector
+
+2014-06-23: v1.1-11
+  + argparse: the C code is now aware of the format strings in die/usage. 
+  + The memory leakage problem is still not solved. When a program misses some parameters, it now prints the correct diagnostic information, but then dies reporting "memory not mapped". It is suspected (not confirmed though) that this may be caused by unfreed pointers when the program exists. It remains to be fixed.
+
+2014-05-09: v1.1-10
+  + parseStrings and parsePairs return NULL in case the input parameter is NULL.
+  + Export parseFactor and makeFactor
+
+2014-03-11: v1.1-7
+  + rarg_get checks initialization to avoid segmentation error when called by a script
+
+2013-10-16: v1.1-6
+  + argParse function prints the command line if fails to parse the needed parameters. It helps debugging the input.
+
+2013-07-29: v1.1-5
+  + add parseStrings and parsePairs
+  + From v1.1-5 ribiosArgs depends on ribiosUtils.
+
+2013-07-14: v1.1-4
+  + argPresent returns FALSE if arg_init and/or arg_initTry has not been called
+  + argGet prints an error and returns NULL if arg_init and/or arg_initTry has not been called
+
+
+2013-05-15: v1.1-3
+  + Add new paramter 'default' to argGet and argGetPos to make the function safer in case the parameter is not specificied
+  + Move scriptInit() to ribiosUtils
+
+2013-01-28: v1.1-2
+  + argParse: now optargs and reqargs can be set to NULL without causing the R session to crash
+  + The log.h module of bios has been replaced by the local mimics, in order not to crash the R session in case problems. Note that however arg_init() and arg_try() still must be called before argGet() and argPresent(). Otherwise the program will end reporting the segfault "memory not mapped".
+
+2013-01-23: v1.1-1
+  + Add scriptInit to prepare R for the script
+
+2013-01-04: v1.1-0
+  + Add BIOS-style command-line parser: argParser, argGet, argGetPos and argPresent. 
+
+2012-01-24: v1.0-5
+  + Add RscriptName function to get the file name of the current Rscript
+
+2011-12-19: v1.0-4
+  + The parseNumVec parameter accepts NULL as expLen value, in order to parse variable-length number vectors
+
+2011-12-15: v1.0.3
+  + The onlyArg and/or missingArg parameter of the getArg function can be set to NULL now (in previous versions this would cause an error)
+  + Add tests folder to keep consistent behaviours of important functions (now getArg is under control, parseNumVec and existArg shall be tested similarly in future releases)
+
+2011-10-10: v1.0.2
+  + (Important) getArg differentiates options (starting with a minus sign AND a non-numeric character, namely 0-9 or the dot) and negative numbers (starting with a minus sign, followed by numeric characters). For instance, "-a" is an option, but the "-3,4" in "-a -3,4" will be treated as value for "a". Arguments, which contain at least one character which is not number or punctuation characters (see ?regex), will be considered as an option (parameter) instead of a value, for instance "-3way".
+  + parseNumVec removes leading and training quotes when existing.
+
+
+2011-10-04: v1.0.1
+  + parseNumVec suppresses warnings during the attempts to convert strings to numbers

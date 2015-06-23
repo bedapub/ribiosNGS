@@ -1,0 +1,22 @@
+importFrom("ribiosUtils", "trim")
+
+export("getArg","existArg")
+
+export("parseNumVec",
+       "parsePairs",
+       "parseStrings")
+
+export("makeFactor",
+       "parseFactor")
+
+export("scriptName")
+
+export("argParse",
+       "argIsInit",
+       "argGet",
+       "argGetPos",
+       "argPresent")
+
+
+## .registration=TRUE is only valid when the routines have been registered
+useDynLib(ribiosArg)

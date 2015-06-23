@@ -1,0 +1,69 @@
+#!/bin/bash /apps64/bi/R/proxyRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+pos <- getArg("pos", onlyArg=NULL, missingArg=NULL)
+neg <- getArg("neg", onlyArg=NULL, missingArg=NULL)
+outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+if(isDebugging()) {
+  pos <- "~/samba_mount/transfer/TGFb-pathway-examples/TGFb-Middle-24hr/gsea_report_for_na_pos_1336436073126.xls"
+  neg <- "~/samba_mount/transfer/TGFb-pathway-examples/TGFb-Middle-24hr/gsea_report_for_na_neg_1336436073126.xls"
+  out <- "test.pdf"
+}
+
+if(is.null(pos) || is.null(neg) || is.null(outfile) || getHelp) {
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              "-pos FILE -neg FILE -outfile\n",
+              "Mandatory parameters:\n",
+              "-pos FILE\tGSEA output tab-delimited file of positively enriched pathways\n",
+              "-neg FILE\tGSEA output tab-delimited file of negatively enriched pathways\n",
+              "-outfile FILE\tOutput PDF file\n", sep=" "), status=1L)
+}
+
+libordie("ribiosIO")
+libordie("ribiosPlot")
+libordie("ape")
+
+rddir <- system.file("extdata", package="ribiosNetwork")
+rdfile <- file.path(rddir, "tggate-gsea-PathEsHc.RData")
+if(!loadFile(rdfile))
+  qqmsg("TG-GATES Pathway Tree Backbone not found", status=1L)
+
+gpt <- read.table(pos, sep="\t", header=TRUE)
+gnt <- read.table(neg, sep="\t", header=TRUE)
+df <- rbind(gpt[,c("NAME", "ES", "FWER.p.val")],
+            gnt[,c("NAME", "ES", "FWER.p.val")])
+hc <- as.phylo(gseaPathEs.hc)
+
+boundNormCol <- function(x, min=-1, max=1, col=greenred, boundary=c(-0.5,0.5)) {
+  cols <- do.call(col, list(n=100))
+  bn <- boundNorm(x, min, max)*100
+  res <- cols[as.integer(bn)]
+}
+colPhylo <- function(hc, df ,type="cladogram", only.sig=FALSE, only.sig.tip=FALSE, show.tip.label=TRUE, no.margin=TRUE, sig=0.05, ...) {
+  labels <- hc$tip.label
+  eind <- matchColumnIndex(labels, df,1L)
+  firstScore <- df[eind, 2L]
+  if(only.sig) {
+    isSig <- abs(log(df[eind, 3L]+1E-8)) >= abs(log(sig))
+    firstScore[!isSig] <- 0
+    if(only.sig.tip) {
+      hc$tip.label[!isSig] <- ""
+    }
+  }
+  stopifnot(!any(is.na(isSig)) & !any(is.na(hc$tip.label)))
+  firstCol <- boundNormCol(firstScore,min=-1, max=1)
+  plot(hc, 
+       tip.col=firstCol,type=type,
+       show.tip.label=show.tip.label, no.margin=no.margin,...)
+}
+openFileDevice(outfile, width=12L, height=12L)
+colPhylo(hc, df,  type="unrooted", show.tip.label=TRUE,
+         only.sig.tip=TRUE, only.sig=TRUE, sig=0.01, lab4ut="axial")
+dev.off()
+
+
+qqmsg(status=0L)

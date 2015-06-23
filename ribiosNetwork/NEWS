@@ -1,0 +1,41 @@
+Version 1.0-11 (2013-06-05)
+  + Add TextMining_I2E and manual as supported databases
+
+Version 1.0-10 (2013-03-27)
+  + Add aux function fixNodeLabel to fix dash-only gene labels, which cause cytoscape error.
+
+Version 1.0-9 (2013-03-22)
+  + Add ronet-evaluation.Rscript for internal evaluation purpose.
+  + Bit-flags can be used to specify which databases to use
+  + TODO by David: parameterize input databases
+  + TODO by David: use BFS to accelerate the process
+
+Version 1.0-8 (2012-12-04)
+  + ronet.Rscript: bug fix: input GeneID/GeneSymbols, input strings are first trimmed of empty strings
+
+Version 1.0-7 (2012-12-03)
+  + ronet.Rscript: add an option "-genesymbol" to support using GeneSymbol as input identifiers
+  + ronet.Rscript: in the output graph, GeneIDs are converted into GeneSymbols whenever possible. Only if the conversion fails the GeneIDs are returned as node names.
+
+Version 1.0-6 (2012-11-30)
+  + exportGML: node indices of the edge lists were wrong: the index started from 1 instead of 0 in newer version of igraph. Fixed.
+
+Version 1.0-5 (2012-07-30)
+  + ronet.Rscript: package namespace "graph" appended before the edges function: due to an update of the igraph package which now has a function named "edges" as well
+Version 1.0-4 (2012-07-11)
+  + Add pathSigTree.Rscript to visualized pathway signature tree with TG-GATES results
+  + Add binary tree and testing data for pathSigTree.Rscript
+
+Version 1.0-3 (2012-04-12)
+  + exportGML is refactored into the ribiosNetwork package (previously in ronet.Rscript)
+  + dummy function is removed
+
+Version 1.0-2 (2012-04-11)
+  + ronet.Rscript: output isInput attribute of nodes, indicating whether a node was of input (1) or of connectors (0)
+
+Version 1.0-1 (2012-03-27)
+  + ronet.Rscript: support edge type and automatic recognition of output file formats
+
+Version 1.0-0 (2012-03-26)
+  + Initialization of the ribiosNetwork package
+  + Add ronet.Rscript and testing files

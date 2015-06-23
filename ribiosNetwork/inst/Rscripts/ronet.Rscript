@@ -1,0 +1,193 @@
+#!/bin/bash /apps64/bi/R/proxyRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+scriptInit()
+
+usage <- paste("Construct a network from a gene list\n",
+               scriptName(),
+               "[-maxConnector INT] [-connectorEdges] -infile FILE -outfile FILE\n",
+               "Mandatory parameter:\n",
+               "-infile FILE\tInput Entrez GeneIDs, one GeneID per line\n",
+               "-outfile FILE\tOutput file. By default outputs are printed in standard output, e.g. screen.\n",
+               "Optional parameters:\n",
+               "-genesymbol\tInput identifiers are not GeneIDs, but official gene symbols.\n",
+               "-maxConnector INT\tMax number of connectors in network expansion. Default:0 (no network expansion).\n",
+               "-connectorEdges\tIf specified, edges between connectors are returned. Default: no edges among connectors.\n",
+               "-db 11111111\t Eight-bit flags to use following databases:\n",
+               " - StringDB\n",
+               " - REACTOME\n",
+               " - Pathway commons\n",
+               " - KEGG\n",
+               " - Human MAP Kinase interactome\n",
+               " - Roche comparative genomics\n",
+               " - Text Mining (I2E)\n",
+               " - Manual curations\n",
+               "  For example: 11111011 will use all databases except for the comparative genomics\n",
+               "  By default all databases are used",
+               sep=" ")
+
+argParse("genesymbol maxConnector,1 connectorEdges db,1", "infile outfile", usage=usage)
+
+## constants
+MAXCONN.DEFAULT <- 0L
+## supported out formats: defined as igraph::write.graph
+SUPP.OUT.FORMATS <- c("edgelist", "pajek", "ncol", "lgl", "graphml", "dimacs", "gml", "dot")
+DATABASES <- c("StringDB", "REACTOME", "PC",
+               "KEGG", "Human MAP Kinase interactome", "RocheCompGen_12_08",
+               "TextMining_I2E", "manual")
+
+assertFile(infile <- argGet("infile"))
+outfile <- argGet("outfile")
+maxconn <- ifelse(argPresent("maxConnector"), as.integer(argGet("maxConnector")),
+                  MAXCONN.DEFAULT)
+if(is.na(maxconn)) maxconn <- MAXCONN.DEFAULT
+## level.limit = maxconn+1, since it measures the path step length
+level.limit <- maxconn+1L
+isGeneSymbol <- argPresent("genesymbol")
+removeConnectorEdges <- argPresent("connectorEdges")
+db <- ifelse(argPresent("db"), argGet("db"), "11111111")
+dbLogi <- sapply(strsplit(db, "")[[1]], function(x) as.logical(as.integer(x)))
+if(nchar(db)!=8 || any(is.na(dbLogi))) qqmsg("-db flag not recognized\n", status=1L)
+useDB <- DATABASES[dbLogi]
+
+
+libordie("ribiosAnnotation")
+libordie("ribiosNetwork")
+libordie("ribiosUtils", minVer="1.0-25")
+
+## OUTPUT
+outformat <- extname(outfile)
+if(is.na(outformat) || !outformat %in% SUPP.OUT.FORMATS) {
+  warning("Outfile format not detected: GML is used.\n",
+          "Please use one of the following formats as file name extension:\n  ",
+          paste(SUPP.OUT.FORMATS, collapse=", "))
+  outformat <- "gml"
+}
+
+## INPUT
+if(!file.exists(infile))
+  qqmsg("ERROR: 'infile' not found\n", status=1L)
+geneids <- readLines(infile)
+geneids <- unique(geneids[!is.na(geneids) & geneids!="" & geneids!="NA"])
+geneids <- geneids[!grepl("^#", geneids)]
+geneids <- trim(geneids)
+if(isGeneSymbol) {
+  anno <- annotateGeneSymbols(geneids, organism="human")
+  geneids <- anno$GeneID
+}
+geneids <- unique(geneids[!is.na(geneids) & geneids!="NA"])
+
+
+## build interaction network
+useDBstr <- formatIn(useDB)
+sql <- paste("SELECT",
+             "INT_ID as ID, GENE1, GENE_SYM1, INT_TYPE as type, EFFECT, GENE2, GENE_SYM2, SOURCE",
+             "FROM bi2.RONET_INTERACTIONS2",
+             "WHERE SOURCE IN ", useDBstr, " AND GENE1 IS NOT NULL AND GENE2 IS NOT NULL",
+             sep=" ")
+all.tbl <- querydb(sql,db="bia", user="biread", password="biread")
+all.tbl <- subset(all.tbl, !is.na(GENE1) & !is.na(GENE2))
+ftM <- as.matrix(all.tbl[,c("GENE1", "GENE2")])
+ftM.isUniq <- !duplicated(ftM)
+ftM <- ftM[ftM.isUniq,]
+## interaction type
+ftM.type <- all.tbl[,"TYPE"]
+hasEffect <- !is.na(all.tbl[,"EFFECT"])
+ftM.type[hasEffect] <- paste(ftM.type[hasEffect], all.tbl[hasEffect, "EFFECT"], sep="_")
+ftM.type <- ftM.type[ftM.isUniq]
+
+## graph library
+libordie(RBGL)
+Gd <- ftM2graphNEL(ftM, edgemode="directed")
+edgeDataDefaults(Gd, "label") <- ""
+ftM.type <- edgeData(Gd,
+                     from=as.character(all.tbl[ftM.isUniq, "GENE1"]),
+                     to=as.character(all.tbl[ftM.isUniq, "GENE2"]),
+                     attr="label")
+
+## validate input nodes
+input.ids <- intersect(nodes(Gd), geneids)
+missingNodes <- setdiff(geneids, c(NA, nodes(Gd)))
+if(length(input.ids)==0)
+  qqmsg("No ids found in the interaction database.", status=2L)
+
+## find subnetwork
+if(level.limit<=1L) {
+  expand.ids <- input.ids
+} else {
+  G <- ugraph(Gd) ## very slow (ca. 60s)
+  
+  gene.start <- rep(input.ids[-length(input.ids)],
+                    (length(input.ids)-1):1)
+  gene.end <- unlist(sapply(1:(length(input.ids)-1),
+                            function(x) input.ids[(x+1):length(input.ids)]))
+  
+  if(level.limit <=3) {
+    input.nei <- adj(G, input.ids)
+    neighbors <- unique(c(input.ids, unlist(input.nei)))
+    nG <- subGraph(neighbors, G)
+    gs <- sp.between(nG, start=gene.start, finish=gene.end)
+  } else {
+    gs <- sp.between(G, start=gene.start, finish=gene.end)
+  }
+  
+  gs.levels <- sapply(gs, function(x) x$length)
+  gs.outLevel <- is.na(gs.levels) | gs.levels > level.limit
+  gs.raw <- gs
+  gs <- gs.raw[!gs.outLevel]
+  
+  expand.idList <- sapply(gs, function(x) x$path_detail)
+  expand.ids <- unique(c(input.ids, unlist(expand.idList)))
+}
+
+
+expandG <- subGraph(expand.ids, Gd)
+fullExpandG <- addNode(missingNodes, expandG)
+
+## remove edges between connectors
+if(removeConnectorEdges) {
+  linkers <- setdiff(expand.ids, geneids)
+  full.edges <- graph::edges(fullExpandG)
+  edge.labels <- sapply(seq(along=full.edges),
+                        function(x) paste(names(full.edges)[x], full.edges[[x]], sep="|"))
+  edge.pairs <- strsplit(unlist(edge.labels), "\\|")
+  linker.edges <- sapply(edge.pairs, function(x) length(x)==2L & all(x %in% linkers))
+  if(any(linker.edges)) {
+    linker.froms <- sapply(edge.pairs[linker.edges], "[[", 1L)
+    linker.tos <- sapply(edge.pairs[linker.edges], "[[", 2L)
+    fullExpandG <- removeEdge(from=linker.froms, to=linker.tos, fullExpandG)
+  }
+}
+
+## visualization for debugging
+## if(vis <- FALSE){
+##  libordie(Rgraphviz)
+##  ncols <- makeNodeAttrs(fullExpandG, fillcolor=ifelse(nodes(fullExpandG) %in% geneids, "lightblue", "orange"))
+##  plot(fullExpandG, nodeAttrs=ncols)
+## }
+
+## output
+libordie(igraph)
+outG <- igraph.from.graphNEL(fullExpandG)
+outG.names <- get.vertex.attribute(outG, "name")
+id2sym <- c(all.tbl$GENE_SYM1, all.tbl$GENE_SYM2)
+names(id2sym) <- c(all.tbl$GENE1, all.tbl$GENE2)
+V(outG)$label <- unname(id2sym[outG.names])
+## in case no GeneSymbol was recorded, query GTI
+outG.missLabel <- is.na(V(outG)$label)
+if(any(outG.missLabel))
+  V(outG)$label[outG.missLabel] <- annotateGeneIDs(V(outG)$name[outG.missLabel])$GeneSymbol
+## in case no GeneSymbol was available from GTI, print GeneID
+outG.isStillMiss <- is.na(V(outG)$label)
+if(any(outG.isStillMiss))
+  V(outG)$label[outG.isStillMiss] <- outG.names[outG.isStillMiss]
+V(outG)$isInput <- as.integer(outG.names %in% geneids)
+
+if(outformat=="gml") {
+  exportGML(outG, file=outfile)
+} else {
+  write.graph(outG, file=outfile, format=outformat)
+}
+
+qqmsg(status=0L)

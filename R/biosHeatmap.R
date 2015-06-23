@@ -178,7 +178,7 @@ biosHeatmap <- function (x,
   if (length(di <- dim(x)) != 2 || !is.numeric(x)) 
     stop("'x' must be a numeric matrix")
   nr <- di[1];nc <- di[2]
-  if (nr <= 1 || nc <= 1) 
+  if (nr < 1 || nc < 1) 
     stop("'x' must have at least 2 rows and 2 columns")
 
   if (missing(cellnote)) 
@@ -340,14 +340,14 @@ biosHeatmap <- function (x,
     lwid <- c(keysize, 6)
   if (missing(lmat) || is.null(lmat)) {
     lmat <- rbind(4:3, 2:1)
-    if (!missing(ColSideColors)) {
+    if (!missing(ColSideColors) && !is.null(ColSideColors) && !is.na(ColSideColors)) {
       if (!is.character(ColSideColors) || length(ColSideColors) %% nc != 0) 
         stop("'ColSideColors' must be a character vector of length ncol(x)")
       lmat <- rbind(lmat[1, ] + 1, c(NA, 1), lmat[2, ] + 
                     1)
       lhei <- c(lhei[1], 0.2, lhei[2])
     }
-    if (!missing(RowSideColors)) {
+    if (!missing(RowSideColors) && !is.null(RowSideColors) && !is.na(RowSideColors)) {
       if (!is.character(RowSideColors) || length(RowSideColors) %% nr != 0) 
         stop("'RowSideColors' must be a character vector of length nrow(x)")
       lmat <- cbind(lmat[, 1] + 1, c(rep(NA, nrow(lmat) - 
@@ -362,6 +362,15 @@ biosHeatmap <- function (x,
     stop("lwid must have length = ncol(lmat) =", ncol(lmat))
   op <- par(no.readonly = TRUE)
   on.exit(par(op))
+
+  ## check lhei[1]*par("din")[2] must be >=1, otherwise it reports error
+  par.fin <- par("fin")
+  estKeyHeight <- lhei[1]/(sum(lhei))*par.fin[2]
+  if(estKeyHeight<1L) {
+    adj.lhei.1 <- lhei[1]/estKeyHeight
+    lhei.rest.coef <- (sum(lhei)-adj.lhei.1)/sum(lhei[-1])
+    lhei <- c(adj.lhei.1, lhei[-1]*lhei.rest.coef)
+  }
   layout(lmat, widths = lwid, heights = lhei, respect = FALSE)
 
   ## margins have to be determined now (after layout)

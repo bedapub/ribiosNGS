@@ -1,0 +1,10 @@
+Version 1.0-2 (2013-04-04)
+  + RIFscore method returns the data.frame sorted by average rankings of RIF1 and RIF2
+  + RIFscore permutation method improvement: de.ind is re-calculated in each permutation round in order to gain real permutation-based p values
+
+Version 1.0-1 (2013-04-03)
+  + Rename the package as ribiosDiwa, and update the package
+  + Add git control
+
+Version 1.0.0 (2011-07-27)
+  + Prepare the package in a Bioconductor package format

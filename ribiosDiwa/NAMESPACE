@@ -1,0 +1,7 @@
+## algorithm functions
+export(pifVec, pifMat,
+       rif1Vec, rif1Mat,
+       rif2Vec, rif2Mat)
+
+## scoring functions
+export(RIFscore)

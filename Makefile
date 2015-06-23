@@ -11,34 +11,27 @@
 ##                   - make dist     calls R CMD build
 ##
 ################################################################################
-## conditional: choose R version depending on the BICOSN value
-ifneq ($(BICOSN), bas)
-	R:= /SOFT/bi/apps/R/devel/trunk/bin/R
-	CHECKADD:= ${CHECKADD} --no-manual ## for envcheck
-	CGI_DIR := /SOFT/bi/httpd_8080/bicgidev
-else
-	R:= R
-	CHECKADD:= ${CHECKADD} --no-latex
-	CGI_DIR := /SOFT/bi/httpd_8080/bicgi
-endif 
 
-PKG          := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
-PKG_VERSION  := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
+R=R
+PKG=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
+PKG_VERSION=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
 
 
-PKG_ROOT_DIR := $(shell pwd)
-PKG_SRC_DIR := $(PKG_ROOT_DIR)/src
+PKG_ROOT_DIR=`pwd`
+PKG_SRC_DIR=$(PKG_ROOT_DIR)/src
 
+CHECK_FILE=${PKG}_${PKG_VERSION}.tar.gz
+CHECK_DIR=${PKG}.Rcheck
 
 install: 
 	@echo '====== Installing Package ======'
-	@(cd ..; ${R} CMD INSTALL $(PKG))
+	@(cd ..; ${R} CMD INSTALL ${PKG})
 	@echo '====== Installing finished ======'
 	@echo ' '
 
 check:	dist
 	@echo '====== Checking Package ======'
-	@(cd ..; ${R} CMD check ${CHECKADD} ${PKG}_${PKG_VERSION}.tar.gz)
+	@(cd ..; ${R} CMD check ${CHECKADD} ${CHECK_FILE})
 	@echo '====== Checking finished ======'
 	@echo ' '
 
@@ -56,10 +49,8 @@ dist:	clean
 clean:
 	@echo '====== Cleaning Package ======'
 	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so)
+	@(rm -f ../${CHECK_FILE})
+	@(rm -rf ../${CHECK_DIR})
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@(find . -type f -name ".Rhistory" -exec rm '{}' \;)
 	@echo ' '
-
-cgi:
-	@echo '====== Install CGI ======'
-	cp-p inst/Rscript/Rcgi.R $(CGI_DIR)

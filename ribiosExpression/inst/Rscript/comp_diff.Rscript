@@ -1,0 +1,80 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+##------------------------------------------------------------##
+## Two-Group Differential expression analysis with limma
+##------------------------------------------------------------##
+
+suppressMessages(library(ribiosArg))
+suppressMessages(library(ribiosUtils))
+
+gctFile <- getArg("gctfile", onlyArg=NULL, missingArg=NULL)
+clsFile <- getArg("clsfile", onlyArg=NULL, missingArg=NULL)
+stat <- getArg("statmethod", onlyArg=NULL, missingArg="logFC")
+outFile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+
+if(is.null(gctFile) | is.null(clsFile) | is.null(stat) | getHelp) {
+  qqmsg("Usage:",
+        scriptName(),
+        "-gctfile GCT_FILE -clsfile CLS_FILE OPTIONS\n",
+        "  -gctfile\tGCT file of genes (indexed by Entrez GeneID)\n",
+        "  -clsfile\tCLS file of samples, two groups (0 and 1) are allowed, and \"X\" or \"x\" are omitted\n\n",
+        "OPTIONS may include\n",
+        "  -statmethod\tStatistic used in rnk file, either 'logFC' or 't'. Default: logFC\n",
+        "  -outfile\tOutfile. If not specified, write to stdout\n",
+        status=-1L)
+}
+
+if(!stat %in% c("logFC", "t"))
+  qqmsg("ERROR: Unrecognized -statmethod option. Should be either 'logFC' or 't'\n", status=2L)
+
+libordie(limma)
+libordie(Biobase)
+libordie(ribiosExpression)
+
+## accepts plain file: need to test URLs
+eset <- readGctCls(gct.file=gctFile, cls.file=clsFile)
+
+## accept two-class GCT only
+sml <- eset$cls
+sel <- which(sml != "X")
+sml <- sml[sel]
+eset <- eset[ ,sel]
+sml <- factor(eset$cls, levels=setdiff(levels(sml), "X"))
+if(!identical(nlevels(sml), 2L))
+  qqmsg("More than 2 input groups were detected in the CLS file\n",
+        "This script only works with two-group comparisons\n",
+        status=1L)
+levels(sml) <- c("G0", "G1")
+
+# log2 transform
+ex <- exprs(eset)
+qx <- as.numeric(quantile(ex, c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm=T))
+LogC <- (qx[5] > 100) ||
+          (qx[6]-qx[1] > 50 && qx[2] > 0) ||
+          (qx[2] > 0 && qx[2] < 1 && qx[4] > 1 && qx[4] < 2)
+if (LogC) exprs(eset) <- log2(ex)
+
+# set up the data and proceed with analysis
+fl <- as.factor(sml)
+eset$description <- fl
+design <- model.matrix(~ description + 0, eset)
+colnames(design) <- levels(fl)
+fit <- lmFit(eset, design)
+fit$genes <- data.frame(GeneID=featureNames(eset),
+                        Desc=fData(eset)[,"desc"])
+cont.matrix <- makeContrasts(G0-G1, levels=design)
+   
+fit2 <- contrasts.fit(fit, cont.matrix)
+fit2 <- eBayes(fit2)
+tT1 <- topTable(fit2, coef=1, adjust="fdr", number=nrow(eset))
+
+res <- tT1[,c("GeneID", stat)]
+res <- sortByCol(res, 2L)
+if(is.null(outFile)) {
+  outFile <- ""
+}
+
+write.table(res, file=outFile, col.names=FALSE, row.names=FALSE, quote=FALSE, sep="\t")
+
+qqmsg(status=0L)

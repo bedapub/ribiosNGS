@@ -1,0 +1,72 @@
+importFrom("ribiosIO", "read_gct_matrix")
+importFrom("ribiosIO", "write_gct")
+importFrom("ribiosIO", "read_cls")
+importFrom("ribiosIO", "read_exprs_matrix")
+importFrom("ribiosUtils", "rowscale", "summarizeRows", "removeInvarCol", "dfFactor", "headtail")
+importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
+importFrom("graph", "connComp")
+importFrom("limma", "makeContrasts")
+
+## export classes
+exportClasses(DesignContrast)
+
+## export generics
+exportMethods(groups, dispGroups)
+
+## export methods
+export("rowscale")
+export("keepMaxStatProbe")
+
+## GSEA -- moved to ribiosGSEA package
+## export("biosGSEAannotations",
+##       BIOS_GSEA_ANNOTATION_DIR,
+##       "biosGSEA")
+
+## IO: import
+export("readExprsMatrix")
+export("ChipFetcher2ExpressionSet",
+       "partek2ExpressionSet")
+export("readGct",
+       "readCls",
+       "readGctCls")
+export("readEset")
+export("readFKtable")
+
+## IO: export
+export("writeGct",
+       "writeCls",
+       "writeGctCls")
+export("writeEset")
+
+## IO: format conversion
+export("grp2gmt",
+       "grpFiles2gmt")
+export("formatGmt")
+
+## eset
+export("mergeEset")
+
+## summarization/collapsing
+export(summarizeProbesets,
+       summarizeSamples,
+       poolReplicates, avgReplicates)
+
+## transformation
+export("matrixToLongTable")
+export("exprsToLong")
+export("eSetToLongTable")
+
+## kendallW
+export("kendallW", "kendallWmat")
+
+## annotation
+export("annotate", "reannotate")
+
+## obsolete
+export(remainHighestVarProbe, keepHighestVarProbe, rankByCol, eset2gct, eset2cls)
+
+## design-contrast
+export(DesignContrast,
+       groups, designMatrix,
+       contrastMatrix, contrastNames,
+       parseDesignContrast)

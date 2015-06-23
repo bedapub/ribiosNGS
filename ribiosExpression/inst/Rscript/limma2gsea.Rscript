@@ -1,0 +1,129 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+infile <- getArg("infile", onlyArg=NULL, missingArg=NULL)
+getHelp <- existArg("h") | existArg("help")
+
+##DEBUG <- Sys.getenv("RSCRIPT_DEBUG") != ""
+##if(DEBUG) {
+##  infile <- "~/samba_mount/transfer/top.CPD.1.1h.txt"
+##  outfile <- "test.CPD.1.1h.rnk"
+##  chiptype <- "RAT230_2"
+##}
+
+if (is.null(infile) || getHelp) {
+  if(existArg("chiptype")) {
+    libordie(ribiosAnnotation)
+    print(gtiChiptypes())
+    qqmsg("No valid infile has been specified. Existing.", status=0L)
+  }
+  qqmsg(paste("\nUsage:",
+              scriptName(),
+              "-infile FILE -outfile FILE -chiptype TYPE OPT\n",
+              "Mandatory parameters:\n",
+              "-infile FILE\tTab-delimited table of limma results\n",
+              "Optional parameters:\n",
+              "-chiptype TYPE\tChip type supported by GTI\n",
+              "-outfile FILE\tRnk file used by GSEA. Written to stdout if omitted\n",
+              "-stat STAT\tStatistic to be used in Rnk file, either 'logFC' (default) or 't'\n",
+              "-fulltable\tReturn a full tab-delimited table, instead of only GSEA-used columns\n",
+              "-orthologue\tMap human orthologs\n\n",
+	      
+              "Call '", scriptName(), " -chiptype' to display supported chip types\n", sep=""),
+        status=1L)
+}
+
+libordie(ribiosAnnotation)
+libordie(lattice)
+libordie(ribiosPlot)
+
+chiptype <- getArg("chiptype", onlyArg=NULL, missingArg=NULL)
+orthologue <- existArg("orthologue")
+
+## outfile
+outfile <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+if(is.null(outfile))
+  outfile <- ""
+
+## stat parameter
+stat <- getArg("stat", onlyArg="logFC", missingArg="logFC")
+if(!stat %in% c("t", "logFC"))
+  qqmsg(paste("STAT must be either 'logFC' or 't', but '", stat, "' was detected!\n"),
+        status=2L)
+
+## chiptype
+if(!is.null(chiptype) && !chiptype %in% gtiChiptypes())
+  qqmsg(paste(chiptype, " is not supported by GTI.\n",
+              "Call '", scriptName(), " -chiptype' to display supported chip types\n", sep=""),
+        status=2L)
+
+## return full table
+fulltable <- existArg("fulltable")
+
+## input table
+intbl <- read.table(infile, header=TRUE)
+avgExpCol <- ifelse("AvgExprs" %in% colnames(intbl),"AvgExprs", "AveExpr") ## this column is sometimes named as AveExpr, and other times as AvgExprs
+if(is.null(chiptype)) { ## GneneSymbol must present if no probeset is available
+  int.cols <- c("GeneSymbol", stat, avgExpCol) 
+} else {
+  int.cols <- c("ProbeID", stat, avgExpCol)
+}
+if(!all(int.cols %in% colnames(intbl))) {
+  msg <- paste("Following columns cannot be found, which are needed by the script:\n",
+               paste(setdiff(int.cols, colnames(intbl)), collapse=","))
+  qqmsg(msg, status=2L)
+}
+
+## annotate
+tbl <- data.frame(intbl)
+if(!is.null(chiptype)) {
+  int.anno <- annotateProbesets(as.character(intbl[,"ProbeID"]),
+                                chip=chiptype)
+  tbl$GeneID <- int.anno$GeneID
+  tbl$GeneSymbol <- int.anno$GeneSymbol
+}
+
+
+## max avg -- TODO: this step should be skipped if not orthologue & no duplicates
+if(!any(duplicated(tbl$GeneSymbol)) && !orthologue) {
+  res <- tbl
+} else {
+  maxByCol <- function(df, index.name, max.name) {
+    stopifnot(!missing(index.name) && !missing(max.name) && all(c(index.name,max.name) %in% colnames(df)))
+    inds <- factor(df[, index.name])
+    vals <- df[, max.name]
+    rn <- 1:nrow(df)
+    maxInd <- tapply(rn, inds, function(x) x[which.max(vals[x])])
+    df[maxInd,]
+  }
+  tbl.rnk <- maxByCol(tbl, index.name="GeneID", max.name=avgExpCol)
+  tbl.rnkStat <- tbl.rnk[, stat]
+  tbl.rnkAvg <- tbl.rnk[,avgExpCol]
+  
+  if(orthologue) {
+    tbl.ort <- humanOrthologs(tbl.rnk$GeneID)
+    ort.ids <- unlist(tbl.ort)
+    ort.stat <- rep(tbl.rnkStat, sapply(tbl.ort, length))
+    ort.avg <- rep(tbl.rnkAvg, sapply(tbl.ort, length))
+    ort.symbol <- factor(annotateGeneIDs(ort.ids)$GeneSymbol) ## TODO: make this step more efficient
+    ## max
+    res.raw <- data.frame(GeneID=ort.ids, GeneSymbol=ort.symbol, value=ort.stat, AvgExprs=ort.avg)
+    colnames(res.raw)[3L] <- stat
+    res <- maxByCol(res.raw, index.name="GeneSymbol", max.name=avgExpCol)
+  } else {
+    res <- tbl.rnk
+  }
+}
+
+
+res <- subset(res, !GeneSymbol %in% c("-", "") & !is.na(GeneSymbol))
+res <- sortByCol(res, stat)
+if(!fulltable) {
+  res <- res[,c("GeneSymbol", stat)]
+}
+col.names <- ifelse(fulltable, TRUE, FALSE)
+write.table(res, file=outfile, quote=FALSE, sep="\t", row.names=FALSE, col.names=col.names)
+
+qqmsg(status=0L)

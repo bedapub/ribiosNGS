@@ -1,0 +1,121 @@
+Version 1.0-34 (Feb 16, 2015)
+  + DesignContrast prints error message if validity is violated
+  + parseDesignContrastFile fixes a mistake of assigning group levels
+  + parseDesignContrastFile now accepts the dispLevelStr option
+  
+Version 1.0-33 (Feb 12, 2015)
+  + parseDesignContrastStr fixes two errors
+
+Version 1.0-32 (Feb 09, 2015)
+  + Add DesignContrast object
+
+Version 1.0-29 (Nov 19, 2012)
+  + Add new functionality in keepMaxMeanProbes.Rscript: able to read from .CHIP file
+  + keepMaxMeanProbes.Rscript now does not depend on the S4 class ExpressionSet anymore, therefore much faster. Next step it will be moved out of ribiosExpression, since it is only dependent on ribiosIO and ribiosUtils
+  + TODO: keepMaxStatProbe needs to be refactored, since its logic has been implemented in the more generic version keepMaxStatRow in ribiosUtils
+
+Version 1.0-28 (Nov 12, 2012)
+  + Debug keepMaxMeanProbes.Rscript: extname returns NA if not found, therefore an addition check is added to make sure not NA is returned.
+
+Version 1.0-27 (Oct 26, 2012)
+  + Function extension in ChipFetcher2ExpressionSet: now non-Affymetrix probesets are supported as well.
+
+Version 1.0-26 (Oct 24, 2012)
+  + The main body of readCls has been moved to ribiosIO::read_cls. readCls becomes a synonym for comptability.
+
+Version 1.0-25 (Sep 11, 2012)
+  + Improvement in readCls: error messages provide more informative details for mal-formated file.
+
+Version 1.0-24 (Jul 18, 2012)
+  + Bug fix in writeEset: expresion matrix is written without quotes
+  + New script: keepMaxMeanProbes.Rscript filters duplicated genes by taking the one with maximum average expression
+
+Version 1.0-23 (Jul 17, 2012)
+  + Bug fix in readGct: if input feature names have duplicates, the exprs matrix row names are changed.
+
+Version 1.0-22 (Jul 10, 2012)
+  + Move exprsMat2gct.Rscript to the ribiosIO package since it no longer requires functionality in ribiosExpression
+  + writeGct has been refactored for matrix in ribiosIO, and the function has been re-implemented as a S4-method for matrix and ExpressionSet
+
+Version 1.0-21 (Jul 06, 2012)
+  + add exprsMat2gct.Rscript to convert between expression matrix files and GCT files
+
+Version 1.0-20 (Jun 21, 2012)
+  + ChipFetcher2ExpressionSet: add option orthologue, changing the parameter "annotation" to "name". Now user can decide whether to explicitly specify a chip name; independently, user can specify whether the human orthologue should be used. See annotateProbesets function in ribiosAnnotation package
+  + ChipFecther2ExpressionSet function has now been documented
+  + keepMaxStatProbe uses function(x) mean(x, na.rm=TRUE) as default function
+
+Version 1.0-19 (Jun 12, 2012)
+  + limma2gsea.Rscript is updated: (1) the AvgExprs field name can be "AvgExprs" or "AveExpr" (2) the script is accelerated in case of no duplicating GeneSymbols & no orthologue mapping needed
+  + limma2gsea.Rscript adds a new option "-fulltable":if specified, it returns a full table of statistics.
+
+Version 1.0-18 (Jun 06, 2012)
+  + Refactor GSEA-related functions that are not dependent on the Biobase data structure to the ribiosGSEA package
+
+Version 1.0-17 (Jun 05, 2012)
+  + limma2gsea.Rscript garantees from now on NO replicated gene symbols after orthologue mapping: in case of several non-human gene IDs mapped to the same human orthologue, only the gene with the highest avg. expression will be used
+  + (TODO): ribiosAnnotation should have easier way to annotate human GeneID with GeneSymbol and GeneNames. Currently it uses chip. 
+
+Version 1.0-16 (Jun 04, 2012)
+  + Add limma2gsea.Rscript to inst/Rscript, its testing file test-limma2gsea.txt to inst/extdata, as well as test-limma2gsea.bash to inst/Rscript
+
+Version 1.0-15 (May 07, 2012)
+  + The ribiosAnnotation package has been removed from the dependency list (due to the strong dependency of Oracle libraries), and has been now listed as Suggested
+  + Add comp_diff.Rscript to inst/Rscript
+
+Version 1.0-14 (Apr 03, 2012)
+  + The deprecation message of remainHighestVarProbe and keepHighestVarProbe have been updated
+
+Version 1.0-13 (Feb 15, 2012)
+  + The rowscale method warns if the input ExpressionSet does not have 'lockedEnvironment' as storageMode
+
+Version 1.0-12 (Jan 09, 2012)
+  + Low-level functions for computational drug repositioning has been refactored into the ribiosReposition package: ksScore, cmap and connScore. Currently there is no dependency of ribiosExpression on ribiosReposition, therefore users of these functions must explicitly load the ribiosReposition package.
+
+Version 1.0-11 (Jan 05, 2012)
+  + Add feature in summarizeProbesets: option "keep.featureNames" allow to keep old feature names whenever possible.
+  + Add documentations and examples for grp2gmt and grpFiles2gmt
+  + Rename and significantly rewrite the function sprintGmt to formatGmt: now it is a S4 method, supporting flexibly formatting character strings into the GMT format
+  + Several small updates in the documentation to reflect the current status of codes.
+
+Version 1.0-10 (Jan 04, 2012)
+  + Bugfix in readEset: Previous versions report error when importing expression matrices with numeric values as column names. The burg is caused by the default behaviour of the 'read.table' function, which appends a prefix (by default X) to the column names and thus cause the readFKtable function to fail. This has been fixed now.
+  + Add annotate and reannotate: to annotate ExpressionSet objects with information from GTI. Both are S4 methods with documentations and examples.
+  + Add documentation for the ribios.ExpressionSet object.
+
+Version 1.0-9 (Jan 03, 2012)
+  + Add the function kendallW and a S4-method kendallWmat. One of their usages is to detect sub-groups of probesets showing strong expression correlation. 
+
+Version 1.0-8 (Dec 20, 2011)
+  + PCA-related data structures and functions are re-factored into the ribiosPCA package.
+
+Version 1.0-7 (Dec 19, 2011)
+  + add summarizeProbesets to summarize probesets
+  + NAMESPACE are now explicitly stated
+  + apply2 and summarizeRows have been removed since they are now part of the ribiosUtils package.
+
+Version 1.0-6 (Dec 16, 2011)
+  + Add dependency on the ribiosAnnotation package
+  + Add writeEset and readEset functions for importing/exporting ExpressionSet objects.
+  + annotatedByChipname has been removed. Its functionality is replaced by the annotateProbesets in the ribiosAnnotation package.
+  + readFKdata was renamed as readFKtable, which is now fully documented and ready to be exported
+  + readFKdata supports two basic modes: strict.order=TRUE (as before) and strict.order=FALSE (can be of any order of FK, so far all FKs are covered)
+  + annotateByChipname is completely replaced by annotateProbesets
+
+Version 1.0.5 (Dec 15, 2011)
+  + Mark annotateByChipname as priority to be updated: the current version has been made a copy in the biocAnnotation package (outside of the ribios suite). A replacement in the ribios suite will be placed in the ribiosAnnotation
+  + (Upstreaming updates) ribiosUtils depends on methods and therefore the rowscale can be imported from
+  + Add git version control
+
+Version 1.0.4 (Nov 25, 2011)
+  + Move data.frame and matrix functions to the ribiosUtils package
+  + Depend on the ribiosUtils package
+
+Version 1.0.3 (Nov 15, 2011)
+  + Refactor read_gct into ribiosIO for efficiency (since no class information like ExpressionSet is needed there)
+
+Version 1.0.2 (Nov 14, 2011)
+  + Change keepHighestVarProbe to more generalized keepMaxStatProbe
+
+Version 1.0.1 (Nov 11, 2011)
+  + Remove the path option sfrom the readGctCls function to make it consistent with readGct and readCls.

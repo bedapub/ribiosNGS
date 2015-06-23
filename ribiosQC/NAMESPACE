@@ -1,0 +1,18 @@
+importClassFrom(Biobase, ExpressionSet)
+importFrom(ribiosUtils, qqmsg, imatch, matchColumn)
+importFrom(ribiosArg, parseStrings, parsePairs)
+
+export("removeSamples")
+
+export("setQClabel", "setQCgroup", "setNormGroup",
+       "getQClabel", "getQCgroup", "getNormGroup")
+
+export("annoEset", "getNewProp")
+
+export("cel2samplename")
+
+export("getSeqFiles", "registerSeqFile")
+
+export("getPCAlist", "getOrdList")
+
+export("normByGroup")

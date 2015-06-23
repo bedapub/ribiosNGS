@@ -1,4 +1,4 @@
-#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /apps64/bi/R/proxyRscript
 
 suppressMessages(library(ribiosUtils))
 suppressMessages(library(ribiosArg))

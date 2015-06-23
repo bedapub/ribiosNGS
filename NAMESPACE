@@ -25,6 +25,7 @@ export(annotateAnyProbeset,
        annotateChip,
        annotateProbesets,
        annotateProbeIDs,
+       annotateRefSeqs,
        annotatemRNAs)
 
 export(annotateAnyID) ## shortcut for annotateGeneID, annotateGeneSymbol and annotateProbesets

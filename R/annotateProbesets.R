@@ -221,7 +221,7 @@ annotateAnyID <- function(ids, chiptype, orthologue=FALSE) {
   }
 }
 
-annotatemRNAs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
+annotateRefSeqs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   comm <- paste("SELECT a.item_id, c.RO_GENE_ID ,c.GENE_SYMBOL, c.DESCRIPTION, 'NA' AS chip, c.TAX_ID ",
                 " FROM genome.GTI_GENE_ITEMS a, ",
                 " GTI_GENES c",
@@ -250,3 +250,5 @@ annotatemRNAs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   rownames(res) <- id2rownames(res$mRNA)
   return(res)
 }
+
+annotatemRNAs <- annotateRefSeqs

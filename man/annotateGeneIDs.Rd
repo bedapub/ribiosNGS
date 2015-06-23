@@ -1,6 +1,7 @@
 \name{annotateGeneIDs}
 \alias{annotateGeneIDs}
 \alias{annotateGeneSymbols}
+\alias{annotateRefSeqs}
 \alias{annotatemRNAs}
 \title{
   Annotate GeneIDs, GeneSymbols, or mRNA accession numbers.
@@ -11,7 +12,7 @@
 \usage{
 annotateGeneIDs(ids, orthologue=FALSE, multiOrth=FALSE)
 annotateGeneSymbols(ids, organism=c("human", "mouse", "rat", "any"),orthologue=FALSE, multiOrth=FALSE)
-annotatemRNAs(ids, orthologue=FALSE, multiOrth=FALSE)
+annotateRefSeqs(ids, orthologue=FALSE, multiOrth=FALSE)
 }
 \arguments{
   \item{ids}{Character vector, GeneIDs, GeneSymbols or mRNAs of query. It can contain \code{NA} or \code{NULL}}
@@ -67,6 +68,9 @@ annotatemRNAs(ids, orthologue=FALSE, multiOrth=FALSE)
   probesets in a chip.
 
   See \code{\link{annotateProbesets}} to get annotation for probesets.
+}
+\note{
+  \code{annotatemRNAs} is an alias of \code{annotateRefSeqs}
 }
 \examples{
 options(error=utils::recover)

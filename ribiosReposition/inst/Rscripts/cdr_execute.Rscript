@@ -1,0 +1,182 @@
+#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+
+## Drug reposition with the Connectivity Map dataset
+## Jitao David Zhang <jitao_david.zhang@roche.com>
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+
+uptags.file <- getArg("uptags", onlyArg=NULL, missingArg=NULL)
+downtags.file <- getArg("downtags", onlyArg=NULL, missingArg=NULL)
+output.file <- getArg("outfile", onlyArg=NULL, missingArg=NULL)
+annotation <- getArg("annotation",onlyArg="HG-U133A",missingArg="HG-U133A")
+datasets <- getArg("dataset", onlyArg=NULL, missingArg=NULL)
+scriptName <- scriptName()
+getHelp <- existArg("h") | existArg("help")
+listDataset <- existArg("listDataset")
+
+## currently supported datasets
+cmapReg <- list(dataset="cmap",
+                chiptype="HG-U133A",
+                RdataFile="/DATA/bi/apps/drugReposition/cmap_build02_rank_gti.RData",
+                RobjectName="conmap.gti",
+                groupName="cmap_name")
+tggatesReg <- list(dataset="tggates",
+                   chiptype="HG-U133_PLUS_2",
+                   RdataFile="/DATA/bi/apps/drugReposition/tggates_human_invitro_rank_gti.RData",
+                   RobjectName="tggate.cmap",
+                   groupName="treatment")
+
+spDats <- list(cmapReg, tggatesReg)
+spDatsNames <- sapply(spDats, function(x) x$dataset)
+
+if(listDataset) {
+  cat(spDatsNames, "\n")
+  qqmsg(status=0L)
+} else if(is.null(uptags.file) || is.null(downtags.file) || is.null(output.file) || is.null(datasets) ||getHelp) {
+  qqmsg(paste("\nUsage:",
+              scriptName,
+              "-uptags UPFILE -downtags DOWNFILE -outfile OUTFILE OPTS\n\n",
+              "Mandatory options:\n",
+              "-uptags UPFILE\t\tAnnotated up-regulated probesets in your experiment, in tab-delimited file\n",
+              "-downtags DOWNFILE\tAnnotated down-regulated probesets in your experiment, in tab-delimited file\n",
+              "-annotation ANNO\tChip type of input tags, must be supported by GTI, or 'GeneID'\n",
+              "-dataset DATASET\tDataset used for repositioning\n",
+              "-outfile OUTFILE\tOutput file, currently a tab-delimited file with ranked drugs\n\n",
+              "Optional OPTS\n",
+              "-perm N\t\tNumber of permutations. Default: 10000\n",
+              "\nOther usages:\n",
+              scriptName, "-h\t\tHelp on command-line usage\n",
+              scriptName,"-listDataset\tList supported datasets\n",
+              collapse=" "),
+        status=1L)
+}
+
+##---------------input parameter checking---------------##
+## datasets
+if(!all(datasets %in% spDatsNames)) {
+  qqmsg("Error: unsupported following dataset(s) detected: ",
+        datasets[!datasets %in% spDatsNames],
+        "\n",
+        "Use '", scriptName, " -listDataset' to list supported datasets",
+        status=2L)
+} else {
+  datasets.inds <- match(datasets, spDatsNames)
+}
+
+## permutation
+perm <- parseNumVec(getArg("perm"), expLen=1L, failVal=10000L)
+
+
+## check annotation
+libordie(ribiosAnnotation)
+if(!isGtiChiptype(annotation, exceptions=c("GeneID")))
+  qqmsg("Annotation not recognized as one of the chiptypes supported by GTI\n",
+        status=2L)
+
+## input annotated tags
+raw.ups <- read.table(uptags.file, head=TRUE)
+raw.downs <- read.table(downtags.file, head=TRUE)
+uniqueNonna <- function(x) as.character(unique(x[!is.na(x)]))
+hasProbeID <- "ProbeID" %in% colnames(raw.ups) & "ProbeID" %in% colnames(raw.downs)
+
+if(hasProbeID) {
+  up.probes <- uniqueNonna(raw.ups[,"ProbeID"])
+  down.probes <- uniqueNonna(raw.downs[, "ProbeID"])
+} else {
+  up.probes <- down.probes <- NULL
+}
+
+up.geneids <- uniqueNonna(raw.ups[,"GeneID"])
+down.geneids <- uniqueNonna(raw.downs[,"GeneID"])
+
+removeIntersect <- function(x, y) {
+  if(length(intersect(x,y))!=0) {
+    udi <- intersect(x,y)
+    x.new <- setdiff(x, udi)
+    y.new <- setdiff(y,udi)
+    return(list(x=x.new, y=y.new))
+  } else {
+    return(list(x=x, y=y))
+  }
+}
+
+if(hasProbeID) {
+  probes <- removeIntersect(up.probes, down.probes)
+  up.probes <- probes$x
+  down.probes <- probes$y
+} else {
+  up.probes <- down.probes <- NULL
+}
+
+geneids <- removeIntersect(up.geneids, down.geneids)
+up.geneids <- geneids$x
+down.geneids <- geneids$y
+
+##---------------Library loading---------------##
+## Library loading is placed after parameter checking, since
+## otherwise it takes long to catch parameter error due to
+## the overhead of library loading -- David
+libordie(Biobase)
+libordie(ribiosIO)
+libordie(ribiosReposition, minVer="1.0.2")
+##libordie(ribiosAnnotation) ## loaded before
+
+
+##---------------data loading---------------##
+runCdr <- function(up.probes,
+                   down.probes,
+                   up.geneids,
+                   down.geneids,
+                   input.chiptype,
+                   dataset.name,
+                   dataset.chiptype,
+                   dataset.RdataFile,
+                   dataset.RobjectName,
+                   dataset.groupName) {
+  if(!loadFile(dataset.RdataFile))
+    qqmsg(dataset.name, "data not found at ", dataset.RdataFile,
+          "\nThe program is existing. Please contact the maintainer of the program",
+          status=-1)
+  obj <- get(dataset.RobjectName)
+  group <- pData(obj)[, dataset.groupName]
+  if(input.chiptype==dataset.chiptype & !is.null(up.probes) & !is.null(down.probes)) {
+    up.ind <- match(up.probes, featureNames(obj))
+    down.ind <- match(down.probes, featureNames(obj))
+  } else {
+    up.feat <- mappedProbesets(up.geneids, chip=dataset.chiptype, unlist=TRUE)
+    down.feat <- mappedProbesets(down.geneids, chip=dataset.chiptype, unlist=TRUE)
+    up.ind <- na.omit(match(up.feat, featureNames(obj)))
+    down.ind <- na.omit(match(down.feat, featureNames(obj)))
+  }
+  res <- cmap(rnks=exprs(obj),
+              up=up.ind,
+              down=down.ind,
+              group=group,
+              permG=perm)
+  res$dataset <- dataset.name
+  return(res)
+}
+
+reslist <- vector("list", length(datasets))
+for(i in seq(along=datasets.inds)) {
+  libobj <- spDats[[ datasets.inds[i] ]]
+  res <- runCdr(up.probes, down.probes,
+                up.geneids, down.geneids,
+                input.chiptype=annotation,
+                dataset.name=libobj$dataset,
+                dataset.chiptype=libobj$chiptype,
+                dataset.RdataFile=libobj$RdataFile,
+                dataset.RobjectName=libobj$RobjectName,
+                dataset.groupName=libobj$groupName)
+  reslist[[i]] <- res
+}
+if(length(reslist)>1) {
+  restbl <- do.call(rbind, reslist)
+} else {
+  restbl <- reslist[[1L]]
+}
+  
+write.table(x=restbl, file=output.file, sep="\t", row.names=FALSE)
+
+qqmsg(status=0)

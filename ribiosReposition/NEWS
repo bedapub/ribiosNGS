@@ -1,0 +1,15 @@
+Version 1.0-3 (2012-01-31)
+  + The cmap function uses ksBoot instead of calling ksStat repeatedly. The ksBoot function is dedicated for KS-statistic bootstrapping;
+  + The cmap function changes the bootstrapping by using UNIQUE values of ksScores, in order to deal with large bunch of ties caused by 0s
+  + The ksScore function has been re-written in C, making the program about three-times faster.
+  
+Version 1.0-2 (2012-01-18)
+  + cmap returns scores in the descending order
+  + Add a prototype Rscript file as command-line tool
+
+Version 1.0-1 (2012-01-10)
+  + connScore and connScorePerm has been transformed into S4 methods
+  + cmap has been adapted to a matrix input
+
+Version 1.0-0 (2012-01-09)
+  + Refactor ks functions from ribiosExpression to ribiosReposition. This package provides low-level functions for computational drug reposition with expression data.

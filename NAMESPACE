@@ -1,0 +1,132 @@
+importFrom("ribiosUtils",
+           "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen")
+importFrom("Biobase", "featureNames", "fData")
+importFrom("methods", "show")
+importFrom("lattice", "xyplot", "barchart")
+importFrom("ribiosGSA", "geneSetPerm")
+importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
+importFrom("BiocGenerics", "counts", "annotation")
+importFrom("ribiosExpression",
+           "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames", "annotate")
+importFrom("edgeR",
+           "cpm", "aveLogCPM")
+importFrom("graphics", "pairs")
+importFrom("limma", "plotMDS")
+
+## for MPS
+import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is only available in newer versions of edgeR. Using importFrom explicitly will cause the package fail to install on stable R.
+
+##importFrom("edgeR", DGEList, calcNormFactors,
+##           estimateGLMRobustDisp,
+##           estimateGLMCommonDisp,
+##           estimateGLMTrendedDisp,
+##           estimateGLMTagwiseDisp,
+##           glmLRT, glmFit, topTags)
+##
+
+## for RNA-seq analysis
+exportClasses(EdgeResult, EdgeObject, EdgeGSE)
+
+export(sigGene, sigGenes, sigGeneCounts)
+
+export(filterByCPM,
+       estimateGLMDisp, fitGLM, testGLM)
+
+exportMethods(BCV, show,
+              plotBCV,
+              normalize,
+              dgeList, normFactors, cpmFilter,
+              EdgeObject,
+              isAnnotated)
+exportMethods(commonDisp, "commonDisp<-")
+
+export(annotate)
+export(dgeTables, dgeTable)
+export(writeDgeTables)
+
+export(modLogCPM)
+export(voom,
+       voomCamera)
+export(fullEnrichTable)
+export(hasCommonDisp, setCommonDispIfMissing)
+
+export(normBoxplot)
+
+export(plotMDS.EdgeObject) ## S3 function from limma
+export(pairs.EdgeResult) ## S3 function from graphics
+export(volcanoPlot)
+export(smearPlot)
+
+
+export(isAnnotated)
+
+## MPS specific (TODO: to be factored into ribiosMP)
+export(readMPS)
+export(mpsAnnotateReporters)
+export(doFisher)
+export(sigGeneBarchart)
+## export(edgeBuild, edgeTest,edgeRun)
+
+## for riboseq
+exportClasses(RiboSeq,
+              riboSeqAnalysisObject)
+
+exportMethods(RiboSeq,
+              normalize,
+              countRNA, countRPF,
+              cpmRNA, cpmRPF,
+              cpmRNAGroupSum, cpmRPFGroupSum,
+              cpmFilter,
+              featureNames)
+
+
+export(translationEfficiency,
+       doEdgeR,
+       doBabel,
+       summarizeBabel,
+       mergeBabelEdgeR,
+       babelAllRnks)
+
+S3method(xyplot, RiboSeq)
+
+export(riboseq.panel,
+       xyplot, xyplot.RiboSeq,
+       riboseq.panel,
+       plotRNAMDS,
+       plotRPFMDS,
+       refBoxplot)
+
+export(write.tableList)
+
+export(readGseaGeneSet,
+       doGeneSetTests)
+
+## riboseq analysis object
+exportMethods(setRnks)
+export(cpmBoxplotFile,
+       exprsScatterFile,
+       mdsFile,
+       teBoxplotFile,
+       logFCscatterFile,
+       babelVolcanoFile,
+       rspaceFile,
+       upstreamFile,
+       functionFile,
+       pathwayFile,
+       fullTableFile,
+       rnkFiles)
+export(writeHTML)
+
+export(mpsReporterAssocPathway,
+       mpsReporterUpstream,
+       mpsReporterUpstreamPos,
+       mpsReporterUpstreamNeg,
+       mpsReporterDownstream,
+       mpsReporterAssocGO,
+       mpsReporterAssocRCTM)
+       
+
+export(minGroupCount,
+       countByGroup,
+       maxCountByGroup,
+       hasNoReplicate)

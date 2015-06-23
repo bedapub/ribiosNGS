@@ -11,44 +11,27 @@
 ##                   - make dist     calls R CMD build
 ##
 ################################################################################
-## conditional: choose R version depending on the BICOSN value
 
-DBMS=oracle
-include $(BIOINFOCONFDIR)/prpidefs.make
-.SUFFIXES:
-SHELL=/bin/sh
+R=R
+PKG=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
+PKG_VERSION=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
 
 
-ifneq ($(BICOSN), bas)
-	R:= /SOFT/bi/apps/R/devel/trunk/bin/R
-	CHECKADD:= ${CHECKADD} --no-manual ## for envcheck
-	H:=/DATA/bi/httpd_8080/htdoc/apps/ribios/ribiosUDIS-demo/
-else
-	R:= R
-	CHECKADD:= ${CHECKADD} --no-latex
-	H:=/DATA/bi/httpd_8080/htdoc/appsdev/ribios/ribiosUDIS-demo/
-endif 
+PKG_ROOT_DIR=`pwd`
+PKG_SRC_DIR=$(PKG_ROOT_DIR)/src
 
-DEMODIR:=inst/demo
-DEMOSRC=ribiosUDIS-demo.Rhtml
-DEMOPUB=ribiosUDIS-demo.html
-
-PKG          := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
-PKG_VERSION  := $(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
-
-
-PKG_ROOT_DIR := $(shell pwd)
-PKG_SRC_DIR := $(PKG_ROOT_DIR)/src
+CHECK_FILE=${PKG}_${PKG_VERSION}.tar.gz
+CHECK_DIR=${PKG}.Rcheck
 
 install: 
 	@echo '====== Installing Package ======'
-	@(cd ..; ${R} CMD INSTALL $(PKG))
+	@(cd ..; ${R} CMD INSTALL ${PKG})
 	@echo '====== Installing finished ======'
 	@echo ' '
 
 check:	dist
 	@echo '====== Checking Package ======'
-	@(cd ..; ${R} CMD check ${CHECKADD} ${PKG}_${PKG_VERSION}.tar.gz)
+	@(cd ..; ${R} CMD check ${CHECKADD} ${CHECK_FILE})
 	@echo '====== Checking finished ======'
 	@echo ' '
 
@@ -66,15 +49,8 @@ dist:	clean
 clean:
 	@echo '====== Cleaning Package ======'
 	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so)
+	@(rm -f ../${CHECK_FILE})
+	@(rm -rf ../${CHECK_DIR})
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@(find . -type f -name ".Rhistory" -exec rm '{}' \;)
-	@(rm -rf $(DEMODIR)/figure $(DEMODIR)/*~ $(DEMODIR)/$(DEMOPUB))
 	@echo ' '
-
-demo:$(DEMODIR)/$(DEMOPUB)
-
-$(DEMODIR)/$(DEMOPUB):$(DEMODIR)/$(DEMOSRC)
-	cd $(DEMODIR); R-devel -e "library(knitr);knit('$(DEMOSRC)', output='$(DEMOPUB)')";cd -
-
-install-demo:demo
-	cd $(DEMODIR); cp-p $(DEMOPUB) $H; cp -pr figure $H; cd -

@@ -62,6 +62,7 @@ getUDISexpression <- function(id="GSE20986",idType=c("studyIdExternal", "studyId
     sampleNames(pd) <- colnames(mat)
     
     fd <- meta2pd(featstr)
+    ## the following codes are specific to the current setting of UDIS, where the feature annotation is not garanteed to be in the same order as the expression matrix
     fdFeatNames <- pData(fd)[,1L]
     if(nrow(fd)!=nrow(mat) || !identical(rownames(mat), fdFeatNames)) {
       fd.ind <- match(rownames(mat), fdFeatNames)

@@ -441,7 +441,10 @@ doGeneSetTest <- function(rnk, anno,
   hasGenes <- all.effsize >= minGene & all.effsize <= maxGene
   sub.index <- all.index[hasGenes]
   ## gs <- sapply(sub.index, function(x) geneSetTest(x, rnk[,2L], alternative="either"))
-  gs.sim <- sapply(sub.index, function(x) geneSetMedianTest(x, rnk[,2L], alternative="either", ranks.only=FALSE, nsim=nsim))
+  ## gs.sim <- sapply(sub.index, function(x) geneSetMedianTest(x, rnk[,2L], alternative="either", ranks.only=FALSE, nsim=nsim))
+  gs.sim.greater <- ribiosGSA::genePermTest(rnk[,2], indList=sub.index)$p
+  gs.sim.alt <- 1-gs.sim
+  gs.sim <- 2 * pmin(gs.sim.greater, gs.sim.alt)
   gs.wmw <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, alternative="two.sided")
   gs.wmw.up <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, alternative="greater")
   gs.wmw.down <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, alternative="less")

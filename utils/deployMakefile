@@ -1,0 +1,19 @@
+#!/bin/bash
+
+RIBIOS_HOME=/apps64/bi/ribios
+RIBIOS_MAKEFILE=${RIBIOS_HOME}/conf/Makefile
+
+find ${RIBIOS_HOME} -name "ribios*" ! -name "*.Rcheck" -type d -maxdepth 1 -mindepth 1 -exec unlink '{}'/Makefile \;
+find ${RIBIOS_HOME} -name "ribios*" ! -name "*.Rcheck" -type d -maxdepth 1 -mindepth 1 -exec cp -p ${RIBIOS_MAKEFILE} '{}' \;
+dirs=`find ${RIBIOS_HOME} -name "ribios*" ! -name "*.Rcheck" -type d -maxdepth 1 -mindepth 1`
+curdir=`pwd`
+
+for i in ${dirs}
+do
+  cd $i
+  git commit Makefile -m "Makefile updated from ../conf"
+done
+
+cd $curdir
+
+exit 0

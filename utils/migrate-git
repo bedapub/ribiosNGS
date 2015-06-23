@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PACKAGE=$1
+TMP=$PACKAGE-tmp
+
+mv $PACKAGE $TMP
+git remote add -f $PACKAGE $TMP/
+git merge -s ours --no-commit $PACKAGE/master
+git read-tree --prefix=$PACKAGE -u $PACKAGE/master
+git commit -m "subtree of $PACKAGE merged"
+git push origin master
+

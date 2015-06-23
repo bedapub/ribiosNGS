@@ -1,0 +1,8 @@
+#!/bin/bash
+
+RIBIOS_DIR=/SOFT/bi/apps/ribios
+
+find ${RIBIOS_DIR} -type f -name "*.R" -exec wc -l '{}' \; | cut -f 1 | awk '{s+=$1} END{print "R\t:" s}'
+find ${RIBIOS_DIR} -type f -name "*.Rscript" -exec wc -l '{}' \; | cut -f 1 | awk '{s+=$1} END{print "Rscript\t:" s}'
+find ${RIBIOS_DIR} -type f -name "*.c" -exec wc -l '{}' \; | cut -f 1 | awk '{s+=$1} END{print "c\t:" s}'
+find ${RIBIOS_DIR} -type f -name "*.h" -exec wc -l '{}' \; | cut -f 1 | awk '{s+=$1} END{print "h\t:" s}'

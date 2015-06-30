@@ -1,11 +1,11 @@
 Package: ribiosAnnotation
 Type: Package
 Title: Annotation of genes, RNAs and proteins in the BIOS system
-Version: 3.1-7
-Date: 2015-01-15
-Author: Jitao David Zhang <jitao_david.zhang@roche.com>, with inputs and feedbacks from BEDA team.
+Version: 3.1-8
+Date: 2015-06-30
+Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer:  Jitao David Zhang <jitao_david.zhang@roche.com>
-Description: Retrieve annotation information of genes, RNAs and proteins from the Oracle database of the BIOS system. 
+Description: Retrieve annotation information of genomic features, genes, RNAs and proteins from the Oracle database of the Roche Bioinformatics environment
 Imports: ribiosUtils,DBI
 Suggests: ROracle, RJDBC
 LazyData: true

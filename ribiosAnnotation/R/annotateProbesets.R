@@ -211,16 +211,6 @@ annotateGeneSymbols <- function(ids,
   return(res)
 }
 
-annotateAnyID <- function(ids, chiptype, orthologue=FALSE) {
-  if(identical(tolower(ids), tolower("GeneID"))) {
-    annotateGeneIDs(ids=ids, orthologue=orthologue)
-  } else if (identical(tolower(ids), tolower("GeneSymbol"))) {
-    annotateGeneSymbols(ids=ids, orthologue=orthologue)
-  } else {
-    annotateProbesets(ids=ids, chip=chiptype, orthologue=orthologue)
-  }
-}
-
 annotateRefSeqs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   comm <- paste("SELECT a.item_id, c.RO_GENE_ID ,c.GENE_SYMBOL, c.DESCRIPTION, 'NA' AS chip, c.TAX_ID ",
                 " FROM genome.GTI_GENE_ITEMS a, ",

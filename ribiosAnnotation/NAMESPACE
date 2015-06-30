@@ -28,7 +28,7 @@ export(annotateAnyProbeset,
        annotateRefSeqs,
        annotatemRNAs)
 
-export(annotateAnyID) ## shortcut for annotateGeneID, annotateGeneSymbol and annotateProbesets
+export(annotateAnyIDs) ## annotate any ID that is available in GTI
 
 export(annotateGeneIDs,
        annotateGeneSymbols)

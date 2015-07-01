@@ -1,4 +1,4 @@
-RIBIOS_CGI_TMP_DIR <- "/DATA/bi/httpd_8080/htdoc/sawitmp/"
+RIBIOS_CGI_TMP_DIR <- "/data64/bi/httpd_8080/sawitmp/"
 RIBIOS_CGI_TMP_URL <- "http://bioinfo.bas.roche.com:8080/sawitmp/"
 
 tmpWebFile <- function(pattern="file", fileext="", tmpdir=RIBIOS_CGI_TMP_DIR) {

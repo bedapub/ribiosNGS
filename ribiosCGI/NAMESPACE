@@ -1,4 +1,4 @@
-export(cgiIsCGI, cgiInit, cgiHeader,
+export(cgiIsCGI, cgiInit, cgiGetInit, cgiHeader,
        cgiEncodeWord, cgiDecodeWord,
        cgiParams, cgiParam)
 

@@ -1,6 +1,8 @@
-#include "rofutil.h"
-
 #include "ribios_cgi.h"
+
+#include "rofutil.h"
+#include "html.h"
+
 #include "cgi.h"
 #include "cgiSendFile.h"
 

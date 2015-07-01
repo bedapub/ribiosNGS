@@ -1,9 +1,10 @@
+#include "ribios_cgi.h"
+
 #include "format.h"
 #include "log.h"
 #include "http.h"
 #include "html.h"
 
-#include "ribios_cgi.h"
 #include "cgi.h"
 
 SEXP r_cgiIsCGI() {
@@ -12,6 +13,11 @@ SEXP r_cgiIsCGI() {
 
 SEXP r_cgiInit() {
   cgiInit();
+  return R_NilValue;
+}
+
+SEXP r_cgiGetInit() {
+  cgiGetInit();
   return R_NilValue;
 }
 
@@ -35,15 +41,17 @@ SEXP r_cgiHeader(SEXP header) {
 }
 
 SEXP r_cgiParameters() {
-  int i=1;
-  Stringa item=stringCreate(16);
+  int i;
+  char *name;
   Stringa value=stringCreate(16);
   Texta keys=textCreate(8);
   Texta values=textCreate(8);
   SEXP r_keys, r_values;
 
-  while(cgiGetNextPair(&i, item, value)) {
-    textAdd(keys, string(item));
+  cgiGetInit();
+
+  while(name = cgiGetNext(value)) {
+    textAdd(keys, name);
     textAdd(values, string(value));
   }
   
@@ -56,7 +64,6 @@ SEXP r_cgiParameters() {
   }
   setNames(r_values, r_keys);
 
-  stringDestroy(item);
   stringDestroy(value);
   textDestroy(keys);
   textDestroy(values);
@@ -74,8 +81,7 @@ int myStrCaseEqual(char* a, char* b) {
 SEXP r_cgiParam(SEXP r_param, SEXP ignore_case, SEXP r_default) {
   if(r_param == R_NilValue) return(R_NilValue);
 
-  int i=1;
-  Stringa item=stringCreate(16);
+  char* name;
   Stringa value=stringCreate(16);
 
   char *param=cStr(r_param);
@@ -85,14 +91,15 @@ SEXP r_cgiParam(SEXP r_param, SEXP ignore_case, SEXP r_default) {
   int (*fPtr)(char*, char*);
   fPtr=cBool(ignore_case) ? &myStrCaseEqual : &myStrEqual;
 
-  while(cgiGetNextPair(&i, item, value)) {
-      if((*fPtr)(string(item), param)) {
-	str=hlr_strdup(string(value));
-	break;
-      }
+  cgiGetInit();
+
+  while(name = cgiGetNext(value)) {
+    if((*fPtr)(name, param)) {
+      str=hlr_strdup(string(value));
+      break;
+    }
   }
   
-  stringDestroy(item);
   stringDestroy(value);
 
   if(str) {

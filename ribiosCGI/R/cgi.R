@@ -6,6 +6,10 @@ cgiInit <- function() {
   invisible(.Call("r_cgiInit"))
 }
 
+cgiGetInit <- function()  {
+  invisible(.Call("r_cgiGetInit"));
+}
+
 cgiGet2Post <- function() {
   invisible(.Call("r_cgiGet2Post"))
 }

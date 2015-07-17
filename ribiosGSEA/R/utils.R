@@ -1,4 +1,4 @@
-GSEA_DATA_DIR <- "/DATA/bi/httpd_8080/htdoc/apps/gsea"
+GSEA_DATA_DIR <- "/data64/bi/httpd_8080/apps/gsea"
 GSEA_ANNOTATION_DIR <- file.path(GSEA_DATA_DIR, "annotations")
 GSEA_GENESET_DIR <- file.path(GSEA_DATA_DIR, "genesets")
 JAVA_BIN <- "/SOFT/bi/apps/java/c/bin/java"

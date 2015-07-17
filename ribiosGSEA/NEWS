@@ -1,3 +1,6 @@
+Version 1.1-7 (Jul 07, 2015)
+  + GSEA file directory changes according to the new server setup
+
 Version 1.1-6 (Apr 03, 2015)
   + Clean up importing/depending packages: only methods is depended and other packages are all imported
   + Add GeneSetsList, a list of GeneSets, to allow simultaneous testing of gene sets in multiple gmt files

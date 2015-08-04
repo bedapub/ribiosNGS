@@ -38,6 +38,8 @@ export(colorpanel)
 ## three-colors
 export(royalbluered,
        royalredblue,
+       royalbluegrayred,
+       royalredgrayblue,
        turyeb,
        redgreen,
        greenred,

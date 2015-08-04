@@ -1,12 +1,11 @@
 Package: ribiosPlot
 Type: Package
 Title: Plotting module of ribios for visualization
-Version: 1.1-29
-Date: 2015-03-13
+Version: 1.1-30
+Date: 2015-08-04
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
-Description: Data structures, pre-compiled color palettes, functions for
-    visualization of omics data.
+Description: Data structures, pre-compiled color palettes, functions for data visualization.
 Imports:
     lattice,
     grDevices,

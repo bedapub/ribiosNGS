@@ -102,6 +102,11 @@ RIBIOS_BLUEREDS <- c("#2166AC", "#D1E5F0", "white", "#FDDBC7", "#B2182B")
 royalbluered <- function(n) colorRampPalette(RIBIOS_BLUEREDS)(n)
 royalredblue <- function(n) colorRampPalette(rev(RIBIOS_BLUEREDS))(n)
 
+RIBIOS_BLUEGRAYREDS <- c("#2166AC", "gray", "#B2182B")
+
+royalbluegrayred <- function(n) colorRampPalette(RIBIOS_BLUEGRAYREDS)(n)
+royalredgrayblue <- function(n) colorRampPalette(rev(RIBIOS_BLUEGRAYREDS))(n)
+
 turyeb <- function(n) colorpanel(n, "turquoise1", "yellow", "black")
 
 ## following functions were created in the gplots package (CRAN):
@@ -146,6 +151,7 @@ twocolor.panels <- function() {
 }
 threecolor.panels <- function() {
   return(c("royalbluered", "royalredblue",
+           "royalbluegrayred","royalredgrayblue",
            "turyeb",
            "redgreen", "greenred",
            "bluered", "redblue",

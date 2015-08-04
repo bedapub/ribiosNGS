@@ -1,6 +1,8 @@
 \name{royalbluered}
 \alias{royalbluered}
 \alias{royalredblue}
+\alias{royalbluegrayred}
+\alias{royalredgrayblue}
 \alias{turyeb}
 \alias{redgreen}
 \alias{greenred}
@@ -23,6 +25,10 @@
 \usage{
 royalbluered(n)
 royalredblue(n)
+
+royalbluegrayred(n)
+royalredgrayblue(n)
+
 turyeb(n)
 redgreen(n)
 greenred(n)

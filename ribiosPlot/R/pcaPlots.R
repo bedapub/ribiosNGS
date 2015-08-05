@@ -39,6 +39,79 @@ plotPCA <- function(x,
     xlab <- sprintf("Principal component %d (%2.1f%%)", xind, expvar[xind]*100)
   if(is.null(ylab))
     ylab <- sprintf("Principal component %d (%2.1f%%)", yind, expvar[yind]*100)
+
+  ## process text first because it may require adjusting xlim automatically
+  plot.new()
+  
+  if(!is.null(text) && !(is.logical(text) && !text)) {
+      doText <- TRUE
+      text.col <- palette()[1]
+      text.cex <- 1L
+      text.font <- 1L
+      text.adj <- NULL
+      text.pos <- NULL
+      text.offset <- 0.5
+      text.vfont <- NULL
+      text.srt <- 0
+      text.family <- ""
+      text.xpd <- FALSE
+      labels <- NULL
+      
+      if (is.character(text) || is.factor(text) || is.numeric(text)) {
+          labels <- text
+      } else if (is.list(text)) {
+          labels <- text$labels
+          text.col <- nonNull(text$col, text.col)
+          text.cex <- nonNull(text$cex, text.cex)
+          text.font <- nonNull(text$font, text.font)
+          text.adj <- nonNull(text$adj,text.adj, defaultNULL.ok=TRUE)
+          text.pos <- nonNull(text$pos, text.pos, defaultNULL.ok=TRUE)
+          text.offset <- nonNull(text$offset, text.offset)
+          text.vfont <- nonNull(text$vfont, text.vfont, defaultNULL.ok=TRUE)
+          text.srt <- nonNull(text$srt,text.srt)
+          text.family <- nonNull(text$family,text.family)
+          text.xpd <- nonNull(text$xpd,text.xpd, defaultNULL.ok=TRUE)
+      }
+      if (is.null(labels)) {
+          labels <- dimnames(xx)[[1L]]
+          if (is.null(labels)) 
+              labels <- 1L:n
+      }
+      labels <- as.character(labels)
+      
+      isRightMost <- which.max(xx[,1])
+      isLeftMost <- which.min(xx[,1])
+      rightMostWidth <- strwidth(labels[isRightMost], units="user", cex=text.cex,
+                                 font=text.font, vfont=text.vfont, family=text.family)
+      leftMostWidth <- strwidth(labels[isLeftMost], units="user", cex=text.cex,
+                                font=text.font, vfont=text.vfont, family=text.family)
+      singleCharWidth <- strwidth("M")
+
+      leftAdj <- leftMostWidth+text.offset*singleCharWidth
+      rightAdj <- rightMostWidth+text.offset*singleCharWidth
+      heightAdj <- text.offset*singleCharWidth
+      
+      if(is.null(text.pos) || text.pos==1 || text.pos==3) {
+          xlim <- c(xlim[1]-leftMostWidth/2,
+                    xlim[2]+rightMostWidth/2)
+          if(!is.null(text.pos)) {
+              if(text.pos==1) {
+                  ylim <- c(ylim[1]-heightAdj, ylim[2])
+              } else if (text.pos==3) {
+                  ylim <- c(ylim[1], ylim[2]+heightAdj)
+              }
+          }
+      } else if (text.pos==4) {
+          xlim <- c(xlim[1],
+                    xlim[2]+rightAdj)
+      } else if (text.pos==2) {
+          xlim <- c(xlim[1]-leftAdj,
+                    xlim[2]-leftAdj+rightAdj)
+      } else {
+          stop("text.pos: cannot happen")
+      }
+  }
+  
   plot(xx, type = "n", xlim = xlim, ylim = ylim, xlab=xlab, ylab=ylab, ...)
 
   if(grid) grid(lty=1L)
@@ -88,44 +161,11 @@ plotPCA <- function(x,
     }
   }
 
-  if(!is.null(text) && !(is.logical(text) && !text)) {
-    text.col <- palette()[1]
-    text.cex <- 1L
-    text.font <- 1L
-    text.adj <- NULL
-    text.pos <- NULL
-    text.offset <- 0.5
-    text.vfont <- NULL
-    text.srt <- 0
-    text.family <- ""
-    text.xpd <- FALSE
-    labels <- NULL
-    
-    if (is.character(text) || is.factor(text) || is.numeric(text)) {
-      labels <- text
-    } else if (is.list(text)) {
-      labels <- text$labels
-      text.col <- nonNull(text$col, text.col)
-      text.cex <- nonNull(text$cex, text.cex)
-      text.font <- nonNull(text$font, text.font)
-      text.adj <- nonNull(text$adj,text.adj, defaultNULL.ok=TRUE)
-      text.pos <- nonNull(text$pos, text.pos, defaultNULL.ok=TRUE)
-      text.offset <- nonNull(text$offset, text.offset)
-      text.vfont <- nonNull(text$vfont, text.vfont, defaultNULL.ok=TRUE)
-      text.srt <- nonNull(text$srt,text.srt)
-      text.family <- nonNull(text$family,text.family)
-      text.xpd <- nonNull(text$xpd,text.xpd, defaultNULL.ok=TRUE)
-    }
-    if (is.null(labels)) {
-      labels <- dimnames(xx)[[1L]]
-      if (is.null(labels)) 
-        labels <- 1L:n
-    }
-    labels <- as.character(labels)
-    text(xx, labels,
-         col=text.col, cex=text.cex, font=text.font,
-         adj=text.adj, pos=text.pos, offset=text.offset,
-         vfont=text.vfont, srt=text.srt, family=text.family, xpd=text.xpd)
+  if(doText) {
+      text(xx, labels, col = text.col, cex = text.cex, font = text.font, 
+           adj = text.adj, pos = text.pos, offset = text.offset, 
+           vfont = text.vfont, srt = text.srt, family = text.family, 
+           xpd = text.xpd)
   }
   return(invisible(as.data.frame(xx)))
   

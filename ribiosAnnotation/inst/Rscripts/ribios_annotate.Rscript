@@ -1,10 +1,10 @@
-#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /apps64/bi/R/proxyRscript
 
 suppressMessages(library(ribiosArg))
 suppressMessages(library(ribiosUtils))
 
 ## check LD_LIBRARY_PATH
-ORACLE.LIB <- "/opt/oracle/client/10/run_1/lib/"
+ORACLE.LIB <- "/apps64/oracle-instantclient/instantclient_11_2/"
 ld.path <- strsplit(Sys.getenv("LD_LIBRARY_PATH"), ":")[[1]]
 trimSlash <- function(x) gsub("/$","", x)
 if(!trimSlash(ORACLE.LIB) %in% trimSlash(ld.path))

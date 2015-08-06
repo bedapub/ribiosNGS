@@ -6,13 +6,18 @@ RIBIOS_MAKEFILE=${RIBIOS_HOME}/conf/Makefile-template
 
 PKGS=`find ${RIBIOS_HOME} -maxdepth 1 -mindepth 1 -name "ribios*" ! -name "*.Rcheck" -type d`
 
+echo "Start"
 for pkg in $PKGS; do
-    echo "Processing ${pkg}"
-    rm -f ${pkg}/Makefile
-    touch ${pkg}/Makefile
-    echo "## AUTOMATICALLY GENERATED FROM TEMPLATE (`date`). DO NOT EDIT IT MANUALLY!" > ${pkg}/Makefile
-    cd ${pkg}
-    git add Makefile; git commit Makefile -m "Makefile updated from the template"
+    echo "  Processing ${pkg}"
+    mf=${pkg}/Makefile
+    rm -f ${mf}
+    touch ${mf}
+    echo "## AUTOMATICALLY GENERATED FROM TEMPLATE (`date`). DO NOT EDIT IT MANUALLY!" > ${mf}
+    cat ${RIBIOS_MAKEFILE} >> ${mf}
+    git add ${mf};
 done
+
+echo "Done"
+git commit -m "Makefile updated from the template"
 
 exit 0

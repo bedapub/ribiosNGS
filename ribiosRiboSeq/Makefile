@@ -22,7 +22,7 @@ CHECK_DIR=${PKG}.Rcheck
 
 roxygenise:
 	@echo '====== roxygenize ======'	
-	@(cd ..; ${R} -e "library(roxygen2);roxygenise($(PKG))"
+	@(cd ..; ${R} -e "library(roxygen2);roxygenise($(PKG))")
 	@echo ' '
 
 install: roxygenise

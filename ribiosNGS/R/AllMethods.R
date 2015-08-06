@@ -386,13 +386,13 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
             feats <- featureNames(object)
             isValidFeat <- isValidID(feats)
             if(target=="GeneID") {
-              anno <- annotateGeneIDs(feats)
+              anno <- annotateGeneIDs(feats,orthologue = TRUE)
             } else if (target=="GeneSymbol") {
-              anno <- annotateGeneSymbols(feats)
+              anno <- annotateGeneSymbols(feats,orthologue = TRUE)
             } else if (target=="RefSeq") {
-              anno <- annotateRefSeqs(feats)
+              anno <- annotateRefSeqs(feats,orthologue = TRUE)
             } else if (target=="EnsEMBL") {
-              anno <- annotateEnsembl(feats)
+              anno <- annotateEnsembl(feats,orthologue = TRUE)
             }
             if(check.target) {
               positive.thr <- 0.5

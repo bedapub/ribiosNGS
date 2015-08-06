@@ -13,7 +13,8 @@ importFrom("edgeR",
 importFrom("graphics", "pairs")
 importFrom("limma", "plotMDS")
 
-## for MPS
+importClassesFrom("ribiosGSEA", "GeneSetsList")
+
 
 ## for RNA-seq analysis
 exportClasses(EdgeResult, EdgeObject, EdgeGSE)

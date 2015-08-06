@@ -1,19 +1,18 @@
 #!/bin/bash
+## Deploy makefile from the template
 
 RIBIOS_HOME=/apps64/bi/ribios
-RIBIOS_MAKEFILE=${RIBIOS_HOME}/conf/Makefile
+RIBIOS_MAKEFILE=${RIBIOS_HOME}/conf/Makefile-template
 
-find ${RIBIOS_HOME} -name "ribios*" ! -name "*.Rcheck" -type d -maxdepth 1 -mindepth 1 -exec unlink '{}'/Makefile \;
-find ${RIBIOS_HOME} -name "ribios*" ! -name "*.Rcheck" -type d -maxdepth 1 -mindepth 1 -exec cp -p ${RIBIOS_MAKEFILE} '{}' \;
-dirs=`find ${RIBIOS_HOME} -name "ribios*" ! -name "*.Rcheck" -type d -maxdepth 1 -mindepth 1`
-curdir=`pwd`
+PKGS=`find ${RIBIOS_HOME} -maxdepth 1 -mindepth 1 -name "ribios*" ! -name "*.Rcheck" -type d`
 
-for i in ${dirs}
-do
-  cd $i
-  git commit Makefile -m "Makefile updated from ../conf"
+for pkg in $PKGS; do
+    echo "Processing ${pkg}"
+    rm -f ${pkg}/Makefile
+    touch ${pkg}/Makefile
+    echo "## AUTOMATICALLY GENERATED FROM TEMPLATE (`date`). DO NOT EDIT IT MANUALLY!" > ${pkg}/Makefile
+    cd ${pkg}
+    git add Makefile; git commit Makefile -m "Makefile updated from the template"
 done
-
-cd $curdir
 
 exit 0

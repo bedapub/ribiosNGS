@@ -2,14 +2,10 @@
 ##
 ##  Makefile
 ##      Author: Jitao David Zhang <jitao_david.zhang@roche.com>
-##	BEDA TRS, pRED, Hoffmann-La Roche AG
-##      Description: Makefile for building distributions etc.
-##                   the Makefile provides the following targets:
-##                   
-##                   - make install  calls R CMD INSTALL
-##                   - make check    calls R CMD check (with RUnit)
-##                   - make dist     calls R CMD build
-##
+##	pRED Bioinformatics
+##	Pharmaceutical Science, F.Hoffmann-La Roche AG
+##      Description: Makefile for building ribios packages
+##	
 ################################################################################
 
 R=R
@@ -23,7 +19,12 @@ PKG_SRC_DIR=$(PKG_ROOT_DIR)/src
 CHECK_FILE=${PKG}_${PKG_VERSION}.tar.gz
 CHECK_DIR=${PKG}.Rcheck
 
-install: 
+roxygenise:
+	@echo '====== roxygenize ======'	
+	@(cd ..; ${R} -e "library(roxygen2);roxygenise(\"$(PKG)\")")
+	@echo ' '
+
+install: roxygenise
 	@echo '====== Installing Package ======'
 	@(cd ..; ${R} CMD INSTALL ${PKG})
 	@echo '====== Installing finished ======'
@@ -40,7 +41,7 @@ envcheck: dist
 	@(cd ..; env -i BIOINFOCONFDIR=${BIOINFOCONFDIR} PATH="/usr/bin/:/usr/local/bin:/bin/:/usr/bin/:/usr/sbin/:/usr/local/bin/:/usr/X11R6/bin:/opt/oracle/client/10/run_1/bin:/usr/kerberos/bin:" LD_LIBRARY_PATH="/homebasel/beda/zhangj83/libs" ${R} CMD check ${CHECKADD} ${PKG}_${PKG_VERSION}.tar.gz) 
 	@echo '====== Checking finished ======'
 
-dist:	clean
+dist:	clean roxygenise
 	@echo '====== Building Distribution ======'
 	@(cd ..; ${R} CMD build $(PKG))
 	@echo '====== Building finished ======'

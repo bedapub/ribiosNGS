@@ -9,20 +9,11 @@ importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
            "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames", "annotate")
 importFrom("edgeR",
-           "cpm", "aveLogCPM")
+           "cpm", "aveLogCPM", "estimateGLMRobustDisp")
 importFrom("graphics", "pairs")
 importFrom("limma", "plotMDS")
 
 ## for MPS
-import("edgeR") ## the reason to use import is that estimateGLMRobustDisp is only available in newer versions of edgeR. Using importFrom explicitly will cause the package fail to install on stable R.
-
-##importFrom("edgeR", DGEList, calcNormFactors,
-##           estimateGLMRobustDisp,
-##           estimateGLMCommonDisp,
-##           estimateGLMTrendedDisp,
-##           estimateGLMTagwiseDisp,
-##           glmLRT, glmFit, topTags)
-##
 
 ## for RNA-seq analysis
 exportClasses(EdgeResult, EdgeObject, EdgeGSE)

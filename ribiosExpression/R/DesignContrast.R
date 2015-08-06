@@ -12,11 +12,12 @@ DesignContrast <- function(designMatrix, contrastMatrix, groups=NULL, dispLevels
     groups <- design2group(designMatrix)
   if(is.null(dispLevels))
     dispLevels <- levels(groups)
-  new("DesignContrast",
-      design=designMatrix,
-      contrasts=contrastMatrix,
-      groups=groups,
-      dispLevels=dispLevels)
+  res <- new("DesignContrast",
+             design=designMatrix,
+             contrasts=contrastMatrix,
+             groups=groups,
+             dispLevels=dispLevels)
+  return(res)
 }
 
 setMethod("groups", "DesignContrast", function(object) {
@@ -94,22 +95,54 @@ parseDesignContrastFile <- function(designFile, contrastFile,
                         contrastMatrix=contrast,
                         groups=groups,
                         dispLevels=dispLevels)
+  return(res)
 }
+plainFile2ConcString <- function(str) {
+    if(!is.null(str) && file.exists(str)) {
+        str <- paste(readLines(str), collapse=",")
+    }
+    return(str)
+}
+
+#' Parse study design and asked questions encoded in design and contrast matrices or in one-way ANOVA designs
+#' @param designFile: A plain tab-delimited file with headers encoding the design matrix, or NULL
+#' @param contrastFile: A plain tab-delimited file with headers encoding the contrast matrix, or NULL
+#' @param sampleGroups: A character string concatenated by commas (e.g. A,B,C), or a plain text file containing one string per line (e.g. A\emph{newline}B\emph{newline}C), encoding sample group memberships.
+#' @param groupLevels: Similar format as 'sampleGroups', encoding levels (e.g. order) of the sampleGroups
+#' @param dispLevels: Similar format as 'sampleGroups', encoding the display of the groupLevels. Must match 'groupLevels'
+#' @param contrasts: Similar format as 'sampleGroups', encoding contrasts in case of one-way ANOVA designs
+#' @return A S4-object 'DesignContrast'
+#' @examples
+#' ## one-way ANOVA
+#' parseDesignContrast(sampleGroups="As,Be,As,Be,As,Be",groupLevels="Be,As", dispLevels="Beryllium,Arsenic", contrasts="As-Be")
+#' ## design/contrast matrix
+#' designFile <- system.file("extdata/example-designMatrix.txt", package="ribiosExpression")
+#' contrastFile <- system.file("extdata/example-contrastMatrix.txt", package="ribiosExpression")
+#' # minimal information
+#' parseDesignContrast(designFile=designFile, contrastFile=contrastFile)
+#' # with extra information about sample groups
+#' parseDesignContrast(designFile=designFile, contrastFile=contrastFile,sampleGroups="As,Be,As,Be,As,Be",groupLevels="Be,As", dispLevels="Beryllium,Arsenic")
 parseDesignContrast <- function(designFile=NULL, contrastFile=NULL,
                                 sampleGroups=NULL, groupLevels=NULL, dispLevels=NULL,
                                 contrasts=NULL) {
-  if(!is.null(designFile) & !is.null(contrastFile)) {
-    return(parseDesignContrastFile(designFile=designFile,
-                                   contrastFile=contrastFile,
-                                   groupsStr=sampleGroups,
-                                   levelStr=groupLevels,
-                                   dispLevelStr=dispLevels))
-  } else if (!is.null(sampleGroups) & !is.null(contrasts)) {
-    return(parseDesignContrastStr(groupsStr=sampleGroups,
-                                  levelStr=groupLevels,
-                                  dispLevelStr=dispLevels,
-                                  contrastStr=contrasts))
-  } else {
-    stop("Provide either a design matrix and a contrast matrix, or sample groups and contrasts")
-  }
+  ## sampleGroups, groupLevels, dispLevels, and contrasts can be either a character string concatenated by commas, or a plain file that encode the strings (one per line)
+    sampleGroups <- plainFile2ConcString(sampleGroups)
+    groupLevels <- plainFile2ConcString(groupLevels)
+    dispLevels <- plainFile2ConcString(dispLevels)
+    contrasts <- plainFile2ConcString(contrasts)
+    
+    if(!is.null(designFile) & !is.null(contrastFile)) {
+        return(parseDesignContrastFile(designFile=designFile,
+                                       contrastFile=contrastFile,
+                                       groupsStr=sampleGroups,
+                                       levelStr=groupLevels,
+                                       dispLevelStr=dispLevels))
+    } else if (!is.null(sampleGroups) & !is.null(contrasts)) {
+        return(parseDesignContrastStr(groupsStr=sampleGroups,
+                                      levelStr=groupLevels,
+                                      dispLevelStr=dispLevels,
+                                      contrastStr=contrasts))
+    } else {
+        stop("Provide either a design matrix and a contrast matrix, or sample groups and contrasts")
+    }
 }

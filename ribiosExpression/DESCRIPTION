@@ -7,6 +7,6 @@ Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Data structures and functions for expression analysis
 Depends: R (>= 2.10), methods, Biobase
-Imports: ribiosIO (>= 1.0-18), ribiosUtils (>= 1.0-5), Biobase, limma, rrcov, graph
+Imports: ribiosIO (>= 1.0-18), ribiosUtils (>= 1.0-5), Biobase, limma, rrcov, graph, ribiosArg
 Suggests: limma, ribiosAnnotation (>= 1.0-8)
 License: GPL-3

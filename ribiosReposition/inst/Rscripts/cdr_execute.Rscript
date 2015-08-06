@@ -1,4 +1,4 @@
-#!/bin/bash /SOFT/bi/apps/R/bdeRscript
+#!/bin/bash /apps64/bi/R/proxyRscript
 
 ## Drug reposition with the Connectivity Map dataset
 ## Jitao David Zhang <jitao_david.zhang@roche.com>

@@ -1,0 +1,191 @@
+div.inputTabs {
+  margin-top:1em;
+  margin-bottom:1em;
+}
+a.accordionTitle {
+  font-family: Helvetica, Arial; 
+  font-size:11pt;
+}
+
+label.intaglabel {
+  margin-left:0.5em;
+  padding-top:0.5em;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+
+textarea.intagarea {
+  width:80%;
+  margin-left:9%;
+  margin-right:10%;
+  height:200px;
+  margin-top:5px;
+  margin-bottom:5px;
+  font-size:80%;
+}
+div.gradientGreen{
+/* thanks to http://blog.fakedarren.com/2010/01/cross-browser-css-gradients/ */
+/* and http://www.puremango.co.uk/2010/04/css-gradient/ */
+  /* fallback (Opera) */
+  background: #DBE3DB;
+  /* Mozilla: */
+  background: -moz-linear-gradient(top, #DBE3DB, #F6FAFA);
+  /* Chrome, Safari:*/
+  background: -webkit-gradient(linear,
+              left top, left bottom, from(#DBE3DB), to(#F6FAFA));
+  /* MSIE */
+  filter: progid:DXImageTransform.Microsoft.Gradient(
+          StartColorStr='#DBE3DB', EndColorStr='#F6FAFA', GradientType=0);
+}
+div.gradientRed{
+  /* fallback (Opera) */
+  background: #F4D7D7;
+  /* Mozilla: */
+  background: -moz-linear-gradient(top, #F4D7D7, #F6FAFA);
+  /* Chrome, Safari:*/
+  background: -webkit-gradient(linear,
+              left top, left bottom, from(#F4D7D7), to(#F6FAFA));
+  /* MSIE */
+  filter: progid:DXImageTransform.Microsoft.Gradient(
+          StartColorStr='#F4D7D7', EndColorStr='#F6FAFA', GradientType=0);
+}
+div.twoleft, div.tworight {
+  float:left;
+  margin-left:1%;
+  margin-right:1%;
+  margin-top:auto;
+  margin-bottom:auto;
+  width:45%;
+  height:250px;
+}
+div.twoleft {
+  clear:left;
+}
+a.tagsLnk {
+  font-size:0.8em;
+  font-family:Arial;
+  color:blue;
+  margin-right:1em;
+}
+
+div.inputLine{
+  clear:left;
+  float:left;
+}
+span.iconItem{
+  display:inline-block;
+  margin-left:1px;
+  margin-right:1px;
+}
+div.uploadIcons{
+  display:inline-block;
+  margin-left:1em;
+}
+input.uploadCtrl{
+  margin-left:1em; 
+  margin-top:1px; 
+  margin-bottom:1px;
+}
+span.uploadLabel{
+  margin-left:0.5em;
+  padding-top:0.5em;
+  font-weight: bold;
+  font-variant: small-caps;
+  display:inline-block;
+  width:75px;
+}
+
+
+
+div.slabel {
+	clear:left;
+	float:left; 
+	width:40%;
+	height:25px;
+	font-size:11pt;
+	margin:1px 0px 0px 1px;}
+div.tright, div.sright {
+	float:right;
+	width:59%;
+	height:25px;
+	margin:1px 0px 0px 1px;
+	display:block;
+}
+div.tright {
+  height:auto;
+}
+
+div#paraAccordion {
+  width:600px;
+}
+
+span.dataset {
+  display:block;
+  font-size:10pt;
+}
+input.buttons {
+  margin-top:1em;
+  font-size:11pt;
+}
+div.wait {
+  display:inline;
+}
+label.waitmsg {
+  font-style:italic;
+  color:#C0C0C0;
+}
+
+label.buttonLabel {
+  font-size:9pt;
+  color:#999999;
+}
+
+div.scrollTableDiv {
+  margin-top:1em;
+  margin-bottom:1em;
+}
+div.tbldiv {
+  overflow-x:hidden;
+  overflow-y:scroll;
+}
+table.datatable {
+  width:100%;
+  font-size:9pt;
+}
+div.annPageDatasets {
+  float:none;
+  height:auto;
+  margin-top:1em;
+}
+span.datasetLabel {
+  width:90%;
+}
+div.annostat {
+  height:auto;
+}
+
+div.annostatTbl {
+  margin-left:1em;
+}
+td.annostatLabel {
+  width:auto;
+  padding-right:2em;
+}
+
+//a.download {font-family: Arial; font-size:10pt;color:blue;}
+//a.label{font-family: Arial; font-size:9pt;color:blue;}
+//
+//.cmid {float:left; width:25%; text-algin:right;height:25px; margin:1px 0px 1px 0px; padding:1px 0px 1px 0px; vertical-align:middle;}
+//.cright {float:left; width:25%; text-algin:right;height:25px; margin:1px 0px 1px 0px; padding:1px 0px 1px 0px; vertical-align:middle;}
+//
+//select.ss {float: left; width:85%;text-align:left; vertical-align:middle;height:23px; border:1px solid #ABADB3; margin:2px 0px 2px 0px; padding:1px 0px 1px 0px; vertical-align:middle;}
+//input.tb {width:85%;text-align:left; border:1px solid #ABADB3; border:1px solid #ABADB3; margin:1px 0px 1px 0px; padding:1px 0px 1px 0px; }
+//input.ssmid {width:25%; text-algin:left; height:15px; vertical-align:middle; margin:2px 0px 2px 0px;}
+//input.ssright {width:25%; text-algin:left; height:15px; vertical-align:middle; margin:2px 0px 2px 0px;}
+//input.submit {font-family:Arial; font-size:11pt;}
+//
+//.helpManual {margin:0px 0px 0px 10px; padding:5px 0px 0px 0px;width:750px;}
+//.helpMenu {background-color:#EFEFEF;width:75%;margin:3px 0px 0px 10px;padding:1px;}
+//span.helpTitle {font-weight:bold;}
+//span.helpSubtitle {margin:0 0 0 2px; color:#999999;}
+//

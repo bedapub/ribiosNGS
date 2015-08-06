@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE; DO NOT EDIT IT MANUALLY\n
+## AUTOMATICALLY GENERATED FROM TEMPLATE; DO NOT EDIT IT MANUALLY
 ################################################################################
 ##
 ##  Makefile

@@ -50,9 +50,13 @@ setMethod("BCV", "EdgeResult", function(x) {
   BCV(dgeList(x))
 })
 
-setMethod("aveLogCPM", "EdgeResult", function(y, ...) {
-  return(aveLogCPM(dgeList(y)))
-})
+## edgeR::aveLogCPM is a S3 method
+aveLogCPM.EdgeResult <- function(y,...) {
+    return(aveLogCPM(dgeList(y)))
+}
+## setMethod("aveLogCPM", "EdgeResult", function(y, ...) {
+##  return(aveLogCPM(dgeList(y)))
+##})
 
 ## plotBCV
 setMethod("plotBCV", "DGEList", function(x, ...) {

@@ -42,9 +42,9 @@ plotPCA <- function(x,
 
   ## process text first because it may require adjusting xlim automatically
   plot.new()
+  doText <- !is.null(text) && !(is.logical(text) && !text)
   
-  if(!is.null(text) && !(is.logical(text) && !text)) {
-      doText <- TRUE
+  if(doText) {
       text.col <- palette()[1]
       text.cex <- 1L
       text.font <- 1L

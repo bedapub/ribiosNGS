@@ -1,6 +1,7 @@
 2015-08-04 v1.1-30
   + add royalredgrayblue and royalbluegrayred
   + plotPCA: the xlim/ylim parameters are automatically adjusted when text labels are appended
+  + Add function 'getLims' to get xlim/ylim values from real value vectors
 
 2015-03-13 v1.1-29
   + compactPar is now more flexible to accept parameters and to pass them to par

@@ -84,3 +84,32 @@ intRange <- function(x, na.rm=TRUE) {
   range[2] <- ceiling(range[2])
   return(range)
 }
+
+
+#' get xlim/ylim ranges for plots from real values
+#'
+#' @param ... one or more vectors of real values
+#' @param perc percentage of dynamic range that should be covered by the limits; if set to 1 the whole range is used.
+#' @param symm logical value; if set to \code{TRUE}, the range will be symmetric around zero
+#'
+#' @examples
+#' myX <- rnorm(100, mean=1)
+#' myY <- rnorm(100)
+#' myLim <- getLims(myX, myY, perc=0.99)
+#' plot(myX, myY, xlim=myLim, ylim=myLim)
+#' mySymmLim <- getLims(myX, myY, perc=0.99, symm=TRUE)
+#' plot(myX, myY, xlim=myLim, ylim=mySymmLim)
+#'
+#' @export
+
+getLims <- function(..., perc=0.99, symm=TRUE) {
+    lower <- (1-perc)/2
+    higher <- 1-lower
+    allVal <- list(...)
+    quant <- quantile(unlist(allVal), c(lower, higher), na.rm=TRUE)
+    if(symm) {
+        quantAbsMax <- max(abs(quant))
+        quant <- c(-quantAbsMax, quantAbsMax)
+    }
+    return(quant)
+}

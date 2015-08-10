@@ -15,6 +15,7 @@ export(intRange)
 export(p2asterisk)
 export(compactTrellis,
        setCompactTrellis)
+export(getLims)
 
 ## biosHeatmap
 export(biosHeatmap)

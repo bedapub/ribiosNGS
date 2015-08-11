@@ -22,6 +22,7 @@ exportClasses(EdgeResult, EdgeObject, EdgeGSE)
 export(sigGene, sigGenes, sigGeneCounts)
 
 export(filterByCPM,
+       isAnyNA, replaceNAwithZero,
        estimateGLMDisp, fitGLM, testGLM)
 
 exportMethods(BCV, show,

@@ -1,12 +1,13 @@
 setMethod("EdgeObject",
           c("matrix", "DesignContrast"),
           function(object, designContrast, genes=NULL, remove.zeros=FALSE) {
-            dgeList <- DGEList(counts=object,
-                               group= groups(designContrast),
-                               genes=genes, remove.zeros=remove.zeros)
-            new("EdgeObject",
-                dgeList=dgeList,
-                designContrast=designContrast)
+              object[is.na(object)] <- 0 ## NA is replaced with zero count
+              dgeList <- DGEList(counts=object,
+                                 group= groups(designContrast),
+                                 genes=genes, remove.zeros=remove.zeros)
+              new("EdgeObject",
+                  dgeList=dgeList,
+                  designContrast=designContrast)
           })
 setMethod("EdgeObject",
           c("FeatAnnoExprs", "DesignContrast"),
@@ -38,6 +39,13 @@ filterByCPM <- function(edgeObj,
   cpm <- cpm(edgeObj@dgeList)
   filter <- apply(cpm, 1, function(x) sum(x>=minCPM)>=minCount)
   edgeObj@dgeList <- edgeObj@dgeList[filter,]
+  return(edgeObj)
+}
+isAnyNA <- function(edgeObj) {
+    any(is.na(edgeObj@dgeList$counts))
+}
+replaceNAwithZero <- function(edgeObj) {
+  edgeObj@dgeList$counts[is.na(edgeObj@dgeList$counts)] <- 0
   return(edgeObj)
 }
 

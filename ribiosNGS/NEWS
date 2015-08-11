@@ -1,3 +1,6 @@
+Version 1.0-13 (2015-08-11)
+  + Replace NA with zero counts if needed
+
 Version 1.0-12 (2015-06-12)
   + RiboSeq fixes a bug in matching the two matrixes by row names
 

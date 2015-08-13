@@ -1,6 +1,6 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen")
-importFrom("Biobase", "featureNames", "fData")
+importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
 importFrom("ribiosGSA", "geneSetPerm")
@@ -67,10 +67,10 @@ exportClasses(RiboSeq,
 exportMethods(RiboSeq,
               normalize,
               countRNA, countRPF,
-              cpmRNA, cpmRPF,
+              cpm, cpmRNA, cpmRPF,
               cpmRNAGroupSum, cpmRPFGroupSum,
               cpmFilter,
-              featureNames)
+              featureNames, sampleNames)
 
 
 export(translationEfficiency,

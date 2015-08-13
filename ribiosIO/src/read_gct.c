@@ -60,7 +60,7 @@ SEXP c_read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
       if(arrayMax(it) != ncol + 2) {
 	stringPrintf(err,
 		     "Sample number differs from the specification in the 2nd line (%d), and sample names in the 3rd line (%d)",
-		     arrayMax(it)-2, ncol);
+		     ncol,arrayMax(it)-2);
 	error(string(err));
 	stringDestroy(err);
       }

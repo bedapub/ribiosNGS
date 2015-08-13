@@ -3,7 +3,7 @@ read_exprs_matrix <- function(x) {
   if(!file.exists(x))
     stop(paste(x, "does not exist\n"))
   x.con <- readLines(con=x, n=3L, warn=FALSE)
-  if(grepl("^\\#1\\.2", x.con[1L])) { ## gct format
+  if(grepl("^\\#1\\.[2|3]", x.con[1L])) { ## gct format
     mat <- .Call("c_read_gct", x, NULL, keep.desc=TRUE);
     return(mat)
   } else {

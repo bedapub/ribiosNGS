@@ -4,8 +4,8 @@ setGeneric("RiboSeq", function(RNA, RPF, groups, ...) standardGeneric("RiboSeq")
 
 setGeneric("countRNA", function(object) standardGeneric("countRNA"))
 setGeneric("countRPF", function(object) standardGeneric("countRPF"))
-setGeneric("cpmRNA", function(object) standardGeneric("cpmRNA"))
-setGeneric("cpmRPF", function(object) standardGeneric("cpmRPF"))
+setGeneric("cpmRNA", function(object,...) standardGeneric("cpmRNA"))
+setGeneric("cpmRPF", function(object,...) standardGeneric("cpmRPF"))
 
 setGeneric("dgeList", function(object) standardGeneric("dgeList"))
 

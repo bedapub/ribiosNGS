@@ -331,7 +331,7 @@ setMethod("setCommonDispIfMissing", c("EdgeObject","numeric"), function(object, 
 })
 
 ## cpm
-setMethod("cpm", function(x,...) {
+setMethod("cpm", "EdgeObject", function(x,...) {
               cpm(dgeList(x),...)
           })
 

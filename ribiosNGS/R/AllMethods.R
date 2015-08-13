@@ -331,13 +331,17 @@ setMethod("setCommonDispIfMissing", c("EdgeObject","numeric"), function(object, 
 })
 
 ## cpm
-cpm.EdgeObject <- function(x,...) {
-  cpm(dgeList(x), ...)
-}
+setMethod("cpm", function(x,...) {
+              cpm(dgeList(x),...)
+          })
 
 ## sniff features
 setMethod("featureNames", "EdgeObject", function(object) {
   return(rownames(dgeList(object)$counts))
+})
+
+setMethod("sampleNames", "EdgeObject", function(object) {
+  return(colnames(dgeList(object)$counts))
 })
 
 isValidID <- function(featNames) {

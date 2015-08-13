@@ -57,8 +57,8 @@ setMethod("normalize", "RiboSeq",
 setMethod("countRNA", "RiboSeq", function(object) object@RNA$counts)
 setMethod("countRPF", "RiboSeq", function(object) object@RPF$counts)
 
-setMethod("cpmRNA", "RiboSeq", function(object) cpm(object@RNA))
-setMethod("cpmRPF", "RiboSeq", function(object) cpm(object@RPF))
+setMethod("cpmRNA", "RiboSeq", function(object,...) cpm(object@RNA,...))
+setMethod("cpmRPF", "RiboSeq", function(object,...) cpm(object@RPF,...))
 
 ## translationEfficiency
 ctapply <- function(matrix, fac, FUN, ...) {

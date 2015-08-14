@@ -19,7 +19,8 @@ importClassesFrom("ribiosGSEA", "GeneSetsList")
 ## for RNA-seq analysis
 exportClasses(EdgeResult, EdgeObject, EdgeGSE)
 
-export(sigGene, sigGenes, sigGeneCounts)
+export(sigGene, sigGenes, sigGeneCounts,
+       updateSigFilter)
 
 export(filterByCPM,
        isAnyNA, replaceNAwithZero,

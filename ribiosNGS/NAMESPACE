@@ -21,7 +21,7 @@ exportClasses(EdgeResult, EdgeObject, EdgeGSE)
 
 export(sigGene, sigGenes,
        sigPosGene, sigNegGene,
-       sigPosGenes, siNegGenes,
+       sigPosGenes, sigNegGenes,
        sigGeneCounts,
        updateSigFilter)
 

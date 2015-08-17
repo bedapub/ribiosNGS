@@ -10,6 +10,6 @@ Depends: methods
 Imports: Rcpp,ribiosIO,ribiosMath,ribiosUtils,XML,parallel
 Suggests: limma (>= 3.5-9)
 License: LGPL-2
-Collate: utils.R AllClasses.R AllMethods.R buildGSEAcomm.R camera.R execute.R fingerprint.R gmt.R list2mat.R ntp.R parseGSEA.R hyper.R
+Collate: utils.R AllClasses.R AllGenerics.R AllMethods.R buildGSEAcomm.R camera.R execute.R fingerprint.R gmt.R list2mat.R ntp.R parseGSEA.R hyper.R fisher.R
 LinkingTo: Rcpp
 LazyLoad: yes

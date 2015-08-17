@@ -10,9 +10,11 @@ import(ribiosUtils)
 exportClass(GeneSets,GeneSetsList,
             gseaResItem, annoGseaResItem,
             annoGseaRes, annoGseaResList)
+exportClass(FisherResult,
+            FisherResultList)
 
 ## S4 methods
-export(gsName, gsDesc, gsGenes, gsGeneValues,
+export(gsName, gsDesc, gsGenes, gsGeneValues, gsCategory,
        "gsGenes<-", "gsGeneValues<-",
        isGseaCoreEnrich,
        gseaES, gseaNES, gseaNP, gseaFDR, gseaFWER,
@@ -50,6 +52,11 @@ S3method("[", "GeneSets")
 
 ## Fisher test (using hypergeometric test)
 export(gmthyper, gmthyperList)
+export(hits, pValue, fdrValue,
+       gsSize, minPValue, minFdrValue,
+       sigGeneSet, sigGeneSetTable, topGeneSetTable,topOrSigGeneSetTable,
+       fisherTest)
+exportMethods("[", "[[")
 
 ## Nearest Template Prediction (ntp) algorithm
 export(list2mat)
@@ -62,6 +69,7 @@ export(parseDTG, parseGSEAdir, parseGSEAedb, parseGSEAres)
 
 ## camera methods
 export(biosCamera, mcamera)
+
 
 ## Use Dynamic Lib
 useDynLib(ribiosGSEA)

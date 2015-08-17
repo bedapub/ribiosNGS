@@ -17,10 +17,33 @@ setClass("annoGseaResItem",
 setClass("annoGseaRes", contains="list")
 setClass("annoGseaResList", contains="list") #3 a list of annoGseaRes objects
 setClass("GeneSet",
-         representation=list(name="character",
-           desc="character",
-           genes="character"))
+         representation=list(
+             category="character",
+             name="character",
+             desc="character",
+             genes="character"),
+         prototype=list(category=as.character(NA),
+                        name=as.character(NA),
+                        desc=as.character(NA),
+                        genes=as.character(NA)))
 setClass("GeneSets",
          representation=list(name="character"),
          contain="list")
 setClass("GeneSetsList", contain="list")
+
+
+## Fisher's exact test
+setClass("FisherResult",
+         representation=list(
+             gsCategory="character",
+             gsName="character",
+             gsEffSize="integer",
+             hits="character",
+             p="numeric",
+             fdr="numeric"))
+
+setClass("FisherResultList",
+         representation=list(
+             input="character",
+             universe="character"),
+         contain="list")

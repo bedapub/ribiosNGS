@@ -1,24 +1,7 @@
-setGeneric("gsName", function(object, ...) standardGeneric("gsName"))
-setGeneric("gsDesc", function(object, ...) standardGeneric("gsDesc"))
-setGeneric("gsGenes", function(object,...) standardGeneric("gsGenes"))
-setGeneric("gsGeneValues", function(object) standardGeneric("gsGeneValues"))
-setGeneric("gsGenes<-", function(object,value) standardGeneric("gsGenes<-"))
-setGeneric("gsGeneValues<-", function(object,value) standardGeneric("gsGeneValues<-"))
-setGeneric("isGseaCoreEnrich", function(object) standardGeneric("isGseaCoreEnrich"))
-setGeneric("gseaES", function(object) standardGeneric("gseaES"))
-setGeneric("gseaNES", function(object) standardGeneric("gseaNES"))
-setGeneric("gseaNP", function(object) standardGeneric("gseaNP"))
-setGeneric("gseaFDR", function(object) standardGeneric("gseaFDR"))
-setGeneric("gseaFWER", function(object) standardGeneric("gseaFWER"))
+setMethod("gsCategory", "GeneSet", function(object) return(object@category))
+setMethod("gsCategory", "GeneSets", function(object) return(sapply(object@.Data, gsCategory)))
 
-setGeneric("gsGeneIndices", function(object) standardGeneric("gsGeneIndices"))
-setGeneric("gseaESprofile", function(object) standardGeneric("gseaESprofile"))
-setGeneric("gseaCoreEnrichThr", function(object) standardGeneric("gseaCoreEnrichThr"))
-setGeneric("gseaCoreEnrichGenes", function(object) standardGeneric("gseaCoreEnrichGenes"))
-setGeneric("annoGseaResItem", function(object, ...) standardGeneric("annoGseaResItem"))
-##setGeneric("gseaRes", function(object) standardGeneric("gseaRes"))
-setGeneric("annoGseaRes", function(object) standardGeneric("annoGseaRes"))
-
+setMethod("gsName", "GeneSet", function(object) return(object@name))
 setMethod("gsName", "gseaResItem", function(object) return(object@geneset))
 setMethod("gsName", "annoGseaRes", function(object) sapply(object, gsName))
 setMethod("gsName", "GeneSets", function(object, i) {
@@ -26,6 +9,7 @@ setMethod("gsName", "GeneSets", function(object, i) {
   if(!missing(i) && !is.null(i)) res <- res[i]
   return(res)
 })
+setMethod("gsName", "FisherResult", function(object) object@gsName)
 
 setMethod("gseaES", "gseaResItem", function(object) return(object@es))
 setMethod("gseaES", "annoGseaRes", function(object) {
@@ -105,6 +89,7 @@ setMethod("gsDesc", "GeneSets", function(object, i) {
   return(res)
 })
 
+setMethod("gsGenes", "GeneSet", function(object) return(object@genes))
 setMethod("gsGenes", "annoGseaResItem", function(object) return(object@gsGenes))
 setMethod("gsGenes", "annoGseaRes", function(object) {
   res <- lapply(object, gsGenes)
@@ -306,3 +291,179 @@ gseaScores <- function(..., names=NULL, type=c("fdr", "p", "fwer")) {
 gsNames <- gsName
 gsDescs <- gsDesc
 
+
+##----------------------------------------##
+## Fisher's exact test
+##----------------------------------------##
+setMethod("gsEffSize", "FisherResult", function(object) return(object@gsEffSize))
+setMethod("hits", "FisherResult", function(object) return(object@hits))
+
+setMethod("gsCategory", "FisherResult", function(object) return(object@gsCategory))
+setMethod("gsCategory", "FisherResultList", function(object) sapply(object@.Data, gsCategory))
+
+
+setMethod("as.data.frame", "FisherResultList", function(x, row.names) {
+              categories <- sapply(x, gsCategory)
+              genesets <- sapply(x, gsName)
+              ps <- sapply(x, pValue)
+              fdrs <- sapply(x, fdrValue)
+              hits <- lapply(x, hits)
+              hitCounts <- sapply(hits, length)
+              gsEffSize <- sapply(x, gsEffSize)
+              inputSize <- length(x@input)
+              universeSize <- length(x@universe)
+              hitPrint <- sapply(hits, paste, collapse=",")
+              data.frame(Category=categories,
+                         GeneSet=genesets,
+                         Pvalue=ps,
+                         FDRvalue=fdrs,
+                         HitCount=hitCounts,
+                         InputSize=inputSize,
+                         GeneSetEffectiveSize=gsEffSize,
+                         UniverseSize=universeSize,
+                         Hits=hitPrint,
+                         row.names=row.names)
+          })
+
+
+##----------------------------------------##
+## Fisher's exact test
+##----------------------------------------##
+setMethod("gsName", "FisherResultList", function(object,...) {
+              sapply(object, function(x) x@gsName)
+          })
+
+setMethod("[[", c("FisherResultList", "numeric"), function(x, i) {
+              return(x@.Data[[i]])
+          })
+setMethod("[[", c("FisherResultList", "character"), function(x, i) {
+              which <- match(i, gsName(x))
+              return(x[[which]])
+          })
+
+setMethod("[", c("FisherResultList", "numeric", "missing", "missing"), function(x, i,j,drop) {
+              x@.Data <- x@.Data[i]
+              return(x)
+          })
+setMethod("[", c("FisherResultList", "character", "missing", "missing"), function(x, i,j, drop) {
+              which <- match(i, gsName(x))
+              x@.Data <- x@.Data[which]
+              return(x)
+          })
+setMethod("[", c("FisherResultList", "character", "character", "missing"),
+          function(x, i,j, drop) {
+              isCategory <- gsCategory(x) %in% i
+              isName <- gsName(x) %in% j
+              isSel <- isCategory & isName
+              if(sum(isSel)==1) {
+                  return(x@.Data[[which(isSel)]])
+              } else if (sum(isSel)>1) {
+                  return(x@.Data[isSel])
+              } else {
+                  stop(sprintf("No element found for category %s and gene set %s!\n",
+                               i, j))
+              }
+          })
+setMethod("[", c("FisherResultList", "character", "missing", "missing"),
+          function(x, i,j, drop) {
+              isCategory <- gsCategory(x) %in% i
+              x@.Data <- x@.Data[isCategory]
+              return(x)
+          })
+setMethod("[", c("FisherResultList", "missing", "character", "missing"),
+          function(x, i,j, drop) {
+              isName <- gsName(x) %in% j
+              x@.Data <- x@.Data[isName]
+              return(x)
+          })
+
+setMethod("hits", "FisherResult", function(object) {
+              object@hits
+          })
+setMethod("hits", "FisherResultList", function(object, geneset) {
+              if(missing(geneset)) {
+                  res <- lapply(object, function(x) x@hits)
+              } else {
+                  res <- genes(object[[geneset]])
+              }
+              return(res)
+          })
+setMethod("pValue", "FisherResult", function(object) {return(object@p)})
+setMethod("pValue", "FisherResultList", function(object, ind, ...) {
+              res <- sapply(object@.Data, pValue)
+              if(!missing(ind)) {
+                  return(res[ind])
+              } else {
+                  return(res)
+              }
+    
+          })
+setMethod("fdrValue", "FisherResult", function(object) {return(object@fdr)})
+setMethod("fdrValue", "FisherResultList", function(object, ind, ...) {
+              res <- sapply(object@.Data, fdrValue)
+              if(!missing(ind)) {
+                  return(res[ind])
+              } else {
+                  return(res)
+              }
+          })
+setMethod("minPValue", "FisherResultList", function(object,...) {
+              min(pValue(object))
+          })
+setMethod("minFdrValue", "FisherResultList", function(object,...) {
+              min(fdrValue(object))
+          })
+setMethod("isSigGeneSet", c("FisherResultList", "numeric"),function(object,fdr) {
+              fdrValue(object)<fdr
+          })
+setMethod("sigGeneSet", c("FisherResultList", "numeric"),function(object,fdr) {
+              gsName(object)[isSigGeneSet(object, fdr)]
+          })
+setMethod("sigGeneSetTable", c("FisherResultList", "numeric"),function(object,fdr,...) {
+              as.data.frame(obj[isSigGeneSet(object, fdr)])
+          })
+setMethod("topGeneSetTable", c("FisherResultList", "numeric"),function(object,N,...) {
+              ps <- pValue(object)
+              pOrd <- order(ps, decreasing=FALSE)[1:pmin(N, length(ps))]
+              sub <- object[pOrd]
+              return(as.data.frame(sub))
+          })
+setMethod("topOrSigGeneSetTable", c("FisherResultList", "numeric", "numeric"), function(object, N, fdr) {
+              fdrV <- fdrValue(object)
+              N <- pmax(N, sum(fdrV<fdr))
+              return(topGeneSetTable(object, N, fdr))
+              
+          })
+setMethod("topOrSigGeneSetTable", c("FisherResultList", "numeric", "missing"), function(object, N, fdr) {
+              topOrSigGeneSetTable(object, N, 0.05)
+          })
+setMethod("topOrSigGeneSetTable", c("FisherResultList", "missing", "missing"), function(object, N, fdr) {
+              topOrSigGeneSetTable(object, 10, 0.05)
+          })
+
+setMethod("print", "FisherResult", function(x, ...) {
+              if(!is.na(gsCategory(x)))
+                  cat("Category:", gsCategory(x), "\n")
+              if(!is.na(gsName(x)))
+                  cat("Name:", gsName(x), "\n")
+              cat("Gene set size:", gsEffSize(x), "\n")
+              cat(sprintf("Hits (%d):", length(hits(x))),
+                  paste(hits(x), collapse=","), "\n")
+              cat("Fisher's exact p value:", pValue(x), "\n")
+              cat("BH FDR value:", fdrValue(x), "\n")
+          })
+setMethod("show", "FisherResult", function(object) {
+              print(object)
+          })
+setMethod("print", "FisherResultList", function(x,...) {
+              cat("--- One-sided Fisher's exact tests for gene sets ---\n")
+              cat(sprintf("Total input genes: %d\n", length(x@input)))
+              cat(sprintf("Gene universe: %d\n", length(x@universe)))
+              cat(sprintf("Total gene sets: %d\n", length(x)))
+              cat(sprintf("Minimal P-value: %e\n", minPValue(x)))
+              cat(sprintf("Minimal FDR-value: %e\n", minFdrValue(x)))
+          })
+
+setMethod("show", "FisherResultList", function(object) {
+              print(object)
+          })

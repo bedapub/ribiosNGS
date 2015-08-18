@@ -78,13 +78,13 @@ plotPCA <- function(x,
               labels <- 1L:n
       }
       labels <- as.character(labels)
-      
-      isRightMost <- which.max(xx[,1])
-      isLeftMost <- which.min(xx[,1])
-      rightMostWidth <- strwidth(labels[isRightMost], units="user", cex=text.cex,
-                                 font=text.font, vfont=text.vfont, family=text.family)
-      leftMostWidth <- strwidth(labels[isLeftMost], units="user", cex=text.cex,
-                                font=text.font, vfont=text.vfont, family=text.family)
+
+      labelWidth <- strwidth(labels, units="user", cex=text.cex,
+                             font=text.font, vfont=text.vfont, family=text.family)
+      isRightMost <- which.max(xx[,1]+labelWidth)
+      isLeftMost <- which.min(xx[,1]-labelWidth)
+      rightMostWidth <- labelWidth[isRightMost]
+      leftMostWidth <- labelWidth[isLeftMost]
       singleCharWidth <- strwidth("M")
 
       leftAdj <- leftMostWidth+text.offset*singleCharWidth
@@ -92,8 +92,8 @@ plotPCA <- function(x,
       heightAdj <- text.offset*singleCharWidth
       
       if(is.null(text.pos) || text.pos==1 || text.pos==3) {
-          xlim <- c(xlim[1]-leftMostWidth/2,
-                    xlim[2]+rightMostWidth/2)
+          xlim <- c(xlim[1]-leftMostWidth,
+                    xlim[2]+rightMostWidth)
           if(!is.null(text.pos)) {
               if(text.pos==1) {
                   ylim <- c(ylim[1]-heightAdj, ylim[2])

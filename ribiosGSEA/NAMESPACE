@@ -7,7 +7,7 @@ import(ribiosIO)
 import(ribiosMath)
 import(ribiosUtils)
 
-exportClass(GeneSets,GeneSetsList,
+exportClass(GeneSets,
             gseaResItem, annoGseaResItem,
             annoGseaRes, annoGseaResList)
 exportClass(FisherResult,
@@ -23,6 +23,8 @@ export(gsName, gsDesc, gsGenes, gsGeneValues, gsCategory,
        annoGseaResItem, annoGseaRes)
 
 export(gseaScore, gseaScores)
+
+export(filterBySize)
 
 ## for back-compatibility
 export(gsNames, gsDescs)
@@ -44,11 +46,9 @@ export(gseaResQvalue, gseaResES,
 export(buildGSEAcomm)
 
 ## GMT functions
-export(readGmt, readGmts, parseGmt,
+export(readGmt, parseGmt,
        matchGenes,
-       geneCount, geneCountFilter)
-
-S3method("[", "GeneSets")
+       geneCount)
 
 ## Fisher test (using hypergeometric test)
 export(gmthyper, gmthyperList)

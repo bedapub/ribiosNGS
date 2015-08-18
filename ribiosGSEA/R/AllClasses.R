@@ -26,10 +26,8 @@ setClass("GeneSet",
                         name=as.character(NA),
                         desc=as.character(NA),
                         genes=as.character(NA)))
-setClass("GeneSets",
-         representation=list(name="character"),
-         contain="list")
-setClass("GeneSetsList", contain="list")
+setClass("GeneSets",contain="list")
+## setClass("GeneSetsList", contain="list")
 
 
 ## Fisher's exact test

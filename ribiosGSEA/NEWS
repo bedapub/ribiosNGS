@@ -1,3 +1,10 @@
+Version 1.1-8 (Aug 18, 2015)
+  + The GeneSet class and GeneSets class are re-designed to support the concept of 'category', namely classes of gene sets. The old class 'GeneSetsList' is removed because its functionality is represented by GeneSets (which provides even more functionality)
+  + Add FisherResult and FisherResultList objects to support Fisher's exact test based gene set enrichment analysis
+  + readGmt now combines readGmt and readGmts, supporting simultaneous reading of several gmt files
+  + Remove 'geneCountFilter' function and replace with 'filterBySize' S4 generic 
+  + Improved functionality of working with GeneSets
+
 Version 1.1-7 (Jul 07, 2015)
   + GSEA file directory changes according to the new server setup
 

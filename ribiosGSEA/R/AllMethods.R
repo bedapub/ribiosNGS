@@ -1,3 +1,8 @@
+setMethod("[","GeneSets", function(x, i, ...) {
+              x@.Data <- x@.Data[i]
+              return(x)
+          })
+
 setMethod("gsCategory", "GeneSet", function(object) return(object@category))
 setMethod("gsCategory", "GeneSets", function(object) return(sapply(object@.Data, gsCategory)))
 
@@ -181,14 +186,21 @@ setMethod("[", "annoGseaRes", function(x, i,...) {
 })
 
 setMethod("show", "GeneSets", function(object) {
-  cat("[[", length(object), "GeneSets of ",object@name, " ]]", "\n")
+  categories <- gsCategory(object)
+  cateTbl <- table(categories)
+  categoryTerm <- ifelse(length(cateTbl)>1, "categories", "category")
+  cat("A GeneSet object\n")
+  cat("  Unique ", categoryTerm," (", length(cateTbl), "):\n", sep="")
+  cat(paste("    [", seq(along=cateTbl), "] ",
+            names(cateTbl), " (", cateTbl, ")", collapse="\n",
+            sep=""),
+      "\n",sep="")
+  cat("  Gene sets (", length(object), "):\n",sep="")
   heads <- 1:pmin(3L, length(object))
-  cat("--------------------\n")
   for(i in heads) {
-    cat("name:", object[[i]]$name, "\n")
-    cat("description:", object[[i]]$description, "\n")
-    cat("genes: ", paste(head(object[[i]]$genes), collapse=","), ",...", "\n", sep="")
-    cat("--------------------\n")
+    cat("    [", i, "] ", object[[i]]@name, "\n",sep="")
+    cat("        description:", object[[i]]@desc, "\n")
+    cat("        genes : ", paste(head(object[[i]]@genes), collapse=","), ",...", "\n", sep="")
   }
   cat("...\n")
 })
@@ -466,4 +478,31 @@ setMethod("print", "FisherResultList", function(x,...) {
 
 setMethod("show", "FisherResultList", function(object) {
               print(object)
+          })
+
+setMethod("gsSize", "GeneSet", function(object) {
+              return(length(object@genes))
+          })
+setMethod("gsSize", "GeneSets", function(object) {
+              return(sapply(object@.Data, gsSize))
+          })
+setMethod("filterBySize",
+          c("GeneSets", "ANY", "ANY"),
+          function(object, min, max) {
+              sizes <- gsSize(object)
+              sel <- rep(TRUE, length(sizes))
+              if(!missing(min)) {
+                  min <- as.numeric(min)
+                  if(!is.na(min)) {
+                      sel <- sel & sizes >= min
+                  }
+              }
+              if(!missing(max)) {
+                  max <- as.numeric(max)
+                  if(!is.na(max)) {
+                      sel <- sel & sizes <= max
+                  }
+              }
+              object@.Data <- object@.Data[sel]
+              return(object)
           })

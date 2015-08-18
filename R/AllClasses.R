@@ -154,7 +154,7 @@ setClass("FeatAnnoExprs",
            genes="data.frame"))
 
 setClass("EdgeGSE",
-         representation=list(geneSetsList="GeneSetsList",
+         representation=list(geneSets="GeneSets",
            method="character",
            enrichTables="list"),
          contains="EdgeResult")
@@ -163,6 +163,6 @@ EdgeGSE <- function(edgeObj, gsc) {
   haltifnot(all(c("GeneID", "GeneSymbol") %in% colnames(dgeList(edgeObj)$genes)),
             msg="Gene annotation of the edgeObj must contain columns 'GeneID' with EntrezGeneIDs and 'GeneSymbol' with official gene symbols")
   egse <- as(edgeObj,"EdgeGSE")
-  egse@geneSetsList <- gsc
+  egse@geneSets <- gsc
   return(egse)
 }

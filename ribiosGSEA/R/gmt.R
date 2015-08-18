@@ -1,9 +1,3 @@
-`[.GeneSets` <- function(x,i, ...) {
-  r <- NextMethod("[")
-  as(r, "GeneSets")
-}
-
-
 matchGenes <- function(x, vec, na.rm=TRUE) {
   if(!is(x, "GeneSets"))
     stop("'x' must be a 'GeneSets' object")
@@ -45,34 +39,49 @@ geneCountFilter <- function(x, min, max) {
 }
 
 ## public methods
-GeneSets <- function(list, name) {
+GeneSets <- function(list, category) {
   res <- new("GeneSets",list)
-  res@name <- name
+  for(i in seq(along=res))
+      res@.Data[[i]]@gsCategory <- category
   return(res)
 }
-readGmt <- function(file, name=basefilename(file)) {
-  rl <- read_gmt_list(file)
-  res <- GeneSets(rl, name=name)
-  return(res)
+
+#' Read GMT file into a GeneSets object
+#'
+#' @param ... Named or unnamed characater string vector, giving file names of One or more GMT format files. 
+#' @param category Character string, category of the gene sets, for instance 'Gene Onotology' or 'Reactome pathway'
+#'
+#' @examples
+#' gmtFile <- system.file("extdata", "example.gmt", package="ribiosGSEA")
+#' mySet <- readGmt(gmtFile)
+#' myFakeSet <- readGmt(CategoryA=gmtFile, CategoryB=gmtFile)
+#' anotherFakeSet <- readGmt(gmtFile, gmtFile, category=c("CategoryA", "CategoryB"))
+#' 
+readGmt <- function(..., category=NULL) {
+    files.list <- list(...)
+    files <- unlist(files.list, use.names=TRUE)
+    fnames <- names(files)
+    if(!is.null(fnames)) {
+        if(!is.null(category))
+            warning("'file' have names - the category option is ignored")
+        category <- fnames
+    } else if(is.null(category)) {
+        category <- basefilename(files)
+    } else if(!is.null(category)) {
+        category <- rep(category, length.out=length(files))
+    }
+    gsList <- lapply(files, read_gmt_list)
+    gs <- unlist(gsList, use.names=TRUE, recursive=FALSE)
+    category <- rep(category, sapply(gsList, length))
+    resl <- lapply(seq(along=gs), function(i) {
+                       return(new("GeneSet", category=category[i],
+                                  name=gs[[i]]$name, desc=gs[[i]]$desc, genes=gs[[i]]$genes))
+                   })
+    res <- as(resl, "GeneSets")
+    gnames <- sapply(res, gsName)
+    return(res)
 }
-readGmts <- function(..., names=NULL) {
-  files.list <- list(...)
-  files <- unlist(files.list, use.names=TRUE)
-  fnames <- names(files)
-  if(!is.null(fnames))
-    names <- fnames
-  if(is.null(names)) {
-    names <- basefilename(files)
-  } else {
-    haltifnot(length(files)==length(names),
-              msg="'names' must have the same length as 'files'")
-  }
-  res <- lapply(seq(along=files), function(i)
-                readGmt(files[i], name=names[i]))
-  names(res) <- names
-  res <- as(res, "GeneSetsList")
-  return(res)
-}
+
 parseGmt <- function(file, vec, min, max) {
   res <- read_gmt_list(file)
   res <- as(res, "GeneSets")

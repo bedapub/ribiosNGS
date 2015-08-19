@@ -22,8 +22,8 @@ fisherTest
 gs1 <- new("GeneSet", category="A", name="GeneSet1", genes=LETTERS[1:4])
 gs2 <- new("GeneSet", category="A", name="GeneSet2", genes=LETTERS[5:8])
 gs3 <- new("GeneSet", category="A", name="GeneSet3", genes=LETTERS[seq(2,8,2)])
-gs4 <- new("GeneSet", category="B", name="GeneSet3", genes=LETTERS[seq(1,7,2)])
-gss <- new("GeneSets", name="Test", list(gs1, gs2, gs3, gs4))
+gs4 <- new("GeneSet", category="B", name="GeneSet4", genes=LETTERS[seq(1,7,2)])
+gss <- GeneSets(list(gs1, gs2, gs3, gs4))
 myInput <- LETTERS[2:6]
 myUniverse <- LETTERS
 myFisherRes <- fisherTest(myInput, gss, myUniverse)
@@ -32,7 +32,7 @@ gs5 <- new("GeneSet", name="GeneSet5", genes=LETTERS[1:4])
 gs6 <- new("GeneSet", name="GeneSet6", genes=LETTERS[5:8])
 gs7 <- new("GeneSet", name="GeneSet7", genes=LETTERS[seq(2,8,2)])
 gs8 <- new("GeneSet",  name="GeneSet8", genes=LETTERS[seq(1,7,2)])
-gss2 <- new("GeneSets", name="Test", list(gs5, gs6, gs7, gs8))
+gss2 <- GeneSets(list(gs5, gs6, gs7, gs8))
 myFisherRes2 <- fisherTest(myInput, gss2, myUniverse)#'
 stopifnot(!identical(p.adjust(pValue(myFisherRes), "fdr"), fdrValue(myFisherRes)))
 stopifnot(identical(p.adjust(pValue(myFisherRes2), "fdr"), fdrValue(myFisherRes2)))

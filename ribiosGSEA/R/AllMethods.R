@@ -205,17 +205,6 @@ setMethod("show", "GeneSets", function(object) {
   cat("...\n")
 })
 
-setMethod("show", "GeneSetsList", function(object) {
-  nl <- length(object)
-  cat("[[A collection of ", nl, " GeneSets]]\n", sep="")
-  for(i in nl) {
-    cat("--------------------\n")
-    cat("GeneSets:", object[[i]]@name, "\n")
-    cat("Number of gene sets: ", length(object[[i]]), "\n")
-    cat("--------------------\n")
-  }
-  cat("...\n")
-})
 setMethod("show", "gseaResItem", function(object) {
   gInd <- gsGeneIndices(object)
   fmt <- "GeneSet \"%s\" [%d genes]\nES=%1.3f; NES=%1.3f; \

@@ -13,6 +13,8 @@ exportClass(GeneSets,
 exportClass(FisherResult,
             FisherResultList)
 
+export(GeneSets)
+
 ## S4 methods
 export(gsName, gsDesc, gsGenes, gsGeneValues, gsCategory,
        "gsGenes<-", "gsGeneValues<-",
@@ -56,7 +58,7 @@ export(hits, pValue, fdrValue,
        gsSize, minPValue, minFdrValue,
        sigGeneSet, sigGeneSetTable, topGeneSetTable,topOrSigGeneSetTable,
        fisherTest)
-exportMethods("[", "[[")
+exportMethods("[")
 
 ## Nearest Template Prediction (ntp) algorithm
 export(list2mat)

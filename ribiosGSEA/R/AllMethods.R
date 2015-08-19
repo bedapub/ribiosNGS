@@ -10,7 +10,7 @@ setMethod("gsName", "GeneSet", function(object) return(object@name))
 setMethod("gsName", "gseaResItem", function(object) return(object@geneset))
 setMethod("gsName", "annoGseaRes", function(object) sapply(object, gsName))
 setMethod("gsName", "GeneSets", function(object, i) {
-  res <- sapply(object, function(x) x$name)
+  res <- names(object)
   if(!missing(i) && !is.null(i)) res <- res[i]
   return(res)
 })
@@ -308,6 +308,9 @@ gsDescs <- gsDesc
 ## Fisher's exact test
 ##----------------------------------------##
 setMethod("gsEffSize", "FisherResult", function(object) return(object@gsEffSize))
+setMethod("gsEffSize", "FisherResultList", function(object) {
+    return(sapply(object@.Data, gsEffSize))
+})
 setMethod("hits", "FisherResult", function(object) return(object@hits))
 
 setMethod("gsCategory", "FisherResult", function(object) return(object@gsCategory))
@@ -316,7 +319,7 @@ setMethod("gsCategory", "FisherResultList", function(object) sapply(object@.Data
 
 setMethod("as.data.frame", "FisherResultList", function(x, row.names) {
               categories <- sapply(x, gsCategory)
-              genesets <- sapply(x, gsName)
+              genesets <- gsName(x)
               ps <- sapply(x, pValue)
               fdrs <- sapply(x, fdrValue)
               hits <- lapply(x, hits)
@@ -342,35 +345,18 @@ setMethod("as.data.frame", "FisherResultList", function(x, row.names) {
 ## Fisher's exact test
 ##----------------------------------------##
 setMethod("gsName", "FisherResultList", function(object,...) {
-              sapply(object, function(x) x@gsName)
+              names(object)
           })
 
-setMethod("[[", c("FisherResultList", "numeric"), function(x, i) {
-              return(x@.Data[[i]])
-          })
-setMethod("[[", c("FisherResultList", "character"), function(x, i) {
-              which <- match(i, gsName(x))
-              return(x[[which]])
-          })
-
-setMethod("[", c("FisherResultList", "numeric", "missing", "missing"), function(x, i,j,drop) {
-              x@.Data <- x@.Data[i]
-              return(x)
-          })
-setMethod("[", c("FisherResultList", "character", "missing", "missing"), function(x, i,j, drop) {
-              which <- match(i, gsName(x))
-              x@.Data <- x@.Data[which]
-              return(x)
-          })
 setMethod("[", c("FisherResultList", "character", "character", "missing"),
           function(x, i,j, drop) {
               isCategory <- gsCategory(x) %in% i
-              isName <- gsName(x) %in% j
+              isName <- names(x) %in% j
               isSel <- isCategory & isName
               if(sum(isSel)==1) {
-                  return(x@.Data[[which(isSel)]])
+                  return(x[[which(isSel)]])
               } else if (sum(isSel)>1) {
-                  return(x@.Data[isSel])
+                  return(x[isSel])
               } else {
                   stop(sprintf("No element found for category %s and gene set %s!\n",
                                i, j))
@@ -379,14 +365,7 @@ setMethod("[", c("FisherResultList", "character", "character", "missing"),
 setMethod("[", c("FisherResultList", "character", "missing", "missing"),
           function(x, i,j, drop) {
               isCategory <- gsCategory(x) %in% i
-              x@.Data <- x@.Data[isCategory]
-              return(x)
-          })
-setMethod("[", c("FisherResultList", "missing", "character", "missing"),
-          function(x, i,j, drop) {
-              isName <- gsName(x) %in% j
-              x@.Data <- x@.Data[isName]
-              return(x)
+              return(x[isCategory])
           })
 
 setMethod("hits", "FisherResult", function(object) {
@@ -486,23 +465,81 @@ setMethod("gsSize", "GeneSet", function(object) {
 setMethod("gsSize", "GeneSets", function(object) {
               return(sapply(object@.Data, gsSize))
           })
+filterMinMax <- function(sizes, min, max) {
+    sel <- rep(TRUE, length(sizes))
+    if(!missing(min)) {
+        min <- as.numeric(min)
+        if(!is.na(min)) {
+            sel <- sel & sizes >= min
+        }
+    }
+    if(!missing(max)) {
+        max <- as.numeric(max)
+        if(!is.na(max)) {
+            sel <- sel & sizes <= max
+        }
+    }
+    return(sel)
+}
 setMethod("filterBySize",
           c("GeneSets", "ANY", "ANY"),
           function(object, min, max) {
               sizes <- gsSize(object)
-              sel <- rep(TRUE, length(sizes))
-              if(!missing(min)) {
-                  min <- as.numeric(min)
-                  if(!is.na(min)) {
-                      sel <- sel & sizes >= min
-                  }
-              }
-              if(!missing(max)) {
-                  max <- as.numeric(max)
-                  if(!is.na(max)) {
-                      sel <- sel & sizes <= max
-                  }
-              }
+              sel <- filterMinMax(sizes, min, max)
               object@.Data <- object@.Data[sel]
               return(object)
+          })
+
+## eestimateFdr and fillBySize
+setMethod("estimateFdr", "FisherResultList", function(object) {
+              system.time(ps <- sapply(object, pValue))
+              fdrs <- rep(NA, length(ps))
+              categories <- gsCategory(object)
+              categories[is.na(categories)] <- "NA"
+              categories <- factor(categories)
+              for(i in 1:nlevels(categories)) {
+                  isCurr <- as.integer(categories)==i
+                  fdrs[isCurr] <- p.adjust(ps[isCurr], "fdr")
+              }
+              for(i in seq(along=object)) {
+                  object@.Data[[i]]@fdr <- fdrs[[i]]
+              }
+              return(object)
+          })
+
+setMethod("filterBySize", c("FisherResultList", "ANY", "ANY"),
+          function(object, min, max) {
+              sizes <- gsEffSize(object)
+              sel <- filterMinMax(sizes, min, max)
+              object@.Data <- object@.Data[sel]
+              object <- estimateFdr(object)
+              return(object)
+          })
+geneSetList2GeneSets <- function(gsList, category) {
+    if(is.null(names(gsList))) {
+        gsNames <- sapply(gsList, gsName)
+        names(gsList) <- gsNames
+    }
+    if(!missing(category)) {
+        for(i in seq(along=gsList))
+            gsList[[i]]@gsCategory <- category
+    }
+    return(new("GeneSets", gsList))
+}
+setAs("GeneSets", "list", function(from) {
+          browser()
+          if(is.null(names(from))) {
+              gsNames <- sapply(from, gsName)
+              names(from) <- gsNames
+          }
+          browser()
+          return(new("GeneSets", from))
+      })
+setMethod("GeneSets", "list", function(object, ..., category) {
+              geneSetList2GeneSets(object, category)
+          })
+setMethod("GeneSets", "GeneSet", function(object, ..., category) {
+              gsList <- list(...)
+              gssList <- c(object, gsList)
+              geneSetList2GeneSets(gssList, category)
           })

@@ -36,4 +36,8 @@ setGeneric("topOrSigGeneSetTable", function(object, N, fdr, ...) standardGeneric
 setGeneric("fisherTest", function(genes, genesets, universe, gsName, gsCategory)
     standardGeneric("fisherTest"))
 
+setGeneric("GeneSets", function(object, ..., category) standardGeneric("GeneSets"))
 setGeneric("filterBySize", function(object,min,max) standardGeneric("filterBySize"))
+
+## internal
+setGeneric("estimateFdr", function(object,...) standardGeneric("estimateFdr"))

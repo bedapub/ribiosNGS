@@ -38,14 +38,6 @@ geneCountFilter <- function(x, min, max) {
   x[sel]
 }
 
-## public methods
-GeneSets <- function(list, category) {
-  res <- new("GeneSets",list)
-  for(i in seq(along=res))
-      res@.Data[[i]]@gsCategory <- category
-  return(res)
-}
-
 #' Read GMT file into a GeneSets object
 #'
 #' @param ... Named or unnamed characater string vector, giving file names of One or more GMT format files. 
@@ -78,7 +70,6 @@ readGmt <- function(..., category=NULL) {
                                   name=gs[[i]]$name, desc=gs[[i]]$desc, genes=gs[[i]]$genes))
                    })
     res <- as(resl, "GeneSets")
-    gnames <- sapply(res, gsName)
     return(res)
 }
 

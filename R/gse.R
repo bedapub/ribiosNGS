@@ -82,7 +82,7 @@ voomCamera <- function(edgeObj, gscs) {
                          return(tt)
                      })
   erTable <- do.call(rbind, erTables)
-  erTable$Category <- categories
+  erTable$Category <- rep(names(erTables), sapply(erTables, nrow))
   erTable <- putColsFirst(erTable, "Category")
   rownames(erTable) <- NULL
   

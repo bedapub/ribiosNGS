@@ -69,7 +69,8 @@ readGmt <- function(..., category=NULL) {
                        return(new("GeneSet", category=category[i],
                                   name=gs[[i]]$name, desc=gs[[i]]$desc, genes=gs[[i]]$genes))
                    })
-    res <- as(resl, "GeneSets")
+    names(resl) <- sapply(resl, gsName)
+    res <- GeneSets(resl)
     return(res)
 }
 

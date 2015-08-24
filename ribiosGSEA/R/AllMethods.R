@@ -88,22 +88,26 @@ setMethod("gseaCoreEnrichThr", "annoGseaRes", function(object) {
   return(res)
 })
 
-
+setMethod("gsDesc", "GeneSet", function(object) {
+              return(object@desc)
+          })
 setMethod("gsDesc", "GeneSets", function(object, i) {
-  res <- sapply(object, function(x) x$description)
+  res <- sapply(object@.Data, function(x) x@desc)
   if(!missing(i)) res <- res[i]
   return(res)
 })
 
 setMethod("gsGenes", "GeneSet", function(object) return(object@genes))
+
 setMethod("gsGenes", "annoGseaResItem", function(object) return(object@gsGenes))
 setMethod("gsGenes", "annoGseaRes", function(object) {
-  res <- lapply(object, gsGenes)
+  res <- lapply(object@.Data, gsGenes)
   names(res) <- gsName(object)
   return(res)
 })
 setMethod("gsGenes", "GeneSets", function(object, i) {
-  res <- sapply(object, function(x) x$genes)
+  res <- sapply(object@.Data, function(x) x@genes)
+  names(res) <- gsNames(object)
   if(!missing(i)) {
     res <- res[i]
     if(length(i)==1)

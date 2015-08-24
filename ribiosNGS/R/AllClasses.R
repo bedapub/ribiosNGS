@@ -156,7 +156,7 @@ setClass("FeatAnnoExprs",
 setClass("EdgeGSE",
          representation=list(geneSets="GeneSets",
            method="character",
-           enrichTables="list"),
+           enrichTables="data.frame"),
          contains="EdgeResult")
 
 EdgeGSE <- function(edgeObj, gsc) {

@@ -15,6 +15,7 @@ setMethod("gsName", "GeneSets", function(object, i) {
   return(res)
 })
 setMethod("gsName", "FisherResult", function(object) object@gsName)
+setMethod("gsName", "FisherResultList", function(object) names(object@.Data))
 
 setMethod("gseaES", "gseaResItem", function(object) return(object@es))
 setMethod("gseaES", "annoGseaRes", function(object) {
@@ -189,7 +190,7 @@ setMethod("show", "GeneSets", function(object) {
   categories <- gsCategory(object)
   cateTbl <- table(categories)
   categoryTerm <- ifelse(length(cateTbl)>1, "categories", "category")
-  cat("A GeneSet object\n")
+  cat("A GeneSets object\n")
   cat("  Unique ", categoryTerm," (", length(cateTbl), "):\n", sep="")
   cat(paste("    [", seq(along=cateTbl), "] ",
             names(cateTbl), " (", cateTbl, ")", collapse="\n",
@@ -308,7 +309,7 @@ setMethod("gsCategory", "FisherResultList", function(object) sapply(object@.Data
 
 setMethod("as.data.frame", "FisherResultList", function(x, row.names) {
               categories <- sapply(x, gsCategory)
-              genesets <- gsName(x)
+              genesets <- sapply(x, gsName) ## TODO: gsName
               ps <- sapply(x, pValue)
               fdrs <- sapply(x, fdrValue)
               hits <- lapply(x, hits)
@@ -336,7 +337,22 @@ setMethod("as.data.frame", "FisherResultList", function(x, row.names) {
 setMethod("gsName", "FisherResultList", function(object,...) {
               names(object)
           })
-
+setMethod("[", "GeneSets", function(x, i) {
+              resList <- x@.Data[i]
+              names(resList) <- names(x)[i]
+              res <- new("GeneSets", resList)
+              return(res)
+          })
+## setMethod("[", c("FisherResultList", "character", "missing", "missing"),
+##           function(x, i,j, drop) {
+##              isCategory <- gsCategory(x) %in% i
+##              return(x[isCategory])
+##          })
+setMethod("[", c("FisherResultList", "ANY", "missing", "missing"), function(x, i) {
+              resList <- x@.Data[i]
+              res <- new("FisherResultList", resList, input=x@input, universe=x@universe)
+              return(res)
+          })
 setMethod("[", c("FisherResultList", "character", "character", "missing"),
           function(x, i,j, drop) {
               isCategory <- gsCategory(x) %in% i
@@ -351,11 +367,7 @@ setMethod("[", c("FisherResultList", "character", "character", "missing"),
                                i, j))
               }
           })
-setMethod("[", c("FisherResultList", "character", "missing", "missing"),
-          function(x, i,j, drop) {
-              isCategory <- gsCategory(x) %in% i
-              return(x[isCategory])
-          })
+
 
 setMethod("hits", "FisherResult", function(object) {
               object@hits
@@ -475,8 +487,7 @@ setMethod("filterBySize",
           function(object, min, max) {
               sizes <- gsSize(object)
               sel <- filterMinMax(sizes, min, max)
-              object@.Data <- object@.Data[sel]
-              return(object)
+              return(object[sel])
           })
 
 ## eestimateFdr and fillBySize
@@ -500,7 +511,7 @@ setMethod("filterBySize", c("FisherResultList", "ANY", "ANY"),
           function(object, min, max) {
               sizes <- gsEffSize(object)
               sel <- filterMinMax(sizes, min, max)
-              object@.Data <- object@.Data[sel]
+              object <- object[sel]
               object <- estimateFdr(object)
               return(object)
           })

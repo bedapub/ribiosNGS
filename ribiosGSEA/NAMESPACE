@@ -12,6 +12,8 @@ exportClass(GeneSets,
             annoGseaRes, annoGseaResList)
 exportClass(FisherResult,
             FisherResultList)
+exportClass(CameraResult,
+            CameraResultList)
 
 export(GeneSets)
 

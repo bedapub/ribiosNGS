@@ -29,19 +29,36 @@ setClass("GeneSet",
 setClass("GeneSets",contain="list")
 ## setClass("GeneSetsList", contain="list")
 
-
-## Fisher's exact test
-setClass("FisherResult",
+setClass("GeneSetResult",
          representation=list(
              gsCategory="character",
              gsName="character",
-             gsEffSize="integer",
-             hits="character",
+             gsEffSize="character",
              p="numeric",
-             fdr="numeric"))
+             fdr="numeric"),
+         contains="VIRTUAL")
+            
+## Fisher's exact test
+setClass("FisherResult",
+         representation=list(hits="character"),
+         contains="GeneSetResult")
 
 setClass("FisherResultList",
          representation=list(
+             inputName="character",
              input="character",
              universe="character"),
          contain="list")
+
+
+## Camera result
+setClass("CameraResult",
+         representation=list(
+             correlation="numeric",
+             hits="character",
+             score="numeric"),
+         contains="GeneSetResult")
+setClass("CameraResultList",
+         representation=list(inputName="character"),
+         contain="list")
+            

@@ -43,6 +43,7 @@ export(writeDgeTables)
 
 export(modLogCPM)
 export(voom,
+       logFCgage,
        voomCamera)
 export(fullEnrichTable)
 export(hasCommonDisp, setCommonDispIfMissing)

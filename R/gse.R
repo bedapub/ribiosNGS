@@ -56,13 +56,17 @@ voomCameraGsc <- function(voom, geneSymbols, gsc, design, contrasts) {
 
   
   cameraRes <- lapply(1:ncol(contrasts),
-                      function(x) camera(voom,
-                                         design=design,
-                                         index=genes.inds,
-                                         contrast=contrasts[,x]))
+                      function(x) {
+                          tbl <- camera(voom,
+                                        design=design,
+                                        index=genes.inds,
+                                        contrast=contrasts[,x])
+                          tbl$GeneSet <- rownames(tbl)
+                          tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "Direction", "PValue", "FDR")]
+                          return(tbl)
+                      })
   cRes <- do.call(rbind, cameraRes)
-  bg <- data.frame(Contrast=rep(colnames(contrasts), sapply(cameraRes, nrow)),
-                   GeneSet=rep(gsNames(gsc), ncol(contrasts)))
+  bg <- data.frame(Contrast=rep(colnames(contrasts), sapply(cameraRes, nrow)))
   res <- cbind(bg, cRes)
   rownames(res) <- NULL
   return(res)

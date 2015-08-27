@@ -33,7 +33,7 @@ setClass("GeneSetResult",
          representation=list(
              gsCategory="character",
              gsName="character",
-             gsEffSize="character",
+             gsEffSize="integer",
              p="numeric",
              fdr="numeric"),
          contains="VIRTUAL")

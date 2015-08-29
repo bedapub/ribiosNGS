@@ -1,3 +1,4 @@
+import(methods)
 importFrom(Rcpp, evalCpp)
 
 export("cossim", "cosdist")
@@ -6,6 +7,6 @@ export("empval")
 
 export("randmat")
 
-export("kappa")
+export("kappaLA", "kappaSimp")
 
 useDynLib(ribiosMath)

@@ -1,3 +1,7 @@
+Version 1.0-8 (2015-08-29)
+  + Add kappaLA and kappaSimp to calculate kappa statistics; benchmark remains to be done to determine which one works better
+  + Add testthat tests for kappaLA and kappaSimp
+  
 Version 1.0-4 (2013-03-06)
   + cossim works now with y missing.
 

@@ -15,10 +15,10 @@ exportClass(FisherResult,
 exportClass(CameraResult,
             CameraResultList)
 
-export(GeneSets)
+export(GeneSet, GeneSets)
 
 ## S4 methods
-export(gsName, gsDesc, gsGenes, gsGeneValues, gsCategory,
+export(gsName, gsDesc, gsGenes, gsGeneCount, gsGeneValues, gsCategory,
        "gsGenes<-", "gsGeneValues<-",
        isGseaCoreEnrich,
        gseaES, gseaNES, gseaNP, gseaFDR, gseaFWER,
@@ -50,9 +50,7 @@ export(gseaResQvalue, gseaResES,
 export(buildGSEAcomm)
 
 ## GMT functions
-export(readGmt, parseGmt,
-       matchGenes,
-       geneCount)
+export(readGmt, parseGmt, matchGenes)
 
 ## Fisher test (using hypergeometric test)
 export(gmthyper, gmthyperList)
@@ -74,6 +72,8 @@ export(parseDTG, parseGSEAdir, parseGSEAedb, parseGSEAres)
 ## camera methods
 export(biosCamera, mcamera)
 
+## util
+export(wnUnique)
 
 ## Use Dynamic Lib
 useDynLib(ribiosGSEA)

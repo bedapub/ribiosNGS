@@ -19,4 +19,8 @@ gseaJar <- function() {return(GSEA_JAR)}
 defaultGmt <- function() {return(DEFAULT_GMT)}
 defaultChip <- function() {return(DEFAULT_CHIP)}
 
-                          
+## unique without NA
+wnUnique <- function(x) {
+    x <- unique(x)
+    return(x[!is.na(x)])
+}

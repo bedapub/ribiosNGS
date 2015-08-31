@@ -116,6 +116,13 @@ setMethod("gsGenes", "GeneSets", function(object, i) {
   return(res)
 })
 
+setMethod("gsGeneCount", "GeneSet", function(object) return(length(object@genes)))
+setMethod("gsGeneCount", "GeneSets", function(object, i) {
+              res <- sapply(object@.Data, function(x) length(x@genes))
+              if(!missing(i)) res <- res[i]
+              return(res)
+          })
+
 setMethod("gsGeneValues", "annoGseaResItem", function(object) return(object@gsGeneValues))
 setMethod("gsGeneValues", "annoGseaRes", function(object) {
   res <- lapply(object, gsGeneValues)
@@ -546,4 +553,17 @@ setMethod("GeneSets", "GeneSet", function(object, ..., category) {
               gsList <- list(...)
               gssList <- c(object, gsList)
               geneSetList2GeneSets(gssList, category)
+          })
+
+setMethod("GeneSet", c("ANY", "character", "ANY", "character"),
+          function(category, name, desc, genes) {
+              if(missing(category))
+                  category <- as.character(NA)
+              if(missing(desc))
+                  desc <- as.character(NA)
+              if(any(duplicated(genes)) || any(is.na(genes))) {
+                  warning("Duplicated genes or NA found! They are removed")
+                  genes <- wnUnique(genes)
+              }
+              new("GeneSet", category=category, name=name, desc=desc, genes=genes)
           })

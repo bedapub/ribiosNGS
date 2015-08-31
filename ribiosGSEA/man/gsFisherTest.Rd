@@ -27,8 +27,8 @@ myGenes <- LETTERS[1:3]
 myGeneSet1 <- LETTERS[1:6]
 myGeneSet2 <- LETTERS[4:7]
 myUniverse <- LETTERS
-gsFisherTest(myGenes, myGeneSet1, myUniverse)
-gsFisherTest(myGenes, myGeneSet2, myUniverse)
-gsFisherTest(myGenes, myGeneSet1, myUniverse, gsName="My gene set1", gsCategory="Letters")
+ribiosGSEA:::gsFisherTest(myGenes, myGeneSet1, myUniverse)
+ribiosGSEA:::gsFisherTest(myGenes, myGeneSet2, myUniverse)
+ribiosGSEA:::gsFisherTest(myGenes, myGeneSet1, myUniverse, gsName="My gene set1", gsCategory="Letters")
 }
 

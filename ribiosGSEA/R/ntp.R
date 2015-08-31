@@ -1,7 +1,6 @@
 
 perm <- function(exp, templates, exp.dist,
                  Nrand=1000) {
-  options(cores=8L)
   mat <- mclapply(1:ncol(exp), function(nc) {
     vec <- exp[, nc, drop=TRUE]
     rvec <- randmat(vec, nrow(templates), as.integer(Nrand))
@@ -20,6 +19,7 @@ ntpTemplates <- function(genesets, featureNames) {
   class(templates) <- c("ntpTemplates", "matrix")
   return(templates)
 }
+
 ntpBiTemplates <- function(genesetsPos, genesetsNeg, featureNames) {
   haltifnot(length(genesetsPos)==length(genesetsNeg),
             msg="Positive and negative gene sets must be of the same length")

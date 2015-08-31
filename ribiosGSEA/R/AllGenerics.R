@@ -2,6 +2,7 @@ setGeneric("gsCategory", function(object, ...) standardGeneric("gsCategory"))
 setGeneric("gsName", function(object, ...) standardGeneric("gsName"))
 setGeneric("gsDesc", function(object, ...) standardGeneric("gsDesc"))
 setGeneric("gsGenes", function(object,...) standardGeneric("gsGenes"))
+setGeneric("gsGeneCount", function(object,...) standardGeneric("gsGeneCount"))
 setGeneric("gsGeneValues", function(object) standardGeneric("gsGeneValues"))
 setGeneric("gsGenes<-", function(object,value) standardGeneric("gsGenes<-"))
 setGeneric("gsGeneValues<-", function(object,value) standardGeneric("gsGeneValues<-"))
@@ -19,6 +20,8 @@ setGeneric("gseaCoreEnrichGenes", function(object) standardGeneric("gseaCoreEnri
 setGeneric("annoGseaResItem", function(object, ...) standardGeneric("annoGseaResItem"))
 ##setGeneric("gseaRes", function(object) standardGeneric("gseaRes"))
 setGeneric("annoGseaRes", function(object) standardGeneric("annoGseaRes"))
+
+setGeneric("GeneSet", function(category, name, desc, genes) standardGeneric("GeneSet"))
 
 ## Fisher's exact test
 setGeneric("hits", function(object, ...) standardGeneric("hits"))

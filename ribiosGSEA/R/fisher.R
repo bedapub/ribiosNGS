@@ -1,3 +1,4 @@
+
 #' Perform Fisher's exact test on a gene set
 #'
 #' @param genes a collection of genes of which over-representation of the gene set is tested
@@ -13,9 +14,9 @@
 #' myGeneSet1 <- LETTERS[1:6]
 #' myGeneSet2 <- LETTERS[4:7]
 #' myUniverse <- LETTERS
-#' gsFisherTest(myGenes, myGeneSet1, myUniverse)
-#' gsFisherTest(myGenes, myGeneSet2, myUniverse)
-#' gsFisherTest(myGenes, myGeneSet1, myUniverse, gsName="My gene set1", gsCategory="Letters")
+#' ribiosGSEA:::gsFisherTest(myGenes, myGeneSet1, myUniverse)
+#' ribiosGSEA:::gsFisherTest(myGenes, myGeneSet2, myUniverse)
+#' ribiosGSEA:::gsFisherTest(myGenes, myGeneSet1, myUniverse, gsName="My gene set1", gsCategory="Letters")
 gsFisherTest <- function(genes, geneSetGenes, universe, gsName, gsCategory) {
     if(missing(gsName)) gsName <- NA
     if(missing(gsCategory)) gsCategory <- NA
@@ -42,20 +43,64 @@ gsFisherTest <- function(genes, geneSetGenes, universe, gsName, gsCategory) {
     return(fr)
 }
 
+#' Perform Fisher's exact test on a gene set
+#'
+#' @param genes a collection of genes of which over-representation of the gene set is tested
+#' @param geneSetGenes genes belonging to a gene set
+#' @param universe universe of genes
+#' @param gsName gene set name, can be left missing
+#' @param gsCategory gene set category name, can be left missing
+#'
+#' This function performs one-sided Fisher's exact test to test the over-representation of gene set genes in the input gene list.
+#'
+#' @note Duplicated items in genes, genesets' genes, and the universe are removed
+#'
+#' @examples
+#' myGenes <- LETTERS[1:3]
+#' myGeneSet1 <- LETTERS[1:6]
+#' myGeneSet2 <- LETTERS[4:7]
+#' myUniverse <- LETTERS
+#' fisherTest(myGenes, myGeneSet1, myUniverse)
+#' fisherTest(myGenes, myGeneSet2, myUniverse)
+#' fisherTest(myGenes, myGeneSet1, myUniverse, gsName="My gene set1", gsCategory="Letters")
+#'
+#' ## note that duplicated items are removed
+#' fisherTest(rep(myGenes,2), myGeneSet2, myUniverse)
+#' fisherTest(rep(myGenes,2), myGeneSet2, rep(myUniverse,2))
 setMethod("fisherTest", c("character", "character", "character", "ANY", "ANY"),
           function(genes, genesets, universe, gsName, gsCategory) {
               if(missing(gsName))
                   gsName <- as.character(NA)
               if(missing(gsCategory))
                   gsCategory <- as.character(NA)
-              genes <- unique(genes)
-              universe <- unique(universe)
+              genes <- wnUnique(genes)
+              universe <- wnUnique(universe)
+              genesets <- wnUnique(genesets)
               gsFisherTest(genes=genes, geneSetGenes=genesets,
                            universe=universe,
                            gsName=gsName, gsCategory=gsCategory)
           })
+
+#' Perform Fisher's exact test on a gene set
+#'
+#' @param genes a collection of genes of which over-representation of the gene set is tested
+#' @param geneSetGenes A GeneSet object
+#' @param universe universe of genes
+#' #'
+#' This function performs one-sided Fisher's exact test to test the over-representation of gene set genes in the input gene list.
+#'
+#' @examples
+#' myGenes <- LETTERS[1:3]
+#' myGeneSet1 <- new("GeneSet", category="My category 1", name="GeneSet1", genes=LETTERS[1:6])
+#' myGeneSet2 <- new("GeneSet", category="My category 2", name="GeneSet1", genes=LETTERS[2:7])
+#' myUniverse <- LETTERS
+#' fisherTest(myGenes, myGeneSet1, myUniverse)
+#' fisherTest(myGenes, myGeneSet2, myUniverse)
+
 setMethod("fisherTest", c("character", "GeneSet", "character", "missing", "missing"),
           function(genes, genesets, universe) {
+              genes <- wnUnique(genes)
+              universe <- wnUnique(universe)
               fisherTest(genes=genes, genesets=gsGenes(genesets),
                          universe=universe,
                          gsName=gsName(genesets), gsCategory=gsCategory(genesets))
@@ -88,18 +133,21 @@ setMethod("fisherTest", c("character", "GeneSet", "character", "missing", "missi
 #' 
 setMethod("fisherTest", c("character", "GeneSets", "character", "missing", "missing"),
           function(genes, genesets, universe) {
-              genes <- unique(genes)
-              universe <- unique(universe)
+              genes <- wnUnique(genes)
+              universe <- wnUnique(universe)
               if(any(!genes %in% universe)) {
                   warning("Incomplete universe: following genes are added",
                           paste(setdiff(genes, universe), collapse=","))
                   universe <- union(universe, genes)
               }
-              res <- lapply(genesets, function(x) fisherTest(genes, x, universe=universe))
+              res <- lapply(genesets, function(x)
+                  gsFisherTest(genes=genes, geneSetGenes=gsGenes(x),
+                               universe=universe,
+                               gsName=gsName(x), gsCategory=gsCategory(x)))
               names(res) <- names(genesets)
               fr <- new("FisherResultList", res)
               fr@input <- genes
               fr@universe <- universe
-              fr <- estimateFdr(fr)
+              fr <- ribiosGSEA:::estimateFdr(fr)
               return(fr)
           })

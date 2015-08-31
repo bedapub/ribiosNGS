@@ -3,7 +3,7 @@ matchGenes <- function(x, vec, na.rm=TRUE) {
     stop("'x' must be a 'GeneSets' object")
   haltifnot(is.vector(vec),
             msg="'vec' must be a vector of gene names")
-  xgl <- lapply(x, function(x) unique(x$genes))
+  xgl <- gsGenes(x)
   xgenes <- unlist(xgl)
   xgenes[is.na(xgenes) | xgenes=="" | xgenes=="-"] <- NA
   xgenes.ind <- match(xgenes, vec)
@@ -17,25 +17,6 @@ matchGenes <- function(x, vec, na.rm=TRUE) {
   names(gs.indices) <- gsName(x)
 
   return(gs.indices)
-}
-
-geneCount <- function(x,i=NULL) {
-  if(!is(x, "GeneSets"))
-    stop("'x' must be a 'GeneSets' object")
-  res <- sapply(x, function(xx) uniqueLength(xx$genes))
-  if(!missing(i)) res <- res[i]
-  names(res) <- gsName(x, i)
-  return(res)
-}
-
-geneCountFilter <- function(x, min, max) {
-  if(!is(x, "GeneSets"))
-    stop("'x' must be a 'GeneSets' object")
-  gmt.count <- sapply(x, function(xx) uniqueLength(xx$genes))
-  sel <- rep(TRUE, length(x))
-  if(!missing(min)) sel <- sel & gmt.count >= min
-  if(!missing(max)) sel <- sel & gmt.count <= max
-  x[sel]
 }
 
 #' Read GMT file into a GeneSets object
@@ -66,8 +47,10 @@ readGmt <- function(..., category=NULL) {
     gs <- unlist(gsList, use.names=TRUE, recursive=FALSE)
     category <- rep(category, sapply(gsList, length))
     resl <- lapply(seq(along=gs), function(i) {
-                       return(new("GeneSet", category=category[i],
-                                  name=gs[[i]]$name, desc=gs[[i]]$desc, genes=gs[[i]]$genes))
+                       return(GeneSet(category=category[[i]],
+                                      name=gs[[i]]$name,
+                                      desc=gs[[i]]$desc,
+                                      genes=gs[[i]]$genes))
                    })
     names(resl) <- sapply(resl, gsName)
     res <- GeneSets(resl)
@@ -75,8 +58,7 @@ readGmt <- function(..., category=NULL) {
 }
 
 parseGmt <- function(file, vec, min, max) {
-  res <- read_gmt_list(file)
-  res <- as(res, "GeneSets")
+  res <- readGmt(file)
   ind <- matchGenes(res, vec, na.rm=TRUE)
 
   ## final filtering

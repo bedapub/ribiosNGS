@@ -89,10 +89,9 @@ rownames(testExp) <- paste("Gene", 1:nrow(testExp), sep="")
 testExp[1:25, 1:5] <- testExp[1:25, 1:5] + rnorm(125, mean=1.5)
 testExp[76:100, 6:10] <- testExp[76:100, 6:10] + rnorm(125, mean=1.5)
 
-testGeneSet <- list(list(name="GeneSet1", description="",
-                    genes=rownames(testExp)[1:25]),
-                    list(name="GeneSet2", description="", genes=rownames(testExp)[76:100]))
-class(testGeneSet) <- "GeneSets"
+gs1 <- GeneSet(name="GeneSet1", genes=rownames(testExp)[1:25])
+gs2 <- GeneSet(name="GeneSet1", genes=rownames(testExp)[76:100])
+testGeneSet <- GeneSets(gs1, gs2)
 
 ## First step: building templates
 testTemplates <- ntpTemplates(testGeneSet, rownames(testExp))

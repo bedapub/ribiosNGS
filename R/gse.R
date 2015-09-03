@@ -3,7 +3,7 @@
 ## gage method
 myGage <- function(logFC, gsc) {
     genes <- gsGenes(gsc)
-    gage.res <- gage(logFC, gsets=genes, ref=NULL, samp=NULL)
+    gage.res <- gage::gage(logFC, gsets=genes, ref=NULL, samp=NULL)
     greater <- as.data.frame(gage.res[[1]][,c("stat.mean", "p.val", "q.val", "set.size")])
     less <- as.data.frame(gage.res[[2]][,c("p.val", "q.val")])
     greater$geneset <- rownames(greater)
@@ -40,7 +40,7 @@ logFCgage <- function(edgeResult, gscs) {
     edgeGse <- as(edgeResult, "EdgeGSE")
     edgeGse@geneSets <- gscs
     edgeGse@method <- "gage"
-    edgeGse@enrichTables <- erTables
+    edgeGse@enrichTables <- erTable
     return(edgeGse)
 }
 

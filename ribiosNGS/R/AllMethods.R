@@ -392,6 +392,8 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
               return(object)
             }
             feats <- featureNames(object)
+            ## only first 100 characters are used
+            feats <- substr(feats, 1, 100)
             isValidFeat <- isValidID(feats)
             if(target=="GeneID") {
               anno <- annotateGeneIDs(feats,orthologue = TRUE)

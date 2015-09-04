@@ -1,3 +1,6 @@
+2015-09-04: v1.1-18
+  + rarg_parse: fixed a bug caused by passing SEXP as a size_t object
+
 2015-06-23: v1.1-17
   + argParse returns invisible NULL in all situations
   + argGetPos and argGet returns default value when running in debugging mode

@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Thu Aug  6 11:23:10 CEST 2015). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Fri Sep  4 11:33:52 CEST 2015). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -10,8 +10,8 @@
 ################################################################################
 
 R=R
-PKG=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
-PKG_VERSION=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
+PKG=`awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION`
+PKG_VERSION=`awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION`
 
 
 PKG_ROOT_DIR=`pwd`

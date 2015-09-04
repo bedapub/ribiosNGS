@@ -6,7 +6,7 @@
 void print_msg(const char *x, const char* prefix, va_list args) {
   fflush(NULL);
   REprintf(prefix);
-  vfprintf(stderr, x, args);
+  REprintf(x, args);
   va_end(args);
   REprintf("\n");
 }

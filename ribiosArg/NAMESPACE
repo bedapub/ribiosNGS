@@ -1,4 +1,4 @@
-importFrom("ribiosUtils", "trim")
+importFrom("ribiosUtils", "trim", "isDebugging", "qqmsg", "extname")
 
 export("getArg","existArg")
 

@@ -30,7 +30,7 @@ SEXP rarg_parse(SEXP argc, SEXP argv, SEXP optargs, SEXP reqargs, SEXP usage) {
 
   rargc=asInteger(argc);
   if(!rargv)
-    rargv= (char **)hlr_calloc (argc,sizeof (char *));
+    rargv= (char **)hlr_calloc (rargc,sizeof (char *));
   
   for(i=0;i<rargc;i++) {
     hlr_free(rargv[i]);

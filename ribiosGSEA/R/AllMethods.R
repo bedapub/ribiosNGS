@@ -106,7 +106,7 @@ setMethod("gsGenes", "annoGseaRes", function(object) {
   return(res)
 })
 setMethod("gsGenes", "GeneSets", function(object, i) {
-  res <- sapply(object@.Data, function(x) x@genes)
+  res <- lapply(object@.Data, function(x) x@genes)
   names(res) <- gsNames(object)
   if(!missing(i)) {
     res <- res[i]

@@ -12,13 +12,15 @@ myGage <- function(logFC, gsc) {
     direction <- with(res.raw, ifelse(p.val.less<p.val.greater, "Down", "Up"))
     pVal.pmin <- with(res.raw, ifelse(p.val.less<p.val.greater, p.val.less, p.val.greater))
     pVal <- pVal.pmin * 2; pVal[pVal>1] <- 1
-    fdr <- p.adjust(pVal, "fdr")
+
     res <- data.frame(Category=gsCategory(gsc),
                       GeneSet=gsName(gsc),
                       NGenes=res.raw$set.size,
                       Direction=direction,
                       PValue=pVal,
-                      FDR=fdr, row.names=res.raw$geneset)
+                      FDR=NA, row.names=res.raw$geneset)
+    res <- subset(res, NGenes>=1 & !is.na(PValue))
+    res$FDR <- p.adjust(res$PValue, "fdr")
     return(res)
 }
 
@@ -69,6 +71,7 @@ voomCameraGsc <- function(voom, geneSymbols, gsc, design, contrasts) {
   bg <- data.frame(Contrast=rep(colnames(contrasts), sapply(cameraRes, nrow)))
   res <- cbind(bg, cRes)
   rownames(res) <- NULL
+  res <- subset(res, NGenes>=1 & !is.na(PValue))
   return(res)
 }
 voomCamera <- function(edgeObj, gscs) {

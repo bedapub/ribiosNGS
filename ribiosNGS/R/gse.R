@@ -69,6 +69,8 @@ voomCameraGsc <- function(voom, geneSymbols, gsc, design, contrasts) {
                                         contrast=contrasts[,x], sort=FALSE)
                           tbl$GeneSet <- names(genes.inds)
                           rownames(tbl) <- NULL
+                          if(!"FDR" %in% colnames(tbl))
+                              tbl$FDR <- tbl$PValue
                           tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "Direction", "PValue", "FDR")]
                           tbl <- sortByCol(tbl, "PValue")
                           return(tbl)

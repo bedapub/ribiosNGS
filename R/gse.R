@@ -66,9 +66,11 @@ voomCameraGsc <- function(voom, geneSymbols, gsc, design, contrasts) {
                           tbl <- camera(voom,
                                         design=design,
                                         index=genes.inds,
-                                        contrast=contrasts[,x])
-                          tbl$GeneSet <- rownames(tbl)
+                                        contrast=contrasts[,x], sort=FALSE)
+                          tbl$GeneSet <- names(genes.inds)
+                          rownames(tbl) <- NULL
                           tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "Direction", "PValue", "FDR")]
+                          tbl <- sortByCol(tbl, "PValue")
                           return(tbl)
                       })
   cRes <- do.call(rbind, cameraRes)

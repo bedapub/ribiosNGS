@@ -3,23 +3,27 @@
 ## gage method
 myGage <- function(logFC, gsc) {
     genes <- gsGenes(gsc)
+    cate <- gsCategory(gsc)
+    gdf <- data.frame(geneset=names(genes), category=cate)
     gage.res <- gage::gage(logFC, gsets=genes, ref=NULL, samp=NULL)
     greater <- as.data.frame(gage.res[[1]][,c("stat.mean", "p.val", "q.val", "set.size")])
     less <- as.data.frame(gage.res[[2]][,c("p.val", "q.val")])
     greater$geneset <- rownames(greater)
     less$geneset <- rownames(less)
-    res.raw <- merge(greater, less, by="geneset", suffix=c(".greater", ".less"))
+    greater <- merge(greater, gdf, by="geneset")
+    less <- merge(less, gdf, by="geneset")
+    res.raw <- merge(greater, less, by=c("geneset","category"), suffix=c(".greater", ".less"))
     direction <- with(res.raw, ifelse(p.val.less<p.val.greater, "Down", "Up"))
     pVal.pmin <- with(res.raw, ifelse(p.val.less<p.val.greater, p.val.less, p.val.greater))
     pVal <- pVal.pmin * 2; pVal[pVal>1] <- 1
 
-    res <- data.frame(Category=gsCategory(gsc),
-                      GeneSet=gsName(gsc),
+    res <- data.frame(Category=res.raw$category,
+                      GeneSet=res.raw$geneset,
                       NGenes=res.raw$set.size,
                       Direction=direction,
                       PValue=pVal,
-                      FDR=NA, row.names=res.raw$geneset)
-    res <- subset(res, NGenes>=1 & !is.na(PValue))
+                      FDR=rep(NA,length(pVal)))
+    res <- subset(res, NGenes>=1 & !is.na(PValue) & !is.nan(PValue))
     res$FDR <- p.adjust(res$PValue, "fdr")
     return(res)
 }
@@ -71,7 +75,7 @@ voomCameraGsc <- function(voom, geneSymbols, gsc, design, contrasts) {
   bg <- data.frame(Contrast=rep(colnames(contrasts), sapply(cameraRes, nrow)))
   res <- cbind(bg, cRes)
   rownames(res) <- NULL
-  res <- subset(res, NGenes>=1 & !is.na(PValue))
+  res <- subset(res, NGenes>=1 & !is.na(PValue) & !is.nan(PValue))
   return(res)
 }
 voomCamera <- function(edgeObj, gscs) {

@@ -31,8 +31,8 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
   const char* fn=CHAR(STRING_ELT(filename, 0));
   ls = ls_createFromFile(strdup(fn));
 
+  ls_nextLine(ls); // skip the first header line
   while(line = ls_nextLine(ls)) {
-    if(nrow==0) continue; // skip the header line
     it = textFieldtokP(line, "\t");
     if(arrayMax(it)<MAND_NCOL)
       error("Input file must contain no less than %d columns", MAND_NCOL);

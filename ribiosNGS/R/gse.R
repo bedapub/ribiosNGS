@@ -80,7 +80,6 @@ voomCameraGsc <- function(voom, geneSymbols, gsc, design, contrasts) {
   res <- cbind(bg, cRes)
   rownames(res) <- NULL
   res <- subset(res, NGenes>=1 & !is.na(PValue) & !is.nan(PValue))
-  res$FDR <- p.adjust(res$PValue, "fdr")
   return(res)
 }
 voomCamera <- function(edgeObj, gscs) {

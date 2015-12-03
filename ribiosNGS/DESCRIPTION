@@ -1,8 +1,8 @@
 Package: ribiosNGS
 Type: Package
 Title: NGS utilities for ribios
-Version: 1.0-13
-Date: 2015-08-11
+Version: 1.0-14
+Date: 2015-12-03
 Author: Jitao David Zhang and Roland Schmucki
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: NGS tasks in ribios, primarily differetial gene expression analysis.

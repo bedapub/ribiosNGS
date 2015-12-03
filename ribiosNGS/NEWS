@@ -1,3 +1,6 @@
+Version 1.0-14 (2015-12-03)
+  + add truncatedDgeTable and writeTruncatedDgeTables
+
 Version 1.0-13 (2015-08-11)
   + Replace NA with zero counts if needed
 

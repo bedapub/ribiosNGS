@@ -377,14 +377,16 @@ truncatedDgeTable <- function(topTable) {
     topTable <- sortByCol(topTable, "PValue", decreasing=FALSE)
     cond1 <- with(topTable, abs(logFC)>=1 & FDR<0.10)
     cond2 <- with(topTable, abs(logFC)>=1 & PValue<0.05)
-    if(sum(cond1)>=100) {
+    if(sum(cond1)>=200) {
         posTbl <- subset(topTable[cond1,], logFC>0)
         negTbl <- subset(topTable[cond1,], logFC<0)
-    } else if(sum(cond2)>=100) {
+    } else if(sum(cond2)>=200) {
         posTbl <- subset(topTable[cond2,], logFC>0)
         negTbl <- subset(topTable[cond2,], logFC<0)
     } else {
-        ntop <- pmin(100, as.integer(nrow(topTable)*0.05))
+        ntop <- pmin(400,
+                     pmin(nrow(topTable),
+                          pmax(100, as.integer(nrow(topTable)*0.05))))
         posTbl <- subset(topTable[1:ntop,], logFC>0)
         negTbl <- subset(topTable[1:ntop,], logFC<0)
     }

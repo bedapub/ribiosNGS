@@ -370,6 +370,48 @@ writeDgeTables <- function(edgeResult, outdir=getwd()) {
   write.tableList(tables, outfiles, row.names=TRUE)
 }
 
+
+
+## the logic described at http://rochewiki.roche.com/confluence/display/BIOINFO/Substream+Algorithm
+truncatedDgeTable <- function(topTable) {
+    topTable <- sortByCol(topTable, "PValue", decreasing=FALSE)
+    cond1 <- with(topTable, abs(logFC)>=1 & FDR<0.10)
+    cond2 <- with(topTable, abs(logFC)>=1 & PValue<0.05)
+    if(sum(cond1)>=100) {
+        posTbl <- subset(topTable[cond1,], logFC>0)
+        negTbl <- subset(topTable[cond1,], logFC<0)
+    } else if(sum(cond2)>=100) {
+        posTbl <- subset(topTable[cond2,], logFC>0)
+        negTbl <- subset(topTable[cond2,], logFC<0)
+    } else {
+        ntop <- pmin(100, as.integer(nrow(topTable)*0.05))
+        posTbl <- subset(topTable[1:ntop,], logFC>0)
+        negTbl <- subset(topTable[1:ntop,], logFC<0)
+    }
+    maxRow <- 150
+    if(nrow(posTbl)>maxRow) posTbl <- posTbl[1:maxRow,]
+    if(nrow(negTbl)>maxRow) negTbl <- negTbl[1:maxRow,]
+    return(list(pos=posTbl, neg=negTbl))
+}
+
+## write truncated DEG lists
+writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
+    contrasts <- contrastNames(edgeResult)
+    lapply(contrasts, function(x) {
+               tbl <- dgeTable(edgeResult, x)
+               degs <- truncatedDgeTable(tbl)
+               writeMatrix(degs$pos,
+                           file.path(outdir,
+                                     sprintf("TruncatedDEGtable-positive-%s.txt", 
+                                             x)))
+               writeMatrix(degs$neg,
+                           file.path(outdir,
+                                     sprintf("TruncatedDEGtable-negative-%s.txt", 
+                                             x)))
+           })
+    return(invisible(NULL))
+}
+
 ###' Build DGEList object ready for generalized linear model fitting
 ###'
 ###' @description

@@ -1,5 +1,6 @@
 importFrom("ribiosUtils",
-           "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen")
+           "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
+           "sortByCol")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
@@ -39,7 +40,8 @@ exportMethods(commonDisp, "commonDisp<-")
 
 export(annotate)
 export(dgeTables, dgeTable)
-export(writeDgeTables)
+export(writeDgeTables,
+       truncatedDgeTable, writeTruncatedDgeTables)
 
 export(modLogCPM)
 export(voom,

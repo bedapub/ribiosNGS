@@ -1,5 +1,6 @@
 require(Rcpp)
 require(testthat)
+require(inline)
 
 tfidf <- function(x, k=0.5) {
     mat <- as.matrix(x)

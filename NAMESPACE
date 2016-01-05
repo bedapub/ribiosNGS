@@ -12,7 +12,7 @@ importFrom("ribiosExpression",
 importFrom("edgeR",
            "cpm", "aveLogCPM", "estimateGLMRobustDisp")
 importFrom("graphics", "pairs")
-importFrom("limma", "plotMDS")
+importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 
@@ -46,6 +46,7 @@ export(writeDgeTables,
 export(modLogCPM)
 export(voom,
        logFCgage,
+       cameraContr,
        voomCamera)
 export(fullEnrichTable)
 export(hasCommonDisp, setCommonDispIfMissing)

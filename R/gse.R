@@ -192,18 +192,20 @@ cameraContr <- function (y,
             tab[i, 4] <- pt(two.sample.t, df = df.camera, lower.tail = FALSE)
         }
         isDown <- tab[i,3] <= tab[i,4]
-        if(isDown) { ## pDown < pUp
-            contInds <- iset[StatInSet<meanStat]
-        } else {
-            contInds <- iset[StatInSet>meanStat]
+        if(!is.null(isDown) && !is.na(isDown)) {
+            if(isDown) { ## pDown < pUp
+                contInds <- iset[StatInSet<meanStat]
+            } else {
+                contInds <- iset[StatInSet>meanStat]
+            }
+            contVals <- Stat[contInds]
+            contOrd <- order(contVals, decreasing=!isDown)
+            contInds <- contInds[contOrd]
+            contVals <- contVals[contOrd]
+            
+            conts[i] <- paste(sprintf("%s(%1.2f)",
+                                      rn[contInds], contVals), collapse=",")
         }
-        contVals <- Stat[contInds]
-        contOrd <- order(contVals, decreasing=!isDown)
-        contInds <- contInds[contOrd]
-        contVals <- contVals[contOrd]
-        
-        conts[i] <- paste(sprintf("%s(%1.2f)",
-                                  rn[contInds], contVals), collapse=",")
     }
     
     tab[, 5] <- 2 * pmin(tab[, 3], tab[, 4])

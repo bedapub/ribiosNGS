@@ -13,6 +13,17 @@ setMethod("contrastNames",
           "EdgeGSE",
           function(object) contrastNames(as(object, "EdgeObject")))
 
+## nContrast and contrastSampleIndices
+setMethod("nContrast", "EdgeResult", function(object) {nContrast(object@designContrast)})
+setMethod("contrastSampleIndices", c("EdgeResult", "character"), function(object, contrast) {
+              contrastSampleIndices(object@designContrast, contrast)
+          })
+setMethod("contrastSampleIndices", c("EdgeResult", "integer"), function(object, contrast) {
+              contrastSampleIndices(object@designContrast, contrast)
+          })
+
+
+
 naOrSqrt <- function(x) {
   if(is.null(x)) { return (NA)}
   return(sqrt(x))

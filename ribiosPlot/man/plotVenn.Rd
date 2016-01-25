@@ -22,10 +22,13 @@ Side effect is used - a plot is generated
 \description{
 The function plots Venn object of the Vennerable package in a way that better suits my eyes
 }
+\note{
+The function is applicable to Vennerable package version 3.0.
+}
 \examples{
 if(require("Vennerable")) {
  myVenn <- list(A=LETTERS[1:24], B=LETTERS[3:8], C=LETTERS[5:9])
- plotVenn(Venn(myVenn))
+ plotVenn(Venn(myVenn), main="Letters")
 }
 }
 

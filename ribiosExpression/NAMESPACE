@@ -70,4 +70,6 @@ export(remainHighestVarProbe, keepHighestVarProbe, rankByCol, eset2gct, eset2cls
 export(DesignContrast,
        groups, designMatrix,
        contrastMatrix, contrastNames,
+       nContrast,
+       contrastSampleIndices,
        parseDesignContrast)

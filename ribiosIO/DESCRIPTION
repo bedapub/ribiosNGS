@@ -9,5 +9,7 @@ Description: Basic data structures and functions for input/output tasks in
     ribios. In this package, only the basic data structures (vectors, lists and
     matrices) are allowed, in order to garantee fast loading and high
     performance.
-Suggests: ribiosUtils
+Suggests:
+    ribiosUtils
 License: GPL-3
+RoxygenNote: 5.0.1

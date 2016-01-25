@@ -3,6 +3,7 @@ importFrom(lattice, panel.xyplot, col.whitebg, lattice.options)
 importFrom(ribiosUtils, assertFile, basefilename, chosenFew, haltifnot)
 importFrom(methods, setClass, setGeneric, setMethod)
 importFrom(RColorBrewer, brewer.pal, brewer.pal.info)
+importFrom(grid, pushViewport, plotViewport, grid.layout, unit, gpar, viewport, grid.text)
 
 ## class
 exportClass(fcol)
@@ -83,3 +84,6 @@ export(jitter.xyplot)
 export(idev, ipdf)
 
 export(pdf2png)
+
+## plotVenn
+export(plotVenn)

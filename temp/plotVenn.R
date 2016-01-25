@@ -16,10 +16,10 @@ replaceFunc <- function(funcName,
                         newFunc, package) {
     env.name <- paste("package", package, sep=":")
     env <- as.environment(env.name)
-    unlockBinding(funcName, env);
-    assignInNamespace(funcName, newFunc, ns=package, envir=env);
-    assign(funcName, newFunc, envir=env);
-    lockBinding(funcName, env);
+    unlockBinding(funcName, env)
+    assignInNamespace(funcName, newFunc, ns=package, envir=env)
+    assign(funcName, newFunc, envir=env)
+    lockBinding(funcName, env)
 }
 
 replaceFunc("makevp.eqsc", makevp.eqsc.mod, package="Vennerable")

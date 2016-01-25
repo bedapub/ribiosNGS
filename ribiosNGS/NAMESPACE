@@ -8,7 +8,9 @@ importFrom("ribiosGSA", "geneSetPerm")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
-           "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames", "annotate")
+           "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames",
+           "nContrast", "contrastSampleIndices",
+           "annotate")
 importFrom("edgeR",
            "cpm", "aveLogCPM", "estimateGLMRobustDisp")
 importFrom("graphics", "pairs")

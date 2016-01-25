@@ -34,6 +34,9 @@ setMethod("designMatrix", "DesignContrast", function(object) {
 setMethod("contrastMatrix", "DesignContrast", function(object) {
   return(object@contrasts)
 })
+setMethod("nContrast", "DesignContrast", function(object) {
+              return(ncol(object@contrasts))
+          })
 setMethod("designVariables", "DesignContrast", function(object) {
   return(colnames(designMatrix(object)))
 })
@@ -146,3 +149,46 @@ parseDesignContrast <- function(designFile=NULL, contrastFile=NULL,
         stop("Provide either a design matrix and a contrast matrix, or sample groups and contrasts")
     }
 }
+
+.contrastSampleIndices<- function(descon, contrast) {
+    contrastMat <- contrastMatrix(descon)
+    designMat <- designMatrix(descon)
+    haltifnot(contrast %in% colnames(contrastMat) || contrast %in% 1:ncol(contrastMat),
+              msg=sprintf("contrast '%s' not found in the contrast matrix",
+                  contrast))
+    currContrast <- contrastMat[, contrast]
+    isNonZero <- currContrast!=0
+    ascNonZero <- which(isNonZero)[order(currContrast[isNonZero], decreasing=FALSE)]
+    ascInds <- lapply(ascNonZero, function(designInd)
+        which(designMat[,designInd]!=0))
+    ## if there is intercept AND the sum of current contrast is not zero, add samples only having intercept
+    isInter <- apply(designMat, 2L, function(x) all(x==1))
+    if(any(isInter) & sum(currContrast)!=0) {
+        hasInterOnly <- which(apply(designMat, 1L, function(x) all(x[!isInter]==0)))
+        ascInds <- c(list(intersect=hasInterOnly), ascInds)
+    }
+    res <- unname(unlist(ascInds))
+    return(res)
+}
+
+#' Return indices of samples involved in the given contrast of two or more coefficients
+#' @param object: A \code{DesignContrast} object
+#' @param contrast: Either a contrast name or a integer indicating the index of the contrast
+#' @return An integer vector, indices of samples that are involved, sorted by the ascending order of the coefficients of the contrast
+#' @examples
+#' ## one-way ANOVA
+#' (myDesCon <- parseDesignContrast(sampleGroups="As,Be,As,Be,As,Be",groupLevels="Be,As", dispLevels="Beryllium,Arsenic", contrasts="As-Be"))
+#' contrastSampleIndices(myDesCon, 1L)
+#' (myInterDesCon <- new("DesignContrast", design=matrix(c(rep(1,6), rep(0,2), rep(1,2), rep(0,2), rep(0,4), rep(1,2)), nrow=6, byrow=FALSE), contrasts=matrix(c(0,1,0, 0,0,1, 0,-1,1), byrow=FALSE, nrow=3), groups=factor(rep(c("As", "Be", "Cd"), each=2)), dispLevels=c("Arsenic", "Beryllium", "Cadmium")))
+#' (cont1Ind <- contrastSampleIndices(myInterDesCon, 1L))
+#' (cont2Ind <- contrastSampleIndices(myInterDesCon, 2L))
+#' (cont3Ind <- contrastSampleIndices(myInterDesCon, 3L))
+#' stopifnot(identical(cont1Ind, 1:4))
+#' stopifnot(identical(cont2Ind, c(1:2, 5:6)))
+#' stopifnot(identical(cont3Ind, c(3:6)))
+setMethod("contrastSampleIndices", c("DesignContrast", "character"), function(object, contrast) {
+              .contrastSampleIndices(object, contrast)
+          })
+setMethod("contrastSampleIndices", c("DesignContrast", "numeric"), function(object, contrast) {
+              .contrastSampleIndices(object, contrast)
+          })

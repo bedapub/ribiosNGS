@@ -133,3 +133,8 @@ export(minGroupCount,
        countByGroup,
        maxCountByGroup,
        hasNoReplicate)
+
+export(readCameraTable,
+       expandSigCameraResults,
+       cameraTable2network,
+       visualizeCameraNetworksByContrast)

@@ -169,6 +169,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     tab$Score <- -log10(tab$PValue) * ifelse(Direction=="Up", 1, -1)
     tab$ContributingGenes <- conts
     tab$GeneSet <- rownames(tab)
+    rownames(tab) <- NULL
     tab <- putColsFirst(tab, "GeneSet")
     if (sort && nsets > 1) {
         o <- order(tab$PValue)
@@ -193,7 +194,6 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
                                               contrast=contrasts[,x],
                                               geneLabels=geneSymbols,
                                               sort=FALSE)
-                            rownames(tbl) <- NULL
                             if(!"FDR" %in% colnames(tbl)) {
                                 ## TRUE if there is only one gene set
                                 tbl$FDR <- tbl$PValue
@@ -203,7 +203,12 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
                             tbl <- sortByCol(tbl, "PValue")
                             return(tbl)
                         })
+
     cRes <- do.call(rbind, cameraRes)
+
+    if(is.null(colnames(contrasts)))
+        colnames(contrasts) <- sprintf("Contrast", 1:ncol(contrasts))
+    
     bg <- data.frame(Contrast=rep(colnames(contrasts), sapply(cameraRes, nrow)))
     res <- cbind(bg, cRes)
     rownames(res) <- NULL

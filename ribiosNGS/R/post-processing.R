@@ -198,15 +198,17 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
         return(retObj)
     }
     
-    scores <- df$scores
+    scores <- df$Score
     labels <- df$label <- with(df, paste(Category,":",GeneSet,sep=""))
                                
     geneLists <- with(df, split(as.character(Gene), labels))
     gJacSim <- matrix(1L, nrow=length(geneLists), ncol=length(geneLists))
-    
-    for(i in 1:(length(geneLists)-1))
-        for(j in (i+1):length(geneLists))
-            gJacSim[i,j] <- gJacSim[j,i] <- jaccardIndex(geneLists[[i]], geneLists[[j]])
+
+    if(length(geneLists)>1) {
+        for(i in 1:(length(geneLists)-1))
+            for(j in (i+1):length(geneLists))
+                gJacSim[i,j] <- gJacSim[j,i] <- jaccardIndex(geneLists[[i]], geneLists[[j]])
+    }
     gJacBin <- gJacSim;  gJacBin[gJacBin>=jacThr] <- 1L; gJacBin[gJacBin<jacThr] <- 0L
     gLabels <- names(geneLists)
     rownames(gJacBin) <- colnames(gJacBin) <- gLabels
@@ -224,8 +226,7 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
         
     graph <- graph_from_adjacency_matrix(gJacBin, mode="undirected", diag=FALSE)
     
-    graphVscores <- matchColumn(V(graph)$name, df, "label")$score
-    
+    graphVscores <- matchColumn(V(graph)$name, df, "label")$Score
     
     absMaxScore <- max(abs(graphVscores))
     score2range <- as.integer(ribiosPlot:::boundNorm(graphVscores)*100,
@@ -245,16 +246,15 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     retObj$graph <- graph
     retObj$resTbl <- data.frame(Category=gCategory,
                                 GeneSet=gGeneSet,
-                                score=graphVscores)
-    return(list(graph=graph, resTbl=resTbl))
+                                Score=graphVscores)
+    return(retObj)
 }
 
-visualizeCameraNetworksByContrast <- function(cameraTable, ...) {
-    df <- expandSigCameraResults(cameraTable)
-    contrasts <- sort(unique(df$Contrast))
+visualizeCameraNetworksByContrast <- function(expCameraTable, ...) {
+    contrasts <- sort(unique(expCameraTable$Contrast))
     nres <- lapply(as.character(contrasts), function(x) {
-                       subdf <- subset(df, Contrast==x)
-                       cameraTable2network(subdf, plot=TRUE, ...)
+                       subexpCameraTable <- subset(expCameraTable, Contrast==x)
+                       cameraTable2network(subexpCameraTable, plot=TRUE, main=x, ...)
                   })
     tbls <- lapply(nres, function(x) x$resTbl)
     res <- cbind(Contrast=rep(contrasts, sapply(tbls, nrow)),

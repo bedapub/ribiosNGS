@@ -3,6 +3,7 @@ importFrom("methods", setClass, setGeneric, setMethod)
 importFrom("XML", xmlAttrs, xmlTreeParse, xmlRoot, xmlChildren, xmlName)
 importFrom("parallel", mclapply)
 importFrom("Rcpp", evalCpp)
+importFrom("limma", "zscoreT", "squeezeVar")
 import(ribiosIO)
 import(ribiosMath)
 import(ribiosUtils)
@@ -70,7 +71,7 @@ export(ntp)
 export(parseDTG, parseGSEAdir, parseGSEAedb, parseGSEAres)
 
 ## camera methods
-export(biosCamera, mcamera)
+export(biosCamera, gscCamera)
 
 ## util
 export(wnUnique)

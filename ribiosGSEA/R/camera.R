@@ -1,11 +1,23 @@
-## biosCamera: an adaption of lima::camera will more friendly outputs
-biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weights = NULL, 
-    use.ranks = FALSE, allow.neg.cor = TRUE, trend.var = FALSE, 
-    sort = TRUE) 
+## biosCamera: an adaption of limma::camera, with following improvments
+## (1) more user-friendly output
+## (2) scores calculated based on p-value and on directionality
+## (3) contributing genes
+biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weights = NULL,
+                        geneLabels=NULL,
+                        use.ranks = FALSE, allow.neg.cor = TRUE, trend.var = FALSE, 
+                        sort = TRUE) 
 {
     y <- as.matrix(y)
     G <- nrow(y)
     n <- ncol(y)
+    if(is.null(geneLabels)) {
+        geneLabels <- rownames(y)
+        if(is.null(geneLabels))
+            geneLabels <- 1:nrow(y)
+    } else {
+        haltifnot(length(geneLabels)==nrow(y),
+                  msg="geneLabels's length must equal to nrow(y)")
+    }
     if (!is.list(index)) 
         index <- list(set1 = index)
     if (is.null(design)) 
@@ -36,16 +48,16 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
             stop("coef ", contrast, " not found")
     }
     if (length(contrast) == 1) {
-        j <- c((1:p)[-contrast], contrast)
-        if (contrast < p) 
-            design <- design[, j]
-    }
-    else {
+        if(contrast < p) {
+            j <- c((1:p)[-contrast], contrast)
+            design <- design[, j] ## JDZ: this if-trunk reorders the to-be-tested contrast to the last column of the design matrix
+        }
+    }  else {
         QR <- qr(contrast)
         design <- t(qr.qty(QR, t(design)))
         if (sign(QR$qr[1, 1] < 0)) 
             design[, 1] <- -design[, 1]
-        design <- design[, c(2:p, 1)]
+        design <- design[, c(2:p, 1)] ## JDZ: this else-trunk 'trransforms' the design matrix into a new one with the contrast and reorders the to-be-tested contrast to the last column of the design matrix. I understand that what we estimate is in fact a linear transformation of coefficients of the linear model (beta == C^T %*% alpha, where alpha denotes coefficients and C^T denotes contrasts), it seems that the QR decomposition of the contrast matrix is used to re-parameterize the design matrix so as to encode the desired contrast directly in one of the columns in the design matrix. This is however just a guess and needs verification. 
     }
     if (is.null(weights)) {
         QR <- qr(design)
@@ -55,8 +67,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         unscaledt <- effects[p, ]
         if (QR$qr[p, p] < 0) 
             unscaledt <- -unscaledt
-    }
-    else {
+    }  else {
         effects <- matrix(0, n, G)
         unscaledt <- rep(0, n)
         sw <- sqrt(weights)
@@ -73,7 +84,9 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
                 unscaledt[g] <- -unscaledt[g]
         }
     }
-    U <- effects[-(1:p), , drop = FALSE]
+
+    ## JDZ: effects is a n x G matrix (n=ncol(y), G=nrow(y))
+    U <- effects[-(1:p), , drop = FALSE] ## JDZ: only takes the residuals 
     sigma2 <- colMeans(U^2)
     U <- t(U)/sqrt(sigma2)
     if (trend.var) 
@@ -89,7 +102,10 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     tab <- matrix(0, nsets, 5)
     rownames(tab) <- names(index)
     colnames(tab) <- c("NGenes", "Correlation", "Down", "Up", 
-        "TwoSided")
+                       "TwoSided")
+
+    conts <- vector("character", nsets)
+    ## JDZ: notice that no matter whether rank is used or not, the statistic underlying the camera method is always the moderated t statistic
     for (i in 1:nsets) {
         iset <- index[[i]]
         StatInSet <- Stat[iset]
@@ -111,8 +127,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
                 correlation <- max(0, correlation)
             tab[i, 3:4] <- rankSumTestWithCorrelation(iset, statistics = Stat, 
                 correlation = correlation, df = df.camera)
-        }
-        else {
+        } else {
             if (!allow.neg.cor) 
                 vif <- max(1, vif)
             meanStatInSet <- mean(StatInSet)
@@ -124,7 +139,23 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
             tab[i, 3] <- pt(two.sample.t, df = df.camera)
             tab[i, 4] <- pt(two.sample.t, df = df.camera, lower.tail = FALSE)
         }
+        isDown <- tab[i,3] <= tab[i,4]
+        if(!is.null(isDown) && !is.na(isDown)) {
+            if(isDown) { ## pDown < pUp
+                contInds <- iset[StatInSet<meanStat]
+            } else {
+                contInds <- iset[StatInSet>meanStat]
+            }
+            contVals <- Stat[contInds]
+            contOrd <- order(contVals, decreasing=!isDown)
+            contInds <- contInds[contOrd]
+            contVals <- contVals[contOrd]
+            
+            conts[i] <- paste(sprintf("%s(%1.2f)",
+                                      geneLabels[contInds], contVals), collapse=",")
+        }
     }
+    
     tab[, 5] <- 2 * pmin(tab[, 3], tab[, 4])
     tab <- data.frame(tab, stringsAsFactors = FALSE)
     Direction <- rep.int("Up", nsets)
@@ -134,23 +165,48 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     tab$Down <- tab$Up <- tab$TwoSided <- NULL
     if (nsets > 1) 
         tab$FDR <- p.adjust(tab$PValue, method = "BH")
+
     tab$Score <- -log10(tab$PValue) * ifelse(Direction=="Up", 1, -1)
+    tab$ContributingGenes <- conts
     tab$GeneSet <- rownames(tab)
     tab <- putColsFirst(tab, "GeneSet")
     if (sort && nsets > 1) {
         o <- order(tab$PValue)
         tab <- tab[o, ]
     }
-    tab
+    return(tab)
 }
 
-## mcamera: multiple contrast camera
-mcamera <- function(y, index, design=NULL, contrastMatrix) {
-  contNames <- colnames(contrastMatrix)
-  llist <- mclapply(1:ncol(contrastMatrix), function(x) {
-    res <- biosCamera(y, index=index, design=design, contrast=contrastMatrix[,x])
-    res$Contrast <- contNames[x]
+## gscCamera: Camera applied to gene set collection
+gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
+    genes <- gsGenes(gsc)
+    genes.inds <- lapply(genes, function(x) {
+                             ind <- match(x, geneSymbols)
+                             return(ind[!is.na(ind)])
+                         })
+  
+    cameraRes <- mclapply(1:ncol(contrasts),
+                        function(x) {
+                            tbl <- biosCamera(matrix,
+                                              design=design,
+                                              index=genes.inds,
+                                              contrast=contrasts[,x],
+                                              geneLabels=geneSymbols,
+                                              sort=FALSE)
+                            rownames(tbl) <- NULL
+                            if(!"FDR" %in% colnames(tbl)) {
+                                ## TRUE if there is only one gene set
+                                tbl$FDR <- tbl$PValue
+                            }
+                            tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "Direction",
+                                          "PValue", "FDR", "ContributingGenes")]
+                            tbl <- sortByCol(tbl, "PValue")
+                            return(tbl)
+                        })
+    cRes <- do.call(rbind, cameraRes)
+    bg <- data.frame(Contrast=rep(colnames(contrasts), sapply(cameraRes, nrow)))
+    res <- cbind(bg, cRes)
+    rownames(res) <- NULL
+    res <- subset(res, NGenes>=1 & !is.na(PValue) & !is.nan(PValue))
     return(res)
-  })
-  res <- do.call(rbind, llist)
 }

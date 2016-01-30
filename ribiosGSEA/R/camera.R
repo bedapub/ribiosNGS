@@ -200,14 +200,14 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
                             }
                             tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "Direction",
                                           "PValue", "FDR", "ContributingGenes")]
-                            tbl <- sortByCol(tbl, "PValue")
+                            tbl <- sortByCol(tbl, "PValue",decreasing=FALSE)
                             return(tbl)
                         })
 
     cRes <- do.call(rbind, cameraRes)
 
     if(is.null(colnames(contrasts)))
-        colnames(contrasts) <- sprintf("Contrast", 1:ncol(contrasts))
+        colnames(contrasts) <- sprintf("Contrast%d", 1:ncol(contrasts))
     
     bg <- data.frame(Contrast=rep(colnames(contrasts), sapply(cameraRes, nrow)))
     res <- cbind(bg, cRes)

@@ -1,10 +1,11 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
-           "sortByCol")
+           "sortByCol", "putColsFirst")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
 importFrom("ribiosGSA", "geneSetPerm")
+importFrom("ribiosGSEA", "gscCamera")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
@@ -15,6 +16,7 @@ importFrom("edgeR",
            "cpm", "aveLogCPM", "estimateGLMRobustDisp")
 importFrom("graphics", "pairs")
 importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
+importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 
@@ -48,7 +50,6 @@ export(writeDgeTables,
 export(modLogCPM)
 export(voom,
        logFCgage,
-       cameraContr,
        voomCamera)
 export(fullEnrichTable)
 export(hasCommonDisp, setCommonDispIfMissing)

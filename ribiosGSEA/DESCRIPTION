@@ -5,11 +5,31 @@ Version: 1.2-0
 Date: 2015-08-31
 Author: Jitao David Zhang
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
-Description: Gene set enrichment analysis is part of the Roche Bioinformatics pipeline. The ribiosGSEA package provides functions and command-line scripts to trigger an analysis, and to perform integrative analysis of GSEA results.
-Depends: methods
-Imports: Rcpp,ribiosIO,ribiosMath,ribiosUtils,XML,parallel
-Suggests: limma (>= 3.5-9), testthat
+Description: Gene set enrichment analysis is part of the Roche Bioinformatics
+    pipeline. The ribiosGSEA package provides functions and command-line scripts to
+    trigger an analysis, and to perform integrative analysis of GSEA results.
+Depends:
+    methods
+Imports:
+    Rcpp,ribiosIO,ribiosMath,ribiosUtils,XML,parallel,limma
+Suggests:
+    testthat
 License: LGPL-2
-Collate: utils.R AllClasses.R AllGenerics.R AllMethods.R buildGSEAcomm.R camera.R execute.R fingerprint.R gmt.R list2mat.R ntp.R parseGSEA.R hyper.R fisher.R
+Collate:
+    utils.R
+    AllClasses.R
+    AllGenerics.R
+    AllMethods.R
+    buildGSEAcomm.R
+    camera.R
+    execute.R
+    fingerprint.R
+    gmt.R
+    list2mat.R
+    ntp.R
+    parseGSEA.R
+    hyper.R
+    fisher.R
 LinkingTo: Rcpp
 LazyLoad: yes
+RoxygenNote: 5.0.1

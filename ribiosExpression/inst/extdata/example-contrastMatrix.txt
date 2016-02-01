@@ -1,0 +1,3 @@
+	As.vs.Be
+Be	-1
+As	1

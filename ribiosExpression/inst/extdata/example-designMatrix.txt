@@ -1,0 +1,7 @@
+	Be	As
+Sample1	0	1
+Sample2	1	0
+Sample3	0	1
+Sample4	1	0
+Sample5	0	1
+Sample6	1	0

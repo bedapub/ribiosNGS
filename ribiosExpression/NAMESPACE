@@ -3,7 +3,9 @@ importFrom("ribiosIO", "write_gct")
 importFrom("ribiosIO", "read_cls")
 importFrom("ribiosIO", "read_exprs_matrix", "readMatrix")
 importFrom("ribiosArg", "parseFactor", "parseStrings")
-importFrom("ribiosUtils", "rowscale", "summarizeRows", "removeInvarCol", "dfFactor", "headtail", "assertFile")
+importFrom("ribiosUtils",
+           "rowscale", "summarizeRows", "removeInvarCol", "dfFactor",
+           "headtail", "assertFile", "haltifnot","putColsFirst")
 importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
 importFrom("graph", "connComp")
 importFrom("limma", "makeContrasts")
@@ -62,6 +64,10 @@ export("kendallW", "kendallWmat")
 
 ## annotation
 export("annotate", "reannotate")
+
+## truncate
+export("limmaTopTable2dgeTable",
+       "truncateDgeTable")
 
 ## obsolete
 export(remainHighestVarProbe, keepHighestVarProbe, rankByCol, eset2gct, eset2cls)

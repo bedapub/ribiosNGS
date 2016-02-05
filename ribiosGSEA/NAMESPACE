@@ -96,7 +96,7 @@ export(nGenes, nSamples,
        bgCorCluster, bgCorSigma, randomSeed,
        simulators, genesets, pFunc, pValues,
        generateBenchmarkData, benchmark, ROC, AUC, ranks,
-       avgRank, minRank, maxRank, rankStat)
+       avgRank, minRank, maxRank, rankStat, TPR, FPR)
 export("nGenes<-", "nSamples<-",
        "tpGeneSetInd<-", "deltaMean<-",
        "tpGeneSetCor<-", "bgDgeInd<-",
@@ -109,7 +109,8 @@ export(as.matrix.TwoGroupExprsSimulator,
        mutateBgByParams,
        defaultBgDgeDeltaMeanFunc,defaultByCorSigmaFunc,
        randomlyMutateBg,
-       newTwoGroupExprsSimulator)
+       newTwoGroupExprsSimulator,
+       pValues2BenchmarkResult)
 export(pFuncFisherExact,
        pFuncCamera,
        pFuncCameraRank,

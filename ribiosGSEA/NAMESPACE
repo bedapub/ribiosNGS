@@ -1,9 +1,21 @@
-## import
+## imports
 importFrom("methods", setClass, setGeneric, setMethod)
 importFrom("XML", xmlAttrs, xmlTreeParse, xmlRoot, xmlChildren, xmlName)
 importFrom("parallel", mclapply)
 importFrom("Rcpp", evalCpp)
-importFrom("limma", "zscoreT", "squeezeVar")
+importFrom("limma",
+           "zscoreT", "squeezeVar",
+           "lmFit", "contrasts.fit", "eBayes", "topTable",
+           "camera", "mroast", "mroast.default", "romer")
+importFrom("MASS", "mvrnorm")
+importFrom("lattice", "xyplot", "panel.xyplot",
+           "trellis.par.get")
+importFrom("BioQC", "wmwTest")
+importFrom("globaltest", "gt")
+importFrom("Biobase", "exprs", "exprs<-")
+importFrom("ribiosExpression",
+           "designMatrix", "contrastMatrix", "truncateDgeTable", "limmaTopTable2dgeTable")
+
 import(ribiosIO)
 import(ribiosMath)
 import(ribiosUtils)
@@ -15,8 +27,11 @@ exportClass(FisherResult,
             FisherResultList)
 exportClass(CameraResult,
             CameraResultList)
-
 export(GeneSet, GeneSets)
+exportClass("TwoGroupExprsSimulator",
+            "BenchmarkDataset",
+            "Benchmarker",
+            "BenchmarkResult")
 
 ## S4 methods
 export(gsName, gsDesc, gsGenes, gsGeneCount, gsGeneValues, gsCategory,
@@ -72,6 +87,53 @@ export(parseDTG, parseGSEAdir, parseGSEAedb, parseGSEAres)
 
 ## camera methods
 export(biosCamera, gscCamera)
+
+## simulation
+export(nGenes, nSamples,
+       tpGeneSetInd, deltaMean,
+       tpGeneSetCor, bgDgeInd, bgDgeLength, bgDgePerc,
+       bgDgeDeltaMean, bgCorLength, bgCorInd, bgCorPerc,
+       bgCorCluster, bgCorSigma, randomSeed,
+       simulators, genesets, pFunc, pValues,
+       benchmark, ROC, AUC, ranks,
+       avgRank, minRank, maxRank, rankStat)
+export("nGenes<-", "nSamples<-",
+       "tpGeneSetInd<-", "deltaMean<-",
+       "tpGeneSetCor<-", "bgDgeInd<-",
+       "bgDgeDeltaMean<-", 
+       "bgCorInd<-", 
+       "bgCorCluster<-", "bgCorSigma<-", "randomSeed<-",
+       "pFunc<-")
+export(as.matrix.TwoGroupExprsSimulator,
+       avgCor,
+       mutateBgByParams,
+       defaultBgDgeDeltaMeanFunc,defaultByCorSigmaFunc,
+       randomlyMutateBg,
+       newTwoGroupExprsSimulator)
+export(pFuncFisherExact,
+       pFuncCamera,
+       pFuncCameraRank,
+       pFuncBioQCtStat,
+       pFuncMroast,
+       pFuncRomer,
+       pFuncGlobaltest,
+       pFuncFisherMethod,
+       pFuncTstatZtest,
+       pFuncTstatTtest,
+       pFuncTstatWMW,
+       pFuncTstatChisq,
+       pFuncLimmaAggregated)
+
+export(fisherMethod)
+
+export(newBenchmarker)
+
+export(varParPerformance,
+       plotROC, plotAUC, plotRanks)
+
+export(tpDiff)
+
+S3method(xyplot,BenchmarkResult)
 
 ## util
 export(wnUnique)

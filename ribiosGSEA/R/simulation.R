@@ -206,6 +206,7 @@ setMethod("contrastMatrix", "TwoGroupExprsSimulator", function(object) {
 setMethod("show", "TwoGroupExprsSimulator", function(object) {
               cat("TwoGroupExprsSimulator with", nGenes(object), "genes and", paste(nSamples(object),collapse="+"), "samples\n")
               cat("[+] ", length(tpGeneSetInd(object)), " true positive genes with deltaMean=", deltaMean(object),
+                  " and cor=", paste(unique(tpGeneSetCor(object)), collapse="/"),
                   ". Use 'tpGeneSetInd(object)' to see them.\n", sep="")
               cat("[+]", bgDgeLength(object), "differentially expressed background genes. Use 'bgDgeInd(object)' to see them.\n")
               cat("[+]", bgCorLength(object), "correlated background genes in", nlevels(bgCorCluster(object)), "clusters. Use 'bgCorInd(object)' to see them.\n")
@@ -281,8 +282,6 @@ setAs(from="TwoGroupExprsSimulator", to="matrix", function(from) return(from@mat
 setMethod("exprs", "TwoGroupExprsSimulator", function(object) { return(object@matrix)})
 setMethod("exprs<-", "TwoGroupExprsSimulator", function(object,value) { object@matrix<-value; return(object)})
 
-isGroup2 <- function(tgSim) 1:ncol(tgSim)>nSamples(tgSim)[1]
-
 sigmaMatrix <- function(cor, n) {
     res <- matrix(cor, nrow=n, ncol=n)
     diag(res) <- 1L
@@ -301,7 +300,7 @@ mvrnormMatrix <- function(nr, nc, mu, sigma) {
 
 twoGroupMvrnorm <- function(nGenes, nSamples, deltaMean, sigma) {
     stopifnot(length(nSamples)==2)
-    deltaMean <- rep_len(deltaMean, length(nGenes))
+    deltaMean <- rep_len(deltaMean, nGenes)
     if(length(sigma)==1)
         sigma <- rep(sigma, 2L)
     if(length(sigma)>=3)
@@ -314,16 +313,17 @@ twoGroupMvrnorm <- function(nGenes, nSamples, deltaMean, sigma) {
 }
 
 rnormMatrix <- function(nr, nc, mu=0, sd=1) {
-     matrix(rnorm(nr*nc, mean=mu, sd=sd), nrow=nr, byrow=FALSE)
+    matrix(rnorm(nr*nc, mean=mu, sd=sd), nrow=nr, byrow=FALSE)
 }
 
 twoGroupRnorm <- function(nGenes, nSamples, deltaMean, sd=1) {
     stopifnot(length(nSamples)==2)
-    deltaMean <- rep_len(deltaMean, length(nGenes))
+    deltaMean <- rep_len(deltaMean, nGenes)
     if(length(sd)==1)
         sd <- rep(sd, 2L)
     if(length(sd)>=3)
         stop("sd must be of length 1 or 2")
+    
     rmat1 <- rnormMatrix(nGenes, nSamples[1], 0, sd)
     rmat2 <- rnormMatrix(nGenes, nSamples[2], deltaMean, sd)
     res <- cbind(rmat1, rmat2)
@@ -434,25 +434,24 @@ simulateTwoGroupData <- function(tgSim) {
     if(length(delta)!=tpGeneCount)
         delta <- rep_len(delta, tpGeneCount)
 
-    isG2 <- isGroup2(tgSim)
     set.seed(randomSeed(tgSim))
     if(all(tpCor==0)) {
-        mat[tpGeneInd,] <- twoGroupRnorm(length(tpGeneInd),
-                                             nSamples(tgSim),
-                                             deltaMean=delta)
+        mat[tpGeneInd,] <- twoGroupRnorm(nGenes=tpGeneCount,
+                                         nSamples=Nsamples,
+                                         deltaMean=delta)
     } else {
-
         mat[tpGeneInd,] <- twoGroupMvrnorm(nGenes=tpGeneCount,
                                            nSamples=Nsamples,
                                            deltaMean=delta,
                                            sigma=tpCor)
     }
 
-    ## mutate
     rownames(mat) <- paste("Gene", 1:Ngenes, sep="")
     colnames(mat) <- paste("Group", rep(c(1,2), Nsamples), ".Sample", c(1:Nsamples[1], 1:Nsamples[2]),sep="")
 
     exprs(tgSim) <- mat
+
+    ## mutate
     tgSim <- mutateBg(tgSim)
     return(tgSim)
 }
@@ -890,10 +889,11 @@ plotRanks <- function(performanceList,
             xlab=key.title, ylab="Ranks", main=main)
 }
 
+isGroup2 <- function(tgSim) 1:ncol(tgSim)>nSamples(tgSim)[1]
 tpDiff <- function(tgSim) {
     mat <- as.matrix(tgSim)
     ind <- tpGeneSetInd(tgSim)
-    isGroup2 <- 1:sum(nSamples(tgSim))>nSamples(tgSim)[1]
+    isGroup2 <- isGroup2(tgSim)
     rowMeans(mat[ind,isGroup2]-mat[ind,!isGroup2])
 }
 

@@ -95,7 +95,7 @@ export(nGenes, nSamples,
        bgDgeDeltaMean, bgCorLength, bgCorInd, bgCorPerc,
        bgCorCluster, bgCorSigma, randomSeed,
        simulators, genesets, pFunc, pValues,
-       benchmark, ROC, AUC, ranks,
+       generateBenchmarkData, benchmark, ROC, AUC, ranks,
        avgRank, minRank, maxRank, rankStat)
 export("nGenes<-", "nSamples<-",
        "tpGeneSetInd<-", "deltaMean<-",

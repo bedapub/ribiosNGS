@@ -283,6 +283,12 @@ setMethod("exprs<-", "TwoGroupExprsSimulator", function(object,value) { object@m
 
 isGroup2 <- function(tgSim) 1:ncol(tgSim)>nSamples(tgSim)[1]
 
+sigmaMatrix <- function(cor, n) {
+    res <- matrix(cor, nrow=n, ncol=n)
+    diag(res) <- 1L
+    return(res)
+}
+
 mvrnormMatrix <- function(nr, nc, mu, sigma) {
     mu <- rep_len(mu, length.out=nr)
     sigmaMat <- sigmaMatrix(sigma, nr)
@@ -291,6 +297,7 @@ mvrnormMatrix <- function(nr, nc, mu, sigma) {
                         Sigma=sigmaMat))
     return(resMat)
 }
+
 
 twoGroupMvrnorm <- function(nGenes, nSamples, deltaMean, sigma) {
     stopifnot(length(nSamples)==2)
@@ -306,9 +313,20 @@ twoGroupMvrnorm <- function(nGenes, nSamples, deltaMean, sigma) {
     return(res)
 }
 
-sigmaMatrix <- function(cor, n) {
-    res <- matrix(cor, nrow=n, ncol=n)
-    diag(res) <- 1L
+rnormMatrix <- function(nr, nc, mu=0, sd=1) {
+     matrix(rnorm(nr*nc, mean=mu, sd=sd), nrow=nr, byrow=FALSE)
+}
+
+twoGroupRnorm <- function(nGenes, nSamples, deltaMean, sd=1) {
+    stopifnot(length(nSamples)==2)
+    deltaMean <- rep_len(deltaMean, length(nGenes))
+    if(length(sd)==1)
+        sd <- rep(sd, 2L)
+    if(length(sd)>=3)
+        stop("sd must be of length 1 or 2")
+    rmat1 <- rnormMatrix(nGenes, nSamples[1], 0, sd)
+    rmat2 <- rnormMatrix(nGenes, nSamples[2], deltaMean, sd)
+    res <- cbind(rmat1, rmat2)
     return(res)
 }
 
@@ -326,7 +344,6 @@ mutateBg <- function(tgSim) {
 
     tpGeneInd <- tpGeneSetInd(tgSim)
 
-    isG2 <- isGroup2(tgSim)
     nG <- nGenes(tgSim)
         
     intDgeCor <- intersect(bgDgeInd, bgCorInd)
@@ -361,7 +378,9 @@ mutateBg <- function(tgSim) {
     }
     if(length(bgDgeInd)>0) {
         stopifnot(length(bgDgeInd)==length(bgDgeDeltaMean))
-        tgSim@matrix[bgDgeInd,isG2] <-  tgSim@matrix[bgDgeInd,isG2] + bgDgeDeltaMean
+        tgSim@matrix[bgDgeInd,] <-  twoGroupRnorm(length(bgDgeInd),
+                                                  nSamples(tgSim),
+                                                  bgDgeDeltaMean)
 
     }
     if(length(bgCorInd)>0) {
@@ -416,10 +435,13 @@ simulateTwoGroupData <- function(tgSim) {
         delta <- rep_len(delta, tpGeneCount)
 
     isG2 <- isGroup2(tgSim)
+    set.seed(randomSeed(tgSim))
     if(all(tpCor==0)) {
-        mat[tpGeneInd,isG2] <-     mat[tpGeneInd,isG2]+delta
+        mat[tpGeneInd,] <- twoGroupRnorm(length(tpGeneInd),
+                                             nSamples(tgSim),
+                                             deltaMean=delta)
     } else {
-        set.seed(randomSeed(tgSim))
+
         mat[tpGeneInd,] <- twoGroupMvrnorm(nGenes=tpGeneCount,
                                            nSamples=Nsamples,
                                            deltaMean=delta,

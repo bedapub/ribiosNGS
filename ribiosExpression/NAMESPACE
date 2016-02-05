@@ -5,7 +5,7 @@ importFrom("ribiosIO", "read_exprs_matrix", "readMatrix")
 importFrom("ribiosArg", "parseFactor", "parseStrings")
 importFrom("ribiosUtils",
            "rowscale", "summarizeRows", "removeInvarCol", "dfFactor",
-           "headtail", "assertFile", "haltifnot","putColsFirst")
+           "headtail", "assertFile", "haltifnot","putColsFirst", "sortByCol")
 importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
 importFrom("graph", "connComp")
 importFrom("limma", "makeContrasts")

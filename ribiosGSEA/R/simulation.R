@@ -243,6 +243,8 @@ setGeneric("avgRank", function(object) standardGeneric("avgRank"))
 setGeneric("minRank", function(object) standardGeneric("minRank"))
 setGeneric("maxRank", function(object) standardGeneric("maxRank"))
 setGeneric("rankStat", function(object) standardGeneric("rankStat"))
+setGeneric("TPR", function(object, p) standardGeneric("TPR"))
+setGeneric("FPR", function(object, p) standardGeneric("FPR"))
 
 setMethod("ROC", "BenchmarkResult", function(object) object@ROC)
 setMethod("AUC", "BenchmarkResult", function(object) object@AUC)
@@ -253,26 +255,34 @@ setMethod("maxRank", "BenchmarkResult", function(object) max(object@ranks))
 setMethod("rankStat", "BenchmarkResult", function(object) paste("min=",minRank(object),
                                                                 "/avg=", avgRank(object),
                                                                 "/max=", maxRank(object), sep=""))
+setMethod("TPR", c("BenchmarkResult", "missing"), function(object) object@ROC$TPR)
+setMethod("TPR", c("BenchmarkResult", "numeric"), function(object,p) with(object@ROC, TPR[which.min(abs(pThr-p))]))
+setMethod("FPR", c("BenchmarkResult", "missing"), function(object) object@ROC$FPR)
+setMethod("FPR", c("BenchmarkResult", "numeric"), function(object,p) with(object@ROC, FPR[which.min(abs(pThr-p))]))
 
 newBenchmarkResult <- function(ROC, AUC, ranks) {
     return(new("BenchmarkResult",
                ROC=ROC, AUC=AUC, ranks=ranks))
 }
 
+pValues2BenchmarkResult <- function(pval) {
+    tpVals <- sapply(pval, "[[", 1L)
+    pStep <- 0.001
+    ps <- seq(0, 1, pStep)
+    fpr <- sapply(ps, function(p0) mean(sapply(pval, function(pp) mean(pp[-1] < 
+                                                                           p0))))
+    tpr <- sapply(ps, function(p0) mean(tpVals <= p0))
+    roc <- data.frame(pThr = ps, FPR = fpr, TPR = tpr)
+    auc <- sum(diff(fpr)*(tpr[-length(tpr)]+tpr[-1])/2)
+    ranks <- sapply(pval, function(x) rank(x)[1])
+    res <- new("BenchmarkResult", ROC = roc, AUC = auc, ranks = ranks)
+    return(res)
+}
+
+
 setMethod("benchmark", "Benchmarker", function(object) {
               pval <- pValues(object)
-              tpVals <- sapply(pval, "[[", 1L)
-        
-              pStep <- 0.001
-              ps <- seq(0, 1, pStep)
-              fpr <- sapply(ps, function(p0) mean(sapply(pval, function(pp) mean(pp[-1]<p0))))
-              tpr <- sapply(ps, function(p0) mean(tpVals<=p0))
-              roc <- data.frame(pThr=ps,
-                                FPR=fpr,
-                                TPR=tpr)
-              auc <- sum(tpr)*pStep
-              ranks <- sapply(pval, function(x) rank(x)[1])
-              res <- new("BenchmarkResult", ROC=roc, AUC=auc, ranks=ranks)
+              res <- pValues2BenchmarkResult(pval)
               return(res)
           })
 
@@ -896,4 +906,5 @@ tpDiff <- function(tgSim) {
     isGroup2 <- isGroup2(tgSim)
     rowMeans(mat[ind,isGroup2]-mat[ind,!isGroup2])
 }
+
 

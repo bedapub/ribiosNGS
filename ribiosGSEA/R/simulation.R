@@ -792,7 +792,7 @@ panel.benchmarkResult <- function(x,y,pThr,...) {
 xyplot.BenchmarkResult <- function(x, data,...) {
     roc <- ROC(x)
     xyplot(TPR~FPR, type="l", data=roc, abline=c(0,1),
-           xlab="False positive rate", ylab="True positiev rate",
+           xlab="False positive rate", ylab="True positive rate",
            panel=panel.benchmarkResult, pThr=roc$pThr,
            key=list(space="top", columns=2,
                text=list(labels=c("nominal p=0.05", "nominal p=0.01")),

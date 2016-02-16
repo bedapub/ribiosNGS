@@ -1,6 +1,5 @@
 ## strbreak comes from Biobase (created by Wolfgang Huber)
-strbreak <- function (x, width = getOption("width"), exdent = 2, collapse = "\n") 
-{
+strbreak <- function (x, width = getOption("width"), exdent = 2, collapse = "\n") {
     width <- as.integer(width)
     if (is.na(width) || width <= 1) 
         stop("invalid argument 'width'")
@@ -429,6 +428,14 @@ biosHeatmap <- function (x,
     image(1:nc, 1:nr, mmat, axes = FALSE, xlab = "", ylab = "", 
           col = na.color, add = TRUE)
   }
+  if (symm) { ## if symmetric, hide upper-tri
+      symmat <- x
+      symmat[lower.tri(symmat, diag=FALSE)] <- 1L
+      symmat[upper.tri(symmat, diag=TRUE)] <- NA
+      symmat <- symmat[,ncol(symmat):1]
+      image(1:nc, 1:nr, symmat, axes=FALSE, xlab="", ylab="",
+             col="white", add=TRUE)
+  }
 
   ## axis label
   axis(1, 1:nc, labels = labCol, las = 2, line = -0.5, tick = 0, 
@@ -442,19 +449,30 @@ biosHeatmap <- function (x,
   
   if (!missing(add.expr)) 
     eval(substitute(add.expr))
-  if (!missing(colsep)) 
-    for (csep in colsep) rect(xleft = csep + 0.5,
-                              ybottom = rep(0, length(csep)),
-                              xright = csep + 0.5 + sepwidth[1], 
-                              ytop = rep(ncol(x) + 1, csep), lty = 1, lwd = 1, 
-                              col = sepcolor, border = sepcolor)
-  if (!missing(rowsep)) 
-    for (rsep in rowsep) rect(xleft = 0,
-                              ybottom = (ncol(x) + 1 - rsep) - 0.5,
-                              xright = nrow(x) + 1,
-                              ytop = (ncol(x) + 1 - rsep) - 0.5 - sepwidth[2],
-                              lty = 1, lwd = 1, 
-                              col = sepcolor, border = sepcolor)
+  if (!missing(colsep)) {
+      if(symm) {
+          cytop <- nrow(x)+0.5-colsep
+      } else {
+          cytop <- rep(ncol(x)+1, length(colsep))
+      }
+      rect(xleft=colsep+0.5,
+           ybottom=rep(0, length(colsep)),
+           xright=colsep+0.5+sepwidth[1],
+           ytop=cytop, lty=1, lwd=1,
+           col=sepcolor, border=sepcolor)
+  }
+  if (!missing(rowsep))  {
+      if(symm) {
+          rxright <- rowsep+0.5
+      } else {
+          rxright <- nrow(x)+1
+      }
+      rect(xleft=0.5,
+           ybottom=ncol(x)+1-rowsep-0.5,
+           xright=rxright,
+           ytop=ncol(x)+1-rowsep-0.5-sepwidth[2],
+           lty=1, lwd=1, col=sepcolor, border=sepcolor)
+  }
   min.scale <- min(breaks)
   max.scale <- max(breaks)
   x.scaled <- boundNorm(t(x), min.scale, max.scale)

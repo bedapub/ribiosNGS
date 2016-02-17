@@ -100,7 +100,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     varStat <- var(Stat)
     nsets <- length(index)
     tab <- matrix(0, nsets, 5)
-    rownames(tab) <- names(index)
+    rownames(tab) <- NULL
     colnames(tab) <- c("NGenes", "Correlation", "Down", "Up", 
                        "TwoSided")
 
@@ -168,8 +168,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
 
     tab$Score <- -log10(tab$PValue) * ifelse(Direction=="Up", 1, -1)
     tab$ContributingGenes <- conts
-    tab$GeneSet <- rownames(tab)
-    rownames(tab) <- NULL
+    tab$GeneSet <- names(index)
     tab <- putColsFirst(tab, "GeneSet")
     if (sort && nsets > 1) {
         o <- order(tab$PValue)
@@ -185,7 +184,7 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
                              ind <- match(x, geneSymbols)
                              return(ind[!is.na(ind)])
                          })
-  
+    names(genes.inds) <- gsNames(gsc)
     cameraRes <- mclapply(1:ncol(contrasts),
                         function(x) {
                             tbl <- biosCamera(matrix,

@@ -19,6 +19,8 @@ SEXP c_read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
   char *gctsource;
   SEXP rownames, colnames, desc, dimnames;
   SEXP ans,res;
+  // TODO: change char* to const char*? tmp should never be modified
+  char* tmp;
   Stringa err=stringCreate(100);
   int keep = asLogical(keepdesc);
   if(keep == NA_LOGICAL) error("'keep.desc' must be TRUE or FALSE");
@@ -76,7 +78,12 @@ SEXP c_read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
 	SET_STRING_ELT(desc, ind-2,
 		       mkChar(textItem(it, 1)));
       for(i=0; i<arrayMax(it)-2; i++) {
-	pmat[i * nrow + (ind-2)] = atof(textItem(it, i+2));
+	tmp=textItem(it, i+2);
+	if(strEqual(tmp, "NA") || strEqual(tmp, "na") || strEqual(tmp, "Na") || strEqual(tmp, "")) {
+	  pmat[ i*nrow + (ind-2) ] = NA_REAL;
+	} else {
+	  pmat[ i*nrow + (ind-2) ] = atof(tmp);
+	}
       }
     }
     textDestroy(it);

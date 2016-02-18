@@ -1,12 +1,5 @@
 ## PCA plot for samples of expression data
-plotPCA <- function(x,
-                    choices=c(1,2),
-                    text=FALSE,
-                    points=list(pch=NULL, col=NULL, cex=NULL, bg=NULL, lwd=NULL, lty=NULL),
-                    arrows=FALSE,
-                    grid=FALSE,
-                    xlim=NULL, ylim=NULL,
-                    xlab=NULL, ylab=NULL, ...) {
+pcaScores <- function(x, choices=c(1,2), offset) {
   if(!is(x, "prcomp"))
     stop(sprintf("'%s' must be a prcomp object", deparse(substitute(x))))
   if (!length(scores <- x$x)) 
@@ -20,155 +13,200 @@ plotPCA <- function(x,
     stop("Input PCA has %d dimensions, the choices (%d, %d) are out of boundary",
          ncol(scores), choices[1], choices[2])
   }
-
-  xind <- choices[1]
-  yind <- choices[2]
+  if(!missing(offset)) {
+      if(!all(offset %in% rownames(x$x)) & !all(offset %in% 1:nrow(x$x)) & !(is.logical(offset) & length(offset)==nrow(x$x))) {
+          stop("offset should be either one or more rows's names in x$x, or indices, or a logical vector" )
+      }
+  }
   
   lam <- x$sdev[choices]
   n <- NROW(scores)
   lam <- lam * sqrt(n)
   xx <- t(t(scores[, choices])/lam)
-
-  rangx1 <- range(xx[, 1])
-  rangx2 <- range(xx[, 2])
-  if(missing(xlim)) xlim <- rangx1
-  if(missing(ylim)) ylim <- rangx2
-
-  expvar <- x$sdev^2/sum(x$sdev^2)
-  if(is.null(xlab))
-    xlab <- sprintf("Principal component %d (%2.1f%%)", xind, expvar[xind]*100)
-  if(is.null(ylab))
-    ylab <- sprintf("Principal component %d (%2.1f%%)", yind, expvar[yind]*100)
-
-  ## process text first because it may require adjusting xlim automatically
-  plot.new()
-  doText <- !is.null(text) && !(is.logical(text) && !text)
-  
-  if(doText) {
-      text.col <- palette()[1]
-      text.cex <- 1L
-      text.font <- 1L
-      text.adj <- NULL
-      text.pos <- NULL
-      text.offset <- 0.5
-      text.vfont <- NULL
-      text.srt <- 0
-      text.family <- ""
-      text.xpd <- FALSE
-      labels <- NULL
-      
-      if (is.character(text) || is.factor(text) || is.numeric(text)) {
-          labels <- text
-      } else if (is.list(text)) {
-          labels <- text$labels
-          text.col <- nonNull(text$col, text.col)
-          text.cex <- nonNull(text$cex, text.cex)
-          text.font <- nonNull(text$font, text.font)
-          text.adj <- nonNull(text$adj,text.adj, defaultNULL.ok=TRUE)
-          text.pos <- nonNull(text$pos, text.pos, defaultNULL.ok=TRUE)
-          text.offset <- nonNull(text$offset, text.offset)
-          text.vfont <- nonNull(text$vfont, text.vfont, defaultNULL.ok=TRUE)
-          text.srt <- nonNull(text$srt,text.srt)
-          text.family <- nonNull(text$family,text.family)
-          text.xpd <- nonNull(text$xpd,text.xpd, defaultNULL.ok=TRUE)
-      }
-      if (is.null(labels)) {
-          labels <- dimnames(xx)[[1L]]
-          if (is.null(labels)) 
-              labels <- 1L:n
-      }
-      labels <- as.character(labels)
-
-      labelWidth <- strwidth(labels, units="user", cex=text.cex,
-                             font=text.font, vfont=text.vfont, family=text.family)
-      isRightMost <- which.max(xx[,1]+labelWidth)
-      isLeftMost <- which.min(xx[,1]-labelWidth)
-      rightMostWidth <- labelWidth[isRightMost]
-      leftMostWidth <- labelWidth[isLeftMost]
-      singleCharWidth <- strwidth("M")
-
-      leftAdj <- leftMostWidth+text.offset*singleCharWidth
-      rightAdj <- rightMostWidth+text.offset*singleCharWidth
-      heightAdj <- text.offset*singleCharWidth
-      
-      if(is.null(text.pos) || text.pos==1 || text.pos==3) {
-          xlim <- c(xlim[1]-leftMostWidth,
-                    xlim[2]+rightMostWidth)
-          if(!is.null(text.pos)) {
-              if(text.pos==1) {
-                  ylim <- c(ylim[1]-heightAdj, ylim[2])
-              } else if (text.pos==3) {
-                  ylim <- c(ylim[1], ylim[2]+heightAdj)
-              }
-          }
-      } else if (text.pos==4) {
-          xlim <- c(xlim[1],
-                    xlim[2]+rightAdj)
-      } else if (text.pos==2) {
-          xlim <- c(xlim[1]-leftAdj,
-                    xlim[2]-leftAdj+rightAdj)
-      } else {
-          stop("text.pos: cannot happen")
-      }
+  if(!missing(offset)) {
+      offsetMean <- colMeans(xx[offset,,drop=FALSE])
+      xxOffset <- matrix(rep(offsetMean, nrow(xx)), ncol=ncol(xx), byrow=T)
+      xx <- xx-xxOffset
   }
-  
-  plot(xx, type = "n", xlim = xlim, ylim = ylim, xlab=xlab, ylab=ylab, ...)
+  return(xx)
+}
 
-  if(grid) grid(lty=1L)
-  if(!is.null(points) && !(is.logical(points) && !points)) {
-    pts.pch <- 1L
-    pts.col <- palette()[1]
-    pts.cex <- 1L
-    pts.bg <- palette()[1]
-    pts.lwd <- 1L
-    pts.lty <- 1L
-    if (is.list(points)) {
-      pts.pch <- nonNull(points$pch, pts.pch)
-      pts.col <- nonNull(points$col,pts.col)
-      pts.cex <- nonNull(points$cex, pts.cex)
-      pts.bg <- nonNull(points$bg,pts.bg)
-      pts.lwd <- nonNull(points$lwd, pts.lwd)
-      pts.lty <- nonNull(points$lty,pts.lty)
-    }
-    points(xx,
-           pch=pts.pch, col=pts.col, cex=pts.cex,
-           bg=pts.bg, lwd=pts.lwd, lty=pts.lty)
-  }
+plotPCA <- function(x,
+                    choices=c(1,2),
+                    text=FALSE,
+                    points=list(pch=NULL, col=NULL, cex=NULL, bg=NULL, lwd=NULL, lty=NULL, order=NULL),
+                    arrows=FALSE,
+                    grid=FALSE, abline=FALSE,
+                    xlim=NULL, ylim=NULL,
+                    xlab=NULL, ylab=NULL,
+                    offset,...) {
 
-  if(!is.null(arrows) && !(is.logical(arrows) && !arrows)) {
-    if(is.logical(arrows)) arrows <- list()
+    xx <- pcaScores(x,offset=offset)
     
-    arrows.col <- palette()[1]
-    arrows.lwd <- 1L
-    arrows.lty <- 1L
-    arrows.code <- 2
-    arrows.length <- 0.1
-    arrows.angle <- 30
-
-    nout <- nrow(xx)
-
-    arrows.col <- nonNull(arrows$col, arrows.col, nout)
-    arrows.lwd <- nonNull(arrows$lwd, arrows.lwd, nout)
-    arrows.lty <- nonNull(arrows$lty, arrows.lty, nout)
-    arrows.code <- nonNull(arrows$code, arrows.code, nout)
-    arrows.length <- nonNull(arrows$length, arrows.length, nout)
-    arrows.angle <- nonNull(arrows$angle, arrows.angle, nout)
-
-    for(i in seq(along=1:nrow(xx))) {
-      arrows(0, 0, xx[i,1]*0.95, xx[i,2]*0.95,
-             col=arrows.col[i], lwd=arrows.lwd[i], lty=arrows.lty[i],
-             code=arrows.code[i], length=arrows.length[i], angle=arrows.angle[i])
+    xind <- choices[1]
+    yind <- choices[2]
+    
+    rangx1 <- range(xx[, 1])
+    rangx2 <- range(xx[, 2])
+    if(missing(xlim)) xlim <- rangx1
+    if(missing(ylim)) ylim <- rangx2
+    
+    expvar <- x$sdev^2/sum(x$sdev^2)
+    if(is.null(xlab))
+        xlab <- sprintf("Principal component %d (%2.1f%%)", xind, expvar[xind]*100)
+    if(is.null(ylab))
+        ylab <- sprintf("Principal component %d (%2.1f%%)", yind, expvar[yind]*100)
+    
+    ## process text first because it may require adjusting xlim automatically
+    plot.new()
+    doText <- !is.null(text) && !(is.logical(text) && !text)
+    
+    if(doText) {
+        text.col <- palette()[1]
+        text.cex <- 1L
+        text.font <- 1L
+        text.adj <- NULL
+        text.pos <- NULL
+        text.offset <- 0.5
+        text.vfont <- NULL
+        text.srt <- 0
+        text.family <- ""
+        text.xpd <- FALSE
+        labels <- NULL
+        
+        if (is.character(text) || is.factor(text) || is.numeric(text)) {
+            labels <- text
+        } else if (is.list(text)) {
+            labels <- text$labels
+            text.col <- nonNull(text$col, text.col)
+            text.cex <- nonNull(text$cex, text.cex)
+            text.font <- nonNull(text$font, text.font)
+            text.adj <- nonNull(text$adj,text.adj, defaultNULL.ok=TRUE)
+            text.pos <- nonNull(text$pos, text.pos, defaultNULL.ok=TRUE)
+            text.offset <- nonNull(text$offset, text.offset)
+            text.vfont <- nonNull(text$vfont, text.vfont, defaultNULL.ok=TRUE)
+            text.srt <- nonNull(text$srt,text.srt)
+            text.family <- nonNull(text$family,text.family)
+            text.xpd <- nonNull(text$xpd,text.xpd, defaultNULL.ok=TRUE)
+        }
+        if (is.null(labels)) {
+            labels <- dimnames(xx)[[1L]]
+            if (is.null(labels)) 
+                labels <- 1L:n
+        }
+        labels <- as.character(labels)
+        
+        labelWidth <- strwidth(labels, units="user", cex=text.cex,
+                               font=text.font, vfont=text.vfont, family=text.family)
+        isRightMost <- which.max(xx[,1]+labelWidth)
+        isLeftMost <- which.min(xx[,1]-labelWidth)
+        rightMostWidth <- labelWidth[isRightMost]
+        leftMostWidth <- labelWidth[isLeftMost]
+        singleCharWidth <- strwidth("M")
+        
+        leftAdj <- leftMostWidth+text.offset*singleCharWidth
+        rightAdj <- rightMostWidth+text.offset*singleCharWidth
+        heightAdj <- text.offset*singleCharWidth
+        
+        if(is.null(text.pos) || text.pos==1 || text.pos==3) {
+            xlim <- c(xlim[1]-leftMostWidth,
+                      xlim[2]+rightMostWidth)
+            if(!is.null(text.pos)) {
+                if(text.pos==1) {
+                    ylim <- c(ylim[1]-heightAdj, ylim[2])
+                } else if (text.pos==3) {
+                    ylim <- c(ylim[1], ylim[2]+heightAdj)
+                }
+            }
+        } else if (text.pos==4) {
+            xlim <- c(xlim[1],
+                      xlim[2]+rightAdj)
+        } else if (text.pos==2) {
+            xlim <- c(xlim[1]-leftAdj,
+                      xlim[2]-leftAdj+rightAdj)
+        } else {
+            stop("text.pos: cannot happen")
+        }
     }
-  }
-
-  if(doText) {
-      text(xx, labels, col = text.col, cex = text.cex, font = text.font, 
-           adj = text.adj, pos = text.pos, offset = text.offset, 
-           vfont = text.vfont, srt = text.srt, family = text.family, 
-           xpd = text.xpd)
-  }
-  return(invisible(as.data.frame(xx)))
-  
+    
+    plot(xx, type = "n", xlim = xlim, ylim = ylim, xlab=xlab, ylab=ylab, ...)
+    
+    if(grid) grid(lty=1L)
+    if(is.logical(abline) && abline) {
+        abline(v=0, h=0)
+    } else if (!is.logical(abline)) {
+        do.call("abline", as.list(abline))
+    }
+    if(!is.null(points) && !(is.logical(points) && !points)) {
+        pts.pch <- 1L
+        pts.col <- palette()[1]
+        pts.cex <- 1L
+        pts.bg <- palette()[1]
+        pts.lwd <- 1L
+        pts.lty <- 1L
+        pts.order <- 1L
+        if (is.list(points)) {
+            pts.pch <- nonNull(points$pch, pts.pch)
+            pts.col <- nonNull(points$col,pts.col)
+            pts.cex <- nonNull(points$cex, pts.cex)
+            pts.bg <- nonNull(points$bg,pts.bg)
+            pts.lwd <- nonNull(points$lwd, pts.lwd)
+            pts.lty <- nonNull(points$lty,pts.lty)
+            pts.order <- nonNull(points$order, pts.order)
+        }
+        pts.pch <- rep(pts.pch, length.out=nrow(xx))
+        pts.col <- rep(pts.col, length.out=nrow(xx))
+        pts.cex <- rep(pts.cex, length.out=nrow(xx))
+        pts.bg <- rep(pts.bg, length.out=nrow(xx))
+        pts.lwd <- rep(pts.lwd, length.out=nrow(xx))
+        pts.lty <- rep(pts.lty, length.out=nrow(xx))
+        uord <- sort(unique(pts.order), decreasing=FALSE)
+        for(currOrd in uord) {
+            isCurrOrd <- pts.order == currOrd
+            points(xx[isCurrOrd,],
+                   pch=pts.pch[isCurrOrd],
+                   col=pts.col[isCurrOrd],
+                   cex=pts.cex[isCurrOrd],
+                   bg=pts.bg[isCurrOrd],
+                   lwd=pts.lwd[isCurrOrd],
+                   lty=pts.lty[isCurrOrd])
+        }
+    }
+    
+    if(!is.null(arrows) && !(is.logical(arrows) && !arrows)) {
+        if(is.logical(arrows)) arrows <- list()
+        
+        arrows.col <- palette()[1]
+        arrows.lwd <- 1L
+        arrows.lty <- 1L
+        arrows.code <- 2
+        arrows.length <- 0.1
+        arrows.angle <- 30
+        
+        nout <- nrow(xx)
+        
+        arrows.col <- nonNull(arrows$col, arrows.col, nout)
+        arrows.lwd <- nonNull(arrows$lwd, arrows.lwd, nout)
+        arrows.lty <- nonNull(arrows$lty, arrows.lty, nout)
+        arrows.code <- nonNull(arrows$code, arrows.code, nout)
+        arrows.length <- nonNull(arrows$length, arrows.length, nout)
+        arrows.angle <- nonNull(arrows$angle, arrows.angle, nout)
+        
+        for(i in seq(along=1:nrow(xx))) {
+            arrows(0, 0, xx[i,1]*0.95, xx[i,2]*0.95,
+                   col=arrows.col[i], lwd=arrows.lwd[i], lty=arrows.lty[i],
+                   code=arrows.code[i], length=arrows.length[i], angle=arrows.angle[i])
+        }
+    }
+    
+    if(doText) {
+        text(xx, labels, col = text.col, cex = text.cex, font = text.font, 
+             adj = text.adj, pos = text.pos, offset = text.offset, 
+             vfont = text.vfont, srt = text.srt, family = text.family, 
+             xpd = text.xpd)
+    }
+    return(invisible(as.data.frame(xx)))
+    
 }
                     
 plotPCAloading <- function(loadings, x=1L, y=2L, circle=FALSE, title="", subtitle="",...) {

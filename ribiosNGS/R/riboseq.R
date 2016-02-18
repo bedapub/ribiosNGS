@@ -1,6 +1,3 @@
-
-
-
 setMethod("RiboSeq", c("DGEList", "DGEList", "vector"), function(RNA, RPF, groups) {
   if(!is.factor(groups)) {
     message("coerencing groups as factors")

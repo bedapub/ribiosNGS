@@ -9,9 +9,10 @@ importFrom("ribiosGSEA", "gscCamera")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
-           "groups", "dispGroups", "designMatrix", "contrastMatrix", "contrastNames",
+           "groups", "dispGroups", "designMatrix",
+           "contrastMatrix", "contrastNames",
            "nContrast", "contrastSampleIndices",
-           "annotate")
+           "truncateDgeTable", "annotate")
 importFrom("edgeR",
            "cpm", "aveLogCPM", "estimateGLMRobustDisp")
 importFrom("graphics", "pairs")
@@ -45,7 +46,7 @@ exportMethods(commonDisp, "commonDisp<-")
 export(annotate)
 export(dgeTables, dgeTable)
 export(writeDgeTables,
-       truncatedDgeTable, writeTruncatedDgeTables)
+       writeTruncatedDgeTables)
 
 export(modLogCPM)
 export(voom,

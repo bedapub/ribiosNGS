@@ -18,6 +18,11 @@ export(compactTrellis,
        setCompactTrellis)
 export(getLims)
 
+export(radian2degree,
+       degree2radian,
+       ellipse,
+       confEllipse)
+
 ## biosHeatmap
 export(biosHeatmap)
 
@@ -77,7 +82,7 @@ export(qHist, xclipHist)
 export(histMat)
 
 ## PCA
-export(plotPCA)
+export(pcaScores, plotPCA)
 
 export(jitter.xyplot)
 

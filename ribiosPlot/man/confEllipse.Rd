@@ -13,7 +13,7 @@ confEllipse(x, y = NULL, conf = 0.95, ...)
 
 \item{...}{Parameters passed to \code{ellipse}}
 
-\item{y0}{either a numeric vector of the same length as \param{x}, or NULL}
+\item{y0}{either a numeric vector of the same length as \code{x}, or NULL}
 }
 \value{
 Invisible coordinates of points on the ellipse

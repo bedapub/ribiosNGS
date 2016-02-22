@@ -383,20 +383,18 @@ biosHeatmap <- function (x,
   if (!missing(RowSideColors)) {
     par(mar = c(margins[1], 0, 0, 0.5))
     cs.color.round <- length(RowSideColors) %/% nr
-    cs.matrix <- matrix(rep(1:nr, cs.color.round), nrow=cs.color.round)
-    cs.color.order.base <- matrix(rep(0:(cs.color.round-1), each=nr), nrow=cs.color.round) * nr
-    cs.color.ordered <- as.vector(cs.matrix[,rowInd]) + as.vector(t(cs.color.order.base))
-    cs.matrix.ordered <- cs.matrix + as.vector(t(cs.color.order.base))
-    image(cs.matrix.ordered, col = RowSideColors[cs.color.ordered], axes = FALSE)
+    cs.color.factor <- gl(cs.color.round, nr, length(RowSideColors))
+    color.ordered <- unlist(tapply(RowSideColors, cs.color.factor, function(x) x[rowInd]))
+    cs.matrix <- t(matrix(1:length(RowSideColors), nrow=nr, byrow=FALSE))
+    image(cs.matrix, col = color.ordered, axes = FALSE)
   }
   if (!missing(ColSideColors)) {
     par(mar = c(0.5, 0, 0, margins[2]))
     cs.color.round <- length(ColSideColors) %/% nc
-    cs.matrix <- matrix(rep(1:nc, cs.color.round), ncol=cs.color.round)
-    cs.color.order.base <- matrix(rep(0:(cs.color.round-1), each=nc), ncol=cs.color.round) * nc
-    cs.color.ordered <- as.vector(cs.matrix[colInd,]) + as.vector(cs.color.order.base)
-    cs.matrix.ordered <- cs.matrix + as.vector(cs.color.order.base)
-    image(cs.matrix.ordered, col = ColSideColors[cs.color.ordered], axes = FALSE)
+    cs.color.factor <- gl(cs.color.round, nc, length(ColSideColors))
+    color.ordered <- unlist(tapply(ColSideColors, cs.color.factor, function(x) x[colInd]))
+    cs.matrix <- matrix(1:length(ColSideColors), nrow=nc, byrow=FALSE)
+    image(cs.matrix, col = color.ordered, axes = FALSE)
   }
   par(mar = c(margins[1], 0, 0, margins[2]))
   x <- t(x)
@@ -438,7 +436,7 @@ biosHeatmap <- function (x,
   }
 
   ## axis label
-  axis(1, 1:nc, labels = labCol, las = 2, line = -0.5, tick = 0, 
+  axis(1, 1:nc, labels = labCol, las = 2, line = -0.5, tick = 0,
        cex.axis = cexCol*par("cex"))
   if (!is.null(xlab)) 
     mtext(xlab, side = 1, line = margins[1] - 1.25, cex=par("cex"))

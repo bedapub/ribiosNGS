@@ -59,19 +59,26 @@ sortByCol <- function (data.frame, columns,
                        na.last = TRUE,
                        decreasing = TRUE,
                        orderAsAttr=FALSE)  {
-  if(all(is.character(columns))) {
-    stopifnot(all(columns %in% colnames(data.frame)))
-  } else if (!all(is.numeric(columns)) && !all(is.logical(columns))) {
-    stop("'columns' must be one of the following data types: chracters, numeric and logical\n")
-  }
+    isMatInput <- is.matrix(data.frame)
+    if(isMatInput) {
+        data.frame <- data.frame(data.frame, check.names=FALSE, check.rows=FALSE, stringsAsFactors=FALSE)
+    }
+    if(all(is.character(columns))) {
+        stopifnot(all(columns %in% colnames(data.frame)))
+    } else if (!all(is.numeric(columns)) && !all(is.logical(columns))) {
+        stop("'columns' must be one of the following data types: chracters, numeric and logical\n")
+    }
     
-  subdf <- data.frame[,columns,drop=FALSE]
-  local.order <- function(...) order(..., na.last=na.last,decreasing=decreasing)
-  ord <- do.call(local.order, subdf) ## see example(order)
-  res <- data.frame[ord,,drop=FALSE]
-  if(orderAsAttr)
-    attr(res, "order") <- ord
-  return(res)
+    subdf <- data.frame[,columns,drop=FALSE]
+    local.order <- function(...) order(..., na.last=na.last,decreasing=decreasing)
+    ord <- do.call(local.order, subdf) ## see example(order)
+    res <- data.frame[ord,,drop=FALSE]
+    if(orderAsAttr)
+        attr(res, "order") <- ord
+    if(isMatInput) {
+        res <- as.matrix(res)
+    }
+    return(res)
 }
 
 dfFactor <- function(df, sample.group) {

@@ -38,7 +38,7 @@ matchColumn <- function(vector,
                   sapply(index,length))
     index <- unlist(index)
   }
-  res <- data.frame[index,]
+  res <- data.frame[index,,drop=FALSE]
   if(!(is.numeric(column) && identical(as.integer(column), 0L))) {
     res[, column] <- vector
   } else {

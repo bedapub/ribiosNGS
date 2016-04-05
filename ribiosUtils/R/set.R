@@ -12,6 +12,7 @@ mset <- function(func, ...) {
 munion <- function(...) mset(func=union, ...)
 mintersect <- function(...) mset(func=intersect, ...)
 msetdiff <- function(...) mset(func=setdiff, ...)
+rsetdiff <- function(x,y) setdiff(y,x)
 
 compTwoVecs <- function(vec1, vec2) {
   vec1.ulen <- ulen(vec1)

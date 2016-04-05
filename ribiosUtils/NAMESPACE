@@ -8,7 +8,7 @@ export(summarizeRows, summarizeColumns, summarizeCols)
 export(isError)
 
 export(mmatch)
-export(munion, mintersect, msetdiff, compTwoVecs)
+export(munion, mintersect, msetdiff, rsetdiff, compTwoVecs)
 export(midentical)
 
 export(imatch, imatchv, ipmatch, ipmatchv, matchv)

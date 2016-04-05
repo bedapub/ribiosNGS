@@ -40,9 +40,13 @@ SEXP bios_revcomp (SEXP seq) {
     // assign returning values
     SET_STRING_ELT(res, i, mkChar(resChar));
   }
+
+  // set names
+  setAttrib(res, R_NamesSymbol, getAttrib(seq, R_NamesSymbol));
   
   // cleanup
   stringDestroy(inputSeq);
+
   UNPROTECT(1);
 
   return(res);

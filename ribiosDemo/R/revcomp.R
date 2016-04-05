@@ -1,11 +1,19 @@
+#' @export
 makeSeq <- function(bases=c("A","T","G","C"), len=100)
   paste(sample(bases, len, replace=TRUE), collapse="")
 
-
+#' @export
+#' @useDynLib ribiosDemo bios_revcomp
 revcomp <- function(x) {
-  .Call("bios_revcomp", as.character(x))
+  if(!is.character(x)) {
+      xnames <- names(x)
+      x <- as.character(x)
+      names(x) <- xnames
+  }
+  .Call("bios_revcomp", x)
 }
 
+#' @export
 revcompNative <- function(x) {
   chars <- strsplit(x,"")
   chars.rev <- lapply(chars, rev)

@@ -1,9 +1,11 @@
+#' @export
 makeTempGct <- function(nrow=100, ncol=100) {
   tf <- tempfile()
   writeLines(makeGctLines(nrow=nrow, ncol=ncol), con=tf)
   tf
 }
 
+#' @export
 makeGctLines <- function(nrow=100, ncol=100) {
 
   cnames <- 1:ncol
@@ -22,6 +24,7 @@ makeGctLines <- function(nrow=100, ncol=100) {
     tbltxt)
 }
 
+#' @export
 checkfile <- function(filename) {
   if(!file.exists(filename))
     stop(filename, " does not exist\n");
@@ -29,12 +32,15 @@ checkfile <- function(filename) {
   return(path.expand(filename))
 }
 
+#' @export
+#' @useDynLib ribiosDemo bios_readgct
 readGct <- function(gct.file, keep.desc=TRUE) {
   gct.file <- checkfile(gct.file)
   mat <- .Call("bios_readgct", gct.file, keep.desc)
   return(mat)
 }
 
+#' @export
 readGctNative <- function(gct.file, keep.desc=TRUE) {
   tbl <- read.table(gct.file, skip=2L, header=TRUE, check.names=FALSE)
   mat <- data.matrix(tbl[,-c(1:2)])

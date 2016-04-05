@@ -39,7 +39,7 @@ setCompactTrellis <- function() {
   lattice::lattice.options("default.theme"=compactTrellis())
 }
 
-##ibios.yscale.components <- function (lim, packet.number = 0, packet.list = NULL, right = FALSE, ...) {
+##ribios.yscale.components <- function (lim, packet.number = 0, packet.list = NULL, right = FALSE, ...) {
 ## comps <- lattice:::calculateAxisComponents(lim, packet.list = packet.list, 
 ##                                            packet.number = packet.number, ...)
 ## list(num.limit = comps$num.limit,
@@ -49,7 +49,7 @@ setCompactTrellis <- function() {
 ##          cex = 1, check.overlap = comps$check.overlap)),
 ##      right = right)
 ##
-##ibios.xscale.components <- function (lim, packet.number = 0, packet.list = NULL, top = FALSE,  ...) 
+##ribios.xscale.components <- function (lim, packet.number = 0, packet.list = NULL, top = FALSE,  ...) 
 ##
 ## comps <- lattice:::calculateAxisComponents(lim, packet.list = packet.list, 
 ##                                            packet.number = packet.number, ...)
@@ -59,7 +59,7 @@ setCompactTrellis <- function() {
 ##          check.overlap = comps$check.overlap)),
 ##      top = top)
 ##
-##ibiosLatticeOptions <- function() {
+##ribiosLatticeOptions <- function() {
 ## op <- lattice.options()
 ## op$xscale.components <- ribios.xscale.components
 ## op$yscale.components <- ribios.yscale.components
@@ -67,7 +67,7 @@ setCompactTrellis <- function() {
 ## return(op)
 ##
 ##
-##ibiosLattice <- function() {
+##ribiosLattice <- function() {
 ## op <- lattice.options()
 ## lattice.options(ribiosLatticeOptions())
 ## return(invisible(op))

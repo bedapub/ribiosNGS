@@ -312,11 +312,11 @@ void logOpen (char *fname) {
       perror ("PROBLEM: log: close(2)");
     fd = PLABLA_OPEN (fname,O_WRONLY | O_CREAT | O_APPEND,0664);
     if (fd == -1) {
-      printf ("PROBLEM: could not open log file %s\n",fname);
+      Rprintf ("PROBLEM: could not open log file %s\n",fname);
       perror ("PROBLEM: log: open");
     }
     if (fd != 2)
-      printf ("PROBLEM: could not redirect stderr (fd %d)\n",fd);
+      Rprintf ("PROBLEM: could not redirect stderr (fd %d)\n",fd);
     setbuf (stderr,0);
     gLogFile = stderr;
     if (!gLogFile)

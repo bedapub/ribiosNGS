@@ -22,6 +22,8 @@
 #include "biosdefs.h"
 #include "pagedesign.h"
 
+#include "R.h"
+
 void pd_html (void) {
   /**
      Writes the document type
@@ -47,15 +49,15 @@ void pd_head (char *title) {
      @param[in] title - the title to be shown on to of the browser window
   */
   puts ("<head>");
-  printf ("<title>%s</title>\n",title);
-  puts ("<meta name='viewport' content='width=device-width, initial-scale=1'>");
-  puts ("<link rel='shortcut icon' href='http://bioinfoc.ch/favicon.ico'>");
-  puts ("<link rel='icon' href='http://bioinfoc.ch/favicon_ani.gif' type='image/gif'>");
-  printf ("<link rel=stylesheet type='text/css' href='%s'>\n",
+  Rprintf ("<title>%s</title>\n",title);
+  Rprintf("<meta name='viewport' content='width=device-width, initial-scale=1'>\n");
+  Rprintf("<link rel='shortcut icon' href='http://bioinfoc.ch/favicon.ico'>\n");
+  Rprintf("<link rel='icon' href='http://bioinfoc.ch/favicon_ani.gif' type='image/gif'>\n");
+  Rprintf ("<link rel=stylesheet type='text/css' href='%s'>\n",
           BICSSURL_DEFAULT);
   if (gHeadAdd != NULL)
-    printf ("%s",string (gHeadAdd));
-  puts ("</head>");
+    Rprintf ("%s",string (gHeadAdd));
+  Rprintf("</head>\n");
 }
 
 static char *gBodyTitle = NULL;
@@ -89,27 +91,27 @@ void pd_body (char *attr,char *user) {
      @param[in] attr - the attributes to be added to the body tag
      @param[in] user - the user id to be shown in the menu bar
   */
-  printf ("<body");
+  Rprintf ("<body");
   if (attr != NULL && attr[0] != '\0')
-    printf (" %s>\n",attr);
+    Rprintf (" %s>\n",attr);
   else
-    puts (">");
-  puts ("<div class=bic_header></div>");
-  puts ("<div class=bic_menubar></div>");
-  printf ("<div class=bic_menubarmiddle>User: %s</div>\n",
+    Rprintf (">\n");
+  Rprintf ("<div class=bic_header></div>\n");
+  Rprintf("<div class=bic_menubar></div>\n");
+  Rprintf("<div class=bic_menubarmiddle>User: %s</div>\n",
           user != NULL ? user : "[unknown]");
-  printf ("<div class=bic_menubarright>%s %s &nbsp;&nbsp;&nbsp;&nbsp;</div>\n",
+  Rprintf("<div class=bic_menubarright>%s %s &nbsp;&nbsp;&nbsp;&nbsp;</div>\n",
           user == NULL ?
           "<a href='http://bioinfoc.ch/bicgi/identwwwbicgi?login' class=bic_header>Sign in</a>" :
           strEqual (user,USER_IN_TRANSITION) ? "" :
           "<a href='http://bioinfoc.ch/bicgi/identwwwbicgi?logout' class=bic_header>Sign out</a>",
           gBodyLinks != NULL ? string (gBodyLinks) : "");
-  puts ("<div class=bic_menubarsub></div>");
-  puts ("<div class=bic_headerleft_logo><a href='http://bioinfoc.ch'><img src='http://bioinfoc.ch/biccss/bioinfoc_logo_small.png' width=127 height=110 border=0 alt=bioinfoc_logo></a></div>");
-  puts ("<div class=bic_headerleft_text><a href='http://bioinfoc.ch' class=bic_header>bioinfoc.ch</a></div>");
-  printf ("<div class=bic_headercenter>%s</div>\n",
+  Rprintf("<div class=bic_menubarsub></div>\n");
+  Rprintf ("<div class=bic_headerleft_logo><a href='http://bioinfoc.ch'><img src='http://bioinfoc.ch/biccss/bioinfoc_logo_small.png' width=127 height=110 border=0 alt=bioinfoc_logo></a></div>\n");
+  Rprintf ("<div class=bic_headerleft_text><a href='http://bioinfoc.ch' class=bic_header>bioinfoc.ch</a></div>\n");
+  Rprintf("<div class=bic_headercenter>%s</div>\n",
           gBodyTitle);
-  puts ("<div class=bic_main>");
+  Rprintf("<div class=bic_main>\n");
 }
 
 void pd_bodyClose (int withTechs) {

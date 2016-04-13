@@ -1,6 +1,6 @@
 /* Common definitions of ribiosUtils */
-#ifndef RIBIOS_UTILS_H
-#define RIBIOS_UTILS_H
+#ifndef RIBIOSUTILS_H
+#define RIBIOSUTILS_H
 
 #include <R.h>
 #include <Rinternals.h>

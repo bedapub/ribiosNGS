@@ -1,9 +1,9 @@
 #include <R_ext/Rdynload.h>
 #include "ribios_utils.h"
-#include "endec.h"
-#include "die.h"
-#include "mmatch.h"
-#include "trim.h"
+#include "r_endec.h"
+#include "log.h"
+#include "r_mmatch.h"
+#include "r_trim.h"
 
 static const R_CallMethodDef callMethods[] = {
   /* pwdecode.c */

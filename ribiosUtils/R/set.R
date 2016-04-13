@@ -12,6 +12,18 @@ mset <- function(func, ...) {
 munion <- function(...) mset(func=union, ...)
 mintersect <- function(...) mset(func=intersect, ...)
 msetdiff <- function(...) mset(func=setdiff, ...)
+
+#' Reverse setdiff
+#'
+#' @param x a vector
+#' @param y another vector
+#' @return Similar to setdiff, but with elements in y but not in x
+#' @details reverse setdiff, i.e. rsetdiff(x,y) equals setdiff(y,x)
+#' @author Jitao David Zhang
+#' @examples
+#' testVec1 <- LETTERS[3:6]
+#' testVec2 <- LETTERS[5:7]
+#' rsetdiff(testVec1, testVec2)
 rsetdiff <- function(x,y) setdiff(y,x)
 
 compTwoVecs <- function(vec1, vec2) {

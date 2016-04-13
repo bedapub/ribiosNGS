@@ -28,6 +28,8 @@
 #include "linestream.h"
 #include "html.h"
 
+#include "R.h"
+
 static int hexdigit (register int c) {
   /*
     Convert a hex digit (character) to a numeric value.
@@ -86,11 +88,11 @@ void cgiInit (void) {
       perror ("PROBLEM: cgiInit: close(2)");
     fd = dup (1);
     if (fd == -1) {
-      printf ("PROBLEM: could not duplicate stdout\n");
+      REprintf ("PROBLEM: could not duplicate stdout\n");
       perror ("PROBLEM: cgiInit: dup");
     }
     if (fd != 2)
-      printf ("PROBLEM: cgiInit(): could not redirect stderr (fd %d) - possibly cgiInit() several calls to cgiInit().\n",
+      REprintf ("PROBLEM: cgiInit(): could not redirect stderr (fd %d) - possibly cgiInit() several calls to cgiInit().\n",
               fd);
     setbuf (stderr,NULL);
   }
@@ -989,7 +991,7 @@ void html_hlink4 (char *class1,char *method,char *label,
      (h for hyperlink).<br>
      Precondition: html_URLSet() was called.<br>
   */
-  printf ("<a href=\"%s\">%s</a>",
+  Rprintf ("<a href=\"%s\">%s</a>",
           html_clink4 (class1,method,p1,p2,p3,p4),label);
 }
 
@@ -1107,7 +1109,7 @@ void html_printPopupLinkAdv (char *url,char *urlLabel,char *windowName,
      @param[in]  showBars - if 0/1 hide/show statusbar, toolbar, menubar and
                             addressbar
   */
-  printf ("%s",
+  Rprintf ("%s",
           html_getPopupLinkAdv (url,urlLabel,windowName,isButton,width,height,
                                 showScrollbars,isResizeable,showBars));
 }

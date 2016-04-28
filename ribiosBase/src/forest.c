@@ -154,14 +154,14 @@ static void forest_descend (ForestNode k,int level) {
 
   // print this node
   if (gPrintHTML)
-    fputs ("<option",stdout);
+    Rprintf ("<option");
   else
     array (gMatches,arrayMax (gMatches),int) = 0;
   while (gMatchNodes && index < arrayMax (gMatchNodes)) {
    if (strEqual (nodeWithoutDots (textItem (gMatchNodes,index)),k->name)) {
       gFound = 1;
       if (gPrintHTML)
-        fputs (" selected",stdout);
+        Rprintf (" selected");
       else
         arru (gMatches,(arrayMax (gMatches)-1),int) = 1;
       break;
@@ -170,12 +170,12 @@ static void forest_descend (ForestNode k,int level) {
   }
   dots[level] = '\0';
   if (gPrintHTML) {
-    putchar ('>');
-    fputs (dots,stdout);
+    Rprintf ('>');
+    Rprintf (dots);
     if (level > 0)
-      putchar (' ');
-    fputs (k->name,stdout);
-    putchar ('\n');
+      Rprintf (' ');
+    Rprintf (k->name);
+    Rprintf ('\n');
   }
   else {
     stringCpy (item,dots);

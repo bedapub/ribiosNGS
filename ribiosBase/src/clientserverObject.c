@@ -364,7 +364,7 @@ Connection cso_clientInit (char *hostname,unsigned int port)  {
       warn ("cso_clientInit: connect: %s\nThe server %s:%d is probably not running.\n",
             strerror (errno),hostname,port);
       if (gClientMsg[1] != '\0')
-        printf ("%s",gClientMsg+1);
+        Rprintf ("%s",gClientMsg+1);
     }
     else
       warn (gClientMsg);

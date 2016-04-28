@@ -141,7 +141,7 @@ static long readRaster (unsigned int uWidth,unsigned int uHeight) {
   fread (&uCount,1,1,fp);
   while (uCount > 0) {
     if (fread (cBuffer,1,uCount,fp) != uCount)
-      fprintf (stderr,"Error in reading loop\n");
+      REprintf("Error in reading loop\n");
     if (bResult) {
       for (lpByte=cBuffer;uCount-- > 0;lpByte++) {
         dwDatum += (unsigned long)*lpByte << uBits;

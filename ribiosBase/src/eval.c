@@ -89,7 +89,7 @@ static void tokenize (char *s) {
     arrayClear (gTokens);
   }
   if (gDebug)
-    fprintf (stderr,"-------------------\nTokenize: '%s'\n\n",s);
+    REprintf ("-------------------\nTokenize: '%s'\n\n",s);
 
   stringCreateOnce (t,10);
   i = 0;
@@ -157,7 +157,7 @@ static void tokenize (char *s) {
     fprintf ("\nTokens\n");
     for (i=0;i<arrayMax (gTokens);i++) {
       currTok = arrp (gTokens,i,Tok);
-      fprintf (stderr,"%d\t%s\t%d\n",i,currTok->val,currTok->type);
+      REprintf ("%d\t%s\t%d\n",i,currTok->val,currTok->type);
     }
   }
   */
@@ -277,12 +277,12 @@ static void processTokens (void) {
   }
 
   if (gDebug) {
-    fprintf (stderr,"Tokens processed\n");
+    REprintf ("Tokens processed\n");
     for (i=0;i<arrayMax (gTokens);i++) {
       currTok = arrp (gTokens,i,Tok);
-      fprintf (stderr,"%d\t%s\t%d\n",i,currTok->val,currTok->type);
+      REprintf ("%d\t%s\t%d\n",i,currTok->val,currTok->type);
     }
-    fprintf (stderr,"\n");
+    REprintf ("\n");
   }
 }
 
@@ -350,12 +350,12 @@ static void expandTree (Node *currNode,char *seps) {
       int k;
       Tok *currTok1;
 
-      fprintf (stderr,"in: ");
+      REprintf("in: ");
       for (k=currNode->bInd;k<=currNode->eInd;k++) {
         currTok1 = arrp (gTokens,k,Tok);
-        fprintf (stderr,"%s ",currTok1->val);
+        REprintf("%s ",currTok1->val);
       }
-      fprintf (stderr,"\n");
+      REprintf("\n");
     }
     expanded = 1;
     currNode->op = hlr_strdup (currTok->val);
@@ -368,12 +368,12 @@ static void expandTree (Node *currNode,char *seps) {
       int k;
       Tok *currTok1;
 
-      fprintf (stderr,"l:  ");
+      REprintf("l:  ");
       for (k=newNode->bInd;k<=newNode->eInd;k++) {
         currTok1 = arrp (gTokens,k,Tok);
-        fprintf (stderr,"%s ",currTok1->val);
+        REprintf("%s ",currTok1->val);
       }
-      fprintf (stderr,"\n");
+      REprintf("\n");
     }
     newNode->left = NULL;
     newNode->right = NULL;
@@ -400,12 +400,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k;
           Tok *currTok1;
 
-          fprintf (stderr,"in: ");
+          REprintf("in: ");
           for (k=currNode->bInd;k<=currNode->eInd;k++) {
             currTok1 = arrp (gTokens,k,Tok);
-            fprintf (stderr,"%s ",currTok1->val);
+            REprintf("%s ",currTok1->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         expanded = 1;
         currNode->op = hlr_strdup (currTok->val);
@@ -418,12 +418,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k;
           Tok *currTok1;
 
-          fprintf (stderr,"l:  ");
+          REprintf("l:  ");
           for (k=newNode->bInd;k<=newNode->eInd;k++) {
             currTok1 = arrp (gTokens,k,Tok);
-            fprintf (stderr,"%s ",currTok1->val);
+            REprintf("%s ",currTok1->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         newNode->left = NULL;
         newNode->right = NULL;
@@ -437,12 +437,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k;
           Tok *currTok1;
 
-          fprintf (stderr,"r:  ");
+          REprintf("r:  ");
           for (k=newNode->bInd;k<=newNode->eInd;k++) {
             currTok1 = arrp (gTokens,k,Tok);
-            fprintf (stderr,"%s ",currTok1->val);
+            REprintf("%s ",currTok1->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         newNode->left = NULL;
         newNode->right = NULL;
@@ -470,12 +470,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k;
           Tok *currTok1;
 
-          fprintf (stderr,"in: ");
+          REprintf("in: ");
           for (k=currNode->bInd;k<=currNode->eInd;k++) {
             currTok1 = arrp (gTokens,k,Tok);
-            fprintf (stderr,"%s ",currTok1->val);
+            REprintf("%s ",currTok1->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         expanded = 1;
         currNode->op = hlr_strdup (currTok->val);
@@ -488,12 +488,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k;
           Tok *currTok1;
 
-          fprintf (stderr,"l:  ");
+          REprintf("l:  ");
           for (k=newNode->bInd;k<=newNode->eInd;k++) {
             currTok1 = arrp (gTokens,k,Tok);
-            fprintf (stderr,"%s ",currTok1->val);
+            REprintf("%s ",currTok1->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         newNode->left = NULL;
         newNode->right = NULL;
@@ -508,12 +508,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k;
           Tok *currTok1;
 
-          fprintf (stderr,"r:  ");
+          REprintf("r:  ");
           for (k=newNode->bInd;k<=newNode->eInd;k++) {
             currTok1 = arrp (gTokens,k,Tok);
-            fprintf (stderr,"%s ",currTok1->val);
+            REprintf("%s ",currTok1->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         newNode->left = NULL;
         newNode->right = NULL;
@@ -542,12 +542,12 @@ static void expandTree (Node *currNode,char *seps) {
         int b,e;
 
         if (gDebug) {
-          fprintf (stderr,"branch:  ");
+          REprintf("branch:  ");
           for (k=currNode->bInd;k<=currNode->eInd;k++) {
             currTok1 = arrp (gTokens,k,Tok);
-            fprintf (stderr,"%s ",currTok1->val);
+            REprintf("%s ",currTok1->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         expanded = 1;
         b = currNode->bInd;
@@ -584,12 +584,12 @@ static void expandTree (Node *currNode,char *seps) {
               int k1;
               Tok *currTok2;
 
-              fprintf (stderr,"bl:  ");
+              REprintf("bl:  ");
               for (k1=newNode->bInd;k1<=newNode->eInd;k1++) {
                 currTok2 = arrp (gTokens,k1,Tok);
-                fprintf (stderr,"%s ",currTok2->val);
+                REprintf("%s ",currTok2->val);
               }
-              fprintf (stderr,"\n");
+              REprintf("\n");
             }
             newNode->left = NULL;
             newNode->right = NULL;
@@ -603,12 +603,12 @@ static void expandTree (Node *currNode,char *seps) {
               int k1;
               Tok *currTok2;
 
-              fprintf (stderr,"br:  ");
+              REprintf("br:  ");
               for (k1=newNode->bInd;k1<=newNode->eInd;k1++) {
                 currTok2 = arrp (gTokens,k1,Tok);
-                fprintf (stderr,"%s ",currTok2->val);
+                REprintf("%s ",currTok2->val);
               }
-              fprintf (stderr,"\n");
+              REprintf("\n");
             }
             newNode->left = NULL;
             newNode->right = NULL;
@@ -643,12 +643,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k1;
           Tok *currTok2;
 
-          fprintf (stderr,"then:  ");
+          REprintf("then:  ");
           for (k1=newNode->bInd;k1<=newNode->eInd;k1++) {
             currTok2 = arrp (gTokens,k1,Tok);
-            fprintf (stderr,"%s ",currTok2->val);
+            REprintf("%s ",currTok2->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         newNode->left = NULL;
         newNode->right = NULL;
@@ -662,12 +662,12 @@ static void expandTree (Node *currNode,char *seps) {
           int k1;
           Tok *currTok2;
 
-          fprintf (stderr,"else:  ");
+          REprintf("else:  ");
           for (k1=newNode->bInd;k1<=newNode->eInd;k1++) {
             currTok2 = arrp (gTokens,k1,Tok);
-            fprintf (stderr,"%s ",currTok2->val);
+            REprintf("%s ",currTok2->val);
           }
-          fprintf (stderr,"\n");
+          REprintf("\n");
         }
         newNode->left = NULL;
         newNode->right = NULL;
@@ -699,19 +699,19 @@ static void printTree (Node *currNode,char mode,int level) {
   int i;
 
   for (i=0;i<level;i++)
-    fprintf (stderr,"  ");
+    REprintf("  ");
 
   if (currNode->left == NULL && currNode->right == NULL) {
     if (mode != ' ')
-      fprintf (stderr,"%c:",mode);
+      REprintf("%c:",mode);
     for (i=currNode->bInd;i<=currNode->eInd;i++) {
       currTok = arrp (gTokens,i,Tok);
-      fprintf (stderr,"%s ",currTok->val);
+      REprintf("%s ",currTok->val);
     }
-    fprintf (stderr,"\n");
+    REprintf("\n");
   }
   else {
-    fprintf (stderr,"%s\n",currNode->op);
+    REprintf("%s\n",currNode->op);
     if (currNode->left != NULL)
       printTree (currNode->left,' ',level+1);
     if (currNode->right != NULL)
@@ -747,7 +747,7 @@ static void destroyTree (Node *n) {
 static void tree (void) {
   destroyTree (&topNode);
   if (gDebug)
-    fprintf (stderr,"Create tree\n");
+    REprintf("Create tree\n");
   topNode.parent = NULL;
   topNode.bInd = 0;
   topNode.eInd = arrayMax (gTokens)-1;
@@ -774,9 +774,9 @@ static void tree (void) {
     }
   }
   if (gDebug) {
-    fprintf (stderr,"\nTree:\n");
+    REprintf("\nTree:\n");
     printTree (&topNode,' ',0);
-    fprintf (stderr,"\n");
+    REprintf("\n");
   }
 }
 
@@ -853,18 +853,18 @@ static void termType (void) {
   }
   if (gDebug) {
     if (gVariables != NULL) {
-      fprintf (stderr,"Assigned variables\n");
+      REprintf("Assigned variables\n");
       if (arrayMax (gVariables) > 0) {
         for (k=0;k<arrayMax (gVariables);k++) {
           currVariable = arrp (gVariables,k,Variable);
-          fprintf (stderr,"%s = %s\n",currVariable->name,
+          REprintf("%s = %s\n",currVariable->name,
                   currVariable->val != NULL ? currVariable->val :
                   "being evaluated");
         }
-        fprintf (stderr,"\n");
+        REprintf("\n");
       }
       else
-        fprintf (stderr,"none\n");
+        REprintf("none\n");
     }
   }
   // replace variables

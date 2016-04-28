@@ -195,7 +195,7 @@ static void printName (char *name) {
     sprintf (line,"%*s",NAME_LENGTH,"");
   else
     sprintf (line,"%-*.*s",NAME_LENGTH,NAME_LENGTH-1,name);
-  printf ("%s",line);
+  Rprintf ("%s",line);
 }
 
 static int printLine (char *line,int start,int end) {
@@ -208,12 +208,12 @@ static int printLine (char *line,int start,int end) {
 
   for (j=start;j<end;j++){
     if (j >= strlen (line)){
-        printf ("\n");
+        Rprintf ("\n");
         return 1;
     }
-    printf ("%c",line[j]);
+    Rprintf ("%c",line[j]);
   }
-  printf ("\n");
+  Rprintf ("\n");
   if (j == strlen (line))
     return 1;
   else
@@ -243,7 +243,7 @@ void sa_printAlignment (char *seq1,char *seq2,char *sName1,char *sName2,
   int length,idCount;
 
   scoreLine = getMatchLine (seq1,seq2,isNuc,&length,&idCount);
-  printf ("Identities = %d/%d (%d%%)\n",idCount,length,(idCount*100)/length);
+  Rprintf ("Identities = %d/%d (%d%%)\n",idCount,length,(idCount*100)/length);
   numberLine1 = hlr_strdup (sa_getPositionLine (seq1,frame1,begin1,end1,
                                                 isNuc,orgIsNuc1));
   numberLine2 = hlr_strdup (sa_getPositionLine (seq2,frame2,begin2,end2,
@@ -263,7 +263,7 @@ void sa_printAlignment (char *seq1,char *seq2,char *sName1,char *sName2,
     finished=printLine (seq2,fromPos,toPos);
     printName (NULL);
     printLine (numberLine2,fromPos,toPos);
-    printf ("\n");
+    Rprintf ("\n");
     i++;
   }
 }

@@ -65,7 +65,13 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h"), strict=T
 
 argIsInit <- function() .Call("rarg_isInit")
 
-argPresent <- function(opt) .Call("rarg_present", opt)
+argPresent <- function(opt) {
+    if(isDebugging()) {
+        message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode. FALSE is returned")
+        return(FALSE)
+    }
+  .Call("rarg_present", opt)
+}
 
 argGetPos <- function(opt, ind=1L, default=NULL) {
   if(isDebugging()) {

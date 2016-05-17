@@ -1,8 +1,6 @@
 \name{argParse}
 \alias{argIsInit}
 \alias{argParse}
-\alias{argGet}
-\alias{argGetPos}
 \alias{argPresent}
 \title{
   A BIOS-style parser of command-line parameters
@@ -16,8 +14,6 @@ argParse(optargs, reqargs, usage = paste(scriptName(), "-h"), strict=TRUE)
 
 argIsInit()
 argPresent(opt)
-argGet(opt, default=NULL)
-argGetPos(opt, ind=1L, default=NULL)
 }
 \arguments{
   \item{optargs}{String describing optional arguments. Syntax:
@@ -36,8 +32,6 @@ argGetPos(opt, ind=1L, default=NULL)
     set to \code{TRUE}, the un-prefixed parameters (which must be at the
     end of the command line) will be returned as a character vector.}
   \item{opt}{Name of a command line option}
-  \item{ind}{Index of the value to be fetched, see below.}
-  \item{default}{Value to be returned if the opt was missing}
 }
 \details{
   \code{argParse} must be called before \code{argGet},\code{argGetPos}
@@ -78,9 +72,5 @@ argParse("verbose threshold,2", "infile outfile", usage="prog [-infile
 ]infile [-outfile ]outfile [-verbose] [-threshold MIN MAX]")
 argIsInit()
 argPresent("verbose")
-argGet("threshold") ## ==argGetPos("threshold", 1)
-argGetPos("threshold",2)
-argGet("infile")
-argGet("outfile")
 }
 }

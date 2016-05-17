@@ -1,13 +1,14 @@
 #!/bin/bash /SOFT/bi/apps/R/bdeRscript
 
 library(ribiosArg)
-usage <- sprintf("%s -infile INFILE -outfile OUTFILE [-a Low Up] [-b] [-c Mid] [-d]\
+usage <- sprintf("%s -infile INFILE -outfile OUTFILE [-a Low Up] [-b] [-c Mid] [-d] [-e OPT]\
   -infile: input file\
   -outfile: output file\
   -a LOW UP: thresholds\
   -b: Add b\
   -c: Mid point\
-  -d: Multiply by d", scriptName())
+  -d: Multiply by d\
+  -e: accepts only following values: a, b, c", scriptName())
 
 argParse(optargs="b a,2 c,1 d", reqargs="infile outfile", usage=usage)
 cat("infile:", argGet("infile"),"\n")
@@ -18,3 +19,5 @@ cat("a[2]:", argGetPos("a",2), "\n")
 cat("b:", argPresent("b"), "\n")
 cat("d:", argPresent("d"), "\n")
 cat("d:", argGet("d"), "\n")
+cat("e:", argGet("e", choices=c("a", "b", "c")), "\n")
+

@@ -1,3 +1,21 @@
+#' Returns the file name of the Rscript being executed
+#'
+#' Get the file name of the Rscript that is currently being executed. The function is mainly called by stand-alone Rscripts.
+#'
+#' @details The name is determined by the \code{--file}/\code{-f} option in the command line.
+#'
+#' When the R session was not initiated by a Rscript (i.e. there is no \code{--file} or \code{-f} option in the command line), \code{NULL} is returned.
+#'
+#' Note that the function supports calling Rscript via \code{--file}  or \code{-f} with \code{R}. This applies to cases where a Rscript, marked as executable, and is called from the command line.
+#'
+#' @return  A character string containing the file name of the Rscript.
+#'
+#' @author Jitao David Zhang <jitao_david.zhang@roche.com>
+#' @seealso \code{\link{commandArgs}} and \code{\link{getArg}}
+#'
+#' @examples
+#' \dontrun{scriptName()}
+#'
 scriptName <- function() {
   filename <- grep("--file=", commandArgs(), value=TRUE)
   lf <- length(filename)

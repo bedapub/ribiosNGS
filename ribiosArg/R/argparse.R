@@ -73,21 +73,73 @@ argPresent <- function(opt) {
   .Call("rarg_present", opt)
 }
 
-argGetPos <- function(opt, ind=1L, default=NULL) {
+#' Parse an argument with the given position
+#'
+#' Get the value of an named argument with the given position
+#'
+#' @param opt name of the argument to be parsed
+#' @param ind index of the argument to be parsed, starting from 1.
+#' @param default default values to be returned if the argument is not provided
+#' @param choices a character vector of accepted values; if a string outside the vector is provided, the function will stop and print error message
+#' 
+#' @details The parsing is performed at C-level. If the argument accepts only one value, users can also call argGet(opt, default=NULL, choices=NULL)
+#'
+#' @return  A character string representing the value of the argument
+#'
+#' @author Jitao David Zhang <jitao_david.zhang@roche.com>
+#' @seealso \code{\link{argParse}}, \code{\link{argGet}}, and \code{\link{argPresent}}
+#'
+#' @examples
+#' \dontrun{argGetPos("thresholds", ind=2)}
+#'
+#' 
+argGetPos <- function(opt, ind=1L, default=NULL, choices=NULL) {
   if(isDebugging()) {
     message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode. Default value is returned")
     return(default)
+  }  
+  if(argPresent(opt)) {
+      res <- .Call("rarg_getPos", opt,as.integer(ind))
+      if(!is.null(choices) && !res %in% choices)
+          stop(sprintf("Option '%s' accepts only following values: %s",
+                       opt, paste(choices, collapse=",")))
+  } else {
+      res <- default
   }
-  if(argPresent(opt))
-    return(.Call("rarg_getPos", opt,as.integer(ind)))
-  return(default)
+  return(res)
 }
-argGet <- function(opt, default=NULL) {
+
+#' Parse an argument
+#'
+#' Get the value of an named argument
+#'
+#' @param opt name of the argument to be parsed
+#' @param default default values to be returned if the argument is not provided
+#' @param choices a character vector of accepted values; if a string outside the vector is provided, the function will stop and print error message
+#' 
+#' @details The parsing is performed at C-level. It is an abbreiviation of argGetPos(opt, ind=1, default=NULL, choices=NULL)
+#'
+#' @return  A character string representing the value of the argument
+#'
+#' @author Jitao David Zhang <jitao_david.zhang@roche.com>
+#' @seealso \code{\link{argParse}}, \code{\link{argGetPos}}, and \code{\link{argPresent}}
+#'
+#' @examples
+#' \dontrun{argGet("infile")}
+#'
+argGet <- function(opt, default=NULL, choices=NULL) {
   if(isDebugging()) {
     message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode. Default value is returned")
     return(default)
   }
-  if(argPresent(opt))
-    return(.Call("rarg_get", opt))
-  return(default)
+  if(argPresent(opt)) {
+      res <- .Call("rarg_get", opt)
+      if(!is.null(choices) && !res %in% choices) {
+          stop(sprintf("Option '%s' accepts only following values: %s",
+                       opt, paste(choices, collapse=",")))
+      }
+  } else {
+      res <- default
+  }
+  return(res)
 }

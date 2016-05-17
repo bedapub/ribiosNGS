@@ -17,6 +17,5 @@ export("argParse",
        "argGetPos",
        "argPresent")
 
-
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosArg)

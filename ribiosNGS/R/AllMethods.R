@@ -409,7 +409,8 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
             if(target=="GeneID") {
               anno <- annotateGeneIDs(feats,orthologue = TRUE)
             } else if (target=="GeneSymbol") {
-              anno <- annotateGeneSymbols(feats,orthologue = TRUE)
+                ## this is very slow because of the database table look up, but is working...
+              anno <- annotateGeneSymbols(feats,organism="any", orthologue = TRUE)
             } else if (target=="RefSeq") {
               anno <- annotateRefSeqs(feats,orthologue = TRUE)
             } else if (target=="EnsEMBL") {

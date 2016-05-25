@@ -1,7 +1,2 @@
-## No R specific settings are needed, they are automatically handled by R CMD SHLIB
-R_INC=$(R_HOME)/src/include/
-
-CFLAGSL= $(CFLAGS) $(defines)
-
-## The pwdecode.c is linked to, since BIOS uses static libraries and it is not possible to be linked to a static library
-PKG_LIBS=$(CPICFLAGS) -I$(BIOINFOCONFDIR) 
+RIBIOSBASE_PATH=`echo 'library(ribiosBase); cat(system.file("lib", package="ribiosBase", mustWork=TRUE))' | "${R_HOME}/bin/R" --vanilla --slave`
+PKG_LIBS="$(RIBIOSBASE_PATH)$(R_ARCH)/ribiosBase.a"

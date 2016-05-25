@@ -8,6 +8,6 @@ Author: Jitao David Zhang <jitao_david.zhang@roche.com>, with inputs from
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Utilities for R native data structures and functions
 Depends:
-    methods, ribiosBase
+    methods, grDevices, stats, utils, ribiosBase
 License: GPL-3
 RoxygenNote: 5.0.1

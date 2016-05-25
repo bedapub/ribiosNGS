@@ -1,4 +1,12 @@
 importFrom(methods, setMethod)
+import(ribiosBase)
+importFrom("grDevices", "bmp", "dev.off", "jpeg", "pdf", "png",
+           "postscriptFonts", "tiff")
+importFrom("methods", "is")
+importFrom("stats", "pchisq", "relevel")
+importFrom("utils", "assignInNamespace", "getFromNamespace",
+           "installed.packages", "packageDescription")
+
 
 export(asNumMatrix,
        stringDataFrame2numericMatrix,

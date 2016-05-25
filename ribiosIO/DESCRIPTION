@@ -1,15 +1,18 @@
 Package: ribiosIO
 Type: Package
 Title: Input/Output utilities of ribios
-Version: 1.0-36
-Date: 2015-10-12
+Version: 1.0-37
+Date: 2016-05-25
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Basic data structures and functions for input/output tasks in
     ribios. In this package, only the basic data structures (vectors, lists and
     matrices) are allowed, in order to garantee fast loading and high
     performance.
+Depends:
+    ribiosBase
 Suggests:
     ribiosUtils
+LinkingTo: ribiosBase
 License: GPL-3
 RoxygenNote: 5.0.1

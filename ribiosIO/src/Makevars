@@ -1,9 +1,3 @@
-include $(BIOINFOCONFDIR)/biosdefs.make
+RIBIOSBASE_PATH=`echo 'library(ribiosBase); cat(system.file("lib", package="ribiosBase", mustWork=TRUE))' | "${R_HOME}/bin/R" --vanilla --slave`
+PKG_LIBS="$(RIBIOSBASE_PATH)$(R_ARCH)/ribiosBase.a"
 
-## No R specific settings are needed, they are automatically handled by R CMD SHLIB
-
-CFLAGSL= $(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
-
-PKG_CFLAGS= $(CFLAGSL) $(BIOSINC)
-
-PKG_LIBS=-fPIC -I$(BIOINFOCONFDIR) $(BIOSKERNSRC)/log.c $(BIOSKERNSRC)/format.c $(BIOSKERNSRC)/array.c $(BIOSKERNSRC)/hlrmisc.c $(BIOSKERNSRC)/linestream.c

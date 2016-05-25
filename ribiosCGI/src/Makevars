@@ -1,9 +1,2 @@
-include $(BIOINFOCONFDIR)/biosdefs.make
-
-## No R specific settings are needed, they are automatically handled by R CMD SHLIB
-INC="-I$(PRPILIBLOC) -I${BIOINFOCONFDIR}"
-CFLAGSL= $(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
-PKG_CFLAGS=$(CFLAGSL) $(BIOSINC)
-
-## BIOS uses static libraries and it is not possible to be linked to a static library
-PKG_LIBS=$(CPICFLAGS) -I$(BIOINFOCONFDIR) $(BIOSKERNSRC)/log.c $(BIOSKERNSRC)/html.c $(BIOSKERNSRC)/array.c $(BIOSKERNSRC)/format.c $(BIOSKERNSRC)/hlrmisc.c $(BIOSKERNSRC)/linestream.c $(BIOSKERNSRC)/rofutil.c 
+RIBIOSBASE_PATH=`echo 'library(ribiosBase); cat(system.file("lib", package="ribiosBase", mustWork=TRUE))' | "${R_HOME}/bin/R" --vanilla --slave`
+PKG_LIBS="$(RIBIOSBASE_PATH)$(R_ARCH)/ribiosBase.a"

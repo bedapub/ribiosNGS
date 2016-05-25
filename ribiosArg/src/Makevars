@@ -1,6 +1,2 @@
-include $(BIOINFOCONFDIR)/biosdefs.make
-
-R_INC=$(R_HOME)/src/include/
-CFLAGSL=$(CFLAGS) $(defines) -I$(BIOINFOCONFDIR)
-PKG_CFLAGS=$(CFLAGSL) $(BIOSINC)
-PKG_LIBS=-fPIC $(CPICFLAGS) -I$(BIOINFOCONFDIR) $(BIOSKERNSRC)/array.c $(BIOSKERNSRC)/format.c $(BIOSKERNSRC)/hlrmisc.c $(BIOSKERNSRC)/arg.c
+RIBIOSBASE_PATH=`echo 'library(ribiosBase); cat(system.file("lib", package="ribiosBase", mustWork=TRUE))' | "${R_HOME}/bin/R" --vanilla --slave`
+PKG_LIBS="$(RIBIOSBASE_PATH)$(R_ARCH)/ribiosBase.a"

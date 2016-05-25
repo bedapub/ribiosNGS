@@ -25,6 +25,9 @@ roxygenise:
 	@(cd ..; ${R} --vanilla -q -e "library(roxygen2);roxygenise(\"$(PKG)\")")
 	@echo ' '
 
+static:
+	@(cd src; ar rcs ../inst/lib/ribiosBase.a *.o)
+
 install: roxygenise
 	@echo '====== Installing Package ======'
 	@(cd ..; ${R} CMD INSTALL ${PKG})

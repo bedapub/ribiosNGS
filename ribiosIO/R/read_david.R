@@ -7,7 +7,7 @@ read_david <- function(file) {
                     1, function(x) {lines[x[1]:x[2]]})
   clusters.df <- lapply(clusters, function(x) {
                             con <- textConnection(x)
-                            res <- read.table(con, sep="\t", head=FALSE, comment.char="", quote="")
+                            res <- read.table(con, sep="\t", header=FALSE, comment.char="", quote="")
                             close.connection(con)
                             return(res)
                         })

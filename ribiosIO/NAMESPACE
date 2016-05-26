@@ -1,3 +1,5 @@
+importFrom("utils", "read.csv", "read.table", "write.table")
+
 export(read_gmt_list,
        write_gmt)
 
@@ -30,5 +32,4 @@ export(writeMatrix, readMatrix)
 
 export(read_david)
 
-## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosIO, .registration=TRUE)

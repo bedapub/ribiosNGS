@@ -9,4 +9,4 @@ stopifnot(identical(colnames(ngs)[1:5],
 
 ## rownames
 stopifnot(identical(rownames(ngs)[1:3],
-                    c("ENSG00000214105_17", "ENSG00000234128_7", "ENSG00000172653_17")))
+                    c("ENSG00000234128_7","ENSG00000172653_17", "ENSG00000181092_3")))

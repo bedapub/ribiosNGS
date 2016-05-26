@@ -1,4 +1,9 @@
-importFrom(methods, setMethod)
+importFrom("grDevices", "bmp", "dev.off", "jpeg", "pdf", "png",
+           "postscriptFonts", "tiff")
+importFrom("methods", "is", "setMethod")
+importFrom("stats", "pchisq", "relevel")
+importFrom("utils", "assignInNamespace", "getFromNamespace",
+           "installed.packages", "packageDescription")
 
 export(asNumMatrix,
        stringDataFrame2numericMatrix,
@@ -83,7 +88,7 @@ export(assertDesign, assertContrast, assertDesignContrast)
 export(identicalMatrixValue, identicalMatrix)
 
 ## .registration=TRUE is only valid when the routines have been registered
-useDynLib(ribiosUtils)
+useDynLib(ribiosUtils, .registration=TRUE,.fixes="C_")
 
 ##--------------------##
 ## Deprecation

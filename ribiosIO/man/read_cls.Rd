@@ -27,7 +27,7 @@ read_cls(cls.file)
   \code{\link{read_gct_matrix}}
 }
 \examples{
-idir <- system.file("extdata", package="ribiosExpression")
+idir <- system.file("extdata", package="ribiosIO")
 
 sample.cls <- read_cls(file.path(idir, "test.cls"))
 }

@@ -1,3 +1,17 @@
+#' Get bioinfo cookie
+#'
+#' @param force.refresh Logical. If set to \code{TRUE}, cached cookie is not used and a new cookie is fetched.
+#' @return A character string representing the cookie
+#' @details   User name is obtained by querying the operating system.
+#'
+#' The function first checks whether a cached cookie exists: if so, it
+#' simply returns it without querying the webserver; otherwise, it
+#' fetches a newly backed cookie from the webserver.
+#' @author Jitao David Zhang, Detlef Wolf, and Clemens Brogers
+#' @examples
+#' \dontrun{bioinfoCookie()}
+#' @export
+#' @useDynLib ribiosAuth get_bioinfo_cookie
 bioinfoCookie <- function(force.refresh=FALSE) {
   ## examine environment
   CACHE_VAR <- "RIBIOS_BIOINFO_COOKIE"

@@ -7,6 +7,7 @@
 #include "format.h"
 #include "linestream.h"
 #include "get_bioinfo_cookie.h" 
+#include "get_bioinfo_cookie_pw.h" 
 
 SEXP get_bioinfo_cookie () {
   int recLen=0;

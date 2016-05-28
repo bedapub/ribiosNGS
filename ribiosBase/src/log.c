@@ -228,6 +228,15 @@ void log_deregisterRomsg (RoMsgFunc f) {
   logDeregisterHook (&gRomsgHookCount,gRomsgHooks,f);
 }
 
+void R_print_msg(const char *x, const char* prefix, va_list args) {
+  /** print msg in R **/
+  fflush(NULL);
+  REprintf(prefix);
+  REprintf(x, args);
+  va_end(args);
+  REprintf("\n");
+}
+
 void die (char *format,...) {
   /**
      Exit the program but not before executing all registered die functions
@@ -235,10 +244,9 @@ void die (char *format,...) {
 
      Modified to make R session not crash
   */
-
-  REprintf("PROBLEM: ");
-  REprintf(format);
-  REprintf("\n");
+  va_list args ;
+  va_start(args, x);
+  print_msg(x, "PROBLEM: ", args);
 }
 
 void warn (char *format,...) {
@@ -259,10 +267,8 @@ void usage (char *format,...) {
      @param[in] format - the format of the message
   */
   va_list args;
-
-  va_start (args,format);
-  logExecuteHooks (gUsageHookCount,gUsageHooks,/*problem*/0,/*exit*/1,
-                   format,args);
+  va_start(args, x);
+  print_msg(x, "Usage: ", args);
 }
 
 void romsg (char *format,...) {

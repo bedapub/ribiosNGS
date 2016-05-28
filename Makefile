@@ -75,7 +75,7 @@ install-ribiosGSEA:ribiosGSEA
 
 
 clean:
-	rm *.tar.gz
+	rm -rf *.tar.gz
 	find . -maxdepth 1 -type d -name "*.Rcheck" -exec rm -rf '{}' \;
 
 ## bioinfolib: run once to convert BIOS to BIOINFOLIB

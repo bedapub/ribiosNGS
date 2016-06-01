@@ -1,10 +1,14 @@
 Package: ribiosNetwork
 Type: Package
 Title: Network analysis in RIBIOS
-Version: 1.0-11
-Date: 2013-06-05
+Version: 1.0-12
+Date: 2016-06-01
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Network analysis toolbox in RIBIOS
-Depends: graph, RBGL, igraph
+Depends:
+    graph,
+    RBGL,
+    igraph
 License: LGPL(>=2)
+RoxygenNote: 5.0.1

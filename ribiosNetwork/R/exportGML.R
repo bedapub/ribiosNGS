@@ -6,6 +6,8 @@ fixNodeLabel <- function(name) {
   res[!invalid] <- name[!invalid]
   return(res)
 }
+
+#' @export
 exportGML <- function(igraph, filename) {
   file <- file(filename, "w")
   cat("Creator \"ribiosNetwork\"\n", file=file)

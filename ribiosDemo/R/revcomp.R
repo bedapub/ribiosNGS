@@ -3,7 +3,7 @@ makeSeq <- function(bases=c("A","T","G","C"), len=100)
   paste(sample(bases, len, replace=TRUE), collapse="")
 
 #' @export
-#' @useDynLib ribiosDemo bios_revcomp
+#' @useDynLib ribiosDemo, bios_revcomp, .registration=TRUE
 revcomp <- function(x) {
   if(!is.character(x)) {
       xnames <- names(x)

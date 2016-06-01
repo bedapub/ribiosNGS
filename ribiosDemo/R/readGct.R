@@ -1,4 +1,8 @@
-#' @export
+#' @importFrom utils read.table
+#' @importFrom stats rnorm
+
+
+#' @export 
 makeTempGct <- function(nrow=100, ncol=100) {
   tf <- tempfile()
   writeLines(makeGctLines(nrow=nrow, ncol=ncol), con=tf)
@@ -33,7 +37,7 @@ checkfile <- function(filename) {
 }
 
 #' @export
-#' @useDynLib ribiosDemo bios_readgct
+#' @useDynLib ribiosDemo, bios_readgct, .registration=TRUE
 readGct <- function(gct.file, keep.desc=TRUE) {
   gct.file <- checkfile(gct.file)
   mat <- .Call("bios_readgct", gct.file, keep.desc)

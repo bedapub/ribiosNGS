@@ -1,28 +1,41 @@
+#' @useDynLib ribiosCGI, .registration = TRUE
+#' @importFrom ribiosUtils assertFile haltifnot
+#' @importFrom methods getFunction
+
+#' @export cgiIsCGI
 cgiIsCGI <- function() {
   .Call("r_cgiIsCGI")
 }
 
+#' @export cgiInit
 cgiInit <- function() {
   invisible(.Call("r_cgiInit"))
 }
 
+#' Makes it possible to call cgiGetNext(), which will return the first field of the POSTed data, if any
+#' 
+#' @export cgiGetInit
 cgiGetInit <- function()  {
   invisible(.Call("r_cgiGetInit"));
 }
 
+#' @export cgiGet2Post
 cgiGet2Post <- function() {
   invisible(.Call("r_cgiGet2Post"))
 }
 
+#' @export cgiGet2PostReset
 cgiGet2PostReset <- function() {
   invisible(.Call("r_cgiGet2PostReset"))
 }
 
+#' @export cgiHeader
 cgiHeader <- function(header) {
   invisible(.Call("r_cgiHeader",
                   as.character(header)))
 }
 
+#' @export cgiSendFile
 cgiSendFile <- function(file, header=NULL) {
   assertFile(file <- as.character(file))
   if(!is.null(header)) header <- as.character(header)
@@ -31,24 +44,30 @@ cgiSendFile <- function(file, header=NULL) {
                   file, header));
 }
 
+#' @export cgiEncodeWord
 cgiEncodeWord <- function(word) {
   .Call("r_cgiEncodeWord", as.character(word));
 }
 
+#' @export cgiDecodeWord
 cgiDecodeWord <- function(word) {
   .Call("r_cgiDecodeWord", as.character(word));
 }
 
+#' @export cgiParams
 cgiParams <- function() {
   return(.Call("r_cgiParameters"))
 }
 
+#' @export cgiParam
 cgiParam <- function(name, ignore.case=FALSE, default=NULL) {
   return(.Call("r_cgiParam", as.character(name), as.logical(ignore.case), default))
 }
 
 ## Following functions are based on cgiParam
 ## cgiNumParam: parse numeric CGI paramters
+
+#' @export cgiNumParam
 cgiNumParam <- function(name, ignore.case=FALSE, expLen=NULL, default=NULL) {
   x <- cgiParam(name,
                 ignore.case=ignore.case, default=NULL)
@@ -67,6 +86,8 @@ cgiNumParam <- function(name, ignore.case=FALSE, expLen=NULL, default=NULL) {
 }
 
 ## cgiCateParam/cgiEnumParam: parse categorical variable CGI parameters
+#' @export cgiCateParam
+#' @export cgiEnumParam
 cgiCateParam <- function(name, ignore.case=FALSE,
                          allowed.values=NULL, default=NULL) {
   haltifnot(length(allowed.values)>=1,
@@ -83,6 +104,7 @@ cgiCateParam <- function(name, ignore.case=FALSE,
 cgiEnumParam <- cgiCateParam
 
 ## cgiStrParam: parse string CGI parameters
+#' @export cgiStrParam
 cgiStrParam <- function(name, ignore.case=FALSE, default=NULL) {
   x <- cgiParam(name, ignore.case=ignore.case, default=NULL)
   if(is.null(x)) return(default)
@@ -93,6 +115,7 @@ cgiStrParam <- function(name, ignore.case=FALSE, default=NULL) {
 }
 
 ## cgiLogiParam: parse logical CGI parameters
+#' @export cgiLogiParam
 cgiLogiParam <- function(name, ignore.case=FALSE, default=FALSE) {
   haltifnot(is.logical(default), msg="Default must be a logical value")
   x <- cgiParam(name, ignore.case=ignore.case, default=default)
@@ -102,6 +125,7 @@ cgiLogiParam <- function(name, ignore.case=FALSE, default=FALSE) {
 }
 
 ## cgiFunParam: parse CGI parameters for R function
+#' @export cgiFuncParam
 cgiFuncParam <- function(name, ignore.case=FALSE, default=NULL) {
   x <- cgiParam(name, ignore.case=ignore.case, default=NULL)
   if(is.null(x)) return(default)
@@ -115,6 +139,7 @@ cgiFuncParam <- function(name, ignore.case=FALSE, default=NULL) {
 }
 
 ## cgiPairParam: parse CGI parameters as key-value pairs
+#' @export cgiPairParam
 cgiPairParam <- function(name, ignore.case=FALSE,
                          default=NULL,
                          sep=":", collapse="\\+") {

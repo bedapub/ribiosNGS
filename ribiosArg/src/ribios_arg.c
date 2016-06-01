@@ -1,6 +1,5 @@
 #include <R_ext/Rdynload.h>
 #include "ribios_arg.h"
-#include "rlog.h"
 #include "argparse.h"
 
 static const R_CallMethodDef callMethods[] = {

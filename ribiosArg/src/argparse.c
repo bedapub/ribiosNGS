@@ -3,7 +3,6 @@
 #include "stdlib.h"
 #include "string.h"
 #include "format.h"
-#include "rlog.h"
 #include "arg.h"
 #include "hlrmisc.h"
 

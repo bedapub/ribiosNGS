@@ -7,13 +7,15 @@
 nalimov(x, sig = c("0.95", "0.99", "0.995"))
 }
 \arguments{
+\item{x}{Numeric vector}
+
 \item{sig}{Significance level}
 }
 \value{
 Numeric vector with outlier(s) removed
 }
 \description{
-#' @param x Numeric vector
+Outlier detection with Nalimov test
 }
 \details{
 The function performs the Nalimov test in a non-recursive fashion

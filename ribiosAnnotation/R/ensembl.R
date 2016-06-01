@@ -1,5 +1,5 @@
-annotateEnsembl <- function (ids, orthologue = FALSE, multiOrth = FALSE) 
-{
+#' @export annotateEnsembl
+annotateEnsembl <- function (ids, orthologue = FALSE, multiOrth = FALSE) {
   comm <- paste("SELECT e.ENSEMBL_ID, c.RO_GENE_ID,c.GENE_SYMBOL, c.DESCRIPTION, c.TAX_ID", 
                 " FROM GTI_GENES c INNER JOIN ENSEMBL_GENE e ON c.RO_GENE_ID=e.GENE_ID ", sep = "")
   ann <- querydbTmpTbl(comm, "e.ENSEMBL_ID", ids, "bin",

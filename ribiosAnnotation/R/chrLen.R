@@ -1,3 +1,4 @@
+#' @export chrLen
 chrLen <- function(organism=c("human", "mouse", "rat")) {
   organism <- match.arg(organism)
   if(organism=="human") {

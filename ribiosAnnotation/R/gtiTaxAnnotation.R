@@ -1,3 +1,4 @@
+#' @export gtiTaxAnnotation
 gtiTaxAnnotation <- function(taxid) {
   if(missing(taxid))
     stop("'taxid' cannot be missing.")

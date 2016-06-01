@@ -1,7 +1,9 @@
 ## translate GTI chiptype to bioc chiptype
-bioc2gti <- function (chipname) 
-{
+#' @export bioc2gti
+bioc2gti <- function (chipname) {
+  data("gtibioc", package="ribiosAnnotation")
   if(missing(chipname)) {
+
     supp <- !is.na(gtibioc$Bioconductor)
     vec <- gtibioc$GTI[supp]
     names(vec) <- gtibioc$Bioconductor[supp]
@@ -11,7 +13,9 @@ bioc2gti <- function (chipname)
   }
 }
 
+#' @export gti2bioc
 gti2bioc <- function(chipname) {
+  data("gtibioc", package="ribiosAnnotation")
   if(missing(chipname)) {
     supp <- !is.na(gtibioc$Bioconductor)
     vec <- gtibioc$Bioconductor[supp]

@@ -1,3 +1,4 @@
+#' @export gtiChiptypes
 gtiChiptypes <- function(include.desc=FALSE) {
 
   state <- "SELECT ARRAY_TYPE, TECHNOLOGY, SPECIES, DESCRIPTION FROM genome.CHIP_ARRAY_TYPES"
@@ -11,6 +12,7 @@ gtiChiptypes <- function(include.desc=FALSE) {
   return(res)
 }
 
+#' @export isGtiChiptype
 isGtiChiptype <- function(x, exceptions, ignore.case=FALSE) {
   gct <- gtiChiptypes(include.desc=FALSE)
   if(!missing(exceptions))
@@ -22,13 +24,19 @@ isGtiChiptype <- function(x, exceptions, ignore.case=FALSE) {
   x %in% gct
 }
 
+#' @export scriptChiptypes
 scriptChiptypes <- function() {
   return(c("GeneID", "GeneSymbol",gtiChiptypes()))
 }
 
+#' @export gtiChipnames
 gtiChipnames <- function(...) {gtiChiptypes(...)}
+#' @export gtiArraytypes
 gtiArraytypes <- function(...) {gtiChiptypes(...)}
-  
+
+##----------------------------------------##
+## decrecated
+##----------------------------------------##
 affychipNames <- function(...) {
   .Deprecated("gtiChiptypes",package="ribiosAnnotation")
   gtiChipnames(...) 

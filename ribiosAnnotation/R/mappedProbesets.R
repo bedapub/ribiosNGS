@@ -1,3 +1,4 @@
+#' @export mappedProbesets
 mappedProbesets <- function(geneids,
                             chip="HG-U133_PLUS_2",
                             unlist=FALSE) {

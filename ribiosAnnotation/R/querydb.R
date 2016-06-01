@@ -2,9 +2,11 @@ RIBIOS_TMP_TBL <- "RIBIOS_ID_TMP"
 RIBIOS_JDBC_TMP_TBL <- "RIBIOS_JDBC_ID_TMP"
 
 ## format IN syntax
+#' @export formatIn
 formatIn <- function(x) paste("(",paste("'", x, "'", sep="", collapse=","),")", sep="")
 tmpTbl <- function(forceJDBC=FALSE) ifelse(hasOracle() & !forceJDBC, RIBIOS_TMP_TBL, RIBIOS_JDBC_TMP_TBL)
 
+#' @export querydb
 querydb <- function(sqlComm, db="bia", user="biread", password="biread", forceJDBC=FALSE) {
   isORA <- hasOracle() & !forceJDBC
   con <- ribiosCon(db=db, user=user, password=password, forceJDBC=forceJDBC)
@@ -22,6 +24,7 @@ querydb <- function(sqlComm, db="bia", user="biread", password="biread", forceJD
 
 
 ## select in: large IN queries
+#' @export querydbSelectIn
 querydbSelectIn <- function(sqlComm, inCol, inValues,
                             db="bia", user="biread", password="biread",
                             forceJDBC=FALSE) {
@@ -87,6 +90,7 @@ fillOneColTmpTbl <- function(con,  values) {
 }
 
 ## querydbTmpTbl shows principles of using temporary table. The SQL building is not finished: currently it only supports WHERE-free syntax
+#' @export querydbTmpTbl
 querydbTmpTbl <- function(sqlComm, inCol, inValues,
                           db="bia", user="biread", password="biread", forceJDBC=FALSE) {
   isORA <- hasOracle() & !forceJDBC

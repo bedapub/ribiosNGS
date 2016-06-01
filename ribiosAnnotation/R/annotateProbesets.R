@@ -16,6 +16,7 @@ notValid <- function(x)  is.null(x) || is.na(x) || tolower(x)=="any" || x==""
 
 ## Scenario 1: annotate probesets with known chip type
 ## TODO: gtiChipAnnotation adds support for othologue mapping
+#' @export annotateHumanOrthologs
 annotateHumanOrthologs <- function(geneids, multiOrth=FALSE) {
   geneids <- unique(geneids)
   comm <- paste("SELECT a.RO_GENE_ID2, a.TAX_ID2, 9606 as TaxID, a.RO_GENE_ID1, b.GENE_SYMBOL",
@@ -36,6 +37,7 @@ annotateHumanOrthologsNoOrigTax <- function(...) {
   return(res[,-2L])
 }
 
+#' @export gtiChipAnnotation
 gtiChipAnnotation <- function(chip,ids, orthologue=FALSE, multiOrth=FALSE) {
   if(missing(chip)) stop("'chip' cannot be missing.Using 'gtiChiptypes()' to find supported chip types.")
   
@@ -79,9 +81,11 @@ gtiChipAnnotation <- function(chip,ids, orthologue=FALSE, multiOrth=FALSE) {
   return(res)
 }
 
+#' @export annotateChip
 annotateChip <- gtiChipAnnotation
 
 ## Scenario 2: annotate probesets with unknown, but single chip type
+#' @export guessChiptype
 guessChiptype <- function(ids, maxOnly=FALSE, sample=100) {
   ids <- unique(as.character(ids))
   if(!is.null(sample) && !is.na(sample) && is.numeric(sample)) {
@@ -100,6 +104,7 @@ guessChiptype <- function(ids, maxOnly=FALSE, sample=100) {
 
 ## Scenario 3: annotate probesets with mixed chip type
 ## TODO: add OrigGeneSymbol
+#' @export annotateAnyProbeset
 annotateAnyProbeset <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   comm <- paste("SELECT a.ANY_ID ,a.RO_GENE_ID ,c.GENE_SYMBOL, c.DESCRIPTION, 'NA' AS chip, c.TAX_ID ",
                 " FROM genome.GTI_IDMAP a, ",
@@ -132,6 +137,7 @@ annotateAnyProbeset <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   return(res)
 }
 
+#' @export annotateProbesets
 annotateProbesets <- function(ids, chip, orthologue=FALSE) {
   if(missing(chip) || notValid(chip)) {
     annotateAnyProbeset(ids, orthologue=orthologue)
@@ -140,8 +146,10 @@ annotateProbesets <- function(ids, chip, orthologue=FALSE) {
   }
 }
 
+#' @export annotateProbeIDs
 annotateProbeIDs <- annotateProbesets
 
+#' @export annotateGeneIDs
 annotateGeneIDs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   comm <- paste("SELECT c.RO_GENE_ID,c.GENE_SYMBOL, c.DESCRIPTION, c.TAX_ID ",
                 " FROM GTI_GENES c", sep="")
@@ -173,6 +181,7 @@ annotateGeneIDs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   return(res)
 }
 
+#' @export annotateGeneSymbols
 annotateGeneSymbols <- function(ids,
                                 organism=c("human", "mouse", "rat", "any"),
                                 orthologue=FALSE,
@@ -211,6 +220,7 @@ annotateGeneSymbols <- function(ids,
   return(res)
 }
 
+#' @export annotateRefSeqs
 annotateRefSeqs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   comm <- paste("SELECT a.item_id, c.RO_GENE_ID ,c.GENE_SYMBOL, c.DESCRIPTION, 'NA' AS chip, c.TAX_ID ",
                 " FROM genome.GTI_GENE_ITEMS a, ",
@@ -241,4 +251,5 @@ annotateRefSeqs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   return(res)
 }
 
+#' @export annotatemRNAs
 annotatemRNAs <- annotateRefSeqs

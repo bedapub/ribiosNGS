@@ -22,7 +22,7 @@ scriptChiptypes()
   Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \seealso{
-  \code{\link{gtiChiptypes}}, and \code{\link{annotateAnyID}}
+  \code{\link{gtiChiptypes}}, and \code{\link{annotateAnyIDs}}
 }
 \examples{
 options(error=utils::recover)

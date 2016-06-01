@@ -1,3 +1,4 @@
+#' @export hapmapSnp
 hapmapSnp <- function(ids,
                       genes=FALSE,
                       flanking=FALSE) {

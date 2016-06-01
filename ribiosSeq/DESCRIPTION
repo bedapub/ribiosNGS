@@ -5,7 +5,10 @@ Version: 1.0
 Date: 2011-05-05
 Author: Jitao David Zhang, Roland Schmucki and Martin Ebeling
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
-Description: Utilities to analyze NGS datasets in the BIOS environment
-Depends: IRanges
+Description: Utilities to analyze sequencing data in the BIOS environment.
+Imports: grDevices, stats, utils
+Depends:
+    IRanges
 License: LGPL-2
 LazyLoad: yes
+RoxygenNote: 5.0.1

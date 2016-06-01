@@ -10,3 +10,4 @@ Imports:
     ribiosUtils,
     Rcpp
 License: LGPL-3
+RoxygenNote: 5.0.1

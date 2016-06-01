@@ -1,5 +1,8 @@
+#' @export
 setGeneric("pcaHubertBiData", function(x,...) standardGeneric("pcaHubertBiData"))
+#' @export
 setGeneric("bidata", function(x) standardGeneric("bidata"))
+#' @export
 setGeneric("expvar", function(x) standardGeneric("expvar"))
 
 pcaHubertBi <- function(x, k=0L, kmax=10L, choices=1L:3L, biplot.scale=1L,...) {

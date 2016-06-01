@@ -1,18 +1,3 @@
-DBMS=oracle
-include $(BIOINFOCONFDIR)/biosdefs.make
-.SUFFIXES:
-SHELL=/bin/sh
-
-## No R specific settings are needed, they are automatically handled by R CMD SHLIB
-## BIOS specific
-BIOS_CONF= /SOFT/bi/bios/conf
-BIOS_INCLUDE = /SOFT/bi/bios/include
-BIOS_SRC_LIBDEV = /SOFT/bi/bios/src/libdev
-
-##-I$(BIOS_CONF) -I$(BIOS_INCLUDE) is covered by $(BIOSINC)
-
-CFLAGSL= $(CFLAGS) $(defines) -I$(BIOS_CONF) -I$(BIOS_INCLUDE)
-
-PKG_CFLAGS= $(CFLAGSL) $(BIOSINC)
-
-PKG_LIBS=-fPIC -I$(BIOS_CONF) -I$(BIOS_INCLUDE) $(BIOS_SRC_LIBDEV)/log.c $(BIOS_SRC_LIBDEV)/arg.c $(BIOS_SRC_LIBDEV)/format.c $(BIOS_SRC_LIBDEV)/array.c $(BIOS_SRC_LIBDEV)/hlrmisc.c $(BIOS_SRC_LIBDEV)/sequtil.c $(BIOS_SRC_LIBDEV)/linestream.c
+RIBIOSBASE_PATH=`echo 'library(ribiosBase); cat(system.file("lib", package="ribiosBase", mustWork=TRUE))' | "${R_HOME}/bin/R" --vanilla --slave`
+PKG_LIBS="$(RIBIOSBASE_PATH)$(R_ARCH)/ribiosBase.a"
+PKG_CFLAGS=-I$(RIBIOSBASE_PATH)/../include

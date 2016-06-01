@@ -1,5 +1,4 @@
-#include <R.h>
-#include <Rinternals.h>
+#include "ribios_seq.h"
 #include <unistd.h>
 #include <ctype.h>
 #include <format.h>

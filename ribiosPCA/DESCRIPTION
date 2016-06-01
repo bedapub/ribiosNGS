@@ -6,5 +6,7 @@ Date: 2011-12-20
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Doing robust principle component analysis with ribios.
-Depends: methods,Biobase,rrcov
+Depends:
+    methods,Biobase,rrcov
 License: GPL (>=2)
+RoxygenNote: 5.0.1

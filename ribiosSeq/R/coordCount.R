@@ -1,6 +1,7 @@
 ## Functions to read coordinate-count tables, for example those produced in the SAGE experiments
 ## jitao_david.zhang@roche.com
 
+#' @export
 checkFilesExist <- function(files) {
   if(length(files)==0) {
     warning("No file defined\n")
@@ -14,6 +15,9 @@ checkFilesExist <- function(files) {
     return(FALSE)
   }
 }
+
+#' @export
+#' @useDynLib ribiosSeq, bios_read_coord_count_file, .registration=TRUE
 readCoordCountFile <- function(file) {
   if(!checkFilesExist(file))
     stop("File do not exist")
@@ -22,6 +26,7 @@ readCoordCountFile <- function(file) {
   return(res)
 }
 
+#' @export
 readCoordCountFileUsingR <- function(file, head=FALSE, diff.only=FALSE,...) {
   tbl <- read.table(file, sep="\t", head=head,
                     col.names=c("coord", "count"),
@@ -39,6 +44,7 @@ readCoordCountFileUsingR <- function(file, head=FALSE, diff.only=FALSE,...) {
   return(res)
 }
 
+#' @export
 readCoordCountRange <- function(inputDir, pattern="\\.counts$") {
  files <- dir(inputDir,
                pattern=pattern, full.names=TRUE)
@@ -71,7 +77,7 @@ readCoordCountRange <- function(inputDir, pattern="\\.counts$") {
 ## option 3: pmax larger than a threshold
 
 
-
+#' @export
 readCoordCounts <- function(inputDir, pattern="\\.counts$") {
   files <- dir(inputDir,
                pattern=pattern, full.names=TRUE)
@@ -107,12 +113,14 @@ readCoordCounts <- function(inputDir, pattern="\\.counts$") {
   return(list(rle=rle.list, start=coord.min, end=coord.max))
 }
 
+#' @export
 writeCoordCounts <- function(cclist, file) {
   ## write the table
   browser()
 }
 
 ## Rle manipulations
+#' @export
 sumRle <- function(rleList) { ## ask for equal length Rles
   res <- rleList[[1]]
   for(i in 2:length(rleList)) {
@@ -121,6 +129,7 @@ sumRle <- function(rleList) { ## ask for equal length Rles
   return(res)
 }
 
+#' @export
 diffRle <- function(df, start, end) {
   res <- Rle(0L, lengths=end-start+1)
   ind <- df$coord - Rle(as.integer(start)-1L, length(df$coord))

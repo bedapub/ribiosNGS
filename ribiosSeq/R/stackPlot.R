@@ -1,3 +1,4 @@
+#' @export
 stackPlot <- function(chr=1, cutoff=400, plot=FALSE, verbose=FALSE,
                       query.start, query.end, input.directory="./counts") {
   has.query.start <- !missing(query.start)

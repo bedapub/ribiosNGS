@@ -1,3 +1,4 @@
+library(Biobase)
 library(ribiosUDIS)
 
 system.time(test <- getUDISexpression(id="GSE20986"))

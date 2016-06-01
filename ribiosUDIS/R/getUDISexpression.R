@@ -1,3 +1,11 @@
+#' @importFrom methods new
+#' @importFrom utils read.csv
+#' @importFrom ribiosAuth bioinfoCookie
+#' @importFrom ribiosIO read_gctstr_matrix
+#' @importFrom Biobase sampleNames<- featureNames<- pData exprs
+#' @importFrom RCurl postForm curlOptions
+
+
 ##UDIS_DEV_QUERY_CGI <- "http://udisdev.roche.com/udiscgiqa/expressionData_cgi"
 UDIS_QUERY_CGI <- "http://udis.roche.com:8080/query/api"
 
@@ -39,6 +47,8 @@ meta2pd <- function(str) {
 ## As of Feb 2013, NCS_tissue_rat does not work. Use GSE20986 as example
 ## TODO (David): Add verbose mode
 ## TODO (David): Design another function to more complicated queries
+
+#' @export getUDISexpression
 getUDISexpression <- function(id="GSE20986",idType=c("studyIdExternal", "studyId", "studyTitle", "datasetId"), ...) {
   idType <- match.arg(idType)
   idtype <- tolower(idType)

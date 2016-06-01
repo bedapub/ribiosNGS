@@ -1,3 +1,5 @@
+#' @export queryUrl
+
 queryUrl <- function(url) {
   cookie <- bioinfoCookie()
   if(missing(cookie) || is.null(cookie))

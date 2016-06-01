@@ -1,3 +1,6 @@
+#' @importFrom graphics plot points rug
+#' @importFrom stats ecdf p.adjust
+
 ksStat <- function(x,y) {
   x.dup <- sort(x)
   y.dup <- sort(y)
@@ -25,6 +28,7 @@ ecdf2 <- function(x,y) {
     points(xy.inter,rep(0, length(xy.inter)),pch=4)
 }
 
+#' @export cmap
 cmap <- function(rnks, up, down,
                  group,
                  permG=0,

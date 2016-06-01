@@ -2,8 +2,8 @@
 ## generic method connScore
 ## ? overhead : S4 method does not have much more overhead than S3 function
 ##----------------------------------------##
+#' @export connScore
 setGeneric("connScore", function(x, up, down) standardGeneric("connScore"))
-
 
 setMethod("connScore",
           c("character", "character", "character"),
@@ -50,6 +50,7 @@ setMethod("connScore",
 ##----------------------------------------##
 ## connScorePerm
 ##----------------------------------------##
+#' @export connScorePerm
 setGeneric("connScorePerm", function(x, up, down, B) standardGeneric("connScorePerm"))
 
 setMethod("connScorePerm",

@@ -4,9 +4,14 @@ Title: Annotation of genes, RNAs and proteins in the BIOS system
 Version: 3.1-8
 Date: 2015-06-30
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
-Maintainer:  Jitao David Zhang <jitao_david.zhang@roche.com>
-Description: Retrieve annotation information of genomic features, genes, RNAs and proteins from the Oracle database of the Roche Bioinformatics environment
-Imports: ribiosUtils,DBI
-Suggests: ROracle, RJDBC
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: Retrieve annotation information of genomic features, genes, RNAs
+    and proteins from the Oracle database of the Roche Bioinformatics environment
+Imports:
+    ribiosUtils,DBI
+Suggests:
+    ROracle,
+    RJDBC
 LazyData: true
 License: GPL-3
+RoxygenNote: 5.0.1

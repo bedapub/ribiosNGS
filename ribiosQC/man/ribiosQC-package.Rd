@@ -3,40 +3,12 @@
 \alias{ribiosQC}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+Quality control of microarray data
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
-}
-\details{
-\tabular{ll}{
-Package: \tab ribiosQC\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2014-01-28\cr
-License: \tab What license is it under?\cr
-}
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+ribiosQC is developed for a Roche-internal quality-control pipeline of microarray data.
 }
 \author{
-Who wrote it
+Jitao David Zhang <jitao_david.zhang@roche.com>
+}
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
-}
-\references{
-~~ Literature or other references for background information ~~
-}
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in ~~
-~~ the R documentation directory ~~
-\keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-~~ simple examples of the most important functions ~~
-}

@@ -1,3 +1,4 @@
+#' @export normByGroup
 normByGroup <- function(eset, group, method=c("rma", "mas5"), ...) {
   method <- match.arg(method)
   if(method=="rma") {

@@ -1,3 +1,4 @@
+#' @export annoEset
 annoEset <- function(eset, file=NULL, strict=FALSE) {
   sampNames <- cel2samplename(sampleNames(eset))
   if(is.null(file)) {
@@ -27,6 +28,7 @@ annoEset <- function(eset, file=NULL, strict=FALSE) {
   return(eset)
 }
 
+#' @export getNewProp
 getNewProp <- function(eset, ## eset object
                        props, ## existing property (properties) used to build the new property, strings separated by commas
                        assigns, ## property assignment in the form of "SAMPLE1=PROP,SAMPLE2=PROP,..."

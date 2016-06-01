@@ -1,3 +1,4 @@
+#' @export removeSamples
 removeSamples <- function(eset, exclSamples) {
   qcLabels <- getQClabel(eset)
   sampleNames <- sampleNames(eset)

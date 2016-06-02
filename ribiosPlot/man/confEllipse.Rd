@@ -9,11 +9,11 @@ confEllipse(x, y = NULL, conf = 0.95, ...)
 \arguments{
 \item{x}{either a matrix of two columns, or a numeric vector}
 
+\item{y}{either a numeric vector of the same length as \code{x}, or NULL}
+
 \item{conf}{Confidence interval of the ellipse}
 
 \item{...}{Parameters passed to \code{ellipse}}
-
-\item{y0}{either a numeric vector of the same length as \code{x}, or NULL}
 }
 \value{
 Invisible coordinates of points on the ellipse

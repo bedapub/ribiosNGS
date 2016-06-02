@@ -25,6 +25,8 @@ ellipse(x0 = 0, y0 = 0, a = 1, b = 2, alpha = 0, length = 1000,
 \item{fill}{Ellipse fill color}
 
 \item{border}{Equivalent to \code{col}}
+
+\item{...}{further parameters passed to \code{\link{polygon}}}
 }
 \value{
 Invisible coordinates of points on the ellipse

@@ -1,4 +1,5 @@
-\name{plotPCA}
+\name{plotPCA.prcomp}
+\alias{plotPCA.prcomp}
 \alias{plotPCA}
 \title{
   Visualise PCA results of expression data with the sample plot
@@ -14,8 +15,9 @@
 }
 \usage{
 plotPCA(x, choices = c(1, 2), text = FALSE, points = list(pch = NULL,
-col = NULL, cex = NULL, bg = NULL, lwd = NULL, lty = NULL), arrows =
-FALSE, grid = FALSE, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ...)
+col = NULL, cex = NULL, bg = NULL, lwd = NULL, lty = NULL, order=NULL), arrows =
+FALSE, grid = FALSE, abline=FALSE, xlim = NULL, ylim = NULL, xlab =
+NULL, ylab = NULL, offset, ...)
 }
 \arguments{
   \item{x}{A \code{prcomp} object produced by the \code{prcomp} function}
@@ -28,12 +30,16 @@ FALSE, grid = FALSE, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ...)
   \item{arrows}{A logical or a list of options to draw arrows.}
   \item{grid}{Logical value, indicating whether grid lines should be
     added to the plot.}
+  \item{abline}{A logical or a list of options to draw abline}
   \item{xlim}{xlim of the plot. Automatically determined if missing.}
   \item{ylim}{ylim of the plot. Automatically determined if missing.}
   \item{xlab}{xlab of the plot. If missing, the PC and the explained
     variability are shown.}
   \item{ylab}{ylab of the plot. If missing, the PC and the explained
     variability are shown.}
+  \item{offset}{Offset should be either one or more rows's names in the
+    loading matrix, or indices, or a logical vector. The average loading
+  of the rows specified by offset is set to zero.}
   \item{\dots}{Other parameters passed to \code{plot}}
 }
 \details{
@@ -43,7 +49,9 @@ FALSE, grid = FALSE, xlim = NULL, ylim = NULL, xlab = NULL, ylab = NULL, ...)
     \item List. A list containing options passed to \code{text},
     \code{points}, and \code{arrows} respectively, such as \code{col},
     \code{cex}, \code{lwd}, \code{lty}, \code{code}, \code{length},
-    \code{angle}, and  \code{pos} (only for \code{text}.
+    \code{angle}, and  \code{pos} (only for \code{text}).\code{order}
+    decides in what order are the points drawn, which can be useful when
+    there are points to be drawn 'above' other points.
     \item A vector of character strigns (only for \code{text})
   }
   See examples below.

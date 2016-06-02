@@ -1,7 +1,16 @@
-importFrom(grDevices, heat.colors, colorRampPalette, blues9)
+importFrom(grDevices, heat.colors, colorRampPalette, blues9, col2rgb, dev.print, gray, palette, pdf, rgb, xy.coords)
+importFrom("graphics", "abline", "arrows", "axis", "grid", "hist",
+             "image", "layout", "legend", "lines", "mtext", "par",
+             "plot", "plot.new", "polygon", "rect", "strwidth", "text",
+             "title")
+importFrom("stats", "as.dendrogram", "ave", "cov", "density", "dist",
+           "hclust", "median", "order.dendrogram", "qchisq",
+           "quantile", "reorder", "sd")
+importFrom("stats", "prcomp")
+importFrom("utils", "assignInNamespace")
 importFrom(lattice, panel.xyplot, col.whitebg, lattice.options)
 importFrom(ribiosUtils, assertFile, basefilename, chosenFew, haltifnot)
-importFrom(methods, setClass, setGeneric, setMethod)
+importFrom(methods, setClass, setGeneric, setMethod, is, new)
 importFrom(RColorBrewer, brewer.pal, brewer.pal.info)
 importFrom(grid, pushViewport, plotViewport, grid.layout, unit, gpar, viewport, grid.text)
 

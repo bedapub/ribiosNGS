@@ -38,6 +38,6 @@ plotVenn <- function(venn,
                      main="",
                      show=list(FaceText="weight", Universe=FALSE),...) {
     replaceFunc("makevp.eqsc", makevp.eqsc.mod, package="Vennerable")
-    plot(venn, show=show,...)
+    Vennerable:::plotVenn(venn, show=show,...)
     grid.text(main, y=unit(0.95, "npc"), gp=gpar(fontsize=16, font=2))
 }

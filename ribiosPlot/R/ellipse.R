@@ -30,6 +30,7 @@ degree2radian <- function(x) x/180*pi
 #' @param col Ellipse border color
 #' @param fill Ellipse fill color
 #' @param border Equivalent to \code{col}
+#' @param ... further parameters passed to \code{\link{polygon}}
 #'
 #' @return Invisible coordinates of points on the ellipse
 #' @examples
@@ -83,7 +84,7 @@ confEllipseParams <- function(x,y=NULL, conf=0.95) {
 #' Plot confidence ellipse based on two-dimenstional data
 #'
 #' @param x either a matrix of two columns, or a numeric vector
-#' @param y0 either a numeric vector of the same length as \code{x}, or NULL
+#' @param y either a numeric vector of the same length as \code{x}, or NULL
 #' @param conf Confidence interval of the ellipse
 #' @param ... Parameters passed to \code{ellipse}
 #'

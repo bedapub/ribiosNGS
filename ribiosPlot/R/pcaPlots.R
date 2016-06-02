@@ -1,4 +1,19 @@
 ## PCA plot for samples of expression data
+#' Retrieve PCA scores from prcomp objects
+#'
+#' @param x An object of prcomp
+#' @param choices indices of principal components
+#' @param offset either one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.
+#'
+#' @examples
+#' testMatrix <- matrix(rnorm(1000), nrow=10)
+#' testPCA <- prcomp(testMatrix)
+#' testPCAscores <- pcaScores(testPCA)
+#'
+#' testPCAscores.withOffset <- pcaScores(testPCA, offset=c(1,3,5))
+#' ## notice the average of offset-rows are near zero
+#' colMeans(testPCAscores.withOffset[c(1,3,5),])
+
 pcaScores <- function(x, choices=c(1,2), offset) {
   if(!is(x, "prcomp"))
     stop(sprintf("'%s' must be a prcomp object", deparse(substitute(x))))
@@ -31,16 +46,17 @@ pcaScores <- function(x, choices=c(1,2), offset) {
   return(xx)
 }
 
-plotPCA <- function(x,
-                    choices=c(1,2),
-                    text=FALSE,
-                    points=list(pch=NULL, col=NULL, cex=NULL, bg=NULL, lwd=NULL, lty=NULL, order=NULL),
-                    arrows=FALSE,
-                    grid=FALSE, abline=FALSE,
-                    xlim=NULL, ylim=NULL,
-                    xlab=NULL, ylab=NULL,
-                    offset,...) {
 
+plotPCA.prcomp <- function(x,
+                           choices=c(1,2),
+                           text=FALSE,
+                           points=list(pch=NULL, col=NULL, cex=NULL, bg=NULL, lwd=NULL, lty=NULL, order=NULL),
+                           arrows=FALSE,
+                           grid=FALSE, abline=FALSE,
+                           xlim=NULL, ylim=NULL,
+                           xlab=NULL, ylab=NULL,
+                           offset,...) {
+    
     xx <- pcaScores(x,offset=offset)
     
     xind <- choices[1]
@@ -92,7 +108,7 @@ plotPCA <- function(x,
         if (is.null(labels)) {
             labels <- dimnames(xx)[[1L]]
             if (is.null(labels)) 
-                labels <- 1L:n
+                labels <- 1L:nrow(xx)
         }
         labels <- as.character(labels)
         
@@ -206,9 +222,10 @@ plotPCA <- function(x,
              xpd = text.xpd)
     }
     return(invisible(as.data.frame(xx)))
-    
 }
-                    
+
+plotPCA <- plotPCA.prcomp
+
 plotPCAloading <- function(loadings, x=1L, y=2L, circle=FALSE, title="", subtitle="",...) {
   plot(loadings[,x],loadings[,y],
        xlim=c(-1,1),ylim=c(-1,1),

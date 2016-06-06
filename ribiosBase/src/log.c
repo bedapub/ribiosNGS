@@ -245,8 +245,8 @@ void die (char *format,...) {
      Modified to make R session not crash
   */
   va_list args ;
-  va_start(args, x);
-  print_msg(x, "PROBLEM: ", args);
+  va_start(args, format);
+  print_msg(format, "PROBLEM: ", args);
 }
 
 void warn (char *format,...) {
@@ -267,8 +267,8 @@ void usage (char *format,...) {
      @param[in] format - the format of the message
   */
   va_list args;
-  va_start(args, x);
-  print_msg(x, "Usage: ", args);
+  va_start(args, format);
+  print_msg(format, "Usage: ", args);
 }
 
 void romsg (char *format,...) {

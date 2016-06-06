@@ -160,10 +160,10 @@ static void scatn (Array s,char *a,int n) {
      @param[out] s - char(s) appended
   */
   int l = arrayMax (s);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-value"
+//#pragma GCC diagnostic push
+//#pragma GCC diagnostic ignored "-Wunused-value"
   array (s,l+n-1,char); // allocate
-#pragma GCC diagnostic pop
+//#pragma GCC diagnostic pop
   /* copy; since it is so cheap to do, check that 'a' does
      not contain any '\0' char in the copied region */
   if (memccpy (arrp (s,l,char),a,'\0',n))

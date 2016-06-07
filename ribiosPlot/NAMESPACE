@@ -1,7 +1,8 @@
 importFrom(grDevices, heat.colors, colorRampPalette, blues9, col2rgb, dev.print, gray, palette, pdf, rgb, xy.coords)
 importFrom("graphics", "abline", "arrows", "axis", "grid", "hist",
              "image", "layout", "legend", "lines", "mtext", "par",
-             "plot", "plot.new", "polygon", "rect", "strwidth", "text",
+             "plot", "plot.new", "plot.window", "box", "polygon", 
+	     "rect", "strwidth", "text",
              "title")
 importFrom("stats", "as.dendrogram", "ave", "cov", "density", "dist",
            "hclust", "median", "order.dendrogram", "qchisq",

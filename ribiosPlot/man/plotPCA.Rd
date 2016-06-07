@@ -17,7 +17,7 @@
 plotPCA(x, choices = c(1, 2), text = FALSE, points = list(pch = NULL,
 col = NULL, cex = NULL, bg = NULL, lwd = NULL, lty = NULL, order=NULL), arrows =
 FALSE, grid = FALSE, abline=FALSE, xlim = NULL, ylim = NULL, xlab =
-NULL, ylab = NULL, offset, ...)
+NULL, ylab = NULL, offset, main=NULL, reverse=c(FALSE, FALSE), ...)
 }
 \arguments{
   \item{x}{A \code{prcomp} object produced by the \code{prcomp} function}
@@ -40,7 +40,9 @@ NULL, ylab = NULL, offset, ...)
   \item{offset}{Offset should be either one or more rows's names in the
     loading matrix, or indices, or a logical vector. The average loading
   of the rows specified by offset is set to zero.}
-  \item{\dots}{Other parameters passed to \code{plot}}
+  \item{main}{Title of the plot}
+  \item{reverse}{ogical of length 2 or 1 (which will be repeated to 2), indicating whether the sign of values in the 1st/2nd axis should be reversed.}
+  \item{\dots}{Other parameters passed to \code{plot.window}}
 }
 \details{
   The values for \code{text}, \code{points} and \code{arrows} can be

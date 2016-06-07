@@ -4,7 +4,7 @@
 \alias{pcaScores}
 \title{Retrieve PCA scores from prcomp objects}
 \usage{
-pcaScores(x, choices = c(1, 2), offset)
+pcaScores(x, choices = c(1, 2), offset, reverse = c(FALSE, FALSE))
 }
 \arguments{
 \item{x}{An object of prcomp}
@@ -12,6 +12,8 @@ pcaScores(x, choices = c(1, 2), offset)
 \item{choices}{indices of principal components}
 
 \item{offset}{either one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.}
+
+\item{reverse}{Logical of length 2 or 1 (which will be repeated to 2), indicating whether the sign of values in the 1st/2nd axis should be reversed}
 }
 \description{
 Retrieve PCA scores from prcomp objects
@@ -24,5 +26,8 @@ testPCAscores <- pcaScores(testPCA)
 testPCAscores.withOffset <- pcaScores(testPCA, offset=c(1,3,5))
 ## notice the average of offset-rows are near zero
 colMeans(testPCAscores.withOffset[c(1,3,5),])
+
+testPCAscores.withReverse <- pcaScores(testPCA, reverse=c(TRUE, FALSE))
+colMeans(testPCAscores.withReverse[c(1,3,5),])
 }
 

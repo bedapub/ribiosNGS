@@ -4,7 +4,7 @@
 #' @param x An object of prcomp
 #' @param choices indices of principal components
 #' @param offset either one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.
-#'
+#' @param reverse Logical of length 2 or 1 (which will be repeated to 2), indicating whether the sign of values in the 1st/2nd axis should be reversed
 #' @examples
 #' testMatrix <- matrix(rnorm(1000), nrow=10)
 #' testPCA <- prcomp(testMatrix)
@@ -13,8 +13,13 @@
 #' testPCAscores.withOffset <- pcaScores(testPCA, offset=c(1,3,5))
 #' ## notice the average of offset-rows are near zero
 #' colMeans(testPCAscores.withOffset[c(1,3,5),])
+#' 
+#' testPCAscores.withReverse <- pcaScores(testPCA, reverse=c(TRUE, FALSE))
+#' colMeans(testPCAscores.withReverse[c(1,3,5),])
 
-pcaScores <- function(x, choices=c(1,2), offset) {
+pcaScores <- function(x, choices=c(1,2), offset, reverse=c(FALSE, FALSE)) {
+  stopifnot(all(is.logical(reverse)) & length(reverse)<=2)
+  reverse <- rep(reverse, length.out=2)
   if(!is(x, "prcomp"))
     stop(sprintf("'%s' must be a prcomp object", deparse(substitute(x))))
   if (!length(scores <- x$x)) 
@@ -43,6 +48,10 @@ pcaScores <- function(x, choices=c(1,2), offset) {
       xxOffset <- matrix(rep(offsetMean, nrow(xx)), ncol=ncol(xx), byrow=T)
       xx <- xx-xxOffset
   }
+  if(reverse[1])
+    xx[,1] <- -xx[,1]
+  if(reverse[2])
+    xx[,2] <- -xx[,2]
   return(xx)
 }
 
@@ -55,9 +64,9 @@ plotPCA.prcomp <- function(x,
                            grid=FALSE, abline=FALSE,
                            xlim=NULL, ylim=NULL,
                            xlab=NULL, ylab=NULL,
-                           offset,...) {
+                           offset,main=NULL, reverse=c(FALSE, FALSE), ...) {
     
-    xx <- pcaScores(x,offset=offset)
+    xx <- pcaScores(x,offset=offset, reverse=reverse)
     
     xind <- choices[1]
     yind <- choices[2]
@@ -145,7 +154,12 @@ plotPCA.prcomp <- function(x,
         }
     }
     
-    plot(xx, type = "n", xlim = xlim, ylim = ylim, xlab=xlab, ylab=ylab, ...)
+    ##plot(xx, type = "n", xlim = xlim, ylim = ylim, xlab=xlab, ylab=ylab, ...)
+    plot.window(xlim=xlim, ylim=ylim,...)
+    title(xlab=xlab, ylab=ylab, main=main)
+    axis(1)
+    axis(2)
+    box()
     
     if(grid) grid(lty=1L)
     if(is.logical(abline) && abline) {

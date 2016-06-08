@@ -390,6 +390,14 @@ setMethod("sniffFeatures", "EdgeObject", function(object) {
   return("Unknown")
 })
 
+subsetFeatures <- function(x, n=100) {
+    if(length(x)<=n) return(x)
+    return(sample(x, n))
+}
+           
+likeHumanGeneSymbol <- function(x) mean(grepl("^[A-Z][A-Z0-9@orf]*$",
+                                              subsetFeatures(x)), na.rm=TRUE)>=0.8
+
 setMethod("annotate", c("EdgeObject","character", "logical"),
           function(object, target, check.target) {
             target <- match.arg(target,
@@ -399,7 +407,8 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
             }
             if(target=="Unknown") {
               ## no annotations available
-              object@dgeList$annotation <- NULL
+              object@dgeList$genes <- NULL
+              object@dgeList$annotation <- NA
               return(object)
             }
             feats <- featureNames(object)
@@ -410,7 +419,8 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
               anno <- annotateGeneIDs(feats,orthologue = TRUE)
             } else if (target=="GeneSymbol") {
                 ## this is very slow because of the database table look up, but is working...
-              anno <- annotateGeneSymbols(feats,organism="any", orthologue = TRUE)
+              organism <- ifelse(likeHumanGeneSymbol(feats), "human", "any")
+              anno <- annotateGeneSymbols(feats,organism=organism, orthologue = TRUE)
             } else if (target=="RefSeq") {
               anno <- annotateRefSeqs(feats,orthologue = TRUE)
             } else if (target=="EnsEMBL") {

@@ -17,6 +17,7 @@ gs <- list(GeneSet1=index1, GeneSet2=index2)
 (cameraModRes <- biosCamera(y, gs, design))
 addCols <- c("GeneSet", "Score", "ContributingGenes")
 idCols <- c("NGenes", "Correlation", "Direction", "PValue", "FDR")
+rownames(cameraRes) <- NULL
 stopifnot(identical(cameraRes[,idCols], cameraModRes[,idCols]))
 stopifnot(all(c(addCols, idCols) %in% colnames(cameraModRes)))
 
@@ -29,4 +30,5 @@ stopifnot(identical(cameraRes[,idCols], cameraModRes.noRowNames[,idCols]))
 ## test rankSum test
 (cameraRsRes <- camera(y, gs, design, use.ranks=TRUE))
 (cameraRsModRes <- biosCamera(y, gs, design, use.ranks=TRUE))
+rownames(cameraRsRes) <- NULL
 stopifnot(identical(cameraRsRes[,idCols], cameraRsModRes[,idCols]))

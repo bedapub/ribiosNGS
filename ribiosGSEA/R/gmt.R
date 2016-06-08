@@ -57,6 +57,26 @@ readGmt <- function(..., category=NULL) {
     return(res)
 }
 
+#' Write an GeneSet object into a file
+#'
+#' @param geneSet A GeneSet object
+#' @param file Character string, output file name
+#'
+#' @examples
+#' gmtFile <- system.file("extdata", "example.gmt", package="ribiosGSEA")
+#' mySet <- readGmt(gmtFile)[1:5]
+#' myTempFile <- tempfile()
+#' writeGmt(mySet, file=myTempFile)
+#' readLines(myTempFile)
+writeGmt <- function(geneSet, file) {
+    gmtList <- lapply(seq(along=geneSet), function(i) {
+                          list(name=gsName(geneSet[[i]]),
+                               description=paste(gsCategory(geneSet[[i]]), gsDesc(geneSet[[i]]), sep="|"),
+                               genes=gsGenes(geneSet[[i]]))
+                      })
+    ribiosIO::write_gmt(gmtList, file=file)
+}
+
 parseGmt <- function(file, vec, min, max) {
   res <- readGmt(file)
   ind <- matchGenes(res, vec, na.rm=TRUE)

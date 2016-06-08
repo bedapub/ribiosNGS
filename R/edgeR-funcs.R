@@ -155,13 +155,37 @@ dgeGML <- function(edgeResult) return(edgeResult@dgeGLM)
 
 
 dgeTable <- function(edgeResult, contrast=NULL) {
-  tbls <- edgeResult@dgeTables
-  if(is.null(contrast)) {
-    return(tbls)
-  } else {
-    return(tbls[[contrast]])
-  }
+    tbls <- edgeResult@dgeTables
+    if(is.logical(contrast) || is.numeric(contrast)) {
+        contrast <- contrastNames(edgeResult)[contrast]
+    }
+    if(!is.null(contrast)) {
+        if(length(contrast)==0) {
+            stop("No contrast selected")
+        } else if (!all(contrast %in% contrastNames(edgeResult))) {
+            stop("Following contrasts are not found:",
+                 setdiff(contrast, contrastNames(edgeResult)))
+        }
+    }
+    
+    if(!is.null(contrast) && length(contrast)==1) {
+        res <- tbls[[contrast]]
+        res$Contrast <- contrast
+    } else {
+        if(is.null(contrast)) {
+            res <- do.call(rbind, tbls)
+            res$Contrast <- rep(contrastNames(edgeResult), sapply(tbls, nrow))
+        } else {
+            subtbls <- tbls[contrast]
+            res <- do.call(rbind, subtbls)
+            res$Contrast <- rep(contrast, sapply(subtbls, nrow))
+        }
+    }
+    res <- putColsFirst(res, "Contrast")
+    rownames(res) <- NULL
+    return(res)
 }
+
 dgeTableList <- function(edgeResult, contrast=NULL) {
   tbls <- edgeResult@dgeTables
   if(is.null(contrast)) {

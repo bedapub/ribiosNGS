@@ -1,3 +1,9 @@
+#' Read tab-delimited result files from DAVID Bioinformatics Resources
+#' @param file A file from DAVID Bioinformatics Resources
+#' @return A \code{data.frame} containing all information encoded in the file
+#' @examples
+#' davidFile <- system.file("extdata/example-DAVID-output-subset.txt", package="ribiosIO")
+#' davidResult <- read_david(davidFile)
 read_david <- function(file) {
   lines <- readLines(file, skipNul=TRUE)
   lines <- lines[lines!=""]

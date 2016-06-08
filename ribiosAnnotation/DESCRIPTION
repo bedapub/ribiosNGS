@@ -1,8 +1,8 @@
 Package: ribiosAnnotation
 Type: Package
 Title: Annotation of genes, RNAs and proteins in the BIOS system
-Version: 3.1-8
-Date: 2015-06-30
+Version: 3.1-9
+Date: 2016-06-08
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Retrieve annotation information of genomic features, genes, RNAs

@@ -5,16 +5,15 @@ annotateEnsembl <- function (ids, orthologue = FALSE, multiOrth = FALSE) {
   ann <- querydbTmpTbl(comm, "e.ENSEMBL_ID", ids, "bin",
                        ORACLE.BIN.USER, 
                        ORACLE.BIN.PWD)
-  cnames <- c("ENSEMBL_ID", "GeneID", "GeneSymbol", "GeneName", "TaxID")
-  conames <- c("OrigGeneID", "OrigGeneSymbol", "OrigGeneName", 
+  keyCol <- "EnsemblID"
+  cnames <- c(keyCol, "GeneID", "GeneSymbol", "GeneName", "TaxID")
+  conames <- c(keyCol, "OrigGeneID", "OrigGeneSymbol", "OrigGeneName", 
                "OrigTaxID")
   if (!orthologue) {
     colnames(ann) <- cnames
-    cn <- "ENSEMBL_ID"
     res <- ann
   } else {
     colnames(ann) <- conames
-    cn <- "OrigGeneID"
     ort <- annotateHumanOrthologsNoOrigTax(ann$OrigGeneID, 
                                            multiOrth = multiOrth)
     if (multiOrth) {
@@ -25,10 +24,10 @@ annotateEnsembl <- function (ids, orthologue = FALSE, multiOrth = FALSE) {
                             multi = FALSE)
       res <- cbind(ann, ort.re[, -1L])
     }
-    res <- putColsFirst(res, c("GeneID", "GeneSymbol", "TaxID", 
+    res <- putColsFirst(res, c(keyCol, "GeneID", "GeneSymbol", "TaxID", 
                                "OrigTaxID", "OrigGeneID", "OrigGeneSymbol", "OrigGeneName"))
   }
-  res <- matchColumn(ids, res, cn, multi = orthologue && multiOrth)
-  rownames(res) <- id2rownames(res[, cn])
+  res <- matchColumn(ids, res, keyCol, multi = orthologue && multiOrth)
+  rownames(res) <- id2rownames(res[,keyCol])
   return(res)
 }

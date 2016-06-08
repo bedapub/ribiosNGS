@@ -269,7 +269,7 @@ panel.lmSmooth <- function(x,y, col = par("col"), bg = NA, pch = par("pch"),
 pairs.EdgeResult <- function(x, lower.panel=panel.lmSmooth, upper.panel=panel.cor,
                              freeRelation=TRUE,
                              pch=19, ...) {
-  dgeTbls <- dgeTables(x)
+  dgeTbls <- dgeTableList(x)
   ufeat <- unique(unlist(lapply(dgeTbls, rownames)))
   logFCs <- sapply(dgeTbls, function(x) matchColumn(ufeat, x, 0L)$logFC)
   if(freeRelation) {

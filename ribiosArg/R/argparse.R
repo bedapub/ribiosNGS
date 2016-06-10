@@ -50,9 +50,13 @@ argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h"), strict=T
                as.character(optargs),
                as.character(reqargs),
                as.character(usage))
+
+  if(res<0)
+      qqmsg()
+  
   if(strict) {
     if(argc != res)
-      qqmsg(usage)
+      qqmsg()
     return(invisible(NULL))
   } else {
     if(argc >= (res+1)) {

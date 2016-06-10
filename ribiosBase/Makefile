@@ -25,10 +25,17 @@ roxygenise:
 	@(cd ..; ${R} --vanilla -q -e "library(roxygen2);roxygenise(\"$(PKG)\")")
 	@echo ' '
 
-static:
+preinstall:
+	@echo '====== Pre-install to get c files compiled ======'
+	@(cd ..; ${R} CMD INSTALL ${PKG})
+	@echo '====== Installing finished ======'
+	@echo ' '
+
+static: preinstall
+	@echo '====== Compile the static library  ======'
 	@(cd src; ar rcs ../inst/lib/ribiosBase.a *.o)
 
-install: roxygenise
+install: roxygenise static
 	@echo '====== Installing Package ======'
 	@(cd ..; ${R} CMD INSTALL ${PKG})
 	@echo '====== Installing finished ======'

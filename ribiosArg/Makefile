@@ -25,7 +25,7 @@ roxygenise:
 	@(cd ..; ${R} --vanilla -q -e "library(roxygen2);roxygenise(\"$(PKG)\")")
 	@echo ' '
 
-install: roxygenise
+install: clean roxygenise
 	@echo '====== Installing Package ======'
 	@(cd ..; ${R} CMD INSTALL ${PKG})
 	@echo '====== Installing finished ======'

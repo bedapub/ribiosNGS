@@ -228,7 +228,7 @@ void log_deregisterRomsg (RoMsgFunc f) {
   logDeregisterHook (&gRomsgHookCount,gRomsgHooks,f);
 }
 
-void R_print_msg(const char *x, const char* prefix, va_list args) {
+void print_msg(const char *x, const char* prefix, va_list args) {
   /** print msg in R **/
   fflush(NULL);
   REprintf(prefix);

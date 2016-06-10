@@ -25,7 +25,7 @@ roxygenise:
 	@(cd ..; ${R} --vanilla -q -e "library(roxygen2);roxygenise(\"$(PKG)\")")
 	@echo ' '
 
-preinstall:
+preinstall: clean
 	@echo '====== Pre-install to get c files compiled ======'
 	@(cd ..; ${R} CMD INSTALL ${PKG})
 	@echo '====== Installing finished ======'

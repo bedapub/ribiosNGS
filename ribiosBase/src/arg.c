@@ -253,15 +253,15 @@ static int testAndInit (int argc, char *argv[],
   strReplace (&opta,optargs);
   if (argc < 2) {
     usagef (1);
-    return (1);
+    return (-1);
   }
   else if (strCaseEqual (tArgv[1],"-h")) {
     usagef (2);
-    return (1);
+    return (-1);
   }
   else if (strCaseEqual (tArgv[1],"-help")) {
     usagef (3);
-    return (1);
+    return (-1);
   }
   if (gArgs == NULL)
     gArgs = arrayCreate (5,Arg);

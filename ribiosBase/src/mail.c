@@ -34,7 +34,7 @@
 /// length of the read buffer
 #define READSBUFLEN 2049
 
-static struct sockaddr_in sin;
+static struct sockaddr_in sockAddrIn;
 static  int clientSd = -1;
 
 static Stringa gMsg = NULL;
@@ -160,10 +160,10 @@ void mail_send (char *sender,char *recipients,char* subject,char *text)  {
     return;
   }
 
-  memset (&sin,0,sizeof (sin));
-  sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = ((struct in_addr *) (hp->h_addr))->s_addr;
-  sin.sin_port = htons (SMTPport);
+  memset (&sockAddrIn,0,sizeof (sockAddrIn));
+  sockAddrIn.sin_family = AF_INET;
+  sockAddrIn.sin_addr.s_addr = ((struct in_addr *) (hp->h_addr))->s_addr;
+  sockAddrIn.sin_port = htons (SMTPport);
   if ((clientSd = socket (AF_INET,SOCK_STREAM,0)) == -1) {
     allocateMsg ();
     stringPrintf (gMsg,"socket %s",strerror (errno));
@@ -171,7 +171,7 @@ void mail_send (char *sender,char *recipients,char* subject,char *text)  {
     return;
   }
 
-  if (connect (clientSd,&sin,sizeof (sin)) == -1) {
+  if (connect (clientSd,&sockAddrIn,sizeof (sockAddrIn)) == -1) {
     allocateMsg ();
     stringPrintf (gMsg,"connect %s",strerror (errno));
     warnAdd ("mail_send",string (gMsg));

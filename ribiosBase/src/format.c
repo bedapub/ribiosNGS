@@ -513,10 +513,10 @@ int stringPrintf (Stringa str,const char *format,...) {
   va_start (args,format);
   maxlength = computeResultLength (format,args);
   va_end (args);
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wunused-value"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-value"
   array (str,maxlength + 1,char); // allocate space
-//#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
   va_start (args,format);
   resultLen = vsprintf (string (str),format,args);
   va_end (args);
@@ -539,10 +539,10 @@ int stringAppendf (Stringa str,const char *format,...) {
   va_start (args,format);
   maxlength = computeResultLength (format,args);
   va_end (args);
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wunused-value"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-value"
   array (str,len + maxlength + 1,char); // allocate space
-//#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
   va_start (args,format);
   resultLen = vsprintf (string (str)+len,format,args);
   va_end (args);
@@ -575,10 +575,10 @@ char *stringPrintBuf (const char *format,...) {
   va_start (args,format);
   maxlength = computeResultLength (format,args);
   va_end (args);
-//#pragma GCC diagnostic push
-//#pragma GCC diagnostic ignored "-Wunused-value"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-value"
   array (str,maxlength + 1,char); // allocate space
-//#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
   va_start (args,format);
   resultLen = vsprintf (string (str),format,args);
   va_end (args);

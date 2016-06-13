@@ -1,6 +1,7 @@
 summarizeSamples <- function(eset, indSamples=eset$SAMPLEID, removeInvarCols=TRUE, fun=sum, ...) {
   if(!is.factor(indSamples)) indSamples <- as.factor(indSamples)
   stopifnot(length(indSamples)==ncol(eset))
+  if(is.factor(indSamples))  indSamples <- droplevels(indSamples)
   eset.pool <- ribiosUtils::summarizeColumns(exprs(eset), indSamples, fun=fun, ...)
   eset.pd <- do.call(rbind, tapply(1:ncol(eset), indSamples, function(x) {
     pData(eset)[x[1],]

@@ -31,6 +31,8 @@
 #include "format.h"
 #include "eval.h"
 
+#include <R.h>
+
 enum {null,term,constant,variable,operator,function,parenthesis,
       unary1,unary2,branch};
 static int gDebug = 0;

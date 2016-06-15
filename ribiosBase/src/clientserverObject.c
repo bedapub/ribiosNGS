@@ -37,10 +37,12 @@
 #include "hlrclock.h"
 #include "clientserverObject.h"
 
+#include <R.h>
+
 /// ASCII value of Esc
 #define ESC '\033'
 
-static struct sockaddr_in sin;
+static struct sockaddr_in sockAddrIn;
 static int serverSd = -1; // socket descriptor number of receiving socket
 static int gJobCnt = 0;
 static int gQueueLen = 10; // for example
@@ -120,11 +122,11 @@ void cso_serverInit (unsigned int port) {
     REprintf("socket");
     return;
   }
-  memset (&sin,0,sizeof (sin));
-  sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = INADDR_ANY;
-  sin.sin_port = htons (port);
-  if (bind (serverSd,(struct sockaddr*)&sin,sizeof (sin)) == -1) {
+  memset (&sockAddrIn,0,sizeof (sockAddrIn));
+  sockAddrIn.sin_family = AF_INET;
+  sockAddrIn.sin_addr.s_addr = INADDR_ANY;
+  sockAddrIn.sin_port = htons (port);
+  if (bind (serverSd,(struct sockaddr*)&sockAddrIn,sizeof (sockAddrIn)) == -1) {
     logWrite ("check port %d\n",port);
     REprintf("bind");
     return;
@@ -351,13 +353,13 @@ Connection cso_clientInit (char *hostname,unsigned int port)  {
       die ("cso_clientInit: gethostbyname(%s) failed",hostname);
     strReplace (&prevHostname,hp->h_name);
   }
-  memset (&sin,0,sizeof (sin));
-  sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = ((struct in_addr *) (hp->h_addr))->s_addr;
-  sin.sin_port = htons (port);
+  memset (&sockAddrIn,0,sizeof (sockAddrIn));
+  sockAddrIn.sin_family = AF_INET;
+  sockAddrIn.sin_addr.s_addr = ((struct in_addr *) (hp->h_addr))->s_addr;
+  sockAddrIn.sin_port = htons (port);
   if ((conn->socket = socket (AF_INET,SOCK_STREAM,0)) == -1)
     die ("cso_clientInit: socket: %s\n%s",strerror (errno),gClientMsg);
-  if (connect (conn->socket,(struct sockaddr*)&sin,sizeof (sin)) == -1) {
+  if (connect (conn->socket,(struct sockaddr*)&sockAddrIn,sizeof (sockAddrIn)) == -1) {
     if (!gClientMsg)
       return NULL;
     if (*gClientMsg == '+') {

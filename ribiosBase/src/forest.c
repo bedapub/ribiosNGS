@@ -50,6 +50,9 @@ puts ("</select>\n");
 forest_destroy (forestDomains);
 textDestroy (preselectedDomains);
 */
+
+#include <R.h>
+
 #include "hlrmisc.h"
 #include "log.h"
 #include "format.h"
@@ -170,12 +173,12 @@ static void forest_descend (ForestNode k,int level) {
   }
   dots[level] = '\0';
   if (gPrintHTML) {
-    Rprintf ('>');
+    Rprintf (">");
     Rprintf (dots);
     if (level > 0)
-      Rprintf (' ');
+      Rprintf (" ");
     Rprintf (k->name);
-    Rprintf ('\n');
+    Rprintf ("\n");
   }
   else {
     stringCpy (item,dots);

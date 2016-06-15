@@ -23,6 +23,8 @@
     Synergy book ISBN 3-9803718-0-8.
     Module prefix gif_
 */
+#include <R.h>
+
 #include "log.h"
 #include "format.h"
 #include "hlrmisc.h"

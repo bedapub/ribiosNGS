@@ -25,13 +25,21 @@ roxygenise:
 	@(cd ..; ${R} --vanilla -q -e "library(roxygen2);roxygenise(\"$(PKG)\")")
 	@echo ' '
 
-preinstall: clean
-	@echo '====== Pre-install to get c files compiled ======'
-	@(cd ..; ${R} CMD INSTALL ${PKG})
-	@echo '====== Installing finished ======'
-	@echo ' '
+R_CC=`${R} CMD config CC`
+R_CFLAGS=`${R} CMD config CFLAGS`
+R_CPICFLAGS=`${R} CMD config CPICFLAGS`
+R_CPPFLAGS=`${R} CMD config --cppflags`
+R_LDFLAGS=`${R} CMD config --ldflags`
 
-static: preinstall
+compile:src/*.c
+	@echo '====== Compile source files ======'
+	cd src; for cfile in *.c; do \
+	echo "Compiling $$cfile"; \
+	${R_CC} ${R_CPPFLAGS} ${R_CFLAGS} ${R_CPICFLAGS} -I ../inst/include -c $${cfile}; \
+	done
+	@echo '====== compiling finished ======'
+
+static: compile
 	@echo '====== Compile the static library  ======'
 	@(cd src; ar rcs ../inst/lib/ribiosBase.a *.o)
 

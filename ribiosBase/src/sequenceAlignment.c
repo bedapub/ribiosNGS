@@ -59,6 +59,7 @@ positions respectively.
 
 */
 #include <ctype.h>
+#include <R.h>
 #include "format.h"
 #include "sequtil.h"
 #include "hlrmisc.h"

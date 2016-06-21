@@ -84,6 +84,8 @@ export(qsystem, rmat)
 
 export(silencio)
 
+export(procent)
+
 export(assertDesign, assertContrast, assertDesignContrast)
 export(identicalMatrixValue, identicalMatrix)
 

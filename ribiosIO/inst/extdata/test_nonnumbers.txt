@@ -1,0 +1,7 @@
+ID	Sample1	Sample2	Sample3
+Gene1	1	2	3
+Gene2	2	3	4
+Gene3	4	6	1
+Gene4	5	3	2
+Gene5	5	3?	1
+Gene6	1		2

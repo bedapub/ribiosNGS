@@ -49,3 +49,14 @@ assertRoundIdentical(dup.mat,
                      read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix_full_duprownames.tsv")))
 assertRoundIdentical(dup.mat,
                      read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix_full_duprownames.txt")))
+
+## non-numeric values
+nonnum <- read_exprs_matrix(file.path(testfile.path, "test_nonnumbers.txt"))
+nonnumExp <- matrix(c(1,2,3,
+                      2,3,4,
+                      4,6,1,
+                      5,3,2,
+                      5,NA,1,
+                      1,NA,2),nrow=6, byrow=TRUE,
+                    dimnames=list(sprintf("Gene%d", 1:6), sprintf("Sample%d", 1:3)))
+stopifnot(identical(nonnum, nonnumExp))

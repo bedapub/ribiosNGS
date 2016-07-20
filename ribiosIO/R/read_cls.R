@@ -37,15 +37,17 @@ write_cls <- write_factor
 
 #' Read in a factor writtin in the CLS format
 #'
+#' @aliases read_cls
+#' 
 #' @param con File or connection to read file from
 #' @param offset  The integer representing the first level, default is set to 0, for some software it can be set to 1
-#' @param sep Separator used in the CLS format, can be '\\t' (recommended) or '\\s' (not to be used when space exists in levels)
 #'
 #' @note
 #' The original CLS format specifies that both tab or space can be used as separators.
 #' This makes it unable to represent factors with sapces in levels. In order to accomodate
 #' CLS format for these factors, we propose using tab as separators in CLS files when encoding factors
-#' in R. The default setting of \code{read_factor} and \code{write_factor} uses tab.
+#' in R. The default setting of \code{read_factor} and \code{write_factor} uses tab. Though \code{read_factor}
+#' can handle both separators, as long as in the file a separator is consistenly used.
 #'
 #' @seealso \code{\link{write_factor}}
 #' 
@@ -55,10 +57,20 @@ write_cls <- write_factor
 #' tempfile <- tempfile()
 #' write_factor(tempfac, tempfile)
 #' stopifnot(identical(tempfac, read_factor(tempfile)))
-read_factor <- function(con=stdin(), offset=0, sep=c("\t", "\\s")) {
-    sep <- match.arg(sep)
+#'
+#' write_factor(tempfac, tempfile, sep=" ")
+#' stopifnot(identical(tempfac, read_factor(tempfile)))
+#'
+#' idir <- system.file("extdata", package="ribiosIO")
+#' sample.cls <- read_factor(file.path(idir, "test.cls"))
+#' expFac <- factor(c("Case", "Control")[c(1,0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,1,1,1,1,0,0)+1],
+#' levels=c("Case", "Control"))
+#' stopifnot(identical(sample.cls, expFac))
+#' 
+read_factor <- function(con=stdin(), offset=0) {
     lns <- readLines(con)
     stopifnot(length(lns) == 3)
+    sep <- ifelse(grepl("\t", lns[1]), "\t", "\\s")
     indims <- as.integer(strsplit(lns[1L], sep)[[1]])
     if (!(length(indims) == 3L & indims[3L] == 1L)) {
         stop("The first line of cls file is mal-formated.\n")
@@ -76,31 +88,34 @@ read_factor <- function(con=stdin(), offset=0, sep=c("\t", "\\s")) {
     return(sf)
 }
 
-#' Read cls files
+read_cls <- read_factor
+
+#' Check if a file encodes a factor
 #'
-#' @param cls.file CLS file name
-#' @param offset The integer representing the first level, default is set to 0, for some software it can be set to 1
-#'
-#' It reads CLS format files with space or tab as separators.
-#'
-#' @note
-#' The original CLS format specifies both tab or space can be used as separators.
-#' This makes it unable to represent factors with sapces in levels. In order to accomodate
-#' CLS format for these factors, we propose using tab as separators in CLS files when encoding factors
-#' in R.
-#'
-#' Because of this, only use \code{read_cls} if you are sure that no level string contain space(s).
-#' Otherwise, use read_factor and write_factor instead: they can handle such strings
-#'
-#' @seealso
-#' \code{\link{read_factor}} and \code{\link{write_factor}}
-#'
+#' @aliases is_cls_file
+#' 
+#' @param con Connection from which to read the file
+#' 
 #' @examples
-#' idir <- system.file("extdata", package="ribiosIO")
-#' sample.cls <- read_cls(file.path(idir, "test.cls"))
-#' expFac <- factor(c("Case", "Control")[c(1,0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,1,1,1,1,0,0)+1],
-#' levels=c("Case", "Control"))
-#' stopifnot(identical(sample.cls, expFac))
-read_cls <- function (cls.file, offset=0) {
-    read_factor(con=cls.file, offset=offset, sep="\\s")
+#' set.seed(1887)
+#' tempfac <- factor(sample(LETTERS, 30, replace=TRUE), levels=sample(LETTERS))
+#' tempfile <- tempfile()
+#' write_factor(tempfac, tempfile)
+#' is_factor_file(tempfile)
+#' write_factor(tempfac, tempfile, sep=" ")
+#' is_factor_file(tempfile)
+is_factor_file <- function(con=stdin()) {
+    lns <- readLines(con)
+    if(length(lns)!=3)
+        return(FALSE)
+    sep <- ifelse(grepl("\t", lns[1]), "\t", "\\s")
+    indims <- suppressWarnings(as.integer(strsplit(lns[1L], sep)[[1]]))
+    if(length(indims)!=3L)
+        return(FALSE)
+    slevels <- strsplit(lns[2L], sep)[[1L]]
+    if (!(identical(slevels[1], "#") & length(slevels) == indims[2L] + 1L)) {
+        return(FALSE)
+    }
+    return(TRUE)
 }
+is_cls_file <- is_factor_file

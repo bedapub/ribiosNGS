@@ -17,6 +17,8 @@ export(read_cls,
        write_cls,
        read_factor,
        write_factor,
+       is_factor_file,
+       is_cls_file,
        read_pheno,
        read_pheno_factor)
 

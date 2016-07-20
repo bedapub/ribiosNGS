@@ -14,6 +14,9 @@ export(read_gct_matrix,
        write_gct)
 
 export(read_cls,
+       write_cls,
+       read_factor,
+       write_factor,
        read_pheno,
        read_pheno_factor)
 

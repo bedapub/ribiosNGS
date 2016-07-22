@@ -1,6 +1,16 @@
 unisignCascadeOrder <- function(matrix, decreasing=TRUE) {
-    maxtime <- apply(matrix, 1L, function(x) which.max(abs(x)))
-    maxval <- apply(matrix, 1L, function(x) max(abs(x)))
+    maxtime <- apply(matrix, 1L, function(x) {
+                         if(all(is.na(x))) {
+                             return(ncol(matrix))
+                         } else {
+                             return(which.max(abs(x)))
+                         }})
+    maxval <- apply(matrix, 1L, function(x) {
+                        if(all(is.na(x))) {
+                            return(-Inf)
+                        } else {
+                            return(max(abs(x), na.rm=TRUE))
+                        }})
     order(maxtime, -maxval, decreasing=FALSE)
 }
 
@@ -12,7 +22,7 @@ unisignCascadeOrder <- function(matrix, decreasing=TRUE) {
 #' be from 1 to column number minus one.
 #' 
 #' @param matrix A numeric matrix
-#' @param dichotomy How are the rows divided into two? By mean value, median value, or by absolute maximal value
+#' @param dichotomy How are the rows divided into two? By mean value, median value, or by maximal abs value
 #'
 #' @examples
 #' myMatrix <- matrix(c(1,2,3, 4,6,5, 8,7,9,3,4,8,9,1,2,-1,-2,-3, -4, -2, -1, -5, -7, -4), byrow=TRUE, ncol=3)
@@ -22,7 +32,7 @@ unisignCascadeOrder <- function(matrix, decreasing=TRUE) {
 #' myOrderedMatrix <- myMatrix[myOrder,]
 #' biosHeatmap(myOrderedMatrix, Colv=FALSE, Rowv=FALSE, dendrogram="none")
 
-cascadeOrder <- function(matrix, dichotomy=c('mean', 'median', 'absmax')) {
+cascadeOrder <- function(matrix, dichotomy=c('mean', 'median', 'maxabs')) {
     dichotomy <- match.arg(dichotomy)
     if(is.null(row.names(matrix)))
         rownames(matrix) <- 1:nrow(matrix)
@@ -30,8 +40,14 @@ cascadeOrder <- function(matrix, dichotomy=c('mean', 'median', 'absmax')) {
         dichfun <- function(x) mean(x, na.rm=TRUE)<=0
     } else if (dichotomy=="median") {
         dichfun <- function(x) median(x, na.rm=TRUE)<=0
-    } else if (dichotomy=="absmax") {
-        dichfun <- function(x) x[which.max(x)]<=0
+    } else if (dichotomy=="maxabs") {
+        dichfun <- function(x) {
+            if(all(is.na(x))) {
+                return(TRUE)
+            } else {
+                return(x[which.max(abs(x))]<=0)
+            }
+        }
     }
     isNeg <- apply(matrix, 1, dichfun)
     isNeg[is.na(isNeg)] <- TRUE

@@ -17,7 +17,7 @@ createDir(dir, showWarnings = FALSE, recursive = FALSE, mode = "0777")
   \item{mode}{Passed to \link{dir.create}}
 }
 \value{
-  Side effect is used. 
+  Directory name (invisible)
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>

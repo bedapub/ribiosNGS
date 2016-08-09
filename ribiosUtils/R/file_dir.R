@@ -19,7 +19,7 @@ createDir <- function(dir,showWarnings=FALSE, recursive=FALSE, mode="0777") {
     dir.create(path=dir, showWarnings=showWarnings, recursive=recursive, mode=mode)
   if(!checkDir(dir))
     stop("Directory access not possible: ", dir)
-  return(invisible(NULL))
+  return(invisible(dir))
 }
 
 ## files

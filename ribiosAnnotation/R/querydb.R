@@ -95,7 +95,7 @@ querydbTmpTbl <- function(sqlComm, inCol, inValues,
                           db="bia", user="biread", password="biread", forceJDBC=FALSE) {
   isORA <- hasOracle() & !forceJDBC
   con <- ribiosCon(db=db, user=user, password=password, forceJDBC=forceJDBC)
-  inValues <- unique(as.character(inValues))
+  inValues <- setdiff(unique(as.character(inValues)), "")
   
   TMP_TBL <- tmpTbl(forceJDBC=forceJDBC)
   fillOneColTmpTbl(con = con, values = inValues)

@@ -28,6 +28,8 @@ export(compactTrellis,
        setCompactTrellis)
 export(getLims)
 
+export(cascadeOrder)
+
 export(radian2degree,
        degree2radian,
        ellipse,

@@ -66,7 +66,7 @@ plotPCA.prcomp <- function(x,
                            xlab=NULL, ylab=NULL,
                            offset,main=NULL, reverse=c(FALSE, FALSE), ...) {
     
-    xx <- pcaScores(x,offset=offset, reverse=reverse)
+    xx <- pcaScores(x, choices=choices,offset=offset, reverse=reverse)
     
     xind <- choices[1]
     yind <- choices[2]

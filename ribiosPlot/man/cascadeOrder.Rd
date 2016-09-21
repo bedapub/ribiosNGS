@@ -4,12 +4,12 @@
 \alias{cascadeOrder}
 \title{Order rows of a matrix in the cascade order}
 \usage{
-cascadeOrder(matrix, dichotomy = c("mean", "median", "absmax"))
+cascadeOrder(matrix, dichotomy = c("mean", "median", "maxabs"))
 }
 \arguments{
 \item{matrix}{A numeric matrix}
 
-\item{dichotomy}{How are the rows divided into two? By mean value, median value, or by absolute maximal value}
+\item{dichotomy}{How are the rows divided into two? By mean value, median value, or by maximal abs value}
 }
 \description{
 The 'cascade order' is defined by (1) rows are divided into two groups by the condition given by 'dichotomy'

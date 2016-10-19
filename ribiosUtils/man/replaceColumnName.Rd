@@ -1,4 +1,5 @@
-\name{replaceColumnNames}
+\name{replaceColumnName}
+\alias{replaceColumnName}
 \alias{replaceColumnNames}
 \title{
   Replace column names in data.frame
@@ -7,7 +8,7 @@
   Replace column names in data.frame
 }
 \usage{
-replaceColumnNames(data.frame, old.names, new.names)
+replaceColumnName(data.frame, old.names, new.names)
 }
 \arguments{
   \item{data.frame}{A data.frame}
@@ -23,5 +24,5 @@ replaceColumnNames(data.frame, old.names, new.names)
 \examples{
 clubs <- data.frame(Points=c(21,23,28,24), Name=c("BVB", "FCB", "HSV",
 "FCK"), games=c(12,11,11,12))
-replaceColumnNames(clubs, c("Points", "games"), c("Punkte", "Spiele"))
+replaceColumnName(clubs, c("Points", "games"), c("Punkte", "Spiele"))
 }

@@ -20,9 +20,11 @@ export(imatch, imatchv, ipmatch, ipmatchv, matchv)
 
 export(matchColumnIndex, matchColumn)
 
+export(matchColumnName, assertColumnName, subsetByColumnName)
+
 export(putColsFirst, sortByDimnames,
        removeColumns,
-       replaceColumnNames,
+       replaceColumnName,
        sortByCol)
 export(isVarCol, isInvarCol, removeInvarCol)
 export(rowscale)
@@ -96,3 +98,4 @@ useDynLib(ribiosUtils, .registration=TRUE,.fixes="C_")
 ## Deprecation
 ##--------------------##
 export(nField)
+export(replaceColumnNames)

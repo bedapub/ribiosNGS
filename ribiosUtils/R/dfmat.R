@@ -48,13 +48,18 @@ replaceByMatch <- function(vector, old.items, new.items) {
   }
   return(vector)
 }
-replaceColumnNames <- function(data.frame, old.names, new.names) {
+replaceColumnName <- function(data.frame, old.names, new.names) {
   col.names <- colnames(data.frame)
   new.col.names <- replaceByMatch(col.names, old.names, new.names)
   colnames(data.frame) <- new.col.names
   return(data.frame)
 }
-
+replaceColumnNames <- function(...) {
+    .Deprecated("replaceColumnName",
+                package="ribiosUtils")
+    replaceColumnName(...)
+}
+      
 sortByCol <- function (data.frame, columns,
                        na.last = TRUE,
                        decreasing = TRUE,
@@ -97,6 +102,85 @@ dfFactor <- function(df, sample.group) {
   }
   if(!is.factor(fac)) fac <- factor(fac)
   return(fac)
+}
+
+## match column names
+
+#' Match a given vector to column names of a data.frame or matrix
+#'
+#' @param data.frame.cols column names of a data.frame. One can also provide a data.frame, which may however cause worse performance since the data.frame is copied
+#' @param reqCols required columns
+#' @param ignore.case logical, whether the case is considered
+#'
+#' @examples
+#' myTestDf <- data.frame(HBV=1:3, VFB=0:2, BVB=4:6, FCB=2:4)
+#' myFavTeams <- c("HBV", "BVB")
+#' matchColumnName(myTestDf, myFavTeams)
+#' myFavTeamsCase <- c("hbv", "bVb")
+#' matchColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)
+#' ## NA will be returned in this case if ignore.case is set to FALSE
+#' matchColumnName(myTestDf, myFavTeamsCase, ignore.case=FALSE)
+matchColumnName <- function(data.frame.cols, reqCols, ignore.case=FALSE) {
+    if(is.data.frame(data.frame.cols))
+        data.frame.cols <- colnames(data.frame.cols)
+    if(ignore.case) {
+        lowInputCol <- tolower(data.frame.cols)
+        lowCol <- tolower(reqCols)
+        res <- match(lowCol, lowInputCol)
+    } else {
+        res <- match(reqCols, data.frame.cols)
+    }
+    return(res)
+}
+
+#' Assert whether the required column names exist
+#'
+#' @param data.frame.cols column names of a data.frame. One can also provide a data.frame, which may however cause worse performance since the data.frame is copied
+#' @param reqCols required columns
+#' @param ignore.case logical, whether the case is considered
+#'
+#' @details The function calls \code{\link{matchColumnName}} internally to match the column names.
+#' @return If all required column names are present, their indices are returned *invisibly*. Otherwise an error message is printed.
+#'
+#' @examples
+#' myTestDf <- data.frame(HBV=1:3, VFB=0:2, BVB=4:6, FCB=2:4)
+#' myFavTeams <- c("HBV", "BVB")
+#' assertColumnName(myTestDf, myFavTeams)
+#' myFavTeamsCase <- c("hbv", "bVb")
+#' assertColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)
+#' \dontrun{assertColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)}
+assertColumnName <- function(data.frame.cols, reqCols, ignore.case=FALSE) {
+    matchRes <- matchColumnName(data.frame.cols, reqCols, ignore.case=ignore.case)
+    if(any(is.na(matchRes))) {
+        moreThanOne <- sum(is.na(matchRes))
+        stop("Following column%s not found: %s",
+             ifelse(moreThanOne, "s were", " was"),
+             paste(reqCols[is.na(matchRes)], collapse=","))
+    }
+    return(invisible(matchRes))
+}
+
+#' Subset a data.frame by column name, allowing differences in cases
+#'
+#' @param data.frame A data.frame object
+#' @param reqCols required columns
+#' @param ignore.case logical, whether the case is considered
+#'
+#' @details The function calls \code{\link{assertColumnName}} internally to match the column names.
+#' @return If all required column names are present, the data.frame object will be subset to include only these columns and the result data.frame is returned. Otherwise an error message is printed.
+#'
+#' @examples
+#' myTestDf <- data.frame(HBV=1:3, VFB=0:2, BVB=4:6, FCB=2:4)
+#' myFavTeams <- c("HBV", "BVB")
+#' subsetByColumnName(myTestDf, myFavTeams)
+#' myFavTeamsCase <- c("hbv", "bVb")
+#' subsetByColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)
+#' \dontrun{subsetByColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)}
+subsetByColumnName <- function(data.frame, reqCols, ignore.case=FALSE) {
+    ind <- assertColumnName(data.frame, reqCols, ignore.case=ignore.case)
+    res <- data.frame[,ind]
+    colnames(res) <- reqCols
+    return(res)
 }
 
 ## variable columns

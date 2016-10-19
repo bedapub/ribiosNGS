@@ -33,7 +33,8 @@ export(matrix2longdf,
 
 export(dfFactor)
 
-export(basefilename, extname)
+export(basefilename, extname,
+       ribiosTempdir, ribiosTempfile)
 
 export(qqmsg)
 export(haltifnot)

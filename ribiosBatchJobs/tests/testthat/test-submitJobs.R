@@ -7,11 +7,6 @@ f <- function(x) {
   -x
 }
 
-loadConfigBioinfo <- function() {
-    loadConfig(system.file("templates",
-                           "BatchJobs-bioinfo.R",
-                           package="ribiosBatchJobs"))
-}
 
 loadConfigBioinfo()
 

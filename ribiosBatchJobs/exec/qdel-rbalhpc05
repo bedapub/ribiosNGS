@@ -1,0 +1,1 @@
+ssh rbalhpc05 /apps64/cluster/torque-3.0.2/bin/qdel "$@"

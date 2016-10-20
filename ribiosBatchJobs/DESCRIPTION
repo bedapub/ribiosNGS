@@ -1,0 +1,22 @@
+Package: ribiosBatchJobs
+Type: Package
+Title: Wrapper package of BatchJobs that allow submitting jobs to a remote
+    server running Torque
+Version: 1.0
+Date: 2016-10-20
+Author: Jitao David Zhang <jitao_david.zhang@roche.com>
+Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Description: The package extends the BatchJobs package by allowing submitting
+    jobs to a remote server running Torque. It is used within the Roche
+    Bioinformatics Infrastructure.
+Depends:
+    BatchJobs
+Imports:
+    checkmate,
+    brew,
+    BBmisc,
+    ribiosUtils
+Suggests: testthat
+Collates: ribiosCfBrewTemplate.R makeClusterFunctionsRemoteTorque.R
+License: GPL-3
+RoxygenNote: 5.0.1

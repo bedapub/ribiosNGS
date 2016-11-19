@@ -1,5 +1,6 @@
 #include "ribios_demo.h"
 
+#include <math.h>
 #include "statistics.h"
 
 SEXP bios_nalimov(SEXP values, SEXP sig) {

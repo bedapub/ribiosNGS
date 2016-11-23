@@ -74,3 +74,6 @@ clean:
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@(find . -type f -name ".Rhistory" -exec rm '{}' \;)
 	@echo ' '
+
+deepclean: clean
+	@(rm -f inst/lib/ribiosBase.a)

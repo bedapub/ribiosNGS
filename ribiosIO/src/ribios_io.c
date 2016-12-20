@@ -6,7 +6,7 @@ static const R_CallMethodDef callMethods[] = {
   CALLMETHOD_DEF(c_read_gmt, 1),
   CALLMETHOD_DEF(c_write_gmt, 2),
   CALLMETHOD_DEF(c_read_chip, 1),
-  CALLMETHOD_DEF(c_read_rocheNGS_exprs, 1),
+  CALLMETHOD_DEF(c_read_biokit_exprs, 1),
 
   {NULL, NULL, 0}
 };

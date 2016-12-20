@@ -93,6 +93,7 @@ export(translationEfficiency,
        babelAllRnks)
 
 S3method(xyplot, RiboSeq)
+S3method(dim, EdgeResult)
 
 export(riboseq.panel,
        xyplot, xyplot.RiboSeq,

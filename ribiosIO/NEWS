@@ -1,3 +1,9 @@
+Version 1.0-41 (2016-12-20)
+  + read_rocheNGS_exprs is renamed as read_biokit_exprs
+  + read_biokit_exprs updates to work with the new output files from the Biokit pipeline
+  + Add read_trimmed_lines
+  + Add loadObject
+  
 Version 1.0-36 (2015-10-12)
   + read_rocheNGS_exprs: skip the header line
 

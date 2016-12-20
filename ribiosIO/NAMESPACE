@@ -1,4 +1,5 @@
 importFrom("utils", "read.csv", "read.table", "write.table")
+importFrom("ribiosUtils", "trim")
 
 export(read_gmt_list,
        write_gmt)
@@ -6,6 +7,8 @@ export(read_gmt_list,
 export(read_exprs_matrix)
 export(iofile,
        loadFile)
+
+export(loadObject)
 
 export(isGctFile)
 
@@ -24,7 +27,9 @@ export(read_cls,
 
 export(read_chip)
 
-export(read_rocheNGS_exprs)
+export(read_trimmed_lines)
+
+export(read_biokit_exprs)
 
 export(read_fasta,
        write_fasta)

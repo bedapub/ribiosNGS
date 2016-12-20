@@ -110,6 +110,10 @@ setMethod("testGLM", c("EdgeObject", "DGEGLM"),
                     dgeTables=toptables))
 })
 
+## some useful attributes
+setMethod("nrow", "EdgeResult", function(x) nrow(x@dgeList))
+setMethod("ncol", "EdgeResult", function(x) ncol(x@dgeList))
+dim.EdgeResult <- function(x) c(nrow(x), ncol(x))
 
 posLogFC <- function(edgeSigFilter) edgeSigFilter@posLogFC
 negLogFC <- function(edgeSigFilter) edgeSigFilter@negLogFC
@@ -244,7 +248,7 @@ getGenes <- function(edgeResult) {
 }
 
 geneCount <- function(edgeResult) {
-  nrow(edgeR::getCounts(dgeList(dgeTest)))
+  nrow(edgeR::getCounts(dgeList(edgeResult)))
 }
 
 assertEdgeToptable <- function(x) {
@@ -268,23 +272,24 @@ isSigNeg <- function(data.frame, sigFilter) {
        logFC <= negLogFC(sigFilter) & logCPM>=logCPM(sigFilter) & LR>=LR(sigFilter) & PValue <= pValue(sigFilter) & FDR <= FDR(sigFilter))
 }
 
+## TODO: fix: add InputFeature
 sigGene <- function(edgeResult, contrast) {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSig(tbl, sf)
-  rownames(tbl)[issig]
+  tbl$GeneID[issig]
 }
 sigPosGene <- function(edgeResult, contrast) {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSigPos(tbl, sf)
-  rownames(tbl)[issig]
+  tbl$GeneID[issig]
 }
 sigNegGene <- function(edgeResult, contrast) {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSigNeg(tbl, sf)
-  rownames(tbl)[issig]
+  tbl$GeneID[issig]
 }
 sigGenes <- function(edgeResult) {
   cs <- contrastNames(edgeResult)
@@ -327,7 +332,7 @@ sigGeneBarchart <- function(edgeResult,
                             auto.key=list(columns=2),
                             ...) {
   counts <- sigGeneCounts(edgeResult)
-  contrasts <- ribiosUtils::ofactor(contrastNames(dgeTest))
+  contrasts <- ribiosUtils::ofactor(contrastNames(edgeResult))
   positive <- counts$posCount
   negative <- counts$negCount
   scales$y$log <- ifelse(logy, 10, FALSE)
@@ -429,3 +434,4 @@ plotMDS.EdgeObject <- function(x, col, ...) {
 }
 
 ## sniff annotation
+

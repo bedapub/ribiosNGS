@@ -8,7 +8,7 @@
 #' @details
 #' An expression matrix of size m x n contains exprssion levels of m features in n samples. This function supports three commonly used file formats for expression levels: \code{GCT} format, \code{tab-delimited file} and \code{space-delimited file}.
 #'
-#' @author Jitao David Zhang <jitao_david.zhang@roche.com>
+#' @author Jitao David Zhang <jitao_david.zhang at roche.com>
 #' @note
 #'   The function uses a very simple logic to guess whether the file is
 #'  tab-delimited or space-delimited: it reads in the first n lines

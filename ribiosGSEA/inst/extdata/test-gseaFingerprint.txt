@@ -1,4 +1,0 @@
-../extdata/gseaDirs/HumanInVitroLiver_VitaminA_24h_Middle
-../extdata/gseaDirs/HumanInVitroLiver_VitaminA_24h_High
-../extdata/gseaDirs/HumanInVitroLiver_VitaminA_8h_High
-../extdata/gseaDirs/HumanInVitroLiver_VitaminA_8h_Middle

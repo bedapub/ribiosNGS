@@ -28,6 +28,7 @@ exportClass(FisherResult,
 exportClass(CameraResult,
             CameraResultList)
 export(GeneSet, GeneSets)
+export(geneSetPerm)
 exportClass("TwoGroupExprsSimulator",
             "BenchmarkDataset",
             "Benchmarker",

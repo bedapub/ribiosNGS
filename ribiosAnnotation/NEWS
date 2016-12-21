@@ -1,3 +1,6 @@
+Version 3.2-0 (2016-12-21)
+  + Add mRNArefseqByTaxID to get all refseq IDs given a Taxonomy ID
+
 Version 3.1-8 (2015-06-30)
   + export annotateAnyIDs to annotate any types of feature identifiers supported by GTI
 

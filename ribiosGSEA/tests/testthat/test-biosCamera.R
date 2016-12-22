@@ -12,8 +12,10 @@ y[index1,4:6] <- y[index1,4:6]+1
 ## index2: not DEs
 index2 <- 21:40
 
+## TODO: limma::camera has been updated. biosCamera has to be updated, too!
+
 gs <- list(GeneSet1=index1, GeneSet2=index2)
-(cameraRes <- camera(y, gs, design))
+(cameraRes <- camera(y, gs, design, inter.gene.cor=NA))
 (cameraModRes <- biosCamera(y, gs, design))
 addCols <- c("GeneSet", "Score", "ContributingGenes")
 idCols <- c("NGenes", "Correlation", "Direction", "PValue", "FDR")

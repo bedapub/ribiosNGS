@@ -1,3 +1,7 @@
+Version 1.3-2 (2016-12-22)
+  + add ronetGGI to query gene-gene interactions from RONET
+  + officially move geeSetPerm from ribiosGSA to ribiosGSEA
+
 Version 1.1-8 (Aug 18, 2015)
   + The GeneSet class and GeneSets class are re-designed to support the concept of 'category', namely classes of gene sets. The old class 'GeneSetsList' is removed because its functionality is represented by GeneSets (which provides even more functionality)
   + Add FisherResult and FisherResultList objects to support Fisher's exact test based gene set enrichment analysis

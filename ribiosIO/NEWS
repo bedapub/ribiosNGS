@@ -1,3 +1,6 @@
+Version 1.0-42 (2016-01-25)
+  + Improve read_gct.c by providing meaningful error messages when the file is not consistent about row numbers
+
 Version 1.0-41 (2016-12-20)
   + read_rocheNGS_exprs is renamed as read_biokit_exprs
   + read_biokit_exprs updates to work with the new output files from the Biokit pipeline

@@ -1,8 +1,8 @@
 Package: ribiosIO
 Type: Package
 Title: Input/Output utilities of ribios
-Version: 1.0-41
-Date: 2016-12-20
+Version: 1.0-42
+Date: 2017-01-25
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Basic data structures and functions for input/output tasks in

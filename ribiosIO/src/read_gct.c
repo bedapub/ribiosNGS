@@ -70,19 +70,21 @@ SEXP c_read_gct(SEXP filename, SEXP pchr, SEXP keepdesc) {
 	SET_STRING_ELT(colnames, i, 
 		       mkChar(textItem(it, i+2)));
     } else {
-      if(arrayMax(it)<=2)
-	continue; // empty line
-      SET_STRING_ELT(rownames, ind-2,
-		     mkChar(textItem(it, 0)));
-      if(keep)
-	SET_STRING_ELT(desc, ind-2,
-		       mkChar(textItem(it, 1)));
-      for(i=0; i<arrayMax(it)-2; i++) {
-	tmp=textItem(it, i+2);
-	if(strEqual(tmp, "NA") || strEqual(tmp, "na") || strEqual(tmp, "Na") || strEqual(tmp, "")) {
-	  pmat[ i*nrow + (ind-2) ] = NA_REAL;
-	} else {
-	  pmat[ i*nrow + (ind-2) ] = atof(tmp);
+      if(ind-2<nrow) {
+	if(arrayMax(it)<=2)
+	  continue; // empty line
+	SET_STRING_ELT(rownames, ind-2,
+		       mkChar(textItem(it, 0)));
+	if(keep)
+	  SET_STRING_ELT(desc, ind-2,
+			 mkChar(textItem(it, 1)));
+	for(i=0; i<arrayMax(it)-2; i++) {
+	  tmp=textItem(it, i+2);
+	  if(strEqual(tmp, "NA") || strEqual(tmp, "na") || strEqual(tmp, "Na") || strEqual(tmp, "")) {
+	    pmat[ i*nrow + (ind-2) ] = NA_REAL;
+	  } else {
+	    pmat[ i*nrow + (ind-2) ] = atof(tmp);
+	  }
 	}
       }
     }

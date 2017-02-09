@@ -107,6 +107,23 @@ plainFile2ConcString <- function(str) {
     return(str)
 }
 
+## check consistency between signal matrix and design matrix
+isInputDesignConsistent <- function(descon, sampleNames) {
+    designSampleNames <- colnames(designMatrix(descon))
+    if(setequal(sampleNames, designSampleNames)) {
+        if(identical(sampleNames, designSampleNames)) {
+            return(invisible(TRUE))
+        } else {
+            warning("The order of samples in the design matrix differ from that in the input matrix! Please verify the consistency!")
+            return(invisible(FALSE))
+        }
+    } else {
+        warning("Sample names in the input matrix and in the design matrix do not match")
+        return(invisible(FALSE))
+    }
+}
+
+
 #' Parse study design and asked questions encoded in design and contrast matrices or in one-way ANOVA designs
 #' @param designFile: A plain tab-delimited file with headers encoding the design matrix, or NULL
 #' @param contrastFile: A plain tab-delimited file with headers encoding the contrast matrix, or NULL
@@ -114,6 +131,7 @@ plainFile2ConcString <- function(str) {
 #' @param groupLevels: Similar format as 'sampleGroups', encoding levels (e.g. order) of the sampleGroups
 #' @param dispLevels: Similar format as 'sampleGroups', encoding the display of the groupLevels. Must match 'groupLevels'
 #' @param contrasts: Similar format as 'sampleGroups', encoding contrasts in case of one-way ANOVA designs
+#' @param expSampleNames: A vector of character strings giving the expected sample names (e.g. those in the input matrix)
 #' @return A S4-object 'DesignContrast'
 #' @examples
 #' ## one-way ANOVA
@@ -127,7 +145,7 @@ plainFile2ConcString <- function(str) {
 #' parseDesignContrast(designFile=designFile, contrastFile=contrastFile,sampleGroups="As,Be,As,Be,As,Be",groupLevels="Be,As", dispLevels="Beryllium,Arsenic")
 parseDesignContrast <- function(designFile=NULL, contrastFile=NULL,
                                 sampleGroups=NULL, groupLevels=NULL, dispLevels=NULL,
-                                contrasts=NULL) {
+                                contrasts=NULL, expSampleNames=NULL) {
   ## sampleGroups, groupLevels, dispLevels, and contrasts can be either a character string concatenated by commas, or a plain file that encode the strings (one per line)
     sampleGroups <- plainFile2ConcString(sampleGroups)
     groupLevels <- plainFile2ConcString(groupLevels)
@@ -135,19 +153,24 @@ parseDesignContrast <- function(designFile=NULL, contrastFile=NULL,
     contrasts <- plainFile2ConcString(contrasts)
     
     if(!is.null(designFile) & !is.null(contrastFile)) {
-        return(parseDesignContrastFile(designFile=designFile,
+        descon <- parseDesignContrastFile(designFile=designFile,
                                        contrastFile=contrastFile,
                                        groupsStr=sampleGroups,
                                        levelStr=groupLevels,
-                                       dispLevelStr=dispLevels))
+                                       dispLevelStr=dispLevels)
     } else if (!is.null(sampleGroups) & !is.null(contrasts)) {
-        return(parseDesignContrastStr(groupsStr=sampleGroups,
+        descon <- parseDesignContrastStr(groupsStr=sampleGroups,
                                       levelStr=groupLevels,
                                       dispLevelStr=dispLevels,
-                                      contrastStr=contrasts))
+                                      contrastStr=contrasts)
     } else {
         stop("Provide either a design matrix and a contrast matrix, or sample groups and contrasts")
     }
+
+    if(!is.null(expSampleNames)) {
+        isInputDesignConsistent(descon, expSampleNames)
+    }
+    return(descon)
 }
 
 .contrastSampleIndices<- function(descon, contrast) {
@@ -192,3 +215,4 @@ setMethod("contrastSampleIndices", c("DesignContrast", "character"), function(ob
 setMethod("contrastSampleIndices", c("DesignContrast", "numeric"), function(object, contrast) {
               .contrastSampleIndices(object, contrast)
           })
+

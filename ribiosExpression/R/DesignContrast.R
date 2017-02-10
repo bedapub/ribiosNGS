@@ -108,6 +108,7 @@ plainFile2ConcString <- function(str) {
 }
 
 ## check consistency between signal matrix and design matrix
+## TODO: writing test
 isInputDesignConsistent <- function(descon, sampleNames) {
     designSampleNames <- rownames(designMatrix(descon))
     if(setequal(sampleNames, designSampleNames)) {

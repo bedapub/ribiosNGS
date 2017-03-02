@@ -37,17 +37,17 @@ matrix2longdf <- function(mat,
 ##}
 
 longdf2matrix <- function(df, row.col = 1L, column.col = 2L, value.col = 3L) {
-  sub <- df[, c(row.col, column.col, value.col)]
-  subrows <- unique(sub[,1L])
-  subcols <- unique(sub[,2L])
-  r.ind <- match(sub[,1L], subrows)
-  c.ind <- match(sub[,2L], subcols)
-  m.ind <- (c.ind-1)*length(subrows) + r.ind
-  if(length(m.ind)!=length(subrows)*length(subcols))
-    warning("Missing values detected\n")
-  mat <- matrix(NA, nrow=length(subrows), ncol=length(subcols))
-  mat[m.ind] <- sub[,3L]
-  rownames(mat) <- subrows
-  colnames(mat) <- subcols
-  return(mat)
+    sub <- as.data.frame(df[, c(row.col, column.col, value.col)])
+    subrows <- unique(sub[,1L])
+    subcols <- unique(sub[,2L])
+    r.ind <- match(sub[,1L], subrows)
+    c.ind <- match(sub[,2L], subcols)
+    m.ind <- (c.ind-1)*length(subrows) + r.ind
+    if(length(m.ind)!=(length(subrows)+0.0)*length(subcols))
+        warning("Missing values detected\n")
+    mat <- matrix(NA, nrow=length(subrows), ncol=length(subcols))
+    mat[m.ind] <- sub[,3L]
+    rownames(mat) <- subrows
+    colnames(mat) <- subcols
+    return(mat)
 }

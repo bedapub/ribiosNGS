@@ -11,8 +11,7 @@ Depends:
     edgeR,ribiosAnnotation,
     ribiosExpression
 Imports:
-    ribiosUtils,methods,Biobase,lattice,ribiosGSA,BiocGenerics,ribiosPlot,graphics,limma,
-    ribiosGSEA,igraph
+    ribiosUtils,methods,Biobase,lattice,ribiosGSEA,BiocGenerics,ribiosPlot,graphics,limma,igraph
 Suggests:
     testthat
 License: GPL-3

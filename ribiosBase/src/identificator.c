@@ -19,7 +19,15 @@
     Module prefix ident_
 */
 #include <pwd.h>
-#include <crypt.h>
+
+// crypt is included in unistd.h on MacOS 10.5, see https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man3/crypt.3.html
+#ifndef __APPLE__
+  #include <crypt.h>
+#else
+  #include <unistd.h>
+  #include <stdlib.h>
+#endif
+
 #include "log.h"
 #include "format.h"
 #include "rofutil.h"

@@ -1,8 +1,6 @@
 #include "algorithm"
 #include <Rcpp.h>
 
-
-
 typedef std::vector<int> IndexList;
 typedef std::vector< std::vector<int> > IndexListSet;
 

@@ -4,8 +4,7 @@ importFrom("ribiosUtils",
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
-importFrom("ribiosGSA", "geneSetPerm")
-importFrom("ribiosGSEA", "gscCamera")
+importFrom("ribiosGSEA", "gscCamera", "geneSetPerm")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
@@ -93,6 +92,7 @@ export(translationEfficiency,
        babelAllRnks)
 
 S3method(xyplot, RiboSeq)
+S3method(dim, EdgeResult)
 
 export(riboseq.panel,
        xyplot, xyplot.RiboSeq,

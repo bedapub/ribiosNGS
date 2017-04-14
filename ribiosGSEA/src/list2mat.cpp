@@ -1,4 +1,4 @@
-#include "ribios_gsea.h"
+#include <Rcpp.h>
 
 RcppExport SEXP list2mat(SEXP data) {
   using namespace std;

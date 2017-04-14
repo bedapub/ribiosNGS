@@ -5,10 +5,10 @@
 
 #include "ribios_io.h"
 
-SEXP c_read_rocheNGS_exprs (SEXP filename) {
+SEXP c_read_biokit_exprs (SEXP filename) {
   LineStream ls;
   char* line;
-  const int MAND_NCOL=6; // the first column is the row name, and column 2-6 are mandatory
+  const int MAND_NCOL=7; // the first column is the row name, and column 2-7 are mandatory
   int add_ncol=0;
   Texta it;
   Texta rnames=textCreate(128);
@@ -17,11 +17,12 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
   Array srpkms=arrayCreate(128, double);
   Array sreads=arrayCreate(128, int);
   Array mprop=arrayCreate(128, double);
+  Array allmap = arrayCreate(128, int);
   Array annos=arrayCreate(128, Texta);
   Texta anno=NULL; // must have a NULL assigned; otherwise textCreateClear leads to memory error
   Stringa str=stringCreate(8);
 
-  SEXP R_rnames, R_mrpkms, R_mreads, R_srpkms, R_sreads, R_mprop,R_res;
+  SEXP R_rnames, R_mrpkms, R_mreads, R_srpkms, R_sreads, R_mprop, R_allmap, R_res;
   SEXP R_colnames, R_class;
   
   int nprot=0;
@@ -43,6 +44,7 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
     array(srpkms, arrayMax(srpkms), double)=atof(textItem(it, 3));
     array(sreads, arrayMax(sreads), int)=atoi(textItem(it, 4));
     array(mprop, arrayMax(mprop), double)=atof(textItem(it, 5));
+    array(allmap, arrayMax(allmap), int)=atoi(textItem(it, 6));
 
     add_ncol = max(arrayMax(it)-MAND_NCOL, add_ncol);
     textCreateClear(anno, arrayMax(it)-MAND_NCOL);
@@ -59,6 +61,7 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
   R_srpkms=PROTECT(allocVector(REALSXP, nrow)); nprot++;
   R_sreads=PROTECT(allocVector(INTSXP, nrow)); nprot++;
   R_mprop=PROTECT(allocVector(REALSXP, nrow)); nprot++;
+  R_allmap=PROTECT(allocVector(INTSXP, nrow)); nprot++;
 
   for(i=0; i<nrow; ++i) {
     SET_STRING_ELT(R_rnames, i, mkChar(textItem(rnames, i)));
@@ -67,6 +70,7 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
     REAL(R_srpkms)[i]=arru(srpkms, i, double);
     INTEGER(R_sreads)[i]=arru(sreads, i, int);
     REAL(R_mprop)[i]=arru(mprop, i, double);
+    INTEGER(R_allmap)[i]=arru(allmap, i, int);
   }
 
   R_res=PROTECT(allocVector(VECSXP, MAND_NCOL+add_ncol-1)); nprot++;
@@ -75,6 +79,7 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
   SET_VECTOR_ELT(R_res, 2, R_srpkms);
   SET_VECTOR_ELT(R_res, 3, R_sreads);
   SET_VECTOR_ELT(R_res, 4, R_mprop);
+  SET_VECTOR_ELT(R_res, 5, R_allmap);
   for(i=0; i<add_ncol; ++i) {
     SEXP R_anno=NULL;
     R_anno=PROTECT(allocVector(STRSXP, nrow));
@@ -97,6 +102,7 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
   SET_STRING_ELT(R_colnames, 2, mkChar("RPKM_UniqMap"));
   SET_STRING_ELT(R_colnames, 3, mkChar("ReadCount_UniqMap"));
   SET_STRING_ELT(R_colnames, 4, mkChar("MultiProp"));
+  SET_STRING_ELT(R_colnames, 5, mkChar("AllMappingReads"));
   for(i=0; i<add_ncol; ++i) {
     stringPrintf(str, "Annotation%d", i+1);
     SET_STRING_ELT(R_colnames, i+MAND_NCOL-1,
@@ -117,6 +123,7 @@ SEXP c_read_rocheNGS_exprs (SEXP filename) {
   arrayDestroy(srpkms);
   arrayDestroy(sreads);
   arrayDestroy(mprop);
+  arrayDestroy(allmap);
   stringDestroy(str);
 
   ls_destroy(ls);

@@ -1,8 +1,9 @@
 #include <R_ext/Rdynload.h>
-#include "ribiosGSA.h"
+#include "ribiosGSEA.h"
 
 static const R_CallMethodDef callMethods[] = {
   CALLMETHOD_DEF("cpp_geneSetPerm", 3),
+  CALLMETHOD_DEF("list2mat", 1),
   {NULL, NULL, 0}
 };
 

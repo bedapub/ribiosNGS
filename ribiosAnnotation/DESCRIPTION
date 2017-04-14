@@ -1,8 +1,8 @@
 Package: ribiosAnnotation
 Type: Package
 Title: Annotation of genes, RNAs and proteins in the BIOS system
-Version: 3.1-9
-Date: 2016-06-08
+Version: 3.2-0
+Date: 2016-12-21
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Retrieve annotation information of genomic features, genes, RNAs
@@ -11,7 +11,9 @@ Imports:
     ribiosUtils,DBI
 Suggests:
     ROracle,
-    RJDBC
+    RJDBC,
+    roxygen2,
+    testthat
 LazyData: true
 License: GPL-3
 RoxygenNote: 5.0.1

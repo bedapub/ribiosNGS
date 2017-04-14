@@ -1,7 +1,7 @@
 #' Test gene set enrichment by permutating gene labels of statistics
 #'
 #' @description
-#' TODO
+#' Test gene set enrichment by permutating gene labels of statistics
 #'
 #' @param stats Statistics
 #' @param indList a list of integers, indicating indices of genes of gene sets (index starts from 1, following R's convention)
@@ -44,6 +44,6 @@ geneSetPerm <- function(stats,
               paste(which(hasNAind), collapse=",")))
             
   .Call("cpp_geneSetPerm", stats, int.indList, Nsim,
-        PACKAGE="ribiosGSA")
+        PACKAGE="ribiosGSEA")
         
 }

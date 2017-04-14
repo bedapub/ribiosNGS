@@ -17,7 +17,7 @@ geneSetPerm(stats, indList, Nsim = 9999)
 A data frame containg mean statistic, gene set size, and p-values
 }
 \description{
-TODO
+Test gene set enrichment by permutating gene labels of statistics
 }
 \examples{
 set.seed(1887)

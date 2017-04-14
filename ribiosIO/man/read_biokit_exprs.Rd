@@ -1,14 +1,13 @@
-\name{read_rocheNGS_exprs}
-\alias{read_rocheNGS_exprs}
+\name{read_biokit_exprs}
+\alias{read_biokit_exprs}
 \title{
-  Read expression files output by the Roche NGS pipeline 
+  Read expression files output by the Biokit pipeline 
 }
 \description{
-  The function reads expression files output by the Roche NGS
-  pipeline. A brief description can be found in the \code{description} section.
+  The function reads expression files output by the Biokit pipeline. A brief description can be found in the \code{description} section.
 }
 \usage{
-read_rocheNGS_exprs(filename)
+read_biokit_exprs(filename)
 }
 \arguments{
   \item{filename}{A Roche NGS pipeline output file}
@@ -41,5 +40,5 @@ read_rocheNGS_exprs(filename)
 }
 \examples{
 ngsFile <- system.file("extdata/NGS_exprs/file1.expression", package="ribiosIO")
-ngs <- read_rocheNGS_exprs(ngsFile)
+ngs <- read_biokit_exprs(ngsFile)
 }

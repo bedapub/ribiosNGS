@@ -1,3 +1,6 @@
+Version 1.0-39 (09.02.2015)
+  + parseDesignContrast add new parameter 'expSampleNames' to allow sample name consistency check with input matrix
+ 
 Version 1.0-34 (Feb 16, 2015)
   + DesignContrast prints error message if validity is violated
   + parseDesignContrastFile fixes a mistake of assigning group levels

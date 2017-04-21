@@ -67,8 +67,8 @@ dist:	clean roxygenise
 	@echo ' '
 
 clean:
-	@echo '====== Cleaning Package ======'
-	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so)
+	@echo '====== Cleaning Package (without deleting ribiosBase.a)======'
+	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so $(PKG_SRC_DIR)/*.rds)
 	@(rm -f ../${CHECK_FILE})
 	@(rm -rf ../${CHECK_DIR})
 	@(find . -type f -name "*~" -exec rm '{}' \;)
@@ -76,4 +76,5 @@ clean:
 	@echo ' '
 
 deepclean: clean
+	@echo '====== Deep cleaning Package (deleting ribiosBase.a)======'
 	@(rm -f inst/lib/ribiosBase.a)

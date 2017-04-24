@@ -3,9 +3,9 @@
 library(ribiosExpression)
 library(ribiosIO)
 
-infile <- function(file) file.path("../inst/extdata", file)
-designFile <- infile("example-DesignMatrix.txt")
-contrastFile <- infile("example-ContrastMatrix.txt")
+infile <- function(file) system.file(file.path("extdata", file), package="ribiosExpression")
+designFile <- infile("example-designMatrix.txt")
+contrastFile <- infile("example-contrastMatrix.txt")
 exprsFile <- infile("example-expression.gct")
 
 exprsMat <- read_exprs_matrix(exprsFile)

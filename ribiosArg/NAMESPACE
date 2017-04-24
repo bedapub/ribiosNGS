@@ -9,7 +9,8 @@ export("parseNumVec",
 export("makeFactor",
        "parseFactor")
 
-export("scriptName")
+export("scriptName",
+       "scriptPath")
 
 export("argParse",
        "argIsInit",

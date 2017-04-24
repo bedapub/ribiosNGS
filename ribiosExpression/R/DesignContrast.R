@@ -109,6 +109,14 @@ plainFile2ConcString <- function(str) {
 
 ## check consistency between signal matrix and design matrix
 ## TODO: writing test
+dataFrameTwoVecs <- function(vec1, vec2, col.names=c("Vec1", "Vec2")) {
+  len <- pmax(length(vec1), length(vec2))
+  res <- data.frame(vec1 = c(as.character(vec1), rep("", len-length(vec1))),
+		    vec2 = c(as.character(vec2), rep("", len-length(vec2))))
+  colnames(res) <- col.names
+  return(res)
+}
+
 isInputDesignConsistent <- function(descon, sampleNames) {
     designSampleNames <- rownames(designMatrix(descon))
     if(setequal(sampleNames, designSampleNames)) {
@@ -120,6 +128,8 @@ isInputDesignConsistent <- function(descon, sampleNames) {
         }
     } else {
         warning("Sample names in the input matrix and in the design matrix do not match")
+	print(dataFrameTwoVecs(sampleNames, designSampleNames,
+			col.names=c("Given","DesignMatrix")))
         return(invisible(FALSE))
     }
 }

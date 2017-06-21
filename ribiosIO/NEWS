@@ -1,3 +1,6 @@
+Version 1.0-43 (2016-06-21)
+  + loadObject allows the obj option to take the value NULL
+
 Version 1.0-42 (2016-01-25)
   + Improve read_gct.c by providing meaningful error messages when the file is not consistent about row numbers
 

@@ -1,4 +1,5 @@
 is.named <- function(x) !is.null(names(x))
+
 raiseMessage <- function(msg, condition=c("warning", "error")) {
   condition <- match.arg(condition)
   if(condition=="warning") {
@@ -9,9 +10,10 @@ raiseMessage <- function(msg, condition=c("warning", "error")) {
     print("Should not be here.")
   }
 }
+
 checkFactorLevels <- function(factor, levels, 
                               missingLevels=c("pass", "warning", "error"), 
-                              unrecognisedLevels=c("pass", "warning", "error")) 
+                              unrecognisedLevels=c("warning", "pass", "error")) 
 { 
   missingLevels <- match.arg(missingLevels)
   unrecognisedLevels <- match.arg(unrecognisedLevels)
@@ -21,7 +23,7 @@ checkFactorLevels <- function(factor, levels,
     if(length(notCovered)>0) {
       msg <- paste("Following levels are not covered by refs:",
                    paste(notCovered, collapse=", "), sep="\n")
-      raiseMessage(msg, missingLevels)
+      raiseMessage(msg, condition=missingLevels)
     }
   }
   if(unrecognisedLevels!="pass") {
@@ -29,7 +31,7 @@ checkFactorLevels <- function(factor, levels,
     if(length(unrecog)>0) {
       msg <- paste("Following levels are not recognised in x:",
                    paste(unrecog, collapse=", "), sep="\n")
-      raiseMessage(msg, unrecog)
+      raiseMessage(msg, condition=unrecognisedLevels)
     }
   }
 }
@@ -53,7 +55,7 @@ checkFactorLevels <- function(factor, levels,
 #' ## TODO: test warning and error
 relevelsByNamedVec <- function(x, refs, 
                                missingLevels=c("pass", "warning", "error"), 
-                               unrecognisedLevels=c("pass", "warning", "error")) {
+                               unrecognisedLevels=c("warning", "pass", "error")) {
   stopifnot(is.named(refs))
   stopifnot(is.factor(x))
   xlevels <- levels(x)
@@ -89,7 +91,7 @@ relevelsByNamedVec <- function(x, refs,
 #' 
 relevelsByNotNamedVec <- function(x, refs, 
                                   missingLevels=c("pass", "warning", "error"), 
-                                  unrecognisedLevels=c("pass", "warning", "error")) 
+                                  unrecognisedLevels=c("warning", "pass", "error")) 
 {
   stopifnot(!is.named(refs))
   stopifnot(is.factor(x))
@@ -126,9 +128,17 @@ relevelsByNotNamedVec <- function(x, refs,
 #' stopifnot(identical(newFactor, factor(c("A", "B", "A", "C", "B"), levels=c("B", "C", "A"))))
 #' newFactor2 <-  relevels(oldFactor, refDict)
 #' stopifnot(identical(newFactor2, factor(c("a", "b", "a", "c", "b"), levels=c("a", "b", "c"))))
+#' \dontrun{
+#' try(relevels(oldFactor, c("A", "B", "C", "D"),  unrecognisedLevels="error"))
+#' try(relevels(oldFactor, c("A", "B"), missingLevels="error"))
+#' }
 relevels <- function(x, refs,
                      missingLevels=c("pass", "warning", "error"), 
-                     unrecognisedLevels=c("pass", "warning", "error")) {
+                     unrecognisedLevels=c("warning", "pass", "error")) {
+  
+  missingLevels <- match.arg(missingLevels)
+  unrecognisedLevels <- match.arg(unrecognisedLevels)
+  
   if(is.named(refs)) {
     res <- relevelsByNamedVec(x, refs, 
                               missingLevels=missingLevels,

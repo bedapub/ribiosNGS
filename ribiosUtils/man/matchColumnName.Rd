@@ -25,4 +25,3 @@ matchColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)
 ## NA will be returned in this case if ignore.case is set to FALSE
 matchColumnName(myTestDf, myFavTeamsCase, ignore.case=FALSE)
 }
-

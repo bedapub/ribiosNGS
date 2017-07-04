@@ -28,4 +28,3 @@ stopifnot(!identicalMatrixValue(x,y+1E-5))
 stopifnot(!identicalMatrixValue(x,y-1E-5))
 stopifnot(!identicalMatrixValue(x,z))
 }
-

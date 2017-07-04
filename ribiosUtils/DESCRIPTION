@@ -9,6 +9,9 @@ Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: ribiosUtils is a swiss-knife package providing misc utilities.
 LinkingTo: ribiosBase
 Depends:
-    methods, grDevices, stats, utils
+    methods,
+    grDevices,
+    stats,
+    utils
 License: GPL-3
 RoxygenNote: 6.0.1

@@ -1,39 +1,146 @@
-refactor <- function(factor, levels) {
-  if(!is.factor(factor))
-    stop("'factor' must be factor\n")
-  if(!nlevels(factor)==length(levels))
-    stop("Level number of factor' must be of the same length of 'levels'\n")
-  if(is.null(names(levels)))
-    stop("'levels' must be a named vector: names are (ordered) old levels, values are new levels")
-  current.levels <- levels(factor)
-  oldlevels <- names(levels)
-  newlevels <- unname(levels)
-  if(!all(oldlevels %in% current.levels)) {
-    missing.levels <- setdiff(oldlevels,current.levels)
-    stop(paste("Following old levels are not found:\n",
-               paste(missing.levels, collapse=" "),"\n"))
+is.named <- function(x) !is.null(names(x))
+raiseMessage <- function(msg, condition=c("warning", "error")) {
+  condition <- match.arg(condition)
+  if(condition=="warning") {
+    warning(msg)
+  } else if (condition=="error") {
+    stop(msg)
+  } else {
+    print("Should not be here.")
   }
-  if(!all(current.levels %in% oldlevels)) {
-    missing.levels <- setdiff(current.levels, oldlevels)
-    stop(paste("Following current levels are not included in 'levels':\n",
-               paste(missing.levels, collapse=" "), "\n"))
+}
+checkFactorLevels <- function(factor, levels, 
+                              missingLevels=c("pass", "warning", "error"), 
+                              unrecognisedLevels=c("pass", "warning", "error")) 
+{ 
+  missingLevels <- match.arg(missingLevels)
+  unrecognisedLevels <- match.arg(unrecognisedLevels)
+  flevels <- levels(factor)
+  if(missingLevels!="pass") {
+    notCovered <- setdiff(flevels, levels)
+    if(length(notCovered)>0) {
+      msg <- paste("Following levels are not covered by refs:",
+                   paste(notCovered, collapse=", "), sep="\n")
+      raiseMessage(msg, missingLevels)
+    }
   }
-  factor.new <- factor(factor, levels=oldlevels)
-  levels(factor.new) <- newlevels
-  return(factor.new)
+  if(unrecognisedLevels!="pass") {
+    unrecog <- setdiff(levels, flevels)
+    if(length(unrecog)>0) {
+      msg <- paste("Following levels are not recognised in x:",
+                   paste(unrecog, collapse=", "), sep="\n")
+      raiseMessage(msg, unrecog)
+    }
+  }
 }
 
-relevels <- function(x, refs) {
-  if(!all(refs %in% levels(x))) {
-    missing <- which(!(refs %in% levels(x)))
-    stop("The following levels are not found in x:\n",paste(refs[missing], sep=","))
-  }
+#' Relevel a factor by a named vector
+#' 
+#' @description Relevel a factor by a named vector. 
+#' @param x A factor
+#' @param refs A named vector. The names of the vector are all or a subset of levels in the old factor.
+#'       And the values are new levels
+#' @param missingLevels Actions taken in case existing levels are missing: 'pass', 'warning', or 'error'.
+#' @param unrecognisedLevels Actions taken in case unrecognised levels are found: 'pass', 'warning', or 'error'.
+#' 
+#' @details
+#' If names contain character strings other than the levels in the old factor and warning is set to \code{TRUE}, a warning will be raised
+#' @examples
+#' oldFactor <- factor(c("A", "B", "A", "C", "B"), levels=LETTERS[1:3])
+#' factorDict <- c("A"="a", "B"="b", "C"="c")
+#' newFactor <- relevelsByNamedVec(oldFactor, factorDict)
+#' stopifnot(identical(newFactor, factor(c("a", "b", "a", "c", "b"), levels=c("a", "b", "c"))))
+#' ## TODO: test warning and error
+relevelsByNamedVec <- function(x, refs, 
+                               missingLevels=c("pass", "warning", "error"), 
+                               unrecognisedLevels=c("pass", "warning", "error")) {
+  stopifnot(is.named(refs))
+  stopifnot(is.factor(x))
+  xlevels <- levels(x)
+  refNames <- names(refs)
+  
+  checkFactorLevels(x, refNames,
+                    missingLevels=missingLevels,
+                    unrecognisedLevels=unrecognisedLevels)
+  
+  commonLevels <- intersect(xlevels, refNames)
+  indOld <- match(commonLevels, xlevels)
+  indNew <- match(commonLevels, refNames)
+  levels(x)[indOld] <- refs[indNew]
+  return(x)
+}
+
+#' Relevel a factor by an unnamed vector
+#' 
+#' @description Relevel a factor by a unnamed vector. 
+#' @param x A factor
+#' @param refs A unnamed vector. The values of the vector are levels of \code{x}.
+#' @param missingLevels Actions taken in case existing levels are missing: 'pass', 'warning', or 'error'.
+#' @param unrecognisedLevels Actions taken in case unrecognised levels are found: 'pass', 'warning', or 'error'.
+#' 
+#' @details 
+#' If names contain character strings other than the levels in the old factor and warning is set to \code{TRUE}, a warning will be raised
+#' @examples
+#' oldFactor <- factor(c("A", "B", "A", "C", "B"), levels=LETTERS[1:3])
+#' refLevels <- c("B", "C", "A")
+#' newFactor <- relevelsByNotNamedVec(oldFactor, refLevels)
+#' stopifnot(identical(newFactor, factor(c("A", "B", "A", "C", "B"), levels=c("B", "C", "A"))))
+#' ## TODO: test warning and error
+#' 
+relevelsByNotNamedVec <- function(x, refs, 
+                                  missingLevels=c("pass", "warning", "error"), 
+                                  unrecognisedLevels=c("pass", "warning", "error")) 
+{
+  stopifnot(!is.named(refs))
+  stopifnot(is.factor(x))
+  xlevels <- levels(x)
+  
+  checkFactorLevels(x, refs,
+                    missingLevels=missingLevels,
+                    unrecognisedLevels=unrecognisedLevels)
+  
   refs <- rev(refs)
   for (i in refs) {
-    x <- relevel(x, ref=i)
+    x <- relevel(x, ref = i)
   }
   return(x)
 }
+
+#' Relevel a factor by a named or unnamed vector
+#' 
+#' @description Relevel a factor by a named or unnamed vector. 
+#' 
+#' @param x A factor
+#' @param refs A named vector or unnamed vector. 
+#' @param missingLevels Actions taken in case existing levels are missing: 'pass', 'warning', or 'error'.
+#' @param unrecognisedLevels Actions taken in case unrecognised levels are found: 'pass', 'warning', or 'error'.
+#' 
+#' @details 
+#' This function wraps \code{\link{relevelsByNamedVec}} for named vector and \code{\link{relevelsByNotNamedVec}} for not named vectors
+#' @seealso \code{\link{relevelsByNamedVec}} and \code{\link{relevelsByNotNamedVec}}
+#' @examples
+#' oldFactor <- factor(c("A", "B", "A", "C", "B"), levels=LETTERS[1:3])
+#' refLevels <- c("B", "C", "A")
+#' refDict <- c("A"="a", "B"="b", "C"="c")
+#' newFactor <- relevels(oldFactor, refLevels)
+#' stopifnot(identical(newFactor, factor(c("A", "B", "A", "C", "B"), levels=c("B", "C", "A"))))
+#' newFactor2 <-  relevels(oldFactor, refDict)
+#' stopifnot(identical(newFactor2, factor(c("a", "b", "a", "c", "b"), levels=c("a", "b", "c"))))
+relevels <- function(x, refs,
+                     missingLevels=c("pass", "warning", "error"), 
+                     unrecognisedLevels=c("pass", "warning", "error")) {
+  if(is.named(refs)) {
+    res <- relevelsByNamedVec(x, refs, 
+                              missingLevels=missingLevels,
+                              unrecognisedLevels=unrecognisedLevels)
+  } else {
+    res <- relevelsByNotNamedVec(x, refs, 
+                                 missingLevels=missingLevels,
+                                 unrecognisedLevels=unrecognisedLevels)
+  }
+  return(res)
+}
+
 
 ofactor <- function(x,...) factor(x, levels=unique(as.character(x)),...)
 

@@ -1,6 +1,6 @@
 #' Print a decimal number in procent format
 #'
-#' @alias percentage
+#' @aliases percentage
 #' 
 #' @param x a decimal number, usually between -1 and 1
 #' @param fmt format string, '1.1' means a digit before and after the decimal point will be printed

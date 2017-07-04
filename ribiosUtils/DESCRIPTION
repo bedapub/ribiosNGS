@@ -11,4 +11,4 @@ LinkingTo: ribiosBase
 Depends:
     methods, grDevices, stats, utils
 License: GPL-3
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

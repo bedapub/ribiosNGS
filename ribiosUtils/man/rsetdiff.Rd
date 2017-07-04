@@ -28,4 +28,3 @@ rsetdiff(testVec1, testVec2)
 \author{
 Jitao David Zhang
 }
-

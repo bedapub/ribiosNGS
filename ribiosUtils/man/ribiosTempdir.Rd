@@ -15,4 +15,3 @@ A temporary directory which (1) every machine in the cluster has access to and (
 \seealso{
 \code{\link{ribiosTempfile}}
 }
-

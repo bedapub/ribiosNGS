@@ -30,4 +30,3 @@ newFactor <- relevelsByNamedVec(oldFactor, factorDict)
 stopifnot(identical(newFactor, factor(c("a", "b", "a", "c", "b"), levels=c("a", "b", "c"))))
 ## TODO: test warning and error
 }
-

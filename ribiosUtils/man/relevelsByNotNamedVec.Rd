@@ -30,4 +30,3 @@ stopifnot(identical(newFactor, factor(c("A", "B", "A", "C", "B"), levels=c("B", 
 ## TODO: test warning and error
 
 }
-

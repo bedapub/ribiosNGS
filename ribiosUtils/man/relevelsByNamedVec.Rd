@@ -5,7 +5,7 @@
 \title{Relevel a factor by a named vector}
 \usage{
 relevelsByNamedVec(x, refs, missingLevels = c("pass", "warning", "error"),
-  unrecognisedLevels = c("pass", "warning", "error"))
+  unrecognisedLevels = c("warning", "pass", "error"))
 }
 \arguments{
 \item{x}{A factor}
@@ -30,3 +30,4 @@ newFactor <- relevelsByNamedVec(oldFactor, factorDict)
 stopifnot(identical(newFactor, factor(c("a", "b", "a", "c", "b"), levels=c("a", "b", "c"))))
 ## TODO: test warning and error
 }
+

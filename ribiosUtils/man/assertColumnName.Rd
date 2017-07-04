@@ -30,3 +30,4 @@ myFavTeamsCase <- c("hbv", "bVb")
 assertColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)
 \dontrun{assertColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)}
 }
+

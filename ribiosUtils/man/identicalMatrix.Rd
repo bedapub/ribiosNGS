@@ -26,3 +26,4 @@ set.seed(1887); z <- matrix(rnorm(1000), nrow=10, dimnames=list(letters[1:10],NU
 stopifnot(identicalMatrix(x,y))
 stopifnot(!identicalMatrix(x,z))
 }
+

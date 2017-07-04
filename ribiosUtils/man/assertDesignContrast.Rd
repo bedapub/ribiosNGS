@@ -28,3 +28,4 @@ assertDesignContrast(nsample, design, contrast)
 \seealso{
 \code{\link{assertDesign}}, \code{\link{assertContrast}}
 }
+

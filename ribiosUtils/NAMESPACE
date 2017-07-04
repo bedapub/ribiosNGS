@@ -48,7 +48,7 @@ export(scriptInit)
 
 export(registerLog, clearLog, flushLog, doLog, writeLog)
 
-export(refactor, relevels,
+export(relevels, relevelsByNamedVec, relevelsByNotNamedVec,
        cutInterval, refactorNum)
 
 export(ofactor)

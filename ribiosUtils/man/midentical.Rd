@@ -7,7 +7,8 @@
   Testing whether multiple objects are identical
 }
 \usage{
-midentical(..., num.eq = TRUE, single.NA = TRUE, attrib.as.set = TRUE, ignore.bytecode = TRUE, ignore.environment = FALSE)
+midentical(..., num.eq = TRUE, single.NA = TRUE, 
+   attrib.as.set = TRUE, ignore.bytecode = TRUE, ignore.environment = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

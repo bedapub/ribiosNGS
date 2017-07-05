@@ -182,7 +182,10 @@ cutInterval <- function(x, step=1,
     labels <- cut.scale[-1]
   }
   x.cut <- cut(x, cut.scale,labels=labels,
-               include.lowest=include.lowest, right=right, dig.lab=dig.lab, ordered_result=ordered_result, ## default in cut
+               include.lowest=include.lowest, 
+               right=right, 
+               dig.lab=dig.lab, 
+               ordered_result=ordered_result, ## default in cut
                ...)
   return(x.cut)
 }

@@ -1,5 +1,7 @@
-midentical <- function(..., num.eq=TRUE, single.NA=TRUE, attrib.as.set=TRUE,
-                       ignore.bytecode=TRUE, ignore.environment=FALSE) {
+midentical <- function(..., num.eq=TRUE, single.NA=TRUE, 
+                       attrib.as.set=TRUE,
+                       ignore.bytecode=TRUE, 
+                       ignore.environment=FALSE) {
   li <- list(...)
   if(length(li)==1L) li <- li[[1L]]
   

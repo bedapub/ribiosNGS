@@ -29,4 +29,3 @@ writeMatrix(test.mat, tmpfile)
 readin.mat <- readMatrix(tmpfile)
 if(require(ribiosUtils)) identicalMatrix(test.mat, readin.mat)
 }
-

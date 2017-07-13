@@ -57,10 +57,9 @@ read_exprs_matrix(file.path(testfile.path, "test_read_exprs_matrix_desc.tsv"))
 ## import tab-separated file with non-numeric values
 read_exprs_matrix(file.path(testfile.path, "test_nonnumbers.txt"))
 }
-\author{
-Jitao David Zhang <jitao_david.zhang at roche.com>
-}
 \seealso{
 The function calls internally the \code{read_gct_matrix} function to parse GCT files.
 }
-
+\author{
+Jitao David Zhang <jitao_david.zhang at roche.com>
+}

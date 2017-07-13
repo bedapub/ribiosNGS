@@ -1,4 +1,3 @@
-## customed Cytoscape/yEd-friendly export function for GML
 fixNodeLabel <- function(name) {
   res <- vector("character", length=length(name))
   invalid <- grepl("^-*$", name)
@@ -7,7 +6,44 @@ fixNodeLabel <- function(name) {
   return(res)
 }
 
+#' Export igraph object to GML, friendly to Cytoscape and yEd
+#' 
+#' @param igraph An \code{igraph} object
+#' @param filename Filename
+#'
+#'   \code{exportGML} exports an \code{igraph} object to GML files
+#' complying with specifications defined by Cytoscape and yEd. Compared
+#'  to the native \code{write.graph} function provided by the
+#'  \code{igraph} package, GML files exported with \code{exportGML} can be
+#'  directly read and properly visualized by Cytoscape and yEd.
+#'
+#'   Currently the function uses supports following attributes:
+#'  Node name: \code{V(igraph)$name}
+#'  Node label: \code{V(igraph)$label}
+#'  Node isInput: \code{V(igraph)$isInput}, controlling node shapes
+#'  Edge label: \code{V(igraph)$label}, determining edge target arrow
+#'    
+#'  So far the function is mainly used by the \code{ronet.Rscript} script
+#'  in the package. Users are invited to adapt the function for other purposes.
+#'
+#' @author Jitao David Zhang, \email{jitao_david.zhang@roche.com}
+#' @importFrom igraph is.directed vcount V E get.edgelist
+#' @seealso \code{\link[igraph]{write.graph}}
+#' @examples
+#'  g <- barabasi.game(100, directed=FALSE)
+#'  V(g)$label <- c(paste("node", 1:99, sep=""),"--")
+#'  V(g)$name <- 1:100 
+#'  V(g)$isInput <- rbinom(100,1, 0.5)
+#'  E(g)$label <- "Expression"
+#'  gPosE <- as.logical(rbinom(ecount(g), 1, 0.25))
+#'  gNegE <- as.logical(rbinom(ecount(g), 1, 0.25))
+#'  E(g)$label[gPosE] <- "Expressoion_Positive"
+#'  E(g)$label[gNegE] <- "Expressoion_Negative"
+#'  gFile <- tempfile()
+#'  exportGML(g, gFile)
+#'
 #' @export
+
 exportGML <- function(igraph, filename) {
   file <- file(filename, "w")
   cat("Creator \"ribiosNetwork\"\n", file=file)

@@ -38,7 +38,7 @@ export(write.tableList)
 
 export(find_ampliseq, read_ampliseq, find_and_read_ampliseq)
 
-export(writeMatrix, readMatrix)
+export(writeMatrix, readMatrix, readTable)
 
 export(read_david)
 

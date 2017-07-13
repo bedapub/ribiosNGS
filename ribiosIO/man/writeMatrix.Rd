@@ -26,4 +26,3 @@ writeMatrix(test.mat, tempfile())
 \seealso{
 \code{\link{readMatrix}} to read in matrix
 }
-

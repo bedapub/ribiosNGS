@@ -56,3 +56,26 @@ readMatrix <- function(file, row.names=TRUE, as.matrix=TRUE) {
     return(res)
   }
 }
+
+#' Read in data.frame from tab-delimited format written by \code{writeMatrix}
+#'
+#' \code{readTable} reads a data.frame written by \code{writeMatrix} into a R session
+#'
+#' @details
+#' Default behaviour of \code{read.table} is adapted to the convention used in \code{writeMatrix}
+#'
+#' @param file file to be read in
+#' @param row.names Logical, whether the first column contains row names (should be consistent with the settign in \code{writeMatrix})
+#'
+#' @return A \code{data.frame} object
+#' @examples
+#' test.df <- data.frame(Team=c("HSV", "BVB", "VFB"), Score=c(21, 19, 17))
+#' tmpfile <- tempfile()
+#' writeMatrix(test.df, tmpfile)
+#' readin.df <- readTable(tmpfile)
+#' stopifnot(identical(as.character(readin.df$Team), c("HSV", "BVB", "VFB")))
+#' stopifnot(identical(readin.df$Score, c(21L, 19L, 17L)))
+
+readTable <- function(file, row.names=TRUE) {
+    return(readMatrix(file, row.names=row.names, as.matrix=FALSE))
+}

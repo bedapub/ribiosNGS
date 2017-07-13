@@ -4,16 +4,15 @@
 \alias{loadObject}
 \title{Load an object by its name from a RData file}
 \usage{
-loadObject(file, obj, verbose = FALSE)
+loadObject(file, obj = NULL, verbose = FALSE)
 }
 \arguments{
 \item{file}{A RData file}
 
-\item{obj}{Object name}
+\item{obj}{Object name. If set as \code{NULL}, all objects are returned}
 
 \item{verbose}{Whether the loading process should be verbose, see \code{\link{load}}}
 }
 \description{
 Load an object by its name from a RData file
 }
-

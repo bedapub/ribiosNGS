@@ -19,4 +19,3 @@ Read tab-delimited result files from DAVID Bioinformatics Resources
 davidFile <- system.file("extdata/example-DAVID-output-subset.txt", package="ribiosIO")
 davidResult <- read_david(davidFile)
 }
-

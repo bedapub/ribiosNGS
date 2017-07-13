@@ -18,6 +18,6 @@ loadObject <- function(file, obj=NULL, verbose=FALSE) {
   env <- new.env()
   load(file, env, verbose = verbose)
   if(is.null(obj))
-     obj <- ls(env=env)
+     obj <- ls(envir=env)
   get(obj, env)
 }

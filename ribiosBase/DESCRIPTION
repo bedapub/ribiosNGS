@@ -1,8 +1,8 @@
 Package: ribiosBase
 Type: Package
 Title: Base ribios package with data structures and functions in C
-Version: 1.0-3
-Date: 2017-04-14
+Version: 1.0-4
+Date: 2017-07-13
 Author: Jitao David Zhang, Clemens Broger, and Detlef Wolf, with input from
     Roche Bioinformatics Group
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
@@ -13,4 +13,4 @@ Description: RiBIOS (R interface to BIOS) is a collection of R packages
     Bioinfolib and is the foundation of other ribios packages that need to call C-
     level functions.
 License: GPL-3
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

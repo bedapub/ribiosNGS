@@ -5,10 +5,9 @@ Version: 1.0-12
 Date: 2016-06-01
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
-Description: Network analysis toolbox in RIBIOS
+Description: Network analysis toolbox in RIBIOS.
 Depends:
-    graph,
-    RBGL,
-    igraph
+    igraph,
+    ribiosUtils
 License: LGPL(>=2)
 RoxygenNote: 5.0.1

@@ -40,6 +40,8 @@ export(find_ampliseq, read_ampliseq, find_and_read_ampliseq)
 
 export(writeMatrix, readMatrix, readTable)
 
+export(writeStrList)
+
 export(read_david)
 
 useDynLib(ribiosIO, .registration=TRUE)

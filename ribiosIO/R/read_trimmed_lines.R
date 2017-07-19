@@ -1,6 +1,6 @@
 #' Read lines, thereby trimming empty spaces around the strings and removing empty lines
 #' @param file A text file
-#' @param skipNul: Skip NULL line (passed to \code{readLines})
+#' @param skipNul Skip NULL line (passed to \code{readLines})
 #' @param ... Other paratmers than \code{skipNul} passed to readLines
 #' 
 #' @examples

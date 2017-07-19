@@ -9,9 +9,9 @@ read_trimmed_lines(file, skipNul = TRUE, ...)
 \arguments{
 \item{file}{A text file}
 
-\item{...}{Other paratmers than \code{skipNul} passed to readLines}
+\item{skipNul}{Skip NULL line (passed to \code{readLines})}
 
-\item{skipNul:}{Skip NULL line (passed to \code{readLines})}
+\item{...}{Other paratmers than \code{skipNul} passed to readLines}
 }
 \description{
 Read lines, thereby trimming empty spaces around the strings and removing empty lines

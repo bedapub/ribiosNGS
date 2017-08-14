@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 09:54:15 CEST 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 11:56:18 CEST 2017). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -22,32 +22,29 @@ PKG_SRC_DIR=$(PKG_ROOT_DIR)/src
 
 roxygenise:
 	@echo '====== roxygenize ======'	
-	@(cd ..; ${R} --vanilla -q -e "library(devtools);document(\"$(PKG)\")")
+	@(${R} -q -e "library(devtools);document('.')")
 	@echo ' '
 
 doVignettes:
 	@echo "====== vignettes ======"
-	@(${R} --vanilla -q -e "library(devtools); devtools::build_vignettes()")
+	@(${R} -q -e "library(devtools); devtools::build_vignettes()")
 	@echo ' '
 
 dist:	clean roxygenise
 	@echo '====== Building Distribution ======'
-	@(cd ..; ${R} CMD build ${DISTADD} $(PKG) )
+	@(${R} -q -e "library(devtools); devtools::build()")
 	@echo '====== Building finished ======'
 	@echo ' '
 
-install: dist
+install: 
 	@echo '====== Installing Package ======'
-	(cd ..; ${R} CMD INSTALL ${PKG}_${PKG_VERSION}.tar.gz) 
+	@(${R} -q -e "library(devtools); devtools::install()")
 	@echo '====== Installing finished ======'
 	@echo ' '
 
-install-test: 
-	${R} CMD INSTALL ../${PKG} && ${R} -e "library(testthat); test_dir('./tests')"
-
 check:
 	@echo '====== Checking Package ======'
-	@(cd ..; ${R} --vanilla -q -e "library(devtools);check(\"$(PKG)\")")
+	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")")
 	@echo '====== Checking finished ======'
 	@echo ' '
 

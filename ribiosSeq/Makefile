@@ -1,15 +1,10 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 11:59:57 CEST 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 12:00:53 CEST 2017). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
 ##      Author: Jitao David Zhang <jitao_david.zhang@roche.com>
-##	BEDA TRS, pRED, Hoffmann-La Roche AG
+##	    F. Hoffmann-La Roche AG
 ##      Description: Makefile for building distributions etc.
-##                   the Makefile provides the following targets:
-##                   
-##                   - make install  calls R CMD INSTALL
-##                   - make check    calls R CMD check (with RUnit)
-##                   - make dist     calls R CMD build
 ##
 ################################################################################
 R:=R

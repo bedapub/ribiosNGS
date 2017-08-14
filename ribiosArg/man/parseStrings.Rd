@@ -44,4 +44,3 @@ parseStrings("a,b,c;d", collapse=",|;")
 \seealso{
 \code{\link{strsplit}}, \code{\link[ribiosUtils]{trim}}
 }
-

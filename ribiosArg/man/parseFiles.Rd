@@ -24,4 +24,3 @@ Parse files from command line option, which can be (1) a string vector of files,
 \note{
 In case of compressed files, a temp dir will be created: the user should take care of cleaning up!
 }
-

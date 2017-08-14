@@ -31,4 +31,3 @@ parseNumVec("3,7,9", expLen=3)
 \seealso{
 \code{\link{argGet}}
 }
-

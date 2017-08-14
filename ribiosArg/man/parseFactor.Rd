@@ -44,4 +44,3 @@ makeFactor(groups, levels)
 }
 
 }
-

@@ -31,4 +31,3 @@ From version 1.0.3 \code{onlyArg} and \code{missingArg} accepts \code{NULL} as i
 \seealso{
 \code{\link{existArg}}
 }
-

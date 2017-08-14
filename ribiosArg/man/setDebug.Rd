@@ -15,4 +15,3 @@ Set the enrivonment for debugging
 \seealso{
 \code{\link{isDebugging}} and \code{\link{unsetDebug}}
 }
-

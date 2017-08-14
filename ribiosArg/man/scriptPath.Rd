@@ -23,10 +23,9 @@ Note that the function supports calling Rscript via \code{--file}  or \code{-f} 
 \dontrun{scriptPath()}
 
 }
-\author{
-Jitao David Zhang <jitao_david.zhang@roche.com>
-}
 \seealso{
 \code{\link{scriptName}}
 }
-
+\author{
+Jitao David Zhang <jitao_david.zhang@roche.com>
+}

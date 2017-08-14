@@ -22,4 +22,3 @@ setDebug()
 \seealso{
 \code{\link{setDebug}} and \code{\link{unsetDebug}}
 }
-

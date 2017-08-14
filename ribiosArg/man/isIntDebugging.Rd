@@ -15,4 +15,3 @@ Test whether the environment is set for debugging, or it's an interactive sessio
 \seealso{
 \code{\link{isDebugging}}
 }
-

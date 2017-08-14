@@ -26,10 +26,9 @@ The parsing is performed at C-level. It is an abbreiviation of argGetPos(opt, in
 \dontrun{argGet("infile")}
 
 }
-\author{
-Jitao David Zhang <jitao_david.zhang@roche.com>
-}
 \seealso{
 \code{\link{argParse}}, \code{\link{argGetPos}}, and \code{\link{argPresent}}
 }
-
+\author{
+Jitao David Zhang <jitao_david.zhang@roche.com>
+}

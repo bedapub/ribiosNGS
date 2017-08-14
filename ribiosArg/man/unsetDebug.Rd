@@ -15,4 +15,3 @@ Remove the debugging flag of the the enrivonment
 \seealso{
 \code{\link{isDebugging}} and \code{\link{setDebug}}
 }
-

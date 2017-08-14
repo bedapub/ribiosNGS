@@ -27,12 +27,10 @@ The parsing is performed at C-level. If the argument accepts only one value, use
 \examples{
 \dontrun{argGetPos("thresholds", ind=2)}
 
-
-}
-\author{
-Jitao David Zhang <jitao_david.zhang@roche.com>
 }
 \seealso{
 \code{\link{argParse}}, \code{\link{argGet}}, and \code{\link{argPresent}}
 }
-
+\author{
+Jitao David Zhang <jitao_david.zhang@roche.com>
+}

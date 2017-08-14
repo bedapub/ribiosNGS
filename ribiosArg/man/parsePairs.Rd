@@ -40,4 +40,3 @@ parsePairs("A:3|B:4|C:5", collapse="|", sep=":")
 \seealso{
 \code{\link{parseStrings}}
 }
-

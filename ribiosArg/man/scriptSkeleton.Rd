@@ -15,4 +15,3 @@ Generate a Rscript with its skeleton
 \examples{
 scriptSkeleton()
 }
-

@@ -12,4 +12,3 @@ argPresent(opt)
 \description{
 Test whether the given option is present in the command line or not
 }
-

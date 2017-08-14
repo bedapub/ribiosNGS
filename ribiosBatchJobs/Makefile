@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 11:56:18 CEST 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 11:59:57 CEST 2017). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -12,13 +12,7 @@
 ##                   - make dist     calls R CMD build
 ##
 ################################################################################
-R=R
-PKG_ROOT_DIR=`pwd`
-
-PKG=`awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' ./DESCRIPTION`
-PKG_VERSION=`awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' ${PKG}/DESCRIPTION`
-
-PKG_SRC_DIR=$(PKG_ROOT_DIR)/src
+R:=R
 
 roxygenise:
 	@echo '====== roxygenize ======'	
@@ -30,7 +24,7 @@ doVignettes:
 	@(${R} -q -e "library(devtools); devtools::build_vignettes()")
 	@echo ' '
 
-dist:	clean roxygenise
+build:
 	@echo '====== Building Distribution ======'
 	@(${R} -q -e "library(devtools); devtools::build()")
 	@echo '====== Building finished ======'
@@ -48,14 +42,9 @@ check:
 	@echo '====== Checking finished ======'
 	@echo ' '
 
-envcheck: dist
-	@echo '====== Checking Package w/o Environmental Vars ======'
-	@(cd ..; env -i BIOINFOCONFDIR=${BIOINFOCONFDIR} PATH="/usr/bin/:/usr/local/bin:/bin/:/usr/bin/:/usr/sbin/:/usr/local/bin/:/usr/X11R6/bin:/opt/oracle/client/10/run_1/bin:/usr/kerberos/bin:" LD_LIBRARY_PATH="/homebasel/beda/zhangj83/libs" ${R} CMD check ${CHECKADD} ${PKG}_${PKG_VERSION}.tar.gz) 
-	@echo '====== Checking finished ======'
-
 clean:
 	@echo '====== Cleaning Package ======'
-	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so $(PKG_SRC_DIR)/*.dll $(PKG_SRC_DIR)/*.rds)
+	@(rm -f src/*.o src/*.so src/*.dll src/*.rds)
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@(find . -type f -name ".Rhistory" -exec rm '{}' \;)
 	@echo ' '

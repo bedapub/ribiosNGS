@@ -13,6 +13,7 @@
 #' @author Jitao David Zhang <jitao_david.zhang@roche.com>
 #' @seealso \code{\link{commandArgs}} and \code{\link{getArg}}
 #'
+#' @export
 #' @examples
 #' \dontrun{scriptName()}
 #'
@@ -46,6 +47,7 @@ scriptName <- function() {
 #' @author Jitao David Zhang <jitao_david.zhang@roche.com>
 #' @seealso \code{\link{scriptName}}
 #'
+#' @export
 #' @examples
 #' \dontrun{scriptPath()}
 #'

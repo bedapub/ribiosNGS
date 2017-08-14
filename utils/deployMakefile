@@ -1,7 +1,7 @@
 #!/bin/bash
 ## Deploy makefile from the template
 
-RIBIOS_HOME=/apps64/bi/ribios
+RIBIOS_HOME=/pstore/apps/bioinfo/ribios
 RIBIOS_MAKEFILE=${RIBIOS_HOME}/conf/Makefile-template
 
 PKGS=`find ${RIBIOS_HOME} -maxdepth 1 -mindepth 1 -name "ribios*" ! -name "*.Rcheck" -type d`

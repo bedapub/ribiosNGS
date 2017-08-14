@@ -1,6 +1,6 @@
 #include <R_ext/Rdynload.h>
-#include "ribios_arg.h"
-#include "argparse.h"
+#include <R_ext/Visibility.h>
+#include "init.h"
 
 static const R_CallMethodDef callMethods[] = {
   CALLMETHOD_DEF(rarg_parse, 5),
@@ -11,6 +11,8 @@ static const R_CallMethodDef callMethods[] = {
   {NULL, NULL, 0}
 };
 
-void R_init_ribiosUtils(DllInfo *info) {
+void attribute_visible R_init_ribiosArg(DllInfo *info) {
   R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+  R_useDynamicSymbols(info, FALSE);
+  R_forceSymbols(info, TRUE);
 }

@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 09:53:31 CEST 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 09:54:15 CEST 2017). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -15,7 +15,7 @@
 R=R
 PKG_ROOT_DIR=`pwd`
 
-PKG_VERSION=`PKG=awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' ./DESCRIPTION`
+PKG=`awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' ./DESCRIPTION`
 PKG_VERSION=`awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' ${PKG}/DESCRIPTION`
 
 PKG_SRC_DIR=$(PKG_ROOT_DIR)/src

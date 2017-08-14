@@ -34,7 +34,6 @@
 #' session quits while printing the error message.
 #'
 #' @importFrom ribiosUtils qqmsg
-#' @export
 #' @useDynLib ribiosArg, .registration=TRUE, .fixes="C_"
 #' 
 #' @examples
@@ -44,7 +43,8 @@
 #' argIsInit()
 #' argPresent("verbose")
 #' }
-#' 
+#'
+#' @export
 argParse <- function(optargs, reqargs, usage=paste(scriptName(), "-h"), strict=TRUE) {
   if(isDebugging()) {
     message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode")
@@ -148,7 +148,7 @@ argPresent <- function(opt) {
 #' @examples
 #' \dontrun{argGetPos("thresholds", ind=2)}
 #'
-#' 
+#' @export 
 argGetPos <- function(opt, ind=1L, default=NULL, choices=NULL) {
   if(isDebugging()) {
     message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode. Default value is returned")
@@ -183,6 +183,7 @@ argGetPos <- function(opt, ind=1L, default=NULL, choices=NULL) {
 #' @examples
 #' \dontrun{argGet("infile")}
 #'
+#' @export
 argGet <- function(opt, default=NULL, choices=NULL) {
   if(isDebugging()) {
     message("[DEBUGGIING] The script is running in an interactive session, e.g. debugging mode. Default value is returned")

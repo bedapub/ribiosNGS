@@ -1,3 +1,17 @@
+#' Test if named arguments exists
+#'
+#' @param args Argument names, without leading minus sign
+#' @details Options are those arguments with a leading minus sign
+#' (e.g. "-opt"). This function tells whether queried options exist in
+#' the argument list.
+#' @return A vector of logicals, indicating whether the arguments exist
+#' @seealso \code{\link{getArg}}
+#' @export
+#' @examples
+#' comm <- paste(c("Rscript --vanilla -e", "'", "library(ribiosArg);",
+#'              "existArg(c(\"opt\", \"opt2\", \"opt3\"))", "'",
+#'               "-opt abc -opt3"), collapse=" ")
+#' system(comm)
 existArg <- function(args) {
   argPattern <- paste("^-", args, "$", sep="")
 

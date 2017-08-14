@@ -1,57 +1,53 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Fri Sep  4 11:39:55 CEST 2015). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 09:53:31 CEST 2017). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
 ##      Author: Jitao David Zhang <jitao_david.zhang@roche.com>
-##	pRED Bioinformatics
-##	Pharmaceutical Science, F.Hoffmann-La Roche AG
-##      Description: Makefile for building ribios packages
-##	
+##	BEDA TRS, pRED, Hoffmann-La Roche AG
+##      Description: Makefile for building distributions etc.
+##                   the Makefile provides the following targets:
+##                   
+##                   - make install  calls R CMD INSTALL
+##                   - make check    calls R CMD check (with RUnit)
+##                   - make dist     calls R CMD build
+##
 ################################################################################
-
 R=R
-PKG=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
-PKG_VERSION=$(shell awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' DESCRIPTION)
-
-
 PKG_ROOT_DIR=`pwd`
-PKG_SRC_DIR=$(PKG_ROOT_DIR)/src
 
-CHECK_FILE=${PKG}_${PKG_VERSION}.tar.gz
-CHECK_DIR=${PKG}.Rcheck
+PKG_VERSION=`PKG=awk 'BEGIN{FS=":"}{if ($$1=="Package") {gsub(/ /, "",$$2);print $$2}}' ./DESCRIPTION`
+PKG_VERSION=`awk 'BEGIN{FS=":"}{if ($$1=="Version") {gsub(/ /, "",$$2);print $$2}}' ${PKG}/DESCRIPTION`
+
+PKG_SRC_DIR=$(PKG_ROOT_DIR)/src
 
 roxygenise:
 	@echo '====== roxygenize ======'	
-	@(cd ..; ${R} --vanilla -q -e "library(roxygen2);roxygenise(\"$(PKG)\")")
+	@(cd ..; ${R} --vanilla -q -e "library(devtools);document(\"$(PKG)\")")
 	@echo ' '
 
-R_CC=`${R} CMD config CC`
-R_CFLAGS=`${R} CMD config CFLAGS`
-R_CPICFLAGS=`${R} CMD config CPICFLAGS`
-R_CPPFLAGS=`${R} CMD config --cppflags`
-R_LDFLAGS=`${R} CMD config --ldflags`
+doVignettes:
+	@echo "====== vignettes ======"
+	@(${R} --vanilla -q -e "library(devtools); devtools::build_vignettes()")
+	@echo ' '
 
-compile:src/*.c
-	@echo '====== Compile source files ======'
-	cd src; for cfile in *.c; do \
-	echo "Compiling $$cfile"; \
-	${R_CC} ${R_CPPFLAGS} ${R_CFLAGS} ${R_CPICFLAGS} -I ../inst/include -c $${cfile}; \
-	done
-	@echo '====== compiling finished ======'
+dist:	clean roxygenise
+	@echo '====== Building Distribution ======'
+	@(cd ..; ${R} CMD build ${DISTADD} $(PKG) )
+	@echo '====== Building finished ======'
+	@echo ' '
 
-static: compile
-	@echo '====== Compile the static library  ======'
-	@(cd src; ar rcs ../inst/lib/ribiosBase.a *.o)
-
-install: roxygenise static
+install: dist
 	@echo '====== Installing Package ======'
-	@(cd ..; ${R} CMD INSTALL ${PKG})
+	(cd ..; ${R} CMD INSTALL ${PKG}_${PKG_VERSION}.tar.gz) 
 	@echo '====== Installing finished ======'
 	@echo ' '
 
-check:	dist
+install-test: 
+	${R} CMD INSTALL ../${PKG} && ${R} -e "library(testthat); test_dir('./tests')"
+
+check:
 	@echo '====== Checking Package ======'
-	@(cd ..; ${R} CMD check ${CHECKADD} ${CHECK_FILE})
+	@(cd ..; ${R} --vanilla -q -e "library(devtools);check(\"$(PKG)\")")
 	@echo '====== Checking finished ======'
 	@echo ' '
 
@@ -60,21 +56,9 @@ envcheck: dist
 	@(cd ..; env -i BIOINFOCONFDIR=${BIOINFOCONFDIR} PATH="/usr/bin/:/usr/local/bin:/bin/:/usr/bin/:/usr/sbin/:/usr/local/bin/:/usr/X11R6/bin:/opt/oracle/client/10/run_1/bin:/usr/kerberos/bin:" LD_LIBRARY_PATH="/homebasel/beda/zhangj83/libs" ${R} CMD check ${CHECKADD} ${PKG}_${PKG_VERSION}.tar.gz) 
 	@echo '====== Checking finished ======'
 
-dist:	clean roxygenise
-	@echo '====== Building Distribution ======'
-	@(cd ..; ${R} CMD build $(PKG))
-	@echo '====== Building finished ======'
-	@echo ' '
-
 clean:
-	@echo '====== Cleaning Package (without deleting ribiosBase.a)======'
-	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so $(PKG_SRC_DIR)/*.rds)
-	@(rm -f ../${CHECK_FILE})
-	@(rm -rf ../${CHECK_DIR})
+	@echo '====== Cleaning Package ======'
+	@(rm -f $(PKG_SRC_DIR)/*.o $(PKG_SRC_DIR)/*.so $(PKG_SRC_DIR)/*.dll $(PKG_SRC_DIR)/*.rds)
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@(find . -type f -name ".Rhistory" -exec rm '{}' \;)
 	@echo ' '
-
-deepclean: clean
-	@echo '====== Deep cleaning Package (deleting ribiosBase.a)======'
-	@(rm -f inst/lib/ribiosBase.a)

@@ -25,13 +25,10 @@
 \alias{setting.}
 \title{Prepare the environment for a script}
 \usage{
-scriptInit(dumpto = "ribios.dump", include.GlobalEnv = TRUE)
+scriptInit(dumpto = "ribios.dump")
 }
 \arguments{
 \item{dumpto}{Character string, file name to dump to when there is an error}
-
-\item{include.GlobalEnv}{logical indicating if a _copy_ of the .GlobalEnv enrivonment should be included
-in addition tot he 'sys.frames()'. Useful when used in a batch job}
 }
 \value{
 Only side effect is used

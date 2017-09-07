@@ -187,3 +187,22 @@ subsetByColumnName <- function(data.frame, reqCols, ignore.case=FALSE) {
 isVarCol <- function(df) return(apply(df, 2L, ulen) > 1)
 isInvarCol <- function(df) !isVarCol(df)
 removeInvarCol <- function(df) df[,isVarCol(df), drop=FALSE]
+
+#' Transform a list of character strings into a data.frame
+#' @param list A list of character strings
+#' @param names Values in the 'Name' column of the result, used if the input list has no names
+#' @param col.names Column names of the \code{data.frame}
+#' @examples
+#' myList <- list(HSV=c("Mueller", "Papadopoulos", "Wood"), FCB=c("Lewandowski", "Robben", "Hummels"),
+#'                BVB=c("Reus", "Goetze", "Kagawa"))
+#' list2df(myList, col.names=c("Club", "Player"))
+list2df <- function(list, names=NULL, col.names=c("Name", "Item")) {
+  if(is.null(names))
+    names <- names(list)
+  if(is.null(names))
+    stop("Parameter 'names' cannot be NULL if the list has NULL names")
+  res <- data.frame(Name=rep(names, sapply(list, length)),
+             Item=unlist(list), row.names=NULL)
+  colnames(res) <- col.names
+  return(res)
+}

@@ -8,13 +8,15 @@
 }
 \usage{
 midentical(..., num.eq = TRUE, single.NA = TRUE, 
-   attrib.as.set = TRUE, ignore.bytecode = TRUE, ignore.environment = FALSE)
+   attrib.as.set = TRUE,
+   ignore.bytecode = TRUE, ignore.environment = FALSE,
+   ignore.srcref = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{\dots}{Objects to be tested, or a list of them}
   \item{num.eq, single.NA, attrib.as.set, ignore.bytecode,
-    ignore.environment}{See \code{\link{identical}}}
+    ignore.environment, ignore.srcref}{See \code{\link{identical}}}
 }
 \details{
   \code{midentical} extends \code{identical} to test multiple objects

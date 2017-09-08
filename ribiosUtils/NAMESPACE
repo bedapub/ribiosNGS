@@ -51,7 +51,7 @@ export(registerLog, clearLog, flushLog, doLog, writeLog)
 
 export(relevels, relevelsByNamedVec, relevelsByNotNamedVec,
        cutInterval, refactorNum)
-
+export(dfFactor2Str)
 export(ofactor)
 
 ##export(atomGrep, orderedGrep)

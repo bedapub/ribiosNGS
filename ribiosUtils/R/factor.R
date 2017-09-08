@@ -204,7 +204,7 @@ refactorNum <- function(x, decreasing=FALSE) {
 #' exampleDf <- data.frame(Teams=c("HSV", "FCB", "FCB", "HSV"), 
 #'              Player=c("Mueller", "Mueller", "Robben", "Holtby"), 
 #'              scores=c(3.5, 1.5, 1.5, 1.0), stringsAsFactors=TRUE)
-#' strDf <- dfFactor2str(exampleDf)
+#' strDf <- dfFactor2Str(exampleDf)
 #' stopifnot(identical(strDf[,1], c("HSV", "FCB", "FCB", "HSV")))
 #' stopifnot(identical(exampleDf[,1], factor(c("HSV", "FCB", "FCB", "HSV"))))
 dfFactor2Str <- function(df) {

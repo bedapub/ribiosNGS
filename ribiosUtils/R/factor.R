@@ -196,3 +196,22 @@ refactorNum <- function(x, decreasing=FALSE) {
                      decreasing=decreasing)
   factor(x, levels=new.levels)
 }
+
+#' Convert factor columns in a data.frame into character strings
+#' @param df A data.frame
+#' @return A data.frame with factor columns coereced into character strings
+#' @examples
+#' exampleDf <- data.frame(Teams=c("HSV", "FCB", "FCB", "HSV"), 
+#'              Player=c("Mueller", "Mueller", "Robben", "Holtby"), 
+#'              scores=c(3.5, 1.5, 1.5, 1.0), stringsAsFactors=TRUE)
+#' strDf <- dfFactor2str(exampleDf)
+#' stopifnot(identical(strDf[,1], c("HSV", "FCB", "FCB", "HSV")))
+#' stopifnot(identical(exampleDf[,1], factor(c("HSV", "FCB", "FCB", "HSV"))))
+dfFactor2Str <- function(df) {
+  isFactor <- sapply(df, is.factor)
+  ind <- which(isFactor)
+  if(any(isFactor)) 
+    for(i in ind)
+      df[,i] <- as.character(df[,i])
+  return(df)
+}

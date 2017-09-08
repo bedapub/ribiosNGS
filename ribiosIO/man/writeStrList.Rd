@@ -4,7 +4,7 @@
 \alias{writeStrList}
 \title{Write a list of strings in a tab-delimited file}
 \usage{
-writeStrList(list, file, names = names(list), type = c("column", "row"),
+writeStrList(list, file, names = NULL, type = c("column", "row"),
   index = FALSE)
 }
 \arguments{
@@ -20,4 +20,12 @@ writeStrList(list, file, names = names(list), type = c("column", "row"),
 }
 \description{
 Write a list of strings in a tab-delimited file
+}
+\examples{
+myList <- list("A"=LETTERS[3:5], "B"=LETTERS[4])
+writeStrList(myList, file=stdout())
+writeStrList(myList, file=stdout(), names=c("ListA", "ListB"))
+writeStrList(myList, file=stdout(), names=c("ListA", "ListB"), type="row")
+writeStrList(myList, file=stdout(), names=c("ListA", "ListB"), type="row", index=TRUE)
+writeStrList(myList, file=stdout(), names=c("ListA", "ListB"), type="column", index=TRUE)
 }

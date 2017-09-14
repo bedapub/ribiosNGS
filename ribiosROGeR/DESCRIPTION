@@ -1,0 +1,23 @@
+Package: ribiosROGeR
+Title: Utilities for the ROGeR (Roche Gene Regulation) database
+Version: 0.0.0.9000
+Authors@R: person("Jitao David", "Zhang", email = "jitao_david.zhang@roche.com", role = c("aut", "cre"))
+Description: ROche Gene Regulation (ROGeR) is an experimental database storing
+    information of gene regulation derived from differential gene expression
+    analysis. ribiosROGeR provides functionalities to access the database and do
+    operations.
+Depends:
+    R (>= 3.3.2)
+Imports:
+    blob,
+    testthat,
+    methods
+Depends: DBI, RSQLite
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Collate:
+    'df.R'
+    'db.R'
+    'factors.R'
+RoxygenNote: 5.0.1

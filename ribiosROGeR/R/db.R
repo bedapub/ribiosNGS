@@ -1,10 +1,7 @@
-#' Max and new design ID
-#'
-#' @aliases maxDesignID
-#' @aliases newDesignID
+#' Max design ID
 #'
 #' @param conn Database connection
-#' @return Max design ID and new design ID (max+1)
+#' @return Integer, max design ID
 #'
 #' @importFrom DBI dbGetQuery
 #' @export
@@ -12,25 +9,35 @@ maxDesignID <- function(conn) {
   res <- dbGetQuery(conn, "SELECT MAX(ID) AS MAXID FROM Designs")[1,1]
   return(res)
 }
+
+#' New design ID
+#'
+#' @param conn Database connection
+#' @return Integer, new design ID (max+1)
+#'
+#' @export
 newDesignID <- function(conn) {
   maxDesignID(conn) + 1L
 }
 
 #' Max and new dataset ID
 #'
-#' @aliases maxDatasetID
-#' @aliases newDatasetID
-#'
 #' @param conn Database connection
-#' @return Max dataset ID and new dataset ID (max+1)
+#' @return Integer, max dataset ID
 #'
 #' @importFrom DBI dbGetQuery
 #' @export
-
 maxDatasetID <- function(conn) {
   res <- dbGetQuery(conn, "SELECT MAX(ID) AS MAXID FROM Datasets")[1,1]
   return(res)
 }
+
+#' New dataset ID
+#'
+#' @param conn Database connection
+#' @return Integer, new dataset ID (max+1)
+#'
+#' @export
 newDatasetID <- function(conn) {
   maxDatasetID(conn) + 1L
 }

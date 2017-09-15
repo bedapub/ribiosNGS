@@ -62,7 +62,7 @@ newDatasetDesignID <- function(conn, datasetID) {
 #' @param sampleSubset A \code{data.frame}, see details.
 #'
 #' A valid \code{sampleSubset} is a \code{data.frame} object containing
-#' three columns: \code{SampleIndex} (integer), \code{isUsed} (logical),
+#' three columns: \code{DatasetSampleIndex} (integer), \code{isUsed} (logical),
 #' and \code{Description} (character).
 #' Note that the column names are case-sensitive
 #'
@@ -73,7 +73,7 @@ newDatasetDesignID <- function(conn, datasetID) {
 assertSampleSubset <- function(sampleSubset) {
   stopifnot(is.data.frame(sampleSubset))
   stopifnot(identical(colnames(sampleSubset),
-                      c("SampleIndex", "IsUsed", "Description")))
+                      c("DatasetSampleIndex", "IsUsed", "Description")))
   return(invisible(TRUE))
 }
 
@@ -82,7 +82,7 @@ assertSampleSubset <- function(sampleSubset) {
 #' @param featureSubset A \code{data.frame}, see details.
 #'
 #' A valid \code{featureSubset} is a \code{data.frame} object containing
-#' three columns: \code{FeatureIndex} (integer), \code{isUsed} (logical),
+#' three columns: \code{DatasetFeatureIndex} (integer), \code{isUsed} (logical),
 #' and \code{Description} (character).
 #' Note that the column names are case-sensitive
 #'
@@ -93,7 +93,7 @@ assertSampleSubset <- function(sampleSubset) {
 assertFeatureSubset <- function(featureSubset) {
   stopifnot(is.data.frame(featureSubset))
   stopifnot(identical(colnames(featureSubset),
-                      c("FeatureIndex", "IsUsed", "Description")))
+                      c("DatasetFeatureIndex", "IsUsed", "Description")))
   return(invisible(TRUE))
 }
 

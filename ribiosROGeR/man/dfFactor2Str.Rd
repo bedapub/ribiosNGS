@@ -21,4 +21,3 @@ stopifnot(identical(strDf[,1], c("HSV", "FCB", "FCB", "HSV")))
 stopifnot(identical(exampleDf[,1], factor(c("HSV", "FCB", "FCB", "HSV"))))
 
 }
-

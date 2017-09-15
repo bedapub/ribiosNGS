@@ -2,7 +2,7 @@
 % Please edit documentation in R/db.R
 \name{maxDesignID}
 \alias{maxDesignID}
-\title{Max and new design ID}
+\title{Max design ID}
 \usage{
 maxDesignID(conn)
 }
@@ -10,9 +10,8 @@ maxDesignID(conn)
 \item{conn}{Database connection}
 }
 \value{
-Max design ID and new design ID (max+1)
+Integer, max design ID
 }
 \description{
-Max and new design ID
+Max design ID
 }
-

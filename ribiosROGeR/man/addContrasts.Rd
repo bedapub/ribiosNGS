@@ -30,4 +30,3 @@ Add a set of new Contrasts to an existing Design
 \seealso{
 \code{\link[limma]{makeContrasts}}
 }
-

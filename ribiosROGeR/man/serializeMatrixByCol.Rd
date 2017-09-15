@@ -18,4 +18,3 @@ Serialize a matrix by columns
 \examples{
 serializeMatrixByCol(matrix(1:4, ncol=2))
 }
-

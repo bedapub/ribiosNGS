@@ -10,7 +10,7 @@ assertSampleSubset(sampleSubset)
 \item{sampleSubset}{A \code{data.frame}, see details.
 
 A valid \code{sampleSubset} is a \code{data.frame} object containing
-three columns: \code{SampleIndex} (integer), \code{isUsed} (logical),
+three columns: \code{DatasetSampleIndex} (integer), \code{isUsed} (logical),
 and \code{Description} (character).
 Note that the column names are case-sensitive}
 }
@@ -21,4 +21,3 @@ is raised.
 \description{
 Assert the correct structure of sampleSubset
 }
-

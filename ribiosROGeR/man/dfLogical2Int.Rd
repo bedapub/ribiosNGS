@@ -21,4 +21,3 @@ intDf <- dfLogical2Int(exampleDf)
 stopifnot(identical(intDf[,3], c(1L, 0L, 1L, 1L)))
 
 }
-

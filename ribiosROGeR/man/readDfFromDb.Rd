@@ -39,4 +39,3 @@ unserialize(myTestDfOut$Complex[[1]])
 testthat::expect_equal(myTestDf, myTestDfOut)
 
 }
-

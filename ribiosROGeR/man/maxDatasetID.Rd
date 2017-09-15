@@ -10,9 +10,8 @@ maxDatasetID(conn)
 \item{conn}{Database connection}
 }
 \value{
-Max dataset ID and new dataset ID (max+1)
+Integer, max dataset ID
 }
 \description{
 Max and new dataset ID
 }
-

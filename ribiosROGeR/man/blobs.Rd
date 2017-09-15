@@ -30,4 +30,3 @@ myList2Out <- unserialize(myDfOut$Object[[2]])
 stopifnot(identical(myList1, myList1Out))
 stopifnot(identical(myList2, myList2Out))
 }
-

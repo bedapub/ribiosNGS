@@ -24,4 +24,3 @@ testFacOut <- decodeFactor(testFacStr)
 testthat::expect_equivalent(testFac, testFacOut)
 
 }
-

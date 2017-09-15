@@ -29,4 +29,3 @@ to the \code{Designs} table.
 \description{
 Add a new design to an existing Dataset
 }
-

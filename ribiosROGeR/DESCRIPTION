@@ -1,6 +1,6 @@
 Package: ribiosROGeR
 Title: Utilities for the ROGeR (Roche Gene Regulation) database
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: person("Jitao David", "Zhang", email = "jitao_david.zhang@roche.com", role = c("aut", "cre"))
 Description: ROche Gene Regulation (ROGeR) is an experimental database storing
     information of gene regulation derived from differential gene expression

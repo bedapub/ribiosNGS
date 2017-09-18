@@ -36,7 +36,7 @@
 #'
 writeDfToDb <- function(conn, data.frame,  tableName="testDf",
                         row.names=FALSE,
-                        overwrite=TRUE, append=FALSE, ...) {
+                        overwrite=FALSE, append=TRUE, ...) {
   stopifnot(is.data.frame(data.frame))
   stopifnot(!is.null(conn))
   stopifnot(!is.null(tableName) & !is.na(tableName))

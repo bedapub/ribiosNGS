@@ -25,10 +25,7 @@
 \alias{setting.}
 \title{Prepare the environment for a script}
 \usage{
-scriptInit(dumpto = "ribios.dump")
-}
-\arguments{
-\item{dumpto}{Character string, file name to dump to when there is an error}
+scriptInit()
 }
 \value{
 Only side effect is used

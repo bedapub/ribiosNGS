@@ -1,3 +1,11 @@
+#' Get user ID
+#' 
+#' @return Character string, user ID
+#' @export
+#' @examples 
+#' getUser()
+getUser <- function() system("echo $USER", intern=TRUE)
+
 #' Max design ID
 #'
 #' @param conn Database connection
@@ -170,7 +178,9 @@ addDesign <- function(conn,
                           Description=as.character(description),
                           SampleSubset=blobs(sampleSubset),
                           FeatureSubset=blobs(featureSubset),
-                          DesignMatrix=blobs(designMatrix))
+                          DesignMatrix=blobs(designMatrix),
+                          CreatedBy=getUser(),
+                          CreatedAt=Sys.time())
   writeDfToDb(conn, designTbl, tableName="Designs", overwrite=FALSE, append=TRUE)
   designId <- dbGetQuery(conn, "SELECT ID FROM Designs WHERE ROWID==LAST_INSERT_ROWID();")[1,1]
   return(designId)
@@ -227,7 +237,9 @@ addContrasts <- function(conn,
                              DesignID=designID,
                              Name=names,
                              Description=descriptions,
-                             Contrast=serializeMatrixByCol(contrastMatrix))
+                             Contrast=serializeMatrixByCol(contrastMatrix),
+                             CreatedBy=getUser(),
+                             CreatedAt=Sys.time())
   writeDfToDb(conn, newContrasts, "Contrasts", overwrite=FALSE, append=TRUE)
   return(newContrastIDs)
 }

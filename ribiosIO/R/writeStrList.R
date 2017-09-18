@@ -1,4 +1,4 @@
-/#' Write a list of strings in a tab-delimited file
+#' Write a list of strings in a tab-delimited file
 #'
 #' @param list A list of character strings
 #' @param file A filename

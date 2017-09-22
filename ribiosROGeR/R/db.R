@@ -62,6 +62,8 @@ newDatasetID <- function(conn) {
 newDatasetDesignID <- function(conn, datasetID) {
   res <- dbGetQuery(conn,
                     sprintf("SELECT MAX(DatasetDesignID)+1 AS NEWID FROM Designs WHERE DatasetID=%d", datasetID))[1,1]
+  if(is.na(res))
+    res <- 1L
   return(res)
 }
 
@@ -208,6 +210,8 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
   if(verbose)
     message("Writing dataset")
   dsID <- newDatasetID(conn)
+  if(is.na(dsID))
+    warning("Dataset ID failed - please check the integrity of the database")
   counts <- edgeObject@dgeList$counts
   ds <- data.frame(ID=dsID,
                    Exprs=blobs(counts),
@@ -233,8 +237,10 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
     message("Writing design")
   newDesID <- newDesignID(conn)
   newDDid <- newDatasetDesignID(conn, dsID)
+  if(is.na(newDesID))
+    warning("Design ID failed - please check the integrity of the database")
   if(is.na(newDDid))
-    warning("Dataset ID failed - please check the integrity of the database")
+    warning("Dataset-specific design ID failed - please check the integrity of the database")
   design <-  data.frame(ID=newDesID,
                         DatasetID=dsID,
                         DatasetDesignID=newDDid,
@@ -262,6 +268,8 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
     message("Writing contrasts")
   contMatrix <- contrastMatrix(edgeResult)
   newContIDs <- newContrastIDs(conn, contMatrix)
+  if(length(newContIDs)==1 && is.na(newContIDs))
+    warning("Contrast ID failed - please check the integrity of the database")
   contrasts <- data.frame(ID=newContIDs,
                           DesignID=newDesID,
                           Name=colnames(contMatrix),

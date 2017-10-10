@@ -40,7 +40,7 @@ export(find_ampliseq, read_ampliseq, find_and_read_ampliseq)
 
 export(writeMatrix, readMatrix, readTable)
 
-export(writeStrList)
+export(strList2DataFrame, writeStrList)
 
 export(read_david)
 

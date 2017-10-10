@@ -1,3 +1,28 @@
+#' Format a string list into a data.frame
+#'
+#' @param strList A list of character strings
+#' @param colnames Column names of the resulting data.frame, by default the names of the list
+#' @param index Logical value, whether the row.names attribute of the data.frame should be integer indexes
+#'
+#' @examples
+#' myList <- list("A"=LETTERS[3:5], "B"=LETTERS[4])
+#' strList2DataFrame(myList)
+#' strList2DataFrame(myList, colnames=c("FirstColumn", "SecondColumn"))
+#' strList2DataFrame(myList, colnames=c("FirstColumn", "SecondColumn"), index=TRUE)
+
+strList2DataFrame <- function(strList, colnames=names(strList), index=FALSE) {
+  maxlen <- max(sapply(strList, length))
+  flist <- lapply(strList, function(x) c(x, rep("", maxlen-length(x))))
+  tbl <- do.call(cbind,flist)
+  colnames(tbl) <- colnames
+  if(index) {
+    rownames(tbl) <- 1:nrow(tbl)
+  } else {
+    rownames(tbl) <- NULL
+  }
+  return(tbl)
+}
+
 #' Write a list of strings in a tab-delimited file
 #'
 #' @param list A list of character strings
@@ -19,21 +44,11 @@ writeStrList <- function(list, file, names=NULL, type=c("column", "row"), index=
       names <- names(list)
   if(is.null(names))
       stop("Input list must have valid names when the parameter 'names' is null")
-  maxlen <- max(sapply(list, length))
-  flist <- lapply(list, function(x) c(x, rep("", maxlen-length(x))))
+  tbl <- strList2DataFrame(list, colnames=names, index=index)
   if(type=="column") {
-    tbl <- do.call(cbind,flist)
-    colnames(tbl) <- names
-    if(index) {
-      rownames(tbl) <- 1:nrow(tbl)
-    }
     writeMatrix(tbl, file, row.names=index)
   } else if (type=="row") {
-    tbl <- do.call(rbind, flist)
-    rownames(tbl) <- names
-    if(index) {
-      rownames(tbl) <- 1:nrow(tbl)
-    }
+    tbl <- t(tbl)
     if(!index) {
         write.table(tbl, file=file,
                     quote=FALSE, sep="\t", row.names=TRUE,

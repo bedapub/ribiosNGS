@@ -40,3 +40,4 @@ isGctFile(myInfileLS)
 \seealso{
 \code{\link{read_gct_matrix}} to read in GCT files
 }
+

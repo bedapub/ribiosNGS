@@ -1,0 +1,187 @@
+Gene	Multiple_RPKM	Multiple_Read_Count	Unique_RPKM	Unique_Read_Count	Multiple_Read_Count_Fraction	All_Mapping_Reads	Additional_Annotation
+55423	0.00	0.06	0.00	0.00	0.06	2.0	SIRPG	signal regulatory protein gamma	
+5568	0.02	2.00	0.02	2.00	0.00	2.0	PRKACG	protein kinase cAMP-activated catalytic subunit gamma	
+126	0.02	2.00	0.02	2.00	0.00	2.0	ADH1C	alcohol dehydrogenase 1C (class I)%2C gamma polypeptide	
+2567	0.00	2.00	0.00	2.00	0.00	2.0	GABRG3	gamma-aminobutyric acid type A receptor gamma3 subunit	
+2560	0.00	2.00	0.00	2.00	0.00	2.0	GABRB1	gamma-aminobutyric acid type A receptor beta1 subunit	
+2104	0.00	2.00	0.00	2.00	0.00	2.0	ESRRG	estrogen related receptor gamma	
+155051	0.01	2.00	0.01	2.00	0.00	2.0	CRYGN	crystallin gamma N	
+54212	0.00	2.00	0.00	2.00	0.00	2.0	SNTG1	syntrophin gamma 1	
+91227	0.03	2.07	0.03	2.00	0.07	174.0	GGTLC2	gamma-glutamyltransferase light chain 2	
+445347	0.01	4.00	0.01	4.00	0.00	4.0	TARP	TCR gamma alternate reading frame protein	
+27091	0.07	4.00	0.07	4.00	0.00	4.0	CACNG5	calcium voltage-gated channel auxiliary subunit gamma 5	
+8424	0.03	4.00	0.03	4.00	0.00	4.0	BBOX1	gamma-butyrobetaine hydroxylase 1	
+124975	0.04	6.00	0.04	6.00	0.00	6.0	GGT6	gamma-glutamyltransferase 6	
+786	0.07	6.00	0.07	6.00	0.00	6.0	CACNG1	calcium voltage-gated channel auxiliary subunit gamma 1	
+2687	0.04	6.00	0.04	6.00	0.00	6.0	GGT5	gamma-glutamyltransferase 5	
+56300	0.08	6.00	0.08	6.00	0.00	6.0	IL36G	interleukin 36%2C gamma	
+10369	0.02	6.00	0.02	6.00	0.00	6.0	CACNG2	calcium voltage-gated channel auxiliary subunit gamma 2	
+8641	0.02	6.37	0.01	4.00	2.37	3226.0	PCDHGB4	protocadherin gamma subfamily B%2C 4	
+2793	0.11	8.00	0.11	8.00	0.00	8.0	GNGT2	G protein subunit gamma transducin 2	
+56120	0.07	8.00	0.07	8.00	0.00	8.0	PCDHGB8P	protocadherin gamma subfamily B%2C 8 pseudogene	
+26025	0.03	8.66	0.02	6.00	2.66	3074.0	PCDHGA12	protocadherin gamma subfamily A%2C 12	
+92086	0.09	10.00	0.09	10.00	0.00	10.0	GGTLC1	gamma-glutamyltransferase light chain 1	
+2569	0.05	10.00	0.05	10.00	0.00	10.0	GABRR1	gamma-aminobutyric acid type A receptor rho1 subunit	
+9708	0.03	11.71	0.02	8.00	3.71	3080.0	PCDHGA8	protocadherin gamma subfamily A%2C 8	
+53632	0.06	12.00	0.06	12.00	0.00	12.0	PRKAG3	protein kinase AMP-activated non-catalytic subunit gamma 3	
+2679	0.11	13.31	0.08	10.00	3.31	64.0	GGT3P	gamma-glutamyltransferase 3 pseudogene	
+648740	0.11	14.00	0.11	14.00	0.00	14.0	ACTG1P4	actin gamma 1 pseudogene 4	
+56099	0.05	14.46	0.03	10.00	4.46	3080.0	PCDHGB7	protocadherin gamma subfamily B%2C 7	
+2792	0.36	16.00	0.36	16.00	0.00	18.0	GNGT1	G protein subunit gamma transducin 1	
+3561	0.19	18.00	0.19	18.00	0.00	20.0	IL2RG	interleukin 2 receptor subunit gamma	
+349149	0.26	18.04	0.23	16.00	2.04	34.0	GJC3	gap junction protein gamma 3	
+2568	0.10	20.00	0.10	20.00	0.00	20.0	GABRP	gamma-aminobutyric acid type A receptor pi subunit	
+56112	0.07	20.95	0.05	14.00	6.95	3090.0	PCDHGA3	protocadherin gamma subfamily A%2C 3	
+5294	0.05	24.00	0.05	24.00	0.00	24.0	PIK3CG	phosphatidylinositol-4%2C5-bisphosphate 3-kinase catalytic subunit gamma	
+72	0.29	24.00	0.29	24.00	0.00	24.0	ACTG2	actin%2C gamma 2%2C smooth muscle%2C enteric	
+1146	0.18	24.00	0.18	24.00	0.00	24.0	CHRNG	cholinergic receptor nicotinic gamma subunit	
+390213	1.04	28.00	1.04	28.00	0.00	32.0	DOC2GP	double C2 domain gamma pseudogene	
+59284	0.17	28.00	0.17	28.00	0.00	28.0	CACNG7	calcium voltage-gated channel auxiliary subunit gamma 7	
+56108	0.10	31.76	0.07	22.00	9.76	3090.0	PCDHGA7	protocadherin gamma subfamily A%2C 7	
+2558	0.07	32.00	0.07	32.00	0.00	32.0	GABRA5	gamma-aminobutyric acid type A receptor alpha5 subunit	
+6445	0.24	32.00	0.24	32.00	0.00	36.0	SGCG	sarcoglycan gamma	
+6258	0.19	32.00	0.19	32.00	0.00	32.0	RXRG	retinoid X receptor gamma	
+54221	0.04	34.00	0.04	34.00	0.00	34.0	SNTG2	syntrophin gamma 2	
+9535	0.93	38.00	0.93	38.00	0.00	38.0	GMFG	glia maturation factor gamma	
+105372280	1.45	38.00	1.45	38.00	0.00	42.0	GNG14	G protein subunit gamma 14	
+56114	0.13	38.19	0.09	26.00	12.19	3096.0	PCDHGA1	protocadherin gamma subfamily A%2C 1	
+440738	0.41	40.00	0.41	40.00	0.00	40.0	MAP1LC3C	microtubule associated protein 1 light chain 3 gamma	
+56102	0.14	40.42	0.10	28.00	12.42	3096.0	PCDHGB3	protocadherin gamma subfamily B%2C 3	
+6340	0.20	44.00	0.20	44.00	0.00	44.0	SCNN1G	sodium channel epithelial 1 gamma subunit	
+1421	1.05	46.00	1.05	46.00	0.00	46.0	CRYGD	crystallin gamma D	
+25823	0.27	46.19	0.27	46.00	0.19	78.0	TPSG1	tryptase gamma 1	
+56106	0.16	46.20	0.11	32.00	14.20	3100.0	PCDHGA10	protocadherin gamma subfamily A%2C 10	
+56110	0.18	51.97	0.13	36.00	15.97	3104.0	PCDHGA5	protocadherin gamma subfamily A%2C 5	
+56113	0.17	52.55	0.12	36.00	16.55	3108.0	PCDHGA2	protocadherin gamma subfamily A%2C 2	
+1427	0.95	54.00	0.95	54.00	0.00	54.0	CRYGS	crystallin gamma S	
+285126	0.44	56.22	0.44	56.00	0.22	70.0	DNAJC5G	DnaJ heat shock protein family (Hsp40) member C5 gamma	
+56109	0.21	59.64	0.14	40.00	19.64	3114.0	PCDHGA6	protocadherin gamma subfamily A%2C 6	
+56097	0.20	60.64	0.14	42.00	18.64	3110.0	PCDHGC5	protocadherin gamma subfamily C%2C 5	
+632	1.33	61.16	0.57	26.00	35.16	192.0	BGLAP	bone gamma-carboxyglutamate protein	
+94235	0.26	62.00	0.26	62.00	0.00	62.0	GNG8	G protein subunit gamma 8	
+1608	0.18	64.00	0.18	64.00	0.00	64.0	DGKG	diacylglycerol kinase gamma	
+2563	0.21	66.00	0.21	66.00	0.00	68.0	GABRD	gamma-aminobutyric acid type A receptor delta subunit	
+100506776	0.30	66.00	0.30	66.00	0.00	70.0	TRG-AS1	T-cell receptor gamma locus antisense RNA 1	
+56103	0.26	74.15	0.17	50.00	24.15	3126.0	PCDHGB2	protocadherin gamma subfamily B%2C 2	
+6623	1.22	78.00	1.22	78.00	0.00	78.0	SNCG	synuclein gamma	
+56107	0.30	86.64	0.21	60.00	26.64	3128.0	PCDHGA9	protocadherin gamma subfamily A%2C 9	
+3174	0.29	88.00	0.29	88.00	0.00	88.0	HNF4G	hepatocyte nuclear factor 4 gamma	
+56111	0.30	89.51	0.20	62.00	27.51	3130.0	PCDHGA4	protocadherin gamma subfamily A%2C 4	
+283693	0.89	92.00	0.89	92.00	0.00	92.0	ACTG1P17	actin gamma 1 pseudogene 17	
+645367	0.60	92.25	0.59	90.00	2.25	96.0	GGT8P	gamma-glutamyltransferase 8 pseudogene	
+56104	0.35	100.22	0.24	68.00	32.22	3144.0	PCDHGB1	protocadherin gamma subfamily B%2C 1	
+733	1.45	116.02	1.45	116.00	0.02	118.0	C8G	complement C8 gamma chain	
+5582	0.63	124.00	0.63	124.00	0.00	128.0	PRKCG	protein kinase C gamma	
+59285	0.78	124.00	0.78	124.00	0.00	126.0	CACNG6	calcium voltage-gated channel auxiliary subunit gamma 6	
+56100	0.50	144.38	0.35	100.00	44.38	3168.0	PCDHGB6	protocadherin gamma subfamily B%2C 6	
+2785	2.31	149.63	1.76	114.00	35.63	310.0	GNG3	G protein subunit gamma 3	
+56105	0.55	179.13	0.38	124.00	55.13	3192.0	PCDHGA11	protocadherin gamma subfamily A%2C 11	
+56098	0.65	193.50	0.45	134.00	59.50	3202.0	PCDHGC4	protocadherin gamma subfamily C%2C 4	
+51764	3.20	194.73	3.18	194.00	0.73	272.0	GNG13	G protein subunit gamma 13	
+92960	1.71	214.51	1.71	214.00	0.51	234.0	PEX11G	peroxisomal biogenesis factor 11 gamma	
+9568	0.58	230.00	0.58	230.00	0.00	230.0	GABBR2	gamma-aminobutyric acid type B receptor subunit 2	
+57165	1.65	244.00	1.65	244.00	0.00	244.0	GJC2	gap junction protein gamma 2	
+55057	0.64	252.00	0.64	252.00	0.00	252.0	CRYBG2	crystallin beta-gamma domain containing 2	
+87769	0.68	266.82	0.67	260.00	6.82	306.0	GGACT	gamma-glutamylamine cyclotransferase	
+5260	1.45	297.29	1.26	258.00	39.29	1742.0	PHKG1	phosphorylase kinase catalytic subunit gamma 1	
+55879	1.49	304.00	1.49	304.00	0.00	304.0	GABRQ	gamma-aminobutyric acid type A receptor theta subunit	
+2570	0.63	336.00	0.63	336.00	0.00	336.0	GABRR2	gamma-aminobutyric acid type A receptor rho2 subunit	
+27092	1.68	356.00	1.68	356.00	0.00	364.0	CACNG4	calcium voltage-gated channel auxiliary subunit gamma 4	
+64098	0.74	358.00	0.74	358.00	0.00	358.0	PARVG	parvin gamma	
+644961	2.53	416.10	2.53	416.00	0.10	434.0	ACTG1P20	actin gamma 1 pseudogene 20	
+54331	1.53	454.00	1.53	454.00	0.00	454.0	GNG2	G protein subunit gamma 2	
+2788	1.70	468.63	1.20	332.00	136.63	606.0	GNG7	G protein subunit gamma 7	
+54103	1.71	472.98	1.71	472.00	0.98	482.0	GSAP	gamma-secretase activating protein	
+57828	1.00	520.00	1.00	520.00	0.00	530.0	CATSPERG	cation channel sperm associated auxiliary subunit gamma	
+2791	10.46	618.00	10.46	618.00	0.00	618.0	GNG11	G protein subunit gamma 11	
+5533	1.84	650.00	1.84	650.00	0.00	656.0	PPP3CC	protein phosphatase 3 catalytic subunit gamma	
+7022	4.09	726.00	4.09	726.00	0.00	726.0	TFAP2C	transcription factor AP-2 gamma	
+59283	1.39	754.99	1.37	742.00	12.99	770.0	CACNG8	calcium voltage-gated channel auxiliary subunit gamma 8	
+56101	2.71	779.68	1.69	486.00	293.68	3712.0	PCDHGB5	protocadherin gamma subfamily B%2C 5	
+83464	2.70	784.00	2.70	784.00	0.00	784.0	APH1B	aph-1 homolog B%2C gamma-secretase subunit	
+1491	2.71	788.00	2.71	788.00	0.00	790.0	CTH	cystathionine gamma-lyase	
+10912	12.26	812.00	12.26	812.00	0.00	812.0	GADD45G	growth arrest and DNA damage inducible gamma	
+55012	4.65	979.35	4.27	900.00	79.35	1250.0	PPP2R3C	protein phosphatase 2 regulatory subunit B''gamma	
+5468	3.40	982.00	3.40	982.00	0.00	990.0	PPARG	peroxisome proliferator activated receptor gamma	
+51422	1.78	986.73	1.77	982.00	4.73	992.0	PRKAG2	protein kinase AMP-activated non-catalytic subunit gamma 2	
+5336	1.91	1030.00	1.91	1030.00	0.00	1030.0	PLCG2	phospholipase C gamma 2	
+79094	2.75	1038.00	2.75	1038.00	0.00	1038.0	CHAC1	ChaC glutathione specific gamma-glutamylcyclotransferase 1	
+202	2.16	1123.36	2.13	1106.00	17.36	1158.0	CRYBG1	crystallin beta-gamma domain containing 1	
+10319	2.95	1150.00	2.95	1150.00	0.00	1152.0	LAMC3	laminin subunit gamma 3	
+131544	1.80	1213.65	1.63	1098.00	115.65	1558.0	CRYBG3	crystallin beta-gamma domain containing 3	
+2790	16.15	1255.02	5.04	392.00	863.02	2128.0	GNG10	G protein subunit gamma 10	
+398	21.88	1276.38	21.73	1268.00	8.38	1298.0	ARHGDIG	Rho GDP dissociation inhibitor gamma	
+11232	8.59	1324.00	8.59	1324.00	0.00	1330.0	POLG2	DNA polymerase gamma 2%2C accessory subunit	
+2562	2.93	1372.00	2.93	1372.00	0.00	1372.0	GABRB3	gamma-aminobutyric acid type A receptor beta3 subunit	
+11142	12.12	1614.00	12.12	1614.00	0.00	1618.0	PKIG	cAMP-dependent protein kinase inhibitor gamma	
+3918	4.06	1636.00	4.06	1636.00	0.00	1642.0	LAMC2	laminin subunit gamma 2	
+5916	7.83	1664.00	7.83	1664.00	0.00	1668.0	RARG	retinoic acid receptor gamma	
+114791	4.02	1676.00	4.02	1676.00	0.00	1678.0	TUBGCP5	tubulin gamma complex associated protein 5	
+64895	3.70	1692.00	3.70	1692.00	0.00	1694.0	PAPOLG	poly(A) polymerase gamma	
+5522	4.67	1756.00	4.67	1756.00	0.00	1762.0	PPP2R2C	protein phosphatase 2 regulatory subunit Bgamma	
+84572	20.12	1776.68	19.70	1740.00	36.68	1910.0	GNPTG	N-acetylglucosamine-1-phosphate transferase gamma subunit	
+84552	8.02	1906.00	8.02	1906.00	0.00	1908.0	PARD6G	par-6 family cell polarity regulator gamma	
+1456	6.34	1992.00	6.34	1992.00	0.00	1994.0	CSNK1G3	casein kinase 1 gamma 3	
+8836	19.81	2116.00	19.81	2116.00	0.00	2118.0	GGH	gamma-glutamyl hydrolase	
+3459	9.86	2216.00	9.86	2216.00	0.00	2216.0	IFNGR1	interferon gamma receptor 1	
+23480	79.24	2287.00	79.21	2286.00	1.00	2302.0	SEC61G	Sec61 translocon gamma subunit	
+10426	5.57	2290.83	5.55	2282.00	8.83	2302.0	TUBGCP3	tubulin gamma complex associated protein 3	
+55561	6.35	2306.00	6.35	2306.00	0.00	2310.0	CDC42BPG	CDC42 binding protein kinase gamma	
+2564	6.00	2444.00	6.00	2444.00	0.00	2470.0	GABRE	gamma-aminobutyric acid type A receptor epsilon subunit	
+27175	13.03	2512.11	12.50	2410.00	102.11	3590.0	TUBG2	tubulin gamma 2	
+8891	15.94	2514.00	15.94	2514.00	0.00	2516.0	EIF2B3	eukaryotic translation initiation factor 2B subunit gamma	
+2678	13.71	2527.57	13.13	2420.00	107.57	2666.0	GGT1	gamma-glutamyltransferase 1	
+8517	15.31	2574.39	15.22	2560.00	14.39	2650.0	IKBKG	inhibitor of nuclear factor kappa B kinase subunit gamma	
+2786	8.03	2696.00	8.03	2696.00	0.00	2704.0	GNG4	G protein subunit gamma 4	
+8774	10.62	2722.00	10.62	2722.00	0.00	2726.0	NAPG	NSF attachment protein gamma	
+53944	5.56	2854.00	5.56	2854.00	0.00	2858.0	CSNK1G1	casein kinase 1 gamma 1	
+5571	18.56	2929.81	18.48	2918.00	11.81	2954.0	PRKAG1	protein kinase AMP-activated non-catalytic subunit gamma 1	
+5098	9.59	2953.26	6.61	2036.00	917.26	5104.0	PCDHGC3	protocadherin gamma subfamily C%2C 3	
+79017	37.53	3082.00	37.53	3082.00	0.00	3082.0	GGCT	gamma-glutamylcyclotransferase	
+3460	18.36	3269.49	16.76	2984.00	285.49	3910.0	IFNGR2	interferon gamma receptor 2	
+5527	7.97	3354.98	7.97	3354.00	0.98	3358.0	PPP2R5C	protein phosphatase 2 regulatory subunit B'gamma	
+27229	8.11	3501.31	6.89	2974.00	527.31	5678.0	TUBGCP4	tubulin gamma complex associated protein 4	
+2686	13.55	3546.00	13.55	3546.00	0.00	3554.0	GGT7	gamma-glutamyltransferase 7	
+818	9.55	3706.00	9.55	3706.00	0.00	3706.0	CAMK2G	calcium/calmodulin dependent protein kinase II gamma	
+26958	15.49	3866.88	15.48	3864.00	2.88	3874.0	COPG2	coatomer protein complex subunit gamma 2	
+2677	8.02	3866.96	7.65	3688.00	178.96	5970.0	GGCX	gamma-glutamyl carboxylase	
+55970	12.15	3870.99	12.15	3870.00	0.99	3884.0	GNG12	G protein subunit gamma 12	
+3421	37.08	3957.11	36.87	3934.00	23.11	4076.0	IDH3G	isocitrate dehydrogenase 3 (NAD(+)) gamma	
+2787	79.28	3957.63	78.53	3920.00	37.63	4012.0	GNG5	G protein subunit gamma 5	
+23396	8.26	4058.00	8.26	4058.00	0.00	4062.0	PIP5K1C	phosphatidylinositol-4-phosphate 5-kinase type 1 gamma	
+8906	12.53	4309.19	9.56	3290.00	1019.19	5464.0	AP1G2	adaptor related protein complex 1 gamma 2 subunit	
+4802	16.52	4477.90	15.53	4210.00	267.90	4804.0	NFYC	nuclear transcription factor Y subunit gamma	
+79837	21.51	4516.00	21.51	4516.00	0.00	4516.0	PIP4K2C	phosphatidylinositol-5-phosphate 4-kinase type 2 gamma	
+2550	12.49	4988.00	12.49	4988.00	0.00	4994.0	GABBR1	gamma-aminobutyric acid type B receptor subunit 1	
+55851	67.45	5004.47	67.39	5000.00	4.47	5036.0	PSENEN	presenilin enhancer gamma-secretase subunit	
+79719	21.96	5098.96	21.96	5098.00	0.96	5102.0	AAGAB	alpha- and gamma-adaptin binding protein	
+9913	16.45	5289.77	15.53	4996.00	293.77	5964.0	SUPT7L	SPT7 like%2C STAGA complex gamma subunit	
+10052	10.85	5528.00	10.85	5528.00	0.00	5530.0	GJC1	gap junction protein gamma 1	
+23163	19.97	5892.10	19.81	5846.00	46.10	6070.0	GGA3	golgi associated%2C gamma adaptin ear containing%2C ARF binding protein 3	
+11276	7.49	5955.23	6.90	5488.00	467.23	7160.0	SYNRG	synergin gamma	
+26088	16.88	6658.00	16.88	6658.00	0.00	6668.0	GGA1	golgi associated%2C gamma adaptin ear containing%2C ARF binding protein 1	
+5261	19.85	6774.24	17.05	5818.00	956.24	7860.0	PHKG2	phosphorylase kinase catalytic subunit gamma 2	
+509	103.85	7550.91	103.62	7534.00	16.91	7576.0	ATP5C1	ATP synthase%2C H+ transporting%2C mitochondrial F1 complex%2C gamma polypeptide 1	
+55787	24.13	8184.20	24.13	8184.00	0.20	8204.0	TXLNG	taxilin gamma	
+164	19.84	8418.00	19.84	8418.00	0.00	8436.0	AP1G1	adaptor related protein complex 1 gamma 1 subunit	
+23082	26.08	8680.28	26.08	8680.00	0.28	8700.0	PPRC1	peroxisome proliferator-activated receptor gamma%2C coactivator-related 1	
+5501	42.30	8706.00	42.30	8706.00	0.00	8716.0	PPP1CC	protein phosphatase 1 catalytic subunit gamma	
+22820	43.21	8711.00	43.17	8702.00	9.00	8724.0	COPG1	coatomer protein complex subunit gamma 1	
+1455	32.87	8772.98	32.86	8770.00	2.98	8788.0	CSNK1G2	casein kinase 1 gamma 2	
+23062	14.83	9040.00	14.83	9040.00	0.00	9046.0	GGA2	golgi associated%2C gamma adaptin ear containing%2C ARF binding protein 2	
+10844	29.19	9279.22	28.74	9134.00	145.22	9568.0	TUBGCP2	tubulin gamma complex associated protein 2	
+85378	25.35	9735.52	25.33	9730.00	5.52	9756.0	TUBGCP6	tubulin gamma complex associated protein 6	
+5428	36.59	10080.62	35.09	9666.00	414.62	12262.0	POLG	DNA polymerase gamma%2C catalytic subunit	
+7283	97.99	11839.98	93.54	11302.00	537.98	12668.0	TUBG1	tubulin gamma 1	
+51107	69.86	12326.00	69.86	12326.00	0.00	12342.0	APH1A	aph-1 homolog A%2C gamma-secretase subunit	
+1054	53.70	12838.00	53.70	12838.00	0.00	12886.0	CEBPG	CCAAT/enhancer binding protein gamma	
+5335	38.99	13054.77	38.42	12862.00	192.77	13288.0	PLCG1	phospholipase C gamma 1	
+3428	43.21	13664.98	42.22	13350.00	314.98	13988.0	IFI16	interferon gamma inducible protein 16	
+8672	24.61	13843.12	24.60	13842.00	1.13	13872.0	EIF4G3	eukaryotic translation initiation factor 4 gamma 3	
+7532	62.38	14476.00	62.38	14476.00	0.00	14478.0	YWHAG	tyrosine 3-monooxygenase/tryptophan 5-monooxygenase activation protein gamma	
+1968	103.93	22304.00	103.93	22304.00	0.00	22342.0	EIF2S3	eukaryotic translation initiation factor 2 subunit gamma	
+3915	51.16	24996.00	51.16	24996.00	0.00	25010.0	LAMC1	laminin subunit gamma 1	
+1982	114.44	30894.99	114.42	30890.00	4.99	30900.0	EIF4G2	eukaryotic translation initiation factor 4 gamma 2	
+1981	128.68	49787.00	128.68	49784.00	3.00	49860.0	EIF4G1	eukaryotic translation initiation factor 4 gamma 1	
+1937	754.48	71866.26	742.83	70756.00	1110.26	73002.0	EEF1G	eukaryotic translation elongation factor 1 gamma	
+71	1057.73	137894.00	1057.73	137894.00	0.00	137912.0	ACTG1	actin gamma 1	

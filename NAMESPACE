@@ -1,7 +1,8 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
-           "sortByCol", "putColsFirst")
+           "sortByCol", "putColsFirst", "matchColumn")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
+importFrom("ribiosIO", "read_biokit_exprs")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
 importFrom("ribiosGSEA", "gscCamera", "geneSetPerm")
@@ -19,7 +20,7 @@ importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
-
+importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
 
 ## for RNA-seq analysis
 exportClasses(EdgeResult, EdgeObject, EdgeGSE)
@@ -130,6 +131,7 @@ export(mpsReporterAssocPathway,
        mpsReporterAssocGO,
        mpsReporterAssocRCTM)
        
+export(readBiokitExpression)
 
 export(minGroupCount,
        countByGroup,

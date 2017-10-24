@@ -22,4 +22,3 @@ strList2DataFrame(myList)
 strList2DataFrame(myList, colnames=c("FirstColumn", "SecondColumn"))
 strList2DataFrame(myList, colnames=c("FirstColumn", "SecondColumn"), index=TRUE)
 }
-

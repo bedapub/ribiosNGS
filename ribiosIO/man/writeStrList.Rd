@@ -29,4 +29,3 @@ writeStrList(myList, file=stdout(), names=c("ListA", "ListB"), type="row")
 writeStrList(myList, file=stdout(), names=c("ListA", "ListB"), type="row", index=TRUE)
 writeStrList(myList, file=stdout(), names=c("ListA", "ListB"), type="column", index=TRUE)
 }
-

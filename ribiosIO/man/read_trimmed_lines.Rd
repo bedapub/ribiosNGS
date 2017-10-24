@@ -21,4 +21,3 @@ lines <- "  ABC \\n\\tHBV\\n\\nFCB  \\n\\n"
 trimmedLines <- read_trimmed_lines(textConnection(lines))
 stopifnot(identical(trimmedLines, c("ABC", "HBV", "FCB")))
 }
-

@@ -28,4 +28,3 @@ readin.df <- readTable(tmpfile)
 stopifnot(identical(as.character(readin.df$Team), c("HSV", "BVB", "VFB")))
 stopifnot(identical(readin.df$Score, c(21L, 19L, 17L)))
 }
-

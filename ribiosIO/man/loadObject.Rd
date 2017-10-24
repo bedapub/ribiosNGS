@@ -16,4 +16,3 @@ loadObject(file, obj = NULL, verbose = FALSE)
 \description{
 Load an object by its name from a RData file
 }
-

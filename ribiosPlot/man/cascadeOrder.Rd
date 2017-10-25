@@ -25,4 +25,3 @@ myOrder <- cascadeOrder(myMatrix)
 myOrderedMatrix <- myMatrix[myOrder,]
 biosHeatmap(myOrderedMatrix, Colv=FALSE, Rowv=FALSE, dendrogram="none")
 }
-

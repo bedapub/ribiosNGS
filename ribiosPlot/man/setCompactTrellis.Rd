@@ -17,4 +17,3 @@ The function sets compact trellis options as default
 setCompactTrellis()
 }
 }
-

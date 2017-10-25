@@ -9,7 +9,7 @@ pcaScores(x, choices = c(1, 2), offset, reverse = c(FALSE, FALSE))
 \arguments{
 \item{x}{An object of prcomp}
 
-\item{choices}{indices of principal components}
+\item{choices}{Indices of principal components}
 
 \item{offset}{either one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.}
 
@@ -30,4 +30,3 @@ colMeans(testPCAscores.withOffset[c(1,3,5),])
 testPCAscores.withReverse <- pcaScores(testPCA, reverse=c(TRUE, FALSE))
 colMeans(testPCAscores.withReverse[c(1,3,5),])
 }
-

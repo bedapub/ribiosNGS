@@ -41,4 +41,3 @@ if(interactive() & require("MASS")) {
 }
 
 }
-

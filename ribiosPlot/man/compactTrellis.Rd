@@ -17,4 +17,3 @@ to prepare for publications.
 \examples{
 opts <- compactTrellis()
 }
-

@@ -1,8 +1,8 @@
 Package: ribiosPlot
 Type: Package
 Title: Plotting module of ribios for visualization
-Version: 1.1-35
-Date: 2016-07-22
+Version: 1.1-36
+Date: 2016-10-25
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Data structures, pre-compiled color palettes, functions for data
@@ -21,9 +21,10 @@ Suggests:
     latticeExtra,
     ribiosArg,
     plotrix,
-    MASS
+    MASS,
+    testthat
 Enhances:
     Vennerable
 License: GPL-3
 LazyLoad: yes
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

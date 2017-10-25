@@ -123,6 +123,10 @@ export(cpmBoxplotFile,
        rnkFiles)
 export(writeHTML)
 
+export(readAmpliSeq,
+       isCherryPickingRepeat,
+       removeCherryPickingRepeat)
+
 export(mpsReporterAssocPathway,
        mpsReporterUpstream,
        mpsReporterUpstreamPos,

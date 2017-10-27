@@ -9,18 +9,21 @@ removeCherryPickingRepeat(eset, cherryPickingRun)
 \arguments{
 \item{eset}{An ExpressionSet object returned by \code{\link{readAmpliSeq}}}
 
-\item{cherryPickingRun}{Character string(s), name(s) of cherry picking runs
-
-#' @examples 
-countFiles <- system.file("extdata/AmpliSeq_files/",
-  sprintf("ReadCountFiles-%d.xls", 1:3), package="ribiosNGS")
-barcodeFiles <- system.file("extdata/AmpliSeq_files/",
-  sprintf("BarcodeSummaryFile-%d.xls", 1:3), package="ribiosNGS")
-exampleAmpliSeq <- readAmpliSeq(coutFiles, barcodeFiles, 
-  runNames=c("R1", "R2", "R3"))
-newAmpliSeq <- removeCherryPickingRepeat(exampleAmpliSeq)}
+\item{cherryPickingRun}{Character string(s), name(s) of cherry picking runs}
 }
 \description{
 Remove samples that are repeated in cherry-picking runs
+}
+\note{
+Only valid if the sample names are unique.
+}
+\examples{
+countFiles <- system.file("extdata/AmpliSeq_files/",
+  sprintf("ReadCountFiles-\%d.xls", 1:3), package="ribiosNGS")
+barcodeFiles <- system.file("extdata/AmpliSeq_files/",
+  sprintf("BarcodeSummaryFile-\%d.xls", 1:3), package="ribiosNGS")
+exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
+  runNames=c("R1", "R2", "R3"))
+newAmpliSeq <- removeCherryPickingRepeat(exampleAmpliSeq)
 }
 

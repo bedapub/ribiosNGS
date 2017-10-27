@@ -57,7 +57,7 @@ logFCgage <- function(edgeResult, gscs) {
 ## camera
 ##----------------------------------------##
 voomCamera <- function(edgeObj, gscs) {
-  obj.voom <- voom(dgeList(edgeObj))
+  obj.voom <- voom(edgeObj)
   ctnames<- contrastNames(edgeObj)
   design <- designMatrix(edgeObj)
   ct <- contrastMatrix(edgeObj)

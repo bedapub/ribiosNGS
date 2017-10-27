@@ -27,4 +27,3 @@ biokitFiles <- system.file("extdata/biokit_expression_files",
   package="ribiosNGS")
 biokitEset <- readBiokitExpression(biokitFiles)
 }
-

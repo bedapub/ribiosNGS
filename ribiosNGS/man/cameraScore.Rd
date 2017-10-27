@@ -20,4 +20,3 @@ Return cameraScore
 \examples{
 ribiosNGS:::cameraScore(pvalue=c(1, 0.1, 0.01), direction=c("Up", "Down", "Up"))
 }
-

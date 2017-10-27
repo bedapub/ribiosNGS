@@ -64,9 +64,9 @@ SEXP c_read_chip(SEXP filename) {
   setAttrib(res, R_DimSymbol, dim);
 
   PROTECT(colnames=allocVector(VECSXP, 3));
-  SET_VECTOR_ELT(colnames, 0, mkChar("ProbeID"));
+  SET_VECTOR_ELT(colnames, 0, mkChar("ProbeSetID"));
   SET_VECTOR_ELT(colnames, 1, mkChar("GeneSymbol"));
-  SET_VECTOR_ELT(colnames, 2, mkChar("GeneName"));
+  SET_VECTOR_ELT(colnames, 2, mkChar("GeneTitle"));
   PROTECT(rownames=allocVector(VECSXP, nrow));
   for(i=0; i<nrow; i++) {
     SET_VECTOR_ELT(rownames, i, STRING_ELT(res,i));

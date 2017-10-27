@@ -1,8 +1,38 @@
+#' Retrieve percentage of variance explained by principal components
+#' 
+#' @param prcomp An object of prcomp
+#' @param choices Indices of principal components. By default explained variance of all components are returned
+#' 
+#' @examples
+#' testData <- matrix(rnorm(100), 10, 10)
+#' testPrcomp <- prcomp(testData)
+#' expVar(testPrcomp)
+#' expVar(testPrcomp, 1:3)
+expVar <- function(prcomp, choices=seq(along=prcomp$sdev)) {
+  vars <- prcomp$sdev^2
+  res <- vars[choices]/sum(vars)
+  return(res)
+}
+
+#' Print explained variance of the chosen principal component(s)
+#' 
+#' @param prcomp An object of prcomp
+#' @param choices The choice(s) of principal components
+#' 
+#' @examples 
+#' testData <- matrix(rnorm(100), 10, 10)
+#' testPrcomp <- prcomp(testData)
+#' printExpVar(testPrcomp, 1:2)
+printExpVar <- function(prcomp, choices=1) {
+  sprintf("Principal component %d (%2.1f%%)",
+          choices, expVar(prcomp, choices)*100)
+}
+
 ## PCA plot for samples of expression data
 #' Retrieve PCA scores from prcomp objects
 #'
 #' @param x An object of prcomp
-#' @param choices indices of principal components
+#' @param choices Indices of principal components
 #' @param offset either one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.
 #' @param reverse Logical of length 2 or 1 (which will be repeated to 2), indicating whether the sign of values in the 1st/2nd axis should be reversed
 #' @examples

@@ -15,15 +15,14 @@ read_chip(x)
   \item{x}{File name}
 }
 \details{
-  A data.frame is returned with three columns: \code{ProbeID},
-  \code{GeneSymbol} and \code{GeneName}.
+  The current implementation only parses the first three columns and ignores the rest of columns. This behavior may change in future versions to provide larger flexibility of parsing CHIP-like files.
 }
 \value{
-  A data.frame is returned with three columns: \code{ProbeID},
-  \code{GeneSymbol} and \code{GeneName}.
+  A data.frame is returned with three columns: \code{ProbeSetID},
+  \code{GeneSymbol} and \code{GeneTitle}. The column names are concordant with the GSEA convention, except that the empty spaces are omitted.
 }
 \references{
-  BROAD institute GSEA manual
+  BROAD institute GSEA manual, available at \url{http://software.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats#CHIP:_Chip_file_format_.28.2A.chip.29}.
 }
 \author{
   Jitao David Zhang <jitao_david.zhang@roche.com>
@@ -32,4 +31,5 @@ read_chip(x)
   testFile <- system.file("extdata/test.chip", package="ribiosIO")
   testChip <- read_chip(testFile)
   head(testChip)
+  stopifnot(identical(colnames(testChip), c("ProbeSetID", "GeneSymbol", "GeneTitle")))
 }

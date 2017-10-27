@@ -4,8 +4,6 @@
 #' This function is called at the beginning of an Rscript, in order to
 #' prepare the R environment to run in a script setting.
 #'
-#' @param dumpto Character string, file name to dump to when there is an error
-#' 
 #' @return Only side effect is used
 #' 
 #' @export
@@ -13,12 +11,12 @@
 #' \dontrun{
 #'   scriptInit()
 #' }
-scriptInit <- function(dumpto="ribios.dump") {
+scriptInit <- function() {
   if(interactive()) {
     setDebug()
   } else {
     options(error=quote({
-      dump.frames(dumpto, to.file=TRUE, include.GlobalEnv=TRUE)
+      dump.frames(dumpto="ribios.dump", to.file=TRUE, include.GlobalEnv=TRUE)
       quit(save="no", status=1L)
     }))
   }

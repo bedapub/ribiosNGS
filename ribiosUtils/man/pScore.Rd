@@ -24,5 +24,5 @@ pScore(testPvals)
 testPvalSign <- rep(c(-1,1), 3)
 pScore(testPvals, sign=testPvalSign)
 testLog <- rep(c(TRUE, FALSE),3)
-pScpre(testPvals, testLog)
+pScore(testPvals, testLog)
 }

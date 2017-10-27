@@ -94,7 +94,8 @@ export(qHist, xclipHist)
 export(histMat)
 
 ## PCA
-export(pcaScores, plotPCA)
+export(expVar, printExpVar,
+       pcaScores, plotPCA)
 
 export(jitter.xyplot)
 

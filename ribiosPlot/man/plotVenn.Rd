@@ -31,4 +31,3 @@ if(require("Vennerable")) {
  plotVenn(Venn(myVenn), main="Letters")
 }
 }
-

@@ -28,4 +28,3 @@ stopifnot(identical(myPasterisks, c("***", "*", "", "", "", "**")))
 myPasterisks2 <- p2asterisk(myPvals, use0.1=TRUE)
 stopifnot(identical(myPasterisks2, c("***", "*", "", ".", "",  "**")))
 }
-

@@ -6,6 +6,8 @@ importFrom("ribiosArg", "parseFactor", "parseStrings")
 importFrom("ribiosUtils",
            "rowscale", "summarizeRows", "removeInvarCol", "dfFactor",
            "headtail", "assertFile", "haltifnot","putColsFirst", "sortByCol")
+importFrom("ribiosPlot",
+           "pcaScores")
 importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
 importFrom("graph", "connComp")
 importFrom("limma", "makeContrasts")
@@ -79,3 +81,5 @@ export(DesignContrast,
        nContrast,
        contrastSampleIndices,
        parseDesignContrast)
+
+export(splitPCA)

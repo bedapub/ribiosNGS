@@ -30,6 +30,7 @@ export(isVarCol, isInvarCol, removeInvarCol)
 export(rowscale)
 export(matrix2longdf,
        longdf2matrix)
+export(list2df)
 
 export(dfFactor)
 
@@ -50,7 +51,7 @@ export(registerLog, clearLog, flushLog, doLog, writeLog)
 
 export(relevels, relevelsByNamedVec, relevelsByNotNamedVec,
        cutInterval, refactorNum)
-
+export(dfFactor2Str)
 export(ofactor)
 
 ##export(atomGrep, orderedGrep)

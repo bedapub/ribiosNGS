@@ -15,7 +15,7 @@
 #' testPvalSign <- rep(c(-1,1), 3)
 #' pScore(testPvals, sign=testPvalSign)
 #' testLog <- rep(c(TRUE, FALSE),3)
-#' pScpre(testPvals, testLog)
+#' pScore(testPvals, testLog)
 pScore <- function(p, sign=1) {
   if(is.logical(sign))
     sign <- ifelse(sign, 1, -1)

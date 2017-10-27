@@ -11,10 +11,9 @@ designMatrix <- matrix(c(rep(1,6), c(0,0,1,1,0,0), c(0,0,0,0,1,1)),
 contrastMatrix <- matrix(c(0,1,0,0,0,1), ncol=2, byrow=FALSE)
 descon <- DesignContrast(designMatrix, contrastMatrix)
 
-obj <- EdgeObject(mat,descon)
+obj <- EdgeObject(mat,descon, fData=data.frame(GeneSymbol=rownames(mat)))
 
 ## NOTE THAT obj must have GeneSymbol in its fData
-obj@dgeList$genes <- data.frame(GeneSymbol=rownames(mat))
 
 gs1 <- GeneSet("DefaultCategory", "GeneSet1", "", c("gene1", "gene3"))
 gs2 <- GeneSet("DefaultCategory", "GeneSet2", "", c("gene2", "gene4"))

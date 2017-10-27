@@ -5,7 +5,8 @@ importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("ribiosIO", "read_biokit_exprs")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
-importFrom("ribiosGSEA", "gscCamera", "geneSetPerm")
+importFrom("ribiosGSEA", "biosCamera", "geneSetPerm",
+           "matchGenes", "gsGenes", "gsCategory")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
@@ -51,7 +52,10 @@ export(writeDgeTables,
 export(modLogCPM)
 export(voom,
        logFCgage,
-       voomCamera)
+       voomCamera,
+       zscoreDGE,
+       camera.EdgeResult)
+
 export(fullEnrichTable)
 export(hasCommonDisp, setCommonDispIfMissing)
 

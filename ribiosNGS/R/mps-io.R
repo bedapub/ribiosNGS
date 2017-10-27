@@ -60,7 +60,7 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=names(
 #' @param runNames Character string vector, run names
 #' 
 #' This function parses read count files as well as barcode summary files, 
-#' and organise the data into an \cpde{ExpressionSet} object.
+#' and organise the data into an \code{\linkS4class[Biobase]{ExpressionSet} object.
 #' 
 #' @examples 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",

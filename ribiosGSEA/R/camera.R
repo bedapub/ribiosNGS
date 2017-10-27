@@ -4,7 +4,7 @@
 ## (3) contributing genes
 biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weights = NULL,
                         geneLabels=NULL,
-                        use.ranks = FALSE, allow.neg.cor = TRUE, trend.var = FALSE, 
+                        use.ranks = FALSE, allow.neg.cor = FALSE, trend.var = FALSE, 
                         sort = TRUE) 
 {
     y <- as.matrix(y)

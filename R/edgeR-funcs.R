@@ -10,7 +10,7 @@ setMethod("EdgeObject",
               }
               dgeList <- DGEList(counts=object,
                                  group= groups(designContrast),
-                                 fData=fData, remove.zeros=remove.zeros)
+                                 genes=fData, remove.zeros=remove.zeros)
               new("EdgeObject",
                   dgeList=dgeList,
                   designContrast=designContrast)

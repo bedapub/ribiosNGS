@@ -144,11 +144,6 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
                         zscores <- zscoreDGE(y=dgeList,
                                              design=design,
                                              contrast=contrasts[,x])
-                        tbl.camera <- biosCamera(zscores, index, design = design, contrast = contrasts[,x],
-                                                 weights = NULL, 
-                                                 geneLabels = fData(dgeList)$GeneSymbol, 
-                                                 use.ranks = FALSE, allow.neg.cor = FALSE, 
-                                                 trend.var = FALSE, sort = FALSE)
                         tbl.priorCor <- camera(zscores,
                                                index=index,
                                                design=design,
@@ -159,7 +154,7 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
                                                inter.gene.cor=0.01,
                                                trend.var=FALSE,
                                                sort=FALSE)
-                        tbl.estCor <- biosCamera(zscores, 
+                        tbl.estCor <- ribiosGSEA::biosCamera(zscores, 
                                                  index=index, 
                                                  design = design, contrast = contrasts[,x],
                                                  weights = NULL, ## TODO: may be passed in the future

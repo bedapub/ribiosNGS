@@ -11,11 +11,6 @@ readAmpliSeq(readCountFiles, barcodeSummaryFiles,
 \item{readCountFiles}{Character string vector, names of read count files}
 
 \item{barcodeSummaryFiles}{Character string vector, names of barcode summary files}
-
-\item{runNames}{Character string vector, run names
-
-This function parses read count files as well as barcode summary files, 
-and organise the data into an \cpde{ExpressionSet} object.}
 }
 \description{
 Read AmpliSeq results into an ExpressionSet object
@@ -25,7 +20,7 @@ countFiles <- system.file("extdata/AmpliSeq_files/",
   sprintf("ReadCountFiles-\%d.xls", 1:3), package="ribiosNGS")
 barcodeFiles <- system.file("extdata/AmpliSeq_files/",
   sprintf("BarcodeSummaryFile-\%d.xls", 1:3), package="ribiosNGS")
-exampleAmpliSeq <- readAmpliSeq(coutFiles, barcodeFiles, 
+exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
   runNames=c("R1", "R2", "R3"))
 }
 

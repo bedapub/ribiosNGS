@@ -454,8 +454,30 @@ setMethod("annotation", "EdgeObject", function(object) {
   return(object@dgeList$annotation)
 })
 
+setMethod("fData", "DGEList", function(object) object$genes)
+setMethod("fData<-", c("DGEList", "data.frame"), function(object, value) {
+  object@genes <- value
+  return(object)
+})
 setMethod("fData", "EdgeObject", function(object) {
   return(object@dgeList$genes)
+})
+setMethod("fData<-", c("EdgeObject", "data.frame"), function(object, value) {
+  object@dgeList$genes <- value
+  return(object)
+})
+
+setMethod("pData", "DGEList", function(object) object$samples)
+setMethod("pData<-", c("DGEList", "data.frame"), function(object, value) {
+  object@samples <- value
+  return(object)
+})
+setMethod("pData", "EdgeObject", function(object) {
+  return(object@dgeList$samples)
+})
+setMethod("pData<-", c("EdgeObject", "data.frame"), function(object, value) {
+  object@dgeList$samples <- value
+  return(object)
 })
 
 setMethod("isAnnotated", "EdgeObject", function(object) {

@@ -18,4 +18,3 @@ dgeListCamera(dgeList, index, design, contrasts)
 \description{
 Perform camera using DGEList
 }
-

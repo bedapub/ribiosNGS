@@ -16,4 +16,3 @@ Note that the EdgeResult object must have a column 'GeneSymbol' in its \code{fDa
 \description{
 Run CAMERA method using EdgeResult
 }
-

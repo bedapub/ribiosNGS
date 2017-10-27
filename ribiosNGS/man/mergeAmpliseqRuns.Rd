@@ -19,4 +19,3 @@ The function is used internally to merge several runs into one ExpressionSet obj
 \description{
 Merge AmpliSeq runs
 }
-

@@ -19,4 +19,3 @@ TODO: automatically check whether the function has changed in edgeR in the futur
 \description{
 Calculate mid-p quantile residuals
 }
-

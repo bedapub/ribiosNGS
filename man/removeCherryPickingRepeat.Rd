@@ -26,4 +26,3 @@ exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles,
   runNames=c("R1", "R2", "R3"))
 newAmpliSeq <- removeCherryPickingRepeat(exampleAmpliSeq)
 }
-

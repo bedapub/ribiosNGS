@@ -23,4 +23,3 @@ barcodeFiles <- system.file("extdata/AmpliSeq_files/",
 exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
   runNames=c("R1", "R2", "R3"))
 }
-

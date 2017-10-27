@@ -14,4 +14,3 @@ The function is used internally to extract unique target annotation from multipl
 \description{
 Extract AmpliSeq target annotation from a list of read count data.frames
 }
-

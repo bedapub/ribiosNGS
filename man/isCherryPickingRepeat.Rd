@@ -14,12 +14,15 @@ isCherryPickingRepeat(eset, cherryPickingRun)
 \description{
 Detect samples that are repeated in cherry-picking runs
 }
+\note{
+Only valid if the sample names are unique.
+}
 \examples{
 countFiles <- system.file("extdata/AmpliSeq_files/",
   sprintf("ReadCountFiles-\%d.xls", 1:3), package="ribiosNGS")
 barcodeFiles <- system.file("extdata/AmpliSeq_files/",
   sprintf("BarcodeSummaryFile-\%d.xls", 1:3), package="ribiosNGS")
-exampleAmpliSeq <- readAmpliSeq(coutFiles, barcodeFiles, 
+exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
   runNames=c("R1", "R2", "R3"))
 summary(isCherryPickingRepeat(exampleAmpliSeq))
 }

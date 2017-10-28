@@ -25,4 +25,3 @@ mySymmLim <- getLims(myX, myY, perc=0.99, symm=TRUE)
 plot(myX, myY, xlim=myLim, ylim=mySymmLim)
 
 }
-

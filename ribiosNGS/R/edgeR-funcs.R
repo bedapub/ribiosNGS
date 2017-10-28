@@ -1,16 +1,16 @@
 setMethod("EdgeObject",
           c("matrix", "DesignContrast"),
-          function(object, designContrast, genes=NULL, remove.zeros=FALSE) {
+          function(object, designContrast, fData=NULL, remove.zeros=FALSE) {
               object[is.na(object)] <- 0 ## NA is replaced with zero count
-              if(!is.null(rownames(object))) {
-                  genes <- data.frame(InputID=rownames(object))
-                  if(!is.null(attr(object, "desc"))) {
-                      genes$Description <- attr(object, "desc")
+              if(is.null(fData) & !is.null(rownames(object))) {
+                  fData <- data.frame(InputID=rownames(object))
+                  if(is.null(fData) & !is.null(attr(object, "desc"))) {
+                      fData$Description <- attr(object, "desc")
                   }
               }
               dgeList <- DGEList(counts=object,
                                  group= groups(designContrast),
-                                 genes=genes, remove.zeros=remove.zeros)
+                                 genes=fData, remove.zeros=remove.zeros)
               new("EdgeObject",
                   dgeList=dgeList,
                   designContrast=designContrast)
@@ -20,7 +20,7 @@ setMethod("EdgeObject",
           function(object, designContrast, remove.zeros=FALSE) {
             dgeList <- DGEList(counts=object@exprs,
                                group=groups(designContrast),
-                               genes=object@genes, remove.zeros=remove.zeros)
+                               fData=object@fData, remove.zeros=remove.zeros)
             new("EdgeObject",
                 dgeList=dgeList,
                 designContrast=designContrast)

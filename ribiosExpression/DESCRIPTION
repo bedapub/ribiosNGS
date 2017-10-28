@@ -1,8 +1,8 @@
 Package: ribiosExpression
 Type: Package
 Title: Expression analysis component of ribios
-Version: 1.0-39
-Date: 2017-02-09
+Version: 1.0-40
+Date: 2017-10-25
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Data structures and functions for expression analysis.
@@ -13,6 +13,7 @@ Depends:
 Imports:
     ribiosIO (>= 1.0-18),
     ribiosUtils (>= 1.0-5),
+    ribiosPlot,
     Biobase,
     limma,
     rrcov,

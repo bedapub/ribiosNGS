@@ -20,4 +20,3 @@ Convert degree to radian values
 degree2radian(90)
 degree2radian(-225)
 }
-

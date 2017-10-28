@@ -6,7 +6,7 @@
 \usage{
 parseDesignContrast(designFile = NULL, contrastFile = NULL,
   sampleGroups = NULL, groupLevels = NULL, dispLevels = NULL,
-  contrasts = NULL)
+  contrasts = NULL, expSampleNames = NULL)
 }
 \arguments{
 \item{designFile:}{A plain tab-delimited file with headers encoding the design matrix, or NULL}
@@ -20,6 +20,8 @@ parseDesignContrast(designFile = NULL, contrastFile = NULL,
 \item{dispLevels:}{Similar format as 'sampleGroups', encoding the display of the groupLevels. Must match 'groupLevels'}
 
 \item{contrasts:}{Similar format as 'sampleGroups', encoding contrasts in case of one-way ANOVA designs}
+
+\item{expSampleNames:}{A vector of character strings giving the expected sample names (e.g. those in the input matrix)}
 }
 \value{
 A S4-object 'DesignContrast'

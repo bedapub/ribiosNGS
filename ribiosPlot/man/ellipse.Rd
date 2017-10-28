@@ -48,4 +48,3 @@ if(interactive()) {
   ellipse(0, 0, a=0.5, b=0.5, fill="steelblue")
 }
 }
-

@@ -23,4 +23,3 @@ A list of matrices, each containing one value column
 \description{
 Internal function used by readBiokitExpression
 }
-

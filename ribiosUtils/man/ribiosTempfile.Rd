@@ -6,6 +6,13 @@
 \usage{
 ribiosTempfile(pattern = "file", tmpdir = ribiosTempdir(), fileext = "")
 }
+\arguments{
+\item{pattern}{Character string, file pattern}
+
+\item{tmpdir}{Character string, temp directory}
+
+\item{fileext}{CHaracter string, file name extension (suffix)}
+}
 \value{
 a character string of the file name
 }

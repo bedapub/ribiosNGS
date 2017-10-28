@@ -101,7 +101,6 @@ mpsReporterDownRCTM <- function() {
             c("GeneID", "Pathway"))
 }
 
-MPS_REPORTER_COUNT <- mpsReporterCount()
 myFisher <- function(reporters, background, assoc, key) {
   ## note that some reporters and background genes may be not annotated -> they should be left out
   assoc <- subset(assoc, GeneID %in% background)

@@ -26,18 +26,22 @@ voomCameraOut <- voomCamera(obj, gsc)
 voomCameraTbl <- voomCameraOut@enrichTables
 
 ## validate
+## Note that from limma 3.29.6, the default parameters of camera changed: inter.gene.cor=0.01 (used to be NA), and allow.neg.cor=FALSE (used to be TRUE)
 matVoom <- as.matrix(voom(mat))
-resContrast1 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,1])
-resContrast2 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,2])
+resContrast1 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,1], inter.gene.cor=NA, allow.neg.cor=TRUE)
+resContrast2 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,2], inter.gene.cor=NA, allow.neg.cor=TRUE)
 
 expect_identical_field <- function(field) {
     expect_identical(c(resContrast1[, field],resContrast2[,field]),
                      voomCameraTbl[,field])
 }
-
+expect_equal_field <- function(field) {
+    expect_equal(c(resContrast1[, field],resContrast2[,field]),
+                     voomCameraTbl[,field])
+}
 expect_identical_field("NGenes")
-expect_identical_field("PValue")
-expect_identical_field("FDR")
+expect_equal_field("PValue")
+expect_equal_field("FDR")
 expect_identical_field("Correlation")
 expect_identical_field("Direction")
 expect_identical(c(rownames(resContrast1),rownames(resContrast2)),

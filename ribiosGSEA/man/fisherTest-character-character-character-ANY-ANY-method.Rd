@@ -40,4 +40,3 @@ fisherTest(myGenes, myGeneSet1, myUniverse, gsName="My gene set1", gsCategory="L
 fisherTest(rep(myGenes,2), myGeneSet2, myUniverse)
 fisherTest(rep(myGenes,2), myGeneSet2, rep(myUniverse,2))
 }
-

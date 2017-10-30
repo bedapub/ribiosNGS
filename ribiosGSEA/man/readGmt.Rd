@@ -21,4 +21,3 @@ myFakeSet <- readGmt(CategoryA=gmtFile, CategoryB=gmtFile)
 anotherFakeSet <- readGmt(gmtFile, gmtFile, category=c("CategoryA", "CategoryB"))
 
 }
-

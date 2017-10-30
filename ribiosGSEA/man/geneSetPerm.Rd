@@ -32,4 +32,3 @@ geneSetPerm(stats, gsList3, Nsim=9999)
 \seealso{
 \code{geneSetTest}, a R implementation in the limma package
 }
-

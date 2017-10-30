@@ -21,7 +21,7 @@ setGeneric("annoGseaResItem", function(object, ...) standardGeneric("annoGseaRes
 ##setGeneric("gseaRes", function(object) standardGeneric("gseaRes"))
 setGeneric("annoGseaRes", function(object) standardGeneric("annoGseaRes"))
 
-setGeneric("GeneSet", function(category, name, desc, genes) standardGeneric("GeneSet"))
+setGeneric("GeneSet", function(category, name, desc, genes, ...) standardGeneric("GeneSet"))
 
 ## Fisher's exact test
 setGeneric("hits", function(object, ...) standardGeneric("hits"))

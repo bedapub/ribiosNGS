@@ -167,7 +167,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         tab$FDR <- p.adjust(tab$PValue, method = "BH")
 
     tab$Score <- -log10(tab$PValue) * ifelse(Direction=="Up", 1, -1)
-    tab$ContributingGenes <- conts
+    tab$ContributingGenes <- as.character(conts)
     tab$GeneSet <- names(index)
     tab <- putColsFirst(tab, "GeneSet")
     if (sort && nsets > 1) {

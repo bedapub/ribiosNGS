@@ -22,7 +22,7 @@ Read AmpliSeq results into an ExpressionSet object
 }
 \examples{
 countFiles <- system.file("extdata/AmpliSeq_files/",
-  sprintf("ReadCountFiles-\%d.xls", 1:3), package="ribiosNGS")
+  sprintf("ReadCountFile-\%d.xls", 1:3), package="ribiosNGS")
 barcodeFiles <- system.file("extdata/AmpliSeq_files/",
   sprintf("BarcodeSummaryFile-\%d.xls", 1:3), package="ribiosNGS")
 exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 

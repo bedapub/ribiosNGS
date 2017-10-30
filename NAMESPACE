@@ -3,6 +3,8 @@ importFrom("ribiosUtils",
            "sortByCol", "putColsFirst", "matchColumn")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("ribiosIO", "read_biokit_exprs")
+importFrom("readr",
+           "count_fields", "tokenizer_tsv", "read_tsv")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
 importFrom("ribiosGSEA", "biosCamera", "geneSetPerm",

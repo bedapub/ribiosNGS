@@ -556,13 +556,14 @@ setMethod("GeneSets", "GeneSet", function(object, ..., category) {
           })
 
 setMethod("GeneSet", c("ANY", "character", "ANY", "character"),
-          function(category, name, desc, genes) {
+          function(category, name, desc, genes, verbose=FALSE) {
               if(missing(category))
                   category <- as.character(NA)
               if(missing(desc))
                   desc <- as.character(NA)
-              if(any(duplicated(genes)) || any(is.na(genes))) {
-                  warning("Duplicated genes or NA found! They are removed")
+              if(verbose & (any(duplicated(genes)) || any(is.na(genes)))) {
+                  warnMessage <- sprintf("Duplicated genes or NA found in Category %s, Name %s! They are removed\n", category, name)
+                  warning(warnMessage)
                   genes <- wnUnique(genes)
               }
               new("GeneSet", category=category, name=name, desc=desc, genes=genes)

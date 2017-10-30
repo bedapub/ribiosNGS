@@ -10,8 +10,19 @@ matrixToLongTable <- function(x, valueLabel="value", rowLabel="row", colLabel="c
   return(res)
 }
 
-eSetToLongTable <- function(x) {
-  exp <- exprs(x)
+#' Transform eSet to long data.frame
+#' 
+#' @param x An \code{eSet} object
+#' @param exprsFun A function to extract expression values, by default \code{exprs}
+#' 
+#' The function extracts gene expression, and return it in a long data.frame format with phenotypic data
+#' 
+#' @examples 
+#' data(ribios.ExpressionSet, package="ribiosExpression")
+#' exprsLongTbl <- eSetToLongTable(ribios.ExpressionSet)
+#' seLongTbl <- eSetToLongTable(ribios.ExpressionSet, exprsFun=function(eset) assayData(eset)$se.exprs)
+eSetToLongTable <- function(x, exprsFun=function(eset) Biobase::exprs(eset)) {
+  exp <- do.call(exprsFun, list(x))
   if(is.data.frame(exp)) {
     expVec <- unlist(exp)
     rownames(expVec) <- rownames(exp)

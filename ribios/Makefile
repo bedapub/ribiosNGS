@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Aug 14 12:00:53 CEST 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Oct 30 11:23:12 CET 2017). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -31,7 +31,7 @@ install:
 	@echo '====== Installing finished ======'
 	@echo ' '
 
-check:
+check: roxygenise
 	@echo '====== Checking Package ======'
 	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")")
 	@echo '====== Checking finished ======'

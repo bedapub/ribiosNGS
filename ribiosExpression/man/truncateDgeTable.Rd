@@ -18,4 +18,3 @@ Truncate dgeTable into tables of positively and negatively differentially expres
 \references{
 The logic is described at http://rochewiki.roche.com/confluence/display/BIOINFO/Substream+Algorithm
 }
-

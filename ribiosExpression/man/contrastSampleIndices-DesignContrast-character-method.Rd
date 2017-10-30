@@ -30,4 +30,3 @@ stopifnot(identical(cont1Ind, 1:4))
 stopifnot(identical(cont2Ind, c(1:2, 5:6)))
 stopifnot(identical(cont3Ind, c(3:6)))
 }
-

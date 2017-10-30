@@ -21,4 +21,3 @@ data(ribios.ExpressionSet, package="ribiosExpression")
 fac1 <- gl(2,13)
 pcaScore1 <- splitPCA(ribios.ExpressionSet, fac1)
 }
-

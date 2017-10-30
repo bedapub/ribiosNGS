@@ -28,4 +28,3 @@ example.tt <- topTable(example.fit, coef=2)
 example.dt <- limmaTopTable2dgeTable(example.tt)
 head(example.dt)
 }
-

@@ -30,7 +30,7 @@ install:
 	@echo '====== Installing finished ======'
 	@echo ' '
 
-check:
+check: roxygenise
 	@echo '====== Checking Package ======'
 	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")")
 	@echo '====== Checking finished ======'

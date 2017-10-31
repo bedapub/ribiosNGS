@@ -64,7 +64,7 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=names(
 #' 
 #' @examples 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",
-#'   sprintf("ReadCountFiles-%d.xls", 1:3), package="ribiosNGS")
+#'   sprintf("ReadCountFile-%d.xls", 1:3), package="ribiosNGS")
 #' barcodeFiles <- system.file("extdata/AmpliSeq_files/",
 #'   sprintf("BarcodeSummaryFile-%d.xls", 1:3), package="ribiosNGS")
 #' exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
@@ -103,12 +103,12 @@ readAmpliSeq <- function(readCountFiles,
 #' 
 #' @examples 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",
-#'   sprintf("ReadCountFiles-%d.xls", 1:3), package="ribiosNGS")
+#'   sprintf("ReadCountFile-%d.xls", 1:3), package="ribiosNGS")
 #' barcodeFiles <- system.file("extdata/AmpliSeq_files/",
 #'   sprintf("BarcodeSummaryFile-%d.xls", 1:3), package="ribiosNGS")
 #' exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
 #'   runNames=c("R1", "R2", "R3"))
-#' summary(isCherryPickingRepeat(exampleAmpliSeq))
+#' summary(isCherryPickingRepeat(exampleAmpliSeq, "R3"))
 isCherryPickingRepeat <- function(eset, cherryPickingRun) {
   stopifnot(cherryPickingRun %in% eset$Run)
   dupSampleNames <- eset$SampleName[duplicated(eset$SampleName)]
@@ -124,12 +124,12 @@ isCherryPickingRepeat <- function(eset, cherryPickingRun) {
 #' @note Only valid if the sample names are unique.
 #' @examples 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",
-#'   sprintf("ReadCountFiles-%d.xls", 1:3), package="ribiosNGS")
+#'   sprintf("ReadCountFile-%d.xls", 1:3), package="ribiosNGS")
 #' barcodeFiles <- system.file("extdata/AmpliSeq_files/",
 #'   sprintf("BarcodeSummaryFile-%d.xls", 1:3), package="ribiosNGS")
 #' exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
 #'   runNames=c("R1", "R2", "R3"))
-#' newAmpliSeq <- removeCherryPickingRepeat(exampleAmpliSeq)
+#' newAmpliSeq <- removeCherryPickingRepeat(exampleAmpliSeq, "R3")
 removeCherryPickingRepeat <- function(eset, cherryPickingRun) {
   isDup <- isCherryPickingRepeat(eset, cherryPickingRun)
   return(eset[,!isDup])

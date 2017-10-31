@@ -40,4 +40,3 @@ parseDesignContrast(designFile=designFile, contrastFile=contrastFile)
 # with extra information about sample groups
 parseDesignContrast(designFile=designFile, contrastFile=contrastFile,sampleGroups="As,Be,As,Be,As,Be",groupLevels="Be,As", dispLevels="Beryllium,Arsenic")
 }
-

@@ -13,6 +13,11 @@ roxygenise:
 	@(${R} -q -e "library(devtools);document('.')")
 	@echo ' '
 
+test:
+	@echo '====== test ======'
+	@(${R} -q -e "library(devtools);test('.')")
+	@echo 
+
 doVignettes:
 	@echo "====== vignettes ======"
 	@(${R} -q -e "library(devtools); devtools::build_vignettes()")

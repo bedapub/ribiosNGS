@@ -1,6 +1,6 @@
 #' Construct an EdgeObject object by a count matrix and DesignContrast
 #' 
-#' @param matrix A matrix containing counts of features
+#' @param object A matrix containing counts of features
 #' @param designContrast A \code{DesignContrast} object
 #' @param fData A \code{data.frame} containing annotation information for each gene
 #' @param pData A \code{data.frame} containing annotation information for each sample

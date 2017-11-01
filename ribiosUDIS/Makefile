@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Mon Oct 30 11:23:12 CET 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Wed Nov  1 17:18:16 CET 2017). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -13,6 +13,11 @@ roxygenise:
 	@echo '====== roxygenize ======'	
 	@(${R} -q -e "library(devtools);document('.')")
 	@echo ' '
+
+test:
+	@echo '====== test ======'
+	@(${R} -q -e "library(devtools);test('.')")
+	@echo 
 
 doVignettes:
 	@echo "====== vignettes ======"

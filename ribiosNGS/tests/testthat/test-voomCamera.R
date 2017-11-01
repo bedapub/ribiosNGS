@@ -29,8 +29,8 @@ voomCameraTbl <- voomCameraOut@enrichTables
 ## validate
 ## Note that from limma 3.29.6, the default parameters of camera changed: inter.gene.cor=0.01 (used to be NA), and allow.neg.cor=FALSE (used to be TRUE)
 matVoom <- as.matrix(voom(mat))
-resContrast1 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,1], inter.gene.cor=NA, allow.neg.cor=FALSE)
-resContrast2 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,2], inter.gene.cor=NA, allow.neg.cor=FALSE)
+resContrast1 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,1], inter.gene.cor=NA, allow.neg.cor=FALSE, sort=FALSE)
+resContrast2 <- camera(matVoom, gsInd, design=designMatrix, contrast=contrastMatrix[,2], inter.gene.cor=NA, allow.neg.cor=FALSE, sort=FALSE)
 
 ## make sure that the order is correct
 voomCameraTbl <- with(voomCameraTbl, voomCameraTbl[order(Contrast, GeneSet),])

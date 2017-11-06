@@ -8,7 +8,7 @@ importFrom("readr",
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
 importFrom("ribiosGSEA", "biosCamera", "geneSetPerm",
-           "matchGenes", "gsGenes", "gsCategory")
+           "matchGenes", "gsGenes", "gsCategory", "GeneSet")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
@@ -21,18 +21,31 @@ importFrom("edgeR",
 importFrom("graphics", "pairs")
 importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
+importFrom("sva", "sva")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
 
 ## for RNA-seq analysis
+exportMethods("designMatrix<-", "contrastMatrix<-")
 exportClasses(EdgeResult, EdgeObject, EdgeGSE)
 
+## edgeR
+export(dgeWithEdgeR, doGse,
+       gseWithLogFCgage,
+       gseWithCamera)
 export(sigGene, sigGenes,
        sigPosGene, sigNegGene,
        sigPosGenes, sigNegGenes,
        sigGeneCounts,
        updateSigFilter)
+
+## sva
+export(countsSVA, countsRemoveSV,
+       voomSVA, voomRemoveSV,
+       cpmSVA, cpmRemoveSV,
+       isEmptySV,
+       doSVA)
 
 export(filterByCPM,
        isAnyNA, replaceNAwithZero,

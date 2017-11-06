@@ -13,6 +13,15 @@ setMethod("contrastNames",
           "EdgeGSE",
           function(object) contrastNames(as(object, "EdgeObject")))
 
+setMethod("designMatrix<-", c("EdgeObject", "matrix"), function(object, value) {
+  object@designContrast@design <- value
+  return(object)
+})
+setMethod("contrastMatrix<-", c("EdgeObject", "matrix"), function(object, value) {
+  object@designContrast@contrasts <- value
+  return(object)
+})
+
 ## nContrast and contrastSampleIndices
 setMethod("nContrast", "EdgeResult", function(object) {nContrast(object@designContrast)})
 setMethod("contrastSampleIndices", c("EdgeResult", "character"), function(object, contrast) {

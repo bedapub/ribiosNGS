@@ -43,3 +43,7 @@ setGeneric("setCommonDispIfMissing", function(object, common.disp) standardGener
 setGeneric("sniffFeatures", function(object) standardGeneric("sniffFeatures"))
 
 setGeneric("isAnnotated", function(object) standardGeneric("isAnnotated"))
+
+
+setGeneric("designMatrix<-", function(object, value) standardGeneric("designMatrix<-"))
+setGeneric("contrastMatrix<-", function(object, value) standardGeneric("contrastMatrix<-"))

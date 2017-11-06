@@ -82,8 +82,8 @@ replaceNAwithZero <- function(edgeObj) {
   return(edgeObj)
 }
 
-setMethod("normalize", "EdgeObject", function(object, ...) {
-  object@dgeList <- calcNormFactors(object@dgeList, ...)
+setMethod("normalize", "EdgeObject", function(object, method="RLE", ...) {
+  object@dgeList <- calcNormFactors(object@dgeList, method=method, ...)
   return(object)
 })
 
@@ -232,7 +232,20 @@ dgeTableList <- function(edgeResult, contrast=NULL) {
   }
   return(res)
 }
-dgeTables <- function(edgeResult) dgeTable(edgeResult, contrast=NULL)
+
+#' Return a list of differential gene expression tables 
+#' 
+#' @param edgeResult An \code{EdgeResult} object
+#' 
+#' @return A list of \code{data.frame}s, each containing the DGEtable for one contrast.
+#' 
+#' @seealso \code{dgeTable} which returns one \code{data.frame} for one or more given contrasts.
+dgeTables <- function(edgeResult) {
+  contrs <- contrastNames(edgeResult)
+  res <- lapply(contrs, function(ctr) dgeTable(edgeResult, contrast=ctr))
+  names(res) <- contrs
+  return(res)
+}
 
 
 sigFilter <- function(edgeResult) return(edgeResult@sigFilter)
@@ -379,7 +392,6 @@ isUnsetSigFilter <- function(object) {
 
 
 ## annotation
-
 annotateMPS <- function(mat) {
   ampl <- attr(mat, "desc")
   stopifnot(!is.null(ampl) & all(grepl("^AMPL", ampl)))
@@ -395,6 +407,94 @@ readMPS <- function(file) {
   return(new("FeatAnnoExprs",
              exprs=tbl,
              genes=genes))
+}
+
+#' Perform differential gene expression analysis with edgeR
+#' 
+#' @param edgeObj An object of \code{EdgeObject}
+#' 
+#' The function performs end-to-end differential gene expression (DGE) analysis 
+#' with common best practice using edgeR
+#' 
+#' @return An \code{EdgeResult} object
+#' 
+#' @examples
+#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
+#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
+#' exDesign <- model.matrix(~0+exGroups)
+#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+#' exFdata <- data.frame(Identifier=sprintf("Gene%d", 1:nrow(exMat)))
+#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
+#'                      Group=exGroups)
+#' exObj <- EdgeObject(exMat, exDescon, 
+#'                      fData=exFdata, pData=exPdata)
+#' exDgeRes <- dgeWithEdgeR(exObj)
+#' dgeTable(exDgeRes)
+dgeWithEdgeR <- function(edgeObj) {
+  edgeObj.filter <- ribiosNGS::filterByCPM(edgeObj)
+  edgeObj.norm <- ribiosNGS::normalize(edgeObj.filter)
+  edgeObj.disp <- estimateGLMDisp(edgeObj.norm)
+  ## in case of single replicate
+  ## edgeR recommendation for common dispersion: 0.4 for human study, 0.1 for well-controlled, 0.01 for tech replicates
+  if(!hasCommonDisp(edgeObj.disp)) {
+    warning("No common dispersion estimate available. Possible reason may be no replicates")
+    warning("Common dispersion is set as 0.4. Note that the number of DEGs is sensitive to this setting")
+    edgeObj.disp <- setCommonDispIfMissing(edgeObj.disp, 0.4)
+  }
+  edgeObj.fit <- fitGLM(edgeObj.disp)
+  dgeTest <- testGLM(edgeObj.disp, edgeObj.fit)
+  return(dgeTest)
+}
+
+#' Perform gene-set enrichment (GSE) analysis
+#' 
+#' @param edgeResult An object of the class \code{EdgeObject}
+#' @param geneSets An object of the class \code{GeneSets}
+#' 
+#' The function performs gene-set enrichment analysis. 
+#' If biological replicates of samples are available, then the CAMERA method is applied; 
+#' otherwise if no replicates are available, the GAGE method (Generally Applicable Gene-set Enrichment for pathway analysis) is applied.
+#' 
+#' @return A \code{data.frame} containing results of the gene-set enrichment analysis.
+#' 
+#' @seealso \code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by this function to perform analysis with GAGE and CAMERA, respectively. \code{logFCgage} and \code{camera.EdgeResult} implements the logic, and returns an object of the \code{EdgeGSE} class, which contains all relevant information required to reproduce the analysis results.
+#' 
+#' @examples
+#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
+#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
+#' exDesign <- model.matrix(~0+exGroups)
+#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+#' exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
+#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
+#'                      Group=exGroups)
+#' exObj <- EdgeObject(exMat, exDescon, 
+#'                      fData=exFdata, pData=exPdata)
+#' exDgeRes <- dgeWithEdgeR(exObj)
+#' 
+#' exGeneSets <- new("GeneSets", list("Set1"=GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
+#'                                    "Set2"=GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
+#' exGse <- doGse(exDgeRes, exGeneSets)
+#' 
+#' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
+#' exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
+doGse <- function(edgeResult, geneSets) {
+  if(hasNoReplicate(edgeResult)) {
+    res <- gseWithLogFCgage(edgeResult, geneSets)
+  } else {
+    res <- gseWithCamera(edgeResult, geneSets)
+  }
+}
+gseWithLogFCgage <- function(edgeResult, geneSets) {
+  gseRes <- logFCgage(edgeResult, geneSets)
+  enrichTbl <- fullEnrichTable(gseRes)
+  return(enrichTbl)
+}
+gseWithCamera <- function(edgeResult, geneSets) {
+  gseRes <- camera.EdgeResult(edgeResult, geneSets)
+  enrichTbl <- fullEnrichTable(gseRes)
+  return(enrichTbl)
 }
 ##annotateDataFrame <- function(df, annotation, key) {
 ##  stopifnot(is.data.frame(annotation))
@@ -419,8 +519,6 @@ readMPS <- function(file) {
 ##  edgeResult@dgeTables <- annodt
 ##  return(edgeResult)
 ##}
-
-
 
 
 ## report

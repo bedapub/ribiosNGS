@@ -94,7 +94,14 @@ voomCamera <- function(edgeObj, gscs) {
 #' @param contrast Contrast vector
 #' 
 #' The function is a carbon copy of edgeR:::.zscoreDGE, which is unfortunately not exported
-#' TODO: automatically check whether the function has changed in edgeR in the future
+#' 
+#' @examples 
+#' dgeMatrix <- matrix(rpois(1200, 10), nrow=200)
+#' dgeList <- DGEList(dgeMatrix)
+#' dgeList <- estimateCommonDisp(dgeList)
+#' dgeDesign <- model.matrix(~gl(2,3))
+#' dgeZscore <- zscoreDGE(dgeList, dgeDesign, contrast=c(0,1))
+#' head(dgeZscore)
 zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
   allzero <- rowSums(y$counts > 1e-08) == 0
   if (any(allzero)) 
@@ -129,8 +136,20 @@ zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
   fit.null <- glmFit(y, design0, prior.count = 0)
   y <- zscoreNBinom(y$counts, mu = fit.null$fitted.values, 
                     size = 1/dispersion)
-  return(y)
+  y
 }
+
+#' Get human gene symbols for gene-set enrichment analysis
+setGeneric("humanGeneSymbols", function(object) standardGeneric("humanGeneSymbols"))
+fDataHumanGeneSymbol <- function(object) {
+  gs <- fData(object)$GeneSymbol
+  if(!is.character(gs) && !is.null(gs)) {
+    gs <- as.character(gs)
+  }
+  return(gs)
+}
+setMethod("humanGeneSymbols", "DGEList", function(object) fDataHumanGeneSymbol(object))
+setMethod("humanGeneSymbols", "EdgeObject", function(object) fDataHumanGeneSymbol(object))
 
 #' Perform camera using DGEList
 #' 
@@ -139,6 +158,9 @@ zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
 #' @param design Design matrix
 #' @param contrasts Contrast matrix
 dgeListCamera <- function(dgeList, index, design, contrasts) {
+  geneSymbols <- humanGeneSymbols(dgeList)
+  if(is.null(geneSymbols))
+    stop("EdgeResult must have 'GeneSymbol' in its fData to perform camera!")
   cameraRes <- mclapply(1:ncol(contrasts),
                       function(x) {
                         zscores <- zscoreDGE(y=dgeList,
@@ -159,7 +181,7 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
                                                  design = design, contrast = contrasts[,x],
                                                  weights = NULL, ## TODO: may be passed in the future
                                                  use.ranks = FALSE, ## TODO may be passed in the future
-                                                 geneLabels = fData(dgeList)$GeneSymbol, 
+                                                 geneLabels = geneSymbols, 
                                                  allow.neg.cor = FALSE, 
                                                  trend.var = FALSE, 
                                                  sort = FALSE)
@@ -167,18 +189,16 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
                           tbl.priorCor$FDR <- tbl.priorCor$PValue
                           tbl.estCor$FDR <- tbl.estCor$PValue
                         }
-                        tbl <- cbind(tbl.priorCor,
-                                     Score=pScore(tbl.priorCor$PValue, tbl.priorCor$Direction=="Up"),
-                                     EstimatedInterGeneCor=tbl.estCor$Correlation,
-                                     PValue.interGeneCor=tbl.estCor$PValue,
-                                     FDR.interGeneCor=tbl.estCor$FDR,
-                                     Score.interGeneCor=pScore(tbl.estCor$PValue, tbl.estCor$Direction=="Up"),
-                                     ContributingGenes=tbl.estCor[,"ContributingGenes"])
+                        tbl <- cbind(tbl.estCor,
+                                     PValue.cor0.01=tbl.priorCor$PValue,
+                                     FDR.cor0.01=tbl.priorCor$FDR,
+                                     Score.cor0.01=pScore(tbl.priorCor$PValue, tbl.priorCor$Direction=="Up"))
                         tbl$GeneSet <- rownames(tbl)
                         rownames(tbl) <- NULL
                         tbl <- tbl[,c("GeneSet", "NGenes","Direction",
-                                      "EstimatedInterGeneCor", "PValue.interGeneCor", "FDR.interGeneCor", "Score.interGeneCor",
-                                      "PValue", "FDR", "Score", "ContributingGenes")]
+                                      "Correlation", "PValue", "FDR", "Score",
+                                      "PValue.cor0.01", "FDR.cor0.01", "Score.cor0.01", 
+                                      "ContributingGenes")]
                         tbl <- sortByCol(tbl, "PValue",decreasing=FALSE)
                         return(tbl)
                       })
@@ -205,11 +225,10 @@ camera.EdgeResult <- function(y, gscs) {
   ctnames<- contrastNames(y)
   design <- designMatrix(y)
   ct <- contrastMatrix(y)
-  geneSymbols <- fData(y)$GeneSymbol
+  geneSymbols <- humanGeneSymbols(y)
   if(is.null(geneSymbols))
     stop("EdgeResult must have 'GeneSymbol' in its fData to perform camera!")
-  geneSymbols <- as.character(geneSymbols)
-  
+
   categories <- ribiosGSEA::gsCategory(gscs)
   gsIndex <- ribiosGSEA::matchGenes(gscs, geneSymbols, na.rm=TRUE)
   names(gsIndex) <- make.unique(names(gsIndex))

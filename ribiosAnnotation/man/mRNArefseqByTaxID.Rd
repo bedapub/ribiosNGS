@@ -21,4 +21,3 @@ Retrieve mRNA RefSeq records by TaxID
 mRNArefseqByTaxID(9606)
 }
 }
-

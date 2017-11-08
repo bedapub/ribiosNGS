@@ -13,9 +13,16 @@ zscoreDGE(y, design = NULL, contrast = ncol(design))
 
 \item{contrast}{Contrast vector
 
-The function is a carbon copy of edgeR:::.zscoreDGE, which is unfortunately not exported
-TODO: automatically check whether the function has changed in edgeR in the future}
+The function is a carbon copy of edgeR:::.zscoreDGE, which is unfortunately not exported}
 }
 \description{
 Calculate mid-p quantile residuals
+}
+\examples{
+dgeMatrix <- matrix(rpois(1200, 10), nrow=200)
+dgeList <- DGEList(dgeMatrix)
+dgeList <- estimateCommonDisp(dgeList)
+dgeDesign <- model.matrix(~gl(2,3))
+dgeZscore <- zscoreDGE(dgeList, dgeDesign, contrast=c(0,1))
+head(dgeZscore)
 }

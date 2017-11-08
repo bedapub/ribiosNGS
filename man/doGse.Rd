@@ -16,7 +16,7 @@ If biological replicates of samples are available, then the CAMERA method is app
 otherwise if no replicates are available, the GAGE method (Generally Applicable Gene-set Enrichment for pathway analysis) is applied.}
 }
 \value{
-A \code{data.frame} containing results of the gene-set enrichment analysis.
+An \code{EdgeGSE} object containing all information required to reproduce the gene-set enrichment analysis results, as well as the enrichment table. Apply \code{fullEnrichTable} to the object to extract a \code{data.frame} containing results of the gene-set enrichment analysis.
 }
 \description{
 Perform gene-set enrichment (GSE) analysis
@@ -37,6 +37,7 @@ exDgeRes <- dgeWithEdgeR(exObj)
 exGeneSets <- new("GeneSets", list("Set1"=GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
                                    "Set2"=GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
 exGse <- doGse(exDgeRes, exGeneSets)
+fullEnrichTable(exGse)
 
 exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
 exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)

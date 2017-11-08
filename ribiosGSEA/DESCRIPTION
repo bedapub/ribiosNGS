@@ -12,8 +12,16 @@ Depends:
     methods
 Imports:
     Rcpp,ribiosIO,ribiosMath,ribiosUtils,XML,parallel,limma,
-    Biobase, MASS, lattice, latticeExtra, BioQC, globaltest,
-    ribiosExpression, ribiosUDIS, ribiosCGI, edgeR
+    Biobase,
+    MASS,
+    lattice,
+    latticeExtra,
+    BioQC,
+    globaltest,
+    ribiosExpression,
+    ribiosUDIS,
+    ribiosCGI,
+    edgeR
 Suggests:
     testthat
 License: LGPL-2

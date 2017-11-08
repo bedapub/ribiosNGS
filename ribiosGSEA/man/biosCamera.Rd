@@ -11,7 +11,7 @@ biosCamera(y, index, design = NULL, contrast = ncol(design),
 \arguments{
 \item{y}{a numeric matrix of log-expression values or log-ratios of expression values, or any data object containing such a matrix. Rows correspond to probes and columns to samples. Any type of object that can be processed by getEAWP is acceptable.}
 
-\item{index}{an index vector or a list of index vectors. Can be any vector such that y[index,] of statistic[index] selects the rows corresponding to the test set. The list can be made using \codes{ids2indices}.}
+\item{index}{an index vector or a list of index vectors. Can be any vector such that y[index,] of statistic[index] selects the rows corresponding to the test set. The list can be made using \code{ids2indices}.}
 
 \item{design}{Design matrix}
 
@@ -44,7 +44,7 @@ A \code{data.frame} with one row per set and the following columns:
   \item{GeneSet}{Gene set name}
   \item{NGenes}{Number of genes in the set}
   \item{Correlation}{Estimated correlation}
-  \item{Direction}{Direction of set-wise regulation, \code{Up} or \cod{Down}}
+  \item{Direction}{Direction of set-wise regulation, \code{Up} or \code{Down}}
   \item{Score}{Gene-set enrichment score, defined as \code{log10(pValue)*I(directionality)}, where \code{I(directionality)} equals \code{1} if the directionality is \code{Up} and \code{-1} if the directionality is \code{Down}}
   \item{ContribuingGenes}{A character string, containing all genes labels of genes that are in the set and regulated in the same direction as the set-wise direction, and the respective statistic}
 }
@@ -53,7 +53,7 @@ A \code{data.frame} with one row per set and the following columns:
 An adapted and enhanced version of limma::camera
 }
 \note{
-Since limma 3.29.6, the default setting of allow.neg.cor changes from TRUE to FALSE, and a new parameter, inter.gene.cor, is added with the default value of 0.01, namely a prior inter-gene correlation is set for all gene sets. Currently, \code{biosCamera} does not have  the parameter \cpde{inter.gene.cor}, but \code{allow.neg.cor} is set by default to \code{FALSE} to be consistent with the latest camera function.
+Since limma 3.29.6, the default setting of allow.neg.cor changes from TRUE to FALSE, and a new parameter, inter.gene.cor, is added with the default value of 0.01, namely a prior inter-gene correlation is set for all gene sets. Currently, \code{biosCamera} does not have  the parameter \code{inter.gene.cor}, but \code{allow.neg.cor} is set by default to \code{FALSE} to be consistent with the latest camera function.
 }
 \examples{
 y <- matrix(rnorm(1000*6),1000,6)

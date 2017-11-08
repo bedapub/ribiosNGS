@@ -13,7 +13,8 @@ Depends:
 Imports:
     ribiosUtils,methods,Biobase,lattice,ribiosGSEA,ribiosIO,
     BiocGenerics,ribiosPlot,graphics,limma,igraph,
-    readr, sva
+    readr,
+    sva
 Suggests:
     testthat
 License: GPL-3

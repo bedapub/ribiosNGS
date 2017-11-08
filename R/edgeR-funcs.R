@@ -456,7 +456,7 @@ dgeWithEdgeR <- function(edgeObj) {
 #' If biological replicates of samples are available, then the CAMERA method is applied; 
 #' otherwise if no replicates are available, the GAGE method (Generally Applicable Gene-set Enrichment for pathway analysis) is applied.
 #' 
-#' @return A \code{data.frame} containing results of the gene-set enrichment analysis.
+#' @return An \code{EdgeGSE} object containing all information required to reproduce the gene-set enrichment analysis results, as well as the enrichment table. Apply \code{fullEnrichTable} to the object to extract a \code{data.frame} containing results of the gene-set enrichment analysis.
 #' 
 #' @seealso \code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by this function to perform analysis with GAGE and CAMERA, respectively. \code{logFCgage} and \code{camera.EdgeResult} implements the logic, and returns an object of the \code{EdgeGSE} class, which contains all relevant information required to reproduce the analysis results.
 #' 
@@ -476,6 +476,7 @@ dgeWithEdgeR <- function(edgeObj) {
 #' exGeneSets <- new("GeneSets", list("Set1"=GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
 #'                                    "Set2"=GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
 #' exGse <- doGse(exDgeRes, exGeneSets)
+#' fullEnrichTable(exGse)
 #' 
 #' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
 #' exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
@@ -485,17 +486,17 @@ doGse <- function(edgeResult, geneSets) {
   } else {
     res <- gseWithCamera(edgeResult, geneSets)
   }
+  return(res)
 }
 gseWithLogFCgage <- function(edgeResult, geneSets) {
   gseRes <- logFCgage(edgeResult, geneSets)
-  enrichTbl <- fullEnrichTable(gseRes)
-  return(enrichTbl)
+  return(gseRes)
 }
 gseWithCamera <- function(edgeResult, geneSets) {
   gseRes <- camera.EdgeResult(edgeResult, geneSets)
-  enrichTbl <- fullEnrichTable(gseRes)
-  return(enrichTbl)
+  return(gseRes)
 }
+
 ##annotateDataFrame <- function(df, annotation, key) {
 ##  stopifnot(is.data.frame(annotation))
 ##  if(!missing(key)) {

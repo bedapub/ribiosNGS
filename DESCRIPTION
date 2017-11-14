@@ -14,7 +14,8 @@ Imports:
     ribiosUtils,methods,Biobase,lattice,ribiosGSEA,ribiosIO,
     BiocGenerics,ribiosPlot,graphics,limma,igraph,
     readr,
-    sva, gage
+    sva,
+    gage
 Suggests:
     testthat
 License: GPL-3

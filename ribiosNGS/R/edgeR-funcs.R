@@ -66,12 +66,40 @@ maxCountByGroup <- function(edgeObj) {
 hasNoReplicate <- function(edgeObj) {
   return(maxCountByGroup(edgeObj)<=1)
 }
+
+#' Filter EdgeObj and remove lowly expressed genes
+#' 
+#' @param edgeObj An EdgeObject object
+#' @param minCPM Minimal CPM value, see descriptions below
+#' @param mintCount Minimal count of samples in which the CPM value is no less than \code{minCPM}
+#' 
+#' The filter is recommended by the authors of the \code{edgeR} package to remove lowly expressed genes, since including them in differential gene expression analysis will cause extreme differential expression fold-changes of lowly and stochastically expressed genes, and increase false positive rates.
+#' 
+#' The filter removes genes that are less expressed than 1 copy per million reads (cpm) in at least \code{n} samples, where \code{n} equals the number of samples in the smallest group of the design. 
+#' 
+#' @examples
+#' myFac <- gl(3,2)
+#' set.seed(1234)
+#' myMat <- matrix(rpois(1200,100), nrow=200, ncol=6)
+#' myMat[1:3,] <- 0
+#' myEdgeObj <- EdgeObject(myMat, 
+#'                        DesignContrast(designMatrix=model.matrix(~myFac),
+#'                         contrastMatrix=matrix(c(0,1,0), ncol=1), groups=myFac),
+#'                         fData=data.frame(GeneSymbol=sprintf("Gene%d", 1:200)))
+#' myFilteredEdgeObj <- filterByCPM(myEdgeObj)
+#' dim(counts(myEdgeObj))
+#' dim(counts(myFilteredEdgeObj))
+#' ## show unfiltered count matrix
+#' dim(counts(myFilteredEdgeObj, filter=FALSE))
 filterByCPM <- function(edgeObj,
                         minCPM=1,
                         minCount=minGroupCount(edgeObj)) {
   cpm <- cpm(edgeObj)
   filter <- apply(cpm, 1, function(x) sum(x>=minCPM)>=minCount)
-  edgeObj@dgeList <- edgeObj@dgeList[filter,]
+  newDgeList <- edgeObj@dgeList[filter,]
+  newDgeList$counts.unfiltered <- edgeObj@dgeList$counts
+  newDgeList$genes.unfiltered <- edgeObj@dgeList$genes
+  edgeObj@dgeList <- newDgeList
   return(edgeObj)
 }
 isAnyNA <- function(edgeObj) {
@@ -90,8 +118,19 @@ setMethod("normalize", "EdgeObject", function(object, method="RLE", ...) {
 setMethod("cpmRNA", "EdgeObject", function(object) {
   return(cpm(object@dgeList))
 })
-setMethod("counts", "EdgeObject", function(object) {
-  return(object@dgeList$counts)
+
+#' Return counts in EdgeObject
+#' 
+#' @param object An EdgeObject
+#' @param filter Logical, whether filtered matrix (by default) or unfiltered matrix should be returned
+#' 
+#' @seealso \code{\link{filterByCPM}}
+setMethod("counts", "EdgeObject", function(object, filter=TRUE) {
+  if(filter) {
+    return(object@dgeList$counts)
+  } else {
+    return(object@dgeList$counts.unfiltered)
+  }
 })
 setMethod("normFactors", "DGEList", function(object) {
   return(object$samples$norm.factors)
@@ -473,8 +512,8 @@ dgeWithEdgeR <- function(edgeObj) {
 #'                      fData=exFdata, pData=exPdata)
 #' exDgeRes <- dgeWithEdgeR(exObj)
 #' 
-#' exGeneSets <- new("GeneSets", list("Set1"=GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
-#'                                    "Set2"=GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
+#' exGeneSets <- new("GeneSets", list("Set1"=ribiosGSEA::GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
+#'                                    "Set2"=ribiosGSEA::GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
 #' exGse <- doGse(exDgeRes, exGeneSets)
 #' fullEnrichTable(exGse)
 #' 

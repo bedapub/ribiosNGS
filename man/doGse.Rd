@@ -34,8 +34,8 @@ exObj <- EdgeObject(exMat, exDescon,
                      fData=exFdata, pData=exPdata)
 exDgeRes <- dgeWithEdgeR(exObj)
 
-exGeneSets <- new("GeneSets", list("Set1"=GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
-                                   "Set2"=GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
+exGeneSets <- new("GeneSets", list("Set1"=ribiosGSEA::GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
+                                   "Set2"=ribiosGSEA::GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
 exGse <- doGse(exDgeRes, exGeneSets)
 fullEnrichTable(exGse)
 

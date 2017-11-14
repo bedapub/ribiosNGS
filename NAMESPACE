@@ -1,6 +1,6 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
-           "sortByCol", "putColsFirst", "matchColumn")
+           "sortByCol", "putColsFirst", "matchColumn", "pScore")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("ribiosIO", "read_biokit_exprs")
 importFrom("readr",
@@ -22,6 +22,7 @@ importFrom("graphics", "pairs")
 importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 importFrom("sva", "sva")
+importFrom("gage", "gage")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")

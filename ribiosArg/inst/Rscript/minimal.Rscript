@@ -1,0 +1,66 @@
+#!/usr/bin/env Rscript
+
+suppressMessages(library(ribiosUtils))
+suppressMessages(library(ribiosArg))
+scriptInit()
+
+usage <- paste("Print the results of two numbers applied to an operation, with optional output of the equation\n",
+               "Usage:", scriptName(), "-num1 NUM -num2 NUM  -outfile FILE [-operation OPT] [-printEq] [-log LOG]\n",
+               "Mandatory options:\n",
+               "  -num1: A number\n",
+               "  -num2: Another number:\n",
+               "  -outfile: Output file where the results will be written to. Use '-' to write the results on the standard output.\n",
+               "Optional options:\n",
+               "  -printEq: If set, the equation is printed\n",
+               "  -operation: Operation, supported values include 'add', 'subtract', 'divide', and 'multiply'. Default: 'add'\n",
+               "  -log: File name to which the log of the program will be written. use '-' to write the log on the standard output.\n", sep="")
+
+argParse(optargs="printEq operation,1 log,1",
+         reqargs="num1 num2 outfile", usage=usage)
+
+##----------------------------------------##
+## Program starts
+##----------------------------------------##
+logfile <- argGet("log", default=NULL)
+registerLog(logfile)
+doLog("%s starts", scriptName())
+
+##----------------------------------------##
+## Logic
+##----------------------------------------##
+outfile <- argGet("outfile")
+if(outfile == "-") {
+  outfile <- stdout()
+}
+num1 <- parseNumVec(argGet("num1"), expLen=1L)
+num2 <- parseNumVec(argGet("num2"), expLen=1L)
+
+operation <- argGet("operation", choices=c("add", "subtract", "divide", "multiply"), default="add")
+printEq <- argPresent("printEq")
+
+doLog("Doing operation")
+if(operation=="add") {
+  res <- num1 + num2
+} else if (operation=="subtract") {
+  res <- num1 - num2
+} else if (operation=="multiply") {
+  res <- num1 * num2
+} else if (operation=="divide") {
+  res <- num1 * num2
+}
+
+if(printEq) {
+   opSym <- c("add"="+", "subtract"="-", "multiply"="*", "divide"="/")[operation]
+   str <- sprintf("%g %s %g = %g", num1, opSym, num2, res)
+} else {
+   str <- sprintf("%g", res)
+}
+doLog("Writing output")
+writeLines(str, outfile)
+
+##--------------------##
+## Quit
+##--------------------##
+doLog("Program quitting")
+qqmsg(status=0)
+

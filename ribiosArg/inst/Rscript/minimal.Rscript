@@ -1,5 +1,8 @@
 #!/usr/bin/env Rscript
 
+# A minimalistic Rscript demonstrating the usage of the ribiosArg package to parse command-line parameters of Rscript
+# Released under the GPL-3 license by Jitao David Zhang, <jitao_david.zhang@roche.com>
+
 suppressMessages(library(ribiosUtils))
 suppressMessages(library(ribiosArg))
 scriptInit()

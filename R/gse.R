@@ -193,7 +193,6 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
                                      PValue.cor0.01=tbl.priorCor$PValue,
                                      FDR.cor0.01=tbl.priorCor$FDR,
                                      Score.cor0.01=pScore(tbl.priorCor$PValue, tbl.priorCor$Direction=="Up"))
-                        tbl$GeneSet <- rownames(tbl)
                         rownames(tbl) <- NULL
                         tbl <- tbl[,c("GeneSet", "NGenes","Direction",
                                       "Correlation", "PValue", "FDR", "Score",

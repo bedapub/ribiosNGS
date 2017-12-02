@@ -94,8 +94,8 @@ hasNoReplicate <- function(edgeObj) {
 filterByCPM <- function(edgeObj,
                         minCPM=1,
                         minCount=minGroupCount(edgeObj)) {
-  cpm <- cpm(edgeObj)
-  filter <- apply(cpm, 1, function(x) sum(x>=minCPM)>=minCount)
+  cpmRes <- cpm(edgeObj)
+  filter <- apply(cpmRes, 1, function(x) sum(x>=minCPM)>=minCount)
   newDgeList <- edgeObj@dgeList[filter,]
   newDgeList$counts.unfiltered <- edgeObj@dgeList$counts
   newDgeList$genes.unfiltered <- edgeObj@dgeList$genes

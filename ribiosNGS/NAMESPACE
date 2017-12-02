@@ -99,7 +99,7 @@ exportClasses(RiboSeq,
 exportMethods(RiboSeq,
               normalize,
               countRNA, countRPF,
-              cpm, cpmRNA, cpmRPF,
+              cpmRNA, cpmRPF,
               cpmRNAGroupSum, cpmRPFGroupSum,
               cpmFilter,
               featureNames, sampleNames)

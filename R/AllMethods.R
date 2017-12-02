@@ -351,9 +351,12 @@ setMethod("setCommonDispIfMissing", c("EdgeObject","numeric"), function(object, 
 })
 
 ## cpm
-setMethod("cpm", "EdgeObject", function(x,...) {
-              cpm(dgeList(x),...)
-          })
+## setMethod("cpm", "EdgeObject", function(x,...) {
+##              cpm(dgeList(x),...)
+##          })
+cpm.EdgeObject <- function(y, ...) {
+    cpm(dgeList(y),...)
+}
 
 ## sniff features
 setMethod("featureNames", "EdgeObject", function(object) {

@@ -12,19 +12,15 @@ matchColumnIndex <- function(vector,
   if(isColRow) {
     target <- rownames(data.frame)
   } else {
-    target <- data.frame[, column]
+    target <- unlist(data.frame[, column])
   }
 
   ## From 1.0-16, multiple mapping is not slow since it is accelerated by C.
-  if(multi)
+  if(multi) {
     index <- mmatch(vector, target)
-  ## index <- lapply(vector, function(x) {
-  ##      res <- which(target %in% x)
-  ## if(length(res)>0) return(res)
-  ## return(NA)
-  ## })
-  else
+  } else {
     index <- match(vector, target)
+  }
   
   return(index)
 }

@@ -70,7 +70,9 @@ export(gseaResQvalue, gseaResES,
 export(buildGSEAcomm)
 
 ## GMT functions
-export(readGmt, writeGmt, parseGmt, matchGenes)
+export(readGmt, writeGmt, parseGmt,
+       appendGeneSets,
+       matchGenes)
 
 ## Fisher test (using hypergeometric test)
 export(gmthyper, gmthyperList)

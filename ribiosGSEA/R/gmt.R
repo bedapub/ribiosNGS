@@ -87,3 +87,32 @@ parseGmt <- function(file, vec, min, max) {
   ind <- ind[sapply(ind, function(x) length(x)>=nmin & length(x)<=nmax)]
   return(ind)
 }
+
+appendOneGeneSets <- function(geneSets, newGeneSets) {
+   res <- geneSets
+   res@.Data <- c(geneSets@.Data, newGeneSets@.Data)
+   names(res) <- c(names(geneSets), names(newGeneSets))
+   return(res)
+}
+
+#' Append one or more instances of GeneSets to an existing instance
+#'
+#' @param geneSets An existing instance of GeneSets to which other instances should be appended
+#' @param newGeneSets An instance of GeneSets that will be appended to \code{geneSets}
+#' @param ... Other instance(s) of GeneSets that will be appended consequentially
+#'
+#' @examples
+#' gmtFile <- system.file("extdata", "example.gmt", package="ribiosGSEA")
+#' mySet <- readGmt(gmtFile)
+#' myFakeSet <- readGmt(CategoryA=gmtFile, CategoryB=gmtFile)
+#' anotherFakeSet <- readGmt(gmtFile, gmtFile, category=c("CategoryC", "CategoryD"))
+#' mySetAppended <- appendGeneSets(mySet, myFakeSet)
+#' mySetAppendedTwice <- appendGeneSets(mySet, myFakeSet, anotherFakeSet
+appendGeneSets <- function(geneSets, newGeneSets, ...) {
+    res <- appendOneGeneSets(geneSets, newGeneSets)
+    newList <- list(...)
+    for(ngs in newList) {
+        res <- appendOneGeneSets(res, ngs)
+    }
+    return(res)
+}

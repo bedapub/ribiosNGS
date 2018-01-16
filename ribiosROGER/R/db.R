@@ -358,7 +358,7 @@ addDesign <- function(conn,
                           FeatureSubset=blobs(featureSubset),
                           DesignMatrix=blobs(designMatrix),
                           CreatedBy=getUser(),
-                          CreatedAt=Sys.time())
+                          CreationTime=Sys.time())
   writeDfToDb(conn, designTbl, tableName="Designs", overwrite=FALSE, append=TRUE)
   designId <- dbGetQuery(conn, "SELECT ID FROM Designs WHERE ROWID==LAST_INSERT_ROWID();")[1,1]
   return(designId)
@@ -417,7 +417,7 @@ addContrasts <- function(conn,
                              Description=descriptions,
                              Contrast=serializeMatrixByCol(contrastMatrix),
                              CreatedBy=getUser(),
-                             CreatedAt=Sys.time())
+                             CreationTime=Sys.time())
   writeDfToDb(conn, newContrasts, "Contrasts", overwrite=FALSE, append=TRUE)
   return(newContrastIDs)
 }

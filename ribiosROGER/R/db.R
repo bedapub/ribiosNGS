@@ -190,7 +190,7 @@ serializeMatrixByCol <- function(matrix) {
 #' experimental: the code has not been thoroughly tested and needs refactoring. Use with caution.
 #' 
 #' @export
-#' @importFrom ribiosNGS hasNoReplicate dgeTables featureNames
+#' @importFrom ribiosNGS hasNoReplicate dgeTable featureNames
 #' @importFrom ribiosUtils matchColumn trim pScore
 #' @importFrom ribiosExpression contrastMatrix designMatrix
 #' @importFrom Biobase featureNames

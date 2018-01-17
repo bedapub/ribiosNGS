@@ -41,6 +41,14 @@ setMethod("designMatrix", "MArrayLM", function(object) {
     return(object$design)
 })
 
+#' Extract contrast matrix from MArrayLM
+#'
+#' @param object A MArrayLM object from the limma package
+#' @return contrast matrix
+setMethod("contrastMatrix", "MArrayLM", function(object) {
+    return(object$contrast)
+})
+
 #' Extract contrast names from MArrayLM
 #'
 #' @param object A MArrayLM object from the limma package

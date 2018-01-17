@@ -328,10 +328,12 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
                 designID=newDesID,
                 contrastID=newContIDs)
     dbCommit(conn)
+    if(verbose) 
+        message("Database successfully updated!")
   }, error=function(e) {
       dbRollback(conn)
       print(e)
-      message("There was an error and hence no changes were done to the database!")
+      warning("There was an error and hence no changes were done to the database!")
   })
   return(res)
 }

@@ -1,6 +1,6 @@
 Package: ribiosROGER
 Title: Utilities for the ROGER (Roche Gene Expression Regulation) database
-Version: 0.0.0.9011
+Version: 0.0.0.9012
 Authors@R: person("Jitao David", "Zhang", email = "jitao_david.zhang@roche.com", role = c("aut", "cre"))
 Description: ROche Gene Expression Regulation (ROGER) is an experimental database storing information of gene expression regulation derived from differential gene expression analysis. ribiosROGER provides functionalities to access the database and do operations.
 Depends:

@@ -11,6 +11,7 @@ importFrom("ribiosPlot",
 importFrom("Biobase", "featureNames", "exprs", "fData", "pData", "featureData", "phenoData")
 importFrom("graph", "connComp")
 importFrom("limma", "makeContrasts")
+importClassesFrom("limma", "MArrayLM")
 
 ## export classes
 exportClasses(DesignContrast)

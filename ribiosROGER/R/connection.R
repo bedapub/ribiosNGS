@@ -9,7 +9,7 @@
 #' 
 #' @examples
 #' devROGER()
-devROGER <- function(dest="/pstore/data/bi/apps/ROGER/protROGER-v0.1.db") {
+devROGER <- function(dest="/pstore/data/bi/apps/ROGER/protROGER-v0.2.db") {
   DBI::dbConnect(RSQLite::SQLite(), 
                  dest)
 }

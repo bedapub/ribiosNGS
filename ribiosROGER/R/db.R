@@ -209,6 +209,9 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
     annoTarget <- NA
     annotation <- NULL
   }
+
+  currUser <- getUser()
+  currTime <- Sys.time()
   
   ## insert into Datasets
   dbBegin(conn)
@@ -218,7 +221,7 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
       message("Writing dataset")
     dsID <- newDatasetID(conn)
     if(is.na(dsID))
-      warning("Dataset ID failed - please check the integrity of the database")
+      stop("Dataset ID failed - please check the integrity of the database")
     counts <- edgeObject@dgeList$counts
     ds <- data.frame(ID=dsID,
                      Exprs=blobs(counts),
@@ -226,8 +229,8 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
                      Pheno=blobs(phenoData),
                      Feature=blobs(annotation),
                      Xref=xref,
-                     CreatedBy=getUser(),
-                     CreationTime=Sys.time())
+                     CreatedBy=currUser,
+                     CreationTime=currTime)
     writeDfToDb(conn, ds, tableName="Datasets", row.names=FALSE,
                 overwrite = FALSE, append=TRUE)
   
@@ -244,7 +247,7 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
       message("Writing design")
     newDesID <- newDesignID(conn)
     if(is.na(newDesID))
-      warning("Design ID failed - please check the integrity of the database")
+      stop("Design ID failed - please check the integrity of the database")
     design <-  data.frame(ID=newDesID,
                           DatasetID=dsID,
                           Name="defaultDesign",
@@ -252,8 +255,8 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
                           SampleSubset=blobs(sampleSubset),
                           FeatureSubset=blobs(featSubset),
                           DesignMatrix=blobs(designMatrix(edgeResult)),
-                          CreatedBy=getUser(),
-                          CreationTime=Sys.time())
+                          CreatedBy=currUser,
+                          CreationTime=currTime)
   
     writeDfToDb(conn=conn, design, tableName="Designs", overwrite=FALSE, append=TRUE)
   
@@ -272,14 +275,14 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
     contMatrix <- contrastMatrix(edgeResult)
     newContIDs <- newContrastIDs(conn, contMatrix)
     if(length(newContIDs)==1 && is.na(newContIDs))
-        warning("Contrast ID failed - please check the integrity of the database")
+        stop("Contrast ID failed - please check the integrity of the database")
     contrasts <- data.frame(ID=newContIDs,
                             DesignID=newDesID,
                             Name=colnames(contMatrix),
                             Description=colnames(contMatrix),
                             Contrast=serializeMatrixByCol(contMatrix),
-                            CreatedBy=getUser(),
-                            CreationTime=Sys.time())
+                            CreatedBy=currUser,
+                            CreationTime=currTime)
     
     writeDfToDb(conn=conn, contrasts, tableName="Contrasts", overwrite=FALSE, append=TRUE)
     
@@ -303,12 +306,11 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
     if(verbose)
         message("Writing GSEtable")
     gseMethodId <- ifelse(ribiosNGS::hasNoReplicate(edgeObject), 5L, 1L) ## 5=GAGE, 1=camera
-    
-    gmtInfo <- readDfFromDb(conn, "RONETgenesets")
-    gseContrastID <- match(enrichTbl$Contrast, contrasts$Name)
+    gmtInfo <- readDfFromDb(conn, "DefaultGenesets")
+    gseContrastID <- newContIDs[match(enrichTbl$Contrast, contrasts$Name)]
     gsIndex <- matchColumn(ribiosUtils::trim(as.character(enrichTbl$GeneSet)),
-                           gmtInfo, "GeneSetName")$Index
-    
+                           gmtInfo, "GenesetName")$ID
+
     gsetable <- data.frame(GSEmethodID=gseMethodId,
                            ContrastID=gseContrastID,
                            DefaultGenesetID=gsIndex,
@@ -316,8 +318,9 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
                            Direction=ifelse(enrichTbl$Direction=="Up", 1L, -1L),
                            PValue=enrichTbl$PValue,
                            FDR=enrichTbl$FDR,
-                           EnrichmentScore=pScore(enrichTbl$PValue, sign=enrichTbl$Direction=="Up"))
-    
+                           EnrichmentScore=pScore(enrichTbl$PValue, sign=enrichTbl$Direction=="Up"),
+                           EffGeneCount=enrichTbl$NGenes)
+
     writeDfToDb(conn=conn, gsetable, tableName="GSEtables", overwrite=FALSE, append=TRUE)
   
     ## results
@@ -327,7 +330,8 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
     dbCommit(conn)
   }, error=function(e) {
       dbRollback(conn)
-      e
+      print(e)
+      message("There was an error and hence no changes were done to the database!")
   })
   return(res)
 }

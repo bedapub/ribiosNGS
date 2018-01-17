@@ -13,6 +13,7 @@ Imports:
     ribiosNGS,
     ribiosExpression,
     ribiosUtils,
+    limma,
     Biobase
 License: GPL-3
 Encoding: UTF-8

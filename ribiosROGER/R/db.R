@@ -211,120 +211,124 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
   }
   
   ## insert into Datasets
-  if(verbose)
-    message("Writing dataset")
-  dsID <- newDatasetID(conn)
-  if(is.na(dsID))
-    warning("Dataset ID failed - please check the integrity of the database")
-  counts <- edgeObject@dgeList$counts
-  ds <- data.frame(ID=dsID,
-                   Exprs=blobs(counts),
-                   ExprsType="count",
-                   Pheno=blobs(phenoData),
-                   Feature=blobs(annotation),
-                   Xref=xref,
-                   CreatedBy=getUser(),
-                   CreationTime=Sys.time())
-  writeDfToDb(conn, ds, tableName="Datasets", row.names=FALSE,
-              overwrite = FALSE, append=TRUE)
+  dbBegin(conn)
+  res <- list(datasetID=NA, designID=NA,  contrastID=NA)
+  tryCatch({
+    if(verbose)
+      message("Writing dataset")
+    dsID <- newDatasetID(conn)
+    if(is.na(dsID))
+      warning("Dataset ID failed - please check the integrity of the database")
+    counts <- edgeObject@dgeList$counts
+    ds <- data.frame(ID=dsID,
+                     Exprs=blobs(counts),
+                     ExprsType="count",
+                     Pheno=blobs(phenoData),
+                     Feature=blobs(annotation),
+                     Xref=xref,
+                     CreatedBy=getUser(),
+                     CreationTime=Sys.time())
+    writeDfToDb(conn, ds, tableName="Datasets", row.names=FALSE,
+                overwrite = FALSE, append=TRUE)
   
-  isUsed <- annotation$`_Feature` %in% featureNames(edgeResult)
-  featSubset <- data.frame(DatasetFeatureIndex=annotation$`_DatasetFeatureIndex`,
-                           IsUsed=isUsed,
-                           Description="At least 1 cpm in N samples where N equals the size of the smallest group")  
-  sampleSubset <- data.frame(DatasetSampleIndex=1:ncol(counts),
-                             IsUsed=TRUE,
-                             Description="ngsDge_edgeR.Rscript currently only support designs where all samples are used.")
+    isUsed <- annotation$`_Feature` %in% featureNames(edgeResult)
+    featSubset <- data.frame(DatasetFeatureIndex=annotation$`_DatasetFeatureIndex`,
+                             IsUsed=isUsed,
+                             Description="At least 1 cpm in N samples where N equals the size of the smallest group")  
+    sampleSubset <- data.frame(DatasetSampleIndex=1:ncol(counts),
+                               IsUsed=TRUE,
+                               Description="ngsDge_edgeR.Rscript currently only support designs where all samples are used.")
   
-  ## insert into Designs
-  if(verbose)
-    message("Writing design")
-  newDesID <- newDesignID(conn)
-  ## newDDid <- newDatasetDesignID(conn, dsID)
-  if(is.na(newDesID))
-    warning("Design ID failed - please check the integrity of the database")
-  ## if(is.na(newDDid))
-  ##  warning("Dataset-specific design ID failed - please check the integrity of the database")
-  design <-  data.frame(ID=newDesID,
-                        DatasetID=dsID,
-                        ## DatasetDesignID=newDDid,
-                        Name="defaultDesign",
-                        Description="edgeR script default design",
-                        SampleSubset=blobs(sampleSubset),
-                        FeatureSubset=blobs(featSubset),
-                        DesignMatrix=blobs(designMatrix(edgeResult)),
-                        CreatedBy=getUser(),
-                        CreationTime=Sys.time())
-  
-  writeDfToDb(conn=conn, design, tableName="Designs", overwrite=FALSE, append=TRUE)
-  
-  ## insert into DGEmodels
-  if(verbose)
-    message("Writing DGEmodel")
-  dgeModel <- data.frame(DesignID=newDesID,
-                         DGEmethodID=2L, ## edgeR
-                         InputObj=blobs(edgeResult@dgeList),
-                         FitObj=blobs(edgeResult@dgeGLM))
-  writeDfToDb(conn=conn, dgeModel, tableName="DGEmodels", overwrite=FALSE, append=TRUE)
-  
-  ## insert into Contrasts
-  if(verbose)
-    message("Writing contrasts")
-  contMatrix <- contrastMatrix(edgeResult)
-  newContIDs <- newContrastIDs(conn, contMatrix)
-  if(length(newContIDs)==1 && is.na(newContIDs))
-    warning("Contrast ID failed - please check the integrity of the database")
-  contrasts <- data.frame(ID=newContIDs,
-                          DesignID=newDesID,
-                          Name=colnames(contMatrix),
-                          Description=colnames(contMatrix),
-                          Contrast=serializeMatrixByCol(contMatrix),
+    ## insert into Designs
+    if(verbose)
+      message("Writing design")
+    newDesID <- newDesignID(conn)
+    if(is.na(newDesID))
+      warning("Design ID failed - please check the integrity of the database")
+    design <-  data.frame(ID=newDesID,
+                          DatasetID=dsID,
+                          Name="defaultDesign",
+                          Description="edgeR script default design",
+                          SampleSubset=blobs(sampleSubset),
+                          FeatureSubset=blobs(featSubset),
+                          DesignMatrix=blobs(designMatrix(edgeResult)),
                           CreatedBy=getUser(),
                           CreationTime=Sys.time())
   
-  writeDfToDb(conn=conn, contrasts, tableName="Contrasts", overwrite=FALSE, append=TRUE)
+    writeDfToDb(conn=conn, design, tableName="Designs", overwrite=FALSE, append=TRUE)
   
-  ## insert to DGEtable
-  if(verbose)
-    message("Writing DGEtable")
-  dgeTbl <- dgeTable(edgeResult)
-  dgetable <- data.frame(ContrastID=matchColumn(dgeTbl$Contrast, contrasts, "Name")$ID,
-                         FeatureIndex=matchColumn(dgeTbl$GeneID, 
-                                                  annotation, "GeneID")$`_DatasetFeatureIndex`,
-                         GeneIndex=matchColumn(dgeTbl$GeneID,
-                                               annotation, "GeneID")$`_GeneIndex`,
-                         AveExprs=dgeTbl$logCPM,
-                         Statistic=dgeTbl$LR,
-                         LogFC=dgeTbl$logFC,
-                         PValue=dgeTbl$PValue,
-                         FDR=dgeTbl$FDR, row.names=NULL)
-  writeDfToDb(conn=conn, dgetable, tableName="DGEtables", overwrite=FALSE, append=TRUE)
+    ## insert into DGEmodels
+    if(verbose)
+        message("Writing DGEmodel")
+    dgeModel <- data.frame(DesignID=newDesID,
+                           DGEmethodID=2L, ## edgeR
+                           InputObj=blobs(edgeResult@dgeList),
+                           FitObj=blobs(edgeResult@dgeGLM))
+    writeDfToDb(conn=conn, dgeModel, tableName="DGEmodels", overwrite=FALSE, append=TRUE)
+    
+    ## insert into Contrasts
+    if(verbose)
+        message("Writing contrasts")
+    contMatrix <- contrastMatrix(edgeResult)
+    newContIDs <- newContrastIDs(conn, contMatrix)
+    if(length(newContIDs)==1 && is.na(newContIDs))
+        warning("Contrast ID failed - please check the integrity of the database")
+    contrasts <- data.frame(ID=newContIDs,
+                            DesignID=newDesID,
+                            Name=colnames(contMatrix),
+                            Description=colnames(contMatrix),
+                            Contrast=serializeMatrixByCol(contMatrix),
+                            CreatedBy=getUser(),
+                            CreationTime=Sys.time())
+    
+    writeDfToDb(conn=conn, contrasts, tableName="Contrasts", overwrite=FALSE, append=TRUE)
+    
+    ## insert to DGEtable
+    if(verbose)
+        message("Writing DGEtable")
+    dgeTbl <- dgeTable(edgeResult)
+    dgetable <- data.frame(ContrastID=matchColumn(dgeTbl$Contrast, contrasts, "Name")$ID,
+                           FeatureIndex=matchColumn(dgeTbl$GeneID, 
+                                                    annotation, "GeneID")$`_DatasetFeatureIndex`,
+                           GeneIndex=matchColumn(dgeTbl$GeneID,
+                                                 annotation, "GeneID")$`_GeneIndex`,
+                           AveExprs=dgeTbl$logCPM,
+                           Statistic=dgeTbl$LR,
+                           LogFC=dgeTbl$logFC,
+                           PValue=dgeTbl$PValue,
+                           FDR=dgeTbl$FDR, row.names=NULL)
+    writeDfToDb(conn=conn, dgetable, tableName="DGEtables", overwrite=FALSE, append=TRUE)
+    
+    ## insert into GSEtables
+    if(verbose)
+        message("Writing GSEtable")
+    gseMethodId <- ifelse(ribiosNGS::hasNoReplicate(edgeObject), 5L, 1L) ## 5=GAGE, 1=camera
+    
+    gmtInfo <- readDfFromDb(conn, "RONETgenesets")
+    gseContrastID <- match(enrichTbl$Contrast, contrasts$Name)
+    gsIndex <- matchColumn(ribiosUtils::trim(as.character(enrichTbl$GeneSet)),
+                           gmtInfo, "GeneSetName")$Index
+    
+    gsetable <- data.frame(GSEmethodID=gseMethodId,
+                           ContrastID=gseContrastID,
+                           DefaultGenesetID=gsIndex,
+                           Correlation=enrichTbl$Correlation,
+                           Direction=ifelse(enrichTbl$Direction=="Up", 1L, -1L),
+                           PValue=enrichTbl$PValue,
+                           FDR=enrichTbl$FDR,
+                           EnrichmentScore=pScore(enrichTbl$PValue, sign=enrichTbl$Direction=="Up"))
+    
+    writeDfToDb(conn=conn, gsetable, tableName="GSEtables", overwrite=FALSE, append=TRUE)
   
-  ## insert into GSEtables
-  if(verbose)
-    message("Writing GSEtable")
-  gseMethodId <- ifelse(ribiosNGS::hasNoReplicate(edgeObject), 5L, 1L) ## 5=GAGE, 1=camera
-  
-  gmtInfo <- readDfFromDb(conn, "RONETgenesets")
-  gseContrastID <- match(enrichTbl$Contrast, contrasts$Name)
-  gsIndex <- matchColumn(ribiosUtils::trim(as.character(enrichTbl$GeneSet)),
-                         gmtInfo, "GeneSetName")$Index
-  
-  gsetable <- data.frame(GSEmethodID=gseMethodId,
-                         ContrastID=gseContrastID,
-                         DefaultGenesetID=gsIndex,
-                         Correlation=enrichTbl$Correlation,
-                         Direction=ifelse(enrichTbl$Direction=="Up", 1L, -1L),
-                         PValue=enrichTbl$PValue,
-                         FDR=enrichTbl$FDR,
-                         EnrichmentScore=pScore(enrichTbl$PValue, sign=enrichTbl$Direction=="Up"))
-  
-  writeDfToDb(conn=conn, gsetable, tableName="GSEtables", overwrite=FALSE, append=TRUE)
-  
-  ## results
-  res <- list(datasetID=dsID,
-              designID=newDesID,
-              contrastID=newContIDs)
+    ## results
+    res <- list(datasetID=dsID,
+                designID=newDesID,
+                contrastID=newContIDs)
+    dbCommit(conn)
+  }, error=function(e) {
+      dbRollback(conn)
+      e
+  })
   return(res)
 }
 #' Add a new design to an existing Dataset

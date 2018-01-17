@@ -7,7 +7,7 @@
 limmaDgeTable(eFit, contrast = NULL)
 }
 \arguments{
-\item{eFit}{An \code{MArrayLM} object}
+\item{eFit}{An \code{\link[limma]{MArrayLM-class}} object}
 
 \item{contrast}{Contrast(s) of choice}
 }

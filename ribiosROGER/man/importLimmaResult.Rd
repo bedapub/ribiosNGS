@@ -12,7 +12,7 @@ importLimmaResult(conn, eSet, eSetFit, enrichTbl, valType = c("RMA", "MAS5"),
 
 \item{eSet}{An object of the class \code{\link[Biobase]{eSet-class}}}
 
-\item{eSetFit}{An object of the class \code{\link[limma]{MArrayLM}}}
+\item{eSetFit}{An object of the class \code{\link[limma]{MArrayLM-class}}}
 
 \item{enrichTbl}{Gene-set enrichment table}
 

@@ -8,8 +8,6 @@ limmaDgeTables(eFit)
 }
 \arguments{
 \item{eFit}{An \code{MArrayLM} object}
-
-\item{contrast}{Contrast(s) of choice}
 }
 \description{
 limma DGE table

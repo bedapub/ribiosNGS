@@ -502,7 +502,17 @@ limmaDgeTable <- function(eFit, contrast=NULL) {
     return(res)
 }
 
-#' @importFrom Biobase sampleNames
+#' Return pheno data required by ROGER database
+#'
+#' @param eset An \code{ExpressionSet} object
+#' @param phenoDataFile A pheno data file
+#' @param groups Groups of the samples, if available
+#'
+#' @return The \code{ExpressionSet} object, with phenoData modified
+#' 
+#' @importFrom Biobase sampleNames read.AnnotatedDataFrame
+#'
+#' @export
 maPhenoData <- function(eset, phenoDataFile=NULL, groups=NULL) {
     if(!is.null(phenoDataFile)) {
         ## TODO: fail if the first column is not unique (which should contain sample names)
@@ -515,7 +525,8 @@ maPhenoData <- function(eset, phenoDataFile=NULL, groups=NULL) {
     pd$`_DatasetSampleIndex` <- 1:nrow(pd)
     pd$`_Sample` <- sampleNames(eset)
     pd$`_SampleGroup` <- groups
-    return(pd)
+    pData(eset) <- eset
+    return(eset)
 }
 
 #' Import the content of a EdgeResult object into the database

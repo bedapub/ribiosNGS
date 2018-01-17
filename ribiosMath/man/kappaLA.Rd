@@ -22,4 +22,3 @@ kappaLA(testMat)
 \seealso{
 \code{\link{kappaSimp}} to calculate the same statistic using a simpler routine
 }
-

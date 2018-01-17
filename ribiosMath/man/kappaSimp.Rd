@@ -24,4 +24,3 @@ kappaSimp(testMat)
 \seealso{
 \code{\link{kappaLA}} to calculate the same statistic using a linear algebra based routine
 }
-

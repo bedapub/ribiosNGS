@@ -31,3 +31,20 @@ setMethod("rowscale", c("ExpressionSet","ANY", "ANY"), function(object, center, 
   return(object)
 })
 
+## for limma::MArrayLM
+
+#' Extract design matrix from MArrayLM
+#'
+#' @param object A MArrayLM object from the limma package
+#' @return Design matrix
+setMethod("designMatrix", "MArrayLM", function(object) {
+    return(object$design)
+})
+
+#' Extract contrast names from MArrayLM
+#'
+#' @param object A MArrayLM object from the limma package
+#' @return Character vector of contrast names
+setMethod("contrastNames", "MArrayLM", function(object) {
+    return(colnames(contrastMatrix(object)))
+})

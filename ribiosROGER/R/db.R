@@ -37,6 +37,8 @@ newDesignID <- function(conn) {
 #' @export
 maxDatasetID <- function(conn) {
   res <- dbGetQuery(conn, "SELECT MAX(ID) AS MAXID FROM Datasets")[1,1]
+  if(is.na(res))
+      res <- 0L
   return(res)
 }
 
@@ -74,6 +76,8 @@ newDatasetDesignID <- function(conn, datasetID) {
 #' @export
 maxContrastID <- function(conn) {
   res <- dbGetQuery(conn, "SELECT MAX(ID) AS MAXID FROM Contrasts")[1,1]
+  if(is.na(res))
+      res <- 0L
   return(res)
 }
 
@@ -84,7 +88,7 @@ maxContrastID <- function(conn) {
 #' 
 #' @export
 newContrastIDs <- function(conn, contrastMatrix) {
-  newID <- maxDatasetID(conn)
+  newID <- maxContrastID(conn)
   res <- seq(from=newID+1, to=newID+ncol(contrastMatrix))
   return(res)
 }
@@ -236,14 +240,14 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
   if(verbose)
     message("Writing design")
   newDesID <- newDesignID(conn)
-  newDDid <- newDatasetDesignID(conn, dsID)
+  ## newDDid <- newDatasetDesignID(conn, dsID)
   if(is.na(newDesID))
     warning("Design ID failed - please check the integrity of the database")
-  if(is.na(newDDid))
-    warning("Dataset-specific design ID failed - please check the integrity of the database")
+  ## if(is.na(newDDid))
+  ##  warning("Dataset-specific design ID failed - please check the integrity of the database")
   design <-  data.frame(ID=newDesID,
                         DatasetID=dsID,
-                        DatasetDesignID=newDDid,
+                        ## DatasetDesignID=newDDid,
                         Name="defaultDesign",
                         Description="edgeR script default design",
                         SampleSubset=blobs(sampleSubset),
@@ -283,7 +287,7 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
   ## insert to DGEtable
   if(verbose)
     message("Writing DGEtable")
-  dgeTbl <- dgeTables(edgeResult)
+  dgeTbl <- dgeTable(edgeResult)
   dgetable <- data.frame(ContrastID=matchColumn(dgeTbl$Contrast, contrasts, "Name")$ID,
                          FeatureIndex=matchColumn(dgeTbl$GeneID, 
                                                   annotation, "GeneID")$`_DatasetFeatureIndex`,
@@ -306,9 +310,9 @@ importEdgeResult <- function(conn, edgeResult, edgeObject,
   gsIndex <- matchColumn(ribiosUtils::trim(as.character(enrichTbl$GeneSet)),
                          gmtInfo, "GeneSetName")$Index
   
-  gsetable <- data.frame(GseMethodID=gseMethodId,
-                         ContrastIndex=gseContrastID,
-                         GeneSetIndex=gsIndex,
+  gsetable <- data.frame(GSEmethodID=gseMethodId,
+                         ContrastID=gseContrastID,
+                         DefaultGenesetID=gsIndex,
                          Correlation=enrichTbl$Correlation,
                          Direction=ifelse(enrichTbl$Direction=="Up", 1L, -1L),
                          PValue=enrichTbl$PValue,
@@ -346,12 +350,12 @@ addDesign <- function(conn,
                       featureSubset,
                       designMatrix) {
   designId <- newDesignID(conn)
-  studyDesignId <- newDatasetDesignID(conn, datasetID=datasetID)
+  ## studyDesignId <- newDatasetDesignID(conn, datasetID=datasetID)
   assertSampleSubset(sampleSubset)
   assertFeatureSubset(featureSubset)
   designTbl <- data.frame(ID=designId,
                           DatasetID=datasetID,
-                          DatasetDesignID=studyDesignId,
+                          ## DatasetDesignID=studyDesignId,
                           Name=as.character(name),
                           Description=as.character(description),
                           SampleSubset=blobs(sampleSubset),

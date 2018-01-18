@@ -15,6 +15,8 @@ getUser <- function() system("echo $USER", intern=TRUE)
 #' @export
 maxDesignID <- function(conn) {
   res <- dbGetQuery(conn, "SELECT MAX(ID) AS MAXID FROM Designs")[1,1]
+  if(is.na(res))
+      res <- 0L
   return(res)
 }
 
@@ -525,7 +527,7 @@ maPhenoData <- function(eset, phenoDataFile=NULL, groups=NULL) {
     pd$`_DatasetSampleIndex` <- 1:nrow(pd)
     pd$`_Sample` <- sampleNames(eset)
     pd$`_SampleGroup` <- groups
-    pData(eset) <- eset
+    pData(eset) <- pd
     return(eset)
 }
 

@@ -7,6 +7,6 @@ export("empval")
 
 export("randmat")
 
-export("kappaLA", "kappaSimp")
+export("colKappa", "rowKappa")
 
 useDynLib(ribiosMath)

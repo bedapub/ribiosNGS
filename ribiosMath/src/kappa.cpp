@@ -2,7 +2,7 @@
 
 using namespace Rcpp;
 
-RcppExport SEXP kappaLA(SEXP Xs) {
+RcppExport SEXP colKappa(SEXP Xs) {
 BEGIN_RCPP
 
   Rcpp::NumericMatrix Xr(Xs); // creates Rcpp matrix from SEXP
@@ -31,7 +31,7 @@ END_RCPP
 }
 
 
-RcppExport SEXP kappaSimp(SEXP Xs) {
+RcppExport SEXP colKappaSimp(SEXP Xs) {
 BEGIN_RCPP
 
   Rcpp::NumericMatrix Xr(Xs); // creates Rcpp matrix from SEXP

@@ -11,16 +11,17 @@ kappaSimp(matrix)
 }
 \value{
 A matrix of size nxn if the input matrix is of size mxn (m is arbitrary)
-
-#' @family kappa functions
 }
 \description{
 Calculate column-wise kappa statistics of a matrix, using a simple procedure by going through the matrix and counting
 }
 \examples{
 testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0))
-kappaSimp(testMat)
+ribiosMath:::kappaSimp(testMat)
 }
 \seealso{
-\code{\link{kappaLA}} to calculate the same statistic using a linear algebra based routine
+\code{\link{colKappa}} to calculate the same statistic using a linear algebra based routine
+
+Other kappa functions: \code{\link{colKappa}},
+  \code{\link{rowKappa}}
 }

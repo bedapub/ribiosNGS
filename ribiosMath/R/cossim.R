@@ -3,7 +3,7 @@ cossim <- function(x,y, na.rm=TRUE) {
   xIsMatrix <- is.matrix(x)
   yIsMatrix <- is.matrix(y)
   if(!xIsMatrix && !yIsMatrix) {
-    return(.Call("cossim", x, y, na.rm))
+    return(.Call(C_cossim, x, y, na.rm))
   } else if(xIsMatrix && !yIsMatrix) {
     y <- matrix(y, ncol=1L)
   } else if(!xIsMatrix && yIsMatrix) {

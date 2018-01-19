@@ -1,3 +1,3 @@
 empval <- function(stat, sim) {
-  .Call("empval", stat, sim)
+  .Call(C_empval, stat, sim)
 }

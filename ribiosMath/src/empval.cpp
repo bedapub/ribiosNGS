@@ -17,22 +17,22 @@
 //' @return A vector of empirical p-values, of the same length as the input
 //' 
 //' @references
-//'   Davison AC, Hinkley DV (1997) Bootstrap methods and their
-//' applications. Cambridge University Press, Cambridge, United Kindom.
-
-//' North BV, Curtis D, Sham PC (2002) A note on the calculation of
+//' \itemize{
+//' \item{Davison AC, Hinkley DV (1997) Bootstrap methods and their
+//' applications. Cambridge University Press, Cambridge, United Kindom.}
+//' \item{North BV, Curtis D, Sham PC (2002) A note on the calculation of
 //' empirical p values from Monte Carlo Procedures. Am J Hum Genet. 2002
-//' August; 71(2):439--441.
-//' 
+//' August; 71(2):439--441.}
+//' }
 //' @author
 //' Jitao David Zhang <jitao_david.zhang@roche.com>
 //' 
 //' @examples
-//'   set.seed(1995)
+//' set.seed(1995)
 //' testStat <- c(-100, -3, -1, 0, 1, 3, 100)
 //' testSim <- rnorm(1000)
 //' empval(stat=testStat, sim=testSim)
-  
+//' @export
 // [[Rcpp::export]]
 RcppExport SEXP empval(SEXP a, SEXP b) {
   //Implementation inspired by https://r-forge.r-project.org/scm/viewvc.php/*checkout*/papers/BatesEddelbuettel/bb.r?root=rcpp

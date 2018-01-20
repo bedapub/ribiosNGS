@@ -43,7 +43,9 @@ BEGIN_RCPP
     if(dimnms.size()>1) {
       rres.attr("dimnames") = Rcpp::List::create(dimnms[1], dimnms[1]);
     }
-    return rres;
+    Rcpp::LogicalVector isnan = Rcpp::is_nan(rres);
+    rres[isnan] = 1;
+    return(rres);
     
 END_RCPP
 }

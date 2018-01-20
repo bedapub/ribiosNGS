@@ -34,10 +34,10 @@
 //' empval(stat=testStat, sim=testSim)
 //' @export
 // [[Rcpp::export]]
-RcppExport SEXP empval(SEXP a, SEXP b) {
+RcppExport SEXP empval(SEXP stat, SEXP sim) {
   //Implementation inspired by https://r-forge.r-project.org/scm/viewvc.php/*checkout*/papers/BatesEddelbuettel/bb.r?root=rcpp
-  Rcpp::NumericVector xa(a);
-  Rcpp::NumericVector xb=clone(Rcpp::NumericVector(b));
+  Rcpp::NumericVector xa(stat);
+  Rcpp::NumericVector xb=clone(Rcpp::NumericVector(sim));
   const Rcpp::NumericVector::iterator bb=xb.begin(), ee=xb.end();
   std::sort(bb, ee); // sort xb
   int n_xa=xa.size(), n_xb=xb.size();

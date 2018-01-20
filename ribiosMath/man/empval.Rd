@@ -4,7 +4,7 @@
 \alias{empval}
 \title{Get empirical p-value}
 \usage{
-empval(a, b)
+empval(stat, sim)
 }
 \arguments{
 \item{stat}{A numeric vector of calculated statistic from the actual data}

@@ -2,7 +2,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-RcppExport SEXP cossim(SEXP x, SEXP y, SEXP narm) {
+RcppExport SEXP cossimVec(SEXP x, SEXP y, SEXP narm) {
 BEGIN_RCPP
 
   NumericVector a(x);

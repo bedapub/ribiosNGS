@@ -20,10 +20,10 @@ using namespace Rcpp;
 //' 
 //' @export
 // [[Rcpp::export]]
-RcppExport SEXP colKappa(SEXP Xs) {
+RcppExport SEXP colKappa(SEXP matrix) {
 BEGIN_RCPP
 
-  Rcpp::NumericMatrix Xr(Xs); // creates Rcpp matrix from SEXP
+  Rcpp::NumericMatrix Xr(matrix); // creates Rcpp matrix from SEXP
     int n = Xr.nrow(), k=Xr.ncol();
     arma::mat X(Xr.begin(), n, k, false); // reuses memory and avoids extra copy
     arma::mat Xminus=1-X;

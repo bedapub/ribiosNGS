@@ -4,7 +4,7 @@
 \alias{colKappa}
 \title{Calculate column-wise kappa statistics of a matrix}
 \usage{
-colKappa(Xs)
+colKappa(matrix)
 }
 \arguments{
 \item{matrix}{a binary matrix, containing values of either 0 or 1.}

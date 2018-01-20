@@ -4,7 +4,7 @@
 \alias{empval}
 \title{Get empirical p-value}
 \usage{
-empval(stat, sim)
+empval(a, b)
 }
 \arguments{
 \item{stat}{A numeric vector of calculated statistic from the actual data}
@@ -25,7 +25,7 @@ a test statistic greater than or equal to that calculated for the
 actual data.
 }
 \examples{
-  set.seed(1995)
+set.seed(1995)
 testStat <- c(-100, -3, -1, 0, 1, 3, 100)
 testSim <- rnorm(1000)
 empval(stat=testStat, sim=testSim)

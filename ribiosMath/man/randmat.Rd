@@ -4,14 +4,14 @@
 \alias{randmat}
 \title{Make a random matrix by sampling}
 \usage{
-randmat(x, n, N)
+randmat(vec, size, N)
 }
 \arguments{
-\item{N}{Integer, number of sampling repeats, or the column count of the matrix.}
-
 \item{vec}{A numeric vector to be sampled from}
 
 \item{size}{Integer, size of sampling, or the row count of the matrix.}
+
+\item{N}{Integer, number of sampling repeats, or the column count of the matrix.}
 }
 \value{
 A random matrix of the dimension \eqn{size \times N}.

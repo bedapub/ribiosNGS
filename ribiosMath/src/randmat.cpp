@@ -22,9 +22,9 @@ using namespace Rcpp;
 //'@export
 // [[Rcpp::export]]
 
-RcppExport SEXP randmat(SEXP x, SEXP n, SEXP N) {
-  Rcpp::NumericVector xx(x);
-  int n_row=Rcpp::as<int>(n);
+RcppExport SEXP randmat(SEXP vec, SEXP size, SEXP N) {
+  Rcpp::NumericVector xx(vec);
+  int n_row=Rcpp::as<int>(size);
   int n_col=Rcpp::as<int>(N);
 
   Rcpp::NumericMatrix res(n_row, n_col);

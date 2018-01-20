@@ -38,8 +38,8 @@ cossimVec <- function(x, y, narm) {
 #' testSim <- rnorm(1000)
 #' empval(stat=testStat, sim=testSim)
 #' @export
-empval <- function(a, b) {
-    .Call('_ribiosMath_empval', PACKAGE = 'ribiosMath', a, b)
+empval <- function(stat, sim) {
+    .Call('_ribiosMath_empval', PACKAGE = 'ribiosMath', stat, sim)
 }
 
 #' Calculate column-wise kappa statistics of a matrix
@@ -59,8 +59,8 @@ empval <- function(a, b) {
 #' colKappa(testMat)
 #' 
 #' @export
-colKappa <- function(Xs) {
-    .Call('_ribiosMath_colKappa', PACKAGE = 'ribiosMath', Xs)
+colKappa <- function(matrix) {
+    .Call('_ribiosMath_colKappa', PACKAGE = 'ribiosMath', matrix)
 }
 
 colKappaSimp <- function(Xs) {
@@ -86,7 +86,7 @@ colKappaSimp <- function(Xs) {
 #' testVec <- 1:10
 #' randmat(testVec, size=5L, N=10L)
 #'@export
-randmat <- function(x, n, N) {
-    .Call('_ribiosMath_randmat', PACKAGE = 'ribiosMath', x, n, N)
+randmat <- function(vec, size, N) {
+    .Call('_ribiosMath_randmat', PACKAGE = 'ribiosMath', vec, size, N)
 }
 

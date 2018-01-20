@@ -1,7 +1,25 @@
-#include "ribios_math.h"
+#include <RcppArmadillo.h>
 
 using namespace Rcpp;
 
+//' Calculate column-wise kappa statistics of a matrix
+//'
+//' The function returns column-wise kappa statistics of a matrix, using a linear algebra procedure implemented in C++.
+//'
+//' @param matrix a binary matrix, containing values of either 0 or 1.
+//'
+//' @return
+//' A matrix of size \eqn{n \times n} if the input matrix is of size \eqn{m \times n}.
+//'
+//' @family kappa functions
+//' @seealso \code{\link{rowKappa}} to calculate the statistic of rows
+//' 
+//' @examples
+//' testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0))
+//' colKappa(testMat)
+//' 
+//' @export
+// [[Rcpp::export]]
 RcppExport SEXP colKappa(SEXP Xs) {
 BEGIN_RCPP
 
@@ -30,7 +48,7 @@ BEGIN_RCPP
 END_RCPP
 }
 
-
+// [[Rcpp::export]]
 RcppExport SEXP colKappaSimp(SEXP Xs) {
 BEGIN_RCPP
 

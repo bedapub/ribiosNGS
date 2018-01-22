@@ -95,3 +95,31 @@ BEGIN_RCPP
  
 END_RCPP
 }
+
+
+//' @examples 
+//' testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0))
+//' davidClustering_cpp(testMat)
+//' @export
+// [[Rcpp::export]]
+Rcpp::List davidClustering_cpp(Rcpp::NumericMatrix adjMatrix,
+                               double kappaThr = 0.35,
+                               int initialGroupMembership = 3) {
+  Rcpp::NumericMatrix adjKappa = colKappa(adjMatrix);
+
+  int anrow = adjKappa.nrow();
+  int ancol = adjKappa.ncol();
+  
+  Rcpp::List seeds;
+  for(int i=0; i<ancol; i++ ) {
+    Rcpp::IntegerVector currSeeds; 
+    currSeeds.push_back(i);
+    for(int j=0; j<anrow; j++)  {
+      if(adjKappa[j, i] >= kappaThr && i!=j) {
+        currSeeds.push_back(j);
+      }
+      seeds.push_back(clone(currSeeds));
+    }
+  }
+  return(seeds);
+}

@@ -67,6 +67,14 @@ colKappaSimp <- function(Xs) {
     .Call('_ribiosMath_colKappaSimp', PACKAGE = 'ribiosMath', Xs)
 }
 
+#' @examples 
+#' testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0))
+#' davidClustering_cpp(testMat)
+#' @export
+davidClustering_cpp <- function(adjMatrix, kappaThr = 0.35, initialGroupMembership = 3L) {
+    .Call('_ribiosMath_davidClustering_cpp', PACKAGE = 'ribiosMath', adjMatrix, kappaThr, initialGroupMembership)
+}
+
 #' Make a random matrix by sampling
 #' 
 #' Generating a random matrix by sampling a numeric vector with replacement per column.

@@ -8,7 +8,7 @@ davidClustering(matrix, kappaThr = 0.35, initialGroupMembership = 3,
   multiLinkageThr = 0.5, removeRedundant = TRUE, debug = FALSE)
 }
 \arguments{
-\item{matrix}{Input identity matrix: the values in the cells are either 0 or 1.}
+\item{matrix}{Input An adjacency matrix: the values in the cells are either 0 or 1.}
 
 \item{kappaThr}{Numeric, the threshold of the Kappa statistic, which is used to select initial seeds. Default value: 0.35, as recommended by the authors of the original study based on their experiences.}
 

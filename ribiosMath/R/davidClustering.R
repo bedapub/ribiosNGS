@@ -2,7 +2,7 @@
 #'
 #' The function implements the Hierarhical fuzzy multi-linkage partitioning method used in the DAVID Bioinformatics tool.
 #'
-#' @param matrix Input identity matrix: the values in the cells are either 0 or 1.
+#' @param matrix Input An adjacency matrix: the values in the cells are either 0 or 1.
 #' @param kappaThr Numeric, the threshold of the Kappa statistic, which is used to select initial seeds. Default value: 0.35, as recommended by the authors of the original study based on their experiences.
 #' @param initialGroupMembership Integer, the number of minimal members in initial groups. Default value: 3.
 #' @param multiLinkageThr Numeric, the minimal linkage between two groups to be merged. Default value: 0.5.

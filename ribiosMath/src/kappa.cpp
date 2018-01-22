@@ -97,9 +97,12 @@ END_RCPP
 }
 
 
+//' Perform heuristic fuzzy multi-linkage partitioning of DAVID
+//' 
 //' @examples 
 //' testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0))
 //' davidClustering_cpp(testMat)
+//' 
 //' @export
 // [[Rcpp::export]]
 Rcpp::List davidClustering_cpp(Rcpp::NumericMatrix adjMatrix,
@@ -118,8 +121,8 @@ Rcpp::List davidClustering_cpp(Rcpp::NumericMatrix adjMatrix,
       if(adjKappa[j, i] >= kappaThr && i!=j) {
         currSeeds.push_back(j);
       }
-      seeds.push_back(clone(currSeeds));
     }
+    seeds.push_back(clone(currSeeds));
   }
   return(seeds);
 }

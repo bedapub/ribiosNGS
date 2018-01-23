@@ -54,15 +54,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // davidClustering_cpp
-Rcpp::List davidClustering_cpp(Rcpp::NumericMatrix adjMatrix, double kappaThr, int initialGroupMembership);
-RcppExport SEXP _ribiosMath_davidClustering_cpp(SEXP adjMatrixSEXP, SEXP kappaThrSEXP, SEXP initialGroupMembershipSEXP) {
+Rcpp::List davidClustering_cpp(Rcpp::NumericMatrix kappaMatrix, double kappaThr, int initialGroupMembership);
+RcppExport SEXP _ribiosMath_davidClustering_cpp(SEXP kappaMatrixSEXP, SEXP kappaThrSEXP, SEXP initialGroupMembershipSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type adjMatrix(adjMatrixSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type kappaMatrix(kappaMatrixSEXP);
     Rcpp::traits::input_parameter< double >::type kappaThr(kappaThrSEXP);
     Rcpp::traits::input_parameter< int >::type initialGroupMembership(initialGroupMembershipSEXP);
-    rcpp_result_gen = Rcpp::wrap(davidClustering_cpp(adjMatrix, kappaThr, initialGroupMembership));
+    rcpp_result_gen = Rcpp::wrap(davidClustering_cpp(kappaMatrix, kappaThr, initialGroupMembership));
     return rcpp_result_gen;
 END_RCPP
 }

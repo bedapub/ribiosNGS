@@ -53,19 +53,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// davidClustering_cpp
-Rcpp::List davidClustering_cpp(Rcpp::NumericMatrix kappaMatrix, double kappaThr, int initialGroupMembership);
-RcppExport SEXP _ribiosMath_davidClustering_cpp(SEXP kappaMatrixSEXP, SEXP kappaThrSEXP, SEXP initialGroupMembershipSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type kappaMatrix(kappaMatrixSEXP);
-    Rcpp::traits::input_parameter< double >::type kappaThr(kappaThrSEXP);
-    Rcpp::traits::input_parameter< int >::type initialGroupMembership(initialGroupMembershipSEXP);
-    rcpp_result_gen = Rcpp::wrap(davidClustering_cpp(kappaMatrix, kappaThr, initialGroupMembership));
-    return rcpp_result_gen;
-END_RCPP
-}
 // randmat
 RcppExport SEXP randmat(SEXP vec, SEXP size, SEXP N);
 RcppExport SEXP _ribiosMath_randmat(SEXP vecSEXP, SEXP sizeSEXP, SEXP NSEXP) {
@@ -85,7 +72,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ribiosMath_empval", (DL_FUNC) &_ribiosMath_empval, 2},
     {"_ribiosMath_colKappa", (DL_FUNC) &_ribiosMath_colKappa, 1},
     {"_ribiosMath_colKappaSimp", (DL_FUNC) &_ribiosMath_colKappaSimp, 1},
-    {"_ribiosMath_davidClustering_cpp", (DL_FUNC) &_ribiosMath_davidClustering_cpp, 3},
     {"_ribiosMath_randmat", (DL_FUNC) &_ribiosMath_randmat, 3},
     {NULL, NULL, 0}
 };

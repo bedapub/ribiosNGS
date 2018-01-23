@@ -4,13 +4,15 @@
 \alias{davidClustering_cpp}
 \title{Perform heuristic fuzzy multi-linkage partitioning of DAVID}
 \usage{
-davidClustering_cpp(adjMatrix, kappaThr = 0.35, initialGroupMembership = 3L)
+davidClustering_cpp(kappaMatrix, kappaThr = 0.35,
+  initialGroupMembership = 3L)
 }
 \description{
 Perform heuristic fuzzy multi-linkage partitioning of DAVID
 }
 \examples{
-testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0))
-davidClustering_cpp(testMat)
+testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0), c(1,0,1,1,0,1))
+testKappaMat <- rowKappa(testMat)
+davidClustering_cpp(testKappaMat)
 
 }

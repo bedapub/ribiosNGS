@@ -154,14 +154,14 @@ testOut2 <- davidClustering_cpp_R(synKappaMatT.round2, kappaThr=0.35)
 expect_identical(testExp1, testOut1)
 expect_identical(testExp2, testOut2)
 
-benchmark(dcR=davidClustering(t(synData), removeRedundant = TRUE, debug=FALSE),
+benchmark(dcR=davidClustering(synData, removeRedundant = TRUE, debug=FALSE),
           dcCpp=davidClustering_cpp_R(synKappaMatT.round2, kappaThr=0.35))
 
 ## large matrix
-largeMat <- matrix(rbinom(5000, 1, 0.25), nrow=500)
+largeMat <- matrix(rbinom(5000, 1, 0.25), nrow=1000)
 largematKappa <- round(rowKappa(largeMat),2)
-rres <- davidClustering(largeMat)
-cppres <- davidClustering_cpp_R(largematKappa, debug=FALSE, kappaThr=0.35)
+system.time(rres <- davidClustering(largeMat))
+system.time(cppres <- davidClustering_cpp_R(largematKappa, debug=FALSE, kappaThr=0.35))
 
 expect_identical(rres, cppres)
 

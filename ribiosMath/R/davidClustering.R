@@ -53,6 +53,9 @@ davidClustering <- function(matrix,
     seeds <- seeds[!dupSeeds]
   }
   seeds <- seeds[sapply(seeds, length)>=initialGroupMembership]
+  if(length(seeds)==0)
+    return(list())
+  
   isMultiLinkage <- sapply(seeds, function(x) {
     nonInitialSeed <- x[-1]
     subKappa <- matKappa.round2[nonInitialSeed, nonInitialSeed]

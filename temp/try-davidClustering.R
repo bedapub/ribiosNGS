@@ -14,37 +14,37 @@ Rcpp::List davidClustering_cpp_R(Rcpp::NumericMatrix kappaMatrix,
   int ancol = kappaMatrix.ncol();
 
   // TODO: seeds is a vector, which is quite expensive with operations like "erase". To be changed into list
-  std::vector< std::set<int> > seeds;
+  std::vector< std::vector<int> > seeds;
   for(int i=0; i<anrow; i++) {
-    std::set<int> currSeeds;
+    std::vector<int> currSeeds;
     for(int j=0; j<ancol; j++)  {
       if(kappaMatrix(i, j) >= kappaThr and i!=j) {
-        currSeeds.insert(j);
+        currSeeds.push_back(j);
        }
     }
    if(currSeeds.size() >= initialGroupMembership-1) {
     if(debug) {
       Rcpp::Rcout << "Candidate seeds from row [" << i << "]" << std::endl;
-    for(std::set<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
+    for(std::vector<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
        Rcpp::Rcout << *it << ",";
     }
     Rcpp::Rcout << std::endl;
     }
      if(currSeeds.size() == 1) {
-        currSeeds.insert(i);
+        currSeeds.push_back(i);
         seeds.push_back(currSeeds);
       }  else {
         int overThrKappaCnt = 0;
-        for(std::set<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
-          for(std::set<int>::iterator jt=it; jt!=currSeeds.end(); ++jt) {
-             if(jt != it && kappaMatrix(*it, *jt) >= kappaThr) {
+        for(std::vector<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
+          for(std::vector<int>::iterator jt=it+1; jt!=currSeeds.end(); ++jt) {
+             if(kappaMatrix(*it, *jt) >= kappaThr) {
                  overThrKappaCnt++;
              }
           }
         }
         int totalKappa = (currSeeds.size()*(currSeeds.size()-1))/2;
         if (overThrKappaCnt >= totalKappa * multiLinkageThr) {
-          currSeeds.insert(i);
+          currSeeds.push_back(i);
           seeds.push_back(currSeeds);
         } else {
           if(debug) {
@@ -61,14 +61,23 @@ Rcpp::List davidClustering_cpp_R(Rcpp::NumericMatrix kappaMatrix,
   if(debug) {
   Rcpp::Rcout << "#Seeds=" << seeds.size() << std::endl;
   for(int i=0; i<seeds.size(); i++) {
-    std::set<int> currSeeds = seeds[i];
+    std::vector<int> currSeeds = seeds[i];
     Rcpp::Rcout << "Seeds [" << i << "]" << std::endl;
-    for(std::set<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
+    for(std::vector<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
        Rcpp::Rcout << *it << ",";
     }
     Rcpp::Rcout << std::endl;
   }
   }
+
+  // sort seeds, make R indices, and find unique seeds
+  for(std::vector< std::vector<int> >::iterator it=seeds.begin(); it!=seeds.end(); ++it) {
+    std::sort(it->begin(), it->end());
+    std::transform(it->begin(), it-> end(), 
+                   it->begin(), std::bind2nd( std::plus<int>(), 1 ) );
+  }
+  std::sort( seeds.begin(), seeds.end() );
+  seeds.erase( std::unique( seeds.begin(), seeds.end() ), seeds.end() );
 
   // iteratively updating the seeds
   int lastSeedCount;
@@ -80,16 +89,16 @@ Rcpp::List davidClustering_cpp_R(Rcpp::NumericMatrix kappaMatrix,
     changed = FALSE;
     for(int i=0; i<lastSeedCount-1; i++) {
       for(int j=i+1; j<lastSeedCount; j++) {
-         std::set<int> seedi = seeds[i];
-         std::set<int> seedj = seeds[j];
-         std::set<int> intersect;
-         std::set<int> ijunion;
+         std::vector<int> seedi = seeds[i];
+         std::vector<int> seedj = seeds[j];
+         std::vector<int> intersect;
+         std::vector<int> ijunion;
          std::set_intersection(seedi.begin(),seedi.end(),
                                seedj.begin(),seedj.end(),
-                               std::inserter(intersect,intersect.begin()));
+                               std::back_inserter(intersect));
          std::set_union(seedi.begin(),seedi.end(),
                         seedj.begin(),seedj.end(),
-                        std::inserter(ijunion,ijunion.begin()));
+                        std::back_inserter(ijunion));
          int ninter = intersect.size();
          toMerge = FALSE;
          if(mergeRule==1) {
@@ -98,6 +107,10 @@ Rcpp::List davidClustering_cpp_R(Rcpp::NumericMatrix kappaMatrix,
              toMerge = ninter >= multiLinkageThr * seedi.size() && ninter >= multiLinkageThr * seedj.size();
          } else if (mergeRule==3) {
              toMerge = ninter >= multiLinkageThr * seedi.size() || ninter >= multiLinkageThr * seedj.size();
+         } else if (mergeRule==4) {
+             toMerge = ninter * ninter / (seedi.size() * seedj.size()) >= multiLinkageThr * multiLinkageThr;
+         } else {
+             Rcpp::stop("should not be here");
          }
          if(toMerge) {
             seeds[i] = ijunion;
@@ -116,25 +129,16 @@ Rcpp::List davidClustering_cpp_R(Rcpp::NumericMatrix kappaMatrix,
   if(debug) {
   Rcpp::Rcout << "AFTER FILTERING #Seeds=" << seeds.size() << std::endl;
   for(int i=0; i<seeds.size(); i++) {
-    std::set<int> currSeeds = seeds[i];
+    std::vector<int> currSeeds = seeds[i];
     Rcpp::Rcout << "Seeds [" << i << "]" << std::endl;
-    for(std::set<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
+    for(std::vector<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
        Rcpp::Rcout << *it << ",";
     }
     Rcpp::Rcout << std::endl;
   }
   }
 
-   Rcpp::List seedsRes;
-   for(int i=0; i<seeds.size() ; ++i) {
-      Rcpp::IntegerVector currVec;
-      std::set<int> currSeeds=seeds[i];
-      for(std::set<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
-          currVec.push_back(*it+1); // index starts with 1 in R
-      }
-     seedsRes.push_back(currVec);
-   }
-   return(seedsRes);
+  return(Rcpp::wrap(seeds));
 }')
 
 synData <- matrix(c(rep(c(rep(1, 10), rep(0, 5)), 3),
@@ -148,7 +152,7 @@ testExp2 <- davidClustering(t(synData), removeRedundant = TRUE, debug=FALSE)
 synKappaMat <- rowKappa(synData)
 synKappaMat.round2 <- round(synKappaMat, 2)
 synKappaMatT.round2 <- round(colKappa(synData),2)
-testOut1 <- davidClustering_cpp_R(synKappaMat.round2, kappaThr=0.35)
+testOut1 <- davidClustering_cpp_R(synKappaMat.round2, kappaThr=0.35, debug=TRUE)
 testOut2 <- davidClustering_cpp_R(synKappaMatT.round2, kappaThr=0.35)
 
 expect_identical(testExp1, testOut1)
@@ -163,10 +167,20 @@ largematKappa <- round(rowKappa(largeMat),2)
 system.time(rres <- davidClustering(largeMat))
 system.time(cppres <- davidClustering_cpp_R(largematKappa, debug=FALSE, kappaThr=0.35))
 
-expect_identical(rres, cppres)
+## note that now the seeds from R and from C++ have different orders
+sortedSeeds <- function(x) x[order(sapply(x, paste, collapse=""))]
+expect_identical(sortedSeeds(rres), sortedSeeds(cppres))
 
+## currently the Cpp implementation is 8 times faster than the R implementation
 benchmark(dcR=davidClustering(largeMat),
           dcCpp=davidClustering_cpp_R(largematKappa))
           
+## how different merging methods affect the results?
+
 ## internal
 clus3Kappa <- rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)][lower.tri(rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)], diag=FALSE)]
+jaccardIndex <- function(x, y=NULL) {
+  if(is.null(y))
+    y <- x
+  sapply(seq(along=x), function(i) sapply(seq(along=y), function(j) length(intersect(x[i],y[j]))/length(union(x[i], y[j]))))
+}

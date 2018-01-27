@@ -3,7 +3,7 @@
 export(colKappa)
 export(cosdist)
 export(cossim)
-export(davidClustering)
+export(davidClustering_kappa)
 export(empval)
 export(randmat)
 export(rowKappa)

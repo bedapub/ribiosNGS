@@ -19,6 +19,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// davidClustering_kappa
+Rcpp::List davidClustering_kappa(Rcpp::NumericMatrix kappaMatrix, double kappaThr, int initialGroupMembership, double multiLinkageThr, int mergeRule);
+RcppExport SEXP _ribiosMath_davidClustering_kappa(SEXP kappaMatrixSEXP, SEXP kappaThrSEXP, SEXP initialGroupMembershipSEXP, SEXP multiLinkageThrSEXP, SEXP mergeRuleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type kappaMatrix(kappaMatrixSEXP);
+    Rcpp::traits::input_parameter< double >::type kappaThr(kappaThrSEXP);
+    Rcpp::traits::input_parameter< int >::type initialGroupMembership(initialGroupMembershipSEXP);
+    Rcpp::traits::input_parameter< double >::type multiLinkageThr(multiLinkageThrSEXP);
+    Rcpp::traits::input_parameter< int >::type mergeRule(mergeRuleSEXP);
+    rcpp_result_gen = Rcpp::wrap(davidClustering_kappa(kappaMatrix, kappaThr, initialGroupMembership, multiLinkageThr, mergeRule));
+    return rcpp_result_gen;
+END_RCPP
+}
 // empval
 RcppExport SEXP empval(SEXP stat, SEXP sim);
 RcppExport SEXP _ribiosMath_empval(SEXP statSEXP, SEXP simSEXP) {
@@ -69,6 +84,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_ribiosMath_cossimVec", (DL_FUNC) &_ribiosMath_cossimVec, 3},
+    {"_ribiosMath_davidClustering_kappa", (DL_FUNC) &_ribiosMath_davidClustering_kappa, 5},
     {"_ribiosMath_empval", (DL_FUNC) &_ribiosMath_empval, 2},
     {"_ribiosMath_colKappa", (DL_FUNC) &_ribiosMath_colKappa, 1},
     {"_ribiosMath_colKappaSimp", (DL_FUNC) &_ribiosMath_colKappaSimp, 1},

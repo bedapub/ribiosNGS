@@ -141,41 +141,254 @@ Rcpp::List davidClustering_cpp_R(Rcpp::NumericMatrix kappaMatrix,
   return(Rcpp::wrap(seeds));
 }')
 
+## TODO: how different merging methods affect the results?
+
+## list instead of vector
+cppFunction('
+Rcpp::List davidClustering_cpplist_R(Rcpp::NumericMatrix kappaMatrix,
+                               double kappaThr = 0.35,
+                               int initialGroupMembership = 3,
+                               double multiLinkageThr=0.5,
+                               bool debug=0,
+                               int mergeRule=1) {
+  int anrow = kappaMatrix.nrow();
+  int ancol = kappaMatrix.ncol();
+
+  // TODO: seeds is a vector, which is quite expensive with operations like "erase". To be changed into list
+  std::list< std::vector<int> > seeds;
+  for(int i=0; i<anrow; i++) {
+    std::vector<int> currSeeds;
+    for(int j=0; j<ancol; j++)  {
+      if(kappaMatrix(i, j) >= kappaThr and i!=j) {
+        currSeeds.push_back(j);
+       }
+    }
+   if(currSeeds.size() >= initialGroupMembership-1) {
+    if(debug) {
+      Rcpp::Rcout << "Candidate seeds from row [" << i << "]" << std::endl;
+    for(std::vector<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
+       Rcpp::Rcout << *it << ",";
+    }
+    Rcpp::Rcout << std::endl;
+    }
+     if(currSeeds.size() == 1) {
+        currSeeds.push_back(i);
+        seeds.push_back(currSeeds);
+      }  else {
+        int overThrKappaCnt = 0;
+        for(std::vector<int>::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
+          for(std::vector<int>::iterator jt=it+1; jt!=currSeeds.end(); ++jt) {
+             if(kappaMatrix(*it, *jt) >= kappaThr) {
+                 overThrKappaCnt++;
+             }
+          }
+        }
+        int totalKappa = (currSeeds.size()*(currSeeds.size()-1))/2;
+        if (overThrKappaCnt >= totalKappa * multiLinkageThr) {
+          currSeeds.push_back(i);
+          seeds.push_back(currSeeds);
+        } else {
+          if(debug) {
+          Rcpp::Rcout << "Candidate seeds from row [" << i << "] failed because lack of strong linkage" << std::endl;
+          Rcpp::Rcout << "total kappa=" << totalKappa;
+          Rcpp::Rcout << "strong linkage=" << overThrKappaCnt;
+          Rcpp::Rcout << std::endl;
+          }
+        }
+      }
+    }
+  }
+
+  // sort seeds, make R indices, and find unique seeds
+  for(std::list< std::vector<int> >::iterator it=seeds.begin(); it!=seeds.end(); ++it) {
+    std::sort(it->begin(), it->end());
+    std::transform(it->begin(), it-> end(), 
+                   it->begin(), std::bind2nd( std::plus<int>(), 1 ) );
+  }
+  seeds.sort();
+  seeds.erase( std::unique( seeds.begin(), seeds.end() ), seeds.end() );
+
+  // iteratively updating the seeds
+  int lastSeedCount;
+  int newSeedCount = -1;
+  bool changed;
+  bool toMerge;
+  while(newSeedCount<0 || newSeedCount != lastSeedCount) {
+    lastSeedCount = seeds.size();
+    changed = FALSE;
+    for(std::list< std::vector<int> >::iterator it=seeds.begin(); it!=seeds.end(); ++it) {
+     for(std::list< std::vector<int> >::iterator jt=it; jt!=seeds.end(); ++jt) {
+      if(jt==it) {
+        jt++;
+        if(jt==seeds.end()) 
+          break;
+      }
+         std::vector<int> seedi = *it;
+         std::vector<int> seedj = *jt;
+         std::vector<int> intersect;
+         std::vector<int> ijunion;
+         std::set_intersection(seedi.begin(),seedi.end(),
+                               seedj.begin(),seedj.end(),
+                               std::back_inserter(intersect));
+         std::set_union(seedi.begin(),seedi.end(),
+                        seedj.begin(),seedj.end(),
+                        std::back_inserter(ijunion));
+         int ninter = intersect.size();
+         toMerge = FALSE;
+         if(mergeRule==1) {
+             toMerge = ninter >= multiLinkageThr * ijunion.size();
+         } else if (mergeRule==2) {
+             toMerge = ninter >= multiLinkageThr * seedi.size() && ninter >= multiLinkageThr * seedj.size();
+         } else if (mergeRule==3) {
+             toMerge = ninter >= multiLinkageThr * seedi.size() || ninter >= multiLinkageThr * seedj.size();
+         } else if (mergeRule==4) {
+             toMerge = ninter * ninter / (seedi.size() * seedj.size()) >= multiLinkageThr * multiLinkageThr;
+         } else {
+             Rcpp::stop("should not be here");
+         }
+         if(toMerge) {
+            *it = ijunion;
+            seeds.erase(jt);
+            changed = TRUE;
+            break;
+         }
+      }
+      if(changed) {
+        break;
+      }
+    }
+    newSeedCount = seeds.size();
+  }
+  
+  return(Rcpp::wrap(seeds));
+}')
+
+## 
+davidClusteringR <- function(matKappa.round2, 
+                            kappaThr = 0.35,
+                            initialGroupMembership=3,
+                            multiLinkageThr=0.5,
+                            ## the following parameters are used for debugging
+                            removeRedundant=TRUE,
+                            debug=FALSE) {
+  matBin <- matKappa.round2 >= kappaThr
+  ## note that order in seeds is important: the first element is the initial seed
+  seeds <- sapply(1:nrow(matBin), function(i) {
+    x <- matBin[i,]
+    members <- which(x)
+    c(i, setdiff(members, i))
+  })
+  if(removeRedundant) {
+    ordSeeds <- lapply(seeds, sort)
+    dupSeeds <- duplicated(ordSeeds)
+    seeds <- seeds[!dupSeeds]
+  }
+  seeds <- seeds[sapply(seeds, length)>=initialGroupMembership]
+  if(length(seeds)==0)
+    return(list())
+  
+  isMultiLinkage <- sapply(seeds, function(x) {
+    nonInitialSeed <- x[-1]
+    subKappa <- matKappa.round2[nonInitialSeed, nonInitialSeed]
+    pwKappa <- subKappa[lower.tri(subKappa, diag=FALSE)]
+    isLinked <- mean(pwKappa >= kappaThr)>=multiLinkageThr
+    return(isLinked)
+  })
+  seeds <- seeds[isMultiLinkage]
+  
+  ## iteratively merge seeds until no two seeds share majority (multiLinkageThr) of members
+  if(length(seeds)>1) {
+    lastSeedCount <- length(seeds)
+    newSeedCount <- NA
+    while(is.na(newSeedCount) || lastSeedCount!=newSeedCount) {
+      if(debug) {
+        print(seeds)
+      }
+      lastSeedCount <- length(seeds)
+      changed <- FALSE
+      for(i in seq(1, lastSeedCount-1)) {
+        for(j in seq(i+1, lastSeedCount)) {
+          if(j>length(seeds))
+            break
+          seedsi <- seeds[[i]]
+          seedsj <- seeds[[j]]
+          commonLen <- length(intersect(seedsi, seedsj))
+          total <- union(seedsi, seedsj)
+          totalLen <- length(total)
+          linkage <- commonLen/totalLen
+          if(linkage >= multiLinkageThr) {
+            seeds[[i]] <- total
+            seeds <- seeds[-j]
+            changed <- TRUE
+            break
+          }
+        }
+        if(changed) {
+          break
+        }
+      }
+      newSeedCount <- length(seeds)
+      if(debug) {
+        cat(sprintf("lastSeedCount=%d, newSeedCount=%d, i=%d, j=%d\n", lastSeedCount, newSeedCount, i, j))
+      }
+    }
+  }
+  ## sort the seeds
+  seeds <- lapply(seeds, sort, decreasing=FALSE)
+  return(seeds)
+}
+
+## benchmark
+
 synData <- matrix(c(rep(c(rep(1, 10), rep(0, 5)), 3),
                     rep(0, 4), rep(1, 7), rep(0,4),
                     rep(c(rep(0,5), rep(1,10)), 3),
                     rep(c(rep(0,3), 1), 4)[-16]), ncol=15, byrow=TRUE)
 rownames(synData) <- sprintf("Gene %s", letters[1:8])
 colnames(synData) <- sprintf("t%d", 1:15)
-testExp1 <- davidClustering(synData, removeRedundant = TRUE, debug=FALSE)
-testExp2 <- davidClustering(t(synData), removeRedundant = TRUE, debug=FALSE)
 synKappaMat <- rowKappa(synData)
 synKappaMat.round2 <- round(synKappaMat, 2)
+synKappaMatTp <- colKappa(synData)
+synKappaMatTp.round2 <- round(synKappaMatTp, 2)
+testExp1 <- davidClusteringR(synKappaMat.round2, removeRedundant = TRUE, debug=FALSE)
+testExp2 <- davidClusteringR(synKappaMatTp.round2, removeRedundant = TRUE, debug=FALSE)
+
 synKappaMatT.round2 <- round(colKappa(synData),2)
 testOut1 <- davidClustering_cpp_R(synKappaMat.round2, kappaThr=0.35, debug=TRUE)
 testOut2 <- davidClustering_cpp_R(synKappaMatT.round2, kappaThr=0.35)
 
+testlistOut1 <- davidClustering_cpplist_R(synKappaMat.round2, kappaThr=0.35, debug=TRUE)
+testlistOut2 <- davidClustering_cpplist_R(synKappaMatT.round2, kappaThr=0.35)
+
 expect_identical(testExp1, testOut1)
 expect_identical(testExp2, testOut2)
+expect_identical(testExp1, testlistOut1)
+expect_identical(testExp2, testlistOut2)
 
 benchmark(dcR=davidClustering(synData, removeRedundant = TRUE, debug=FALSE),
-          dcCpp=davidClustering_cpp_R(synKappaMatT.round2, kappaThr=0.35))
+          dcCppVec=davidClustering_cpp_R(synKappaMatT.round2, kappaThr=0.35),
+          dcCppList=davidClustering_cpplist_R(synKappaMatT.round2, kappaThr=0.35))
 
 ## large matrix
-largeMat <- matrix(rbinom(5000, 1, 0.25), nrow=1000)
+set.seed(1887)
+largeMat <- matrix(rbinom(10000, 1, 0.25), nrow=1000)
 largematKappa <- round(rowKappa(largeMat),2)
-system.time(rres <- davidClustering(largeMat))
+system.time(rres <- davidClusteringR(largematKappa))
 system.time(cppres <- davidClustering_cpp_R(largematKappa, debug=FALSE, kappaThr=0.35))
+system.time(cpplistres <- davidClustering_cpplist_R(largematKappa, debug=FALSE, kappaThr=0.35))
 
 ## note that now the seeds from R and from C++ have different orders
 sortedSeeds <- function(x) x[order(sapply(x, paste, collapse=""))]
 expect_identical(sortedSeeds(rres), sortedSeeds(cppres))
+expect_identical(sortedSeeds(cppres), sortedSeeds(cpplistres))
 
 ## currently the Cpp implementation is 8 times faster than the R implementation
+## the performance of std::list< std::vector<int> > and std::vector< std::vector<int> > is comparable, though vector::erase should be much more expensive than list::erase
+## in certain cases list is even slower
 benchmark(dcR=davidClustering(largeMat),
-          dcCpp=davidClustering_cpp_R(largematKappa))
+          dcCppVec=davidClustering_cpp_R(largematKappa),
+          dcCppList=davidClustering_cpplist_R(largematKappa))
           
-## how different merging methods affect the results?
 
 ## internal
 clus3Kappa <- rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)][lower.tri(rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)], diag=FALSE)]

@@ -66,6 +66,7 @@ davidClustering <- function(matrix,
   seeds <- seeds[isMultiLinkage]
   
   ## iteratively merge seeds until no two seeds share majority (multiLinkageThr) of members
+  if(length(seeds)>1) {
   lastSeedCount <- length(seeds)
   newSeedCount <- NA
   while(is.na(newSeedCount) || lastSeedCount!=newSeedCount) {
@@ -76,6 +77,8 @@ davidClustering <- function(matrix,
     changed <- FALSE
     for(i in seq(1, lastSeedCount-1)) {
       for(j in seq(i+1, lastSeedCount)) {
+        if(j>lastSeedCount)
+          break;
         seedsi <- seeds[[i]]
         seedsj <- seeds[[j]]
         commonLen <- length(intersect(seedsi, seedsj))
@@ -97,6 +100,7 @@ davidClustering <- function(matrix,
     if(debug) {
       cat(sprintf("lastSeedCount=%d, newSeedCount=%d, i=%d, j=%d\n", lastSeedCount, newSeedCount, i, j))
     }
+  }
   }
   ## sort the seeds
   seeds <- lapply(seeds, sort, decreasing=FALSE)

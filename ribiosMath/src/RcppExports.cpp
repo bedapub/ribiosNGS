@@ -47,24 +47,38 @@ BEGIN_RCPP
 END_RCPP
 }
 // colKappa
-RcppExport SEXP colKappa(SEXP matrix);
-RcppExport SEXP _ribiosMath_colKappa(SEXP matrixSEXP) {
+RcppExport SEXP colKappa(Rcpp::NumericMatrix matrix, int minOverlap);
+RcppExport SEXP _ribiosMath_colKappa(SEXP matrixSEXP, SEXP minOverlapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type matrix(matrixSEXP);
-    rcpp_result_gen = Rcpp::wrap(colKappa(matrix));
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type matrix(matrixSEXP);
+    Rcpp::traits::input_parameter< int >::type minOverlap(minOverlapSEXP);
+    rcpp_result_gen = Rcpp::wrap(colKappa(matrix, minOverlap));
     return rcpp_result_gen;
 END_RCPP
 }
 // colKappaSimp
-RcppExport SEXP colKappaSimp(SEXP Xs);
-RcppExport SEXP _ribiosMath_colKappaSimp(SEXP XsSEXP) {
+RcppExport SEXP colKappaSimp(SEXP Xs, int minOverlap);
+RcppExport SEXP _ribiosMath_colKappaSimp(SEXP XsSEXP, SEXP minOverlapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type Xs(XsSEXP);
-    rcpp_result_gen = Rcpp::wrap(colKappaSimp(Xs));
+    Rcpp::traits::input_parameter< int >::type minOverlap(minOverlapSEXP);
+    rcpp_result_gen = Rcpp::wrap(colKappaSimp(Xs, minOverlap));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rowKappa
+RcppExport SEXP rowKappa(Rcpp::NumericMatrix matrix, int minOverlap);
+RcppExport SEXP _ribiosMath_rowKappa(SEXP matrixSEXP, SEXP minOverlapSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type matrix(matrixSEXP);
+    Rcpp::traits::input_parameter< int >::type minOverlap(minOverlapSEXP);
+    rcpp_result_gen = Rcpp::wrap(rowKappa(matrix, minOverlap));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -86,8 +100,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ribiosMath_cossimVec", (DL_FUNC) &_ribiosMath_cossimVec, 3},
     {"_ribiosMath_davidClustering_kappa", (DL_FUNC) &_ribiosMath_davidClustering_kappa, 5},
     {"_ribiosMath_empval", (DL_FUNC) &_ribiosMath_empval, 2},
-    {"_ribiosMath_colKappa", (DL_FUNC) &_ribiosMath_colKappa, 1},
-    {"_ribiosMath_colKappaSimp", (DL_FUNC) &_ribiosMath_colKappaSimp, 1},
+    {"_ribiosMath_colKappa", (DL_FUNC) &_ribiosMath_colKappa, 2},
+    {"_ribiosMath_colKappaSimp", (DL_FUNC) &_ribiosMath_colKappaSimp, 2},
+    {"_ribiosMath_rowKappa", (DL_FUNC) &_ribiosMath_rowKappa, 2},
     {"_ribiosMath_randmat", (DL_FUNC) &_ribiosMath_randmat, 3},
     {NULL, NULL, 0}
 };

@@ -4,10 +4,12 @@
 \alias{colKappa}
 \title{Calculate column-wise kappa statistics of a matrix}
 \usage{
-colKappa(matrix)
+colKappa(matrix, minOverlap = 0L)
 }
 \arguments{
-\item{matrix}{a binary matrix, containing values of either 0 or 1.}
+\item{matrix}{An adjacency matrix, containing values of either 0 or 1.}
+
+\item{minOverlap}{Integer, minimal overlap between two columns in order to be considered. Pairs with fewer overlaps will return \code{NA}.}
 }
 \value{
 A matrix of size \eqn{n \times n} if the input matrix is of size \eqn{m \times n}.

@@ -394,9 +394,9 @@ benchmark(dcR=davidClustering(largeMat),
           dcCppList=davidClustering_cpplist_R(largematKappa))
           
 ## Try figuring out which merging method makes more sense
-davidFile <- "david-clustering-example.txt"
+davidFile <- "data/david-clustering-example.txt"
 davidRes <- read_david(davidFile)
-probeAnno <- readMatrix("probe-annotation.txt", as.matrix=FALSE, row.names=FALSE)
+probeAnno <- readMatrix("data/probe-annotation.txt", as.matrix=FALSE, row.names=FALSE)
 davidOrigCluster <- function(res) {
   split(paste(res$Category, res$Term, sep="|"), res$cluster)
 }
@@ -456,12 +456,13 @@ writeCluster <- function(clusterList, file) {
   writeStrList(clusterList, file, names=names)
 }
 
-writeCluster(davidClus1, "davidClus1.txt")
-writeCluster(davidClus2, "davidClus2.txt")
-writeCluster(davidClus3, "davidClus3.txt")
-writeCluster(davidClus3, "davidClus4.txt")
-writeCluster(davidClus3, "davidClus5.txt")
-writeStrList(davidOrigClus, "davidOrig.txt")
+outfile <- function(x) file.path("data", x)
+writeCluster(davidClus1, outfile("davidClus1.txt"))
+writeCluster(davidClus2, outfile("davidClus2.txt"))
+writeCluster(davidClus3, outfile("davidClus3.txt"))
+writeCluster(davidClus3, outfile("davidClus4.txt"))
+writeCluster(davidClus3, outfile("davidClus5.txt"))
+writeStrList(davidOrigClus, outfile("davidOrig.txt"))
 
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus1, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus2, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)

@@ -59,7 +59,7 @@ davidClustering_kappa_R <- function(kappaMatrix,
     nonInitialSeed <- x[-1]
     subKappa <- kappaMatrix[nonInitialSeed, nonInitialSeed]
     pwKappa <- subKappa[lower.tri(subKappa, diag=FALSE)]
-    isLinked <- mean(pwKappa >= kappaThr)>=multiLinkageThr
+    isLinked <- mean(pwKappa >= kappaThr)>=0.5
     return(isLinked)
   })
   seeds <- seeds[isMultiLinkage]

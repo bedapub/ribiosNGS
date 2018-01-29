@@ -6,3 +6,5 @@ testMatExp <- matrix(c(1,2/3, 2/3, 1), byrow=TRUE, nrow=2)
 testMatLAkappa <- colKappa(testMat)
 expect_that(testMatExp, equals(testMatLAkappa))
 
+expect_identical(rowKappa(testMat), colKappa(t(testMat)))
+expect_identical(rowKappa(t(testMat)), colKappa(testMat))

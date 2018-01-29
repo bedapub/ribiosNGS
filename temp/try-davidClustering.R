@@ -2,6 +2,10 @@ library(Rcpp)
 library(rbenchmark)
 library(testthat)
 library(ribiosMath)
+library(ribiosGSEA)
+library(ribiosIO)
+library(ribiosUtils)
+
 
 cppFunction('
 Rcpp::List davidClustering_cpp_R(Rcpp::NumericMatrix kappaMatrix,
@@ -389,11 +393,73 @@ benchmark(dcR=davidClustering(largeMat),
           dcCppVec=davidClustering_cpp_R(largematKappa),
           dcCppList=davidClustering_cpplist_R(largematKappa))
           
+## Try figuring out which merging method makes more sense
+davidFile <- "david-clustering-example.txt"
+davidRes <- read_david(davidFile)
+probeAnno <- readMatrix("probe-annotation.txt", as.matrix=FALSE, row.names=FALSE)
+david2cluster <- function(res) {
+  split(1:nrow(res), res$cluster)
+}
+david2matrix <- function(res, annotation) {
+  ## clusters <- res$cluster
+  terms <- with(res, paste(Category, Term, sep="|"))
+  probes <- lapply(as.character(res$Genes), function(x) sapply(strsplit(x, ",")[[1]], ribiosUtils::trim))
+  genes <- lapply(probes, function(p) {
+    genes <- matchColumn(tolower(p), annotation, "AFFYMETRIX_3PRIME_IVT_ID")$Name
+    genes <- setdiff(genes[!is.na(genes)], "")
+    return(genes)
+  })
+  uniqGenes <- ribiosUtils::munion(genes)
+  termByGene <- t(sapply(genes, function(x) uniqGenes %in% x))
+  rownames(termByGene) <- terms
+  colnames(termByGene) <- uniqGenes
+  stopifnot(all(rowSums(termByGene) == res$Count)) ## consistent count of genes
+  return(termByGene)
+}
+dim(davidMatrix <- david2matrix(davidRes, probeAnno))
+davidKappa <- rowKappa(davidMatrix)
+davidKappa2 <- rowKappa(davidMatrix+1-1)
+expect_identical(davidKappa, davidKappa2)
+davidKappa.round2 <- round(rowKappa(davidMatrix),2)
+ulen(davidRes$cluster)
+length(davidOrigClus <- david2cluster(davidRes))
+length(davidClus1 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=1))
+length(davidClus2 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=2))
+length(davidClus3 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=3))
+## length(davidClus4 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=4))
+## length(davidClus5 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=5))
+
+writeCluster <- function(davidRes, clusterList, file) {
+  terms <- sapply(clusterList, function(x) as.character(davidRes$Term[x]))
+  names <- sprintf("Cluster %d", seq(along=clusterList))
+  writeStrList(terms, file, names=names)
+}
+davidList <- with(davidRes, split(as.character(Term), cluster))
+
+writeCluster(davidRes, davidClus1, "davidClus1.txt")
+writeCluster(davidRes, davidClus2, "davidClus2.txt")
+writeCluster(davidRes, davidClus3, "davidClus3.txt")
+writeStrList(davidList, "davidOrig.txt", names=names(davidList))
+
+midentical(davidClus1,davidClus2, davidClus3, davidClus4)
+ribiosPlot::biosHeatmap(jaccardIndex(davidClus1, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
+ribiosPlot::biosHeatmap(jaccardIndex(davidClus2, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
+ribiosPlot::biosHeatmap(jaccardIndex(davidClus3, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
+ribiosPlot::biosHeatmap(jaccardIndex(davidClus4, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 
 ## internal
 clus3Kappa <- rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)][lower.tri(rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)], diag=FALSE)]
 jaccardIndex <- function(x, y=NULL) {
-  if(is.null(y))
+  if(is.null(y)) {
     y <- x
-  sapply(seq(along=x), function(i) sapply(seq(along=y), function(j) length(intersect(x[i],y[j]))/length(union(x[i], y[j]))))
+  }
+  res <- sapply(seq(along=x), function(i) {
+    sapply(seq(along=y), function(j) {
+      currX <- x[[i]]
+      currY <- y[[j]]
+      res <- length(intersect(currX, currY))/length(union(currX, currY))
+      return(res)
+    })
+  })
+  return(res)
 }

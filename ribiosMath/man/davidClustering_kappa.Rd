@@ -18,12 +18,13 @@ davidClustering_kappa(kappaMatrix, kappaThr = 0.35,
 
 \item{mergeRule}{Integer, how two seeds are merged. See below.
 
-Merge rules:
+Currently following merge rules are implemented:
 \itemize{
-\item{1: length of intersect divided by length of union no less than \code{multiLinkageThr}.}
-\item{2: length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}.}
-\item{3: length of intersect divided by length of \emph{either} seeds no less than \code{multiLinkageThr}.}
-\item{4: Geometric mean of length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}.}
+\item{1 (OR RULE) length of intersect divided by length of \emph{either} seeds no less than \code{multiLinkageThr}. Empirical evidence suggests that it is a bit coarse grain than the native DAVID clustering algorithm, but the performance is quite good judged by biological relevance.}
+\item{2 (AND RULE) length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}, which gives slightly fragmented cluster by empirical experieince}
+\item{3 (UNION RULE) length of intersect divided by length of the union no less than \code{multiLinkageThr}, which performs similar to the \emph{AND RULE} above.}
+\item{4 (GMEAN RULE) Geometric mean of length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}, the clusters tend to be highly fragemented.}
+\item{5 (AMEAN RULE) Arithmetic mean of length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}, a few items tend to appear in multiple clusters.}
 }}
 }
 \description{

@@ -83,13 +83,15 @@ void dc_mergeSeeds(IntList &seeds,
        int ninter = intersect.size();
        bool toMerge = FALSE;
        if(mergeRule==1) {
-         toMerge = ninter >= multiLinkageThr * seedi.size() || ninter >= multiLinkageThr * seedj.size(); // OR Rule
+         toMerge = ninter >= multiLinkageThr * seedi.size() || ninter >= multiLinkageThr * seedj.size(); // OR Rule, default
        } else if (mergeRule==2) {
-          toMerge = ninter >= multiLinkageThr * seedi.size() && ninter >= multiLinkageThr * seedj.size(); // AND Rule
+         toMerge = ninter >= multiLinkageThr * seedi.size() && ninter >= multiLinkageThr * seedj.size(); // AND Rule
        } else if (mergeRule==3) {
           toMerge = ninter >= multiLinkageThr * ijunion.size(); // Union Rule
-//       } else if (mergeRule==4) {
-//          toMerge = ninter * ninter / (seedi.size() * seedj.size()) >= multiLinkageThr * multiLinkageThr; //too liberal
+       } else if (mergeRule==4) {
+          toMerge = ninter * ninter / (seedi.size() * seedj.size()) >= multiLinkageThr * multiLinkageThr; // GMEAN - too liberal
+       } else if (mergeRule==5) {
+         toMerge = ((ninter / seedi.size()) + (ninter / seedj.size()))/2.0 >= multiLinkageThr; // AMEAN
        } else {
           Rcpp::stop("should not be here");
        }
@@ -118,12 +120,13 @@ void dc_mergeSeeds(IntList &seeds,
 //' @param multiLinkageThr Numeric, the minimal linkage between two groups to be merged. Default value: 0.5.
 //' @param mergeRule Integer, how two seeds are merged. See below.
 //' 
-//' Merge rules:
+//' Currently following merge rules are implemented:
 //' \itemize{
-//' \item{1: length of intersect divided by length of union no less than \code{multiLinkageThr}.}
-//' \item{2: length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}.}
-//' \item{3: length of intersect divided by length of \emph{either} seeds no less than \code{multiLinkageThr}.}
-//' \item{4: Geometric mean of length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}.}
+//' \item{1 (OR RULE) length of intersect divided by length of \emph{either} seeds no less than \code{multiLinkageThr}. Empirical evidence suggests that it is a bit coarse grain than the native DAVID clustering algorithm, but the performance is quite good judged by biological relevance.}
+//' \item{2 (AND RULE) length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}, which gives slightly fragmented cluster by empirical experieince}
+//' \item{3 (UNION RULE) length of intersect divided by length of the union no less than \code{multiLinkageThr}, which performs similar to the \emph{AND RULE} above.}
+//' \item{4 (GMEAN RULE) Geometric mean of length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}, the clusters tend to be highly fragemented.}
+//' \item{5 (AMEAN RULE) Arithmetic mean of length of intersect divided by length of \emph{both} seeds no less than \code{multiLinkageThr}, a few items tend to appear in multiple clusters.}
 //' }
 //' 
 //' @author Jitao David Zhang <jitao_david.zhang@roche.com>

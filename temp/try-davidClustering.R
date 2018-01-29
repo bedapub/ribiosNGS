@@ -397,8 +397,8 @@ benchmark(dcR=davidClustering(largeMat),
 davidFile <- "david-clustering-example.txt"
 davidRes <- read_david(davidFile)
 probeAnno <- readMatrix("probe-annotation.txt", as.matrix=FALSE, row.names=FALSE)
-david2cluster <- function(res) {
-  split(1:nrow(res), res$cluster)
+davidOrigCluster <- function(res) {
+  split(paste(res$Category, res$Term, sep="|"), res$cluster)
 }
 david2matrix <- function(res, annotation) {
   ## clusters <- res$cluster
@@ -414,46 +414,60 @@ david2matrix <- function(res, annotation) {
   rownames(termByGene) <- terms
   colnames(termByGene) <- uniqGenes
   stopifnot(all(rowSums(termByGene) == res$Count)) ## consistent count of genes
-  return(termByGene)
+  dupTerms <- duplicated(terms)
+  res <- termByGene[!dupTerms,]
+  return(res)
 }
-dim(davidMatrix <- david2matrix(davidRes, probeAnno))
+dim(davidMatrix <- david2matrix(davidRes, annotation=probeAnno))
+dim(davidKappa <- rowKappa(davidMatrix, minOverlap=3))
+david2cluster <- function(kappa=davidKappa, kappaThr=0.5, mergeRule=1) {
+  clusRes <- davidClustering_kappa(davidKappa, kappaThr = kappaThr, mergeRule=mergeRule)
+  clus <- lapply(clusRes, function(i) rownames(davidKappa)[i])
+  return(clus)
+}
 
-davidKappa <- rowKappa(davidMatrix, minOverlap=3)
-davidKappa[is.na(davidKappa)] <- -1
-davidKappa.round2 <- round(rowKappa(davidMatrix),2)
 ulen(davidRes$cluster)
-length(davidOrigClus <- david2cluster(davidRes))
-length(davidClus1 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=1)) ## AND rule: okay, many replicates though
-length(davidClus2 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=2)) ## OR rule: too coarse grain
-length(davidClus3 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=3)) ## UNION RULE: too many replicates
-## length(davidClus4 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=4))
-## length(davidClus5 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=5))
-
+length(davidOrigClus <- davidOrigCluster(davidRes))
+length(davidClus1 <- david2cluster(mergeRule=1)) ## AND rule: okay, many replicates though
+length(davidClus2 <- david2cluster(mergeRule=2)) ## OR rule: coarse grain
+length(davidClus3 <- david2cluster(mergeRule=3)) ## UNION RULE: too many replicates
+length(davidClus4 <- david2cluster(mergeRule=4))  ## GMEAN RULE: too many clusters
+length(davidClus5 <- david2cluster(mergeRule=5))  ## AMEAN RULE: ok clusters
+## davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=6)
+ 
+table(table(unlist(davidOrigClus)))
 table(table(unlist(davidClus1)))
 table(table(unlist(davidClus2)))
 table(table(unlist(davidClus3)))
+table(table(unlist(davidClus4)))
+table(table(unlist(davidClus5)))
 
-table(sapply(davidOrigClus, length))
-table(sapply(davidClus1, length))
-table(sapply(davidClus2, length))
-table(sapply(davidClus3, length))
+plot(density(sapply(davidOrigClus, length)), main="Cluster size")
+lines(density(sapply(davidClus1, length)), col="red")
+lines(density(sapply(davidClus2, length)), col="blue")
+lines(density(sapply(davidClus3, length)), col="orange")
+lines(density(sapply(davidClus4, length)), col="darkgreen")
+lines(density(sapply(davidClus5, length)), col="violet")
 
-writeCluster <- function(davidRes, clusterList, file) {
-  terms <- sapply(clusterList, function(x) as.character(davidRes$Term[x]))
+
+writeCluster <- function(clusterList, file) {
+  
   names <- sprintf("Cluster %d", seq(along=clusterList))
-  writeStrList(terms, file, names=names)
+  writeStrList(clusterList, file, names=names)
 }
-davidList <- with(davidRes, split(as.character(Term), cluster))
 
-writeCluster(davidRes, davidClus1, "davidClus1.txt")
-writeCluster(davidRes, davidClus2, "davidClus2.txt")
-writeCluster(davidRes, davidClus3, "davidClus3.txt")
-writeStrList(davidList, "davidOrig.txt", names=names(davidList))
+writeCluster(davidClus1, "davidClus1.txt")
+writeCluster(davidClus2, "davidClus2.txt")
+writeCluster(davidClus3, "davidClus3.txt")
+writeCluster(davidClus3, "davidClus4.txt")
+writeCluster(davidClus3, "davidClus5.txt")
+writeStrList(davidOrigClus, "davidOrig.txt")
 
-midentical(davidClus1,davidClus2, davidClus3, davidClus4)
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus1, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus2, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus3, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
+ribiosPlot::biosHeatmap(jaccardIndex(davidClus4, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
+ribiosPlot::biosHeatmap(jaccardIndex(davidClus5, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 
 ## internal
 clus3Kappa <- rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)][lower.tri(rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)], diag=FALSE)]

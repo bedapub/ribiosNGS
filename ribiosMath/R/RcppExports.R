@@ -91,8 +91,8 @@ empval <- function(stat, sim) {
 #'
 #' The function returns column-wise kappa statistics of a matrix, using a linear algebra procedure implemented in C++.
 #'
-#' @param matrix a binary matrix, containing values of either 0 or 1.
-#'
+#' @param matrix An adjacency matrix, containing values of either 0 or 1.
+#' @param minOverlap Integer, minimal overlap between two columns in order to be considered. Pairs with fewer overlaps will return \code{NA}.
 #' @return
 #' A matrix of size \eqn{n \times n} if the input matrix is of size \eqn{m \times n}.
 #'
@@ -104,12 +104,33 @@ empval <- function(stat, sim) {
 #' colKappa(testMat)
 #' 
 #' @export
-colKappa <- function(matrix) {
-    .Call('_ribiosMath_colKappa', PACKAGE = 'ribiosMath', matrix)
+colKappa <- function(matrix, minOverlap = 0L) {
+    .Call('_ribiosMath_colKappa', PACKAGE = 'ribiosMath', matrix, minOverlap)
 }
 
-colKappaSimp <- function(Xs) {
-    .Call('_ribiosMath_colKappaSimp', PACKAGE = 'ribiosMath', Xs)
+colKappaSimp <- function(Xs, minOverlap = 0L) {
+    .Call('_ribiosMath_colKappaSimp', PACKAGE = 'ribiosMath', Xs, minOverlap)
+}
+
+#' Calculate row-wise kappa statistics of a matrix
+#'
+#' The function returns row-wise kappa statistics of a matrix, using a linear algebra procedure implemented in C++.
+#'
+#' @param matrix An adjacency matrix, containing values of either 0 or 1.
+#' @param minOverlap Integer, minimal overlap between two columns in order to be considered. Pairs with fewer overlaps will return \code{NA}.
+#' @return
+#' A matrix of size \eqn{m \times m} if the input matrix is of size \eqn{m \times n}.
+#'
+#' @family kappa functions
+#' @seealso \code{\link{colKappa}} to calculate the statistic of rows
+#' 
+#' @examples
+#' testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0), c(0,1,0,0,1,0), c(1,0,1,0,1,0))
+#' rowKappa(testMat)
+#' stopifnot(identical(rowKappa(testMat), colKappa(t(testMat))))
+#' @export
+rowKappa <- function(matrix, minOverlap = 0L) {
+    .Call('_ribiosMath_rowKappa', PACKAGE = 'ribiosMath', matrix, minOverlap)
 }
 
 #' Make a random matrix by sampling

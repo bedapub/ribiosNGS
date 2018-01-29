@@ -8,44 +8,43 @@ typedef std::list< std::vector<int> > IntList;
 
 IntList dc_kappaRowSeeds(NumericMatrix kappaMatrix,
                          double kappaThr = 0.35,
-                         int initialGroupMembership = 3,
-                         double multiLinkageThr=0.5) {
+                         int initialGroupMembership = 3) {
    int anrow = kappaMatrix.nrow();
    int ancol = kappaMatrix.ncol();
    if(anrow != ancol) {
      Rcpp::stop("The input matrix must be a square matrix, i.e. row numbers must equal to column numbers");
    }
 
-  IntList seeds;
-  for(int i=0; i<anrow; i++) {
-    IntVec currSeeds;
-    for(int j=0; j<ancol; j++)  {
-      if(kappaMatrix(i, j) >= kappaThr and i!=j) {
-        currSeeds.push_back(j);
+   IntList seeds;
+   for(int i=0; i<anrow; i++) {
+     IntVec currSeeds;
+     for(int j=0; j<ancol; j++)  {
+       if(kappaMatrix(i, j) >= kappaThr and i!=j) {
+         currSeeds.push_back(j);
+        }
+     }
+     if(currSeeds.size() >= initialGroupMembership-1) {
+      if(currSeeds.size() == 1) {
+         currSeeds.push_back(i);
+         seeds.push_back(currSeeds);
+       }  else {
+         int overThrKappaCnt = 0;
+         for(IntVec::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
+           for(IntVec::iterator jt=it+1; jt!=currSeeds.end(); ++jt) {
+              if(kappaMatrix(*it, *jt) >= kappaThr) {
+                  overThrKappaCnt++;
+              }
+           }
+         }
+         int totalKappa = (currSeeds.size()*(currSeeds.size()-1))/2;
+         if (overThrKappaCnt >= totalKappa * 0.5) {
+           currSeeds.push_back(i);
+           seeds.push_back(currSeeds);
+         }
        }
-    }
-    if(currSeeds.size() >= initialGroupMembership-1) {
-     if(currSeeds.size() == 1) {
-        currSeeds.push_back(i);
-        seeds.push_back(currSeeds);
-      }  else {
-        int overThrKappaCnt = 0;
-        for(IntVec::iterator it=currSeeds.begin(); it!=currSeeds.end(); ++it) {
-          for(IntVec::iterator jt=it+1; jt!=currSeeds.end(); ++jt) {
-             if(kappaMatrix(*it, *jt) >= kappaThr) {
-                 overThrKappaCnt++;
-             }
-          }
-        }
-        int totalKappa = (currSeeds.size()*(currSeeds.size()-1))/2;
-        if (overThrKappaCnt >= totalKappa * multiLinkageThr) {
-          currSeeds.push_back(i);
-          seeds.push_back(currSeeds);
-        }
       }
-    }
-  }
-  return(seeds);
+   }
+   return(seeds);
 }
 
 void dc_uniqueSeeds(IntList &seeds) {
@@ -59,8 +58,8 @@ void dc_uniqueSeeds(IntList &seeds) {
 }
 
 void dc_mergeSeeds(IntList &seeds,
-                         double multiLinkageThr=0.5,
-                         int mergeRule=1) {
+                   double multiLinkageThr=0.5,
+                   int mergeRule=1) {
   int lastSeedCount;
   int newSeedCount = -1;
   while(newSeedCount<0 || newSeedCount != lastSeedCount) {
@@ -68,44 +67,42 @@ void dc_mergeSeeds(IntList &seeds,
     bool changed = FALSE;
     for(std::list< std::vector<int> >::iterator it=seeds.begin(); it!=seeds.end(); ++it) {
      for(std::list< std::vector<int> >::iterator jt=it; jt!=seeds.end(); ++jt) {
-      if(jt==it) {
-        jt++;
-        if(jt==seeds.end()) 
-          break;
-      }
-      IntVec seedi = *it;
-      IntVec seedj = *jt;
-      IntVec intersect;
-      IntVec ijunion;
-      std::set_intersection(seedi.begin(),seedi.end(),
-                            seedj.begin(),seedj.end(),
-                            std::back_inserter(intersect));
-      std::set_union(seedi.begin(),seedi.end(),
-                     seedj.begin(),seedj.end(),
-                     std::back_inserter(ijunion));
-      int ninter = intersect.size();
-      bool toMerge = FALSE;
-      if(mergeRule==1) {
-         toMerge = ninter >= multiLinkageThr * ijunion.size();
-         } else if (mergeRule==2) {
-             toMerge = ninter >= multiLinkageThr * seedi.size() && ninter >= multiLinkageThr * seedj.size();
-         } else if (mergeRule==3) {
-             toMerge = ninter >= multiLinkageThr * seedi.size() || ninter >= multiLinkageThr * seedj.size();
-         } else if (mergeRule==4) {
-             toMerge = ninter * ninter / (seedi.size() * seedj.size()) >= multiLinkageThr * multiLinkageThr;
-         } else {
-             Rcpp::stop("should not be here");
-         }
-         if(toMerge) {
-            *it = ijunion;
-            seeds.erase(jt);
-            changed = TRUE;
-            break;
-         }
-      }
-      if(changed) {
-        break;
-      }
+       if(jt==it) {
+         continue;
+       }
+       IntVec seedi = *it;
+       IntVec seedj = *jt;
+       IntVec intersect;
+       IntVec ijunion;
+       std::set_intersection(seedi.begin(),seedi.end(),
+                             seedj.begin(),seedj.end(),
+                             std::back_inserter(intersect));
+       std::set_union(seedi.begin(),seedi.end(),
+                      seedj.begin(),seedj.end(),
+                      std::back_inserter(ijunion));
+       int ninter = intersect.size();
+       bool toMerge = FALSE;
+       if(mergeRule==1) {
+         toMerge = ninter >= multiLinkageThr * seedi.size() || ninter >= multiLinkageThr * seedj.size(); // OR Rule
+       } else if (mergeRule==2) {
+          toMerge = ninter >= multiLinkageThr * seedi.size() && ninter >= multiLinkageThr * seedj.size(); // AND Rule
+       } else if (mergeRule==3) {
+          toMerge = ninter >= multiLinkageThr * ijunion.size(); // Union Rule
+//       } else if (mergeRule==4) {
+//          toMerge = ninter * ninter / (seedi.size() * seedj.size()) >= multiLinkageThr * multiLinkageThr; //too liberal
+       } else {
+          Rcpp::stop("should not be here");
+       }
+       if(toMerge) {
+         *it = ijunion;
+         seeds.erase(jt);
+         changed = TRUE;
+         break;
+       }
+     }
+     if(changed) {
+       break;
+     }
     }
     newSeedCount = seeds.size();
   }
@@ -160,10 +157,11 @@ Rcpp::List davidClustering_kappa(Rcpp::NumericMatrix kappaMatrix,
                                 int mergeRule=1) {
   IntList seeds = dc_kappaRowSeeds(kappaMatrix,
                                    kappaThr=kappaThr,
-                                   initialGroupMembership=initialGroupMembership,
-                                   multiLinkageThr=multiLinkageThr);
+                                   initialGroupMembership=initialGroupMembership);
   dc_uniqueSeeds(seeds);
-  dc_mergeSeeds(seeds);
+  dc_mergeSeeds(seeds,
+                multiLinkageThr=multiLinkageThr,
+                mergeRule=mergeRule);
   return(Rcpp::wrap(seeds));
 }
 // You can include R code blocks in C++ files processed with sourceCpp

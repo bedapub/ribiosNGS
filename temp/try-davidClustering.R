@@ -417,17 +417,26 @@ david2matrix <- function(res, annotation) {
   return(termByGene)
 }
 dim(davidMatrix <- david2matrix(davidRes, probeAnno))
-davidKappa <- rowKappa(davidMatrix)
-davidKappa2 <- rowKappa(davidMatrix+1-1)
-expect_identical(davidKappa, davidKappa2)
+
+davidKappa <- rowKappa(davidMatrix, minOverlap=3)
+davidKappa[is.na(davidKappa)] <- -1
 davidKappa.round2 <- round(rowKappa(davidMatrix),2)
 ulen(davidRes$cluster)
 length(davidOrigClus <- david2cluster(davidRes))
-length(davidClus1 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=1))
-length(davidClus2 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=2))
-length(davidClus3 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=3))
+length(davidClus1 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=1)) ## AND rule: okay, many replicates though
+length(davidClus2 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=2)) ## OR rule: too coarse grain
+length(davidClus3 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=3)) ## UNION RULE: too many replicates
 ## length(davidClus4 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=4))
 ## length(davidClus5 <- davidClustering_kappa(davidKappa, kappaThr = 0.5, mergeRule=5))
+
+table(table(unlist(davidClus1)))
+table(table(unlist(davidClus2)))
+table(table(unlist(davidClus3)))
+
+table(sapply(davidOrigClus, length))
+table(sapply(davidClus1, length))
+table(sapply(davidClus2, length))
+table(sapply(davidClus3, length))
 
 writeCluster <- function(davidRes, clusterList, file) {
   terms <- sapply(clusterList, function(x) as.character(davidRes$Term[x]))
@@ -445,7 +454,6 @@ midentical(davidClus1,davidClus2, davidClus3, davidClus4)
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus1, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus2, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 ribiosPlot::biosHeatmap(jaccardIndex(davidClus3, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
-ribiosPlot::biosHeatmap(jaccardIndex(davidClus4, davidOrigClus), ylab="Original DAVID", Colv=FALSE, Rowv=FALSE)
 
 ## internal
 clus3Kappa <- rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)][lower.tri(rowKappa(synData)[c(1,2,3,5,6,7),c(1,2,3,5,6,7)], diag=FALSE)]

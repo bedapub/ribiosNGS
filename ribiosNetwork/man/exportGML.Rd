@@ -43,10 +43,9 @@ Export igraph object to GML, friendly to Cytoscape and yEd
  exportGML(g, gFile)
 
 }
-\author{
-Jitao David Zhang, \email{jitao_david.zhang@roche.com}
-}
 \seealso{
 \code{\link[igraph]{write.graph}}
 }
-
+\author{
+Jitao David Zhang, \email{jitao_david.zhang@roche.com}
+}

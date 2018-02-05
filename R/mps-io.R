@@ -14,10 +14,10 @@ extractTargetAnno <- function(readCountsList) {
 #' 
 #' @param readCountList A list of read count data.frames
 #' @param barcodeSummaryList A list of barcode summary data.frames
-#' @param runNames Character strings, run names
+#' @param runNames Character strings, run names. If \code{NULL}, a sequential number will be given.
 #' 
 #' The function is used internally to merge several runs into one ExpressionSet object.
-mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=names(readCountList)) {
+mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) {
   if(is.null(runNames))
     runNames <- seq(along=readCountList)
   stopifnot(length(readCountList)==length(barcodeSummaryList))

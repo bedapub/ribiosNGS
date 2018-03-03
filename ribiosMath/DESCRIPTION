@@ -1,8 +1,8 @@
 Package: ribiosMath
 Type: Package
 Title: Mathematical and statistical tools in ribios
-Version: 1.1-1
-Date: 2018-01-27
+Version: 1.1-2
+Date: 2018-01-29
 Author: Jitao David Zhang <jitao_david.zhang@roche.com>
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Mathematical and statistical tools in ribios. Functions target at

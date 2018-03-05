@@ -72,7 +72,8 @@ export(buildGSEAcomm)
 ## GMT functions
 export(readGmt, writeGmt, parseGmt,
        appendGeneSets,
-       matchGenes)
+       matchGenes,
+       readDefaultGenesets)
 
 ## Fisher test (using hypergeometric test)
 export(gmthyper, gmthyperList)

@@ -71,7 +71,7 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) 
 #'   runNames=c("R1", "R2", "R3"))
 readAmpliSeq <- function(readCountFiles, 
                          barcodeSummaryFiles,
-                         runNames=names(readCountFileList)) {
+                         runNames=names(readCountFiles)) {
   stopifnot(length(readCountFiles)==length(barcodeSummaryFiles))
   if(!is.null(runNames)) {
     stopifnot(length(readCountFiles)==length(runNames))

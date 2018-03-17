@@ -87,7 +87,15 @@ readAmpliSeq <- function(readCountFiles,
     readr::read_tsv(f, col_types=colTypeStr)
   })
   barcodeSummaryList <- lapply(barcodeSummaryFiles, function(f) {
-    readr::read_tsv(f, col_types="ccicc")
+    df <- readr::read_tsv(f, col_types="ccicc")
+    if(ncol(df)==4 && identical(colnames(df), c("Barcode ID", "Sample Name", "Mapped Reads", "On Target"))) {
+      df$TargetsDetected <- NA
+    } else if (ncol(df)==5) {
+      ## okay
+    } else {
+      stop("barcode summary files should have either 4 or 5 columns!")
+    }
+    return(df)
   })
   
   res <- mergeAmpliseqRuns(readCountList, barcodeSummaryList, runNames) 

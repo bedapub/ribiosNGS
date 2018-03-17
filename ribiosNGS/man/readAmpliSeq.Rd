@@ -5,7 +5,7 @@
 \title{Read AmpliSeq results into an ExpressionSet object}
 \usage{
 readAmpliSeq(readCountFiles, barcodeSummaryFiles,
-  runNames = names(readCountFileList))
+  runNames = names(readCountFiles))
 }
 \arguments{
 \item{readCountFiles}{Character string vector, names of read count files}

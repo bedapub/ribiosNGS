@@ -4,15 +4,14 @@
 \alias{mergeAmpliseqRuns}
 \title{Merge AmpliSeq runs}
 \usage{
-mergeAmpliseqRuns(readCountList, barcodeSummaryList,
-  runNames = names(readCountList))
+mergeAmpliseqRuns(readCountList, barcodeSummaryList, runNames = NULL)
 }
 \arguments{
 \item{readCountList}{A list of read count data.frames}
 
 \item{barcodeSummaryList}{A list of barcode summary data.frames}
 
-\item{runNames}{Character strings, run names
+\item{runNames}{Character strings, run names. If \code{NULL}, a sequential number will be given.
 
 The function is used internally to merge several runs into one ExpressionSet object.}
 }

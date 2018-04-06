@@ -40,6 +40,7 @@ export(sigGene, sigGenes,
        sigPosGenes, sigNegGenes,
        sigGeneCounts,
        updateSigFilter)
+export(logFCmatrix)
 
 ## sva
 export(countsSVA, countsRemoveSV,

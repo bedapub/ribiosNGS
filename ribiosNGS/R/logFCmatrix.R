@@ -2,7 +2,7 @@
 #' 
 #' @param edgeResult An \code{EdgeResult} object
 #' @param featureIdentifier Character, column name in \code{dgeTable} that will be used as rownames of the result matrix
-#' @param contrast \code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned
+#' @param contrasts \code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned
 #' 
 #' @note TODO: add edgeResult data example
 logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", contrasts=NULL) {

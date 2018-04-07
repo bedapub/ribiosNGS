@@ -11,7 +11,7 @@ logFCmatrix(edgeResult, featureIdentifier = "GeneSymbol", contrasts = NULL)
 
 \item{featureIdentifier}{Character, column name in \code{dgeTable} that will be used as rownames of the result matrix}
 
-\item{contrast}{\code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned}
+\item{contrasts}{\code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned}
 }
 \description{
 Extract a matrix of log2(fold-change) values

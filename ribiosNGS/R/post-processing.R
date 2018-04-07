@@ -94,16 +94,61 @@ jaccardDist <- function(x, y) 1-jaccardIndex(x,y)
 ##              }
 ##          })
 
+
+#' Parse contributing genes from the output file
+#' @param str Character string, containing contributing genes
+#' @return A list of \code{data.frames}, each containing two columns, \code{Gene} and \code{Stat}
+#' 
+#' @examples 
+#' parseContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)")
+#' parseContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
+#'                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"))
 parseContributingGenes <- function(str) {
-    ss <- strsplit(as.character(str), ",")
-    genes <- lapply(ss, function(x) gsub("\\(.*\\)", "", x))
-    stats <- lapply(ss, function(x) as.numeric(gsub(".*\\((.*)\\)$", "\\1", x)))
-    res <- lapply(seq(along=ss), function(i) data.frame(Gene=genes[[i]], Stat=stats[[i]]))
-    if(length(res)==1) {
-        res <- res[[1]]
-    }
-    return(res)
+  ss <- strsplit(str, ",")
+  res <- lapply(ss, function(x) {
+    genes <- gsub("\\(.*\\)", "", x)
+    stat <- as.numeric(as.character(gsub(".*\\((.*)\\)", "\\1", x)))
+    return(data.frame(Gene=genes, Stat=stat))
+  })
+  return(res)
 }
+
+#' Parse contributing genes by genesets
+#' @param str Character strings, containing contributing genes
+#' @param genesets Character strings, geneset labels. Its length must match the length of \code{str}
+#' @return A \code{data.frame} containing genesets, genes, and statistics
+#' 
+#' @examples 
+#' parseGenesetsContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)", "Metabolism")
+#' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
+#'                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"),
+#'                          c("Metabolism", "AKTs"))
+parseGenesetsContributingGenes <- function(str, genesets) {
+  stopifnot(length(str)==length(genesets))
+  genes <- parseContributingGenes(str)
+  res <- cbind(GeneSet=rep(genesets, sapply(genes, nrow)),
+               do.call(rbind, genes))
+  return(res)
+}
+
+#' #' Parse contributing genesets by both genesets and contrasts
+#' #' @param str Character strings, containing contributing genes
+#' #' @param genesets Character strings, geneset labels. Its length must match the length of \code{str}
+#' #' @return A \code{data.frame} containing genesets, genes, and statistics
+#' #' 
+#' #' @examples 
+#' #' parseGenesetsContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)", "Metabolism")
+#' #' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
+#' #'                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"),
+#' #'                          c("Metabolism", "AKTs"))
+#' parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts) {
+#'   genes <- parseContributingGenes(str)
+#'   res <- cbind(Contrast=rep(contrasts, sapply(contrasts, nrow)),
+#'                GeneSet=rep(genesets, sapply(genes, nrow)),
+#'                do.call(rbind, genes))
+#'   return(res)
+#' }
+
 
 
 ##GSEresult <- function(Category,
@@ -158,10 +203,13 @@ parseContributingGenes <- function(str) {
 ##}
 
 ## skip the GSEresultList object, and directly parse camera table
-readCameraTable <- function(file) {
-    tbl <- readMatrix(file, as.matrix=FALSE, row.names=FALSE)
-    tbl$Score <- with(tbl, cameraScore(PValue, Direction))
-    return(tbl)
+#' Read CAMERA results into a tibble object
+#' @param file CAMERA results file
+#' @param minNGenes Integer, genesets with fewer genes are filtered out
+readCameraResults <- function(file, minNGenes=3) {
+  res <- readr::read_tsv(file, col_types = "cccicdddddddc")
+  res <- subset(res, NGenes>=minNGenes)
+  return(res)
 }
 
 expandCameraTableGenes <- function(tbl) {

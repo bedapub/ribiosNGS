@@ -163,7 +163,10 @@ export(minGroupCount,
        maxCountByGroup,
        hasNoReplicate)
 
-export(readCameraTable,
+export(readCameraResults,
        expandSigCameraResults,
        cameraTable2network,
        visualizeCameraNetworksByContrast)
+
+export(parseContributingGenes,
+       parseGenesetsContributingGenes)

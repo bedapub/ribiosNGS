@@ -95,7 +95,12 @@ empval <- function(stat, sim) {
 #' @param matrix An adjacency matrix, containing values of either 0 or 1.
 #' @param minOverlap Integer, minimal overlap between two columns in order to be considered. Pairs with fewer overlaps will return \code{NA}.
 #' @return
-#' A matrix of size \eqn{n \times n} if the input matrix is of size \eqn{m \times n}.
+#' A matrix of size \eqn{n \times n} if the input matrix is of size \eqn{m \times n}. 
+#'
+#' @note
+#' A kappa statistics of value 1 indicates perfect agreement. A value of 0
+#' indicates no agreement. Note that the value can be negative, which implies
+#' the agreement is worse than random.
 #'
 #' @family kappa functions
 #' @seealso \code{\link{rowKappa}} to calculate the statistic of rows
@@ -121,6 +126,11 @@ colKappaSimp <- function(Xs, minOverlap = 0L) {
 #' @param minOverlap Integer, minimal overlap between two columns in order to be considered. Pairs with fewer overlaps will return \code{NA}.
 #' @return
 #' A matrix of size \eqn{m \times m} if the input matrix is of size \eqn{m \times n}.
+#'
+#' @note
+#' A kappa statistics of value 1 indicates perfect agreement. A value of 0
+#' indicates no agreement. Note that the value can be negative, which implies
+#' the agreement is worse than random.
 #'
 #' @family kappa functions
 #' @seealso \code{\link{colKappa}} to calculate the statistic of rows

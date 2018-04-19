@@ -17,6 +17,11 @@ A matrix of size \eqn{n \times n} if the input matrix is of size \eqn{m \times n
 \description{
 The function returns column-wise kappa statistics of a matrix, using a linear algebra procedure implemented in C++.
 }
+\note{
+A kappa statistics of value 1 indicates perfect agreement. A value of 0
+indicates no agreement. Note that the value can be negative, which implies
+the agreement is worse than random.
+}
 \examples{
 testMat <- cbind(c(1,1,0,0,1,0), c(1,1,0,1,1,0))
 colKappa(testMat)

@@ -5,7 +5,8 @@
 #' @param contrasts \code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned
 #' 
 #' @note TODO: add edgeResult data example
-logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", contrasts=NULL) {
+logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", contrasts=NULL,
+                        removeNAfeatures=TRUE) {
   tbls <- edgeResult@dgeTables
   allContrasts <- contrastNames(edgeResult)
   
@@ -15,11 +16,15 @@ logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", contrasts=NU
   mat <- sapply(tbls, function(x) matchColumn(oriFeats, x, 0L)$logFC)
   rownames(mat) <- feats
   colnames(mat) <- allContrasts
+  if(removeNAfeatures) {
+      isNAfeat <- is.na(feats) || feats=="-"
+      mat <- mat[!isNAfeat,,drop=FALSE]
+  }
   if(!is.null(contrasts)) {
     if (is.logical(contrasts) || is.numeric(contrasts)) {
       contrasts <- allContrasts[contrasts]
     }
-    mat <- mat[, contrasts]
+    mat <- mat[, contrasts, drop=FALSE]
   }
   return(mat)
 }

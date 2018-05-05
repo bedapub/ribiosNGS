@@ -70,6 +70,7 @@ readBiokitExpression <- function(files,
     sampleInfo <- read.table(ngsPipelineSampleInfoFile, head=FALSE,
                              col.names=c("SampleName", "SampleGroup", "Fastq1", "Fastq2"))
     sampleInfo <- matchColumn(sampleNames(res), sampleInfo, "SampleName")
+    rownames(sampleInfo) <- sampleNames(res)
     pData(res) <- sampleInfo
   }
   return(res)

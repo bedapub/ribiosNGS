@@ -14,6 +14,7 @@ matchKeyValue <- function(keys, dfList, keyColumn, valueColumns) {
   resList <- lapply(valueColumns, function(col) {
     res <- do.call(cbind, lapply(subdfList, function(x) x[,col]))
     rownames(res) <- keys
+    res[is.na(res)] <- 0
     return(res)
   })
   return(resList)

@@ -13,6 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
+logo: /assets/img/ribios-logo.png
 #title: Your awesome title
 #email: your-email@example.com
 #description: >- # this means to ignore newlines until "baseurl:"
@@ -30,14 +31,4 @@ theme: jekyll-theme-minimal
 #plugins:
 #  - jekyll-feed
 
-# Exclude from processing.
-# The following items will not be processed, by default. Create a custom list
-# to override the default setting.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+exclude: ['extract_descs.R', 'Gemfile.lock', 'Gemfile']

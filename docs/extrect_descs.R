@@ -36,4 +36,4 @@ packages.meta$Scores <- unlist(lapply(packages.meta$Package, function(x) depende
 packages.meta.orderd <- packages.meta[order(-Scores)]
 cat(sprintf("%s | %s\n", packages.meta.orderd $Package, gsub("[\r\n]", "", packages.meta.orderd $Description)))
 
-print(paste(sprintf("%s",packages.meta.orderd$Package),collapse = ","))
+cat(paste(sprintf("\"%s\"",packages.meta.orderd$Package),collapse = ","))

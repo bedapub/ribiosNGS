@@ -15,7 +15,7 @@ biocLite()
 ```
 3. Install the following additional Bioconucor packages:
 ```R
-biocLite(c("BioQC", "limma", "graph", "globaltest", "edgeR", "sva", "gage"))
+biocLite(c("BioQC", "limma", "graph", "globaltest", "edgeR", "sva", "gage", "eisa", "ExpressionView"))
 ```
 4. Install you desired ribios packages, or execute the following lines to install them all at once:
 ```R

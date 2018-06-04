@@ -143,10 +143,8 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
     warning("Argument 'values' should not be used when argument 'filters' is a list and will be ignored.")
   if (is.list(filters) && is.null(names(filters)))
     stop("Argument 'filters' must be a named list when sent as a list.")
-  if (!is.null(filters) && !is.list(filters) && filters != "" && is.null(values))
+  if (!is.null(filters) && !is.list(filters) && is.null(values))
     stop("Argument 'values' must be specified.")
-  if (!is.null(filters) && !is.null(values) && length(filters) != length(values))
-    stop("Lengths of 'filters' and 'values' do not match")
   if (is.list(filters)) {
     values = filters
     filters = names(filters)
@@ -154,6 +152,8 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
   if(!is.null(values) && !is.list(values)) {
     values <- list(values)
   }
+  if (!is.null(filters) && !is.null(values) && length(filters) != length(values))
+    stop("Lengths of 'filters' and 'values' do not match")
   if (class(verbose) != "logical") {
     stop("Argument 'verbose' must be a logical value, so either TRUE or FALSE")
   }
@@ -330,11 +330,11 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
                         sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                                 mainTableOf("translation"),
                                 firstTableWithPrimaryKeyOf("translation"),
-                                pkOf("transation")))
+                                pkOf("translation")))
     }
     #join translation main table with any table with a transcription id
     whereClauses <- c(whereClauses,
-                      sprintf("`%s.%3$s` = `%s`.`%3$s`",
+                      sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                               firstTableWithPrimaryKeyOf("transcript"),
                               mainTableOf("translation"),
                               pkOf("transcript")))
@@ -376,7 +376,9 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
   if(verbose) {
     print(query)
   }
+
   result <- dbGetQuery(mart$conn, query)
+
   #Remove factor columns and replace them by numeric values whenever possible
   for(col in colnames(result)) {
     result[[col]] <- type.convert(as.character(result[[col]]),as.is=TRUE)

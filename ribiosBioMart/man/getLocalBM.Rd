@@ -4,14 +4,21 @@
 \alias{getLocalBM}
 \title{Executes a biomart query on the given mart object (see \code{\link[biomaRt]{getBM}}}
 \usage{
-getLocalBM(attributes, values, mart)
+getLocalBM(attributes, filters = NULL, values = NULL, mart,
+  verbose = FALSE, uniqueRows = TRUE)
 }
 \arguments{
 \item{attributes}{a vector of BioMart attributes}
 
+\item{filters}{a vector of BioMart filters}
+
 \item{values}{the values used for the BioMart filters}
 
 \item{mart}{the BioMart meta object needed to execute the BioMart queries on a local database server}
+
+\item{verbose}{Prints out the composed SQL query to the command line}
+
+\item{uniqueRows}{use \code{SELECT DISTINCT} to ensure unique result rows. Default is \code{TRUE}}
 }
 \value{
 the mart object (regular list) with the connection object and internal attributes in it

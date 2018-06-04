@@ -4,7 +4,7 @@ library (RMySQL)
 context("Bulk Queries")
 
 if(!exists("testDB")) {
-  skip("No test database specified in 'helper.testDB.R'")
+  skip("No test database specified (add it to 'helper.testDB.R' or create a new helper.*.R file)")
 }
 
 test_that("Extract full gene annotation", {

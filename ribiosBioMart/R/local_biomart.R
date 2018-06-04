@@ -9,49 +9,48 @@ listLocalDatasets <- function(conn) {
   dbGetQuery(conn, "SELECT dataset, display_name as 'description', version FROM meta_conf__dataset__main;")
 }
 
-#' Used to extract XML attribute values from an list of AttributeDescription nodes
+#' Returns options of the given filters as list
 #'
-#' @param nodes list of AttributeDescription XML nodes
-#' @param name the name of the attribute we want to extract
-#' @return vector with XML attribute values or \code{NA} if the corresponding node doesn't have the requested XML attribute
+#' @param filter the name of the filters as character vector
+#' @param mart the BioMart meta object needed to execute the BioMart queries on a local database server
+#' @return a list of filter options available for each givn filter
 #'
-#' @importFrom XML xmlGetAttr
-extractInfoFromAttributeDescriptions <- function(nodes, name) {
-  unlist(lapply(nodes, function(x) {
-    attr <- xmlGetAttr(x, name = name)
-    if(is.null(attr)) {
-      return(NA)
-    }
-    attr
-  }))
+#' @export
+#' @importFrom stringr str_split
+localFilterOptions <- function(filter, mart) {
+  if (missing(filter))
+    stop("No filter given. Please specify the filter for which you want to retrieve the possible values.")
+  if (class(filter) != "character")
+    stop("Filter argument should be of class character")
+
+  checkFilters = filter %in% mart$.filters$internalName
+  if (!all(checkFilters)) {
+    stop(sprintf("Unknown filters: %s", paste(filter[!checkFilters],collapse = ",")))
+  }
+  filtered <- mart$.filters[internalName %in% filter]
+  mapply(x=filtered$internalName,y=filtered$option, function(x, y) {
+    str_split(y, ",", simplify = TRUE)
+  })
 }
 
-#' Used to extract the meta information about BioMart attributes from XML content
+#' Returns the types of the given filters as vector
 #'
-#' @param docRoot the root XML document containg dataset meta information
-#' @return BioMart attribute meta information as \code{\link[data.table]{data.table}}
+#' @param filter the name of the filters as character vector
+#' @param mart the BioMart meta object needed to execute the BioMart queries on a local database server
+#' @return a vector of filter types
 #'
-#' @importFrom XML getNodeSet xmlGetAttr
-#' @importFrom data.table data.table
-extractListOfBioMartAttributes <- function(docRoot) {
-  attributePages <- getNodeSet(docRoot, "//AttributePage")
-  localAttributes <- NULL
-  for (i in 1:length(attributePages)) {
-    attrNodes <- getNodeSet(attributePages[[i]], "AttributeGroup/AttributeCollection/AttributeDescription")
+#' @export
+localFilterType <- function(filter, mart) {
+  if (missing(filter))
+    stop("No filter given. Please specify the filter for which you want to retrieve the possible values.")
+  if (class(filter) != "character")
+    stop("Filter argument should be of class character")
 
-    attributes <- data.table(
-      page = rep(xmlGetAttr(attributePages[[i]], name = "internalName"), length(attrNodes)),
-      primaryKey = extractInfoFromAttributeDescriptions(attrNodes, "key"),
-      pointerAttribute = extractInfoFromAttributeDescriptions(attrNodes, "pointerAttribute"),
-      pointerDataset = extractInfoFromAttributeDescriptions(attrNodes, "pointerDataset"),
-      displayName = extractInfoFromAttributeDescriptions(attrNodes, "displayName"),
-      internalName = extractInfoFromAttributeDescriptions(attrNodes, "internalName"),
-      tableConstraint = extractInfoFromAttributeDescriptions(attrNodes, "tableConstraint"),
-      field = extractInfoFromAttributeDescriptions(attrNodes, "field")
-    )
-    localAttributes <- rbind(localAttributes, attributes)
+  checkFilters = filter %in% mart$.filters$internalName
+  if (!all(checkFilters)) {
+    stop(sprintf("Unknown filters: %s", paste(filter[!checkFilters],collapse = ",")))
   }
-  localAttributes
+  mart$.filters[internalName %in% filter]$type
 }
 
 #' Creates a new mart object for the given database connection (see \code{\link[biomaRt]{useMart}}
@@ -62,7 +61,8 @@ extractListOfBioMartAttributes <- function(docRoot) {
 #'
 #' @export
 #' @importFrom DBI dbGetQuery
-#' @importFrom XML xmlParse xmlAttrs
+#' @importFrom XML xmlParse xmlAttrs getNodeSet xmlGetAttr
+#' @importFrom data.table data.table
 #' @importFrom stringr str_match
 useLocalMart <- function(conn, dataset) {
 
@@ -77,20 +77,37 @@ useLocalMart <- function(conn, dataset) {
   docRoot <-xmlParse(xmlFile)
 
   mainTables <- xmlAttrs(getNodeSet(docRoot, "//MainTables")[[1]])
+  mainTables <- data.table(primaryKey=names(mainTables),
+                           table=mainTables,
+                           #extract handy aliasas (i.e. "gene", "transcription, and "translation")
+                           alias=str_match(mainTables, ".*_([a-z]+)__main$")[,2])
 
   list(dataset=dataset,
        conn = conn,
-       .mainTables = data.table(primaryKey=names(mainTables),
-                                table=mainTables,
-                                #extract handy aliasas (i.e. "gene", "transcription, and "translation")
-                                alias=str_match(mainTables, ".*_([a-z]+)__main$")[,2]),
-       .attributes = extractListOfBioMartAttributes(docRoot))
+       .mainTables = mainTables,
+       .attributes = extractListOfBioMartAttributes(dataset, docRoot, mainTables),
+       .filters = extractListOfBioMartFilters(dataset, docRoot, mainTables))
+}
+
+#' Lists all available filters for a selected dataset (see \code{\link[biomaRt]{listFilters}}.
+#'
+#' @param mart the BioMart meta object needed to execute the BioMart queries on a local database server
+#' @return a list of all available filters as \code{\link[data.table]{data.table}}
+#'
+#' @export
+listLocalFilters <- function(mart) {
+  data.table(
+    name = mart$.filters$internalName,
+    description = mart$.filters$displayName,
+    type = mart$.filters$type,
+    options = mart$.filters$options
+  )
 }
 
 #' Lists all available attributes for a selected dataset (see \code{\link[biomaRt]{listAttributes}}.
 #'
 #' @param mart the BioMart meta object needed to execute the BioMart queries on a local database server
-#' @return a user-friendly and
+#' @return a list of all available attributes as \code{\link[data.table]{data.table}}
 #'
 #' @export
 listLocalAttributes <- function(mart) {
@@ -104,43 +121,151 @@ listLocalAttributes <- function(mart) {
 #' Executes a biomart query on the given mart object (see \code{\link[biomaRt]{getBM}}
 #'
 #' @param attributes a vector of BioMart attributes
+#' @param filters a vector of BioMart filters
 #' @param values the values used for the BioMart filters
 #' @param mart the BioMart meta object needed to execute the BioMart queries on a local database server
+#' @param verbose Prints out the composed SQL query to the command line
+#' @param uniqueRows use \code{SELECT DISTINCT} to ensure unique result rows. Default is \code{TRUE}
 #' @return the mart object (regular list) with the connection object and internal attributes in it
 #'
 #' @export
 #' @importFrom DBI dbGetQuery
+#' @importFrom stringr str_split
 #' @importFrom utils type.convert
 #' @importFrom data.table data.table :=
-#TODO: no filtering for now...
-getLocalBM <- function(attributes, values, mart) {
+getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALSE, uniqueRows=TRUE) {
 
-  # Extract relevant attributes
-  selectedAttrs <- mart$.attributes[mart$.attributes$internalName %in% attributes,]
+  # General parameter checking ----
 
+  if (is.null(attributes))
+    stop("Argument 'attributes' must be specified.")
+  if (is.list(filters) && !is.null(values))
+    warning("Argument 'values' should not be used when argument 'filters' is a list and will be ignored.")
+  if (is.list(filters) && is.null(names(filters)))
+    stop("Argument 'filters' must be a named list when sent as a list.")
+  if (!is.null(filters) && !is.list(filters) && filters != "" && is.null(values))
+    stop("Argument 'values' must be specified.")
+  if (!is.null(filters) && !is.null(values) && length(filters) != length(values))
+    stop("Lengths of 'filters' and 'values' do not match")
+  if (is.list(filters)) {
+    values = filters
+    filters = names(filters)
+  }
+  if(!is.null(values) && !is.list(values)) {
+    values <- list(values)
+  }
+  if (class(verbose) != "logical") {
+    stop("Argument 'verbose' must be a logical value, so either TRUE or FALSE")
+  }
+  if (class(uniqueRows) != "logical") {
+    stop("Argument 'uniqueRows' must be a logical value, so either TRUE or FALSE")
+  }
 
-  # Replace "main" table references with actual main tables (gene__main, transcript__main, etc.)
-  selectedAttrs[tableConstraint == "main",
-                tableConstraint:=lapply(
-                  primaryKey,
-                  function(x) mart$.mainTables[primaryKey == x, table])
-                ]
+  #Input validation: do specified attributes / filters exist?
+  attrCheck <- attributes %in% mart$.attributes$internalName
+  if(!all(attrCheck)) {
+    stop(sprintf("Unknown attributes: %s", paste(attributes[!attrCheck],collapse = ",")))
+  }
+  filterCheck <- filters %in% mart$.filters$internalName
+  if(!all(filterCheck)) {
+    stop(sprintf("Unknown filters: %s", paste(filters[!filterCheck],collapse = ",")))
+  }
 
-  #Extract target tables
-  targetTables <- unique(selectedAttrs[,.(tableConstraint,primaryKey)])
+  # Filter & attribute extraction ----
+
+  selectedAttrs <- mart$.attributes[internalName %in% attributes,]
+  selectedFilters <- mart$.filters[internalName %in% filters,]
+
+  #Check if user request an attribute / filter we do not support
+  attrSupport <- is.na(selectedAttrs$pointerDataset)
+  if(!all(attrSupport)) {
+    stop(sprintf("Unsupported attributes: %s",
+                 paste(selectedAttrs$internalName[!attrSupport],collapse = ",")))
+  }
+  filterSupport <- is.na(selectedFilters$pointerDataset)
+  if(!all(filterSupport)) {
+    stop(sprintf("Unsupported filters: %s",
+                 paste(selectedFilters$internalName[!filterSupport],collapse = ",")))
+  }
+
+  # Extract target tables & list of SQL attributes ----
+
+  targetTables <- unique(rbind(
+    selectedAttrs[,.(tableConstraint,primaryKey)],
+    selectedFilters[,.(tableConstraint,primaryKey)]))
+
   #Generate SQL attribute lists & appropriate aliases
   attributeList <- unlist(lapply(targetTables$tableConstraint, function(targetTable) {
     targetAttrs <- selectedAttrs[selectedAttrs$tableConstraint == targetTable,]
-    sprintf("%s.%s as %s", targetTable, targetAttrs$field, targetAttrs$internalName)
+    sprintf("`%s`.`%s` as `%s`", targetTable, targetAttrs$field, targetAttrs$internalName)
   }))
 
+  #List of tables in FROM clause (can change depending on requested attributes)
+  fromList <- targetTables$tableConstraint
+
+  # Translating filters to SQL conditions (also check filter validity) ----
+
+  # There exist the following filter "=","=,in",">=","<=", "only,excluded"
+  filterList <- unlist(mapply(x=filters,y=values, function(x, y) {
+    filter <- selectedFilters[internalName==x, ]
+    #Handle boolean filters
+    if(filter$operation == "only,excluded") {
+      if(!is.logical(y) || length(y) > 1) {
+        stop(sprintf("Value for boolean filter '%s' bust be a logic vector with exactly 1 element: '%s'",
+                     x, paste(y,collapse = ",")))
+      }
+      if(y) {
+        return(sprintf("`%s`.`%s` IS NOT NULL",
+                       filter$tableConstraint,
+                       filter$field,
+                       y))
+      }
+      return(sprintf("`%s`.`%s` IS NULL",
+                     filter$tableConstraint,
+                     filter$field,
+                     y))
+    }
+    #For anything else: check if the ther is an option list and ensure
+    #The specified values are taken from that list
+    allowedValues <- str_split(filter$options, ",", simplify = TRUE)
+    if(length(allowedValues) > 1 || allowedValues != "") {
+      checkValues <- y %in% allowedValues
+      if(!all(checkValues)) {
+        stop(sprintf("Value for filter '%s' not allowed: %s",
+                     x, paste(y[!checkValues],collapse = ",")))
+      }
+    }
+    #handle id_list filters
+    if(filter$operation == "=,in" && length(y) > 1) {
+      return(sprintf("`%s`.`%s` IN (%s)",
+                     filter$tableConstraint,
+                     filter$field,
+                     paste(sprintf("'%s'",y), collapse = ",")))
+    }
+    #handle everything else
+    if(length(y) > 1) {
+      #We got a vector with multiple elements,
+      #but for a filter which does not allow multiple values (i.e. is not '=,in')
+      stop(sprintf("Filter '%s' requires exactly 1 value, %d values given",
+                   x, length(y)))
+    }
+    return(sprintf("`%s`.`%s` %s '%s'",
+                   filter$tableConstraint,
+                   filter$field, gsub(",in","",filter$operation), y))
+  }))
+
+  # Inner Joins ----
+
   #The most interesting part: We can have up to 3 different types of primary keys / foraign keys:
-  # (1) The gene id for joining gene-related tables (e.g. gene_id_<internal_id>_key)
-  # (2) The transcript id for joining transcript-related tables (e.g. transcript_id_<internal_id>_key)
-  # (2) The translation id for joining translation-related tables (e.g. translation_id_<internal_id>_key)
+  # (1) The gene key for joining gene-related tables (e.g. gene_id_<internal_id>_key)
+  # (2) The transcript key for joining transcript-related tables (e.g. transcript_id_<internal_id>_key)
+  # (2) The translation key for joining translation-related tables (e.g. translation_id_<internal_id>_key)
   #This requires hierarchical joining of tables.
 
-  #First: join all tables that have share a comman primary key / "main" foraing key
+  ###
+  # First: join all tables that share a comman primary key / "main" foraing key
+  ###
+
   whereClauses <- unlist(mapply(
     x=mart$.mainTables$table,
     y=mart$.mainTables$primaryKey,
@@ -148,7 +273,7 @@ getLocalBM <- function(attributes, values, mart) {
       tableGroup <- targetTables[primaryKey == y,]
       if(nrow(tableGroup) > 1) {
         unlist(lapply(1:(nrow(tableGroup)-1), function(i) {
-          sprintf("%s.%3$s = %s.%3$s",
+          sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                   tableGroup[i,tableConstraint],
                   tableGroup[i+1,tableConstraint],
                   y)
@@ -156,7 +281,10 @@ getLocalBM <- function(attributes, values, mart) {
       }
   }))
 
+  ####
   #Second: Merge tables from different category (gen / transcript / translation)
+  ####
+
   pkOf <- function(category) {
     mart$.mainTables[alias==category,primaryKey]
   }
@@ -176,15 +304,16 @@ getLocalBM <- function(attributes, values, mart) {
     #make sure that main table for transcription data is part of the inner joins
     if(!(mainTableOf("transcript") %in% targetTables$tableConstraint)) {
       #join transcription main table with any table with an transcription id
+      fromList <- c(fromList, mainTableOf("transcript"))
       whereClauses <- c(whereClauses,
-                        sprintf("%s.%3$s = %s.%3$s",
+                        sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                                 mainTableOf("transcript"),
                                 firstTableWithPrimaryKeyOf("transcript"),
-                                pkOf("transcription")))
+                                pkOf("transcript")))
     }
     #join transcription main table with any table with a gene id
     whereClauses <- c(whereClauses,
-                      sprintf("%s.%3$s = %s.%3$s",
+                      sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                               firstTableWithPrimaryKeyOf("gene"),
                               mainTableOf("transcript"),
                               pkOf("gene")))
@@ -196,15 +325,16 @@ getLocalBM <- function(attributes, values, mart) {
     #Make sure that main table for translation data is part of the inner joins
     if(!(mainTableOf("translation") %in% targetTables$tableConstraint)) {
       #Join transcription main table with any table with an transcription id
+      fromList <- c(fromList, mainTableOf("translation"))
       whereClauses <- c(whereClauses,
-                        sprintf("%s.%3$s = %s.%3$s",
+                        sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                                 mainTableOf("translation"),
                                 firstTableWithPrimaryKeyOf("translation"),
                                 pkOf("transation")))
     }
     #join translation main table with any table with a transcription id
     whereClauses <- c(whereClauses,
-                      sprintf("%s.%3$s = %s.%3$s",
+                      sprintf("`%s.%3$s` = `%s`.`%3$s`",
                               firstTableWithPrimaryKeyOf("transcript"),
                               mainTableOf("translation"),
                               pkOf("transcript")))
@@ -217,27 +347,35 @@ getLocalBM <- function(attributes, values, mart) {
     #make sure that main table for translation data is part of the inner joins
     if(!(mainTableOf("translation") %in% targetTables$tableConstraint)) {
       #join translation main table with any table with an translation id
+      fromList <- c(fromList, mainTableOf("translation"))
       whereClauses <- c(whereClauses,
-                        sprintf("%s.%3$s = %s.%3$s",
+                        sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                                 mainTableOf("translation"),
                                 firstTableWithPrimaryKeyOf("translation"),
                                 pkOf("translation")))
     }
     #join translation main table with any table with a gene id
     whereClauses <- c(whereClauses,
-                      sprintf("%s.%3$s = %s.%3$s",
+                      sprintf("`%s`.`%3$s` = `%s`.`%3$s`",
                               firstTableWithPrimaryKeyOf("gene"),
                               mainTableOf("translation"),
                               pkOf("gene")))
   }
 
-  query <- sprintf("SELECT %s FROM %s",
+  # Building final SQL query ----
+
+  query <- sprintf("SELECT %s %s FROM %s",
+                   if(uniqueRows) "DISTINCT" else "",
                    paste(attributeList, collapse = ","),
-                   paste(targetTables$tableConstraint, collapse = ","))
+                   paste(fromList, collapse = ","))
   if(length(targetTables) > 1) {
-    query <- sprintf("%s WHERE %s", query, paste(whereClauses, collapse = " AND "))
+    query <- sprintf("%s WHERE %s",
+                     query,
+                     paste(c(whereClauses, filterList), collapse = " AND "))
   }
-  print(query)
+  if(verbose) {
+    print(query)
+  }
   result <- dbGetQuery(mart$conn, query)
   #Remove factor columns and replace them by numeric values whenever possible
   for(col in colnames(result)) {
@@ -246,7 +384,102 @@ getLocalBM <- function(attributes, values, mart) {
   result
 }
 
-#source("tests/testthat/helper.quersFun.R")
+getOptionList <- function(optionNodes) {
+  paste(extractInfoFromAttributeDescriptions(optionNodes, "value"),collapse = ",")
+}
 
-#geneLocal <- getLocalMartGeneAnnotationSample()
-#geneRemote <- getRemoteMartGeneAnnotationSample()
+extractInfoFromAttributeDescriptions <- function(nodes, name) {
+  sapply(nodes, function(x) xmlGetAttrOrNA(x, name = name))
+}
+
+xmlGetAttrOrNA <- function(node, ...) {
+  val <- xmlGetAttr(node, ...)
+  if(is.null(val)) {
+    return(NA)
+  }
+  val
+}
+
+extractListOfBioMartAttributes <- function(dataset, docRoot, mainTables) {
+  attributePages <- getNodeSet(docRoot, "//AttributePage[not(@hideDisplay='true')]")
+  localAttributes <- NULL
+  for (i in 1:length(attributePages)) {
+    attrNodes <- getNodeSet(attributePages[[i]], "AttributeGroup/AttributeCollection/AttributeDescription")
+
+    attributes <- data.table(
+      internalName = extractInfoFromAttributeDescriptions(attrNodes, "internalName"),
+      page = rep(xmlGetAttr(attributePages[[i]], name = "internalName"), length(attrNodes)),
+      primaryKey = extractInfoFromAttributeDescriptions(attrNodes, "key"),
+      pointerAttribute = extractInfoFromAttributeDescriptions(attrNodes, "pointerAttribute"),
+      pointerDataset = extractInfoFromAttributeDescriptions(attrNodes, "pointerDataset"),
+      displayName = extractInfoFromAttributeDescriptions(attrNodes, "displayName"),
+      tableConstraint = extractInfoFromAttributeDescriptions(attrNodes, "tableConstraint"),
+      field = extractInfoFromAttributeDescriptions(attrNodes, "field")
+    )
+    localAttributes <- rbind(localAttributes, attributes)
+  }
+
+  # Replace "main" table references with actual main tables (*_gene__main, *_transcript__main, etc.)
+  localAttributes[tableConstraint == "main",
+                  tableConstraint := sapply(
+                    primaryKey,
+                    function(x) mainTables[primaryKey == x, table])
+                  ]
+  localAttributes <- localAttributes[order(internalName)]
+
+  localAttributes
+}
+
+extractListOfBioMartFilters <- function(dataset, docRoot, mainTables) {
+  filterDescs <- getNodeSet(docRoot, "//FilterCollection[not(@hideDisplay='true')]/FilterDescription")
+  localFilters <- NULL
+  for (filterDesc in filterDescs) {
+    # There exist the following types of filters:
+    # "list", "text", "drop_down_basic_filter", "boolean_list", "id_list"
+    filterType <- xmlGetAttrOrNA(filterDesc, name = "type")
+
+    # In <FilterDescription> tag with  "boolean_list" and "id_list" as type, every <Option> tag within
+    # the <FilterDescription> tag represents a concrete filter
+    if(filterType %in% c("boolean_list", "id_list")) {
+      nodes <- getNodeSet(filterDesc, "Option")
+
+      filters <- data.table(
+        internalName = extractInfoFromAttributeDescriptions(nodes, "internalName"),
+        type = rep(filterType, length(nodes)),
+        options = sapply(nodes, function(x) getOptionList(getNodeSet(x, "Option"))),
+        operation = extractInfoFromAttributeDescriptions(nodes, "legal_qualifiers"),
+        primaryKey = extractInfoFromAttributeDescriptions(nodes, "key"),
+        pointerAttribute = extractInfoFromAttributeDescriptions(nodes, "pointerAttribute"),
+        pointerDataset = extractInfoFromAttributeDescriptions(nodes, "pointerDataset"),
+        displayName = extractInfoFromAttributeDescriptions(nodes, "displayName"),
+        tableConstraint = extractInfoFromAttributeDescriptions(nodes, "tableConstraint"),
+        field = extractInfoFromAttributeDescriptions(nodes, "field")
+      )
+      localFilters <- rbind(localFilters, filters)
+    }
+    # In every other case, the <FilterDescription> tag itself represents a filter
+    else {
+      filters <- data.table(
+        internalName = xmlGetAttrOrNA(filterDesc, "internalName"),
+        type = filterType,
+        options = getOptionList(getNodeSet(filterDesc, "Option")),
+        operation = xmlGetAttrOrNA(filterDesc, "legal_qualifiers"),
+        primaryKey = xmlGetAttrOrNA(filterDesc, "key"),
+        pointerAttribute = xmlGetAttrOrNA(filterDesc, "pointerAttribute"),
+        pointerDataset = xmlGetAttrOrNA(filterDesc, "pointerDataset"),
+        displayName = xmlGetAttrOrNA(filterDesc, "displayName"),
+        tableConstraint = xmlGetAttrOrNA(filterDesc, "tableConstraint"),
+        field = xmlGetAttrOrNA(filterDesc, "field")
+      )
+      localFilters <- rbind(localFilters, filters)
+    }
+  }
+
+  # Replace "main" table references with actual main tables (*_gene__main, *_transcript__main, etc.)
+  localFilters[tableConstraint == "main",
+               tableConstraint := sapply(
+                 primaryKey,
+                 function(x) mainTables[primaryKey == x, table])
+               ]
+  localFilters
+}

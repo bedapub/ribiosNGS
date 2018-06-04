@@ -10,7 +10,7 @@ listLocalAttributes(mart)
 \item{mart}{the BioMart meta object needed to execute the BioMart queries on a local database server}
 }
 \value{
-a user-friendly and
+a list of all available attributes as \code{\link[data.table]{data.table}}
 }
 \description{
 Lists all available attributes for a selected dataset (see \code{\link[biomaRt]{listAttributes}}.

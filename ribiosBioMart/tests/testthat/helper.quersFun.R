@@ -5,13 +5,8 @@ getRemoteMartGeneAnnotationSample <- function() {
 
   rat <- biomaRt::getBM(attributes,
                         values=TRUE, mart = ratMart)
-  ratAnno <- data.frame(TaxID=10116L,
-                        EnsembleGeneID=rat$ensembl_gene_id_version,
-                        StableEnsembleGeneID=rat$ensembl_gene_id,
-                        GeneID=rat$entrezgene,
-                        GeneType=rat$gene_biotype,
-                        GeneSymbol=rat$external_gene_name)
-  ratAnno
+  setcolorder(rat, order(colnames(rat)))
+  return(rat)
 }
 
 getRemoteMartTranscriptAnnotationSample <- function() {
@@ -21,13 +16,8 @@ getRemoteMartTranscriptAnnotationSample <- function() {
                   "transcript_biotype", "external_transcript_name")
   rat <- biomaRt::getBM(attributes,
                         values=TRUE, mart = ratMart)
-  ratAnno <- data.frame(TaxID=10116L,
-                        EnsembleTranscriptID=rat$ensembl_transcript_id_version,
-                        StableEnsembleTranscriptID=rat$ensembl_transcript_id,
-                        EnsembleGeneID=rat$ensembl_gene_id,
-                        TranscriptType=rat$transcript_biotype,
-                        TranscriptName=rat$external_transcript_name)
-  ratAnno
+  setcolorder(rat, order(colnames(rat)))
+  rat
 }
 
 getLocalMartGeneAnnotationSample <- function() {
@@ -40,14 +30,8 @@ getLocalMartGeneAnnotationSample <- function() {
                     "gene_biotype", "external_gene_name")
 
     rat <- getLocalBM(attributes, mart = mart)
-
-    ratAnno <- data.frame(TaxID=10116L,
-                          EnsembleGeneID=rat$ensembl_gene_id_version,
-                          StableEnsembleGeneID=rat$ensembl_gene_id,
-                          GeneID=rat$entrezgene,
-                          GeneType=rat$gene_biotype,
-                          GeneSymbol=rat$external_gene_name)
-    return(ratAnno)
+    setcolorder(rat, order(colnames(rat)))
+    return(rat)
   }, finally = {
     dbDisconnect(conn)
   })
@@ -64,14 +48,8 @@ getLocalMartTranscriptAnnotationSample <- function() {
                     "transcript_biotype", "external_transcript_name")
 
     rat <- getLocalBM(attributes, mart = mart)
-
-    ratAnno <- data.frame(TaxID=10116L,
-                          EnsembleTranscriptID=rat$ensembl_transcript_id_version,
-                          StableEnsembleTranscriptID=rat$ensembl_transcript_id,
-                          EnsembleGeneID=rat$ensembl_gene_id,
-                          TranscriptType=rat$transcript_biotype,
-                          TranscriptName=rat$external_transcript_name)
-    return(ratAnno)
+    setcolorder(rat, order(colnames(rat)))
+    return(rat)
   }, finally = {
     dbDisconnect(conn)
   })
@@ -86,7 +64,7 @@ queryRemote <- function(dataset="rnorvegicus_gene_ensembl",attributes, filters="
                  verbose = verbose)
 }
 
-queryLocal <- function(dataset="rnorvegicus_gene_ensembl", attributes, filters="", values="", verbose=FALSE) {
+queryLocal <- function(dataset="rnorvegicus_gene_ensembl", attributes, filters=NULL, values=NULL, verbose=FALSE) {
   conn <- dbConnect (MySQL (), user=testDB$user, password=testDB$passwd,
                      dbname="ensembl_mart_92", host=testDB$host, port=testDB$port)
 

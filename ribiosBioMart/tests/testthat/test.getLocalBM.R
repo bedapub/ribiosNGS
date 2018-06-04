@@ -10,7 +10,6 @@ if(!exists("testDB")) {
 test_that("Extract full gene annotation", {
   geneLocal <- getLocalMartGeneAnnotationSample()
   geneRemote <- getRemoteMartGeneAnnotationSample()
-
   expect_equal(geneRemote, geneLocal)
 })
 

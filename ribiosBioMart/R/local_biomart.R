@@ -173,7 +173,7 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
 
   # Filter & attribute extraction ----
 
-  selectedAttrs <- mart$.attributes[internalName %in% attributes,]
+  selectedAttrs <- mart$.attributes[mart$.attributes$internalName %in% attributes,]
   selectedFilters <- mart$.filters[internalName %in% filters,]
 
   #Check if user request an attribute / filter we do not support
@@ -425,7 +425,6 @@ extractListOfBioMartAttributes <- function(dataset, docRoot, mainTables) {
                     primaryKey,
                     function(x) mainTables[primaryKey == x, table])
                   ]
-  localAttributes <- localAttributes[order(internalName)]
 
   localAttributes
 }

@@ -6,6 +6,8 @@ queryRemote <- function(dataset, attributes, filters="", values="", verbose=FALS
                            mart = martObj,
                            verbose = verbose)
   setcolorder(result, order(colnames(result)))
+  #Ensembl BioMart reports values with a blank istead of NA, don't know if this is allways the case
+  result[result == ""] <- NA
   result
 }
 

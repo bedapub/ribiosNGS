@@ -10,12 +10,11 @@ Description: Mathematical and statistical tools in ribios. Functions target at
 Depends:
     R (>= 2.10),
     methods,
-    stats,
-    Rcpp(>= 0.12.0)
+    stats
 Suggests:
     testthat
 Imports:
     Rcpp
-LinkingTo: Rcpp,RcppArmadillo
+LinkingTo: Rcpp, RcppArmadillo
 License: GPL-3
 RoxygenNote: 6.0.1

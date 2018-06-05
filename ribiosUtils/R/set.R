@@ -1,5 +1,6 @@
 mset <- function(func, ...) {
   li <- list(...)
+  if(length(li)==0L) return(li)
   if(length(li)==1L) li <- li[[1L]]
   if(length(li)==1L) return(unique(li[[1]]))
   

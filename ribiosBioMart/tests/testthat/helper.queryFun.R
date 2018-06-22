@@ -1,3 +1,7 @@
+library (biomaRt)
+library (data.table)
+library (RMySQL)
+
 queryRemote <- function(dataset, attributes, filters="", values="", verbose=FALSE) {
   martObj <- useMart("ensembl", dataset=dataset)
   result <- biomaRt::getBM(attributes = attributes,

@@ -1,4 +1,5 @@
 library (biomaRt)
+library (data.table)
 library (RMySQL)
 
 context("Bulk Queries")

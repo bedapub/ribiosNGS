@@ -368,7 +368,7 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
                    if(uniqueRows) "DISTINCT" else "",
                    paste(attributeList, collapse = ","),
                    paste(fromList, collapse = ","))
-  if(length(targetTables) > 1) {
+  if(nrow(targetTables) > 1) {
     query <- sprintf("%s WHERE %s",
                      query,
                      paste(c(whereClauses, filterList), collapse = " AND "))

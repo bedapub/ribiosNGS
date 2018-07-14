@@ -15,7 +15,7 @@ readAmpliSeq(readCountFiles, barcodeSummaryFiles,
 \item{runNames}{Character string vector, run names
 
 This function parses read count files as well as barcode summary files, 
-and organise the data into an \code{\linkS4class[Biobase]{ExpressionSet}} object.}
+and organise the data into an \code{\linkS4class{ExpressionSet}} object.}
 }
 \description{
 Read AmpliSeq results into an ExpressionSet object

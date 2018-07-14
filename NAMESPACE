@@ -48,6 +48,7 @@ export(countsSVA, countsRemoveSV,
        cpmSVA, cpmRemoveSV,
        isEmptySV,
        doSVA)
+export(cpm.EdgeObject)
 
 export(filterByCPM,
        isAnyNA, replaceNAwithZero,

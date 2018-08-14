@@ -41,6 +41,6 @@ prcompExprs <- function(matrix, ntop=NULL) {
 #' @param fun Function, how to transform counts in the DGEList into data appropriate for PCA? log-cpm is used by default.
 prcomp.DGEList <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
   mat <- do.call(fun, list(x))
-  res <- ribiosExpression::prcompExprs(mat, ntop=ntop)
+  res <- prcompExprs(mat, ntop=ntop)
   return(res)
 }

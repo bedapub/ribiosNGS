@@ -1,6 +1,6 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
-           "sortByCol", "putColsFirst", "matchColumn", "pScore")
+           "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("ribiosIO", "read_biokit_exprs")
 importFrom("readr",
@@ -42,6 +42,8 @@ export(sigGene, sigGenes,
        sigGeneCounts,
        updateSigFilter)
 export(logFCmatrix)
+
+export(model.DGEList)
 
 ## sva
 export(countsSVA, countsRemoveSV,

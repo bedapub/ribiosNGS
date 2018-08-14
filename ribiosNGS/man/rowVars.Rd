@@ -14,3 +14,8 @@ rowVars(x, na.rm = TRUE)
 \description{
 Variance of features in rows
 }
+\examples{
+myVal <- matrix(1:9, nrow=3, byrow=FALSE)
+myVar <- rowVars(myVal)
+stopifnot(identical(myVar, c(9,9,9)))
+}

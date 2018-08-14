@@ -15,4 +15,3 @@ A \object{GeneSet} object containing molecular-phenotypic screening (MPS) catego
 \description{
 Read molecular-phenotyping genesets
 }
-

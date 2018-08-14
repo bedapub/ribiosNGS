@@ -24,4 +24,3 @@ anotherFakeSet <- readGmt(gmtFile, gmtFile, category=c("CategoryC", "CategoryD")
 mySetAppended <- appendGeneSets(mySet, myFakeSet)
 mySetAppendedTwice <- appendGeneSets(mySet, myFakeSet, anotherFakeSet
 }
-

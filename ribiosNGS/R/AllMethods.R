@@ -37,6 +37,23 @@ naOrSqrt <- function(x) {
   if(is.null(x)) { return (NA)}
   return(sqrt(x))
 }
+
+setMethod("show", "DGEList", function(object) {
+  cat(sprintf("A DGEList object with %s features and %d samples\n",
+              dim(object)[1], dim(object)[2]))
+  cat(sprintf("  - Following items are available: %s\n",
+              paste(names(object), collapse=",")))
+})
+setMethod("show", "DGEList2", function(object) {
+  cat(sprintf("A list of %d DGEList objects:\n", length(object)))
+  for(i in seq(along=object@.Data)) {
+    cat(sprintf("[[%d]]", i))
+    show(object@.Data[[i]])
+  }
+})
+
+setMethod("counts", "DGEList", function(object) object@counts)
+setMethod("sampleNames", "DGEList", function(object) colnames(object$counts))
 setMethod("commonBCV", "DGEList", function(x) {
   naOrSqrt(x$common.dispersion)
 })
@@ -495,3 +512,136 @@ setMethod("pData<-", c("EdgeObject", "data.frame"), function(object, value) {
 setMethod("isAnnotated", "EdgeObject", function(object) {
   return(!is.null(annotation(object)))
 })
+
+#' Split DGEList by a factor into a DGEList2 object
+#' 
+#' @param x A \code{DGEList} object
+#' @param f A factor
+#' @param drop Logical, whether unused levels in the factor should be dropped
+#' @param keep.lib.sizes Logical, whether library sizes are kept
+#' @param sampleDropLevels logical, whether unused levels of factors in the sample annotation data frame should be dropped
+setMethod("split", c("DGEList", "factor", "ANY"), function(x, f, 
+                                                           drop=FALSE, 
+                                                           keep.lib.sizes=TRUE, 
+                                                           sampleDropLevels=TRUE) {
+  if(drop)
+    f <- droplevels(f)
+  samInds <- seq(1, dim(x)[2])
+  resList <- tapply(samInds, f, function(inds) {
+    res <- x[, inds, keep.lib.sizes]
+    if(sampleDropLevels) {
+      if(!is.null(res$samples)) {
+        for(i in 1:ncol(res$samples)) {
+          if(is.factor(res$samples[,i])) {
+            res$samples[,i] <- droplevels(res$samples[,i])
+          }
+        }
+      }
+    }
+    return(res)
+  })
+  res <- new("DGEList2", .Data=resList)
+  names(res) <- levels(f)
+  return(res)
+})
+
+#' Build design matrix from a DGEList object
+#' 
+#' @param object A DGEList object
+#' @param formula Formula, passed to \code{\link{model.matrix}}
+model.DGEList <- function(object, formula, ...) {
+  model.matrix(formula, data=object$samples)
+}
+
+#' Infer surrogate variable from expression matrix and design matrix
+#' 
+#' @param object An expression matrix
+#' @param design Design matrix
+#' 
+#' @return Surrogate variable matrix
+setMethod("inferSV", c("matrix", "matrix"), function(object, design, ...) {
+  svaRes <- sva::sva(dat=object, 
+                     mod=design,
+                     ...)
+  sv <- as.matrix(svaRes$sv)
+  colnames(sv) <- sprintf("sv%d", 1:ncol(sv))
+  return(sv)
+})
+
+#' Infer surrogate variable from DGEList object and design matrix
+#' 
+#' @param object A DGEList object, \code{voom} will be used to transform the data
+#' @param design Design matrix
+#' 
+#' @return Surrogate variable matrix
+setMethod("inferSV", c("DGEList", "matrix"), function(object, design, ...) {
+  voomE <- limma::voom(object)$E
+  inferSV(voomE, design)
+})
+
+#' Infer surrogate variable from DGEList object and design matrix
+#' 
+#' @param object A DGEList object, \code{voom} will be used to transform the data
+#' @param design Formula
+#' 
+#' @return Surrogate variable matrix
+setMethod("inferSV", c("DGEList", "formula"), function(object, design, ...) {
+  designMatrix <- model.DGEList(object, design)
+  inferSV(object, designMatrix)
+})
+
+#' Update design matrix by results of SVA
+#' 
+#' @param object A DGEList object
+#' @param design Formula to infer design
+#' 
+#' @return Updated design matrix including surrogate variables
+setMethod("updateDesignMatrixBySVA", c("DGEList", "formula"), function(object, design, ...) {
+  designMatrix <- model.DGEList(object, design)
+  sv <- inferSV(object, design)
+  res <- cbind(designMatrix, sv)
+  return(res)
+})
+
+#' Detect surrogate variables from DGEList
+#' 
+#' @param object A DGEList object
+#' @param design Design matrix
+#' 
+#' @return A new DGEList object, including new items in the list: \code{voom}, \code{sv}, \code{designMatrix}, \code{designMatrixWithSV}, and \code{voomSVRemoved}.
+setMethod("voomSVA", c("DGEList", "matrix"), function(object, design) {
+  voomE <- voom(object, design=design)$E
+  sv <- inferSV(voomE, design)
+  object$voom <- voomE
+  object$sv <- sv
+  object$designMatrix <- design
+  object$designMatrixWithSV <- cbind(design, sv)
+  object$voomSVRemoved <- removeBatchEffect(voomE, covariates=sv, design=design)
+  return(object)
+})
+
+#' Detect surrogate variables from DGEList
+#' 
+#' @param object A DGEList object
+#' @param design Formula to infer design matrix
+#' 
+#' @return A new DGEList object, including new items in the list: \code{voom}, \code{sv}, \code{designMatrix}, \code{designMatrixWithSV}, and \code{voomSVRemoved}.
+setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
+  designMatrix <- model.DGEList(object, design)
+  voomSVA(object, designMatrix)
+})
+
+#' Run principal component analysis on a DGEList2 object
+#' 
+#' @param x A DGEList2 object
+#' @param ntop NULL or integer. If set, only \code{ntop} top-variable genes are used
+#' @param fun Function, used to transform count data into continuous data used by PCA
+#' 
+#' @return A list of \code{prcomp} objects.
+prcomp.DGEList2 <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
+  resList <- lapply(x@.Data,
+                    function(dgeList) 
+                      prcomp.DGEList(dgeList, fun=fun, ntop=ntop))
+  names(resList) <- names(x)
+  return(resList)
+}

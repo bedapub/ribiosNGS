@@ -20,9 +20,8 @@ exportClass(fcol)
 exportMethods(fcol, fcbase)
 
 exportClass(PCAScoreMatrix)
-exportMethods(PCAScoreMatrix)
 
-export(pcLabels)
+export(PCAScoreMatrix, pcLabels)
 
 ## utils
 export(compactPar)

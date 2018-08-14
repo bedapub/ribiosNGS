@@ -52,7 +52,7 @@ setMethod("show", "DGEList2", function(object) {
   }
 })
 
-setMethod("counts", "DGEList", function(object) object@counts)
+setMethod("counts", "DGEList", function(object) object$counts)
 setMethod("sampleNames", "DGEList", function(object) colnames(object$counts))
 setMethod("commonBCV", "DGEList", function(x) {
   naOrSqrt(x$common.dispersion)
@@ -603,12 +603,32 @@ setMethod("updateDesignMatrixBySVA", c("DGEList", "formula"), function(object, d
   return(res)
 })
 
+#' Run SVA on a count matrix transformed by voom
+#' 
+#' @param object A count matrix
+#' @param design Design matrix
+#' 
+#' @return SV matrix
+#' @examples
+#' set.seed(1887)
+#' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
+#' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
+#' exDesign <- model.matrix(~gl(2,3))
+#' voomSVA(exCounts, designMatrix=exDesign)
+setMethod("voomSVA", c("matrix", "matrix"), function(object, design) {
+  voomE <- voom(object, design=design)$E
+  sv <- inferSV(voomE, design)
+  return(sv)
+})
+
 #' Detect surrogate variables from DGEList
 #' 
 #' @param object A DGEList object
 #' @param design Design matrix
 #' 
-#' @return A new DGEList object, including new items in the list: \code{voom}, \code{sv}, \code{designMatrix}, \code{designMatrixWithSV}, and \code{voomSVRemoved}.
+#' @return A new DGEList object, including new items in the list: \code{voom}, \code{sv}, \code{designMatrix},
+#' \code{designMatrixWithSV}, and \code{voomSVRemoved}.
+#' 
 setMethod("voomSVA", c("DGEList", "matrix"), function(object, design) {
   voomE <- voom(object, design=design)$E
   sv <- inferSV(voomE, design)

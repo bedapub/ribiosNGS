@@ -5,7 +5,7 @@
 \title{Apply SVA to transformed count data}
 \usage{
 countsSVA(counts, designMatrix, transformFunc = function(counts, designMatrix)
-  voom(counts, designMatrix)$E)
+  voom(counts, designMatrix)$E, ...)
 }
 \arguments{
 \item{counts}{A matrix of counts}

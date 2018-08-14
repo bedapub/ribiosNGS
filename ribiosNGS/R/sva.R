@@ -12,10 +12,10 @@
 #' exDesign <- model.matrix(~gl(2,3))
 #' countsSVA(exCounts, designMatrix=exDesign)
 countsSVA <- function(counts, designMatrix, 
-                      transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E) {
-  transformData <- do.call(transformFunc, list(counts=counts, designMatrix=designMatrix))
-  svaRes <- sva(transformData, mod=designMatrix)
-  sv <- as.matrix(svaRes$sv); colnames(sv) <- sprintf("sv%d", 1:ncol(sv))
+                      transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E,
+                      ...) {
+  transData <- do.call(transformFunc, list(counts=counts, designMatrix=designMatrix))
+  sv <- inferSV(transData, designMatrix, ...)
   return(sv)
 }
 
@@ -37,21 +37,6 @@ countsRemoveSV <- function(counts, designMatrix,
   sv <- countsSVA(counts, designMatrix, transformFunc=transformFunc)
   res <- removeBatchEffect(transformedData, covariates=sv, design=designMatrix)
   return(res)
-}
-
-#' Apply SVA to voom-transformed count data
-#' @param counts A matrix of counts
-#' @param designMatrix Design matrix
-#' 
-#' @return The SV matrix
-#' @examples
-#' set.seed(1887)
-#' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
-#' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
-#' exDesign <- model.matrix(~gl(2,3))
-#' voomSVA(exCounts, designMatrix=exDesign)
-voomSVA <- function(counts, designMatrix) {
-  countsSVA(counts, designMatrix, transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E)
 }
 
 #' Apply SVA to voom-transformed count data, and return the voom expression matrix with surrogate variables' effect removed

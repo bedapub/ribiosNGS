@@ -21,3 +21,4 @@ myTempFile <- tempfile()
 writeGmt(mySet, file=myTempFile)
 readLines(myTempFile)
 }
+

@@ -25,3 +25,4 @@ Query gene-gene interactions (GGI) in RONET
   ronetGGI(c(7350, 7351), mode="between")
 }
 }
+

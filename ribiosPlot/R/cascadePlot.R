@@ -1,4 +1,5 @@
-unisignCascadeOrder <- function(matrix, decreasing=TRUE) {
+## TODO: the function had a non-functional parameter decreasing, though inside it's always decreasing=FALSE
+unisignCascadeOrder <- function(matrix) {
     maxtime <- apply(matrix, 1L, function(x) {
                          if(all(is.na(x))) {
                              return(ncol(matrix))
@@ -54,8 +55,8 @@ cascadeOrder <- function(matrix, dichotomy=c('mean', 'median', 'maxabs')) {
     isPos <- !isNeg
     negMatrix <- matrix[isNeg,]
     posMatrix <- matrix[isPos,]
-    posOrder <- unisignCascadeOrder(posMatrix, decreasing=TRUE)
-    negOrder <- unisignCascadeOrder(negMatrix, decreasing=FALSE)
+    posOrder <- unisignCascadeOrder(posMatrix)
+    negOrder <- unisignCascadeOrder(negMatrix)
     
     ordrn <- c(rownames(matrix)[isPos][posOrder],
                rownames(matrix)[isNeg][negOrder])

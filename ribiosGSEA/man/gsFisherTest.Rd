@@ -31,3 +31,4 @@ ribiosGSEA:::gsFisherTest(myGenes, myGeneSet1, myUniverse)
 ribiosGSEA:::gsFisherTest(myGenes, myGeneSet2, myUniverse)
 ribiosGSEA:::gsFisherTest(myGenes, myGeneSet1, myUniverse, gsName="My gene set1", gsCategory="Letters")
 }
+

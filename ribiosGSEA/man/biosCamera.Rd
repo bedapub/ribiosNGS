@@ -69,3 +69,4 @@ biosCamera(y, index2, design)
 limma::camera(y, index1, design) 
 limma::camera(y, index1, design, inter.gene.cor=NA)
 }
+

@@ -38,3 +38,4 @@ stopifnot(!identical(p.adjust(pValue(myFisherRes), "fdr"), fdrValue(myFisherRes)
 stopifnot(identical(p.adjust(pValue(myFisherRes2), "fdr"), fdrValue(myFisherRes2)))
 
 }
+

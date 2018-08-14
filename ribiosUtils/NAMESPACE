@@ -56,7 +56,8 @@ export(ofactor)
 
 ##export(atomGrep, orderedGrep)
 
-export(strtoken, countTokens)
+export(strtoken, countTokens,
+       shortenStr, fixWidthStr)
 
 export(reload)
 

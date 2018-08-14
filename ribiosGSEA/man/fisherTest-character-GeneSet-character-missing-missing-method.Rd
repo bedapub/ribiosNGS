@@ -28,3 +28,4 @@ myUniverse <- LETTERS
 fisherTest(myGenes, myGeneSet1, myUniverse)
 fisherTest(myGenes, myGeneSet2, myUniverse)
 }
+

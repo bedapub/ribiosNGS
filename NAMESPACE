@@ -29,7 +29,8 @@ importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
 
 ## for RNA-seq analysis
 exportMethods("designMatrix<-", "contrastMatrix<-")
-exportClasses(EdgeResult, EdgeObject, EdgeGSE)
+exportClasses(EdgeResult, EdgeObject, EdgeGSE,
+              DGEList2)
 
 ## edgeR
 export(dgeWithEdgeR, doGse,
@@ -49,6 +50,7 @@ export(countsSVA, countsRemoveSV,
        isEmptySV,
        doSVA)
 export(cpm.EdgeObject)
+export(inferSV, voomSVA, updateDesignMatrixBySVA)
 
 export(filterByCPM,
        isAnyNA, replaceNAwithZero,

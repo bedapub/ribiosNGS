@@ -3,7 +3,7 @@
 #' @param x Numeric matrix
 #' @param na.rm Logical. Should missing values (including NaN) be omitted from the calculations?
 #'
-#' @example 
+#' @examples
 #' myVal <- matrix(1:9, nrow=3, byrow=FALSE)
 #' myVar <- rowVars(myVal)
 #' stopifnot(identical(myVar, c(9,9,9)))

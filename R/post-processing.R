@@ -14,32 +14,6 @@
 ## setClass("GSEresultList", contains="list")
 
 
-## helper functions
-shortStr <- function(str, n=8) {
-    ifelse(nchar(str)>n,
-           paste(substr(str, 1, n), "...", sep=""),
-           str)
-}
-
-fixWidthShortStr <- function(str, n=8, align=c("left", "right")) {
-    align <- match.arg(align)
-    if(nchar(str)>n) {
-        wDots <- 3L
-        nwoDots <- n-wDots
-        str <- shortStr(str, nwoDots)
-    }
-    if(nchar(str)<n) {
-        emps <- paste(rep(" ", n-nchar(str)),collapse="")
-        if(align=="left") {
-            str <- paste(str, emps, sep="")
-        } else {
-            str <- paste(emps, str, sep="")
-        }
-    }
-    return(str)
-}
-
-
 #' Return cameraScore
 #' @param pvalue PValues of camera result
 #' @param direction directions of camera result, either 'Up' (positive) or 'Down' (negative)
@@ -70,17 +44,17 @@ jaccardDist <- function(x, y) 1-jaccardIndex(x,y)
 ##                         "PValue","FDR")
 ##        cat(title)
 ##    }
-##    cat(fixWidthShortStr(x@Category, wCate, align="right"))
+##    cat(fixWidthStr(x@Category, wCate, align="right"))
 ##    cat("  ")
-##    cat(fixWidthShortStr(x@Contrast, wContrast, align="right"))
+##    cat(fixWidthStr(x@Contrast, wContrast, align="right"))
 ##    cat("  ")
-##    cat(fixWidthShortStr(x@GeneSet, wGeneSet, align="right"))
+##    cat(fixWidthStr(x@GeneSet, wGeneSet, align="right"))
 ##    cat("  ")
-##    cat(fixWidthShortStr(x@Direction, wDirection, align="right"))
+##    cat(fixWidthStr(x@Direction, wDirection, align="right"))
 ##    cat("  ")
-##    cat(fixWidthShortStr(sprintf("%1.4f", x@PValue),wP))
+##    cat(fixWidthStr(sprintf("%1.4f", x@PValue),wP))
 ##    cat("  ")
-##    cat(fixWidthShortStr(sprintf("%1.4f", x@FDR),wFDR), "\n")
+##    cat(fixWidthStr(sprintf("%1.4f", x@FDR),wFDR), "\n")
 ##}
 ##
 ##setMethod("show", "GSEresult",function(object) {
@@ -205,10 +179,16 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 ## skip the GSEresultList object, and directly parse camera table
 #' Read CAMERA results into a tibble object
 #' @param file CAMERA results file
-#' @param minNGenes Integer, genesets with fewer genes are filtered out
-readCameraResults <- function(file, minNGenes=3) {
+#' @param minNGenes NULL or integer, genesets with fewer genes are filtered out
+#' @param maxNGenes NULL or integer, genesets with more genes are filtered out
+readCameraResults <- function(file, minNGenes=3, maxNGenes=1000) {
   res <- readr::read_tsv(file, col_types = "cccicdddddddc")
-  res <- subset(res, NGenes>=minNGenes)
+  if(!is.null(minNGenes)) {
+    res <- subset(res, NGenes>=minNGenes)
+  }
+  if(!is.null(maxNGenes)) {
+    res <- subset(res, NGenes<=maxNGenes)
+  }
   return(res)
 }
 

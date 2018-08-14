@@ -23,8 +23,7 @@ Suggests:
     plotrix,
     MASS,
     testthat
-Enhances:
-    Vennerable
+Enhances: Vennerable
 License: GPL-3
 LazyLoad: yes
 RoxygenNote: 6.0.1

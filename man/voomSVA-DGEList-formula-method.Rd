@@ -10,7 +10,7 @@
 \arguments{
 \item{object}{A DGEList object}
 
-\item{matrix}{Formula to infer design matrix}
+\item{design}{Formula to infer design matrix}
 }
 \value{
 A new DGEList object, including new items in the list: \code{voom}, \code{sv}, \code{designMatrix}, \code{designMatrixWithSV}, and \code{voomSVRemoved}.

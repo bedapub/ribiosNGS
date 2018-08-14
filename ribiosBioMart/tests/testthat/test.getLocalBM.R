@@ -69,6 +69,23 @@ test_that("Extract all homologies between human and mouse", {
   expect_equal(localData, remoteData)
 })
 
+test_that("Query exactly one gene", {
+  dataset <- "hsapiens_gene_ensembl"
+  attributes <- c('ensembl_gene_id_version', 'description')
+  filterList <- 'ensembl_gene_id_version'
+  values <- c('ENSG00000099194.5')
+
+  localData <- queryLocal(dataset,
+                          attributes,
+                          filter=filterList,
+                          values=values)
+  remoteData <- queryRemote(dataset,
+                            attributes,
+                            filter=filterList,
+                            values=values)
+  expect_equal(localData, remoteData)
+})
+
 context("Sample Queries from biomaRt tutorial")
 
 test_that("Annotate a set of Affymetrix identifiers with HUGO symbol and chromosomal locations of corresponding genes", {

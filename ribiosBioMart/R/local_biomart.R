@@ -209,6 +209,7 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
   filterList <- unlist(mapply(x=filters,y=values, function(x, y) {
     filter <- selectedFilters[internalName==x, ]
     #Handle boolean filters
+
     if(filter$operation == "only,excluded") {
       if(!is.logical(y) || length(y) > 1) {
         stop(sprintf("Value for boolean filter '%s' bust be a logic vector with exactly 1 element: '%s'",
@@ -236,7 +237,7 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
       }
     }
     #handle id_list filters
-    if(filter$operation == "=,in" && length(y) > 1) {
+    if(filter$operation == "=,in" && length(y) > 0) {
       return(sprintf("`%s`.`%s` IN (%s)",
                      filter$tableConstraint,
                      filter$field,
@@ -368,7 +369,7 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
                    if(uniqueRows) "DISTINCT" else "",
                    paste(attributeList, collapse = ","),
                    paste(fromList, collapse = ","))
-  if(nrow(targetTables) > 1) {
+  if(length(c(whereClauses, filterList)) > 0) {
     query <- sprintf("%s WHERE %s",
                      query,
                      paste(c(whereClauses, filterList), collapse = " AND "))

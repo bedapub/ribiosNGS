@@ -173,3 +173,6 @@ export(readCameraResults,
 
 export(parseContributingGenes,
        parseGenesetsContributingGenes)
+
+export(rowVars, prcompExprs,
+       prcomp.DGEList)

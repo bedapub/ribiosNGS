@@ -47,3 +47,9 @@ setGeneric("isAnnotated", function(object) standardGeneric("isAnnotated"))
 
 setGeneric("designMatrix<-", function(object, value) standardGeneric("designMatrix<-"))
 setGeneric("contrastMatrix<-", function(object, value) standardGeneric("contrastMatrix<-"))
+
+setGeneric("updateDesignMatrixBySVA", 
+           function(object, design,  ...) standardGeneric("updateDesignMatrixBySVA"))
+
+setGeneric("inferSV", function(object, design, ...) standardGeneric("inferSV"))
+setGeneric("voomSVA", function(object, design, ...) standardGeneric("voomSVA"))

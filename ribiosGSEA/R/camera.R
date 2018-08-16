@@ -450,3 +450,19 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
 #   }
 #   tab
 # }
+
+# camera.DGEList <-
+#   function (y, index, design = NULL, contrast = ncol(design), weights = NULL, 
+#             use.ranks = FALSE, allow.neg.cor = FALSE, inter.gene.cor = 0.01, 
+#             sort = TRUE, ...) 
+#   {
+#     if (is.null(design)) {
+#       design <- y$design
+#       if (is.null(design)) 
+#         design <- model.matrix(~y$samples$group)
+#     }
+#     y <- .zscoreDGE(y = y, design = design, contrast = contrast)
+#     camera(y = y, index = index, design = design, contrast = contrast, 
+#            weights = weights, use.ranks = use.ranks, allow.neg.cor = allow.neg.cor, 
+#            inter.gene.cor = inter.gene.cor, trend.var = FALSE, sort = sort)
+#   }

@@ -157,8 +157,12 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     else A <- NULL
     sv <- squeezeVar(sigma2, df = df.residual, covariate = A)
     modt <- unscaledt/sqrt(sv$var.post)
-    df.total <- min(df.residual + sv$df.prior, G * df.residual)
-    Stat <- zscoreT(modt, df = df.total, approx=.approx.zscoreT)
+    if (use.ranks) {
+      Stat <- modt
+    } else {
+      df.total <- min(df.residual + sv$df.prior, G * df.residual)
+      Stat <- zscoreT(modt, df = df.total, approx=.approx.zscoreT)
+    }
     meanStat <- mean(Stat)
     varStat <- var(Stat)
     tab <- matrix(0, nsets, 5)

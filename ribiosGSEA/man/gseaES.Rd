@@ -68,7 +68,7 @@ gseaResES(file, normalized = FALSE)
 }
 \examples{
 gsea.dir <- system.file(package="ribiosGSEA",
-"extdata/gseaDirs/HumanInVitroLiver_VitaminA_24h_High")
+"extdata/gseaDirs/VitaminA_24h_High")
 gsea.file <- file.path(gsea.dir,
 "gsea_report_for_na_neg_1336489010730.xls")
 

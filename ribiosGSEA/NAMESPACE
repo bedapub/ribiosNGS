@@ -15,8 +15,7 @@ importFrom("globaltest", "gt")
 importFrom("Biobase", "exprs", "exprs<-")
 importFrom("ribiosExpression",
            "designMatrix", "contrastMatrix", "truncateDgeTable", "limmaTopTable2dgeTable")
-importFrom("ribiosCGI", cgiEncodeWord)
-importFrom("ribiosUDIS", queryUrl)
+importFrom("ribiosUtils", "haltifnot")
            
 import(ribiosIO)
 import(ribiosMath)

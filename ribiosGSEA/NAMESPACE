@@ -30,7 +30,6 @@ exportClass(CameraResult,
             CameraResultList)
 export(GeneSet, GeneSets)
 export(geneSetPerm)
-export(ronetGGI)
 exportClass("TwoGroupExprsSimulator",
             "BenchmarkDataset",
             "Benchmarker",

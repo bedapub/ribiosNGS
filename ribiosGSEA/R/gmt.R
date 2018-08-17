@@ -121,7 +121,7 @@ appendGeneSets <- function(geneSets, newGeneSets, ...) {
 #' 
 #' @param file GMT file which stores default molecular-phenotyping genesets
 #' 
-#' @return A \object{GeneSet} object containing molecular-phenotypic screening (MPS) categories and genes
+#' @return A \code{GeneSet} object containing molecular-phenotypic screening (MPS) categories and genes
  
 readMPSGmt <- function(file) {
   gs <- read_gmt_list(file)

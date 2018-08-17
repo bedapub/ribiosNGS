@@ -107,7 +107,7 @@ appendOneGeneSets <- function(geneSets, newGeneSets) {
 #' myFakeSet <- readGmt(CategoryA=gmtFile, CategoryB=gmtFile)
 #' anotherFakeSet <- readGmt(gmtFile, gmtFile, category=c("CategoryC", "CategoryD"))
 #' mySetAppended <- appendGeneSets(mySet, myFakeSet)
-#' mySetAppendedTwice <- appendGeneSets(mySet, myFakeSet, anotherFakeSet
+#' mySetAppendedTwice <- appendGeneSets(mySet, myFakeSet, anotherFakeSet)
 appendGeneSets <- function(geneSets, newGeneSets, ...) {
     res <- appendOneGeneSets(geneSets, newGeneSets)
     newList <- list(...)

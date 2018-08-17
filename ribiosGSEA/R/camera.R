@@ -11,6 +11,7 @@
 #' ## @param inter.gene.cor numeric, optional preset value for the inter-gene correlation within tested sets. If NA or NULL, then an inter-gene correlation will be estimated for each tested set.
 #' @param trend.var logical, should an empirical Bayes trend be estimated? See \code{eBayes} for details.
 #' @param sort logical, should the results be sorted by p-value?
+#' @param .approx.zscoreT logical, advanced parameter only used for debugging purposes. If \code{TRUE}, the code is expected to return the exact same results as edgeR::camera (version 3.20.9), and maybe faster in execution.
 #' 
 #' The function was adapted from \code{\link[limma]{camera}}, with following improvments
 #' \enumerate{
@@ -54,8 +55,9 @@
 biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weights = NULL,
                         geneLabels=NULL,
                         use.ranks = FALSE, allow.neg.cor = FALSE, trend.var = FALSE, 
-                        sort = FALSE) 
-{
+                        sort = FALSE,
+                        ## internal parameters only for advanced users,
+                        .approx.zscoreT=FALSE) {
     y <- as.matrix(y)
     G <- nrow(y)
     n <- ncol(y)
@@ -67,10 +69,22 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         haltifnot(length(geneLabels)==nrow(y),
                   msg="geneLabels's length must equal to nrow(y)")
     }
+    if (G < 3)
+      stop("Too few genes in the dataset: need at least 3")
     if (!is.list(index)) 
         index <- list(set1 = index)
-    if (is.null(design)) 
-        stop("no design matrix")
+    nsets <- length(index)
+    if (nsets == 0L)
+      stop("Geneset (index) is empty")
+    if (is.null(design)) {
+      stop("no design matrix")
+    } else {
+      design <- as.matrix(design)
+      if (mode(design) != "numeric")
+        stop("design must be a numeric matrix")
+      if(nrow(design) != n)
+        stop("row dimensions of the design matrix must match the column dimension of data")
+    }
     p <- ncol(design)
     df.residual <- n - p
     df.camera <- min(df.residual, G - 2)
@@ -144,10 +158,9 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     sv <- squeezeVar(sigma2, df = df.residual, covariate = A)
     modt <- unscaledt/sqrt(sv$var.post)
     df.total <- min(df.residual + sv$df.prior, G * df.residual)
-    Stat <- zscoreT(modt, df = df.total)
+    Stat <- zscoreT(modt, df = df.total, approx=.approx.zscoreT)
     meanStat <- mean(Stat)
     varStat <- var(Stat)
-    nsets <- length(index)
     tab <- matrix(0, nsets, 5)
     rownames(tab) <- NULL
     colnames(tab) <- c("NGenes", "Correlation", "Down", "Up", 

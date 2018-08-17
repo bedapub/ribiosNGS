@@ -8,9 +8,9 @@
 #' @param geneLabels Labels of the features in the input matrix
 #' @param use.ranks do a rank-based test (TRUE) or a parametric test (FALSE)?
 #' @param allow.neg.cor should reduced variance inflation factors be allowed for negative correlations?
-#' ## @param inter.gene.cor numeric, optional preset value for the inter-gene correlation within tested sets. If NA or NULL, then an inter-gene correlation will be estimated for each tested set.
 #' @param trend.var logical, should an empirical Bayes trend be estimated? See \code{eBayes} for details.
 #' @param sort logical, should the results be sorted by p-value?
+#' @param .fixed.inter.gene.cor Numeric value, vector, or \code{NULL}/\code{NA}, advanced parameter corresponding to \code{inter.gene.cor} in the original implementation in limma. If set, gene-sets are set to have the fixed inter-gene correlation; the vector will be recycled to meet the correct length. If set as \code{NULL}/\code{NA}, correlations are estimated from each gene-set.
 #' @param .approx.zscoreT logical, advanced parameter only used for debugging purposes. If \code{TRUE}, the code is expected to return the exact same results as edgeR::camera (version 3.20.9), and maybe faster in execution.
 #' 
 #' The function was adapted from \code{\link[limma]{camera}}, with following improvments
@@ -57,6 +57,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
                         use.ranks = FALSE, allow.neg.cor = FALSE, trend.var = FALSE, 
                         sort = FALSE,
                         ## internal parameters only for advanced users,
+                        .fixed.inter.gene.cor = NULL,
                         .approx.zscoreT=FALSE) {
     y <- as.matrix(y)
     G <- nrow(y)
@@ -87,7 +88,15 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     }
     p <- ncol(design)
     df.residual <- n - p
-    df.camera <- min(df.residual, G - 2)
+    if (df.residual < 1)
+      stop("No residual df: cannot compute t-tests")
+    fixed.cor <- !(is.null(.fixed.inter.gene.cor) || is.na(.fixed.inter.gene.cor))
+    if(fixed.cor) {
+      df.camera <- ifelse(use.rank, Inf, G-2)
+      .fixed.inter.gene.cor <- rep_len(.fixed.inter.gene.cor, nsets)
+    } else {
+      df.camera <- min(df.residual, G - 2)
+    }
     if (!is.null(weights)) {
         if (any(weights <= 0)) 
             stop("weights must be positive")
@@ -177,14 +186,18 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         StatInSet <- Stat[iset]
         m <- length(StatInSet)
         m2 <- G - m
-        if (m > 1) {
-            Uset <- U[iset, , drop = FALSE]
-            vif <- m * mean(colMeans(Uset)^2)
-            correlation <- (vif - 1)/(m - 1)
-        }
-        else {
+        if (fixed.cor) {
+          correlation <- .fixed.inter.gene.cor[i]
+          vif <- 1 + (m - 1)*correlation
+        } else {
+          if (m > 1) {
+              Uset <- U[iset, , drop = FALSE]
+              vif <- m * mean(colMeans(Uset)^2)
+              correlation <- (vif - 1)/(m - 1)
+          } else {
             vif <- 1
             correlation <- NA
+          }
         }
         tab[i, 1] <- m
         tab[i, 2] <- correlation

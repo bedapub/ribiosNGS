@@ -9,4 +9,3 @@ cgiGetInit()
 \description{
 Makes it possible to call cgiGetNext(), which will return the first field of the POSTed data, if any
 }
-

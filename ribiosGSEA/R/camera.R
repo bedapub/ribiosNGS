@@ -50,8 +50,18 @@
 #' biosCamera(y, index2, design)
 
 #' # compare with the output of camera: columns 'GeneSet', 'Score', 'ContributingGenes' are missing, and in case \code{inter.gene.cor} is (as default) set to a numeric value, the column 'Correlation' is also missing
-#' limma::camera(y, index1, design) 
-#' limma::camera(y, index1, design, inter.gene.cor=NA)
+#' (limmaDefOut <- limma::camera(y, index1, design) )
+#' (limmaCorDefOut <- limma::camera(y, index1, design, inter.gene.cor=NA))
+#'
+#' \dontrun{
+#' # when \code{.approx.zscoreT=TRUE},  PValue reported by \code{limma::camera(inter.gene.cor=NA)} and \code{ribiosGSEA::biosCamera} should equal
+#' (biosCorOut <- biosCamera(y, index1, design, .approx.zscoreT=TRUE))
+#' stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
+#'
+#' # when \code{.fixed.inter.gene.cor=0.01} and \code{.approx.zscoreT=TRUE},  PValue reported by \code{limma::camera} and \code{ribiosGSEA::biosCamera} should equal
+#' (biosFixCorOut <- biosCamera(y, index1, design, .fixed.inter.gene.cor=0.01, .approx.zscoreT=TRUE))
+#' stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
+#' }
 biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weights = NULL,
                         geneLabels=NULL,
                         use.ranks = FALSE, allow.neg.cor = FALSE, trend.var = FALSE, 
@@ -92,7 +102,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
       stop("No residual df: cannot compute t-tests")
     fixed.cor <- !(is.null(.fixed.inter.gene.cor) || is.na(.fixed.inter.gene.cor))
     if(fixed.cor) {
-      df.camera <- ifelse(use.rank, Inf, G-2)
+      df.camera <- ifelse(use.ranks, Inf, G-2)
       .fixed.inter.gene.cor <- rep_len(.fixed.inter.gene.cor, nsets)
     } else {
       df.camera <- min(df.residual, G - 2)

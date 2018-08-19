@@ -199,6 +199,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     conts <- vector("character", nsets)
     for (i in 1:nsets) {
         iset <- index[[i]]
+        ## TODO: also export unscaledt values (which are in fact logFCs)
         StatInSet <- Stat[iset]
         m <- length(StatInSet)
         m2 <- G - m

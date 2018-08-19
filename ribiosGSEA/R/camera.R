@@ -135,12 +135,16 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
             design <- design[, j] ## JDZ: this if-trunk reorders the to-be-tested contrast to the last column of the design matrix
         }
     }  else {
+      ## JDZ: this else-trunk transforms the design matrix into a new one by t(t(Q) %*% y), where Q=qr(contrast) and y=t(design), and then reorders to-be-tested contrast to the last column of the design matrix.
+      ## The QR decomposition of the contrast matrix is used to re-parameterize the design matrix so as to encode the desired comparison directly in the last column.
         QR <- qr(contrast)
         design <- t(qr.qty(QR, t(design)))
         if (sign(QR$qr[1, 1] < 0)) 
             design[, 1] <- -design[, 1]
-        design <- design[, c(2:p, 1)] ## JDZ: this else-trunk 'trransforms' the design matrix into a new one with the contrast and reorders the to-be-tested contrast to the last column of the design matrix. I understand that what we estimate is in fact a linear transformation of coefficients of the linear model (beta == C^T %*% alpha, where alpha denotes coefficients and C^T denotes contrasts), it seems that the QR decomposition of the contrast matrix is used to re-parameterize the design matrix so as to encode the desired contrast directly in one of the columns in the design matrix. This is however just a guess and needs verification. 
+        design <- design[, c(2:p, 1)]
     }
+    ## The transformed design matrix will next be used to estimate the effect of the contrast, which involves another QR transformation
+    ## Question: here qr.coef(QR, t(y))[p,] should also give the same result, true or false?
     if (is.null(weights)) {
         QR <- qr(design)
         if (QR$rank < p) 
@@ -167,8 +171,8 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         }
     }
 
-    ## JDZ: effects is a n x G matrix (n=ncol(y), G=nrow(y))
-    U <- effects[-(1:p), , drop = FALSE] ## JDZ: only takes the residuals 
+    ## Effects is a n x G matrix (n=ncol(y), G=nrow(y)), and U are the residuals removing the main effects, transposed, and normalised by sqrt(mean(u^2))
+    U <- effects[-(1:p), , drop = FALSE]
     sigma2 <- colMeans(U^2)
     U <- t(U)/sqrt(sigma2)
     if (trend.var) 
@@ -179,9 +183,11 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     if (use.ranks) {
       Stat <- modt
     } else {
+      ## moderated-t is further transformed into z-score
       df.total <- min(df.residual + sv$df.prior, G * df.residual)
       Stat <- zscoreT(modt, df = df.total, approx=.approx.zscoreT)
     }
+    ## meanStat and varStat are mean and variance of z-score of the moderated t statistic of all features in the matrix
     meanStat <- mean(Stat)
     varStat <- var(Stat)
     tab <- matrix(0, nsets, 5)
@@ -190,7 +196,6 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
                        "TwoSided")
 
     conts <- vector("character", nsets)
-    ## JDZ: notice that no matter whether rank is used or not, the statistic underlying the camera method is always the moderated t statistic
     for (i in 1:nsets) {
         iset <- index[[i]]
         StatInSet <- Stat[iset]

@@ -131,11 +131,12 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     }
     if (length(contrast) == 1) {
         if(contrast < p) {
+          ## Reorders the to-be-tested contrast to the last column of the design matrix
             j <- c((1:p)[-contrast], contrast)
-            design <- design[, j] ## JDZ: this if-trunk reorders the to-be-tested contrast to the last column of the design matrix
+            design <- design[, j]
         }
     }  else {
-      ## JDZ: this else-trunk transforms the design matrix into a new one by t(t(Q) %*% y), where Q=qr(contrast) and y=t(design), and then reorders to-be-tested contrast to the last column of the design matrix.
+      ## Transforms the design matrix into a new one by t(t(Q) %*% y), where Q=qr(contrast) and y=t(design), and then reorders to-be-tested contrast to the last column of the design matrix.
       ## The QR decomposition of the contrast matrix is used to re-parameterize the design matrix so as to encode the desired comparison directly in the last column.
         QR <- qr(contrast)
         design <- t(qr.qty(QR, t(design)))

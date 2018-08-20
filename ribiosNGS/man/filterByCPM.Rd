@@ -11,7 +11,7 @@ filterByCPM(edgeObj, minCPM = 1, minCount = minGroupCount(edgeObj))
 
 \item{minCPM}{Minimal CPM value, see descriptions below}
 
-\item{mintCount}{Minimal count of samples in which the CPM value is no less than \code{minCPM}
+\item{minCount}{Minimal count of samples in which the CPM value is no less than \code{minCPM}
 
 The filter is recommended by the authors of the \code{edgeR} package to remove lowly expressed genes, since including them in differential gene expression analysis will cause extreme differential expression fold-changes of lowly and stochastically expressed genes, and increase false positive rates.
 

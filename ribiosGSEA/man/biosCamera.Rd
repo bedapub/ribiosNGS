@@ -6,7 +6,8 @@
 \usage{
 biosCamera(y, index, design = NULL, contrast = ncol(design),
   weights = NULL, geneLabels = NULL, use.ranks = FALSE,
-  allow.neg.cor = FALSE, trend.var = FALSE, sort = FALSE)
+  allow.neg.cor = FALSE, trend.var = FALSE, sort = FALSE,
+  .fixed.inter.gene.cor = NULL, .approx.zscoreT = FALSE)
 }
 \arguments{
 \item{y}{a numeric matrix of log-expression values or log-ratios of expression values, or any data object containing such a matrix. Rows correspond to probes and columns to samples. Any type of object that can be processed by getEAWP is acceptable.}
@@ -23,12 +24,15 @@ biosCamera(y, index, design = NULL, contrast = ncol(design),
 
 \item{use.ranks}{do a rank-based test (TRUE) or a parametric test (FALSE)?}
 
-\item{allow.neg.cor}{should reduced variance inflation factors be allowed for negative correlations?
-## @param inter.gene.cor numeric, optional preset value for the inter-gene correlation within tested sets. If NA or NULL, then an inter-gene correlation will be estimated for each tested set.}
+\item{allow.neg.cor}{should reduced variance inflation factors be allowed for negative correlations?}
 
 \item{trend.var}{logical, should an empirical Bayes trend be estimated? See \code{eBayes} for details.}
 
-\item{sort}{logical, should the results be sorted by p-value?
+\item{sort}{logical, should the results be sorted by p-value?}
+
+\item{.fixed.inter.gene.cor}{Numeric value, vector, or \code{NULL}/\code{NA}, advanced parameter corresponding to \code{inter.gene.cor} in the original implementation in limma. If set, gene-sets are set to have the fixed inter-gene correlation; the vector will be recycled to meet the correct length. If set as \code{NULL}/\code{NA}, correlations are estimated from each gene-set.}
+
+\item{.approx.zscoreT}{logical, advanced parameter only used for debugging purposes. If \code{TRUE}, the code is expected to return the exact same results as edgeR::camera (version 3.20.9), and maybe faster in execution.
 
 The function was adapted from \code{\link[limma]{camera}}, with following improvments
 \enumerate{
@@ -66,6 +70,16 @@ index2 <- 21:40
 biosCamera(y, index1, design)
 biosCamera(y, index2, design)
 # compare with the output of camera: columns 'GeneSet', 'Score', 'ContributingGenes' are missing, and in case \\code{inter.gene.cor} is (as default) set to a numeric value, the column 'Correlation' is also missing
-limma::camera(y, index1, design) 
-limma::camera(y, index1, design, inter.gene.cor=NA)
+(limmaDefOut <- limma::camera(y, index1, design) )
+(limmaCorDefOut <- limma::camera(y, index1, design, inter.gene.cor=NA))
+
+\dontrun{
+# when \\code{.approx.zscoreT=TRUE},  PValue reported by \\code{limma::camera(inter.gene.cor=NA)} and \\code{ribiosGSEA::biosCamera} should equal
+(biosCorOut <- biosCamera(y, index1, design, .approx.zscoreT=TRUE))
+stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
+
+# when \\code{.fixed.inter.gene.cor=0.01} and \\code{.approx.zscoreT=TRUE},  PValue reported by \\code{limma::camera} and \\code{ribiosGSEA::biosCamera} should equal
+(biosFixCorOut <- biosCamera(y, index1, design, .fixed.inter.gene.cor=0.01, .approx.zscoreT=TRUE))
+stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
+}
 }

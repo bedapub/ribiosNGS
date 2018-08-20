@@ -1,8 +1,8 @@
-#include "ribios_math.h"
-
+#include "Rcpp.h"
 using namespace Rcpp;
 
-RcppExport SEXP cossim(SEXP x, SEXP y, SEXP narm) {
+// [[Rcpp::export]]
+RcppExport SEXP cossimVec(SEXP x, SEXP y, SEXP narm) {
 BEGIN_RCPP
 
   NumericVector a(x);

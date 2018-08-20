@@ -1,6 +1,6 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
-           "sortByCol", "putColsFirst", "matchColumn", "pScore")
+           "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("ribiosIO", "read_biokit_exprs")
 importFrom("readr",
@@ -29,7 +29,8 @@ importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
 
 ## for RNA-seq analysis
 exportMethods("designMatrix<-", "contrastMatrix<-")
-exportClasses(EdgeResult, EdgeObject, EdgeGSE)
+exportClasses(EdgeResult, EdgeObject, EdgeGSE,
+              DGEList2)
 
 ## edgeR
 export(dgeWithEdgeR, doGse,
@@ -40,6 +41,9 @@ export(sigGene, sigGenes,
        sigPosGenes, sigNegGenes,
        sigGeneCounts,
        updateSigFilter)
+export(logFCmatrix)
+
+export(model.DGEList)
 
 ## sva
 export(countsSVA, countsRemoveSV,
@@ -47,6 +51,8 @@ export(countsSVA, countsRemoveSV,
        cpmSVA, cpmRemoveSV,
        isEmptySV,
        doSVA)
+export(cpm.EdgeObject)
+export(inferSV, voomSVA, updateDesignMatrixBySVA)
 
 export(filterByCPM,
        isAnyNA, replaceNAwithZero,
@@ -162,7 +168,13 @@ export(minGroupCount,
        maxCountByGroup,
        hasNoReplicate)
 
-export(readCameraTable,
+export(readCameraResults,
        expandSigCameraResults,
        cameraTable2network,
        visualizeCameraNetworksByContrast)
+
+export(parseContributingGenes,
+       parseGenesetsContributingGenes)
+
+export(rowVars, prcompExprs,
+       prcomp.DGEList)

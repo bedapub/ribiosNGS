@@ -12,7 +12,7 @@ biosHeatmap(x,
             Rowv = TRUE,
             Colv = if (symm) "Rowv" else TRUE,
             distfun = dist,
-            hclustfun = hclust,
+            hclustfun = function(x) hclust(x, method="ward.D2"),
             dendrogram = c("both","row", "column", "none"),
             symm = FALSE,
 
@@ -87,7 +87,7 @@ biosHeatmap(x,
   \item{Rowv}{Logical, whether row-wise dendrogram should be calculated}
   \item{Colv}{Logical, whether column-wise dendrogram should be calculated}
   \item{distfun}{Function, for calculating distance}
-  \item{hclustfun}{Function, for hierarchical clustering}
+  \item{hclustfun}{Function, for hierarchical clustering. By default, the \code{ward.D2} method is used.}
   \item{dendrogram}{Character, specify which dendrogram to be
     drawn. Note that \code{Rowv} and \code{Colv} determines whether
     dendrograms are calculated and rows or columns are reordered.}

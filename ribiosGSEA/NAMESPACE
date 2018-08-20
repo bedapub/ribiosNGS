@@ -15,8 +15,7 @@ importFrom("globaltest", "gt")
 importFrom("Biobase", "exprs", "exprs<-")
 importFrom("ribiosExpression",
            "designMatrix", "contrastMatrix", "truncateDgeTable", "limmaTopTable2dgeTable")
-importFrom("ribiosCGI", cgiEncodeWord)
-importFrom("ribiosUDIS", queryUrl)
+importFrom("ribiosUtils", "haltifnot")
            
 import(ribiosIO)
 import(ribiosMath)
@@ -31,7 +30,6 @@ exportClass(CameraResult,
             CameraResultList)
 export(GeneSet, GeneSets)
 export(geneSetPerm)
-export(ronetGGI)
 exportClass("TwoGroupExprsSimulator",
             "BenchmarkDataset",
             "Benchmarker",
@@ -70,7 +68,10 @@ export(gseaResQvalue, gseaResES,
 export(buildGSEAcomm)
 
 ## GMT functions
-export(readGmt, writeGmt, parseGmt, matchGenes)
+export(readGmt, writeGmt, parseGmt,
+       appendGeneSets,
+       matchGenes,
+       readDefaultGenesets)
 
 ## Fisher test (using hypergeometric test)
 export(gmthyper, gmthyperList)

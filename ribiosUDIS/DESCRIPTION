@@ -9,4 +9,4 @@ Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Access UDIS in ribios via APIs specified in UDIS.
 Imports: methods, utils, Biobase, RCurl, ribiosAuth, ribiosIO
 License: LGPL-2
-RoxygenNote: 5.0.1
+RoxygenNote: 6.1.0

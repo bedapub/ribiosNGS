@@ -4,7 +4,8 @@
 \alias{tmpWebFile}
 \title{Get temporary web file}
 \usage{
-tmpWebFile(pattern = "file", fileext = "", tmpdir = RIBIOS_CGI_TMP_DIR)
+tmpWebFile(pattern = "file", fileext = "",
+  tmpdir = RIBIOS_CGI_TMP_DIR)
 }
 \arguments{
 \item{pattern}{Character, initial part of the temporary file name}
@@ -38,4 +39,3 @@ print(tmpFile)
 \author{
 Jitao David Zhang <jitao_david.zhang@roche.com>
 }
-

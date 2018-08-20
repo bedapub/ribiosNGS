@@ -29,4 +29,3 @@ list2incidenceMatrix(letterList, type="binary")
 \author{
 Jitao David Zhang, \email{jitao_david.zhang@roche.com}
 }
-

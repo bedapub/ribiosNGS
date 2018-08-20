@@ -14,10 +14,10 @@ extractTargetAnno <- function(readCountsList) {
 #' 
 #' @param readCountList A list of read count data.frames
 #' @param barcodeSummaryList A list of barcode summary data.frames
-#' @param runNames Character strings, run names
+#' @param runNames Character strings, run names. If \code{NULL}, a sequential number will be given.
 #' 
 #' The function is used internally to merge several runs into one ExpressionSet object.
-mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=names(readCountList)) {
+mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) {
   if(is.null(runNames))
     runNames <- seq(along=readCountList)
   stopifnot(length(readCountList)==length(barcodeSummaryList))
@@ -60,7 +60,7 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=names(
 #' @param runNames Character string vector, run names
 #' 
 #' This function parses read count files as well as barcode summary files, 
-#' and organise the data into an \code{\linkS4class[Biobase]{ExpressionSet}} object.
+#' and organise the data into an \code{\linkS4class{ExpressionSet}} object.
 #' 
 #' @examples 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",
@@ -71,7 +71,7 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=names(
 #'   runNames=c("R1", "R2", "R3"))
 readAmpliSeq <- function(readCountFiles, 
                          barcodeSummaryFiles,
-                         runNames=names(readCountFileList)) {
+                         runNames=names(readCountFiles)) {
   stopifnot(length(readCountFiles)==length(barcodeSummaryFiles))
   if(!is.null(runNames)) {
     stopifnot(length(readCountFiles)==length(runNames))
@@ -87,7 +87,15 @@ readAmpliSeq <- function(readCountFiles,
     readr::read_tsv(f, col_types=colTypeStr)
   })
   barcodeSummaryList <- lapply(barcodeSummaryFiles, function(f) {
-    readr::read_tsv(f, col_types="ccicc")
+    df <- readr::read_tsv(f, col_types="ccicc")
+    if(ncol(df)==4 && identical(colnames(df), c("Barcode ID", "Sample Name", "Mapped Reads", "On Target"))) {
+      df$TargetsDetected <- NA
+    } else if (ncol(df)==5) {
+      ## okay
+    } else {
+      stop("barcode summary files should have either 4 or 5 columns!")
+    }
+    return(df)
   })
   
   res <- mergeAmpliseqRuns(readCountList, barcodeSummaryList, runNames) 

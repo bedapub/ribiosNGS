@@ -7,11 +7,13 @@ design2group <- function(designMatrix) {
   levels(res) <- sprintf("AutoGroup_%02d", 1:nlevels(res))
   return(res)
 }
-DesignContrast <- function(designMatrix, contrastMatrix, groups=NULL, dispLevels=NULL) {
+DesignContrast <- function(designMatrix, contrastMatrix=NULL, groups=NULL, dispLevels=NULL) {
   if(is.null(groups))
     groups <- design2group(designMatrix)
   if(is.null(dispLevels))
     dispLevels <- levels(groups)
+  if(is.null(contrastMatrix))
+    contrastMatrix <- matrix(nrow=ncol(designMatrix), dimnames=list(colnames(designMatrix), NULL))
   res <- new("DesignContrast",
              design=designMatrix,
              contrasts=contrastMatrix,

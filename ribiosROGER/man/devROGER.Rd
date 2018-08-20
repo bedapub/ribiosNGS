@@ -4,7 +4,10 @@
 \alias{devROGER}
 \title{Get connection to devel database}
 \usage{
-devROGER()
+devROGER(dest = "/pstore/data/bi/apps/ROGER/protROGER-v0.2.db")
+}
+\arguments{
+\item{dest}{SQLite3 file which holds the ROGER database. The default value is the prototype database.}
 }
 \description{
 Get connection to devel database

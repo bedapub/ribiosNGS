@@ -87,7 +87,7 @@ biosHeatmap <- function (x,
                          Rowv = TRUE,
                          Colv = if (symm) "Rowv" else TRUE,
                          distfun = dist,
-                         hclustfun = hclust,
+                         hclustfun = function(x) hclust(x, method="ward.D2"),
                          dendrogram = c("both","row", "column", "none"),
                          symm = FALSE,
 

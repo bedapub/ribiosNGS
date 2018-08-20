@@ -57,8 +57,8 @@ pcaScores <- function(x, choices=c(1,2), offset, reverse=c(FALSE, FALSE)) {
          domain = NA)
   if (is.complex(scores)) 
     stop("biplots are not defined for complex PCA")
-  if(length(choices)!=2) {
-    stop("choices must be a integer vector of length 2, indicating which components to visualize")
+  if(length(choices)<2) {
+    stop("choices must be a integer vector of length 2 or more, indicating scores of which components to return")
   } else if (max(choices)>ncol(scores)) {
     stop("Input PCA has %d dimensions, the choices (%d, %d) are out of boundary",
          ncol(scores), choices[1], choices[2])
@@ -78,11 +78,13 @@ pcaScores <- function(x, choices=c(1,2), offset, reverse=c(FALSE, FALSE)) {
       xxOffset <- matrix(rep(offsetMean, nrow(xx)), ncol=ncol(xx), byrow=T)
       xx <- xx-xxOffset
   }
-  if(reverse[1])
-    xx[,1] <- -xx[,1]
-  if(reverse[2])
-    xx[,2] <- -xx[,2]
-  return(xx)
+  reverse <- rep_len(reverse, length.out=length(choices))
+  for(i in seq(along=reverse)) {
+    if(reverse[i])
+      xx[,i] <- -xx[,i]
+  }
+  res <- PCAScoreMatrix(xx, expvar=expVar(x, choices))
+  return(res)
 }
 
 

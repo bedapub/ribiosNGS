@@ -27,7 +27,7 @@ scriptName <- function() {
     restname <- strsplit(filename, "=")[[1L]][-1L]
     return(paste(restname, collapse="="))
   } else if (lf==0) { ## no --file found
-    filename <- getArg("f", onlyArg=NULL, missingArg=NULL)
+    filename <- suppressWarnings(getArg("f", onlyArg=NULL, missingArg=NULL)) ## getArg, which is deprecated, is used here
     return(filename) ## if missing: NULL, otherwise: the file name
   }
 }

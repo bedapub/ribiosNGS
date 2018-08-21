@@ -5,7 +5,13 @@
 \alias{pcLabels,PCAScoreMatrix-method}
 \title{Labels of principal components}
 \usage{
-\S4method{pcLabels}{PCAScoreMatrix}(object, variant = c("compact", "full"))
+\S4method{pcLabels}{PCAScoreMatrix}(object, variant = c("compact",
+  "full"))
+}
+\arguments{
+\item{object}{A PCAScoreMatrix object}
+
+\item{variant}{Character, either \code{compact} or \code{full}, to specify the label variant}
 }
 \description{
 Labels of principal components

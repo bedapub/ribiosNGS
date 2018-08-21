@@ -11,6 +11,9 @@ cgiEncode <- function(strVec)  paste(sapply(strVec, cgiEncodeWord), collapse="+"
 #'   ## query interactions between UCP1 and UCP2
 #'   ronetGGI(c(7350, 7351), mode="between")
 #' }
+#' 
+#' @export
+#' @importFrom ribiosUDIS queryUrl
 ronetGGI <- function(geneids,
                        mode=c("in", "out", "inout", "between"),
                        intTypes=NULL,

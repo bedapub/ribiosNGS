@@ -18,10 +18,7 @@
 #' geneSetPerm(stats, gsList2, Nsim=9999)
 #' gsList3 <- sample(1:1000, 200)
 #' geneSetPerm(stats, gsList3, Nsim=9999)
-#' @export
-#' @importFrom ribiosUtils haltifnot
-#' @import Rcpp
-#' @useDynLib ribiosGSA
+
 
 geneSetPerm <- function(stats,
                         indList,

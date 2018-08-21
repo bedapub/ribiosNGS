@@ -8,9 +8,10 @@
 #' @param geneLabels Labels of the features in the input matrix
 #' @param use.ranks do a rank-based test (TRUE) or a parametric test (FALSE)?
 #' @param allow.neg.cor should reduced variance inflation factors be allowed for negative correlations?
-#' ## @param inter.gene.cor numeric, optional preset value for the inter-gene correlation within tested sets. If NA or NULL, then an inter-gene correlation will be estimated for each tested set.
 #' @param trend.var logical, should an empirical Bayes trend be estimated? See \code{eBayes} for details.
 #' @param sort logical, should the results be sorted by p-value?
+#' @param .fixed.inter.gene.cor Numeric value, vector, or \code{NULL}/\code{NA}, advanced parameter corresponding to \code{inter.gene.cor} in the original implementation in limma. If set, gene-sets are set to have the fixed inter-gene correlation; the vector will be recycled to meet the correct length. If set as \code{NULL}/\code{NA}, correlations are estimated from each gene-set.
+#' @param .approx.zscoreT logical, advanced parameter only used for debugging purposes. If \code{TRUE}, the code is expected to return the exact same results as edgeR::camera (version 3.20.9), and maybe faster in execution.
 #' 
 #' The function was adapted from \code{\link[limma]{camera}}, with following improvments
 #' \enumerate{
@@ -49,13 +50,25 @@
 #' biosCamera(y, index2, design)
 
 #' # compare with the output of camera: columns 'GeneSet', 'Score', 'ContributingGenes' are missing, and in case \code{inter.gene.cor} is (as default) set to a numeric value, the column 'Correlation' is also missing
-#' limma::camera(y, index1, design) 
-#' limma::camera(y, index1, design, inter.gene.cor=NA)
+#' (limmaDefOut <- limma::camera(y, index1, design) )
+#' (limmaCorDefOut <- limma::camera(y, index1, design, inter.gene.cor=NA))
+#'
+#' \dontrun{
+#' # when \code{.approx.zscoreT=TRUE},  PValue reported by \code{limma::camera(inter.gene.cor=NA)} and \code{ribiosGSEA::biosCamera} should equal
+#' (biosCorOut <- biosCamera(y, index1, design, .approx.zscoreT=TRUE))
+#' stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
+#'
+#' # when \code{.fixed.inter.gene.cor=0.01} and \code{.approx.zscoreT=TRUE},  PValue reported by \code{limma::camera} and \code{ribiosGSEA::biosCamera} should equal
+#' (biosFixCorOut <- biosCamera(y, index1, design, .fixed.inter.gene.cor=0.01, .approx.zscoreT=TRUE))
+#' stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
+#' }
 biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weights = NULL,
                         geneLabels=NULL,
                         use.ranks = FALSE, allow.neg.cor = FALSE, trend.var = FALSE, 
-                        sort = FALSE) 
-{
+                        sort = FALSE,
+                        ## internal parameters only for advanced users,
+                        .fixed.inter.gene.cor = NULL,
+                        .approx.zscoreT=FALSE) {
     y <- as.matrix(y)
     G <- nrow(y)
     n <- ncol(y)
@@ -67,13 +80,33 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         haltifnot(length(geneLabels)==nrow(y),
                   msg="geneLabels's length must equal to nrow(y)")
     }
+    if (G < 3)
+      stop("Too few genes in the dataset: need at least 3")
     if (!is.list(index)) 
         index <- list(set1 = index)
-    if (is.null(design)) 
-        stop("no design matrix")
+    nsets <- length(index)
+    if (nsets == 0L)
+      stop("Geneset (index) is empty")
+    if (is.null(design)) {
+      stop("no design matrix")
+    } else {
+      design <- as.matrix(design)
+      if (mode(design) != "numeric")
+        stop("design must be a numeric matrix")
+      if(nrow(design) != n)
+        stop("row dimensions of the design matrix must match the column dimension of data")
+    }
     p <- ncol(design)
     df.residual <- n - p
-    df.camera <- min(df.residual, G - 2)
+    if (df.residual < 1)
+      stop("No residual df: cannot compute t-tests")
+    fixed.cor <- !(is.null(.fixed.inter.gene.cor) || is.na(.fixed.inter.gene.cor))
+    if(fixed.cor) {
+      df.camera <- ifelse(use.ranks, Inf, G-2)
+      .fixed.inter.gene.cor <- rep_len(.fixed.inter.gene.cor, nsets)
+    } else {
+      df.camera <- min(df.residual, G - 2)
+    }
     if (!is.null(weights)) {
         if (any(weights <= 0)) 
             stop("weights must be positive")
@@ -98,16 +131,21 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     }
     if (length(contrast) == 1) {
         if(contrast < p) {
+          ## Reorders the to-be-tested contrast to the last column of the design matrix
             j <- c((1:p)[-contrast], contrast)
-            design <- design[, j] ## JDZ: this if-trunk reorders the to-be-tested contrast to the last column of the design matrix
+            design <- design[, j]
         }
     }  else {
+      ## Transforms the design matrix into a new one by t(t(Q) %*% y), where Q=qr(contrast) and y=t(design), and then reorders to-be-tested contrast to the last column of the design matrix.
+      ## The QR decomposition of the contrast matrix is used to re-parameterize the design matrix so as to encode the desired comparison directly in the last column.
         QR <- qr(contrast)
         design <- t(qr.qty(QR, t(design)))
         if (sign(QR$qr[1, 1] < 0)) 
             design[, 1] <- -design[, 1]
-        design <- design[, c(2:p, 1)] ## JDZ: this else-trunk 'trransforms' the design matrix into a new one with the contrast and reorders the to-be-tested contrast to the last column of the design matrix. I understand that what we estimate is in fact a linear transformation of coefficients of the linear model (beta == C^T %*% alpha, where alpha denotes coefficients and C^T denotes contrasts), it seems that the QR decomposition of the contrast matrix is used to re-parameterize the design matrix so as to encode the desired contrast directly in one of the columns in the design matrix. This is however just a guess and needs verification. 
+        design <- design[, c(2:p, 1)]
     }
+    ## The transformed design matrix will next be used to estimate the effect of the contrast, which involves another QR transformation
+    ## Question: here qr.coef(QR, t(y))[p,] should also give the same result, true or false?
     if (is.null(weights)) {
         QR <- qr(design)
         if (QR$rank < p) 
@@ -118,7 +156,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
             unscaledt <- -unscaledt
     }  else {
         effects <- matrix(0, n, G)
-        unscaledt <- rep(0, n)
+        unscaledt <- rep(0, G)
         sw <- sqrt(weights)
         yw <- y * sw
         for (g in 1:G) {
@@ -134,8 +172,8 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         }
     }
 
-    ## JDZ: effects is a n x G matrix (n=ncol(y), G=nrow(y))
-    U <- effects[-(1:p), , drop = FALSE] ## JDZ: only takes the residuals 
+    ## Effects is a n x G matrix (n=ncol(y), G=nrow(y)), and U are the residuals removing the main effects, transposed, and normalised by sqrt(mean(u^2))
+    U <- effects[-(1:p), , drop = FALSE]
     sigma2 <- colMeans(U^2)
     U <- t(U)/sqrt(sigma2)
     if (trend.var) 
@@ -143,31 +181,39 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     else A <- NULL
     sv <- squeezeVar(sigma2, df = df.residual, covariate = A)
     modt <- unscaledt/sqrt(sv$var.post)
-    df.total <- min(df.residual + sv$df.prior, G * df.residual)
-    Stat <- zscoreT(modt, df = df.total)
+    if (use.ranks) {
+      Stat <- modt
+    } else {
+      ## moderated-t is further transformed into z-score
+      df.total <- min(df.residual + sv$df.prior, G * df.residual)
+      Stat <- zscoreT(modt, df = df.total, approx=.approx.zscoreT)
+    }
+    ## meanStat and varStat are mean and variance of z-score of the moderated t statistic of all features in the matrix
     meanStat <- mean(Stat)
     varStat <- var(Stat)
-    nsets <- length(index)
     tab <- matrix(0, nsets, 5)
     rownames(tab) <- NULL
     colnames(tab) <- c("NGenes", "Correlation", "Down", "Up", 
                        "TwoSided")
 
     conts <- vector("character", nsets)
-    ## JDZ: notice that no matter whether rank is used or not, the statistic underlying the camera method is always the moderated t statistic
     for (i in 1:nsets) {
         iset <- index[[i]]
         StatInSet <- Stat[iset]
         m <- length(StatInSet)
         m2 <- G - m
-        if (m > 1) {
-            Uset <- U[iset, , drop = FALSE]
-            vif <- m * mean(colMeans(Uset)^2)
-            correlation <- (vif - 1)/(m - 1)
-        }
-        else {
+        if (fixed.cor) {
+          correlation <- .fixed.inter.gene.cor[i]
+          vif <- 1 + (m - 1)*correlation
+        } else {
+          if (m > 1) {
+              Uset <- U[iset, , drop = FALSE]
+              vif <- m * mean(colMeans(Uset)^2)
+              correlation <- (vif - 1)/(m - 1)
+          } else {
             vif <- 1
             correlation <- NA
+          }
         }
         tab[i, 1] <- m
         tab[i, 2] <- correlation
@@ -265,3 +311,22 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
     res <- subset(res, NGenes>=1 & !is.na(PValue) & !is.nan(PValue))
     return(res)
 }
+
+
+## since the original camera function is quite monolithic, we decompose it into smaller pieces
+
+# camera.DGEList <-
+#   function (y, index, design = NULL, contrast = ncol(design), weights = NULL, 
+#             use.ranks = FALSE, allow.neg.cor = FALSE, inter.gene.cor = 0.01, 
+#             sort = TRUE, ...) 
+#   {
+#     if (is.null(design)) {
+#       design <- y$design
+#       if (is.null(design)) 
+#         design <- model.matrix(~y$samples$group)
+#     }
+#     y <- .zscoreDGE(y = y, design = design, contrast = contrast)
+#     camera(y = y, index = index, design = design, contrast = contrast, 
+#            weights = weights, use.ranks = use.ranks, allow.neg.cor = allow.neg.cor, 
+#            inter.gene.cor = inter.gene.cor, trend.var = FALSE, sort = sort)
+#   }

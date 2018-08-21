@@ -5,8 +5,8 @@
 \alias{split,DGEList,factor-method}
 \title{Split DGEList by a factor into a DGEList2 object}
 \usage{
-\S4method{split}{DGEList,factor}(x, f, drop = FALSE, keep.lib.sizes = TRUE,
-  sampleDropLevels = TRUE)
+\S4method{split}{DGEList,factor}(x, f, drop = FALSE,
+  keep.lib.sizes = TRUE, sampleDropLevels = TRUE)
 }
 \arguments{
 \item{x}{A \code{DGEList} object}

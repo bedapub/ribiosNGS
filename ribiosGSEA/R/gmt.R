@@ -107,7 +107,7 @@ appendOneGeneSets <- function(geneSets, newGeneSets) {
 #' myFakeSet <- readGmt(CategoryA=gmtFile, CategoryB=gmtFile)
 #' anotherFakeSet <- readGmt(gmtFile, gmtFile, category=c("CategoryC", "CategoryD"))
 #' mySetAppended <- appendGeneSets(mySet, myFakeSet)
-#' mySetAppendedTwice <- appendGeneSets(mySet, myFakeSet, anotherFakeSet
+#' mySetAppendedTwice <- appendGeneSets(mySet, myFakeSet, anotherFakeSet)
 appendGeneSets <- function(geneSets, newGeneSets, ...) {
     res <- appendOneGeneSets(geneSets, newGeneSets)
     newList <- list(...)
@@ -121,7 +121,7 @@ appendGeneSets <- function(geneSets, newGeneSets, ...) {
 #' 
 #' @param file GMT file which stores default molecular-phenotyping genesets
 #' 
-#' @return A \object{GeneSet} object containing molecular-phenotypic screening (MPS) categories and genes
+#' @return A \code{GeneSet} object containing molecular-phenotypic screening (MPS) categories and genes
  
 readMPSGmt <- function(file) {
   gs <- read_gmt_list(file)

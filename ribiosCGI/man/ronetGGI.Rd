@@ -24,4 +24,5 @@ Query gene-gene interactions (GGI) in RONET
   ## query interactions between UCP1 and UCP2
   ronetGGI(c(7350, 7351), mode="between")
 }
+
 }

@@ -12,20 +12,24 @@ cascadeOrder(matrix, dichotomy = c("maxabs", "mean", "median"))
 \item{dichotomy}{How are the rows divided into two? By maximal abs value (default), mean value, or the median value of each row.}
 }
 \description{
-The 'cascade order' is defined by (1) rows are divided into two groups by the condition given by 'dichotomy'
-(2) the positive and negative rows are ordered respectively so that rows reaching its absolute maximal values
+The 'cascade order' is defined by three criteria (1) Rows are divided into two groups by the condition given by 'dichotomy'.
+(2) The positive and negative rows are ordered respectively so that rows reaching its absolute maximal values
 in column n are ordered prior to rows reaching reaching its absolute maximal values in columns n+1, where n can
-be from 1 to column number minus one.
+be from 1 to column number minus one. (3) If two rows reach the maximum value at the same column, they 
+are ordered by the (decreasing) order of the absolute value in that column.
+}
+\details{
+See example for illustration of the idea.
 }
 \examples{
-checkBoard <- function() {
-  set.seed(1887)
+checkBoard <- function(seed=1887) {
+  set.seed(seed)
   mat <- matrix(rnorm(76, sd=1), ncol=4)
   delta <- 3
   for(i in seq(1, 16, 2)) {
     rowInd <- i:(i+1)
     colInd <- (i \%/\% 2) \%\% 4 +1
-    delta <- ifelse(i>8, -6, 6)
+    delta <- ifelse(i>8, -6, 6) * c(0.6, 1)
     mat[rowInd, colInd] <- mat[rowInd, colInd] + delta
   }
   mat[17,1:4] <- rep(-1, 4)
@@ -37,7 +41,7 @@ checkBoard <- function() {
   rownames(mat) <- sprintf("Row\%d", 1:nrow(mat))
   return(mat)
 }
-myMat <- checkBoard()
+myMat <- checkBoard(1887)
 biosHeatmap(myMat, Rowv=FALSE, Colv=FALSE, dendrogram="none",
             zlim=c(-4,4), col="royalbluered",
             main="Original matrix")

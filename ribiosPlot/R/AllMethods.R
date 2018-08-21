@@ -20,6 +20,10 @@ setMethod("show", "fcol", function(object) {
 })
 
 #' Labels of principal components
+#' 
+#' @param object A PCAScoreMatrix object
+#' @param variant Character, either \code{compact} or \code{full}, to specify the label variant
+
 setMethod("pcLabels", "PCAScoreMatrix", function(object, variant=c("compact", "full")) {
   variant <- match.arg(variant)
   fmt <- ifelse(variant=="compact",

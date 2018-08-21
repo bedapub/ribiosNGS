@@ -9,6 +9,7 @@ importFrom("stats", "as.dendrogram", "ave", "cov", "density", "dist",
            "quantile", "reorder", "sd")
 importFrom("stats", "prcomp")
 importFrom("utils", "assignInNamespace")
+importFrom("methods", "show")
 importFrom(lattice, panel.xyplot, col.whitebg, lattice.options)
 importFrom(ribiosUtils, assertFile, basefilename, chosenFew, haltifnot, percentage)
 importFrom(methods, setClass, setGeneric, setMethod, is, new)

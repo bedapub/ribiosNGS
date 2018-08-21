@@ -4,12 +4,12 @@
 \alias{cascadeOrder}
 \title{Order rows of a matrix in the cascade order}
 \usage{
-cascadeOrder(matrix, dichotomy = c("mean", "median", "maxabs"))
+cascadeOrder(matrix, dichotomy = c("maxabs", "mean", "median"))
 }
 \arguments{
 \item{matrix}{A numeric matrix}
 
-\item{dichotomy}{How are the rows divided into two? By mean value, median value, or by maximal abs value}
+\item{dichotomy}{How are the rows divided into two? By maximal abs value (default), mean value, or the median value of each row.}
 }
 \description{
 The 'cascade order' is defined by (1) rows are divided into two groups by the condition given by 'dichotomy'
@@ -18,10 +18,36 @@ in column n are ordered prior to rows reaching reaching its absolute maximal val
 be from 1 to column number minus one.
 }
 \examples{
-myMatrix <- matrix(c(1,2,3, 4,6,5, 8,7,9,3,4,8,9,1,2,-1,-2,-3, -4, -2, -1, -5, -7, -4), byrow=TRUE, ncol=3)
-rownames(myMatrix) <- sprintf("Gene\%d", 1:nrow(myMatrix))
-biosHeatmap(myMatrix, Colv=FALSE, Rowv=FALSE, dendrogram="none")
-myOrder <- cascadeOrder(myMatrix)
-myOrderedMatrix <- myMatrix[myOrder,]
-biosHeatmap(myOrderedMatrix, Colv=FALSE, Rowv=FALSE, dendrogram="none")
+checkBoard <- function() {
+  set.seed(1887)
+  mat <- matrix(rnorm(76, sd=1), ncol=4)
+  delta <- 3
+  for(i in seq(1, 16, 2)) {
+    rowInd <- i:(i+1)
+    colInd <- (i \%/\% 2) \%\% 4 +1
+    delta <- ifelse(i>8, -6, 6)
+    mat[rowInd, colInd] <- mat[rowInd, colInd] + delta
+  }
+  mat[17,1:4] <- rep(-1, 4)
+  mat[18,1] <- NA
+  mat[18,2] <- mat[18, 2] -6
+  mat[19,1:4] <- rep(NA,4)
+  rord <- sample(1:nrow(mat), replace=FALSE)
+  mat <- mat[rord,]
+  rownames(mat) <- sprintf("Row\%d", 1:nrow(mat))
+  return(mat)
+}
+myMat <- checkBoard()
+biosHeatmap(myMat, Rowv=FALSE, Colv=FALSE, dendrogram="none",
+            zlim=c(-4,4), col="royalbluered",
+            main="Original matrix")
+## since dist by default does not accept rows full of NAs, we remove them in the example below
+biosHeatmap(myMat[apply(myMat, 1, function(x) !all(is.na(x))),],
+            Rowv=TRUE, Colv=TRUE, dendrogram="both",
+            zlim=c(-4,4), col="royalbluered",
+            main="hclust/dist clustering")
+## note that cascadeOrder handles invariant rows and rows full of NA values
+biosHeatmap(myMat[cascadeOrder(myMat),], Rowv=FALSE, Colv=FALSE, dendrogram="none",
+            zlim=c(-4,4), col="royalbluered",
+            main="Cascade order")
 }

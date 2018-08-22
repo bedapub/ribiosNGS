@@ -22,8 +22,11 @@ Suggests:
     ribiosArg,
     plotrix,
     MASS,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Enhances: Vennerable
 License: GPL-3
 LazyLoad: yes
 RoxygenNote: 6.1.0
+VignetteBuilder: knitr

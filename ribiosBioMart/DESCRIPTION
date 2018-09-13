@@ -2,8 +2,8 @@ Package: ribiosBioMart
 Title: Utilities for BioMart annotation service 
 Version: 0.0.1
 Authors: 
-Authors@R: c(person("Jitao David", "Zhang", email = "jitao_david.zhang@roche.com", role = c("aut", "cre")),
-             person("Rudolf", "Biczok", email = "rudolf.biczok@roche.com", role = c("ctb")))
+Authors@R: c(person("Jitao David", "Zhang", email = "jitao_david.zhang@roche.com", role = c("aut")),
+             person("Rudolf", "Biczok", email = "rudolf.biczok@roche.com", role = c("ctb", "cre")))
 Description: This package is used for hosting a local BioMart installation that does not require an BioMart middleware. 
              Instead, it relies only on a local copy of the Ensembl databases.
 Depends: R (>= 3.3.0), DBI
@@ -11,10 +11,10 @@ Imports:
   XML,
   data.table,
   stringr,
+  RMySQL,
   utils
 Suggests: 
   ribiosBase,
-  RMySQL,
   biomaRt,
   devtools,
   roxygen2,

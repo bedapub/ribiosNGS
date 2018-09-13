@@ -1,12 +1,53 @@
+#' This class is used to store credentials used to connect a MySQL / MariaDB fork of the Ensembl database
+#' @param host The host name of the SQL database containing a copy of the Ensembl BioMart data
+#' @param port The port to the SQL database
+#' @param user The user name used to authenticate to the SQL database
+#' @param passwd The database password used to connect to the SQL database
+#' @param ensembl_version The version of the Ensembl data inside the target SQL database. Will be used as table suffix (e.g. for "ensembl_mart_92")
+#' @export
+EnsemblDBCredentials <- setClass("EnsemblDBCredentials",
+                                 representation(host = "character",
+                                                port = "numeric",
+                                                user = "character",
+                                                passwd = "character",
+                                                ensembl_version = "numeric"))
+
+#' Creates a new DBI connection based on the given credential object
+#' @export
+setGeneric("createDBIConnection", valueClass = "DBIConnection", function(object) {
+  standardGeneric("createDBIConnection")
+})
+
+
+#' Creates a new DBI connection based on the given credential object
+#' @export
+setMethod("createDBIConnection", signature("EnsemblDBCredentials"), function(object) {
+  dbConnect (MySQL(),
+             user=object@user,
+             password=object@passwd,
+             host=object@host,
+             port=object@port,
+             dbname=sprintf("ensembl_mart_%d", object@ensembl_version))
+})
+
+
 #' Returns table of all available BioMart datasets (see \code{\link[biomaRt]{listDatasets}}
 #'
-#' @param conn The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database
+#' @param conn The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database or a instance of \code{\linkS4class{EnsemblDBCredentials}}
 #' @return a \code{\link[data.table]{data.table}}
 #' @export
 #' @importFrom DBI dbGetQuery
 #' @importClassesFrom DBI DBIConnection
 listLocalDatasets <- function(conn) {
-  dbGetQuery(conn, "SELECT dataset, display_name as 'description', version FROM meta_conf__dataset__main;")
+  queryStr <- "SELECT dataset, display_name as 'description', version FROM meta_conf__dataset__main;"
+  if(is(conn, "DBIConnection")) {
+    return(dbGetQuery(conn, queryStr))
+  }
+
+  conn <- createDBIConnection(conn)
+
+  result <- dbGetQuery(conn, "SELECT dataset, display_name as 'description', version FROM meta_conf__dataset__main;")
+  return(result)
 }
 
 #' Returns options of the given filters as list
@@ -55,21 +96,35 @@ localFilterType <- function(filter, mart) {
 
 #' Creates a new mart object for the given database connection (see \code{\link[biomaRt]{useMart}}
 #'
-#' @param conn The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database
+#' @param conn The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database or an instance of \code{\linkS4class{EnsemblDBCredentials}}
 #' @param dataset The name of the Ensembl dataset to query (e.g. "rnorvegicus_gene_ensembl")
 #' @return the mart object (regular list) with the connection object and internal attributes in it
 #'
 #' @export
+#' @importFrom RMySQL MySQL
+#' @importFrom DBI dbConnect
 #' @importFrom DBI dbGetQuery
+#' @importFrom DBI dbDisconnect
 #' @importFrom XML xmlParse xmlAttrs getNodeSet xmlGetAttr
 #' @importFrom data.table data.table
 #' @importFrom stringr str_match
 useLocalMart <- function(conn, dataset) {
 
-  xml <- dbGetQuery(conn, sprintf("SELECT xml FROM meta_conf__xml__dm AS xml_meta
+  close_connection <- FALSE
+  used_conn <- conn
+
+  if (is(conn, "EnsemblDBCredentials")) {
+    used_conn <- createDBIConnection(conn)
+    close_connection <- TRUE
+  }
+
+  xml <- dbGetQuery(used_conn, sprintf("SELECT xml FROM meta_conf__xml__dm AS xml_meta
                                   INNER JOIN meta_conf__dataset__main AS dataset_meta
                                   ON xml_meta.dataset_id_key = dataset_meta.dataset_id_key
                                   WHERE dataset_meta.dataset = \"%s\"", dataset))
+
+  if(close_connection)
+    dbDisconnect(used_conn)
 
   xmlFile <- tempfile(pattern = dataset, fileext = ".xml")
   writeLines(text = as.character(xml), con = xmlFile)
@@ -83,7 +138,7 @@ useLocalMart <- function(conn, dataset) {
                            alias=str_match(mainTables, ".*_([a-z]+)__main$")[,2])
 
   list(dataset=dataset,
-       conn = conn,
+       .conn = conn,
        .mainTables = mainTables,
        .attributes = extractListOfBioMartAttributes(dataset, docRoot, mainTables),
        .filters = extractListOfBioMartFilters(dataset, docRoot, mainTables))
@@ -378,7 +433,18 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
     print(query)
   }
 
-  result <- dbGetQuery(mart$conn, query)
+  conn <- mart$.conn
+  close_connection <- FALSE
+
+  if (is(conn, "EnsemblDBCredentials")) {
+    conn <- createDBIConnection(conn)
+    close_connection <- TRUE
+  }
+
+  result <- dbGetQuery(conn, query)
+
+  if(close_connection)
+    dbDisconnect(conn)
 
   #Remove factor columns and replace them by numeric values whenever possible
   for(col in colnames(result)) {

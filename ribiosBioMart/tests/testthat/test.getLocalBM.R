@@ -159,3 +159,56 @@ test_that("Annotate set of idenfiers with INTERPRO protein domain identifiers", 
 #                             values=values)
 #   expect_equal(localData, remoteData)
 # })
+
+context("Metehod usage & Utility")
+
+test_that("Compare execution modes: 1) without database connection object 2) with database connection object", {
+  dataset <- "hsapiens_gene_ensembl"
+  attributes <- c("refseq_mrna", "interpro", "interpro_description")
+  filters <- "refseq_mrna"
+  values <- c("NM_005359","NM_000546")
+
+  # Test with an ensembl credential object
+
+  conn <- EnsemblDBCredentials(host = testDB$host,
+                               port = testDB$port,
+                               user = testDB$user,
+                               passwd = testDB$passwd,
+                               ensembl_version = 93)
+
+  martObj <- useLocalMart(conn, dataset = dataset)
+  result_stype1 <- getLocalBM(attributes = attributes,
+                              filters = filters,
+                              values = values,
+                              mart = martObj)
+
+  # Test with a regular connection object
+
+  conn <- dbConnect (MySQL(),
+                     user=testDB$user,
+                     password=testDB$passwd,
+                     host=testDB$host,
+                     port=testDB$port,
+                     dbname="ensembl_mart_93")
+
+  martObj <- useLocalMart(conn = conn, dataset = dataset)
+  result_stype2 <- getLocalBM(attributes = attributes,
+                              filters = filters,
+                              values = values,
+                              mart = martObj)
+
+  dbDisconnect(conn)
+
+  expect_equal(result_stype1, result_stype2)
+})
+
+test_that("list avaibale datasets", {
+  conn <- EnsemblDBCredentials(host = testDB$host,
+                               port = testDB$port,
+                               user = testDB$user,
+                               passwd = testDB$passwd,
+                               ensembl_version = 93)
+  result <- listLocalDatasets(conn)
+  expect_true(length(result) > 0)
+})
+

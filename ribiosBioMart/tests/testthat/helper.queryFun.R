@@ -16,18 +16,18 @@ queryRemote <- function(dataset, attributes, filters="", values="", verbose=FALS
 }
 
 queryLocal <- function(dataset, attributes, filters=NULL, values=NULL, verbose=FALSE) {
-  conn <- dbConnect (MySQL (), user=testDB$user, password=testDB$passwd,
-                     dbname="ensembl_mart_93", host=testDB$host, port=testDB$port)
-  tryCatch({
-    martObj <- useLocalMart(conn, dataset=dataset)
-    result <- getLocalBM(attributes=attributes,
-                         filters=filters,
-                         values = values,
-                         mart=martObj,
-                         verbose=verbose)
-    setcolorder(result, order(colnames(result)))
-    result
-  }, finally = {
-    dbDisconnect(conn)
-  })
+  conn <- EnsemblDBCredentials(host = testDB$host,
+                               port = testDB$port,
+                               user = testDB$user,
+                               passwd = testDB$passwd,
+                               ensembl_version = 93)
+
+  martObj <- useLocalMart(conn, dataset = dataset)
+  result <- getLocalBM(attributes = attributes,
+                       filters = filters,
+                       values = values,
+                       mart = martObj,
+                       verbose = verbose)
+  setcolorder(result, order(colnames(result)))
+  result
 }

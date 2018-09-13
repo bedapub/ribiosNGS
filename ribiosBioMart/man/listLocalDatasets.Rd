@@ -7,7 +7,7 @@
 listLocalDatasets(conn)
 }
 \arguments{
-\item{conn}{The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database}
+\item{conn}{The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database or a instance of \code{\linkS4class{EnsemblDBCredentials}}}
 }
 \value{
 a \code{\link[data.table]{data.table}}

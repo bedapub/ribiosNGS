@@ -7,7 +7,7 @@
 useLocalMart(conn, dataset)
 }
 \arguments{
-\item{conn}{The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database}
+\item{conn}{The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database or an instance of \code{\linkS4class{EnsemblDBCredentials}}}
 
 \item{dataset}{The name of the Ensembl dataset to query (e.g. "rnorvegicus_gene_ensembl")}
 }

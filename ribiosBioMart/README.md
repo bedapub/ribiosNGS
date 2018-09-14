@@ -28,16 +28,23 @@ Connect to database server & list available datasets
 library(ribiosBioMart)
 library(RMySQL)
 
-#Your acces data to your database server
-dbhost <- "TODO"
-dbport <- 12345
-dbuser <- "TODO"
-dbpasswd <- "TODO"
+# Your acces data to your database server
+# listLocalDatasets, useLocalMart, and getLocalBM will use this to create a 
+# single-use connection for each function call
+conn <- EnsemblDBCredentials(host = "TODO",
+                             port = 12345,
+                             user = "TODO",
+                             passwd = "TODO",
+                             ensembl_version = 93)
 
-#replace this with your desired mart version
-dbname <- "ensembl_mart_92"
-conn <- dbConnect (MySQL (), user=dbuser, password=dbpasswd,
-                   dbname=dbname, host=dbhost, port=dbport)
+# Alternatively: Use a direct connection for the entire session.
+# You will need to manage / close it yourself
+#conn <- dbConnect (MySQL (), 
+#                   user="TODO", 
+#                   password="TODO",
+#                   dbname="ensembl_mart_93", 
+#                   host="TODO", 
+#                   port=12345)
 ds <-listLocalDatasets(conn)
 ds[1:5,]
 ```
@@ -46,7 +53,7 @@ Initialize mart object and retrieve available attributes & filters
 ------------------------------------------------------------------
 
 ``` r
-localMart = useLocalMart(conn,dataset="hsapiens_gene_ensembl")
+localMart = useLocalMart(conn, dataset="hsapiens_gene_ensembl")
 
 attrs = listLocalAttributes(localMart)
 attrs[1:5,]
@@ -206,8 +213,8 @@ Attributes:
 Final Note
 ==========
 
-Don't forget to close your database connections:
+If you used a direct DBIConnection for the database access, don't forget to close your database connections
 
 ``` r
-dbDisconnect (conn)
+# dbDisconnect (conn)
 ```

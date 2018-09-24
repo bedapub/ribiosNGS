@@ -24,7 +24,7 @@ hapmapSnp <- function(ids,
                    paste(state.sel, collapse=","))
   ann <- querydbSelectIn(state,
                          "a.SNP_ID", ids,
-                         db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+                         db="bia", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   colnames(ann) <- cnames
   ann$Chromosome <- gsub("^CHR", "", ann$Chromosome)
   

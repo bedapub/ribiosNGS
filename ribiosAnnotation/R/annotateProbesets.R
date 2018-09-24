@@ -24,7 +24,7 @@ annotateHumanOrthologs <- function(geneids, multiOrth=FALSE) {
                 "WHERE a.RO_GENE_ID1=b.RO_GENE_ID AND a.TAX_ID1 ='9606'")
   ort <- querydbTmpTbl(comm,
                        "a.RO_GENE_ID2",
-                       geneids, "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
+                       geneids, "bia", ORACLE.BIN.USER, ORACLE.BIN.PWD)
   colnames(ort) <- c("OrigGeneID", "OrigTaxID", "TaxID", "GeneID", "GeneSymbol")
   hGeneIDs <- as.integer(ort$GeneID)
   ort <- ort[order(hGeneIDs, decreasing=FALSE),] ## Smaller GeneIDs come first
@@ -50,13 +50,13 @@ gtiChipAnnotation <- function(chip,ids, orthologue=FALSE, multiOrth=FALSE) {
                    "FROM genome.chip_probeset_gene a, genome.GTI_GENES e ",
                    "where a.RO_GENE_ID(+) = e.RO_GENE_ID ",
                    "AND ARRAY_TYPE='",chip, "'", sep="")
-    ann <- querydb(state, db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+    ann <- querydb(state, db="bia", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   } else {
     state <-  paste("SELECT a.PROBESET_ID, e.RO_GENE_ID, e.GENE_Symbol, e.DESCRIPTION, a.ARRAY_TYPE, e.TAX_ID ",
                     "FROM genome.chip_probeset_gene a, genome.GTI_GENES e ",
                     "WHERE a.RO_GENE_ID(+) = e.RO_GENE_ID ",
                     "AND ARRAY_TYPE='",chip, "'",sep="")
-    ann <- querydbTmpTbl(state, inCol="a.PROBESET_ID",inValues=ids, db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+    ann <- querydbTmpTbl(state, inCol="a.PROBESET_ID",inValues=ids, db="bia", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   }
 
   if(!orthologue) {
@@ -94,7 +94,7 @@ guessChiptype <- function(ids, maxOnly=FALSE, sample=100) {
   state <- paste("SELECT a.PROBESET_ID, a.ARRAY_TYPE ",
                  "FROM genome.chip_probeset_gene a WHERE ")
   ann <- querydbSelectIn(state, inCol="a.PROBESET_ID", inValues=ids,
-                         db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+                         db="bia", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   res.raw <- sort(table(ann$ARRAY_TYPE), decreasing=TRUE)
   if(maxOnly) res.raw <- res.raw[1]
   res <- names(res.raw)
@@ -114,7 +114,7 @@ annotateAnyProbeset <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   conames <- c(cnames, c("OrigTaxID", "OrigGeneID", "OrigGeneSymbol"))
   ann <- querydbTmpTbl(comm,
                        "a.ANY_ID",
-                       ids, "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
+                       ids, "bia", ORACLE.BIN.USER, ORACLE.BIN.PWD)
 
   
   if(!orthologue) {
@@ -155,7 +155,7 @@ annotateGeneIDs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
                 " FROM GTI_GENES c", sep="")
   ann <- querydbTmpTbl(comm, 
                        "c.RO_GENE_ID",
-                       ids, "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
+                       ids, "bia", ORACLE.BIN.USER, ORACLE.BIN.PWD)
   cnames <- c("GeneID", "GeneSymbol", "GeneName", "TaxID")
   conames <- c("OrigGeneID", "OrigGeneSymbol", "OrigGeneName", "OrigTaxID")
 
@@ -195,7 +195,7 @@ annotateGeneSymbols <- function(ids,
   cnames <- c("GeneID", "GeneSymbol", "GeneName", "TaxID")
   ann <- querydbTmpTbl(comm,
                        "c.GENE_SYMBOL",
-                       ids, "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
+                       ids, "bia", ORACLE.BIN.USER, ORACLE.BIN.PWD)
 
   if(!orthologue) {
     colnames(ann) <- cnames
@@ -230,7 +230,7 @@ annotateRefSeqs <- function(ids, orthologue=FALSE, multiOrth=FALSE) {
   conames <- c(cnames, c("OrigTaxID", "OrigGeneID", "OrigGeneSymbol"))
   ann <- querydbTmpTbl(comm,
                        "lower(a.item_id)",
-                       tolower(ids), "bin", ORACLE.BIN.USER, ORACLE.BIN.PWD)
+                       tolower(ids), "bia", ORACLE.BIN.USER, ORACLE.BIN.PWD)
   if(!orthologue) {
     colnames(ann) <- cnames
     res <- ann

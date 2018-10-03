@@ -4,10 +4,12 @@
 \alias{kappaSimp}
 \title{Calculate column-wise kappa statistics of a matrix, using a simple procedure by going through the matrix and counting}
 \usage{
-kappaSimp(matrix)
+kappaSimp(matrix, minOverlap = 0)
 }
 \arguments{
 \item{matrix}{a binary matrix of either 0 or one}
+
+\item{minOverlap}{Numeric/integer, the minimal overlap between two columns to be considered for further calculation}
 }
 \value{
 A matrix of size nxn if the input matrix is of size mxn (m is arbitrary)

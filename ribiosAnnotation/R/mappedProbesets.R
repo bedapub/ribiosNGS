@@ -7,7 +7,7 @@ mappedProbesets <- function(geneids,
                   "FROM genome.chip_probeset_gene a, genome.GTI_GENES e ",
                   "WHERE a.RO_GENE_ID(+) = e.RO_GENE_ID ",
                   "AND ARRAY_TYPE='",chip, "'",sep="")
-  ann <- querydbTmpTbl(state, inCol="e.RO_GENE_ID",inValues=ids, db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+  ann <- querydbTmpTbl(state, inCol="e.RO_GENE_ID",inValues=ids, db="bia", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
   colnames(ann) <- c("ProbeID", "GeneID", "GeneSymbol", "GeneName", "Chip", "TaxID")
   mapId <- with(ann, split(ProbeID, GeneID))
   if(unlist)

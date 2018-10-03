@@ -36,8 +36,8 @@ rownames(synData) <- sprintf("Gene \%s", letters[1:8])
 colnames(synData) <- sprintf("t\%d", 1:15)
 synRowKappa <- rowKappa(synData)
 synColKappa <- colKappa(synData)
-davidClustering_kappa_R(synRowKappa, removeRedundant = TRUE, debug=FALSE)
-davidClustering_kappa_R(synColKappa, removeRedundant = TRUE, debug=FALSE)
+ribiosMath:::davidClustering_kappa_R(synRowKappa, removeRedundant = TRUE, debug=FALSE)
+ribiosMath:::davidClustering_kappa_R(synColKappa, removeRedundant = TRUE, debug=FALSE)
 
 }
 \references{

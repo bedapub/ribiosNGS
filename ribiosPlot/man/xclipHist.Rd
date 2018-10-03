@@ -8,7 +8,9 @@
   quantiles of x values.
 }
 \usage{
-xclipHist(x, xclip = c(0.01, 0.99), breaks = 100, quantiles = 0.25, qlty = 2, qlwd = 2, qcol = "red", ...)
+xclipHist(x, xclip = c(0.01, 0.99), 
+    breaks = 100, quantiles = 0.25, qlty = 2, 
+    qlwd = 2, qcol = "red", ...)
 }
 \arguments{
   \item{x}{Value to draw the histogram}

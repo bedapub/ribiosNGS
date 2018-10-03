@@ -21,12 +21,14 @@ parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts) {
 }
 Read CAMERA results into a tibble object}
 \usage{
-readCameraResults(file, minNGenes = 3)
+readCameraResults(file, minNGenes = 3, maxNGenes = 1000)
 }
 \arguments{
 \item{file}{CAMERA results file}
 
-\item{minNGenes}{Integer, genesets with fewer genes are filtered out}
+\item{minNGenes}{NULL or integer, genesets with fewer genes are filtered out}
+
+\item{maxNGenes}{NULL or integer, genesets with more genes are filtered out}
 }
 \description{
 #' Parse contributing genesets by both genesets and contrasts

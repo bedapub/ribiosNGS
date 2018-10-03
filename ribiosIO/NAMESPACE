@@ -44,4 +44,6 @@ export(strList2DataFrame, writeStrList)
 
 export(read_david)
 
+export(loadRDS)
+
 useDynLib(ribiosIO, .registration=TRUE)

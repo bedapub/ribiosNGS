@@ -2,4 +2,4 @@
 
 ribios: a computational biology and bioinformatics toolbox in R.
 
-Documentation is being built.
+Meta-documentation is being built.

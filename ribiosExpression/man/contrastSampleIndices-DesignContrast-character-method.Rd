@@ -5,7 +5,8 @@
 \alias{contrastSampleIndices,DesignContrast,character-method}
 \title{Return indices of samples involved in the given contrast of two or more coefficients}
 \usage{
-\S4method{contrastSampleIndices}{DesignContrast,character}(object, contrast)
+\S4method{contrastSampleIndices}{DesignContrast,character}(object,
+  contrast)
 }
 \arguments{
 \item{object:}{A \code{DesignContrast} object}

@@ -3,21 +3,29 @@
 #' @param edgeResult An \code{EdgeResult} object
 #' @param featureIdentifier Character, column name in \code{dgeTable} that will be used as rownames of the result matrix
 #' @param contrasts \code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned
+#' @param min.logCPM \code{NULL} or numeric. If set, features with logCPM lower than the given value is not considered. This option is helpful to remove genes that are lowly expressed which yet show strong differential expression. 
 #' 
 #' @note TODO: add edgeResult data example
-logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", contrasts=NULL,
-                        removeNAfeatures=TRUE) {
+logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", 
+                        contrasts=NULL,
+                        removeNAfeatures=TRUE,
+                        min.logCPM=NULL) {
   tbls <- edgeResult@dgeTables
+  if(!is.null(min.logCPM)) {
+    for(i in seq(along=tbls)) {
+      tbls[[i]] <- subset(tbls[[i]], logCPM>=min.logCPM)
+    }
+  }
   allContrasts <- contrastNames(edgeResult)
   
   stopifnot(featureIdentifier %in% colnames(tbls[[1]]))
-  oriFeats <- rownames(tbls[[1]])
+  oriFeats <- mintersect(lapply(tbls, rownames))
   feats <- tbls[[1]][, featureIdentifier]
   mat <- sapply(tbls, function(x) matchColumn(oriFeats, x, 0L)$logFC)
   rownames(mat) <- feats
   colnames(mat) <- allContrasts
   if(removeNAfeatures) {
-      isNAfeat <- is.na(feats) || feats=="-"
+      isNAfeat <- is.na(feats) | feats=="-"
       mat <- mat[!isNAfeat,,drop=FALSE]
   }
   if(!is.null(contrasts)) {

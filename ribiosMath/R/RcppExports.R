@@ -92,7 +92,7 @@ empval <- function(stat, sim) {
 #'
 #' The function returns column-wise kappa statistics of a matrix, using a linear algebra procedure implemented in C++.
 #'
-#' @param matrix An adjacency matrix, containing values of either 0 or 1.
+#' @param matrix An adjacency matrix, containing values of either 0 or 1 (default), or values between 0 and 1 (weighted).
 #' @param minOverlap Integer, minimal overlap between two columns in order to be considered. Pairs with fewer overlaps will return \code{NA}.
 #' @return
 #' A matrix of size \eqn{n \times n} if the input matrix is of size \eqn{m \times n}. 

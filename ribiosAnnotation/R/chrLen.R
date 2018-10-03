@@ -12,7 +12,7 @@ chrLen <- function(organism=c("human", "mouse", "rat")) {
   state <- paste("SELECT SEQ, DESCR, SEQLEN, RANK ",
                  "FROM genome_sequence ",
                  "WHERE DB='", db, "'", sep="")
-  ann <- querydb(state, db="bin", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
+  ann <- querydb(state, db="bia", user=ORACLE.BIN.USER, password=ORACLE.BIN.PWD)
 
   colnames(ann) <- c("Chromosome", "Description", "Length", "Rank")
   ann$Chromosome <- gsub("^CHR","", ann$Chromosome)

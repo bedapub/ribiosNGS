@@ -14,7 +14,7 @@ mRNArefseqByTaxID <- function(taxid=10090) {
                   " a.item_type_id='4' AND a.ro_gene_id=c.ro_gene_id AND ",
                   "(c.ro_gene_id=i.GENEID AND c.tax_id = i.TAX_ID AND c.TAX_ID=", taxidQ, ")", 
                   sep = "")
-    ann <- querydb(comm, "bin", "genome", "genome")
+    ann <- querydb(comm, "bia", "genome", "genome")
     colnames(ann) <- c("RefSeq", "GeneID", "GeneSymbol", "Description", "GeneType")
     return(ann)
 }

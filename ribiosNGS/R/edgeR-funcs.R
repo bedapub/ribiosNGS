@@ -71,7 +71,7 @@ hasNoReplicate <- function(edgeObj) {
 #' 
 #' @param edgeObj An EdgeObject object
 #' @param minCPM Minimal CPM value, see descriptions below
-#' @param mintCount Minimal count of samples in which the CPM value is no less than \code{minCPM}
+#' @param minCount Minimal count of samples in which the CPM value is no less than \code{minCPM}
 #' 
 #' The filter is recommended by the authors of the \code{edgeR} package to remove lowly expressed genes, since including them in differential gene expression analysis will cause extreme differential expression fold-changes of lowly and stochastically expressed genes, and increase false positive rates.
 #' 

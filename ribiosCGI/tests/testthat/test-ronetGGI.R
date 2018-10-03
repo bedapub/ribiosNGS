@@ -1,4 +1,4 @@
-library(ribiosGSEA)
+library(ribiosCGI)
 
 geneids <- c(7350, 7351)
 genes <- c("UCP1", "UCP2")

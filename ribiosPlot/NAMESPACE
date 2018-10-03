@@ -9,8 +9,9 @@ importFrom("stats", "as.dendrogram", "ave", "cov", "density", "dist",
            "quantile", "reorder", "sd")
 importFrom("stats", "prcomp")
 importFrom("utils", "assignInNamespace")
+importFrom("methods", "show")
 importFrom(lattice, panel.xyplot, col.whitebg, lattice.options)
-importFrom(ribiosUtils, assertFile, basefilename, chosenFew, haltifnot)
+importFrom(ribiosUtils, assertFile, basefilename, chosenFew, haltifnot, percentage)
 importFrom(methods, setClass, setGeneric, setMethod, is, new)
 importFrom(RColorBrewer, brewer.pal, brewer.pal.info)
 importFrom(grid, pushViewport, plotViewport, grid.layout, unit, gpar, viewport, grid.text)
@@ -18,6 +19,10 @@ importFrom(grid, pushViewport, plotViewport, grid.layout, unit, gpar, viewport, 
 ## class
 exportClass(fcol)
 exportMethods(fcol, fcbase)
+
+exportClass(PCAScoreMatrix)
+
+export(PCAScoreMatrix, pcLabels)
 
 ## utils
 export(compactPar)
@@ -28,7 +33,8 @@ export(compactTrellis,
        setCompactTrellis)
 export(getLims)
 
-export(cascadeOrder)
+export(rowVars,
+       cascadeOrder)
 
 export(radian2degree,
        degree2radian,

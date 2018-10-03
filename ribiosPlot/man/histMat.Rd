@@ -7,7 +7,10 @@
   Make histograms for matrix
 }
 \usage{
-histMat(mat, linesOpt = list(lwd = NULL, col = NULL, lty = NULL, type = NULL, pch = NULL), main = NULL, xlab = NULL, xlim = NULL, ...)
+histMat(mat, 
+  linesOpt = list(lwd = NULL, col = NULL, 
+      lty = NULL, type = NULL, pch = NULL), 
+  main = NULL, xlab = NULL, xlim = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

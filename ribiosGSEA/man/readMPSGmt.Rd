@@ -10,7 +10,7 @@ readMPSGmt(file)
 \item{file}{GMT file which stores default molecular-phenotyping genesets}
 }
 \value{
-A \object{GeneSet} object containing molecular-phenotypic screening (MPS) categories and genes
+A \code{GeneSet} object containing molecular-phenotypic screening (MPS) categories and genes
 }
 \description{
 Read molecular-phenotyping genesets

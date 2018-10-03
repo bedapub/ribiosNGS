@@ -166,3 +166,16 @@ EdgeGSE <- function(edgeObj, gsc) {
   egse@geneSets <- gsc
   return(egse)
 }
+
+#' An S4 class to represent a list of DGEList2 objects
+setClass("DGEList2", representation("list"))
+
+#' Construct a DGEList2 object
+#' 
+#' @param ... A list of DGEList2 objects, can be passed as individual objects or in a list
+DGEList2 <- function(...) {
+  li <- as.list(...)
+  res <- new("DGEList2", li)
+  names(res@.Data) <- names(li)
+  return(res)
+}

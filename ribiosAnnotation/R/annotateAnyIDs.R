@@ -6,7 +6,7 @@
 annotateAnyIDs <- function(ids, orthologue = FALSE, multiOrth = FALSE) {
   comm <- paste("SELECT m.ANY_ID, m.ID_TYPE, c.RO_GENE_ID,c.GENE_SYMBOL, c.DESCRIPTION, c.TAX_ID ", 
                 " FROM GTI_GENES c JOIN GTI_IDMAP m ON c.RO_GENE_ID=m.RO_GENE_ID ",sep="")
-  ann <- querydbTmpTbl(comm, "m.ANY_ID", ids, "bin",
+  ann <- querydbTmpTbl(comm, "m.ANY_ID", ids, "bia",
                        ORACLE.BIN.USER, 
                        ORACLE.BIN.PWD)
   cnames <- c("Input", "InputIDType", "GeneID", "GeneSymbol", "GeneName", "TaxID")

@@ -156,8 +156,7 @@ blackwhite <- function(n) gray(seq(0, 1, 1/(n-1)))
 twocolor.panels <- function() {
   return(c("blackyellow", "yellowblack",
            "whiteblue", "whitered",
-           "blackred", "blackgreen", "whiteblack", "blackwhite",
-           "magentayellow", "yellowmagenta"))
+           "blackred", "blackgreen", "whiteblack", "blackwhite"))
 }
 threecolor.panels <- function() {
   return(c("royalbluered", "royalredblue",
@@ -169,6 +168,7 @@ threecolor.panels <- function() {
            "cyanblackyellow", "yellowblackcyan",
            "heat.colors",
            "blackredyellow", "blackgoldred", 
+           "magentayellow", "yellowmagenta",
            "whiteblueblackheat", "heat"))
 }
 

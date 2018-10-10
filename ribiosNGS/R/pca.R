@@ -30,7 +30,10 @@ prcompExprs <- function(matrix, ntop=NULL) {
                                                        length(rv)))]
     matrix <- matrix[select,]
   }
-  res <- prcomp(t(matrix), center=TRUE, scale.=TRUE) 
+  tMatAll <- t(matrix)
+  isInvar <- rowVars(tMatAll) == 0
+  tMat <- tMatAll[!isInvar,, drop=FALSE]
+  res <- prcomp(tMat, center=TRUE, scale.=TRUE) 
   return(res)
 }
 

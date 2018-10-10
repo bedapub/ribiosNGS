@@ -99,13 +99,17 @@ brewer.pal.factor <- function(factor, name="Greys") {
 ##-------------------- three-color (or more) systems --------------------##
 
 RIBIOS_BLUEREDS <- c("#2166AC", "#D1E5F0", "white", "#FDDBC7", "#B2182B")
-royalbluered <- function(n) colorRampPalette(RIBIOS_BLUEREDS)(n)
-royalredblue <- function(n) colorRampPalette(rev(RIBIOS_BLUEREDS))(n)
+royalbluered <- function(n) colorRampPalette(RIBIOS_BLUEREDS,
+                                             space="Lab")(n)
+royalredblue <- function(n) colorRampPalette(rev(RIBIOS_BLUEREDS),
+                                             space="Lab")(n)
 
 RIBIOS_BLUEGRAYREDS <- c("#2166AC", "gray", "#B2182B")
 
-royalbluegrayred <- function(n) colorRampPalette(RIBIOS_BLUEGRAYREDS)(n)
-royalredgrayblue <- function(n) colorRampPalette(rev(RIBIOS_BLUEGRAYREDS))(n)
+royalbluegrayred <- function(n) colorRampPalette(RIBIOS_BLUEGRAYREDS,
+                                                 space="Lab")(n)
+royalredgrayblue <- function(n) colorRampPalette(rev(RIBIOS_BLUEGRAYREDS),
+                                                 space="Lab")(n)
 
 turyeb <- function(n) colorpanel(n, "turquoise1", "yellow", "black")
 
@@ -120,8 +124,11 @@ blueblackred <- function(n) colorpanel(n, "blue", "black", "red")
 cyanblackyellow <- function(n) colorpanel(n, "#9BD0EC", "black", "#FCF6C3")
 yellowblackcyan <- function(n) colorpanel(n, "#FCF6C3", "black", "#9BD0EC")
 redblackblue <- function(n) colorpanel(n, "red", "black", "blue")
-blackredyellow <- function(n) colorRampPalette(c("black", "darkred", "red2", "goldenrod1", "yellow"))(n)
+blackredyellow <- function(n) colorRampPalette(c("black", "darkred", "red2", "goldenrod1", "yellow"),
+                                               space="Lab")(n)
 blackgoldred <- function(n) colorpanel(n, "black", "goldenrod1", "red2")
+magentayellow <- function(n) colorRampPalette(c("magenta2", "black", "yellow"), space="Lab")(n)
+yellowmagenta <- function(n) colorRampPalette(c("yellow", "black", "magenta2"), space="Lab")(n)
 
 ##-------------------- l3 color systems --------------------##
 whiteblueblackheat <- function(n) colorRampPalette(c("white", "blue", "blue3", "black", "red3", "red", "yellow"))(n)
@@ -132,10 +139,12 @@ blackyellow <- function(n) colorpanel(n, "black", "yellow")
 yellowblack <- function(n) colorpanel(n, "yellow", "black")
 
 RIBIOS_WHITEBLUES <- c("#F7F7F7", "#D1E5F0", "#92C5DE", "#4393C3")
-whiteblue <- function(n) colorRampPalette(RIBIOS_WHITEBLUES)(n)
+whiteblue <- function(n) colorRampPalette(RIBIOS_WHITEBLUES,
+                                          space="Lab")(n)
 
 RIBIOS_WHITEREDS <- c("#F7F7F7", "#FDDBC7", "#F4A582", "#D6604D")
-whitered <- function(n) colorRampPalette(RIBIOS_WHITEREDS)(n)
+whitered <- function(n) colorRampPalette(RIBIOS_WHITEREDS,
+                                         space="Lab")(n)
 
 blackred <- function(n) colorpanel(n, "black", "red")
 blackgreen <- function(n) colorpanel(n, "black", "green")
@@ -147,7 +156,8 @@ blackwhite <- function(n) gray(seq(0, 1, 1/(n-1)))
 twocolor.panels <- function() {
   return(c("blackyellow", "yellowblack",
            "whiteblue", "whitered",
-           "blackred", "blackgreen", "whiteblack", "blackwhite"))
+           "blackred", "blackgreen", "whiteblack", "blackwhite",
+           "magentayellow", "yellowmagenta"))
 }
 threecolor.panels <- function() {
   return(c("royalbluered", "royalredblue",

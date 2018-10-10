@@ -96,6 +96,8 @@ export(identicalMatrixValue, identicalMatrix)
 
 export(pScore)
 
+export(jaccardIndex, pairwiseJaccardIndex)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils, .registration=TRUE,.fixes="C_")
 

@@ -22,9 +22,14 @@ jaccardIndex <- function(x,y) length(intersect(x,y))/length(union(x,y))
 #' @examples 
 #' myList <- list(first=LETTERS[3:5], second=LETTERS[1:3], third=LETTERS[1:5], fourth=LETTERS[6:10])
 #' pairwiseJaccardIndex(myList)
+#' 
+#' poormanPJI <- function(list) {
+#'   sapply(list, function(x) sapply(list, function(y) jaccardIndex(x,y)))
+#' }
+#' stopifnot(identical(pairwiseJaccardIndex(myList), poormanPJI(myList)))
 pairwiseJaccardIndex <- function(list) {
   len <- length(list)
-  res <- matrix(1, len, len)
+  res <- matrix(0, len, len)
   colnames(res) <- rownames(res) <- names(list)
   vals <- sapply(seq(from=1, to=len-1), function(i) {
     sapply(seq(from=i+1, to=len), function(j) {
@@ -32,8 +37,10 @@ pairwiseJaccardIndex <- function(list) {
     })
   })
   vv <- unlist(vals)
-  res[upper.tri(res)] <- vv
+  ## fill the lower triangle, and make the matrix symmetric
   res[lower.tri(res)] <- vv
+  res <- t(res) + res
+  diag(res) <- 1
   return(res)
 }
 

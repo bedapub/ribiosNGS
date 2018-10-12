@@ -297,7 +297,7 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
                                 ## TRUE if there is only one gene set
                                 tbl$FDR <- tbl$PValue
                             }
-                            tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "Direction",
+                            tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "MeanDiff", "Direction",
                                           "PValue", "FDR", "ContributingGenes")]
                             tbl <- sortByCol(tbl, "PValue",decreasing=FALSE)
                             return(tbl)

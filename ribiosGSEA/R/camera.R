@@ -27,6 +27,7 @@
 #'   \item{GeneSet}{Gene set name}
 #'   \item{NGenes}{Number of genes in the set}
 #'   \item{Correlation}{Estimated correlation}
+#'   \item{MeanDiff}{Estimated difference between the mean values of genes in the geneset and the background genes}
 #'   \item{Direction}{Direction of set-wise regulation, \code{Up} or \code{Down}}
 #'   \item{Score}{Gene-set enrichment score, defined as \code{log10(pValue)*I(directionality)}, where \code{I(directionality)} equals \code{1} if the directionality is \code{Up} and \code{-1} if the directionality is \code{Down}}
 #'   \item{ContribuingGenes}{A character string, containing all genes labels of genes that are in the set and regulated in the same direction as the set-wise direction, and the respective statistic}
@@ -191,15 +192,15 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     ## meanStat and varStat are mean and variance of z-score of the moderated t statistic of all features in the matrix
     meanStat <- mean(Stat)
     varStat <- var(Stat)
-    tab <- matrix(0, nsets, 5)
+    tab <- matrix(0, nsets, 6)
     rownames(tab) <- NULL
     colnames(tab) <- c("NGenes", "Correlation", "Down", "Up", 
-                       "TwoSided")
+                       "MeanDiff", "TwoSided")
 
     conts <- vector("character", nsets)
     for (i in 1:nsets) {
         iset <- index[[i]]
-        ## TODO: also export unscaledt values (which are in fact logFCs)
+        ## TODO: also export unscaledt values (which should correspond to logFCs)
         StatInSet <- Stat[iset]
         m <- length(StatInSet)
         m2 <- G - m
@@ -218,6 +219,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         }
         tab[i, 1] <- m
         tab[i, 2] <- correlation
+        meanDiff <- mean(StatInSet) - meanStat
         if (use.ranks) {
             if (!allow.neg.cor) 
                 correlation <- max(0, correlation)
@@ -226,8 +228,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         } else {
             if (!allow.neg.cor) 
                 vif <- max(1, vif)
-            meanStatInSet <- mean(StatInSet)
-            delta <- G/m2 * (meanStatInSet - meanStat)
+            delta <- G/m2 * meanDiff
             varStatPooled <- ((G - 1) * varStat - delta^2 * m * 
                 m2/G)/(G - 2)
             two.sample.t <- delta/sqrt(varStatPooled * (vif/m + 
@@ -235,6 +236,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
             tab[i, 3] <- pt(two.sample.t, df = df.camera)
             tab[i, 4] <- pt(two.sample.t, df = df.camera, lower.tail = FALSE)
         }
+        tab[,5] <- meanDiff
         isDown <- tab[i,3] <= tab[i,4]
         if(!is.null(isDown) && !is.na(isDown)) {
             if(isDown) { ## pDown < pUp
@@ -252,7 +254,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         }
     }
     
-    tab[, 5] <- 2 * pmin(tab[, 3], tab[, 4])
+    tab[, 6] <- 2 * pmin(tab[, 3], tab[, 4])
     tab <- data.frame(tab, stringsAsFactors = FALSE)
     Direction <- rep.int("Up", nsets)
     Direction[tab$Down < tab$Up] <- "Down"

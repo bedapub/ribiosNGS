@@ -5,8 +5,8 @@
 \alias{fisherTest,character,character,character,ANY,ANY-method}
 \title{Perform Fisher's exact test on a gene set}
 \usage{
-\S4method{fisherTest}{character,character,character,ANY,ANY}(genes,
-  genesets, universe, gsName, gsCategory)
+\S4method{fisherTest}{character,character,character,ANY,ANY}(genes, genesets,
+  universe, gsName, gsCategory)
 }
 \arguments{
 \item{genes}{a collection of genes of which over-representation of the gene set is tested}

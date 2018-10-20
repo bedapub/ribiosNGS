@@ -39,6 +39,15 @@ test_that("Extract full transcript annotation", {
   expect_equal(localData, remoteData)
 })
 
+test_that("Extract full GO ID for human", {
+  dataset <- "hsapiens_gene_ensembl"
+  attributes <- c("entrezgene", "go_id")
+  
+  localData <- queryLocal(dataset, attributes)
+  remoteData <- queryRemote(dataset, attributes)
+  expect_equal(localData, remoteData)
+})
+
 test_that("Extract all homologies between human and rat", {
   dataset <- "hsapiens_gene_ensembl"
   attributes <- c("ensembl_gene_id", "rnorvegicus_homolog_ensembl_gene")

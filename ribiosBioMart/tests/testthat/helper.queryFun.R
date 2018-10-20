@@ -3,7 +3,10 @@ library (data.table)
 library (RMySQL)
 
 queryRemote <- function(dataset, attributes, filters="", values="", verbose=FALSE) {
-  martObj <- useMart("ensembl", dataset=dataset)
+  # jul2018.archive.ensembl.org points to version 93
+  martObj <- useMart(host='jul2018.archive.ensembl.org', 
+                     biomart='ENSEMBL_MART_ENSEMBL', 
+                     dataset=dataset)
   result <- biomaRt::getBM(attributes = attributes,
                            filters = filters,
                            values = values,

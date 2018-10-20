@@ -4,7 +4,7 @@
 #' @param user The user name used to authenticate to the SQL database
 #' @param passwd The database password used to connect to the SQL database
 #' @param ensembl_version The version of the Ensembl data inside the target SQL database. Will be used as table suffix (e.g. for "ensembl_mart_92")
-#' @export
+#' @exportClass EnsemblDBCredentials
 EnsemblDBCredentials <- setClass("EnsemblDBCredentials",
                                  representation(host = "character",
                                                 port = "numeric",

@@ -134,7 +134,8 @@ zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
     design0 <- design[, -nbeta, drop = FALSE]
   }
   fit.null <- glmFit(y, design0, prior.count = 0)
-  y <- zscoreNBinom(y$counts, mu = fit.null$fitted.values, 
+  y <- zscoreNBinom(y$counts, 
+                    mu = pmax(fit.null$fitted.values, 1e-17),
                     size = 1/dispersion)
   y
 }

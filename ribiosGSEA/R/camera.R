@@ -27,7 +27,7 @@
 #'   \item{GeneSet}{Gene set name}
 #'   \item{NGenes}{Number of genes in the set}
 #'   \item{Correlation}{Estimated correlation}
-#'   \item{MeanDiff}{Estimated difference between the mean values of genes in the geneset and the background genes}
+#'   \item{EffectSize}{Estimated difference between the mean values of genes in the geneset and the background genes}
 #'   \item{Direction}{Direction of set-wise regulation, \code{Up} or \code{Down}}
 #'   \item{Score}{Gene-set enrichment score, defined as \code{log10(pValue)*I(directionality)}, where \code{I(directionality)} equals \code{1} if the directionality is \code{Up} and \code{-1} if the directionality is \code{Down}}
 #'   \item{ContribuingGenes}{A character string, containing all genes labels of genes that are in the set and regulated in the same direction as the set-wise direction, and the respective statistic}
@@ -57,7 +57,6 @@
 #' \dontrun{
 #' # when \code{.approx.zscoreT=TRUE},  PValue reported by \code{limma::camera(inter.gene.cor=NA)} and \code{ribiosGSEA::biosCamera} should equal
 #' (biosCorOut <- biosCamera(y, index1, design, .approx.zscoreT=TRUE))
-#' stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
 #'
 #' # when \code{.fixed.inter.gene.cor=0.01} and \code{.approx.zscoreT=TRUE},  PValue reported by \code{limma::camera} and \code{ribiosGSEA::biosCamera} should equal
 #' (biosFixCorOut <- biosCamera(y, index1, design, .fixed.inter.gene.cor=0.01, .approx.zscoreT=TRUE))
@@ -195,7 +194,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
     tab <- matrix(0, nsets, 6)
     rownames(tab) <- NULL
     colnames(tab) <- c("NGenes", "Correlation", "Down", "Up", 
-                       "MeanDiff", "TwoSided")
+                       "EffectSize", "TwoSided")
 
     conts <- vector("character", nsets)
     for (i in 1:nsets) {
@@ -219,7 +218,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         }
         tab[i, 1] <- m
         tab[i, 2] <- correlation
-        meanDiff <- mean(StatInSet) - meanStat
+        effectSize <- mean(StatInSet) - meanStat
         if (use.ranks) {
             if (!allow.neg.cor) 
                 correlation <- max(0, correlation)
@@ -228,7 +227,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         } else {
             if (!allow.neg.cor) 
                 vif <- max(1, vif)
-            delta <- G/m2 * meanDiff
+            delta <- G/m2 * effectSize
             varStatPooled <- ((G - 1) * varStat - delta^2 * m * 
                 m2/G)/(G - 2)
             two.sample.t <- delta/sqrt(varStatPooled * (vif/m + 
@@ -236,7 +235,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
             tab[i, 3] <- pt(two.sample.t, df = df.camera)
             tab[i, 4] <- pt(two.sample.t, df = df.camera, lower.tail = FALSE)
         }
-        tab[,5] <- meanDiff
+        tab[,5] <- effectSize
         isDown <- tab[i,3] <= tab[i,4]
         if(!is.null(isDown) && !is.na(isDown)) {
             if(isDown) { ## pDown < pUp
@@ -297,7 +296,7 @@ gscCamera <- function(matrix, geneSymbols, gsc, design, contrasts) {
                                 ## TRUE if there is only one gene set
                                 tbl$FDR <- tbl$PValue
                             }
-                            tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "MeanDiff", "Direction",
+                            tbl <- tbl[,c("GeneSet", "NGenes", "Correlation", "Direction", "EffectSize", 
                                           "PValue", "FDR", "ContributingGenes")]
                             tbl <- sortByCol(tbl, "PValue",decreasing=FALSE)
                             return(tbl)

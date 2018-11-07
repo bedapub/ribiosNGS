@@ -32,7 +32,7 @@ build: roxygenise
 
 install: roxygenise
 	@echo '====== Installing Package ======'
-	@(${R} -q -e "library(devtools); devtools::install(upgrade_dependencies=FALSE)")
+	@(${R} -q -e "library(devtools); devtools::install(upgrade=FALSE)")
 	@echo '====== Installing finished ======'
 	@echo ' '
 

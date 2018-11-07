@@ -48,7 +48,7 @@ A \code{data.frame} with one row per set and the following columns:
   \item{GeneSet}{Gene set name}
   \item{NGenes}{Number of genes in the set}
   \item{Correlation}{Estimated correlation}
-  \item{MeanDiff}{Estimated difference between the mean values of genes in the geneset and the background genes}
+  \item{EffectSize}{Estimated difference between the mean values of genes in the geneset and the background genes}
   \item{Direction}{Direction of set-wise regulation, \code{Up} or \code{Down}}
   \item{Score}{Gene-set enrichment score, defined as \code{log10(pValue)*I(directionality)}, where \code{I(directionality)} equals \code{1} if the directionality is \code{Up} and \code{-1} if the directionality is \code{Down}}
   \item{ContribuingGenes}{A character string, containing all genes labels of genes that are in the set and regulated in the same direction as the set-wise direction, and the respective statistic}
@@ -77,7 +77,6 @@ biosCamera(y, index2, design)
 \dontrun{
 # when \\code{.approx.zscoreT=TRUE},  PValue reported by \\code{limma::camera(inter.gene.cor=NA)} and \\code{ribiosGSEA::biosCamera} should equal
 (biosCorOut <- biosCamera(y, index1, design, .approx.zscoreT=TRUE))
-stopifnot(all(biosFixCorOut$PValue==limmaDefOut$PValue))
 
 # when \\code{.fixed.inter.gene.cor=0.01} and \\code{.approx.zscoreT=TRUE},  PValue reported by \\code{limma::camera} and \\code{ribiosGSEA::biosCamera} should equal
 (biosFixCorOut <- biosCamera(y, index1, design, .fixed.inter.gene.cor=0.01, .approx.zscoreT=TRUE))

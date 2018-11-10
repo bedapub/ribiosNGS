@@ -239,7 +239,7 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
             tab[i, 3] <- pt(two.sample.t, df = df.camera)
             tab[i, 4] <- pt(two.sample.t, df = df.camera, lower.tail = FALSE)
         }
-        tab[,5] <- effectSize
+        tab[i,5] <- effectSize
         isDown <- tab[i,3] <= tab[i,4]
         if(!is.null(isDown) && !is.na(isDown)) {
             if(isDown) { ## pDown < pUp

@@ -50,6 +50,8 @@
 #' biosCamera(y, index1, design)
 #' biosCamera(y, index2, design)
 
+#' biosCamera(y, list(index1, index2), design)
+
 #' # compare with the output of camera: columns 'GeneSet', 'Score', 'ContributingGenes' are missing, and in case \code{inter.gene.cor} is (as default) set to a numeric value, the column 'Correlation' is also missing
 #' (limmaDefOut <- limma::camera(y, index1, design) )
 #' (limmaCorDefOut <- limma::camera(y, index1, design, inter.gene.cor=NA))
@@ -80,10 +82,12 @@ biosCamera <- function (y, index, design = NULL, contrast = ncol(design), weight
         haltifnot(length(geneLabels)==nrow(y),
                   msg="geneLabels's length must equal to nrow(y)")
     }
-    if (G < 3)
+    if(G < 3)
       stop("Too few genes in the dataset: need at least 3")
-    if (!is.list(index)) 
+    if(!is.list(index)) 
         index <- list(set1 = index)
+    if(is.null(names(index)))
+      names(index) <- sprintf("set%d", seq(along=index))
     nsets <- length(index)
     if (nsets == 0L)
       stop("Geneset (index) is empty")

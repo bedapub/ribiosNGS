@@ -1,2 +1,4 @@
 name: ribios Rmarkdown template
-description: The default template of ribios
+description: > 
+  The default template of ribios. It is used for bioinformatics analysis tasks.
+create_dir: false

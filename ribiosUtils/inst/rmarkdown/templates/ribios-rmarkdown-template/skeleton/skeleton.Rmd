@@ -3,6 +3,7 @@ title: "Untitled"
 author: "Jitao David Zhang"
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 output:
+  rmarkdown::html_vignette
   html_document:
     df_print: paged
     theme: spacelab
@@ -23,6 +24,10 @@ editor_options:
 params:
   echo: yes
   relative: FALSE
+vignette: >
+  %\VignetteIndexEntry{ribios Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE, message=FALSE, warning=FALSE}

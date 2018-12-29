@@ -1,0 +1,54 @@
+---
+title: "Untitled"
+author: "Jitao David Zhang"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  html_document:
+    df_print: paged
+    theme: spacelab
+    mathjax: default
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+params:
+  echo: yes
+  relative: FALSE
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE,
+                      fig.height=6, fig.width=6)
+library(ribiosUtils)
+library(ribiosIO)
+library(ribiosPlot)
+library(openxlsx)
+library(tidyverse)
+```
+
+# Background
+
+# Executive summary
+
+# Analysis
+
+# Session information
+
+```{r}
+sessionInfo()
+```
+
+
+
+
+
+

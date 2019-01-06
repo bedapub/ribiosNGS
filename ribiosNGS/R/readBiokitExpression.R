@@ -75,3 +75,61 @@ readBiokitExpression <- function(files,
   }
   return(res)
 }
+
+#' Read GCT files from Biokit output directory
+#' @param dir Biokit output directory
+#' @param anno Annotation type, either \code{refseq} or \code{ensembl} is supported
+#' @param type GCT file type, \code{count}, \code{rpkm}, \code{uniqCount} and \code{uniqRpkm} are supported.
+#' @examples
+#' ##... (TODO: add a mock output directory in testdata)
+readBiokitGctFile <- function(dir, 
+                              anno=c("refseq", "ensembl"),
+                              type=c("count", "rpkm", "uniqCount", "uniqRpkm")) {
+  anno <- match.arg(anno)  
+  type <- match.arg(type)
+  
+  annoPath <- switch(anno,
+                     "refseq"="gct",
+                     "ensembl"="gct-ens")
+  
+  gctDir <- file.path(dir, annoPath) 
+  assertDir(gctDir)
+  
+  filePattern <- switch(type,
+                        "count"=".*_counts.gct",
+                        "rpkm"=".*_rpkms.gct",
+                        "uniqCount"=".*uniq-counts.gct",
+                        "uniqRpkm"=".*uniq-rpkms.gct")
+  
+  gctFile <- dir(gctDir, pattern=filePattern, full.names=TRUE)
+  mat <- read_gct_matrix(gctFile)
+  return(mat)
+}
+
+#' Read a Biokit output directory into a DGEList object for downstream analysis
+#' @param dir Biokit output directory
+#' @param anno Annotation type, either \code{refseq} or \code{ensembl} is supported
+#' @param type count type, either \code{count} or \code{uniqCount} are supported.
+#' @examples
+#' ##... (TODO: add a mock output directory in testdata)
+readBiokitAsDGEList <- function(dir, 
+                                anno=c("refseq", "ensemble"),
+                                countType=c("count", "uniqCount")) {
+  ## read gct file
+  anno <- match.arg(anno)
+  countType <- match.arg(countType)
+  mat <- readBiokitGctFile(dir, anno=anno, type=countType)
+  
+  ## read sample annotation
+  assertFile(annotFile <- file.path(dir, "annot", "phenoData.meta"))
+  annot <- ribiosIO::readTable(annotFile)
+  annot$group <- annot$SampleGroup
+  
+  ## wish to Roland: feautre annotation
+  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=attr(mat, "desc"))
+  
+  res <- DGEList(counts=mat, samples=annot, genes=genes)
+  res$BiokitAnno <- anno
+  res$BiokitCountType <- countType
+  return(res)
+}

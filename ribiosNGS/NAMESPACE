@@ -162,7 +162,10 @@ export(mpsReporterAssocPathway,
        mpsReporterAssocGO,
        mpsReporterAssocRCTM)
        
-export(readBiokitExpression)
+export(readBiokitExpression,
+       readBiokitAsDGEList)
+
+export(writeDGEList)
 
 export(minGroupCount,
        countByGroup,

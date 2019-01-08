@@ -80,6 +80,8 @@ readBiokitExpression <- function(files,
 #' @param dir Biokit output directory
 #' @param anno Annotation type, either \code{refseq} or \code{ensembl} is supported
 #' @param type GCT file type, \code{count}, \code{rpkm}, \code{uniqCount} and \code{uniqRpkm} are supported.
+#' @return A numeric matrix with the attribute \code{desc} encoding the values in the description column of the GCT format
+#' 
 #' @examples
 #' ##... (TODO: add a mock output directory in testdata)
 readBiokitGctFile <- function(dir, 
@@ -121,9 +123,15 @@ readBiokitAsDGEList <- function(dir,
   mat <- readBiokitGctFile(dir, anno=anno, type=countType)
   
   ## read sample annotation
-  assertFile(annotFile <- file.path(dir, "annot", "phenoData.meta"))
-  annot <- ribiosIO::readTable(annotFile)
-  annot$group <- annot$SampleGroup
+  annotFile <- file.path(dir, "annot", "phenoData.meta")
+  if(file.exists(annotFile)) {
+    annot <- ribiosIO::readTable(annotFile)
+    annot$group <- annot$SampleGroup
+  } else {
+    warning("No sample annotation was found. A mock annotation is used")
+    annot <- data.frame(group=factor(rep("sample", ncol(mat))),
+                        row.names=colnames(mat))
+  }
   
   ## wish to Roland: feautre annotation
   genes <- data.frame(GeneID=rownames(mat), GeneSymbol=attr(mat, "desc"))

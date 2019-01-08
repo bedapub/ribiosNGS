@@ -4,7 +4,7 @@
 \alias{readBiokitAsDGEList}
 \title{Read a Biokit output directory into a DGEList object for downstream analysis}
 \usage{
-readBiokitAsDGEList(dir, anno = c("refseq", "ensemble"),
+readBiokitAsDGEList(dir, anno = c("refseq", "ensembl"),
   countType = c("count", "uniqCount"))
 }
 \arguments{

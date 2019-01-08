@@ -115,7 +115,7 @@ readBiokitGctFile <- function(dir,
 #' @examples
 #' ##... (TODO: add a mock output directory in testdata)
 readBiokitAsDGEList <- function(dir, 
-                                anno=c("refseq", "ensemble"),
+                                anno=c("refseq", "ensembl"),
                                 countType=c("count", "uniqCount")) {
   ## read gct file
   anno <- match.arg(anno)

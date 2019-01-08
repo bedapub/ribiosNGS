@@ -163,6 +163,7 @@ export(mpsReporterAssocPathway,
        mpsReporterAssocRCTM)
        
 export(readBiokitExpression,
+       readBiokitGctFile,
        readBiokitAsDGEList)
 
 export(writeDGEList)

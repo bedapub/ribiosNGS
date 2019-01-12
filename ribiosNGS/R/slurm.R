@@ -161,9 +161,9 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
       }
     }
   } else if (overwrite=="no") {
-    ans <- "y"
-  } else if (overwrite=="yes") {
     ans <- "N"
+  } else if (overwrite=="yes") {
+    ans <- "y"
   }
   
   doOverwrite <- switch(ans,

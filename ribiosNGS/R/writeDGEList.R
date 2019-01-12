@@ -80,10 +80,10 @@ writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file,
     stop("Should not be here")
   }
   if (!missing(fData.file) && !is.null(fData.file)) {
-    writeMatrix(fData, fData.file)
+    ribiosIO::writeMatrix(fData, fData.file)
   }
   if (!missing(pData.file) && !is.null(pData.file)) {
-    writeMatrix(sampleAnno, pData.file)
+    ribiosIO::writeMatrix(sampleAnno, pData.file)
   }
   if (!missing(group.file) && !is.null(group.file)) {
     writeLines(as.character(sampleAnno$group), group.file)

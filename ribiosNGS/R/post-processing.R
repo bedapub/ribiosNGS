@@ -14,17 +14,6 @@
 ## setClass("GSEresultList", contains="list")
 
 
-#' Return cameraScore
-#' @param pvalue PValues of camera result
-#' @param direction directions of camera result, either 'Up' (positive) or 'Down' (negative)
-#' @return A numeric vector, containing camera Scores
-#' @examples
-#' ribiosNGS:::cameraScore(pvalue=c(1, 0.1, 0.01), direction=c("Up", "Down", "Up"))
-cameraScore <- function(pvalue, direction) {
-    stopifnot(all(direction %in% c("Up", "Down")))
-    abs(log10(pvalue)) * ifelse(direction=="Up", 1L, -1L)
-}
-
 ##print.GSEresult <- function(x, title=TRUE) {
 ##    wCate <- 15
 ##    wContrast <- 8
@@ -168,7 +157,7 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 ##                       Direction=rep(direction, nGenes),
 ##                       PValue=rep(pvals, nGenes))
 ##    res <- cbind(path, geneTbl)
-##    res$Score <- with(res, cameraScore(PValue, Direction))
+##    res$Score <- with(res, pScore(PValue, Direction=="Up"))
 ##    return(res)
 ##}
 

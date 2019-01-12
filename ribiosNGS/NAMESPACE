@@ -168,6 +168,11 @@ export(readBiokitExpression,
 
 export(writeDGEList)
 
+## edgeR commands
+export(edgeRcommand,
+       slurmEdgeRcommand,
+       slurmEdgeR)
+
 export(minGroupCount,
        countByGroup,
        maxCountByGroup,

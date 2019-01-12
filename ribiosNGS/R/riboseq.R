@@ -448,9 +448,9 @@ doGeneSetTest <- function(rnk, anno,
   ## gs <- sapply(sub.index, function(x) geneSetTest(x, rnk[,2L], alternative="either"))
   ## gs.sim <- sapply(sub.index, function(x) geneSetMedianTest(x, rnk[,2L], alternative="either", ranks.only=FALSE, nsim=nsim))
   gs.sim <- gage(rnk[,2], ind.list=sub.index, alternative="two.sided")
-  gs.wmw <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, alternative="two.sided")
-  gs.wmw.up <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, alternative="greater")
-  gs.wmw.down <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, alternative="less")
+  gs.wmw <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, valType="p.two.sided")
+  gs.wmw.up <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, valType="p.greater")
+  gs.wmw.down <- BioQC::wmwTest(rnk[,2], ind.list=sub.index, valType="p.less")
   gs.comb <- pair.fisher.method(gs.sim, gs.wmw)$p.value
   gs.median <- sapply(sub.index, function(x) median(rnk[x,2]))
   gs.direction <- ifelse(gs.wmw.up<=gs.wmw.down, "up", "down")

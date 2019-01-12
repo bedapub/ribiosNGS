@@ -12,7 +12,7 @@ Depends:
     ribiosExpression
 Imports:
     ribiosUtils,methods,Biobase,lattice,ribiosGSEA,ribiosIO,
-    BiocGenerics,ribiosPlot,graphics,limma,igraph,
+    BiocGenerics,ribiosPlot,graphics,limma,igraph, BioQC
     readr,
     sva,
     gage

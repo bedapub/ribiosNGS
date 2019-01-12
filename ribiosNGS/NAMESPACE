@@ -3,7 +3,7 @@ importFrom("ribiosUtils",
            "pairwiseJaccardIndex",
            "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
-importFrom("ribiosIO", "read_biokit_exprs")
+importFrom("ribiosIO", "read_biokit_exprs", "writeMatrix")
 importFrom("readr",
            "count_fields", "tokenizer_tsv", "read_tsv")
 importFrom("methods", "show")
@@ -24,6 +24,7 @@ importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 importFrom("sva", "sva")
 importFrom("gage", "gage")
+importFrom("BioQC", "wmwTest")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")

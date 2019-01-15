@@ -167,6 +167,8 @@ export(readBiokitExpression,
        readBiokitGctFile,
        readBiokitAsDGEList)
 
+export(DGEListToLongTable)
+
 export(writeDGEList)
 
 ## edgeR commands

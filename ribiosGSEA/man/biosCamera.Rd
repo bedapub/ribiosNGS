@@ -70,6 +70,7 @@ y[index1,4:6] <- y[index1,4:6]+1
 index2 <- 21:40
 biosCamera(y, index1, design)
 biosCamera(y, index2, design)
+biosCamera(y, list(index1, index2), design)
 # compare with the output of camera: columns 'GeneSet', 'Score', 'ContributingGenes' are missing, and in case \\code{inter.gene.cor} is (as default) set to a numeric value, the column 'Correlation' is also missing
 (limmaDefOut <- limma::camera(y, index1, design) )
 (limmaCorDefOut <- limma::camera(y, index1, design, inter.gene.cor=NA))

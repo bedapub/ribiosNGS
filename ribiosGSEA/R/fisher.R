@@ -346,8 +346,8 @@ setMethod("fisherTest",
               gsCategory <- NA
             } else {
               haltifnot(length(gsCategory) == length(genesets),
-                        msg=sprinf("Length of category (%d) does not match length of the gene-sets (%d)", 
-                                   length(category), legnth(genesets)))
+                        msg=sprintf("Length of category (%d) does not match length of the gene-sets (%d)", 
+                                   length(gsCategory), length(genesets)))
             }
             res <- lapply(genesets, function(x) {
               gsFisherTestCore(genes = genes, 
@@ -368,7 +368,7 @@ setMethod("fisherTest",
             if(all(is.na(gsCategory))) {
               res$FDR <- p.adjust(res$PValue, method="fdr")
             } else {
-              res$FDR <- ave(res$PValue, category, 
+              res$FDR <- ave(res$PValue, gsCategory, 
                              FUN=function(x) p.adjust(x, "fdr"))
             }
             return(res)

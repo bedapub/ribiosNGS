@@ -24,8 +24,11 @@ import(ribiosUtils)
 exportClass(GeneSets,
             gseaResItem, annoGseaResItem,
             annoGseaRes, annoGseaResList)
-exportClass(FisherResult,
-            FisherResultList)
+
+exportClass(FisherResult)
+
+## exportClass(FisherResultList) ## currently not used
+
 exportClass(CameraResult,
             CameraResultList)
 export(GeneSet, GeneSets)
@@ -77,8 +80,9 @@ export(readGmt, writeGmt, parseGmt,
 export(gmthyper, gmthyperList)
 export(hits, pValue, fdrValue,
        gsSize, minPValue, minFdrValue,
-       sigGeneSet, sigGeneSetTable, topGeneSetTable,topOrSigGeneSetTable,
-       fisherTest)
+       sigGeneSet, sigGeneSetTable, topGeneSetTable,topOrSigGeneSetTable)
+export(gsFisherTestCore, gsListFisherTestCore)
+export(fisherTest)
 exportMethods("[")
 
 ## Nearest Template Prediction (ntp) algorithm
@@ -142,7 +146,8 @@ export(tpDiff)
 S3method(xyplot,BenchmarkResult)
 
 ## util
-export(wnUnique)
+export(uniqueNonNA)
+export(ronetGeneSetCategory)
 
 ## Use Dynamic Lib
 useDynLib(ribiosGSEA)

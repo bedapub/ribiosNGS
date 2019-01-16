@@ -615,7 +615,7 @@ pFuncCameraRank <- function(tgSim, index) {
 
 
 pFuncBioQCtStat <- function(tgSim, index) {
-    wmwRes <- wmwTest(as.matrix(tgSim), index, alternative="Q")
+    wmwRes <- wmwTest(as.matrix(tgSim), index, valType = "Q")
     fit <- lmFit(wmwRes, design=designMatrix(tgSim))
     fit <- contrasts.fit(fit, contrastMatrix(tgSim))
     fit <- eBayes(fit)
@@ -698,7 +698,7 @@ pFuncTstatTtest <- function(tgSim, index) {
 pFuncTstatWMW <- function(tgSim, index) {
     fit <- tgSim2limmaFit(tgSim)
     tVals <- fit$t[,1]
-    p <- unname(wmwTest(tVals, index, alternative="two.sided"))
+    p <- unname(wmwTest(tVals, index, valType ="p.two.sided"))
     return(p)
 }
 
@@ -734,7 +734,7 @@ pFuncLimmaAggregated <- function(tgSim, index) {
     tVals <- fit$t[,1]
     pZtest <- unname(sapply(index, function(x) ztest(tVals[x])["p.twosided"]))
     pTtest <- unname(sapply(index, function(x) t.test(tVals[x], tVals[-x], alternative="two.sided")$p.value))
-    pWmw <- unname(wmwTest(tVals, index, alternative="two.sided"))
+    pWmw <- unname(wmwTest(tVals, index, valType = "p.two.sided"))
     pChisq <- unname(sapply(index, function(x) chisqTest(tVals[x])["p.twosided"]))
     res <- list(pFisherMethod=pFisherMethod,
                 pZtest=pZtest,

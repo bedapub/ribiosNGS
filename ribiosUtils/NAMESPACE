@@ -67,6 +67,8 @@ export(headtail, headhead, tailtail)
 
 export(uniqueLength, ulen)
 
+export(uniqueNonNA)
+
 export(chosenFew)
 
 export(openFileDevice, closeFileDevice)

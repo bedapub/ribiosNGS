@@ -44,3 +44,27 @@ pairwiseJaccardIndex <- function(list) {
   return(res)
 }
 
+#' Overlap coefficient, also known as Szymkiewicz-Simpson coefficient
+#' @param x A vector
+#' @param y A vector
+#' @param checkUniqueNonNA Logical, if \code{TRUE}, \code{x} and \code{y} are made unique and non-NA
+#' @return The overlap coefficient
+#' @seealso \code{\link{jaccardIndex}}
+#' 
+#' @examples 
+#' myX <- 1:6
+#' myY <- 4:9
+#' overlapCoefficient(myX, myY)
+#' 
+#' myY2 <- 4:10
+#' overlapCoefficient(myX, myY2)
+#' ## compare the result with Jaccard Index
+#' jaccardIndex(myX, myY2)
+overlapCoefficient <- function(x,y, checkUniqueNonNA=FALSE) {
+  if(checkUniqueNonNA) {
+    x <- uniqueNonNA(x)
+    y <- uniqueNonNA(y)
+  }
+  res <- length(intersect(x,y))/pmin(length(x), length(y))
+  return(res)
+}

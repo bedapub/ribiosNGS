@@ -19,17 +19,6 @@ gseaJar <- function() {return(GSEA_JAR)}
 defaultGmt <- function() {return(DEFAULT_GMT)}
 defaultChip <- function() {return(DEFAULT_CHIP)}
 
-#' Make a vector free of NA and unique
-#' @param x A vector
-#' @return A unique vector without NA
-#' @examples 
-#' testVec <- c(3,4,5,NA,3,5)
-#' uniqueNonNA(testVec)
-uniqueNonNA <- function(x) {
-  x <- x[!is.na(x)]
-  res <- unique(x)
-  return(res)
-}
 
 #' Extract gene-set category from RONET GMT files
 #' @param GmtList A GmtList object read from a RONET GMT file
@@ -37,3 +26,21 @@ uniqueNonNA <- function(x) {
 ronetGeneSetCategory <- function(gmtList) {
   sapply(strsplit(sapply(gmtList, function(x) x$desc), "\\|"), "[[", 1L)
 }
+
+#' Read RONET GMT files with category information
+#' @param file A GMT file in the RONET format, where in the 'desc' field a category is appended at the beginning, separated from the rest of the description with a pipe
+#' @return A \code{GmtList} object with an additional 'category' item in each list
+readRonetGmt <- function(file) {
+  resRaw <- BioQC::readGmt(file)
+  res <- new("GmtList")
+  res@.Data <- lapply(resRaw, function(x) {
+    splitDesc <- strsplit(x$desc, "\\|")[[1]]
+    x$category <- splitDesc[[1]]
+    x$desc <- paste(splitDesc[-1], collapse="|")
+    return(x)
+  })
+  names(res) <- names(resRaw)
+  return(res)
+}
+
+## end of the file

@@ -15,7 +15,7 @@ importFrom("globaltest", "gt")
 importFrom("Biobase", "exprs", "exprs<-")
 importFrom("ribiosExpression",
            "designMatrix", "contrastMatrix", "truncateDgeTable", "limmaTopTable2dgeTable")
-importFrom("ribiosUtils", "haltifnot")
+importFrom("ribiosUtils", "haltifnot", "uniqueNonNA")
            
 import(ribiosIO)
 import(ribiosMath)
@@ -146,8 +146,8 @@ export(tpDiff)
 S3method(xyplot,BenchmarkResult)
 
 ## util
-export(uniqueNonNA)
 export(ronetGeneSetCategory)
+export(readRonetGmt)
 
 ## Use Dynamic Lib
 useDynLib(ribiosGSEA)

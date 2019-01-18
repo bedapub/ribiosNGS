@@ -306,7 +306,7 @@ setMethod("fisherTest",
                               GeneSetName=gsName(genesets),
                               GeneSetEffectiveSize=sapply(res, function(x) x$gsEffSize),
                               HitCount=sapply(res, function(x) length(x$hits)),
-                              Hits=sapply(res, function(x) paste(x$hits, collapse=",",sep="")),
+                              Hits=I(sapply(res, function(x) paste(x$hits, collapse=",",sep=""))),
                               PValue=sapply(res, function(x) x$p))
             if(all(is.na(res$GeneSetCategory))) {
               res$FDR <- p.adjust(res$PValue, method="fdr")
@@ -316,6 +316,7 @@ setMethod("fisherTest",
             }
             return(res)
           })
+
 
 #' Perform Fisher's exact test on a GmtList object
 #' @param genes character strings of gene list to be tested
@@ -362,7 +363,7 @@ setMethod("fisherTest",
                               GeneSetName=sapply(genesets, function(x) x$name),
                               GeneSetEffectiveSize=sapply(res, function(x) x$gsEffSize),
                               HitCount=sapply(res, function(x) length(x$hits)),
-                              Hits=sapply(res, function(x) paste(x$hits, collapse=",",sep="")),
+                              Hits=I(sapply(res, function(x) paste(x$hits, collapse=",",sep=""))),
                               PValue=sapply(res, function(x) x$p))
 
             if(all(is.na(gsCategory))) {

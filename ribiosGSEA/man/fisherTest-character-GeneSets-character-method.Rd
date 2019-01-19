@@ -22,13 +22,13 @@
 
 \item{useEASE}{Logical, whether to use the EASE method to report the p-value. 
 
-#' @return A \code{data.frame} containing Fisher's exact test results of all gene-sets, in the same order as the input gene-sets, with following columns:
+#' @return A \code{data.table} containing Fisher's exact test results of all gene-sets, in the same order as the input gene-sets, with following columns:
 \enumerate{
   \item GeneSetCategory
   \item GeneSetName
   \item GeneSetEffectiveSize, the count of genes in the gene-set that are found in the universe
   \item HitCount, the count of genes in the \code{genes} input that are in the gene-set
-  \item Hits, a comma-delimited character string of htis
+  \item Hits, a vector of character string, representing hits
   \item PValue
   \item FDR, PValue adjusted by the Benjamini-Hochberg method. If more than one gene-set categories are provided, the FDR correction is performed per category
 }}

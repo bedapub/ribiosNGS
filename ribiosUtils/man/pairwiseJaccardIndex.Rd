@@ -2,15 +2,20 @@
 % Please edit documentation in R/jaccardIndex.R
 \name{pairwiseJaccardIndex}
 \alias{pairwiseJaccardIndex}
+\alias{pairwiseJaccardDistance}
 \title{Calculate pairwise Jaccard Indices between each pair of items in a list}
 \usage{
 pairwiseJaccardIndex(list)
+
+pairwiseJaccardDistance(list)
 }
 \arguments{
 \item{list}{A list}
 }
 \value{
 A symmetric matrix of dimension \code{mxm}, where \code{m} is the length of the list
+
+\code{pairwiseJaccardDistance} is defined as \code{1-pairwiseJaccardIndex}.
 }
 \description{
 Calculate pairwise Jaccard Indices between each pair of items in a list

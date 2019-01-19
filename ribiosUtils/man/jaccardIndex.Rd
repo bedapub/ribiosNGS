@@ -2,9 +2,12 @@
 % Please edit documentation in R/jaccardIndex.R
 \name{jaccardIndex}
 \alias{jaccardIndex}
+\alias{jaccardDistance}
 \title{Calculate the Jaccard Index between two vectors}
 \usage{
 jaccardIndex(x, y)
+
+jaccardDistance(x, y)
 }
 \arguments{
 \item{x}{A vector}
@@ -13,6 +16,8 @@ jaccardIndex(x, y)
 }
 \value{
 The Jaccard Index, a number between 0 and 1
+
+\code{JaccardDistance} is defined as \code{1-JaccardIndex}.
 }
 \description{
 Calculate the Jaccard Index between two vectors
@@ -21,8 +26,10 @@ Calculate the Jaccard Index between two vectors
 myX <- 1:6
 myY <- 4:9
 jaccardIndex(myX, myY)
+jaccardDistance(myX, myY)
 
 myX <- LETTERS[1:5]
-myY <- LETTERS[1:10]
+myY <- LETTERS[6:10]
 jaccardIndex(myX, myY)
+jaccardDistance(myX, myY)
 }

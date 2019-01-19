@@ -1,10 +1,5 @@
 ## test gsFisherTest and S4 methods
-
-##----------------------------------------##
-## test wnUnique
-##----------------------------------------##
-testVec <- c(rep(LETTERS[1:3], 2), NA)
-expect_that(wnUnique(testVec), equals(c("A", "B", "C")))
+library(ribiosUtils)
 
 ##----------------------------------------##
 ## test gsFisherTest, the underlying function

@@ -99,7 +99,10 @@ export(identicalMatrixValue, identicalMatrix)
 export(pScore)
 
 export(jaccardIndex, pairwiseJaccardIndex,
-       overlapCoefficient)
+       jaccardDistance, pairwiseJaccardDistance,
+       cumJaccardIndex, cumJaccardDistance,
+       overlapCoefficient, overlapDistance,
+       cumOverlapCoefficient, cumOverlapDistance)
 
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils, .registration=TRUE,.fixes="C_")

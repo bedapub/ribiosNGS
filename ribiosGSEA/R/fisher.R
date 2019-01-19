@@ -344,7 +344,9 @@ setMethod("fisherTest",
               }
             }
             if(missing(gsCategory) || is.null(gsCategory)) {
-              gsCategory <- NA
+              gsCategory <- unlist(sapply(genesets, function(x) x$category))
+              if(is.null(gsCategory))
+                gsCategory <- NA
             } else {
               haltifnot(length(gsCategory) == length(genesets),
                         msg=sprintf("Length of category (%d) does not match length of the gene-sets (%d)", 

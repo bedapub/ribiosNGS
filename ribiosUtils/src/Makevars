@@ -1,3 +1,3 @@
-RIBIOSBASE_PATH=`echo 'library(ribiosBase); cat(system.file("lib", package="ribiosBase", mustWork=TRUE))' | "${R_HOME}/bin/R" --vanilla --slave`
+RIBIOSBASE_PATH=`echo 'library(ribiosBase); cat(system.file("lib", package="ribiosBase", mustWork=TRUE))' | "${R_HOME}/bin/R" --no-save --no-restore --slave`
 PKG_LIBS="$(RIBIOSBASE_PATH)$(R_ARCH)/ribiosBase.a"
 PKG_CFLAGS=-I$(RIBIOSBASE_PATH)/../include

@@ -16,6 +16,7 @@ importFrom("Biobase", "exprs", "exprs<-")
 importFrom("ribiosExpression",
            "designMatrix", "contrastMatrix", "truncateDgeTable", "limmaTopTable2dgeTable")
 importFrom("ribiosUtils", "haltifnot", "uniqueNonNA")
+importFrom("data.table", "data.table")
            
 import(ribiosIO)
 import(ribiosMath)

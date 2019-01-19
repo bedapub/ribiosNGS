@@ -237,6 +237,8 @@ setMethod("fisherTest", c("character", "GeneSet", "character"),
           })
 
 
+## TODO: repeating codes of Fisher's method using either GmtList or GeneSets! To be simplified
+
 #' Perform Fisher's exact test on a GeneSets object
 #' 
 #' @param genes character strings of gene list to be tested
@@ -246,13 +248,13 @@ setMethod("fisherTest", c("character", "GeneSet", "character"),
 #' @param checkUniverse Logical, if \code{TRUE}, then genes that are in \code{genes} but are not in \code{universe} are appended to \code{universe}
 #' @param useEASE Logical, whether to use the EASE method to report the p-value. 
 #'
-#'#' @return A \code{data.frame} containing Fisher's exact test results of all gene-sets, in the same order as the input gene-sets, with following columns:
+#'#' @return A \code{data.table} containing Fisher's exact test results of all gene-sets, in the same order as the input gene-sets, with following columns:
 #' \enumerate{
 #'   \item GeneSetCategory
 #'   \item GeneSetName
 #'   \item GeneSetEffectiveSize, the count of genes in the gene-set that are found in the universe
 #'   \item HitCount, the count of genes in the \code{genes} input that are in the gene-set
-#'   \item Hits, a comma-delimited character string of htis
+#'   \item Hits, a vector of character string, representing hits
 #'   \item PValue
 #'   \item FDR, PValue adjusted by the Benjamini-Hochberg method. If more than one gene-set categories are provided, the FDR correction is performed per category
 #' }
@@ -302,11 +304,11 @@ setMethod("fisherTest",
                                           checkUniverse = checkUniverse,
                                           useEASE = useEASE)
             })
-            res <- data.frame(GeneSetCategory=gsCategory(genesets),
+            res <- data.table::data.table(GeneSetCategory=gsCategory(genesets),
                               GeneSetName=gsName(genesets),
                               GeneSetEffectiveSize=sapply(res, function(x) x$gsEffSize),
                               HitCount=sapply(res, function(x) length(x$hits)),
-                              Hits=I(sapply(res, function(x) paste(x$hits, collapse=",",sep=""))),
+                              Hits=sapply(res, function(x) x$hits),
                               PValue=sapply(res, function(x) x$p))
             if(all(is.na(res$GeneSetCategory))) {
               res$FDR <- p.adjust(res$PValue, method="fdr")
@@ -326,7 +328,16 @@ setMethod("fisherTest",
 #' @param checkUniverse Logical, if \code{TRUE}, then genes that are in \code{genes} but are not in \code{universe} are appended to \code{universe}
 #' @param useEASE Logical, whether to use the EASE method to report the p-value. 
 #' 
-#' @return A data.frame
+#' @return A \code{data.table} containing Fisher's exact test results of all gene-sets, in the same order as the input gene-sets, with following columns:
+#' \enumerate{
+#'   \item GeneSetCategory
+#'   \item GeneSetName
+#'   \item GeneSetEffectiveSize, the count of genes in the gene-set that are found in the universe
+#'   \item HitCount, the count of genes in the \code{genes} input that are in the gene-set
+#'   \item Hits, a vector of character string, representing hits
+#'   \item PValue
+#'   \item FDR, PValue adjusted by the Benjamini-Hochberg method. If more than one gene-set categories are provided, the FDR correction is performed per category
+#' }
 setMethod("fisherTest", 
           c("character", "GmtList", "character"),
           function(genes, genesets, universe,
@@ -361,11 +372,11 @@ setMethod("fisherTest",
                                useEASE = useEASE)
             })
 
-            res <- data.frame(GeneSetCategory=gsCategory,
+            res <- data.table::data.table(GeneSetCategory=gsCategory,
                               GeneSetName=sapply(genesets, function(x) x$name),
                               GeneSetEffectiveSize=sapply(res, function(x) x$gsEffSize),
                               HitCount=sapply(res, function(x) length(x$hits)),
-                              Hits=I(sapply(res, function(x) paste(x$hits, collapse=",",sep=""))),
+                              Hits=sapply(res, function(x) x$hits),
                               PValue=sapply(res, function(x) x$p))
 
             if(all(is.na(gsCategory))) {

@@ -2,9 +2,12 @@
 % Please edit documentation in R/jaccardIndex.R
 \name{overlapCoefficient}
 \alias{overlapCoefficient}
+\alias{overlapDistance}
 \title{Overlap coefficient, also known as Szymkiewicz-Simpson coefficient}
 \usage{
 overlapCoefficient(x, y, checkUniqueNonNA = FALSE)
+
+overlapDistance(x, y, checkUniqueNonNA = FALSE)
 }
 \arguments{
 \item{x}{A vector}
@@ -28,7 +31,12 @@ myY2 <- 4:10
 overlapCoefficient(myX, myY2)
 ## compare the result with Jaccard Index
 jaccardIndex(myX, myY2)
+
+## overlapDistance
+overlapDistance(myX, myY2)
 }
 \seealso{
 \code{\link{jaccardIndex}}
+
+\code{overlapCofficient} calculates the overlap coefficient, and \code{overlapDistance} is defined by 1-\code{overlapCoefficient}.
 }

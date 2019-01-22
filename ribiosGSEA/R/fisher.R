@@ -237,6 +237,17 @@ setMethod("fisherTest", c("character", "GeneSet", "character"),
           })
 
 
+#' Append NewHitsProp to the result \code{data.table} returned by \code{fisherTest}
+#' @param fisherTestResults \code{data.table} returned by \code{fisherTest}
+#' @return A new \code{data.table} containing all columns of the input and \code{NewHitsProp}, a new column including the proportion of new hits in the gene-set
+fisherTestResultNewHitsProp <- function(fisherTestResults) {
+  fisherTestResults <- fisherTestResults %>% arrange(FDR)
+  hits <- strsplit(as.character(fisherTestResults$Hits), ",")
+  cumOC <- ribiosUtils::cumOverlapDistance(hits)
+  fisherTestResults$NewHitsProp <- cumOC
+  return(fisherTestResults)
+}
+
 ## TODO: repeating codes of Fisher's method using either GmtList or GeneSets! To be simplified
 
 #' Perform Fisher's exact test on a GeneSets object
@@ -388,3 +399,49 @@ setMethod("fisherTest",
             return(res)
           })
 
+
+
+#' Run Fisher's exact test on an EdgeResult object
+#' 
+#' @param edgeResult An \code{EdgeResult} object
+#' @param gmtList A \code{GmtList} or \code{GeneSets} object
+#' @param contrast Character, the contrast of interest
+#' @param thr.abs.logFC Numeric, threshold of absolute log2 fold-change to define positively and negatively regulated genes
+#' @param thr.FDR Numeric, threshold of FDR values 
+#' @param minGeneSetEffectiveSize Integer, minimal number of genes of a geneset that are quantified
+#' @param maxGeneSetEffectiveSize Integer, maximal number of genes of a geneset that are quantified
+#' 
+#' @return 
+#' ## TODO: example
+fisherTestEdgeResult <- function(edgeResult,
+                             gmtList,
+                             contrast, 
+                             thr.abs.logFC=1, thr.FDR=0.05, 
+                             minGeneSetEffectiveSize=5,
+                             maxGeneSetEffectiveSize=500, ...) {
+  dgeTbl <- dgeTable(edgeResult) %>% filter(Contrast %in% contrast)
+  dgeBg <- unique(as.character(dgeTbl$GeneSymbol))
+  posDgeTbl <- dgeTbl %>% filter(logFC>=thr.abs.logFC, FDR<thr.FDR, ...)
+  negDgeTbl <- dgeTbl %>% filter(logFC<=(-thr.abs.logFC), FDR<thr.FDR, ...)
+  posGenes <- posDgeTbl %>% pull(GeneSymbol) %>% as.character
+  negGenes <- negDgeTbl %>% pull(GeneSymbol) %>% as.character
+  posFisher <- fisherTest(posGenes, gmtList, dgeBg)
+  negFisher <- fisherTest(negGenes, gmtList, dgeBg)
+  
+  posFisherHits <- posFisher %>% filter(FDR<=thr.FDR,
+                                        GeneSetEffectiveSize>=minGeneSetEffectiveSize,
+                                        GeneSetEffectiveSize<=maxGeneSetEffectiveSize)
+  negFisherHits <- negFisher %>% filter(FDR<=0.05,
+                                        GeneSetEffectiveSize>=minGeneSetEffectiveSize,
+                                        GeneSetEffectiveSize<=maxGeneSetEffectiveSize)
+  
+  res <- data.table::data.table(Regulation=factor(rep(c("Positive", "Negative"), 
+                                          c(nrow(posFisherHits), nrow(negFisherHits))),
+                                      c("Positive", "Negative")),
+                    rbind(posFisherHits, negFisherHits)) %>% 
+    group_by(Regulation) %>% 
+    fisherTestResultNewHitsProp %>%
+    ungroup %>%
+    arrange(Regulation, FDR)
+  return(res)
+}

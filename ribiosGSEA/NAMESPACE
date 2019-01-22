@@ -17,6 +17,7 @@ importFrom("ribiosExpression",
            "designMatrix", "contrastMatrix", "truncateDgeTable", "limmaTopTable2dgeTable")
 importFrom("ribiosUtils", "haltifnot", "uniqueNonNA")
 importFrom("data.table", "data.table")
+importFrom("dplyr", "%>%", "group_by", "ungroup", "arrange", "select")
            
 import(ribiosIO)
 import(ribiosMath)
@@ -84,6 +85,7 @@ export(hits, pValue, fdrValue,
        sigGeneSet, sigGeneSetTable, topGeneSetTable,topOrSigGeneSetTable)
 export(gsFisherTestCore, gsListFisherTestCore)
 export(fisherTest)
+export(fisherTestEdgeResult)
 exportMethods("[")
 
 ## Nearest Template Prediction (ntp) algorithm

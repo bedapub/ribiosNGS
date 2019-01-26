@@ -18,7 +18,7 @@ importFrom("ribiosExpression",
            "nContrast", "contrastSampleIndices",
            "truncateDgeTable", "annotate")
 importFrom("edgeR",
-           "cpm", "aveLogCPM", "estimateGLMRobustDisp")
+           "cpm", "aveLogCPM", "estimateGLMRobustDisp", "rpkm")
 importFrom("graphics", "pairs")
 importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
@@ -170,6 +170,8 @@ export(readBiokitExpression,
 export(DGEListToLongTable)
 
 export(writeDGEList)
+
+export(tpm, rpkm2tpm)
 
 ## edgeR commands
 export(edgeRcommand,

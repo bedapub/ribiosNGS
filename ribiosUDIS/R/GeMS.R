@@ -68,20 +68,20 @@ removeFromGeMS <- function(setName="", source="", user=sysUserName(), subtype=""
   return(returnJSON)
 }
 
-#' Get set names of a user from GeMS
+#' Get gene sets of a user from GeMS
 #' @param user User name
-#' @return A character vector of user's gene sets
+#' @return A data.frame including following columns: \code{source}, \code{setName}.
 #' 
 #' @examples 
 #' ## my gene-sets
-#' getUserSetNamesFromGeMS()
+#' getUserSetsFromGeMS()
 #' ## from another user
-#' getUserSetNamesFromGeMS("kanga6")
-getUserSetNamesFromGeMS <- function(user=sysUserName()) {
+#' getUserSetsFromGeMS("kanga6")
+getUserSetsFromGeMS <- function(user=sysUserName()) {
   body <- list(user=user,
-               returnParams=list("setName"))
+               returnParams=list("source", "setName"))
   response <- httr::POST(GeMS_GENESETS_URL , body=body, encode="json")
   returnJSON <-jsonlite::fromJSON(httr::content(response, "text"))
-  return(returnJSON$response$setName)
+  return(returnJSON$response)
 }
 

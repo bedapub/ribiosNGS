@@ -21,7 +21,7 @@ insertGmtListToGeMSBody <- function(gmtList,
   parsed <- lapply(gmtList, function(x) unname(unlist(x)))
   gemsPars <- list(gf=geneFormat,
                    so=source,
-                   ##xref=xref,
+                   xref=xref,
                    ti=taxID,
                    us=user)
   dataList <- list(headers=c("setName", "desc", "genes"),
@@ -44,8 +44,7 @@ insertGmtListToGeMS <- function(gmtList,
                                   user=user)
   response <- httr::POST(GeMS_INSERT_URL, body=dataList, encode='json')
   returnJSON <- jsonlite::fromJSON(httr::content(response, 'text'))
-  print(returnJSON)
-  return(dataList)
+  return(returnJSON)
 }
 
 #' Message body to remove one or gene sets of the same source and user from GeMS

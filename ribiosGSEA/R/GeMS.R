@@ -40,6 +40,8 @@ getJsonResponse <- function(url, body) {
 #' @param xref External reference, will be written in the meta field of the backend database
 #' @param taxID Integer, NCBI taxonomy ID of the species.
 #' @param user The user name
+#' @param subtype Subtype of the geneset
+#' @param domain Domain of the geneset
 #' 
 #' @return A list with three items: \code{headers}, \code{parsed}, and \code{params}
 #' 
@@ -48,13 +50,15 @@ getJsonResponse <- function(url, body) {
 #'   list(name="GS_B", desc="gene set B", genes=c("ABCA1", "DDR1", "DDR2")),
 #'   list(name="GS_C", desc="gene set C", genes=NULL))
 #' testGmt <- BioQC::GmtList(testList)
-#' insertGmtListToGeMSBody(testGmt, geneFormat=0, source="Test", xref="PMID:000000")
+#' ribiosGSEA:::insertGmtListToGeMSBody(testGmt, geneFormat=0, source="Test", xref="PMID:000000")
 insertGmtListToGeMSBody <- function(gmtList,
                                     geneFormat=0,
                                     source="PubMed",
                                     xref="",
                                     taxID=9606,
-                                    user=ribiosUtils::whoami()) {
+                                    user=ribiosUtils::whoami(),
+                                    subtype="",
+                                    domain="") {
   parsed <- lapply(gmtList, function(x) unname(unlist(x[c("name", "desc", "genes")])))
   gemsPars <- list(gf=geneFormat,
                    so=source,
@@ -74,6 +78,8 @@ insertGmtListToGeMSBody <- function(gmtList,
 #' @param xref External reference, will be written in the meta field of the backend database
 #' @param taxID Integer, NCBI taxonomy ID of the species.
 #' @param user The user name
+#' @param subtype Subtype of the geneset
+#' @param domain Domain of the geneset
 #' 
 #' @return Response code or error message returned by the GeMS API. A value of \code{200} indicates a successful insertion.
 #' 
@@ -92,13 +98,17 @@ insertGmtListToGeMS <- function(gmtList,
                                 source="PubMed",
                                 xref="",
                                 taxID=9606,
-                                user=ribiosUtils::whoami()) {
+                                user=ribiosUtils::whoami(),
+                                subtype="",
+                                domain="") {
   dataList <- insertGmtListToGeMSBody(gmtList=gmtList,
                                   geneFormat=geneFormat,
                                   source=source,
                                   xref=xref,
                                   taxID=taxID,
-                                  user=user)
+                                  user=user,
+                                  subtype=subtype,
+                                  domain=domain)
   return(getJsonResponse(GeMS_INSERT_URL, dataList))
 }
 
@@ -112,8 +122,11 @@ insertGmtListToGeMS <- function(gmtList,
 #' @return A list of genesets to be removed, to be sent as message body
 #' 
 #' @examples 
-#' removeFromGeMSBody(setName=c("GS_A", "GS_B", "GS_C"), source="Test")
-removeFromGeMSBody <- function(setName="", source="", user=ribiosUtils::whoami(), subtype="") {
+#' ribiosGSEA:::removeFromGeMSBody(setName=c("GS_A", "GS_B", "GS_C"), source="Test")
+removeFromGeMSBody <- function(setName="",
+                               source="", 
+                               user=ribiosUtils::whoami(), 
+                               subtype="") {
   toRemove <- lapply(setName, function(sname) {
     list(setName=sname,
          source=source,
@@ -143,7 +156,10 @@ removeFromGeMSBody <- function(setName="", source="", user=ribiosUtils::whoami()
 #'   removeFromGeMS(setName=c("GS_A", "GS_B", "GS_C"), source="Test")
 #' }
 #' 
-removeFromGeMS <- function(setName="", source="", user=ribiosUtils::whoami(), subtype="") {
+removeFromGeMS <- function(setName="", 
+                           source="", 
+                           user=ribiosUtils::whoami(), 
+                           subtype="") {
   body <- removeFromGeMSBody(setName, source, user, subtype)
   return(getJsonResponse(GeMS_REMOVE_URL, body))
 }

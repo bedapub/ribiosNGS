@@ -5,7 +5,8 @@
 \title{Construct message body to insert into GeMS}
 \usage{
 insertGmtListToGeMSBody(gmtList, geneFormat = 0, source = "PubMed",
-  xref = "", taxID = 9606, user = ribiosUtils::whoami())
+  xref = "", taxID = 9606, user = ribiosUtils::whoami(),
+  subtype = "", domain = "")
 }
 \arguments{
 \item{gmtList}{A \code{GmtList} object defined in the \code{BioQC} package}
@@ -19,6 +20,10 @@ insertGmtListToGeMSBody(gmtList, geneFormat = 0, source = "PubMed",
 \item{taxID}{Integer, NCBI taxonomy ID of the species.}
 
 \item{user}{The user name}
+
+\item{subtype}{Subtype of the geneset}
+
+\item{domain}{Domain of the geneset}
 }
 \value{
 A list with three items: \code{headers}, \code{parsed}, and \code{params}

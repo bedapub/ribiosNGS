@@ -55,7 +55,7 @@ Note that the evaluation only takes place when GeMS is reachable, because otherw
 
 The following command fetches genesets associated with a given user, *test* in this case. If not parameter is given, the genesets of the current user is provided.
 
-```{r getGeneSets, eval=FALSE}
+```{r getGeneSets}
 getUserSetsFromGeMS(user="test")
 ```
 
@@ -63,7 +63,7 @@ getUserSetsFromGeMS(user="test")
 
 New genesets can be inserted into GeMS, using the *GmtList* data structure defined in the *BioQC* package, which is essentially a list of lists, which in turn contains three elements: *name*, *desc*, and *genes*. See example below.
 
-```{r insertGeneSets, eval=FALSE}
+```{r insertGeneSets}
 testGmt <- BioQC::GmtList(list(
   list(name="Test gene set 1", 
        desc="Test", genes=c("CXCL13", "TNFRSF1B", "RGS2")),
@@ -75,7 +75,7 @@ insertGmtListToGeMS(testGmt, geneFormat=0, source="Test", xref="PMID:30397336", 
 
 Now we check the genesets of the user *test*, we expect to see the two gene sets that we inserted.
 
-```{r getGeneSetsAfterInsert, eval=FALSE}
+```{r getGeneSetsAfterInsert}
 getUserSetsFromGeMS(user="test")
 ```
 
@@ -84,14 +84,14 @@ Alternative to manual specificiation, *GmtList* can be constructed by reading a 
 ## Task 3: Remove a geneset
 
 The following example shows how a geneset can be removed
-```{r removeGeneSet, eval=FALSE}
+```{r removeGeneSet}
 removeFromGeMS(setName=c("Test gene set 1", "Test gene set 2"),
                source="Test", user="test")
 ```
 
 Now we check the genesets of the user *test*, we expect to see the two gene sets that we previously inserted should be gone.
 
-```{r getGeneSetsAfterRemove eval=FALSE}
+```{r getGeneSetsAfterRemove}
 getUserSetsFromGeMS(user="test")
 ```
 

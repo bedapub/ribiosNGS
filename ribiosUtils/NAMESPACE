@@ -104,6 +104,8 @@ export(jaccardIndex, pairwiseJaccardIndex,
        overlapCoefficient, overlapDistance,
        cumOverlapCoefficient, cumOverlapDistance)
 
+export(whoami)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils, .registration=TRUE,.fixes="C_")
 

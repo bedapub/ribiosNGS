@@ -1,8 +1,10 @@
-## test gsFisherTest and S4 methods
+## test fisherTest and S4 methods
+library(testthat)
 library(ribiosUtils)
+library(ribiosGSEA)
 
 ##----------------------------------------##
-## test gsFisherTest, the underlying function
+## test fisherTest, the underlying function
 ##----------------------------------------##
 
 inputGenes <- LETTERS[1:3]
@@ -23,32 +25,32 @@ badGenes <- function(vector, dup=2, naCount=3, sample=FALSE) {
     return(res)
 }
 
-gsEnrich1 <- ribiosGSEA:::gsFisherTest(inputGenes, geneSet1, universe, "testName", "testCategory")
+gsEnrich1 <- ribiosGSEA::fisherTest(inputGenes, geneSet1, universe, "testName", "testCategory")
 gsManual1 <- fisher.test(matrix(c(3,3,0,20), nrow=2, byrow=TRUE), alternative="greater")
-expect_that(gsManual1$p.value, equals(pValue(gsEnrich1)))
-expect_that(length(geneSet1), equals(ribiosGSEA:::gsEffSize(gsEnrich1)))
-expect_that(inputGenes, equals(ribiosGSEA:::hits(gsEnrich1)))
+expect_equal(gsManual1$p.value, ribiosGSEA::pValue(gsEnrich1))
+expect_equal(length(geneSet1), ribiosGSEA::gsEffSize(gsEnrich1))
+expect_that(inputGenes, equals(ribiosGSEA::hits(gsEnrich1)))
 expect_that(gsCategory(gsEnrich1), equals("testCategory"))
 expect_that(gsName(gsEnrich1), equals("testName"))
             
-gsEnrich2 <- ribiosGSEA:::gsFisherTest(inputGenes, geneSet2, universe)
+gsEnrich2 <- ribiosGSEA::fisherTest(inputGenes, geneSet2, universe)
 gsManual2 <- fisher.test(matrix(c(0,4,3,19), nrow=2, byrow=TRUE), alternative="greater")
 expect_that(gsManual2$p.value, equals(pValue(gsEnrich2)))
-expect_that(length(geneSet2), equals(ribiosGSEA:::gsEffSize(gsEnrich2)))
-expect_that(character(), equals(ribiosGSEA:::hits(gsEnrich2)))
+expect_that(length(geneSet2), equals(ribiosGSEA::gsEffSize(gsEnrich2)))
+expect_that(character(), equals(ribiosGSEA::hits(gsEnrich2)))
 
-gsEnrich3 <- ribiosGSEA:::gsFisherTest(inputGenes, geneSet3, universe)
+gsEnrich3 <- ribiosGSEA::fisherTest(inputGenes, geneSet3, universe)
 gsManual3 <- fisher.test(matrix(c(2,2,1,21), nrow=2, byrow=TRUE), alternative="greater")
 expect_that(gsManual3$p.value, equals(pValue(gsEnrich3)))
-expect_that(length(geneSet3), equals(ribiosGSEA:::gsEffSize(gsEnrich3)))
-expect_that(c("B", "C"), equals(ribiosGSEA:::hits(gsEnrich3)))
+expect_that(length(geneSet3), equals(ribiosGSEA::gsEffSize(gsEnrich3)))
+expect_that(c("B", "C"), equals(ribiosGSEA::hits(gsEnrich3)))
 
 
-gsEnrich4 <- ribiosGSEA:::gsFisherTest(inputGenes, geneSet4, universe)
+gsEnrich4 <- ribiosGSEA::fisherTest(inputGenes, geneSet4, universe)
 gsManual4 <- fisher.test(matrix(c(2,2,1,21), nrow=2, byrow=TRUE), alternative="greater")
 expect_that(gsManual4$p.value, equals(pValue(gsEnrich4)))
-expect_that(4L, equals(ribiosGSEA:::gsEffSize(gsEnrich4)))
-expect_that(c("B", "C"), equals(ribiosGSEA:::hits(gsEnrich4)))
+expect_that(4L, equals(ribiosGSEA::gsEffSize(gsEnrich4)))
+expect_that(c("B", "C"), equals(ribiosGSEA::hits(gsEnrich4)))
 
 
 ##----------------------------------------##
@@ -99,9 +101,9 @@ gss <- GeneSets(list(gs1, gs2, gs3, gs4))
 myFisherRes <- fisherTest(inputGenes, gss, universe)
 
 myFisherRes.expP <- c(pValue(gsEnrich1),pValue(gsEnrich2),pValue(gsEnrich3),pValue(gsEnrich4))
-expect_that(pValue(myFisherRes), equals(myFisherRes.expP))
-expect_that(gsCategory(myFisherRes), equals(c(rep("A", 3), "B")))
-expect_that(gsName(myFisherRes), equals(sprintf("GeneSet%d", 1:4)))
+expect_that(myFisherRes$PValue, equals(myFisherRes.expP))
+expect_that(myFisherRes$GeneSetCategory, equals(c(rep("A", 3), "B")))
+expect_that(myFisherRes$GeneSetName, equals(sprintf("GeneSet%d", 1:4)))
 
 myFisherRes.bad <- fisherTest(badGenes(inputGenes), gss, badGenes(universe))
 expect_identical(myFisherRes.bad ,myFisherRes)

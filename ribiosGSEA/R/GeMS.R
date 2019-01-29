@@ -1,8 +1,20 @@
 GeMS_BASE_URL <- "http://bioinfo.bas.roche.com:1234/api"
 
+
 GeMS_INSERT_URL <- paste(GeMS_BASE_URL, "/insert", sep="")
 GeMS_REMOVE_URL <- paste(GeMS_BASE_URL, "/remove", sep="")
 GeMS_GENESETS_URL <- paste(GeMS_BASE_URL, "/genesets", sep="")
+
+
+#' Test whether GeMS is reachable
+#' @return Logical value
+#' @examples 
+#' \dontrun{
+#' isGeMSReachble()
+#' }
+isGeMSReachable <- function() {
+   !http_error(GET(GeMS_GENESETS_URL)) 
+}
 
 #' Send a list as JSON query to an URL and fetch the response
 #' 
@@ -160,7 +172,11 @@ getUserSetsFromGeMS <- function(user=ribiosUtils::whoami()) {
   body <- list(user=user,
                returnParams=as.list(fieldsOfInterest))
   df <- getJsonResponse(GeMS_GENESETS_URL, body)
-  res <- df[, fieldsOfInterest]
+  if(is.list(df) && length(df)==0) {
+    res <- NULL
+  } else {
+    res <- df[, fieldsOfInterest]
+  }
   return(res)
 }
 

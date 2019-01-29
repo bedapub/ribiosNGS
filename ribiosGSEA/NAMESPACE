@@ -18,7 +18,7 @@ importFrom("ribiosExpression",
 importFrom("ribiosUtils", "haltifnot", "uniqueNonNA", "whoami")
 importFrom("data.table", "data.table")
 importFrom("dplyr", "%>%", "group_by", "ungroup", "arrange", "select")
-importFrom(httr, "POST", "content", "http_error")
+importFrom(httr, "POST", "GET","content", "http_error")
 importFrom(jsonlite, "fromJSON")
            
 import(ribiosIO)

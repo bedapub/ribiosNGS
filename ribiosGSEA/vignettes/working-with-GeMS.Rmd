@@ -73,6 +73,8 @@ testGmt <- BioQC::GmtList(list(
 insertGmtListToGeMS(testGmt, geneFormat=0, source="Test", xref="PMID:30397336", user="test")
 ```
 
+The return value \code{200} indicates the insertion was successful.
+
 Now we check the genesets of the user *test*, we expect to see the two gene sets that we inserted.
 
 ```{r getGeneSetsAfterInsert}

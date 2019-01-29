@@ -13,7 +13,7 @@ GeMS_GENESETS_URL <- paste(GeMS_BASE_URL, "/genesets", sep="")
 #' isGeMSReachble()
 #' }
 isGeMSReachable <- function() {
-   !http_error(GET(GeMS_GENESETS_URL)) 
+   !httr::http_error(httr::GET(GeMS_GENESETS_URL)) 
 }
 
 #' Send a list as JSON query to an URL and fetch the response

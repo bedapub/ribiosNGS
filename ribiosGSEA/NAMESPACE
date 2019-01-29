@@ -151,7 +151,8 @@ export(tpDiff)
 S3method(xyplot,BenchmarkResult)
 
 ## GeMS
-export(getJsonResponse,
+export(isGeMSReachable,
+       getJsonResponse,
        insertGmtListToGeMS,
        removeFromGeMS,
        getUserSetsFromGeMS)

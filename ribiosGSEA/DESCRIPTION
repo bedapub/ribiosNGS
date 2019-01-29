@@ -23,10 +23,12 @@ Imports:
     edgeR,
     dplyr,
     data.table,
-    httr, 
+    httr,
     jsonlite
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 License: LGPL-2
 Collate:
     utils.R
@@ -48,4 +50,5 @@ Collate:
     GeMS.R
 LinkingTo: Rcpp
 LazyLoad: yes
+VignetteBuilder: knitr
 RoxygenNote: 6.1.0

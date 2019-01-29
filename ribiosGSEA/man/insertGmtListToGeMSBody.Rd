@@ -36,5 +36,5 @@ testList <- list(list(name="GS_A", desc=NULL, genes=c("MAPK14", "JAK1", "EGFR"))
   list(name="GS_B", desc="gene set B", genes=c("ABCA1", "DDR1", "DDR2")),
   list(name="GS_C", desc="gene set C", genes=NULL))
 testGmt <- BioQC::GmtList(testList)
-insertGmtListToGeMSBody(testGmt, geneFormat=0, source="Test", xref="PMID:000000")
+ribiosGSEA:::insertGmtListToGeMSBody(testGmt, geneFormat=0, source="Test", xref="PMID:000000")
 }

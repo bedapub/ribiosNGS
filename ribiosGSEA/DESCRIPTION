@@ -1,8 +1,8 @@
 Package: ribiosGSEA
 Type: Package
 Title: RIBIOS functions for Gene Set Enrichment Analysis
-Version: 1.3-11
-Date: 2019-01-19
+Version: 1.4-0
+Date: 2019-01-29
 Author: Jitao David Zhang
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: Gene-set enrichment analysis is part of the Roche Bioinformatics
@@ -21,7 +21,10 @@ Imports:
     globaltest,
     ribiosExpression,
     edgeR,
-    data.table
+    dplyr,
+    data.table,
+    httr, 
+    jsonlite
 Suggests:
     testthat
 License: LGPL-2
@@ -42,6 +45,7 @@ Collate:
     fisher.R
     simulation.R
     geneSetPerm.R
+    GeMS.R
 LinkingTo: Rcpp
 LazyLoad: yes
 RoxygenNote: 6.1.0

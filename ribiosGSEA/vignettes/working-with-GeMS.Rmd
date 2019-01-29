@@ -40,8 +40,9 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE,
                       eval = doEval,
                       fig.height=6, fig.width=6)
 ```
+# Working with Geneset Management System (GeMS)
 
-# Background
+## Background
 
 The Geneset Managment System ([GeMS, link visible within Roche](https://rochewiki.roche.com/confluence/display/BEDA/Gene+sets+and+signatures+-+GeMS)), as its name suggests, is a system to manage genesets.
 
@@ -49,9 +50,9 @@ This document shows basic operations provided to work with the sytsem from R con
 
 Note that the evaluation only takes place when GeMS is reachable, because otherwise the compilation of this vignette  will fail when the webservice is not available. 
 
-# Examples
+## Examples
 
-## Task 1: show genesets provided by a user
+### Task 1: show genesets provided by a user
 
 The following command fetches genesets associated with a given user, *test* in this case. If not parameter is given, the genesets of the current user is provided.
 
@@ -59,7 +60,7 @@ The following command fetches genesets associated with a given user, *test* in t
 getUserSetsFromGeMS(user="test")
 ```
 
-## Task 2: insert new genesets to GeMS
+### Task 2: insert new genesets to GeMS
 
 New genesets can be inserted into GeMS, using the *GmtList* data structure defined in the *BioQC* package, which is essentially a list of lists, which in turn contains three elements: *name*, *desc*, and *genes*. See example below.
 
@@ -83,7 +84,7 @@ getUserSetsFromGeMS(user="test")
 
 Alternative to manual specificiation, *GmtList* can be constructed by reading a valid GMT file with the function *readGmt* in *BioQC*.
 
-## Task 3: Remove a geneset
+### Task 3: Remove a geneset
 
 The following example shows how a geneset can be removed
 ```{r removeGeneSet}
@@ -97,7 +98,7 @@ Now we check the genesets of the user *test*, we expect to see the two gene sets
 getUserSetsFromGeMS(user="test")
 ```
 
-# Conclusions
+## Conclusions
 
 This is a very brief introduction of how to working with GeMS within R. In case of questions or suggestions, please reach out to [Jitao David Zhang](mailto:jitao_david.zhang@roche.com) or [Laura Badi](mailto:laura.badi@roche.com).
 

@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Wed Nov  8 15:25:15 CET 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Wed Jan 30 17:38:16 CET 2019). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -32,11 +32,11 @@ build: roxygenise doVignettes
 
 install: roxygenise doVignettes
 	@echo '====== Installing Package ======'
-	@(${R} -q -e "library(devtools); devtools::install(upgrade=FALSE, build_vignettes=TRUE)")
+	@(${R} -q -e "library(devtools); devtools::install(upgrade_dependencies=FALSE)")
 	@echo '====== Installing finished ======'
 	@echo ' '
 
-check: roxygenise doVignettes
+check: roxygenise
 	@echo '====== Checking Package ======'
 	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")")
 	@echo '====== Checking finished ======'

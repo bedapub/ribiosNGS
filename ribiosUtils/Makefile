@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Wed Nov  8 15:25:15 CET 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Wed Jan 30 17:38:16 CET 2019). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -24,15 +24,15 @@ doVignettes:
 	@(${R} -q -e "library(devtools); devtools::build_vignettes()")
 	@echo ' '
 
-build: roxygenise
+build: roxygenise doVignettes
 	@echo '====== Building Distribution ======'
 	@(${R} -q -e "library(devtools); devtools::build()")
 	@echo '====== Building finished ======'
 	@echo ' '
 
-install: roxygenise
+install: roxygenise doVignettes
 	@echo '====== Installing Package ======'
-	@(${R} -q -e "library(devtools); devtools::install(upgrade=FALSE)")
+	@(${R} -q -e "library(devtools); devtools::install(upgrade_dependencies=FALSE)")
 	@echo '====== Installing finished ======'
 	@echo ' '
 

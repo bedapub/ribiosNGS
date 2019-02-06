@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 ## install ribios packages from github
 
 if(require("devtools")) {
@@ -25,4 +27,6 @@ if(require("devtools")) {
   #install_github("Accio/ribios/ribiosRiboSeq")
   install_github("Accio/ribios/ribiosROGER")
   install_github("Accio/ribios/ribiosSeq")
+} else {
+  stop("Please install 'devtools' first!")
 }

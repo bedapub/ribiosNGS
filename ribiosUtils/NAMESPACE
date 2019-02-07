@@ -104,6 +104,10 @@ export(jaccardIndex, pairwiseJaccardIndex,
        overlapCoefficient, overlapDistance,
        cumOverlapCoefficient, cumOverlapDistance)
 
+export(whoami)
+
+export(cumsumprop, sortAndFilterByCumsumprop)
+
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils, .registration=TRUE,.fixes="C_")
 

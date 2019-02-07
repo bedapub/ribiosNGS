@@ -23,13 +23,13 @@ doVignettes:
 	@(${R} -q -e "library(devtools); devtools::build_vignettes()")
 	@echo ' '
 
-build: roxygenise
+build: roxygenise doVignettes
 	@echo '====== Building Distribution ======'
 	@(${R} -q -e "library(devtools); devtools::build()")
 	@echo '====== Building finished ======'
 	@echo ' '
 
-install: roxygenise
+install: roxygenise doVignettes
 	@echo '====== Installing Package ======'
 	@(${R} -q -e "library(devtools); devtools::install(upgrade_dependencies=FALSE)")
 	@echo '====== Installing finished ======'

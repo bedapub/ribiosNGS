@@ -20,6 +20,8 @@ if(require("devtools") && require("BiocManager")) {
   BiocManager::install(c("edgeR", "limma", "Biobase", "latticeExtra", "globaltest", "data.table"))
   install_github("Accio/ribios/ribiosExpression")
   install_github("Accio/ribios/ribiosGSEA")
+
+  BiocManager::install(c("igraph", "sva", "gage"))
   install_github("Accio/ribios/ribiosNGS")
   ## install_github("Accio/ribios/ribiosBatchJobs") ## to be merged
   ## install_github("Accio/ribios/ribiosBic") ## to be merged

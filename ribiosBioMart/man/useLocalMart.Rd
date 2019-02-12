@@ -12,7 +12,7 @@ useLocalMart(conn, dataset)
 \item{dataset}{The name of the Ensembl dataset to query (e.g. "rnorvegicus_gene_ensembl")}
 }
 \value{
-the mart object (regular list) with the connection object and internal attributes in it
+the mart object (regular list) with the connection object and internal attributes in it, wrapped as a S3 class \code{LocalMart} so that it is distinguished from the \code{Mart} object.
 }
 \description{
 Creates a new mart object for the given database connection (see \code{\link[biomaRt]{useMart}}

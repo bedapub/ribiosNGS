@@ -109,7 +109,7 @@ localFilterType <- function(filter, mart) {
 #'
 #' @param conn The \code{\linkS4class{DBIConnection}} connection object to the local Ensembl database or an instance of \code{\linkS4class{EnsemblDBCredentials}}
 #' @param dataset The name of the Ensembl dataset to query (e.g. "rnorvegicus_gene_ensembl")
-#' @return the mart object (regular list) with the connection object and internal attributes in it
+#' @return the mart object (regular list) with the connection object and internal attributes in it, wrapped as a S3 class \code{LocalMart} so that it is distinguished from the \code{Mart} object.
 #'
 #' @export
 #' @importFrom RMySQL MySQL
@@ -148,11 +148,13 @@ useLocalMart <- function(conn, dataset) {
                            #extract handy aliasas (i.e. "gene", "transcription, and "translation")
                            alias=str_match(mainTables, ".*_([a-z]+)__main$")[,2])
 
-  list(dataset=dataset,
+  res <- list(dataset=dataset,
        .conn = conn,
        .mainTables = mainTables,
        .attributes = extractListOfBioMartAttributes(dataset, docRoot, mainTables),
        .filters = extractListOfBioMartFilters(dataset, docRoot, mainTables))
+  class(res) <- "LocalMart"
+  return(res)
 }
 
 #' Lists all available filters for a selected dataset (see \code{\link[biomaRt]{listFilters}}.

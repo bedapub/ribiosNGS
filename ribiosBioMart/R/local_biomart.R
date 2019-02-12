@@ -461,7 +461,8 @@ getLocalBM <- function(attributes, filters=NULL, values=NULL, mart, verbose=FALS
   for(col in colnames(result)) {
     result[[col]] <- type.convert(as.character(result[[col]]),as.is=TRUE)
   }
-  result
+  result <- result[, attributes, drop=FALSE]
+  return(result)
 }
 
 getOptionList <- function(optionNodes) {

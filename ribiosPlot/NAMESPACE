@@ -87,7 +87,9 @@ export(blackyellow,
        blackred,
        blackgreen,
        whiteblack,
-       blackwhite)
+       blackwhite,
+       magentayellow,
+       yellowmagenta)
 
 ## display functions
 export(twocolor.panels,

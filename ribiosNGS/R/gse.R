@@ -134,7 +134,8 @@ zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
     design0 <- design[, -nbeta, drop = FALSE]
   }
   fit.null <- glmFit(y, design0, prior.count = 0)
-  y <- zscoreNBinom(y$counts, mu = fit.null$fitted.values, 
+  y <- zscoreNBinom(y$counts, 
+                    mu = pmax(fit.null$fitted.values, 1e-17),
                     size = 1/dispersion)
   y
 }
@@ -195,7 +196,7 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
                                      Score.cor0.01=pScore(tbl.priorCor$PValue, tbl.priorCor$Direction=="Up"))
                         rownames(tbl) <- NULL
                         tbl <- tbl[,c("GeneSet", "NGenes","Direction",
-                                      "Correlation", "PValue", "FDR", "Score",
+                                      "Correlation", "EffectSize", "PValue", "FDR", "Score",
                                       "PValue.cor0.01", "FDR.cor0.01", "Score.cor0.01", 
                                       "ContributingGenes")]
                         tbl <- sortByCol(tbl, "PValue",decreasing=FALSE)

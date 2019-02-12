@@ -1,8 +1,9 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
+           "pairwiseJaccardIndex",
            "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
-importFrom("ribiosIO", "read_biokit_exprs")
+importFrom("ribiosIO", "read_biokit_exprs", "writeMatrix")
 importFrom("readr",
            "count_fields", "tokenizer_tsv", "read_tsv")
 importFrom("methods", "show")
@@ -17,12 +18,13 @@ importFrom("ribiosExpression",
            "nContrast", "contrastSampleIndices",
            "truncateDgeTable", "annotate")
 importFrom("edgeR",
-           "cpm", "aveLogCPM", "estimateGLMRobustDisp")
+           "cpm", "aveLogCPM", "estimateGLMRobustDisp", "rpkm")
 importFrom("graphics", "pairs")
 importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 importFrom("sva", "sva")
 importFrom("gage", "gage")
+importFrom("BioQC", "wmwTest")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
@@ -161,7 +163,20 @@ export(mpsReporterAssocPathway,
        mpsReporterAssocGO,
        mpsReporterAssocRCTM)
        
-export(readBiokitExpression)
+export(readBiokitExpression,
+       readBiokitGctFile,
+       readBiokitAsDGEList)
+
+export(DGEListToLongTable)
+
+export(writeDGEList)
+
+export(tpm, rpkm2tpm)
+
+## edgeR commands
+export(edgeRcommand,
+       slurmEdgeRcommand,
+       slurmEdgeR)
 
 export(minGroupCount,
        countByGroup,

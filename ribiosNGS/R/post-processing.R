@@ -14,21 +14,6 @@
 ## setClass("GSEresultList", contains="list")
 
 
-#' Return cameraScore
-#' @param pvalue PValues of camera result
-#' @param direction directions of camera result, either 'Up' (positive) or 'Down' (negative)
-#' @return A numeric vector, containing camera Scores
-#' @examples
-#' ribiosNGS:::cameraScore(pvalue=c(1, 0.1, 0.01), direction=c("Up", "Down", "Up"))
-cameraScore <- function(pvalue, direction) {
-    stopifnot(all(direction %in% c("Up", "Down")))
-    abs(log10(pvalue)) * ifelse(direction=="Up", 1L, -1L)
-}
-
-jaccardIndex <- function(x, y) length(intersect(x,y))/length(union(x,y))
-jaccardDist <- function(x, y) 1-jaccardIndex(x,y)
-
-
 ##print.GSEresult <- function(x, title=TRUE) {
 ##    wCate <- 15
 ##    wContrast <- 8
@@ -172,7 +157,7 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 ##                       Direction=rep(direction, nGenes),
 ##                       PValue=rep(pvals, nGenes))
 ##    res <- cbind(path, geneTbl)
-##    res$Score <- with(res, cameraScore(PValue, Direction))
+##    res$Score <- with(res, pScore(PValue, Direction=="Up"))
 ##    return(res)
 ##}
 
@@ -182,7 +167,7 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 #' @param minNGenes NULL or integer, genesets with fewer genes are filtered out
 #' @param maxNGenes NULL or integer, genesets with more genes are filtered out
 readCameraResults <- function(file, minNGenes=3, maxNGenes=1000) {
-  res <- readr::read_tsv(file, col_types = "cccicdddddddc")
+  res <- readr::read_tsv(file, col_types = "cccicddddddddc")
   if(!is.null(minNGenes)) {
     res <- subset(res, NGenes>=minNGenes)
   }
@@ -230,13 +215,7 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     labels <- df$label <- with(df, paste(Category,":",GeneSet,sep=""))
                                
     geneLists <- with(df, split(as.character(Gene), labels))
-    gJacSim <- matrix(1L, nrow=length(geneLists), ncol=length(geneLists))
-
-    if(length(geneLists)>1) {
-        for(i in 1:(length(geneLists)-1))
-            for(j in (i+1):length(geneLists))
-                gJacSim[i,j] <- gJacSim[j,i] <- jaccardIndex(geneLists[[i]], geneLists[[j]])
-    }
+    gJacSim <- pairwiseJaccardIndex(geneLists)
     gJacBin <- gJacSim;  gJacBin[gJacBin>=jacThr] <- 1L; gJacBin[gJacBin<jacThr] <- 0L
     gLabels <- names(geneLists)
     rownames(gJacBin) <- colnames(gJacBin) <- gLabels

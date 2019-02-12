@@ -67,6 +67,8 @@ export(headtail, headhead, tailtail)
 
 export(uniqueLength, ulen)
 
+export(uniqueNonNA)
+
 export(chosenFew)
 
 export(openFileDevice, closeFileDevice)
@@ -95,6 +97,16 @@ export(assertDesign, assertContrast, assertDesignContrast)
 export(identicalMatrixValue, identicalMatrix)
 
 export(pScore)
+
+export(jaccardIndex, pairwiseJaccardIndex,
+       jaccardDistance, pairwiseJaccardDistance,
+       cumJaccardIndex, cumJaccardDistance,
+       overlapCoefficient, overlapDistance,
+       cumOverlapCoefficient, cumOverlapDistance)
+
+export(whoami)
+
+export(cumsumprop, sortAndFilterByCumsumprop)
 
 ## .registration=TRUE is only valid when the routines have been registered
 useDynLib(ribiosUtils, .registration=TRUE,.fixes="C_")

@@ -24,7 +24,7 @@
 #'   annotateEnsemblBiomart(c("ENSRNOG00000028629"), mart=ratMart, orthologue=TRUE)
 #' }
 #' 
-#' @importFrom biomaRt getBM
+#' @importFrom biomaRt getBM useDataset
 #' @importFrom dplyr as_tibble "%>%" mutate arrange
 #' @importFrom ribiosUtils matchColumn
 #' @importFrom rlang .data

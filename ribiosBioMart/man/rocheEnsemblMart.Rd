@@ -4,8 +4,8 @@
 \alias{rocheEnsemblMart}
 \title{Construct a LocalMart object to access Roche internal Ensembl Mart}
 \usage{
-rocheEnsemblMart(species = "hsapiens", ensembl_version = 95, host = NULL,
-  port = NULL, user = NULL, passwd = NULL)
+rocheEnsemblMart(species = "hsapiens", ensembl_version = 95,
+  host = NULL, port = NULL, user = NULL, passwd = NULL)
 }
 \arguments{
 \item{species}{Species to be used}

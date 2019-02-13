@@ -6,6 +6,9 @@
 \usage{
 createDBIConnection(object)
 }
+\arguments{
+\item{object}{A DBIConnection object}
+}
 \description{
 Creates a new DBI connection based on the given credential object
 }

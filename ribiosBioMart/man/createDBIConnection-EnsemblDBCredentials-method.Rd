@@ -7,6 +7,9 @@
 \usage{
 \S4method{createDBIConnection}{EnsemblDBCredentials}(object)
 }
+\arguments{
+\item{object}{A EnsemblDBCrednetials object}
+}
 \description{
 Creates a new DBI connection based on the given credential object
 }

@@ -7,6 +7,9 @@
 \usage{
 \S4method{show}{EnsemblDBCredentials}(object)
 }
+\arguments{
+\item{object}{A EnsemblDBCrednetials object}
+}
 \description{
 Shows the objects states (without the password)
 }

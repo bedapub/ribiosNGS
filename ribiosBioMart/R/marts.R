@@ -98,6 +98,9 @@ ensemblMart <- function(mart="ensembl", species="hsapiens", ...) {
 #' 
 #' @return A \code{LocalMart} object which can be used to access Roche internal Ensembl Mart
 #' 
+#' @note 
+#' If you are within Roche, the credentials can be obtained at [https://rochewiki.roche.com/confluence/display/BEDA/BIOMART+@+Roche](https://rochewiki.roche.com/confluence/display/BEDA/BIOMART+@+Roche).
+#' 
 #' @examples 
 #' \dontrun{
 #'   rocheEnsembleMart(species="hsapiens")

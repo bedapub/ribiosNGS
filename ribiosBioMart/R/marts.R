@@ -77,7 +77,7 @@ ensemblMartDataset <- function(species="hsapiens") {
 #'   humanMart <- ensemblMart(species="human")
 #'   ratMart <- ensemblMart(species="rnorvegicus")
 #' }
-#' @importFrom biomaRt useMart
+#' @importFrom biomaRt useMart listDatasets
 #' @export
 ensemblMart <- function(mart="ensembl", species="hsapiens", ...) {
   amart <- useMart(mart)

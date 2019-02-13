@@ -62,6 +62,7 @@ ensemblMartDataset <- function(species="hsapiens") {
   }
   return(species)
 }
+
 #' Construct a Mart object with the dataset of the given species
 #' 
 #' @param mart Character string, mart to be used, "ensembl" by default.
@@ -105,6 +106,7 @@ ensemblMart <- function(mart="ensembl", species="hsapiens", ...) {
 #' \dontrun{
 #'   rocheEnsembleMart(species="hsapiens")
 #' }
+#' @export
 rocheEnsemblMart <- function(species="hsapiens",
                              ensembl_version=95,  ## currently 95/94 are supported
                              host=NULL,

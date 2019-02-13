@@ -38,7 +38,9 @@ install: roxygenise
 
 check: roxygenise
 	@echo '====== Checking Package ======'
-	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")")
+	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")" > check.log 2>&1)
+	@echo 'Check finished, see check.log for details. Below are the last lines'
+	@tail check.log
 	@echo '====== Checking finished ======'
 	@echo ' '
 

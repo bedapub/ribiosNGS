@@ -1,6 +1,7 @@
 Package: ribiosBioMart
 Title: Utilities for BioMart annotation service 
-Version: 1.0-5
+Version: 1.0-6
+Date: 2019-02-13
 Authors: 
 Authors@R: c(person("Jitao David", "Zhang", email = "jitao_david.zhang@roche.com", role = c("aut")),
              person("Rudolf", "Biczok", email = "rudolf.biczok@roche.com", role = c("ctb", "cre")))

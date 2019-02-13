@@ -4,6 +4,7 @@
 #' @param user The user name used to authenticate to the SQL database
 #' @param passwd The database password used to connect to the SQL database
 #' @param ensembl_version The version of the Ensembl data inside the target SQL database. Will be used as table suffix (e.g. for "ensembl_mart_92")
+#' @importFrom methods .valueClassTest new is
 #' @export EnsemblDBCredentials
 #' @exportClass EnsemblDBCredentials
 EnsemblDBCredentials <- setClass("EnsemblDBCredentials",
@@ -14,6 +15,7 @@ EnsemblDBCredentials <- setClass("EnsemblDBCredentials",
                                                 ensembl_version = "numeric"))
 
 #' Creates a new DBI connection based on the given credential object
+#' @param object A DBIConnection object
 #' @export
 setGeneric("createDBIConnection", valueClass = "DBIConnection", function(object) {
   standardGeneric("createDBIConnection")
@@ -21,6 +23,7 @@ setGeneric("createDBIConnection", valueClass = "DBIConnection", function(object)
 
 
 #' Creates a new DBI connection based on the given credential object
+#' @param object A EnsemblDBCrednetials object
 #' @export
 setMethod("createDBIConnection", signature("EnsemblDBCredentials"), function(object) {
   dbConnect (MySQL(),
@@ -33,6 +36,8 @@ setMethod("createDBIConnection", signature("EnsemblDBCredentials"), function(obj
 
 
 #' Shows the objects states (without the password)
+#' @param object A EnsemblDBCrednetials object
+#' @importMethodsFrom methods show
 #' @export
 setMethod("show", signature("EnsemblDBCredentials"), function(object){
   cat(sprintf("EnsemblDBCredentials(user=%s, host=%s, port=%s, ensembl_version=%s)",
@@ -54,9 +59,9 @@ listLocalDatasets <- function(conn) {
   if(is(conn, "DBIConnection")) {
     return(dbGetQuery(conn, queryStr))
   }
-
+  
   conn <- createDBIConnection(conn)
-
+  
   result <- dbGetQuery(conn, "SELECT dataset, display_name as 'description', version FROM meta_conf__dataset__main;")
   return(result)
 }
@@ -74,7 +79,7 @@ localFilterOptions <- function(filter, mart) {
     stop("No filter given. Please specify the filter for which you want to retrieve the possible values.")
   if (class(filter) != "character")
     stop("Filter argument should be of class character")
-
+  
   checkFilters = filter %in% mart$.filters$internalName
   if (!all(checkFilters)) {
     stop(sprintf("Unknown filters: %s", paste(filter[!checkFilters],collapse = ",")))
@@ -97,7 +102,7 @@ localFilterType <- function(filter, mart) {
     stop("No filter given. Please specify the filter for which you want to retrieve the possible values.")
   if (class(filter) != "character")
     stop("Filter argument should be of class character")
-
+  
   checkFilters = filter %in% mart$.filters$internalName
   if (!all(checkFilters)) {
     stop(sprintf("Unknown filters: %s", paste(filter[!checkFilters],collapse = ",")))

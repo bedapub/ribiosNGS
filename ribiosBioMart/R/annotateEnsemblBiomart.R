@@ -34,7 +34,12 @@ annotateEnsemblBiomart <- function(ids,
                                    multi=FALSE, 
                                    orthologue=FALSE, 
                                    multiOrth=FALSE) {
-  martDs <- mart@dataset
+  stopifnot(class(mart) %in% c("LocalMart", "Mart"))
+  if(class(mart)=="LocalMart") {
+    martDs <- mart$dataset
+  } else {
+    martDs <- mart@dataset
+  }
   isHuman <- grepl("^hsapiens", martDs)
   isMouse <- grepl("^mmusculus", martDs)
   isRat <- grepl("^rnorvegicus", martDs)

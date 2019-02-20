@@ -31,7 +31,7 @@ sortAndFilterByCumsumprop <- function(x, thr=.9) {
 #' Merge infrequent levels by setting the threshold of the proportion of cumulative sum over sum a.k.a. cumsumprop
 #' @param classes Character strings or factor.
 #' @param thr Numeric, between 0 and 1, how to define frequent levels. Default: 0.9, namely levels which make up over 90\% of all instances.
-#' @param mergedLevel Character, how the merged level should be named. Default: \code{rest}.
+#' @param mergedLevel Character, how the merged level should be named. 
 #' @param returnFactor Logical, whether the value returned should be coereced into a factor.
 #' 
 #' @note
@@ -49,7 +49,7 @@ sortAndFilterByCumsumprop <- function(x, thr=.9) {
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.5) ## A and B are left, C and D are merged
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.4) ## A is left
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.3) ## A is left
-mergeInfreqLevelsByCumsumprop <- function(classes, thr=.9, mergedLevel="rest", returnFactor=TRUE) {
+mergeInfreqLevelsByCumsumprop <- function(classes, thr=.9, mergedLevel="others", returnFactor=TRUE) {
   x <- table(classes)
   xs <- sort(x, decreasing=TRUE)
   xprop <- cumsumprop(xs)

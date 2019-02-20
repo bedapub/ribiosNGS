@@ -4,15 +4,15 @@
 \alias{mergeInfreqLevelsByCumsumprop}
 \title{Merge infrequent levels by setting the threshold of the proportion of cumulative sum over sum a.k.a. cumsumprop}
 \usage{
-mergeInfreqLevelsByCumsumprop(classes, thr = 0.9, mergedLevel = "rest",
-  returnFactor = TRUE)
+mergeInfreqLevelsByCumsumprop(classes, thr = 0.9,
+  mergedLevel = "others", returnFactor = TRUE)
 }
 \arguments{
 \item{classes}{Character strings or factor.}
 
 \item{thr}{Numeric, between 0 and 1, how to define frequent levels. Default: 0.9, namely levels which make up over 90\% of all instances.}
 
-\item{mergedLevel}{Character, how the merged level should be named. Default: \code{rest}.}
+\item{mergedLevel}{Character, how the merged level should be named.}
 
 \item{returnFactor}{Logical, whether the value returned should be coereced into a factor.}
 }

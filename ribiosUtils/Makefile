@@ -24,7 +24,7 @@ doVignettes:
 	@(${R} -q -e "library(devtools); devtools::build_vignettes()")
 	@echo ' '
 
-build: roxygenise doVignettes
+build: doVignettes
 	@echo '====== Building Distribution ======'
 	@(${R} -q -e "library(devtools); devtools::build()")
 	@echo '====== Building finished ======'
@@ -48,3 +48,7 @@ clean:
 	@(find . -type f -name "*~" -exec rm '{}' \;)
 	@(find . -type f -name ".Rhistory" -exec rm '{}' \;)
 	@echo ' '
+
+load_all:
+	@(${R} -q -e "devtools::load_all(recompile=TRUE)")
+

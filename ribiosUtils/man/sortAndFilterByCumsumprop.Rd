@@ -2,35 +2,19 @@
 % Please edit documentation in R/cumsumprop.R
 \name{sortAndFilterByCumsumprop}
 \alias{sortAndFilterByCumsumprop}
-\alias{\code{eightytwenty}}
-\alias{This}
-\alias{function}
-\alias{can}
-\alias{be}
-\alias{useful}
-\alias{to}
-\alias{extract}
-\alias{from}
-\alias{a}
-\alias{long}
-\alias{numeric}
-\alias{vector}
-\alias{the}
-\alias{largest}
-\alias{items}
-\alias{that}
-\alias{dominate}
-\alias{sum}
-\alias{of}
 \title{Sort a numeric vector and filter by a threshold of cumsumprop}
 \usage{
 sortAndFilterByCumsumprop(x, thr = 0.9)
 }
 \arguments{
 \item{x}{Numeric vector, usually named}
+
+\item{thr}{Threshold, default 0.9, meaning that items whose proportion of cumulative sum just above 0.9 are kept.}
 }
 \value{
-Another numeric vector, likely shorter than x, with only items whose \code{cumsumprop} is equal or lower than \code{thr}. The rest items are summed into one new item, with the name \code{rest}
+Another numeric vector, likely shorter than x, items whose \code{cumsumprop} is equal or lower than \code{thr}. The rest items are summed into one new item, with the name \code{rest}
+
+This function can be useful to extract from a long numeric vector the largest items that dominate the sum of the vector
 }
 \description{
 Sort a numeric vector and filter by a threshold of cumsumprop

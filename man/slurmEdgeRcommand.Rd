@@ -5,7 +5,7 @@
 \title{Return the SLURM command to run the edgeR script}
 \usage{
 slurmEdgeRcommand(dgeList, designMatrix, contrastMatrix,
-  outfilePrefix = NULL, outdir = "edgeR_output")
+  outfilePrefix = NULL, outdir = "edgeR_output", mps = FALSE)
 }
 \arguments{
 \item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}}
@@ -16,7 +16,9 @@ slurmEdgeRcommand(dgeList, designMatrix, contrastMatrix,
 
 \item{outfilePrefix}{Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.}
 
-\item{outdir}{Output directory of the edgeR script. Default value "edgeR_output".
+\item{outdir}{Output directory of the edgeR script. Default value "edgeR_output".}
+
+\item{mps}{Logical, whether molecular-phenotyping analysis is run.
 
 This function wraps the function \code{\link{edgeRcommand}} to return the command needed to start a SLURM job.
 

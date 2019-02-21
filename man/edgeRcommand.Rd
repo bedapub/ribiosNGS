@@ -5,7 +5,7 @@
 \title{Export an DGEList, designMatrix, and contrastMatrix to files and return the command to run the edgeR script}
 \usage{
 edgeRcommand(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
-  outdir = "edgeR_output")
+  outdir = "edgeR_output", mps = FALSE)
 }
 \arguments{
 \item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}}
@@ -17,6 +17,8 @@ edgeRcommand(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
 \item{outfilePrefix}{Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.}
 
 \item{outdir}{Output directory of the edgeR script. Default value "edgeR_output".}
+
+\item{mps}{Logical, whether molecular-phenotyping analysis is run.}
 }
 \description{
 Export an DGEList, designMatrix, and contrastMatrix to files and return the command to run the edgeR script

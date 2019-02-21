@@ -4,6 +4,7 @@
 #' @param contrastMatrix The contrast matrix matching the design matrix
 #' @param outfilePrefix Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.
 #' @param outdir Output directory of the edgeR script. Default value "edgeR_output".
+#' @param mps Logical, whether molecular-phenotyping analysis is run.
 #' 
 #' @note
 #' Following checks are done internally:
@@ -26,7 +27,8 @@
 #'      outfilePrefix=NULL, outdir=tempdir())
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outfilePrefix=NULL,
-                         outdir="edgeR_output") {
+                         outdir="edgeR_output",
+                         mps=FALSE) {
   if(is.null(outfilePrefix) || is.na(outfilePrefix)) {
     outfilePrefix <- tempfile(pattern="edgeRslurm")
   }
@@ -65,6 +67,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   writeMatrix(contrastMatrix, contrastFile)
   
   logFile <- paste0(gsub("\\/$", "", outdir), ".log")
+  mpsComm <- ifelse(mps, "-mps", "")
   command <- paste("/pstore/apps/bioinfo/geneexpression/bin/ngsDge_edgeR.Rscript",
                    sprintf("-infile %s", exprsFile),
                    sprintf("-designFile %s", designFile),
@@ -75,7 +78,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    sprintf("-phenoData %s", pDataFile),
                    sprintf("-outdir %s", outdir),
                    sprintf("-log %s", logFile),
-                   sprintf("-writedb"))
+                   sprintf("-writedb"),
+                   mpsComm)
   return(command)
 }
 
@@ -85,6 +89,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param contrastMatrix The contrast matrix matching the design matrix
 #' @param outfilePrefix Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.
 #' @param outdir Output directory of the edgeR script. Default value "edgeR_output".
+#' @param mps Logical, whether molecular-phenotyping analysis is run.
 #' 
 #' This function wraps the function \code{\link{edgeRcommand}} to return the command needed to start a SLURM job.
 #' 
@@ -102,10 +107,12 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'      outfilePrefix=NULL, outdir=tempdir())
 slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outfilePrefix=NULL,
-                              outdir="edgeR_output") {
+                              outdir="edgeR_output",
+                              mps=FALSE) {
   comm <- edgeRcommand(dgeList=dgeList, designMatrix=designMatrix, contrastMatrix=contrastMatrix,
                        outfilePrefix=outfilePrefix,
-                       outdir=outdir)
+                       outdir=outdir,
+                       mps=mps)
   outdirBase <- basename(gsub("\\/$", "", outdir))
   outfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".out"))
   errfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".err"))
@@ -124,8 +131,9 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param outfilePrefix Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.
 #' @param outdir Output directory of the edgeR script. Default value "edgeR_output".
 #' @param overwrite If \code{ask}, the user is asked before an existing output directory is overwritten. If \code{yes}, the job will start and an existing directory will be overwritten anyway. If \code{no}, and if an output directory is present, the job will not be started.
+#' @param mps Logical, whether molecular-phenotyping analysis is run.
 #' 
-#' @return The output of the SLURM command in bash
+#' @return A list of two items, \code{command}, the command line call, and \code{output}, the output of the SLURM command in bash
 #' 
 #' @note 
 #' Even if the output directory is empty, if \code{overwrite} is set to \code{no} (or if the user answers \code{no}), the job will not be started.
@@ -144,7 +152,8 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outfilePrefix=NULL,
                        outdir="edgeR_output",
-                       overwrite=c("ask", "yes", "no")) {
+                       overwrite=c("ask", "yes", "no"),
+                       mps=FALSE) {
   overwrite <- match.arg(overwrite)
   ans <- NA
   if(overwrite=="ask") {
@@ -159,13 +168,15 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
           ans <- "N"
         }
       }
+    } else {
+      ans <- "y"
     }
   } else if (overwrite=="no") {
     ans <- "N"
   } else if (overwrite=="yes") {
     ans <- "y"
   }
-  
+
   doOverwrite <- switch(ans,
                         "N"=FALSE,
                         "y"=TRUE)
@@ -175,7 +186,8 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
   
   comm <- slurmEdgeRcommand(dgeList=dgeList, designMatrix=designMatrix, contrastMatrix=contrastMatrix,
                             outfilePrefix=outfilePrefix,
-                            outdir=outdir)
+                            outdir=outdir,
+                            mps=mps)
   res <- system(comm, intern=TRUE)
-  return(res)
+  return(list(command=comm, output=res))
 }

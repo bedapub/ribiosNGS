@@ -1,4 +1,4 @@
-## AUTOMATICALLY GENERATED FROM TEMPLATE (Wed Nov  8 15:25:15 CET 2017). DO NOT EDIT IT MANUALLY!
+## AUTOMATICALLY GENERATED FROM TEMPLATE (Thu Feb 21 16:59:30 CET 2019). DO NOT EDIT IT MANUALLY!
 ################################################################################
 ##
 ##  Makefile
@@ -24,23 +24,21 @@ doVignettes:
 	@(${R} -q -e "library(devtools); devtools::build_vignettes()")
 	@echo ' '
 
-build: roxygenise
+build: roxygenise doVignettes
 	@echo '====== Building Distribution ======'
 	@(${R} -q -e "library(devtools); devtools::build()")
 	@echo '====== Building finished ======'
 	@echo ' '
 
-install: roxygenise
+install: roxygenise doVignettes
 	@echo '====== Installing Package ======'
-	@(${R} -q -e "library(devtools); devtools::install(upgrade_dependencies=FALSE)")
+	@(${R} -q -e "library(devtools); devtools::install(reload=FALSE, quick=FALSE, build=TRUE, upgrade=FALSE)")
 	@echo '====== Installing finished ======'
 	@echo ' '
 
 check: roxygenise
 	@echo '====== Checking Package ======'
-	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")" > check.log 2>&1)
-	@echo 'Check finished, see check.log for details. Below are the last lines'
-	@tail check.log
+	@(${R} -q -e "library(devtools);check('.', check_dir=\"..\")")
 	@echo '====== Checking finished ======'
 	@echo ' '
 

@@ -5,7 +5,8 @@
 \title{Send an edgeR analysis job to SLURM}
 \usage{
 slurmEdgeR(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
-  outdir = "edgeR_output", overwrite = c("ask", "yes", "no"))
+  outdir = "edgeR_output", overwrite = c("ask", "yes", "no"),
+  mps = FALSE)
 }
 \arguments{
 \item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}}
@@ -19,9 +20,11 @@ slurmEdgeR(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
 \item{outdir}{Output directory of the edgeR script. Default value "edgeR_output".}
 
 \item{overwrite}{If \code{ask}, the user is asked before an existing output directory is overwritten. If \code{yes}, the job will start and an existing directory will be overwritten anyway. If \code{no}, and if an output directory is present, the job will not be started.}
+
+\item{mps}{Logical, whether molecular-phenotyping analysis is run.}
 }
 \value{
-The output of the SLURM command in bash
+A list of two items, \code{command}, the command line call, and \code{output}, the output of the SLURM command in bash
 }
 \description{
 Send an edgeR analysis job to SLURM

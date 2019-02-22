@@ -23,5 +23,5 @@ set.seed(1887)
 exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 exDesign <- model.matrix(~gl(2,3))
-voomSVA(exCounts, designMatrix=exDesign)
+voomSVA(exCounts, design=exDesign)
 }

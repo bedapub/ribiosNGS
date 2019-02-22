@@ -109,6 +109,8 @@ zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
   dispersion <- getDispersion(y)
   if (is.null(dispersion)) 
     stop("Dispersion estimate not found. Please estimate the dispersion(s) before you proceed.")
+  if (is.null(design))
+    design <- y$design
   if (is.null(design)) {
     if (nlevels(y$samples$group) < 2) 
       stop("design not supplied and samples all belong to the same group")

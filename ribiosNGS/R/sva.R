@@ -138,7 +138,7 @@ doSVA <- function(edgeObj, transform=c("voom", "cpm")) {
   } else if (transform=="cpm") {
     sv <- cpmSVA(counts, design)
   } else {
-    error("Should not get here")
+    stop("Should not get here")
   }
   if(!isEmptySV(sv)) {
     newDesign <- cbind(design, sv)

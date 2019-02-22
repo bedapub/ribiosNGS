@@ -30,7 +30,7 @@
 #' writeDGEList(d, exprs.file=exprsFile, fData.file=fDataFile, pData.file=pDataFile, 
 #'   group.file=groupFile, groupLevels.file=groupLevelsFile)
 #' 
-#' head(read_gct_matrix(exprsFile))
+#' head(ribiosIO::read_gct_matrix(exprsFile))
 #' head(ribiosIO::readMatrix(fDataFile))
 #' head(ribiosIO::readMatrix(pDataFile))
 #' head(readLines(groupFile))

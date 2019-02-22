@@ -12,9 +12,7 @@ logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol",
                         min.logCPM=NULL) {
   tbls <- edgeResult@dgeTables
   if(!is.null(min.logCPM)) {
-    for(i in seq(along=tbls)) {
-      tbls[[i]] <- subset(tbls[[i]], logCPM>=min.logCPM)
-    }
+    tbls <- lapply(tbls, function(x) subset(x, logCPM>=min.logCPM))
   }
   allContrasts <- contrastNames(edgeResult)
   

@@ -34,7 +34,7 @@
 #' head(ribiosIO::readMatrix(fDataFile))
 #' head(ribiosIO::readMatrix(pDataFile))
 #' head(readLines(groupFile))
-#' head(readLines(groupLevelFile))
+#' head(readLines(groupLevelsFile))
 writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file, 
                          group.file,
                          groupLevels.file,

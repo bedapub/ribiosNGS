@@ -4,7 +4,7 @@
 \alias{expVarLabel.PCAScoreMatrix}
 \title{Labels of principal components from PCAScoreMatrix}
 \usage{
-expVarLabel.PCAScoreMatrix(x, choices, compact = FALSE)
+\method{expVarLabel}{PCAScoreMatrix}(x, choices, compact = FALSE)
 }
 \arguments{
 \item{x}{A \code{PCAScoreMatrix} object}

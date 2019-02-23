@@ -90,8 +90,8 @@ EXPVAR_FULL_FMTSTR <- "Principal component %d (%s variance explained)"
 ##------------##
 #' S3 function expVar to extract explained variance from prcomp and PCAScoreMatrix objects
 #' 
-#' @param x A \code{prcomp} or \code{PCAScoreMatrix} object
-#' @param choices Either missing, or an integer vector of indices, indicating which PCs should be returned
+#' @param x A \code{prcomp} or \code{PCAScoreMatrix} object.
+#' @param choices Either missing, or an integer vector of indices, indicating which PCs should be returned.
 #' 
 #' @return A numeric vector of variance explained
 #' 
@@ -106,12 +106,16 @@ EXPVAR_FULL_FMTSTR <- "Principal component %d (%s variance explained)"
 #' expVar(myPcaScoreMatrix, 1:5)
 expVar <- function(x, choices) UseMethod("expVar")
 
-expVar.prcomp <- function(x, choices=seq(along=prcomp$sdev)) {
-  vars <- prcomp$sdev^2
+#'@describeIn expVar Extract explained variance from a prcomp object
+expVar.prcomp <- function(x, choices) {
+  vars <- x$sdev^2
+  if(missing(choices) || is.null(choices) || is.na(choices))
+    choices <- seq(along=vars)
   res <- vars[choices]/sum(vars)
   return(res)
 }
 
+#'@describeIn expVar Extract explained variance from a PCAScoreMatrix object
 expVar.PCAScoreMatrix <- function(x, choices) {
   if(missing(choices) || is.null(choices) || is.na(choices))
     choices <- seq(along=x$expVar)
@@ -123,7 +127,10 @@ expVar.PCAScoreMatrix <- function(x, choices) {
 ## expVarLabel
 ##------------##
 #' Generic function expVarLabel to generate a label of explained variance from prcomp and PCAScoreMatrix objects
-expVarLabel <- function(x, choices, ...) UseMethod("expVarLabel")
+#' @param x \code{prcomp} or \code{PCAScoreMatrix} Object
+#' @param choices Integer indices of which PCs to be returned
+#' @param compact Logical, whether a compact format is returned, see example
+expVarLabel <- function(x, choices, compact) UseMethod("expVarLabel")
 
 #' Labels of principal components from PCAScoreMatrix
 #' 

@@ -1,40 +1,3 @@
-#' Retrieve percentage of variance explained by principal components
-#' 
-#' @param prcomp An object of prcomp
-#' @param choices Indices of principal components. By default explained variance of all components are returned
-#' 
-#' @examples
-#' testData <- matrix(rnorm(100), 10, 10)
-#' testPrcomp <- prcomp(testData)
-#' expVar(testPrcomp)
-#' expVar(testPrcomp, 1:3)
-expVar <- function(prcomp, choices=seq(along=prcomp$sdev)) {
-  vars <- prcomp$sdev^2
-  res <- vars[choices]/sum(vars)
-  return(res)
-}
-
-#' Label of explained variance of the chosen principal component(s)
-#' 
-#' @param prcomp An object of prcomp
-#' @param choices The choice(s) of principal components
-#' @param compact Logical, whether the label should be compact. See examples.
-#' 
-#' @return Character string vector of the same length as \code{choices}
-#' 
-#' @examples 
-#' testData <- matrix(rnorm(100), 10, 10)
-#' testPrcomp <- prcomp(testData)
-#' expVarLabel(testPrcomp, 1:2)
-#' expVarLabel(testPrcomp, 1:2, compact=TRUE)
-expVarLabel <- function(prcomp, choices=1, compact=FALSE) {
-  fmt <- ifelse(compact,
-                "PC%d (%2.1f%%)",
-                "Principal component %d (%2.1f%% variance explained)")
-  sprintf(fmt,
-          choices, expVar(prcomp, choices)*100)
-}
-
 ## PCA plot for samples of expression data
 #' Retrieve PCA scores from prcomp objects
 #'
@@ -90,13 +53,79 @@ pcaScores <- function(x, choices, offset, reverse=c(FALSE, FALSE)) {
     if(reverse[i])
       xx[,i] <- -xx[,i]
   }
+  browser()
   res <- PCAScoreMatrix(xx, expVar=expVar(x, choices))
   return(res)
 }
 
 #' S3 method plotPCA
+#' @param x A prcomp object
+#' @param choices Integer index, choices to plot
+#' @param ... Other parameters
 plotPCA <- function(x, choices, ...) UseMethod("plotPCA")
 
+#' Visualise PCA results of expression data with the sample plot
+#' 
+#' \code{plotPCA} is designed to visualize sample relationships revealed
+#' by PCA analysis of high-dimensional expression data. It is adapted
+#' from the \code{biplot} function in the \code{stats} package, with
+#' functionalities useful for sample visualization and labelling, and removing
+#' the visualization of features (usually genes) in the input matrix. The
+#' rationale is that in most cases there are too many features to provide
+#' an informative visualization.
+#' 
+#' @param x \code{prcomp} object produced by the \code{prcomp} function
+#' @param choices An integer vector of length 2, indicating which PCs to visualize. By default the first (X-axis) and second (Y-axis) are visualized
+#' @param text A logical value or a list of options to label samples. See Details.
+#' @param points A logical value or a list of options to pinpoint samples. See details.
+#' @param arrows A logical or a list of options to draw arrows.
+#' @param grid Logical value, indicating whether grid lines should be added to the plot.
+#' @param abline A logical or a list of options to draw abline
+#' @param xlim xlim of the plot. Automatically determined if missing.
+#' @param ylim ylim of the plot. Automatically determined if missing.
+#' @param xlab xlab of the plot. If missing, the PC and the explained variability are shown.
+#' @param ylab ylab of the plot. If missing, the PC and the explained variability are shown.
+#' @param offset Offset should be either one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.
+#' @param main Title of the plot
+#' @param reverse ogical of length 2 or 1 (which will be repeated to 2), indicating whether the sign of values in the 1st/2nd axis should be reversed.
+#' @param ... Other parameters passed to \code{plot.window}
+#' 
+#' @details 
+#'   The values for \code{text}, \code{points} and \code{arrows} can be
+#'   \enumerate{
+#'   \item Logical. If \code{FALSE}, no text or point is added.
+#'   \item List. A list containing options passed to \code{text},  \code{points}, and \code{arrows} respectively, such as \code{col},
+#'   \code{cex}, \code{lwd}, \code{lty}, \code{code}, \code{length},\code{angle}, and  \code{pos} (only for \code{text}). 
+#'   \code{order} decides in what order are the points drawn, which can be useful when there are points to be drawn 'above' other points.
+#'   \item A vector of character strigns (only for \code{text})
+#'   }
+#' See examples below.
+#' 
+#' @return   The value of the rotated data, namely the centered (and scaled if requested) data multiplied by the rotation matrix.
+#' @note   \code{prcomp} should be called with \code{retx=TRUE}, which is the default behaviour.
+#' @seealso   \code{prcomp} and \code{pcaScores}
+#' @examples 
+#' testVal <- matrix(rnorm(10000), nrow=500)
+#' colnames(testVal) <- paste("Sample", 1:ncol(testVal), sep="")
+#' rownames(testVal) <- paste("Gene",1:nrow(testVal), sep="")
+#' 
+#' testPCA <- prcomp(t(testVal), center=TRUE, scale=TRUE)
+#' 
+#' 
+#' plotPCA(testPCA)
+#' 
+#' plotPCA(testPCA, points=FALSE, text=TRUE, grid=TRUE)
+#' 
+#' pointsList <- list(col=1:3, bg=21,pch=22, cex=4:1, lwd=1:2, lty=2:4)
+#' textList <- list(col=c("orange", "royalblue"), cex=1.2, srt=15, pos=1)
+#' 
+#' plotPCA(testPCA, choices=c(1,2), grid=TRUE, points=pointsList,
+#'         text=TRUE)
+#' 
+#' ## visualize dimension 1:3
+#' rop <- par(mfrow=c(1,2), pty="s")
+#' plotPCA(testPCA, choices=c(1,2), grid=TRUE, points=pointsList, text=textList)
+#' plotPCA(testPCA, choices=c(2,3), grid=TRUE, points=pointsList, text=textList)
 plotPCA.prcomp <- function(x,
                            choices=c(1,2),
                            text=FALSE,

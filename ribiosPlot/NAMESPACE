@@ -20,10 +20,6 @@ importFrom(grid, pushViewport, plotViewport, grid.layout, unit, gpar, viewport, 
 exportClass(fcol)
 exportMethods(fcol, fcbase)
 
-exportClass(PCAScoreMatrix)
-
-export(PCAScoreMatrix, pcLabels)
-
 ## utils
 export(compactPar)
 export(squareLayout)
@@ -102,8 +98,18 @@ export(qHist, xclipHist)
 export(histMat)
 
 ## PCA
-export(expVar, printExpVar,
-       pcaScores, plotPCA)
+export(PCAScoreMatrix)
+export(expVar, expVarLabel)
+export(pcaScores)
+export(plotPCA)
+
+S3method(as.matrix, PCAScoreMatrix)
+S3method(print, PCAScoreMatrix)
+S3method(expVar, PCAScoreMatrix)
+S3method(expVarLabel, PCAScoreMatrix)
+S3method(plotPCA, prcomp)
+S3method(expVar, prcomp)
+S3method(expVarLabel, prcomp)
 
 export(jitter.xyplot)
 

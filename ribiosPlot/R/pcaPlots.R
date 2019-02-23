@@ -14,17 +14,24 @@ expVar <- function(prcomp, choices=seq(along=prcomp$sdev)) {
   return(res)
 }
 
-#' Print explained variance of the chosen principal component(s)
+#' Label of explained variance of the chosen principal component(s)
 #' 
 #' @param prcomp An object of prcomp
 #' @param choices The choice(s) of principal components
+#' @param compact Logical, whether the label should be compact. See examples.
+#' 
+#' @return Character string vector of the same length as \code{choices}
 #' 
 #' @examples 
 #' testData <- matrix(rnorm(100), 10, 10)
 #' testPrcomp <- prcomp(testData)
-#' printExpVar(testPrcomp, 1:2)
-printExpVar <- function(prcomp, choices=1) {
-  sprintf("Principal component %d (%2.1f%%)",
+#' expVarLabel(testPrcomp, 1:2)
+#' expVarLabel(testPrcomp, 1:2, compact=TRUE)
+expVarLabel <- function(prcomp, choices=1, compact=FALSE) {
+  fmt <- ifelse(compact,
+                "PC%d (%2.1f%%)",
+                "Principal component %d (%2.1f%% variance explained)")
+  sprintf(fmt,
           choices, expVar(prcomp, choices)*100)
 }
 
@@ -32,8 +39,8 @@ printExpVar <- function(prcomp, choices=1) {
 #' Retrieve PCA scores from prcomp objects
 #'
 #' @param x An object of prcomp
-#' @param choices Indices of principal components
-#' @param offset either one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.
+#' @param choices Integer vector, indices of principal components, default the first two PCs. If missing, \code{NULL} or \code{NA}, all PCs are returned.
+#' @param offset Oither one or more rows's names in the loading matrix, or indices, or a logical vector. The average loading of the rows specified by offset is set to zero.
 #' @param reverse Logical of length 2 or 1 (which will be repeated to 2), indicating whether the sign of values in the 1st/2nd axis should be reversed
 #' @examples
 #' testMatrix <- matrix(rnorm(1000), nrow=10)
@@ -42,12 +49,12 @@ printExpVar <- function(prcomp, choices=1) {
 #'
 #' testPCAscores.withOffset <- pcaScores(testPCA, offset=c(1,3,5))
 #' ## notice the average of offset-rows are near zero
-#' colMeans(testPCAscores.withOffset[c(1,3,5),])
+#' colMeans(as.matrix(testPCAscores.withOffset)[c(1,3,5),])
 #' 
 #' testPCAscores.withReverse <- pcaScores(testPCA, reverse=c(TRUE, FALSE))
-#' colMeans(testPCAscores.withReverse[c(1,3,5),])
+#' colMeans(as.matrix(testPCAscores.withReverse)[c(1,3,5),])
 
-pcaScores <- function(x, choices=c(1,2), offset, reverse=c(FALSE, FALSE)) {
+pcaScores <- function(x, choices, offset, reverse=c(FALSE, FALSE)) {
   stopifnot(all(is.logical(reverse)) & length(reverse)<=2)
   reverse <- rep(reverse, length.out=2)
   if(!is(x, "prcomp"))
@@ -56,9 +63,9 @@ pcaScores <- function(x, choices=c(1,2), offset, reverse=c(FALSE, FALSE)) {
     stop(gettextf("object '%s' has no scores", deparse(substitute(x))), 
          domain = NA)
   if (is.complex(scores)) 
-    stop("biplots are not defined for complex PCA")
-  if(length(choices)<2) {
-    stop("choices must be a integer vector of length 2 or more, indicating scores of which components to return")
+    stop("pcaScores is not defined for complex PCA")
+  if(missing(choices) || is.null(choices) || is.na(choices)) {
+    choices <- 1:ncol(scores)
   } else if (max(choices)>ncol(scores)) {
     stop("Input PCA has %d dimensions, the choices (%d, %d) are out of boundary",
          ncol(scores), choices[1], choices[2])
@@ -72,7 +79,7 @@ pcaScores <- function(x, choices=c(1,2), offset, reverse=c(FALSE, FALSE)) {
   lam <- x$sdev[choices]
   n <- NROW(scores)
   lam <- lam * sqrt(n)
-  xx <- t(t(scores[, choices])/lam)
+  xx <- t(t(scores[, choices, drop=FALSE])/lam)
   if(!missing(offset)) {
       offsetMean <- colMeans(xx[offset,,drop=FALSE])
       xxOffset <- matrix(rep(offsetMean, nrow(xx)), ncol=ncol(xx), byrow=T)
@@ -83,10 +90,12 @@ pcaScores <- function(x, choices=c(1,2), offset, reverse=c(FALSE, FALSE)) {
     if(reverse[i])
       xx[,i] <- -xx[,i]
   }
-  res <- PCAScoreMatrix(xx, expvar=expVar(x, choices))
+  res <- PCAScoreMatrix(xx, expVar=expVar(x, choices))
   return(res)
 }
 
+#' S3 method plotPCA
+plotPCA <- function(x, choices, ...) UseMethod("plotPCA")
 
 plotPCA.prcomp <- function(x,
                            choices=c(1,2),
@@ -98,22 +107,22 @@ plotPCA.prcomp <- function(x,
                            xlab=NULL, ylab=NULL,
                            offset,main=NULL, reverse=c(FALSE, FALSE), ...) {
     
-    xx <- pcaScores(x, choices=choices,offset=offset, reverse=reverse)
+    scores <- pcaScores(x, choices=choices,offset=offset, reverse=reverse)
+    scoreMat <- as.matrix(scores)
     
     xind <- choices[1]
     yind <- choices[2]
     
-    rangx1 <- range(xx[, 1])
-    rangx2 <- range(xx[, 2])
+    rangx1 <- range(scoreMat[, 1])
+    rangx2 <- range(scoreMat[, 2])
     if(missing(xlim)) xlim <- rangx1
     if(missing(ylim)) ylim <- rangx2
     
-    expvar <- x$sdev^2/sum(x$sdev^2)
     if(is.null(xlab))
-        xlab <- sprintf("Principal component %d (%2.1f%%)", xind, expvar[xind]*100)
+      xlab <- expVarLabel(scores, choices=xind)
     if(is.null(ylab))
-        ylab <- sprintf("Principal component %d (%2.1f%%)", yind, expvar[yind]*100)
-    
+      ylab <- expVarLabel(scores, choices=yind)
+
     ## process text first because it may require adjusting xlim automatically
     plot.new()
     doText <- !is.null(text) && !(is.logical(text) && !text)
@@ -147,16 +156,16 @@ plotPCA.prcomp <- function(x,
             text.xpd <- nonNull(text$xpd,text.xpd, defaultNULL.ok=TRUE)
         }
         if (is.null(labels)) {
-            labels <- dimnames(xx)[[1L]]
+            labels <- dimnames(scoreMat)[[1L]]
             if (is.null(labels)) 
-                labels <- 1L:nrow(xx)
+                labels <- 1L:nrow(scoreMat)
         }
         labels <- as.character(labels)
         
         labelWidth <- strwidth(labels, units="user", cex=text.cex,
                                font=text.font, vfont=text.vfont, family=text.family)
-        isRightMost <- which.max(xx[,1]+labelWidth)
-        isLeftMost <- which.min(xx[,1]-labelWidth)
+        isRightMost <- which.max(scoreMat[,1]+labelWidth)
+        isLeftMost <- which.min(scoreMat[,1]-labelWidth)
         rightMostWidth <- labelWidth[isRightMost]
         leftMostWidth <- labelWidth[isLeftMost]
         singleCharWidth <- strwidth("M")
@@ -186,7 +195,7 @@ plotPCA.prcomp <- function(x,
         }
     }
     
-    ##plot(xx, type = "n", xlim = xlim, ylim = ylim, xlab=xlab, ylab=ylab, ...)
+    ##plot(scoreMat, type = "n", xlim = xlim, ylim = ylim, xlab=xlab, ylab=ylab, ...)
     plot.window(xlim=xlim, ylim=ylim,...)
     title(xlab=xlab, ylab=ylab, main=main)
     axis(1)
@@ -216,16 +225,16 @@ plotPCA.prcomp <- function(x,
             pts.lty <- nonNull(points$lty,pts.lty)
             pts.order <- nonNull(points$order, pts.order)
         }
-        pts.pch <- rep(pts.pch, length.out=nrow(xx))
-        pts.col <- rep(pts.col, length.out=nrow(xx))
-        pts.cex <- rep(pts.cex, length.out=nrow(xx))
-        pts.bg <- rep(pts.bg, length.out=nrow(xx))
-        pts.lwd <- rep(pts.lwd, length.out=nrow(xx))
-        pts.lty <- rep(pts.lty, length.out=nrow(xx))
+        pts.pch <- rep(pts.pch, length.out=nrow(scoreMat))
+        pts.col <- rep(pts.col, length.out=nrow(scoreMat))
+        pts.cex <- rep(pts.cex, length.out=nrow(scoreMat))
+        pts.bg <- rep(pts.bg, length.out=nrow(scoreMat))
+        pts.lwd <- rep(pts.lwd, length.out=nrow(scoreMat))
+        pts.lty <- rep(pts.lty, length.out=nrow(scoreMat))
         uord <- sort(unique(pts.order), decreasing=FALSE)
         for(currOrd in uord) {
             isCurrOrd <- pts.order == currOrd
-            points(xx[isCurrOrd,],
+            points(scoreMat[isCurrOrd,],
                    pch=pts.pch[isCurrOrd],
                    col=pts.col[isCurrOrd],
                    cex=pts.cex[isCurrOrd],
@@ -245,7 +254,7 @@ plotPCA.prcomp <- function(x,
         arrows.length <- 0.1
         arrows.angle <- 30
         
-        nout <- nrow(xx)
+        nout <- nrow(scoreMat)
         
         arrows.col <- nonNull(arrows$col, arrows.col, nout)
         arrows.lwd <- nonNull(arrows$lwd, arrows.lwd, nout)
@@ -254,23 +263,21 @@ plotPCA.prcomp <- function(x,
         arrows.length <- nonNull(arrows$length, arrows.length, nout)
         arrows.angle <- nonNull(arrows$angle, arrows.angle, nout)
         
-        for(i in seq(along=1:nrow(xx))) {
-            arrows(0, 0, xx[i,1]*0.95, xx[i,2]*0.95,
+        for(i in seq(along=1:nrow(scoreMat))) {
+            arrows(0, 0, scoreMat[i,1]*0.95, scoreMat[i,2]*0.95,
                    col=arrows.col[i], lwd=arrows.lwd[i], lty=arrows.lty[i],
                    code=arrows.code[i], length=arrows.length[i], angle=arrows.angle[i])
         }
     }
     
     if(doText) {
-        text(xx, labels, col = text.col, cex = text.cex, font = text.font, 
+        text(scoreMat, labels, col = text.col, cex = text.cex, font = text.font, 
              adj = text.adj, pos = text.pos, offset = text.offset, 
              vfont = text.vfont, srt = text.srt, family = text.family, 
              xpd = text.xpd)
     }
-    return(invisible(as.data.frame(xx)))
+    return(invisible(as.data.frame(scoreMat)))
 }
-
-plotPCA <- plotPCA.prcomp
 
 plotPCAloading <- function(loadings, x=1L, y=2L, circle=FALSE, title="", subtitle="",...) {
   plot(loadings[,x],loadings[,y],

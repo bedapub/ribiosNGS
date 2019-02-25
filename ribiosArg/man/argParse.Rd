@@ -5,7 +5,8 @@
 \alias{argIsInit}
 \title{Parser of command-line parameters in BIOS style}
 \usage{
-argParse(optargs, reqargs, usage = paste(scriptName(), "-h"), strict = TRUE)
+argParse(optargs, reqargs, usage = paste(scriptName(), "-h"),
+  strict = TRUE)
 }
 \arguments{
 \item{optargs}{String describing optional arguments. Syntax: \code{<optname1>[,paramcnt1] <optname2>[,paramcnt2]\dots}. Example: \dQuote{verbose outfile,1} means the command line has the syntax \code{prog [-verbose] [outfile name]}. It can be an empty string to express \dQuote{no options}. The value for \code{paramcnt} is 0.}

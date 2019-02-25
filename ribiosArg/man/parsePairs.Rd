@@ -4,8 +4,8 @@
 \alias{parsePairs}
 \title{Parse key-value pairs from a character string}
 \usage{
-parsePairs(str, collapse = ",", sep = "=", colnames = c("key", "value"),
-  trim = TRUE, ...)
+parsePairs(str, collapse = ",", sep = "=", colnames = c("key",
+  "value"), trim = TRUE, ...)
 }
 \arguments{
 \item{str}{Character string}

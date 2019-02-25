@@ -25,6 +25,23 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
+Collate:
+    AllClasses.R
+    AllMethods.R
+    utils.R
+    robustdist.R
+    p2asterisk.R
+    ellipse.R
+    colors.R
+    hist.R
+    jitter.xyplot.R
+    compactTrellis.R
+    cascadePlot.R
+    biosHeatmap.R
+    PCAScoreMatrix.R
+    expVar.R
+    pcaPlots.R
+    plotVenn.R
 Enhances: Vennerable
 License: GPL-3
 LazyLoad: yes

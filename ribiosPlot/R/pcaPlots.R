@@ -53,7 +53,6 @@ pcaScores <- function(x, choices, offset, reverse=c(FALSE, FALSE)) {
     if(reverse[i])
       xx[,i] <- -xx[,i]
   }
-  browser()
   res <- PCAScoreMatrix(xx, expVar=expVar(x, choices))
   return(res)
 }

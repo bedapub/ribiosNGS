@@ -31,7 +31,7 @@ build: roxygenise doVignettes
 
 install: roxygenise doVignettes
 	@echo '====== Installing Package ======'
-	@(${R} -q -e "library(devtools); devtools::install(upgrade_dependencies=FALSE)")
+	@(${R} -q -e "library(devtools); devtools::install(reload=FALSE, quick=FALSE, build=TRUE, upgrade=FALSE)")
 	@echo '====== Installing finished ======'
 	@echo ' '
 

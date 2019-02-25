@@ -157,6 +157,12 @@ export(isGeMSReachable,
        removeFromGeMS,
        getUserSetsFromGeMS)
 
+## Fisher's method
+S3method(print, FishersMethodResult)
+export(fishersMethod)
+
+export(getPvalCol, getFDRCol)
+
 ## util
 export(ronetGeneSetCategory)
 export(readRonetGmt)

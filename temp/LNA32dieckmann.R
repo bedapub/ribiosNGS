@@ -1,42 +1,3 @@
-#' Fisher's method to combine multiple p-values
-#' @param p Numeric vector, p values to be combined
-#' @param returnValidP Logical, whether the valid p-values used should be returned as part of the list
-#' @return A list of following elements
-#' \enumerate{
-#' \item chisq: Chi-square statistic
-#' \item df: Degree of freedom (which is twice the count of the valid p-values used for calculation)
-#' \item p: p-value
-#' \item validp (optional): valid p-values used for the calculation
-#' }
-#' The function returns the combined p-value using the sum of logs (Fisher's) method
-#' \note The function was adapted from metap::sumlog
-#' 
-#' \examples
-#' ps <- c(0.05, 0.75)
-#' fishersMethod(ps)
-fishersMethod <- function(p, returnValidp=FALSE) {
-  keep <- !is.na(p) & p>0 & p<=1
-  if(!all(keep)) {
-    warning("P-values outside (0,1] omitted")
-  }
-  lnp <- log(p[keep])
-  chisq <- (-2) * sum(lnp)
-  df <- 2 * length(lnp)
-  if (sum(keep) == 1) {
-    warning("Only one p-value provided. The original p value is returned.")
-    res <- list(chisq=chisq, df=df,
-                p=p[keep])
-  } else if (!any(keep)) {
-    res <- list(chisq=NA, df=NA, p=NA)  
-  } else {
-    res <- list(chisq = chisq, df = df, 
-                p = pchisq(chisq, df, lower.tail = FALSE))
-  }
-  if(returnValidp)
-    res$validp <- p[keep]
-  return(res)
-}
-
 posNegCountByZscoreFDR <- function(topTbl, fdrCol=NULL, 
                                    thr.logFC.zscore.qnorm=c(0.90, 0.95, 0.99),
                                    thr.fdr=c(0.01, 0.05, 0.10)) {
@@ -80,20 +41,6 @@ posNegCountByZscoreFDR <- function(topTbl, fdrCol=NULL,
   return(df)
 }
 
-getPvalCol <- function(colnames) {
-  lcns <- tolower(gsub("[[:punct:]]", "", colnames))
-  pvalInd <- grepl("^p", lcns) & !grepl("adj", lcns)
-  if(sum(pvalInd)==0)
-    return(NA)
-  return(colnames[pvalInd])
-}
-getFDRCol <- function(colnames) {
-  lcns <- tolower(gsub("[[:punct:]]", "", colnames))
-  fdrInd <- grepl("adj", lcns) | grepl("fdr", lcns)
-  if(sum(fdrInd)==0)
-    return(NA)
-  return(colnames[fdrInd])
-}
 fishersMethodByList <- function(namedP, list) {
   stopifnot(!is.null(names(list)))
   resList <- lapply(list, function(x) {
@@ -114,6 +61,14 @@ getPvec <- function(tbl, pCol, idCol) {
   names(pvec) <- tbl[,idCol]
   return(pvec)
 }
+
+#' Use Fisher's method to combine single-gene P-values into gene-set P-values
+#' 
+#' @param topTbl A S3 \code{topTable} object, in essence a \code{data.frame}
+#' @param list A list of genes
+#' @param idCol Column of identifiers to match
+#' @param logFCCol Column name of the logFC
+#' @param pCol Column name of the p-values
 fishersMethodForTopTbl <- function(topTbl, list, 
                                    idCol="ensembl_gene_id", logFCCol="logFC",
                                    pCol=NULL) {

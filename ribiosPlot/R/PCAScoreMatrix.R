@@ -38,6 +38,28 @@ as.matrix.PCAScoreMatrix <- function(x, ...) {
   return(x)
 }
 
+#' Coerece a PCAScoreMatrix into data.frame
+#' 
+#' @param x A \code{PCAScoreMatrix} S3 object.
+#' @param row.names See \code{as.data.frame}.
+#' @param optional See \code{as.data.frame}.
+#' @param ... See \code{as.data.frame}
+#' 
+#' @return A data.frame consisting of the score matrix
+#' 
+#' @seealso \code{\link{as.data.frame}}
+#' @examples
+#' myPCmat <- PCAScoreMatrix(matrix(rnorm(15),ncol=3), c(0.25, 0.15, 0.1))
+#' as.matrix(myPCmat)
+as.data.frame.PCAScoreMatrix <- function(x,
+                                         row.names=NULL,
+                                         optional=FALSE,
+                                         ...) {
+  res <- as.data.frame(as.matrix(x), 
+                       row.names=row.names, optional=optional, ...)
+  return(res)
+}
+
 
 #' Print PCAScoreMatrix
 #' @param x A \code{PCAScoreMatrix} S3-object

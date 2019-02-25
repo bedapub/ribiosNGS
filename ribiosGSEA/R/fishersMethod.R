@@ -1,4 +1,5 @@
-print.FishersMethodResult <- function(x) {
+#' Print S3 object FishersMethodResult
+print.FishersMethodResult <- function(x, ...) {
   cat("Combined P by Fisher's Method:\n")
   cat(sprintf("p=%g\n", x$p))
   cat(sprintf("Chisq=%g, df=%d\n", x$chisq, x$df))

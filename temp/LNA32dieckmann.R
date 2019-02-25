@@ -69,6 +69,9 @@ getPvec <- function(tbl, pCol, idCol) {
 #' @param idCol Column of identifiers to match
 #' @param logFCCol Column name of the logFC
 #' @param pCol Column name of the p-values
+#' 
+#' Note that the method as it is now reports a lot of false positives, because
+#' large gene-sets will have very low p-value. A permutation-based test is needed.
 fishersMethodForTopTbl <- function(topTbl, list, 
                                    idCol="ensembl_gene_id", logFCCol="logFC",
                                    pCol=NULL) {

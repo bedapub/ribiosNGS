@@ -371,7 +371,7 @@ subsetByColumnName <- function(data.frame, reqCols, ignore.case=FALSE) {
 #' @export isVarCol
 isVarCol <- function(df) return(apply(df, 2L, ulen) > 1)
 
-#' @exportInvarCol
+#' @export isInvarCol
 isInvarCol <- function(df) !isVarCol(df)
 
 

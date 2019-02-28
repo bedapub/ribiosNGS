@@ -98,10 +98,12 @@ export(identicalMatrixValue, identicalMatrix)
 
 export(pScore)
 
-export(jaccardIndex, pairwiseJaccardIndex,
+export(jaccardIndex, 
+       pairwiseDist, pairwiseJaccardIndex,
        jaccardDistance, pairwiseJaccardDistance,
        cumJaccardIndex, cumJaccardDistance,
        overlapCoefficient, overlapDistance,
+       pairwiseOverlapCoefficient, pairwiseOverlapDistance,
        cumOverlapCoefficient, cumOverlapDistance)
 
 export(whoami)

@@ -1,12 +1,17 @@
 #' Check dimensionality of design matrix
-#'
+#' 
+#' 
 #' @param nsample Integer, number of samples
 #' @param design Design matrix
-#' @return Side effect is used: the function stops if sample size does not equal ncol(matrix)
+#' @return Side effect is used: the function stops if sample size does not
+#' equal ncol(matrix)
 #' @examples
+#' 
 #' nsample <- 4
 #' design <- matrix(1:20, ncol=5)
 #' assertDesign(nsample, design)
+#' 
+#' @export assertDesign
 assertDesign <- function(nsample, design) {
   if(!is.numeric(nsample) | length(nsample)!=1)
     stop('nsample must be an integer representing the sample size')
@@ -16,15 +21,19 @@ assertDesign <- function(nsample, design) {
 }
 
 #' Check dimensionality of contrast matrix
-#'
+#' 
+#' 
 #' @param design Design matrix
 #' @param contrast Contrast matrix
-#' @return Side effect is used: the function stops if the ncol(design) does not equal nrow(contrast)
+#' @return Side effect is used: the function stops if the ncol(design) does not
+#' equal nrow(contrast)
 #' @examples
+#' 
 #' design <- matrix(1:20, ncol=5)
 #' contrast <- matrix(c(-1,1,0,0,0, 0,1,0,-1,0), nrow=5)
 #' assertContrast(design, contrast)
-
+#' 
+#' @export assertContrast
 assertContrast <- function(design, contrast) {
   if(ncol(design)!=nrow(contrast))
     stop("Number of rows of the contrast matrix (",
@@ -33,18 +42,21 @@ assertContrast <- function(design, contrast) {
 }
 
 #' Check dimensionality of both design and contrast matrix
-#'
+#' 
 #' @param nsample Integer, number of samples
 #' @param design Design matrix
 #' @param contrast Contrast matrix
-#' @return Side effect is used: the function stops if there are errors in the dimensionalities
+#' @return Side effect is used: the function stops if there are errors in the
+#' dimensionalities
 #' @seealso \code{\link{assertDesign}}, \code{\link{assertContrast}}
 #' @examples
+#' 
 #' nsample <- 4
 #' design <- matrix(1:20, ncol=5)
 #' contrast <- matrix(c(-1,1,0,0,0, 0,1,0,-1,0), nrow=5)
 #' assertDesignContrast(nsample, design, contrast)
-
+#' 
+#' @export assertDesignContrast
 assertDesignContrast <- function(nsample, design, contrast) {
   assertDesign(nsample, design)
   assertContrast(design, contrast)

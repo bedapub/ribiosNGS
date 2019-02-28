@@ -1,3 +1,33 @@
+#' Multiple identical
+#' 
+#' Testing whether multiple objects are identical
+#' 
+#' \code{midentical} extends \code{identical} to test multiple objects instead
+#' of only two.
+#' 
+#' @param \dots Objects to be tested, or a list of them
+#' @param num.eq,single.NA,attrib.as.set,ignore.bytecode, See
+#' \code{\link{identical}}
+#' @param ignore.environment,ignore.srcref See \code{\link{identical}}
+#' @return A logical value, \code{TRUE} if all objects are identical
+#' @author Jitao David Zhang <jitao_david.zhang@@roche.com>
+#' @seealso \code{identical}
+#' @examples
+#' 
+#' set1 <- "HSV"
+#' set2 <- set3 <- set4 <- c("HSV", "FCB")
+#' 
+#' midentical(set1, set2)
+#' midentical(list(set1, set2))
+#' 
+#' midentical(set2, set3, set4)
+#' midentical(list(set2, set3, set4))
+#' 
+#' ## other options passed to identical
+#' midentical(0, -0, +0, num.eq=FALSE)
+#' midentical(0, -0, +0, num.eq=TRUE)
+#' 
+#' @export midentical
 midentical <- function(..., num.eq=TRUE, single.NA=TRUE, 
                        attrib.as.set=TRUE,
                        ignore.bytecode=TRUE, 

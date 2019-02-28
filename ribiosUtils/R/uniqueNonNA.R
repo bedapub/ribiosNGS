@@ -1,9 +1,14 @@
 #' Make a vector free of NA and unique
+#' 
+#' 
 #' @param x A vector
 #' @return A unique vector without NA
-#' @examples 
+#' @examples
+#' 
 #' testVec <- c(3,4,5,NA,3,5)
 #' uniqueNonNA(testVec)
+#' 
+#' @export uniqueNonNA
 uniqueNonNA <- function(x) {
   x <- x[!is.na(x)]
   res <- unique(x)

@@ -138,7 +138,7 @@ replaceByMatch <- function(vector, old.items, new.items) {
 #' Replace column names in data.frame
 #' 
 #' 
-#' @aliases replaceColumnName replaceColumnNames
+#' @aliases replaceColumnName
 #' @param data.frame A data.frame
 #' @param old.names Old column names to be replaced
 #' @param new.names New column names
@@ -157,14 +157,6 @@ replaceColumnName <- function(data.frame, old.names, new.names) {
   colnames(data.frame) <- new.col.names
   return(data.frame)
 }
-replaceColumnNames <- function(...) {
-    .Deprecated("replaceColumnName",
-                package="ribiosUtils")
-    replaceColumnName(...)
-}
-      
-
-
 
 
 #' Sort data.frame rows by values in specified columns
@@ -282,14 +274,6 @@ dfFactor <- function(df, sample.group) {
   return(fac)
 }
 
-## match column names
-
-
-
-
-
-#' Match a given vector to column names of a data.frame or matrix
-#' 
 #' Match a given vector to column names of a data.frame or matrix
 #' 
 #' 
@@ -322,12 +306,6 @@ matchColumnName <- function(data.frame.cols, reqCols, ignore.case=FALSE) {
     return(res)
 }
 
-
-
-
-
-#' Assert whether the required column names exist
-#' 
 #' Assert whether the required column names exist
 #' 
 #' The function calls \code{\link{matchColumnName}} internally to match the
@@ -361,12 +339,6 @@ assertColumnName <- function(data.frame.cols, reqCols, ignore.case=FALSE) {
     return(invisible(matchRes))
 }
 
-
-
-
-
-#' Subset a data.frame by column name, allowing differences in cases
-#' 
 #' Subset a data.frame by column name, allowing differences in cases
 #' 
 #' The function calls \code{\link{assertColumnName}} internally to match the
@@ -396,10 +368,11 @@ subsetByColumnName <- function(data.frame, reqCols, ignore.case=FALSE) {
 }
 
 ## variable columns
+#' @export isVarCol
 isVarCol <- function(df) return(apply(df, 2L, ulen) > 1)
+
+#' @exportInvarCol
 isInvarCol <- function(df) !isVarCol(df)
-
-
 
 
 #' Remove invariable columns from a data frame or matrix
@@ -430,12 +403,6 @@ isInvarCol <- function(df) !isVarCol(df)
 #' @export removeInvarCol
 removeInvarCol <- function(df) df[,isVarCol(df), drop=FALSE]
 
-
-
-
-
-#' Transform a list of character strings into a data.frame
-#' 
 #' Transform a list of character strings into a data.frame
 #' 
 #' 

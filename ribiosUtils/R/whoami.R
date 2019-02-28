@@ -1,6 +1,10 @@
 #' System user name
+#' 
+#' 
 #' @return System user name
-#' @examples 
+#' @examples
+#' 
 #' whoami()
-#' @export
+#' 
+#' @export whoami
 whoami <- function() return(unname(Sys.info()["user"]))

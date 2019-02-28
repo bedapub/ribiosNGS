@@ -1,4 +1,17 @@
 setGeneric("rowscale", function(object, center, scale) standardGeneric("rowscale"))
+#' Row scale
+#' 
+#' Scaling by row (the \code{scale} function scales by column by default)
+#' 
+#' 
+#' @name rowscale-methods
+#' @aliases rowscale-methods rowscale,matrix-method
+#' @docType methods
+#' @section Methods: \describe{
+#' 
+#' \item{list("signature(object = \"matrix\")")}{Scale a matrix by row} }
+#' @keywords methods
+NULL
 
 #' Scale a matrix by row
 #' 

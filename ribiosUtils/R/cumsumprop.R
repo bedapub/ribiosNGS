@@ -1,8 +1,5 @@
 #' Proportion of cumulative sum over sum
 #' 
-#' Proportion of cumulative sum over sum
-#' 
-#' 
 #' @param x Numeric vector
 #' @return the proportion cumulative sum over sum
 #' @examples
@@ -13,14 +10,7 @@
 #' @export cumsumprop
 cumsumprop <- function(x) cumsum(x)/sum(x)
 
-
-
-
-
 #' Sort a numeric vector and filter by a threshold of cumsumprop
-#' 
-#' Sort a numeric vector and filter by a threshold of cumsumprop
-#' 
 #' 
 #' @param x Numeric vector, usually named
 #' @param thr Threshold, default 0.9, meaning that items whose proportion of
@@ -46,14 +36,6 @@ sortAndFilterByCumsumprop <- function(x, thr=.9) {
   return(res)
 }
 
-
-
-
-
-
-#' Merge infrequent levels by setting the threshold of the proportion of
-#' cumulative sum over sum a.k.a. cumsumprop
-#' 
 #' Merge infrequent levels by setting the threshold of the proportion of
 #' cumulative sum over sum a.k.a. cumsumprop
 #' 

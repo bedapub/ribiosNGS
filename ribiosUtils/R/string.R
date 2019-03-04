@@ -115,8 +115,8 @@ shortenStr <- function(str, nchar=8) {
 #' 
 #' @param str A vector of strings
 #' @param nchar The fixed with
-#' 
-#' Strings with more or less characters than \code{nchar} are either shortened
+#' @param align Character, how to align
+#' Strings with more or fewer characters than \code{nchar} are either shortened
 #' or filled (with spaces)
 #' @note \code{NA} will be converted to characters and the same fixed width
 #' will be applied. The behavior is different from \code{\link{shortenStr}},

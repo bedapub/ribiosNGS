@@ -1,3 +1,6 @@
+#' Get default font family
+#' @return Character string, the default font family
+#' @importFrom grDevices postscriptFonts
 #' @export getDefaultFontFamily
 getDefaultFontFamily <- function() {
   psFonts <- names(postscriptFonts())
@@ -68,6 +71,7 @@ getDefaultFontFamily <- function() {
 #'   closeFileDevice()
 #' }
 #' 
+#' @importFrom grDevices pdf png tiff bmp jpeg
 #' @export openFileDevice
 openFileDevice <- function(filename, width=7, height=7, dpi=300L, family) {
   filetype <- extname(filename)
@@ -87,6 +91,7 @@ openFileDevice <- function(filename, width=7, height=7, dpi=300L, family) {
   }
 }
 
+#' @importFrom grDevices dev.off
 #' @export closeFileDevice
 closeFileDevice <- function() {
   invisible(dev.off())

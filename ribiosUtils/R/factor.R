@@ -105,6 +105,7 @@ relevelsByNamedVec <- function(x, refs,
 #' ## TODO: test warning and error
 #' 
 #' 
+#' @importFrom stats relevel
 #' @export relevelsByNotNamedVec
 relevelsByNotNamedVec <- function(x, refs, 
                                   missingLevels=c("pass", "warning", "error"), 

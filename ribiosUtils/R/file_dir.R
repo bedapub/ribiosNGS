@@ -32,10 +32,15 @@ isDir <- function(...) {
   na.false(file.info(x)$isdir)
 }
 
+#' @export checkDir
+#' @rdname isDir
 checkDir <- function(...) {
   x <- unlist(list(...))
   all(isDir(...))
 }
+
+#' @export assertDir
+#' @rdname isDir
 assertDir <- function(...) {
   haltifnot(checkDir(...),
             msg="Not all directories exist\n")
@@ -97,6 +102,9 @@ checkFile <- function(...) {
   x <- unlist(list(...))
   all(file.exists(x))
 }
+
+#' @rdname checkFile
+#' @export assertFile
 assertFile <- function(...) {
   af <- checkFile(...)
   if(af) return(invisible(TRUE))

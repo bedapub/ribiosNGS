@@ -28,13 +28,16 @@ pwdecode <- function(password) {
   }
   num <- strsplit(password, "\\\\")[[1]][-1]
   x <- as.raw(strtoi(num, base=8L))
-  .Call("pwdecode",x)
+  .Call(C_pwdecode,x, PACKAGE="ribiosUtils")
 }
 
+#' Encode a password
+#' @param label label used to encode the password
+#' @param key password key
 #' @export pwencode
 pwencode <- function(label="VAR", key) {
   if(missing(key))
     stop("'key' must not be missing")
-  res <- system(sprintf("/apps/bi/bin/pwencode %s %s", label, key), intern=TRUE)
-  browser()
+  res <- system(sprintf("/pstore/apps/bioinfo/bin/pwencode %s %s", label, key), intern=TRUE)
+  return(res)
 }

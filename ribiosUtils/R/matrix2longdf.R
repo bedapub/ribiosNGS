@@ -67,6 +67,7 @@ matrix2longdf <- function(mat,
 #' contains row names?
 #' @param column.col Character or integer, which column contains column names?
 #' @param value.col Character or integer, which column contains matrix values?
+#' @param missingValue Values assigned in case of missing data
 #' @return A 2D matrix equivalent to the long-format data frame
 #' @author Jitao David Zhang <jitao_david.zhang@@roche.com>
 #' @seealso \code{matrix2longdf}

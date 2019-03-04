@@ -25,6 +25,7 @@
 #' libordie(base, minVer="2.15-1")
 #' }
 #' 
+#' @importFrom utils installed.packages packageDescription
 #' @export libordie
 libordie <- function(package,
                      minVer,

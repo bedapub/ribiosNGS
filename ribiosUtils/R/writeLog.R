@@ -7,9 +7,12 @@
 
 RIBIOS_LOGGERS <- NULL
 
+#' @importFrom utils getFromNamespace
 getLoggers <- function() {
   return(getFromNamespace("RIBIOS_LOGGERS", ns="ribiosUtils"))
 }
+
+#' @importFrom utils assignInNamespace
 setLoggers <- function(loggers) {
   assignInNamespace("RIBIOS_LOGGERS", loggers, ns="ribiosUtils")
 }
@@ -127,6 +130,7 @@ flushLog <- function() {
 #' cat(txt1)
 #' cat(txt2)
 #' 
+#' @importFrom methods is
 #' @export registerLog
 registerLog <- function(..., append=FALSE) {
   x <- list(...)

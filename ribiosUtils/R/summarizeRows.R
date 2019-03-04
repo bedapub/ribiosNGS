@@ -72,7 +72,7 @@ apply1 <- function(x, fun=mean, ...) {
 }
 
 
-#' @export summarizColumns
+#' @export summarizeColumns
 summarizeColumns <- function(matrix,
                              factor,
                              fun=mean, ...) {
@@ -86,4 +86,5 @@ summarizeColumns <- function(matrix,
   return(mat.fun)
 }
 
+#' @export summarizeCols
 summarizeCols <- summarizeColumns

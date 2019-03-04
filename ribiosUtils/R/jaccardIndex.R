@@ -1,8 +1,5 @@
 #' Calculate the Jaccard Index between two vectors
 #' 
-#' Calculate the Jaccard Index between two vectors
-#' 
-#' 
 #' @aliases jaccardIndex jaccardDistance
 #' @param x A vector
 #' @param y A vector
@@ -25,6 +22,7 @@
 jaccardIndex <- function(x,y) length(intersect(x,y))/length(union(x,y))
 
 #' @rdname jaccardIndex
+#' @export jaccardDistance
 jaccardDistance <- function(x,y) {
   return(1 - jaccardIndex(x, y))
 }
@@ -50,6 +48,7 @@ jaccardDistance <- function(x,y) {
 #' ## despite of the name, any function that returns a number can work
 #' pairwiseDist(myList, fun=jaccardDistance)
 #' 
+#' @export pairwiseDist
 pairwiseDist <- function(list, fun=jaccardIndex) {
   len <- length(list)
   res <- matrix(0, len, len)
@@ -71,9 +70,6 @@ pairwiseDist <- function(list, fun=jaccardIndex) {
 
 
 #' Calculate pairwise Jaccard Indices between each pair of items in a list
-#' 
-#' Calculate pairwise Jaccard Indices between each pair of items in a list
-#' 
 #' 
 #' @aliases pairwiseJaccardIndex pairwiseJaccardDistance
 #' @param list A list
@@ -97,16 +93,11 @@ pairwiseJaccardIndex <- function(list) {
 }
 
 #' @rdname pairwiseJaccardIndex
+#' @export pairwiseJaccardDistance
 pairwiseJaccardDistance <- function(list) {
   return(pairwiseDist(list, fun=jaccardDistance))
 }
 
-
-
-
-
-#' Cumulative Jaccard Index
-#' 
 #' Cumulative Jaccard Index
 #' 
 #' 
@@ -145,17 +136,12 @@ cumJaccardIndex <- function(list) {
 }
 
 #' @rdname cumJaccardIndex
+#' @export cumJaccardDistance
 cumJaccardDistance <- function(list) {
   res <- 1 - cumJaccardIndex(list)
   return(res)
 }
 
-
-
-
-
-#' Overlap coefficient, also known as Szymkiewicz-Simpson coefficient
-#' 
 #' Overlap coefficient, also known as Szymkiewicz-Simpson coefficient
 #' 
 #' 
@@ -193,6 +179,7 @@ overlapCoefficient <- function(x,y, checkUniqueNonNA=FALSE) {
   return(res)
 }
 
+#' @export overlapDistance
 #' @rdname overlapCoefficient
 overlapDistance <- function(x,y, checkUniqueNonNA=FALSE) {
   return(1 - overlapCoefficient(x, y, checkUniqueNonNA = checkUniqueNonNA))
@@ -202,8 +189,6 @@ overlapDistance <- function(x,y, checkUniqueNonNA=FALSE) {
 
 
 
-#' Calculate pairwise overlap coefficients between each pair of items in a list
-#' 
 #' Calculate pairwise overlap coefficients between each pair of items in a list
 #' 
 #' 
@@ -224,22 +209,17 @@ overlapDistance <- function(x,y, checkUniqueNonNA=FALSE) {
 #' }
 #' stopifnot(identical(pairwiseOverlapCoefficient(myList), poormanPOC(myList)))
 #' 
+#' @export pairwiseOverlapDistance
 pairwiseOverlapDistance <- function(list) {
   return(pairwiseDist(list, fun=overlapDistance))
 }
 
 #' @rdname pairwiseOverlapDistance
+#' @export pairwiseOverlapCoefficient
 pairwiseOverlapCoefficient <- function(list) {
   return(pairwiseDist(list, fun=overlapCoefficient))
 }
 
-
-
-
-
-
-#' Cumulative overlap coefficient
-#' 
 #' Cumulative overlap coefficient
 #' 
 #' 
@@ -286,6 +266,7 @@ cumOverlapCoefficient <- function(list) {
 }
 
 #' @rdname cumOverlapCoefficient
+#' @export cumOverlapDistance
 cumOverlapDistance <- function(list) {
   res <- 1 - cumOverlapCoefficient(list)
   return(res)

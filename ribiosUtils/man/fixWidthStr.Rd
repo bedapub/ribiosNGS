@@ -9,20 +9,26 @@ fixWidthStr(str, nchar = 8, align = c("left", "right"))
 \arguments{
 \item{str}{A vector of strings}
 
-\item{nchar}{The fixed with
+\item{nchar}{The fixed with}
 
-Strings with more or less characters than \code{nchar} are either shortened or filled (with spaces)}
+\item{align}{Character, how to align
+Strings with more or fewer characters than \code{nchar} are either shortened
+or filled (with spaces)}
 }
 \description{
 Shorten strings to strings with a fix width of characters
 }
 \note{
-\code{NA} will be converted to characters and the same fixed width will be applied. The behavior is different from \code{\link{shortenStr}}, where \code{NA} is kept as it is.
+\code{NA} will be converted to characters and the same fixed width
+will be applied. The behavior is different from \code{\link{shortenStr}},
+where \code{NA} is kept as it is.
 }
 \examples{
+
 inputStrs <- c("abc", "abcd", "abcde", "abcdefg", "NA", NA) 
 outputStrs <- fixWidthStr(inputStrs, nchar=4)
 stopifnot(all(nchar(outputStrs)==4))
+
 }
 \seealso{
 \code{\link{shortenStr}}

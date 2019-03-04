@@ -2,7 +2,7 @@
 % Please edit documentation in R/factor.R
 \name{relevels}
 \alias{relevels}
-\title{Relevel a factor by a named or unnamed vector}
+\title{Relevel a factor by a named or unnamed vector.}
 \usage{
 relevels(x, refs, missingLevels = c("pass", "warning", "error"),
   unrecognisedLevels = c("warning", "pass", "error"))
@@ -12,17 +12,18 @@ relevels(x, refs, missingLevels = c("pass", "warning", "error"),
 
 \item{refs}{A named vector or unnamed vector.}
 
-\item{missingLevels}{Actions taken in case existing levels are missing: 'pass', 'warning', or 'error'.}
+\item{missingLevels}{Actions taken in case existing levels are missing:
+'pass', 'warning', or 'error'.}
 
-\item{unrecognisedLevels}{Actions taken in case unrecognised levels are found: 'pass', 'warning', or 'error'.}
+\item{unrecognisedLevels}{Actions taken in case unrecognised levels are
+found: 'pass', 'warning', or 'error'.}
 }
 \description{
-Relevel a factor by a named or unnamed vector.
-}
-\details{
-This function wraps \code{\link{relevelsByNamedVec}} for named vector and \code{\link{relevelsByNotNamedVec}} for not named vectors
+This function wraps \code{\link{relevelsByNamedVec}} for named vector and
+\code{\link{relevelsByNotNamedVec}} for not named vectors
 }
 \examples{
+
 oldFactor <- factor(c("A", "B", "A", "C", "B"), levels=LETTERS[1:3])
 refLevels <- c("B", "C", "A")
 refDict <- c("A"="a", "B"="b", "C"="c")
@@ -34,7 +35,9 @@ stopifnot(identical(newFactor2, factor(c("a", "b", "a", "c", "b"), levels=c("a",
 try(relevels(oldFactor, c("A", "B", "C", "D"),  unrecognisedLevels="error"))
 try(relevels(oldFactor, c("A", "B"), missingLevels="error"))
 }
+
 }
 \seealso{
-\code{\link{relevelsByNamedVec}} and \code{\link{relevelsByNotNamedVec}}
+\code{\link{relevelsByNamedVec}} and
+\code{\link{relevelsByNotNamedVec}}
 }

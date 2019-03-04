@@ -16,6 +16,8 @@ the proportion cumulative sum over sum
 Proportion of cumulative sum over sum
 }
 \examples{
+
 x <- 1:4
 cumsumprop(x) ## 0.1, 0.3, 0.6, 1
+
 }

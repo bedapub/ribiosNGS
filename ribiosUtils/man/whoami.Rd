@@ -13,5 +13,7 @@ System user name
 System user name
 }
 \examples{
+
 whoami()
+
 }

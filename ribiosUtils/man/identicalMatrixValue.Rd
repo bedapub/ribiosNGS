@@ -2,7 +2,8 @@
 % Please edit documentation in R/identicalMatrix.R
 \name{identicalMatrixValue}
 \alias{identicalMatrixValue}
-\title{Test whether two matrices have the same numerica values given certain accuracy}
+\title{Test whether two matrices have the same numerica values given certain
+accuracy}
 \usage{
 identicalMatrixValue(x, y, epsilon = 1e-12)
 }
@@ -11,15 +12,18 @@ identicalMatrixValue(x, y, epsilon = 1e-12)
 
 \item{y}{another matrix}
 
-\item{epsilon}{accuracy threshold: absolute differences below this threshold is ignored}
+\item{epsilon}{accuracy threshold: absolute differences below this threshold
+is ignored}
 }
 \value{
 Logical
 }
 \description{
-Test whether two matrices have the same numerica values given certain accuracy
+Test whether two matrices have the same numerica values given certain
+accuracy
 }
 \examples{
+
 set.seed(1887); x <- matrix(rnorm(1000), nrow=10)
 set.seed(1887); y <- matrix(rnorm(1000), nrow=10)
 set.seed(1882); z <- matrix(rnorm(1000), nrow=10)
@@ -27,4 +31,5 @@ stopifnot(identicalMatrixValue(x,y))
 stopifnot(!identicalMatrixValue(x,y+1E-5))
 stopifnot(!identicalMatrixValue(x,y-1E-5))
 stopifnot(!identicalMatrixValue(x,z))
+
 }

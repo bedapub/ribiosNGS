@@ -9,17 +9,23 @@ sortAndFilterByCumsumprop(x, thr = 0.9)
 \arguments{
 \item{x}{Numeric vector, usually named}
 
-\item{thr}{Threshold, default 0.9, meaning that items whose proportion of cumulative sum just above 0.9 are kept.}
+\item{thr}{Threshold, default 0.9, meaning that items whose proportion of
+cumulative sum just above 0.9 are kept.}
 }
 \value{
-Another numeric vector, likely shorter than x, items whose \code{cumsumprop} is equal or lower than \code{thr}. The rest items are summed into one new item, with the name \code{rest}
+Another numeric vector, likely shorter than x, items whose
+\code{cumsumprop} is equal or lower than \code{thr}. The rest items are
+summed into one new item, with the name \code{rest}
 
-This function can be useful to extract from a long numeric vector the largest items that dominate the sum of the vector
+This function can be useful to extract from a long numeric vector the
+largest items that dominate the sum of the vector
 }
 \description{
 Sort a numeric vector and filter by a threshold of cumsumprop
 }
 \examples{
+
 x <- c("A"=1,"B"=2,"C"=3,"D"=4,"E"=400,"F"=500)
 sortAndFilterByCumsumprop(x, thr=0.99) ## F and E should be returned
+
 }

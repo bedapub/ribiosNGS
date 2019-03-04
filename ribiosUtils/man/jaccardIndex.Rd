@@ -23,6 +23,7 @@ The Jaccard Index, a number between 0 and 1
 Calculate the Jaccard Index between two vectors
 }
 \examples{
+
 myX <- 1:6
 myY <- 4:9
 jaccardIndex(myX, myY)
@@ -32,4 +33,5 @@ myX <- LETTERS[1:5]
 myY <- LETTERS[6:10]
 jaccardIndex(myX, myY)
 jaccardDistance(myX, myY)
+
 }

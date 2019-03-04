@@ -2,7 +2,7 @@
 % Please edit documentation in R/factor.R
 \name{relevelsByNamedVec}
 \alias{relevelsByNamedVec}
-\title{Relevel a factor by a named vector}
+\title{Relevel a factor by a named vector.}
 \usage{
 relevelsByNamedVec(x, refs, missingLevels = c("pass", "warning",
   "error"), unrecognisedLevels = c("warning", "pass", "error"))
@@ -10,23 +10,25 @@ relevelsByNamedVec(x, refs, missingLevels = c("pass", "warning",
 \arguments{
 \item{x}{A factor}
 
-\item{refs}{A named vector. The names of the vector are all or a subset of levels in the old factor.
-And the values are new levels}
+\item{refs}{A named vector. The names of the vector are all or a subset of
+levels in the old factor. And the values are new levels}
 
-\item{missingLevels}{Actions taken in case existing levels are missing: 'pass', 'warning', or 'error'.}
+\item{missingLevels}{Actions taken in case existing levels are missing:
+'pass', 'warning', or 'error'.}
 
-\item{unrecognisedLevels}{Actions taken in case unrecognised levels are found: 'pass', 'warning', or 'error'.}
+\item{unrecognisedLevels}{Actions taken in case unrecognised levels are
+found: 'pass', 'warning', or 'error'.}
 }
 \description{
-Relevel a factor by a named vector.
-}
-\details{
-If names contain character strings other than the levels in the old factor and warning is set to \code{TRUE}, a warning will be raised
+If names contain character strings other than the levels in the old factor
+and warning is set to \code{TRUE}, a warning will be raised
 }
 \examples{
+
 oldFactor <- factor(c("A", "B", "A", "C", "B"), levels=LETTERS[1:3])
 factorDict <- c("A"="a", "B"="b", "C"="c")
 newFactor <- relevelsByNamedVec(oldFactor, factorDict)
 stopifnot(identical(newFactor, factor(c("a", "b", "a", "c", "b"), levels=c("a", "b", "c"))))
 ## TODO: test warning and error
+
 }

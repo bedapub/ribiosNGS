@@ -20,7 +20,9 @@ Shorten strings to a given number of characters
 \code{NA} will be kept as they are
 }
 \examples{
+
 inputStrs <- c("abc", "abcd", "abcde", NA)
 shortenStr(inputStrs, nchar=4)
 ## expected outcome: abc, abcd, abcd..., NA
+
 }

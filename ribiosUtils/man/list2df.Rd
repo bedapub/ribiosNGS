@@ -9,7 +9,8 @@ list2df(list, names = NULL, col.names = c("Name", "Item"))
 \arguments{
 \item{list}{A list of character strings}
 
-\item{names}{Values in the 'Name' column of the result, used if the input list has no names}
+\item{names}{Values in the 'Name' column of the result, used if the input
+list has no names}
 
 \item{col.names}{Column names of the \code{data.frame}}
 }
@@ -17,7 +18,9 @@ list2df(list, names = NULL, col.names = c("Name", "Item"))
 Transform a list of character strings into a data.frame
 }
 \examples{
+
 myList <- list(HSV=c("Mueller", "Papadopoulos", "Wood"), FCB=c("Lewandowski", "Robben", "Hummels"),
                BVB=c("Reus", "Goetze", "Kagawa"))
 list2df(myList, col.names=c("Club", "Player"))
+
 }

@@ -15,15 +15,14 @@ rsetdiff(x, y)
 Similar to setdiff, but with elements in y but not in x
 }
 \description{
-Reverse setdiff
-}
-\details{
 reverse setdiff, i.e. rsetdiff(x,y) equals setdiff(y,x)
 }
 \examples{
+
 testVec1 <- LETTERS[3:6]
 testVec2 <- LETTERS[5:7]
 rsetdiff(testVec1, testVec2)
+
 }
 \author{
 Jitao David Zhang

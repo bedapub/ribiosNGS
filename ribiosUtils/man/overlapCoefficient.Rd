@@ -14,7 +14,8 @@ overlapDistance(x, y, checkUniqueNonNA = FALSE)
 
 \item{y}{A vector}
 
-\item{checkUniqueNonNA}{Logical, if \code{TRUE}, \code{x} and \code{y} are made unique and non-NA}
+\item{checkUniqueNonNA}{Logical, if \code{TRUE}, \code{x} and \code{y} are
+made unique and non-NA}
 }
 \value{
 The overlap coefficient
@@ -23,6 +24,7 @@ The overlap coefficient
 Overlap coefficient, also known as Szymkiewicz-Simpson coefficient
 }
 \examples{
+
 myX <- 1:6
 myY <- 4:9
 overlapCoefficient(myX, myY)
@@ -34,9 +36,11 @@ jaccardIndex(myX, myY2)
 
 ## overlapDistance
 overlapDistance(myX, myY2)
+
 }
 \seealso{
 \code{\link{jaccardIndex}}
 
-\code{overlapCofficient} calculates the overlap coefficient, and \code{overlapDistance} is defined by 1-\code{overlapCoefficient}.
+\code{overlapCofficient} calculates the overlap coefficient, and
+\code{overlapDistance} is defined by 1-\code{overlapCoefficient}.
 }

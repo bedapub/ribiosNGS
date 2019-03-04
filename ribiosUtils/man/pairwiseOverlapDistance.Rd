@@ -13,7 +13,8 @@ pairwiseOverlapCoefficient(list)
 \item{list}{A list}
 }
 \value{
-A symmetric matrix of dimension \code{mxm}, where \code{m} is the length of the list
+A symmetric matrix of dimension \code{mxm}, where \code{m} is the
+length of the list
 
 \code{pairwiseOverlapDistance} is defined the pairwise overlap distance.
 }
@@ -21,6 +22,7 @@ A symmetric matrix of dimension \code{mxm}, where \code{m} is the length of the 
 Calculate pairwise overlap coefficients between each pair of items in a list
 }
 \examples{
+
 myList <- list(first=LETTERS[3:5], second=LETTERS[1:3], third=LETTERS[1:5], fourth=LETTERS[6:10])
 pairwiseOverlapCoefficient(myList)
 pairwiseOverlapDistance(myList)
@@ -29,4 +31,5 @@ poormanPOC <- function(list) {
   sapply(list, function(x) sapply(list, function(y) overlapCoefficient(x,y)))
 }
 stopifnot(identical(pairwiseOverlapCoefficient(myList), poormanPOC(myList)))
+
 }

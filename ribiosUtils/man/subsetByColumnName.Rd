@@ -14,19 +14,21 @@ subsetByColumnName(data.frame, reqCols, ignore.case = FALSE)
 \item{ignore.case}{logical, whether the case is considered}
 }
 \value{
-If all required column names are present, the data.frame object will be subset to include only these columns and the result data.frame is returned. Otherwise an error message is printed.
+If all required column names are present, the data.frame object will
+be subset to include only these columns and the result data.frame is
+returned. Otherwise an error message is printed.
 }
 \description{
-Subset a data.frame by column name, allowing differences in cases
-}
-\details{
-The function calls \code{\link{assertColumnName}} internally to match the column names.
+The function calls \code{\link{assertColumnName}} internally to match the
+column names.
 }
 \examples{
+
 myTestDf <- data.frame(HBV=1:3, VFB=0:2, BVB=4:6, FCB=2:4)
 myFavTeams <- c("HBV", "BVB")
 subsetByColumnName(myTestDf, myFavTeams)
 myFavTeamsCase <- c("hbv", "bVb")
 subsetByColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)
 \dontrun{subsetByColumnName(myTestDf, myFavTeamsCase, ignore.case=TRUE)}
+
 }

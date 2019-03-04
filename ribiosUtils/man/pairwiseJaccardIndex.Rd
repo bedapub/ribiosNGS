@@ -13,7 +13,8 @@ pairwiseJaccardDistance(list)
 \item{list}{A list}
 }
 \value{
-A symmetric matrix of dimension \code{mxm}, where \code{m} is the length of the list
+A symmetric matrix of dimension \code{mxm}, where \code{m} is the
+length of the list
 
 \code{pairwiseJaccardDistance} is defined as \code{1-pairwiseJaccardIndex}.
 }
@@ -21,6 +22,7 @@ A symmetric matrix of dimension \code{mxm}, where \code{m} is the length of the 
 Calculate pairwise Jaccard Indices between each pair of items in a list
 }
 \examples{
+
 myList <- list(first=LETTERS[3:5], second=LETTERS[1:3], third=LETTERS[1:5], fourth=LETTERS[6:10])
 pairwiseJaccardIndex(myList)
 
@@ -28,4 +30,5 @@ poormanPJI <- function(list) {
   sapply(list, function(x) sapply(list, function(y) jaccardIndex(x,y)))
 }
 stopifnot(identical(pairwiseJaccardIndex(myList), poormanPJI(myList)))
+
 }

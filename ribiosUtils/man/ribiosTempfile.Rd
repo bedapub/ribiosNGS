@@ -2,7 +2,8 @@
 % Please edit documentation in R/temp.R
 \name{ribiosTempfile}
 \alias{ribiosTempfile}
-\title{A temporary file which (1) every machine in the cluster has access to and (2) there is sufficient space}
+\title{A temporary file which (1) every machine in the cluster has access to and
+(2) there is sufficient space}
 \usage{
 ribiosTempfile(pattern = "file", tmpdir = ribiosTempdir(),
   fileext = "")
@@ -18,7 +19,8 @@ ribiosTempfile(pattern = "file", tmpdir = ribiosTempdir(),
 a character string of the file name
 }
 \description{
-A temporary file which (1) every machine in the cluster has access to and (2) there is sufficient space
+A temporary file which (1) every machine in the cluster has access to and
+(2) there is sufficient space
 }
 \seealso{
 \code{\link{ribiosTempdir}}

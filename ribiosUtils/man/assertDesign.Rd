@@ -12,13 +12,16 @@ assertDesign(nsample, design)
 \item{design}{Design matrix}
 }
 \value{
-Side effect is used: the function stops if sample size does not equal ncol(matrix)
+Side effect is used: the function stops if sample size does not
+equal ncol(matrix)
 }
 \description{
 Check dimensionality of design matrix
 }
 \examples{
+
 nsample <- 4
 design <- matrix(1:20, ncol=5)
 assertDesign(nsample, design)
+
 }

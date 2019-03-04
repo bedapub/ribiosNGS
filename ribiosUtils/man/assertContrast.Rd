@@ -12,13 +12,16 @@ assertContrast(design, contrast)
 \item{contrast}{Contrast matrix}
 }
 \value{
-Side effect is used: the function stops if the ncol(design) does not equal nrow(contrast)
+Side effect is used: the function stops if the ncol(design) does not
+equal nrow(contrast)
 }
 \description{
 Check dimensionality of contrast matrix
 }
 \examples{
+
 design <- matrix(1:20, ncol=5)
 contrast <- matrix(c(-1,1,0,0,0, 0,1,0,-1,0), nrow=5)
 assertContrast(design, contrast)
+
 }

@@ -16,6 +16,8 @@ A unique vector without NA
 Make a vector free of NA and unique
 }
 \examples{
+
 testVec <- c(3,4,5,NA,3,5)
 uniqueNonNA(testVec)
+
 }

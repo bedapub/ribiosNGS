@@ -2,6 +2,7 @@
 #### gsub(".*\\.(\\w*)", "\\1", basename(as.character(x)))
 #### Not good: fail when file does not have extname
 
+#' @export basefilename
 basefilename <- function(x, lower.case=FALSE) {
   if (!all(is.character(x))) 
     x <- as.character(x)

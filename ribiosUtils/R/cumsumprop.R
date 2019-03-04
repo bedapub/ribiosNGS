@@ -54,14 +54,20 @@ sortAndFilterByCumsumprop <- function(x, thr=.9) {
 #' 
 #' set.seed(1887)
 #' myVals <- sample(c(rep("A", 4), rep("B", 3), rep("C", 2), "D"))
-#' mergeInfreqLevelsByCumsumprop(myVals, 0.9) ## since A, B, C make up of 90% of the case, D is infrequent. Since it is alone, it is not merged
+#' ## in the example below, since A, B, C make up of 90% of the total,
+#' ## D is infrequent. Since it is alone, it is not merged
+#' mergeInfreqLevelsByCumsumprop(myVals, 0.9) 
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.9, returnFactor=FALSE) ## return characters
-#' mergeInfreqLevelsByCumsumprop(myVals, 0.8) ## since A and B make up 70% of the case, and A, B, C 90%, they are all frequent and D is infrequent. Following the logic above, no merging happens
+#' ## in the example below, since A and B make up 70% of the total, 
+#' ## and A, B, C 90%, they are all frequent and D is infrequent. 
+#' ## Following the logic above, no merging happens
+#' mergeInfreqLevelsByCumsumprop(myVals, 0.8)
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.7) ## A and B are left, C and D are merged
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.5) ## A and B are left, C and D are merged
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.4) ## A is left
 #' mergeInfreqLevelsByCumsumprop(myVals, 0.3) ## A is left
 #' 
+#' @export mergeInfreqLevelsByCumsumprop
 mergeInfreqLevelsByCumsumprop <- function(classes, thr=.9, mergedLevel="others", returnFactor=TRUE) {
   x <- table(classes)
   xs <- sort(x, decreasing=TRUE)

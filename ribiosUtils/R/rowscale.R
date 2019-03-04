@@ -17,8 +17,6 @@ rowscale <- function(x, center = TRUE, scale=TRUE) UseMethod("rowscale")
 #' @return A matrix with each row scaled.
 #' @author Jitao David Zhang <jitao_david.zhang@@roche.com>
 #' @seealso \code{\link{scale}}
-#' @method rowscale matrix
-#' @S3method rowscale matrix
 #' @examples
 #' 
 #' mat <- matrix(rnorm(20), nrow=4)
@@ -33,7 +31,8 @@ rowscale <- function(x, center = TRUE, scale=TRUE) UseMethod("rowscale")
 #' rowscale(mat, center=TRUE, scale=FALSE)
 #' rowscale(mat, center=FALSE, scale=TRUE)
 #' 
-#' @export rowscale.matrix
+#' @method rowscale matrix
+#' @export
 rowscale.matrix <- function(x, center=TRUE, scale=TRUE) {
   t(scale(t(x),center=center, scale=scale))
 }

@@ -6,7 +6,7 @@
 #' 
 #' Multiple matches can be useful in many cases, and there is no native R
 #' function for this purpose. User can write their own functions combining
-#' \code{lapplying} with \code{match} or \code{%in%}, our experience however
+#' \code{lapplying} with \code{match} or \code{\%in\%}, our experience however
 #' shows that such non-vectorized function can be extremely slow, especially
 #' when the \code{x} or \code{table} vector gets longer.
 #' 
@@ -35,6 +35,7 @@
 #' 
 #' @export mmatch
 mmatch <- function(x, table, nomatch=NA_integer_) {
- .Call("mmatch",
-               as.character(x), as.character(table), nomatch)
+ .Call(C_mmatch,
+       as.character(x), as.character(table), nomatch,
+       PACKAGE="ribiosUtils")
 }

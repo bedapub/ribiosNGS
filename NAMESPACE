@@ -193,3 +193,5 @@ export(parseContributingGenes,
 
 export(rowVars, prcompExprs,
        prcomp.DGEList)
+
+export(writeBiokitSampleAnnotation)

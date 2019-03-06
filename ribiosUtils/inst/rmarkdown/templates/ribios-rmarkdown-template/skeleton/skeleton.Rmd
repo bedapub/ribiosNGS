@@ -3,8 +3,6 @@ title: "Untitled"
 author: "Jitao David Zhang"
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 output:
-  rmarkdown::html_vignette:
-    fig_caption: yes
   html_document:
     df_print: paged
     theme: spacelab
@@ -41,26 +39,23 @@ library(openxlsx)
 library(tidyverse)
 ```
 
-# Background
+## Background
 
-# Executive summary
+## Executive summary
 
-# Analysis
+## Analysis
 
-# Examples
+### Examples
 
 ```{r, fig.cap="My figure"}
 plot(10:-10)
 ```
 
-# Session information
+## Acknowledgment
+
+## Session information
 
 ```{r}
 sessionInfo()
-```
 
-
-
-
-
-
+## Appendix

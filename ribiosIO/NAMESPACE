@@ -46,4 +46,6 @@ export(read_david)
 
 export(loadRDS)
 
+export(read_illumina_sampleSheet)
+
 useDynLib(ribiosIO, .registration=TRUE)

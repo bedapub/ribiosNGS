@@ -45,11 +45,7 @@ library(tidyverse)
 
 ## Analysis
 
-### Examples
-
-```{r, fig.cap="My figure"}
-plot(10:-10)
-```
+### Data read in
 
 ## Acknowledgment
 
@@ -57,5 +53,6 @@ plot(10:-10)
 
 ```{r}
 sessionInfo()
+```
 
 ## Appendix

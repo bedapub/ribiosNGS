@@ -11,7 +11,7 @@ loadRDS(rdsFile, variableName, refhook = NULL)
 
 \item{variableName}{Character string or variable name, variable name to which the loaded value is assigned to}
 
-\item{refhook}{Logical, passed to \code{\link{base::readRDS}}}
+\item{refhook}{Logical, passed to \code{\link[base]{readRDS}}}
 }
 \value{
 Logical, \code{TRUE} if the file loading was successful, otherwise \code{FALSE}

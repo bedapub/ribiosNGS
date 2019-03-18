@@ -32,7 +32,7 @@ loadObject <- function(file, obj=NULL, verbose=FALSE) {
 #' 
 #' @param rdsFile Character string, name of the rds file to be loaded
 #' @param variableName Character string or variable name, variable name to which the loaded value is assigned to
-#' @param refhook Logical, passed to \code{\link{base::readRDS}}
+#' @param refhook Logical, passed to \code{\link[base]{readRDS}}
 #' 
 #' @return Logical, \code{TRUE} if the file loading was successful, otherwise \code{FALSE}
 loadRDS <- function(rdsFile, variableName, refhook=NULL) {

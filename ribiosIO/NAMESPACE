@@ -12,6 +12,13 @@ export(loadObject)
 
 export(isGctFile)
 
+export(GctMatrix,
+       gctDesc,
+       cbindGct)
+
+S3method(print, GctMatrix)
+S3method(`[`, GctMatrix)
+
 export(read_gct_matrix,
        read_gctstr_matrix,
        write_gct)

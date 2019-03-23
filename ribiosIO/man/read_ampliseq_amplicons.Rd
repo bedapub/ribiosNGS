@@ -17,3 +17,14 @@ The function is used to read Amplicon information from BED file
 \description{
 Read AmpliSeq amplicon informaiton from a BED file
 }
+\examples{
+lines <- paste0("#track type=bedDetail ionVersion=4.0 name=\\"IAD50039-4_IAD87652-4_Design\\"",
+ "solution_type=4 description=\\"TargetRegions_AmpliSeqID_IAD50039 AmpliSeq_Version=3.0.1",
+ " Workflow=RNA merged with TargetRegions_AmpliSeqID_IAD87652 AmpliSeq_Version=4.48 Workflow=RNA\\"",
+ " color=77,175,74 priority=2", "\\n",
+ "NM_000014\\t3316\\t3421\\tAMPL1384\\t0\\t+\\t.\\tGENE_ID=A2M", "\\n",
+ "NM_005502\\t2488\\t2589\\tAMPL28385508\\t0\\t+\\t.\\tGENE_ID=ABCA1","\\n",
+ "NM_000927\\t2520\\t2624\\tAMPL5599607\\t0\\t+\\t.\\tGENE_ID=ABCB1","\\n",
+ "NM_000443\\t1367\\t1470\\tAMPL5513474\\t0\\t+\\t.\\tGENE_ID=ABCB4")
+ read_ampliseq_amplicons(textConnection(lines))
+}

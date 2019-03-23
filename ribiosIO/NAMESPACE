@@ -43,7 +43,8 @@ export(read_fasta,
 
 export(write.tableList)
 
-export(find_ampliseq, read_ampliseq, find_and_read_ampliseq)
+export(find_ampliseq, read_ampliseq, find_and_read_ampliseq,
+       read_ampliseq_amplicons, read_ampliseq_bedcovgct)
 
 export(writeMatrix, readMatrix, readTable)
 

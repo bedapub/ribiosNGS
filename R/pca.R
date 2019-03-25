@@ -42,7 +42,25 @@ prcompExprs <- function(matrix, ntop=NULL) {
 #' @param x A \code{DGEList} object
 #' @param ntop Integer, how many top-variable genes should be used?
 #' @param fun Function, how to transform counts in the DGEList into data appropriate for PCA? log-cpm is used by default.
-prcomp.DGEList <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
+#' 
+#' If many genes have zero count in all samples, the PCA plot of samples can be sometimes delusive. Therefore, the function
+#' removes such all-zero-count features prior to PCA analysis.
+#' 
+#' @examples
+#' myCounts <- matrix(rnbinom(100, 3, 0.25), nrow=10)
+#' myDgeList <- DGEList(counts=myCounts,
+#'   samples=data.frame(group=gl(5,2)))
+#' myPrcomp <- prcomp(myDgeList)
+#' 
+#' #' features with zero count in all samples do not contribute to the PCA analysis
+#' myDgeList2 <- DGEList(counts=rbind(myCounts, rep(0, 10)),
+#'   samples=data.frame(group=gl(5,2)))
+#' myPrcomp2 <- prcomp(myDgeList2)
+#' stopifnot(identical(myPrcomp, myPrcomp2))
+prcomp.DGEList <- function(x, ntop=NULL, 
+                           fun=function(x) cpm(x, log=TRUE)) {
+  ## remove all-zero-count features first, otherwise the PCA result can be delusive
+  x <- x[rowSums(x$counts)>0, 1:ncol(x)]
   mat <- do.call(fun, list(x))
   res <- prcompExprs(mat, ntop=ntop)
   return(res)

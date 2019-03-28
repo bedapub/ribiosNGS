@@ -33,6 +33,20 @@ gctDesc <- function(gctMatrix, index) {
   return(res)
 }
 
+#' Coerce a GctMatrix object into a matrix
+#' @param x A GctMatrix object
+#' @return A matrix with a \code{desc} attribute
+#' 
+#' @examples 
+#' m1 <- matrix(1:6, nrow=3, dimnames=list(sprintf("G%d", 1:3), sprintf("S%d", 1:2)))
+#' gm1 <- GctMatrix(m1, desc=sprintf("Gene%d", 1:3))
+#' print(gm1)
+#' print(as.matrix(gm1))
+as.matrix.GctMatrix <- function(x, ...) {
+  class(x) <- "matrix"
+  return(x)
+}
+
 #' Print method for GctMatrix object
 #' @param x A GctMatrix object
 #' @param showAll Logical, whether all values should be printed

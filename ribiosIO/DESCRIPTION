@@ -12,7 +12,8 @@ Description: Basic data structures and functions for input/output tasks in
 Depends:
     utils
 Imports:
-    ribiosUtils
+    ribiosUtils,
+    methods
 LinkingTo: ribiosBase
 License: GPL-3
 RoxygenNote: 6.1.0

@@ -125,18 +125,22 @@ readBiokitAsDGEList <- function(dir,
   ## read sample annotation
   annotFile <- file.path(dir, "annot", "phenoData.meta")
   if(file.exists(annotFile)) {
-    annot <- ribiosIO::readTable(annotFile)
-    annot$group <- annot$SampleGroup
+    annot <- ribiosIO::readTable(annotFile, row.names=FALSE)
+    annot$group <- annot$GROUP
   } else {
-    warning("No sample annotation was found. A mock annotation is used")
-    annot <- data.frame(group=factor(rep("sample", ncol(mat))),
-                        row.names=colnames(mat))
+    stop("No sample annotation was found. Contact the developer.")
+  }
+  
+  if(!setequal(as.character(annot$SAMPLEID_GROUP) , colnames(mat))) {
+    stop("Sample annotation 'SAMPLEID_GROUP' and gct file sample names do not match. Contact the developer.")
+  } else {
+    mat <- mat[, as.character(annot$SAMPLEID_GROUP) ]
   }
   
   ## wish to Roland: feautre annotation
-  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=attr(mat, "desc"))
+  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=ribiosIO::gctDesc(mat))
   
-  res <- DGEList(counts=mat, samples=annot, genes=genes)
+  res <- DGEList(counts=mat, samples=annot, genes=genes, group = annot$group)
   res$BiokitAnno <- anno
   res$BiokitCountType <- countType
   return(res)

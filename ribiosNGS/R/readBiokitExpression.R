@@ -134,7 +134,7 @@ readBiokitAsDGEList <- function(dir,
   if(!setequal(as.character(annot$SAMPLEID_GROUP) , colnames(mat))) {
     stop("Sample annotation 'SAMPLEID_GROUP' and gct file sample names do not match. Contact the developer.")
   } else {
-    mat <- mat[, as.character(annot$SAMPLEID_GROUP)]
+    mat <- mat[, as.character(annot$SAMPLEID_GROUP), drop=FALSE]
   }
   
   ## wish to Roland: feautre annotation

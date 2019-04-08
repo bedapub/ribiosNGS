@@ -1,9 +1,10 @@
 importFrom("ribiosUtils",
-           "haltifnot","assertContrast", "assertDesign", "assertDesignContrast", "ulen",
+           "haltifnot","assertContrast", "assertDesign", 
+           "assertDesignContrast", "ulen", "assertDir",
            "pairwiseJaccardIndex",
            "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
-importFrom("ribiosIO", "read_biokit_exprs", "writeMatrix")
+importFrom("ribiosIO", "read_biokit_exprs", "writeMatrix", "gctDesc")
 importFrom("readr",
            "count_fields", "tokenizer_tsv", "read_tsv")
 importFrom("methods", "show")

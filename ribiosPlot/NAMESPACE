@@ -87,6 +87,8 @@ export(blackyellow,
        magentayellow,
        yellowmagenta)
 
+export(midCol)
+
 ## display functions
 export(twocolor.panels,
        threecolor.panels,

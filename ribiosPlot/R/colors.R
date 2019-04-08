@@ -194,3 +194,44 @@ display.twocolor.panels <- function (nc=20) {
 display.threecolor.panels <- function (nc=20) {
   display.colorpanels(threecolor.panels(), nc)
 }
+
+
+#' Blender two colors to get the midpoint color of two colors
+#' @param col1 Character string, represting the first color. It can be of length 2 or 1; in the former case, \code{col2} should be missing
+#' @param col2 Character string, represting the second color
+#' @return The midpoint color of the two in the Lab space.
+#' 
+#' @examples
+#' midCol("black", "red")
+#' midCol(c("black", "red"))
+#' \dontrun{
+#' set.seed(1778)
+#' nCol <- 20
+#' candCol <- grep("gr[a|e]y", colors(), value=TRUE, invert=TRUE)
+#' firstCols <- sample(candCol, nCol)
+#' secondCols <- rev(sample(candCol, nCol))
+#' midCols <- sapply(seq(along=firstCols), function(i) 
+#'   midCol(firstCols[i], secondCols[i]))
+#' plot.new()
+#' plot.window(xaxt="n", yaxt="n", xlim=c(0, nCol),
+#'      ylim=c(0.5, 4), bty="n")
+#' title("Example of midCol")
+#' segments(x0=1:nCol, y0=0, x1=1:nCol, y1=4, col="lightgray")
+#' points(x=rep(1:nCol, each=3),
+#'      y=rep(1:3, nCol), 
+#'      pch=21, cex=1.75,
+#'      bg=as.vector(rbind(firstCols, midCols, secondCols)))
+#' text(0, c(1.5, 2.5, 3.5), c("Second", "Midpoint", "First"),
+#'      pos=4)
+#' }
+midCol <- function(col1, col2) {
+  if(missing(col2)) {
+    if(length(col1)==2) {
+      col2 <- col1[2]
+      col1 <- col1[1]
+    } else {
+      stop("Two colors should be provided")
+    }
+  }
+  colorRampPalette(c(col1, col2), space="Lab")(3)[2]
+}

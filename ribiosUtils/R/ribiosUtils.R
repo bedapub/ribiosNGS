@@ -6,4 +6,5 @@
 #'    Clemens Broger, Martin Ebeling, Laura Badi and Roland Schmucki
 #' @import methods grDevices stats utils
 #' @useDynLib ribiosUtils, .registration=TRUE, .fixes="C_"
+#' @name ribiosUtils
 NULL

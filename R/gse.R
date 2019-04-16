@@ -60,9 +60,11 @@ logFCgage <- function(edgeResult, gscs) {
 voomCamera <- function(edgeObj, gscs) {
   ## TODO: deprecate this after the script is fixed
   ## .Deprecated(new="camera.EdgeResult")
-  obj.voom <- voom(edgeObj)
-  ctnames<- contrastNames(edgeObj)
   design <- designMatrix(edgeObj)
+  dgelist <- calcNormFactorsIfNot(dgeList(edgeObj))
+  obj.voom <- voom(dgelist, design=design)
+  ctnames<- contrastNames(edgeObj)
+
   ct <- contrastMatrix(edgeObj)
   geneSymbols <- as.character(fData(edgeObj)$GeneSymbol)
 

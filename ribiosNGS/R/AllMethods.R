@@ -315,6 +315,11 @@ setMethod("modLogCPM", "EdgeObject", function(object) {
 })
 
 ## voom
+calcNormFactorsIfNot <- function(dgeList) {
+  if(all(dgeList$samples$norm.factors==1))
+    dgeList <- edgeR::calcNormFactors(dgeList)
+  return(dgeList)
+}
 setMethod("voom", "DGEList", function(object,...) {
   limma::voom(object, ...)
 })
@@ -325,7 +330,8 @@ setMethod("voom", "ExpressionSet", function(object,...) {
   limma::voom(object, ...)
 })
 setMethod("voom", "EdgeObject", function(object,...) {
-  limma::voom(dgeList(object),
+  dgelist <- calcNormFactorsIfNot(dgeList(object))
+  limma::voom(dgelist,
               design=designMatrix(object),
               ...)
 })
@@ -575,7 +581,8 @@ setMethod("inferSV", c("matrix", "matrix"), function(object, design, ...) {
 #' 
 #' @return Surrogate variable matrix
 setMethod("inferSV", c("DGEList", "matrix"), function(object, design, ...) {
-  voomE <- limma::voom(object)$E
+  object <- calcNormFactorsIfNot(object)
+  voomE <- limma::voom(object, design=design)$E
   inferSV(voomE, design)
 })
 
@@ -630,6 +637,7 @@ setMethod("voomSVA", c("matrix", "matrix"), function(object, design) {
 #' \code{designMatrixWithSV}, and \code{voomSVRemoved}.
 #' 
 setMethod("voomSVA", c("DGEList", "matrix"), function(object, design) {
+  object <- calcNormFactorsIfNot(object)
   voomE <- voom(object, design=design)$E
   sv <- inferSV(voomE, design)
   object$voom <- voomE

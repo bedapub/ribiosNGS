@@ -147,7 +147,8 @@ readBiokitAsDGEList <- function(dir,
     mat <- mat[, annotSampleId, drop=FALSE]
   }
   
-  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=ribiosIO::gctDesc(mat))
+  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=ribiosIO::gctDesc(mat),
+                      stringsAsFactors = FALSE)
   
   res <- DGEList(counts=mat, samples=annot, genes=genes, group = annot$group)
   res$BiokitAnno <- anno

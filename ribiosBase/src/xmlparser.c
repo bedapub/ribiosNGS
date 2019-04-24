@@ -492,4 +492,3 @@ void xmlp_run (LineStream ls) {
                              lineNum,colNum));
   stackDestroy (stack);
 }
-;

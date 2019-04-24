@@ -104,6 +104,8 @@ readBiokitGctFile <- function(dir,
                         "uniqRpkm"=".*uniq-rpkms.gct")
   
   gctFile <- dir(gctDir, pattern=filePattern, full.names=TRUE)
+  if(length(gctFile)==0 || !file.exists(gctFile))
+    stop(paste0("GCT file with the pattern'", filePattern, "' does not exist!"))
   mat <- read_gct_matrix(gctFile)
   return(mat)
 }
@@ -131,14 +133,22 @@ readBiokitAsDGEList <- function(dir,
     stop("No sample annotation was found. Contact the developer.")
   }
   
-  if(!setequal(as.character(annot$SAMPLEID_GROUP) , colnames(mat))) {
-    stop("Sample annotation 'SAMPLEID_GROUP' and gct file sample names do not match. Contact the developer.")
+  sampleIdGroupCols <- c("SAMPLEID_GROUP", "ID_GROUP")
+  sampleIdGroupCol <- intersect(sampleIdGroupCols, colnames(annot))
+  if(length(sampleIdGroupCol)==0) {
+    stop("The sampleID_group column is not found. Contact the developer")
+  } else if (length(sampleIdGroupCol)>1) {
+    sampleIdGroupCol <- sampleIdGroupCol[1]
+  }
+  annotSampleId <- as.character(annot[, sampleIdGroupCol])
+  if(!setequal(as.character(annotSampleId) , colnames(mat))) {
+    stop("SampleID-group and gct file sample names do not match. Contact the developer.")
   } else {
-    mat <- mat[, as.character(annot$SAMPLEID_GROUP), drop=FALSE]
+    mat <- mat[, annotSampleId, drop=FALSE]
   }
   
-  ## wish to Roland: feautre annotation
-  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=ribiosIO::gctDesc(mat))
+  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=ribiosIO::gctDesc(mat),
+                      stringsAsFactors = FALSE)
   
   res <- DGEList(counts=mat, samples=annot, genes=genes, group = annot$group)
   res$BiokitAnno <- anno

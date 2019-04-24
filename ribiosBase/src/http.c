@@ -62,7 +62,7 @@ static int httpOpen (char *host,int port) {
     warnAdd ("httpOpen","Error in socket");
     return 2;
   }
-  if (connect (gSd,&pin,sizeof (pin)) == -1) {
+  if (connect (gSd,(struct sockaddr*)&pin,sizeof (pin)) == -1) {
     warnAdd ("httpOpen","Error in connect");
     return 3;
   }

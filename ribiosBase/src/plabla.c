@@ -25,3 +25,5 @@
           BIOS_BITS_PER_INT
 */
 #include "plabla.h"
+
+typedef int make_iso_compilers_happy;

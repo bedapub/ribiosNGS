@@ -13,4 +13,4 @@ Description: RiBIOS (R interface to BIOS) is a collection of R packages
     Bioinfolib and is the foundation of other ribios packages that need to call C-
     level functions.
 License: GPL-3
-RoxygenNote: 6.1.1
+RoxygenNote: 6.1.0

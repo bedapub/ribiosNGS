@@ -13,6 +13,7 @@ rocheCore(str, short = FALSE)
 }
 \value{
 Core identifiers if the element is a Roche compound ID, the original element otherwise
+Non-character input will be converted to character strings first.
 }
 \description{
 Extract core identifiers from Roche compound IDs

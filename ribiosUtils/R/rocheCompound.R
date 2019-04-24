@@ -10,13 +10,15 @@
 #'                    "ROnoise-000-000"))
 #' @export isRocheCompoundID
 isRocheCompoundID <- function(str) {
-  grepl("^RO-?{0,1}[0-9]{2,7}(-[0-9]{3})?(-[0-9]{3})?$", str)
+  grepl("^RO-?{0,1}[0-9]{2,7}(-[0-9]{3})?(-[0-9]{3})?$", 
+        as.character(str))
 }
 
 #' Extract core identifiers from Roche compound IDs
 #' @param str Character strings
 #' @param short Logical, if \code{TRUE}, the short version of Roche identifiers (\code{RO[0-9]{4}}) is returned. Default: \code{FALSE}
 #' @return Core identifiers if the element is a Roche compound ID, the original element otherwise
+#' Non-character input will be converted to character strings first.
 #' @seealso \code{\link{isRocheCompoundID}}
 #' @examples
 #' rocheCore(c("RO1234567-001", "RO1234567-001-000", "RO1234567", 
@@ -26,6 +28,7 @@ isRocheCompoundID <- function(str) {
 #' 
 #' @export rocheCore
 rocheCore <- function(str, short=FALSE) {
+  str <- as.character(str)
   isRO <- isRocheCompoundID(str)
   res <- gsub("-[0-9]{3}$", "", as.character(str))
   res <- gsub("-[0-9]{3}$", "", res)

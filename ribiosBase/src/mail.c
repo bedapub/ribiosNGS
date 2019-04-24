@@ -171,7 +171,7 @@ void mail_send (char *sender,char *recipients,char* subject,char *text)  {
     return;
   }
 
-  if (connect (clientSd,&sockAddrIn,sizeof (sockAddrIn)) == -1) {
+  if (connect (clientSd,(struct sockaddr*)&sockAddrIn,sizeof (sockAddrIn)) == -1) {
     allocateMsg ();
     stringPrintf (gMsg,"connect %s",strerror (errno));
     warnAdd ("mail_send",string (gMsg));

@@ -26,6 +26,7 @@ importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 importFrom("sva", "sva")
 importFrom("gage", "gage")
 importFrom("BioQC", "wmwTest")
+importFrom("dplyr", "%>%", "summarise_all")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
@@ -195,4 +196,5 @@ export(parseContributingGenes,
 export(rowVars, prcompExprs,
        prcomp.DGEList)
 
-export(writeBiokitSampleAnnotation)
+export(checkBiokitSampleAnnotation,
+       writeBiokitSampleAnnotation)

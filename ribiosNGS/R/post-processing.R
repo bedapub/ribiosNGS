@@ -236,7 +236,7 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     graphVscores <- matchColumn(V(graph)$name, df, "label")$Score
     
     absMaxScore <- max(abs(graphVscores))
-    score2range <- as.integer(ribiosPlot:::boundNorm(graphVscores)*100,
+    score2range <- as.integer(ribiosPlot::boundNorm(graphVscores)*100,
                               low=-absMaxScore, high=absMaxScore)
     scoreColor <- royalbluegrayred(101)[score2range+1]
 

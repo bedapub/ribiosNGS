@@ -17,6 +17,9 @@ NULL, side effect is used
 \description{
 Write sample annotation into a tab-delimited file to start the Biokit pipeline
 }
+\note{
+Starting from version 1.0-36, the function checks the input \code{data.frame} or \code{tbl_df} before writing to the file
+}
 \examples{
 testDf <- data.frame(ID=LETTERS[1:4], 
    GROUP=gl(2,2), 

@@ -296,7 +296,8 @@ void chem_sd_stripH (Texta mol) {
   */
   int na,nb;
   Array ats;
-  int a1,a2,a1n,a2n;
+  int a1,a2;
+  unsigned char a1n, a2n;
   int i,k;
   int nbDel;
   char s[7];
@@ -334,11 +335,11 @@ void chem_sd_stripH (Texta mol) {
           continue;
         a2n++;
       }
-      sprintf (s,"%3d%3d",a1n,a2n);
+      snprintf (s, 7, "%3hhu%3hhu", a1n, a2n);
       strncpy (textItem (mol,i),s,6);
     }
   }
-  sprintf (s,"%3d%3d",na-arrayMax (ats),nb-nbDel);
+  snprintf (s, 7, "%3d%3d",na-arrayMax (ats), nb-nbDel);
   strncpy (textItem (mol,3),s,6);
   k = 0;
   for (i=0;i<arrayMax (mol);i++) {

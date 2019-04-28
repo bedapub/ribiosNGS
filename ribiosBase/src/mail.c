@@ -33,6 +33,8 @@
 #define SMTPport 25
 /// length of the read buffer
 #define READSBUFLEN 2049
+/// mail buffer size
+#define BUFFER_SIZE 2049
 
 static struct sockaddr_in sockAddrIn;
 static  int clientSd = -1;
@@ -133,7 +135,7 @@ void mail_send (char *sender,char *recipients,char* subject,char *text)  {
   */
   struct hostent *hp;
   char *hostname = "localhost";
-  char buf[2048];
+  char buf[BUFFER_SIZE];
   WordIter wi;
   char *word;
   char *cp = NULL;
@@ -192,14 +194,14 @@ void mail_send (char *sender,char *recipients,char* subject,char *text)  {
     getResponse ("334 VXNlcm5hbWU6"); // ???
     if (warnCount (NULL,NULL) != 0)
       return;
-    sprintf (buf,"%s\n",gMailUser);
+    snprintf (buf, BUFFER_SIZE, "%s\n",gMailUser);
     sendText (buf);
     if (warnCount (NULL,NULL) != 0)
       return;
     getResponse ("334 UGFzc3dvcmQ6");
     if (warnCount (NULL,NULL) != 0)
       return;
-    sprintf (buf,"%s\n",gMailPw);
+    snprintf (buf, BUFFER_SIZE, "%s\n",gMailPw);
     sendText (buf);
     if (warnCount (NULL,NULL) != 0)
       return;
@@ -211,7 +213,7 @@ void mail_send (char *sender,char *recipients,char* subject,char *text)  {
     *cp = '\0';
     stringAppendf (textStr,"From: %s (%s)\n",senderBuf,cp+1);
   }
-  sprintf (buf,"MAIL FROM: %s\n",senderBuf);
+  snprintf (buf, BUFFER_SIZE, "MAIL FROM: %s\n",senderBuf);
   sendText (buf);
   if (warnCount (NULL,NULL) != 0)
     return;
@@ -224,7 +226,7 @@ void mail_send (char *sender,char *recipients,char* subject,char *text)  {
   i = -1;
   wi = wordIterCreate (recpBuf," ,;\t\n",1);
   while ((word = wordNext (wi)) != NULL) {
-    sprintf (buf,"RCPT TO: %s\n",word);
+    snprintf (buf, BUFFER_SIZE, "RCPT TO: %s\n",word);
     sendText (buf);
     if (warnCount (NULL,NULL) != 0)
       return;

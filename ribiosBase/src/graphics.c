@@ -549,9 +549,10 @@ void gr_setColor (int ci) {
 void gr_setSvgColorRGB (float r,float g,float b) {
   /**
      For SVG graphics set the current color for drawing in RGB mode
-     @param[in] r,g,b - red, green and blue values (0.0 - 1.0)
+     @param[in] r,g,b - red, green and blue values (0.0 - 1.0).
+     unsigned char type makes sure that the value between 0 and 255
   */
-  sprintf (svgColorStr,"%02x%02x%02x",(int)(r*255),(int)(g*255),(int)(b*255));
+  snprintf (svgColorStr, 7, "%02x%02x%02x",(unsigned char)(r*255),(unsigned char)(g*255),(unsigned char)(b*255));
 }
 
 void gr_setSvgColor (int col) {

@@ -173,7 +173,7 @@ char *sa_getPositionLine (char *seq,int frame,int begin,int end,
   for (i=0;i<length;i++) {
     if (isalpha (seq[i]) || (seq[i] == '*')) {
       if (count%10 == 0) {
-        sprintf (counter,"%d",count);
+        snprintf (counter, 10, "%d",count);
         if (strlen (counter) <= i+1) {
           for (j=0;j<strlen (counter);j++)
             string (line)[i+1-strlen(counter)+j] = counter[j];

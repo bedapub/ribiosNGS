@@ -378,7 +378,7 @@ void ls_cat (LineStream this1,char *filename) {
     }
     while ((line = ls_nextLine (this1)) != NULL) {
       fputs (line,f);
-      putc ('\n',f);
+      fputc ('\n',f);
     }
     if (f != stdout)
       fclose (f);

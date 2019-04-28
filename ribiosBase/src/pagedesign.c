@@ -28,7 +28,7 @@ void pd_html (void) {
   /**
      Writes the document type
   */
-  puts ("<!DOCTYPE html>\n<html>");
+  Rprintf ("<!DOCTYPE html>\n<html>");
 }
 
 static Stringa gHeadAdd = NULL;
@@ -48,7 +48,7 @@ void pd_head (char *title) {
      Prints the header of the web page
      @param[in] title - the title to be shown on to of the browser window
   */
-  puts ("<head>");
+  Rprintf ("<head>");
   Rprintf ("<title>%s</title>\n",title);
   Rprintf("<meta name='viewport' content='width=device-width, initial-scale=1'>\n");
   Rprintf("<link rel='shortcut icon' href='http://bioinfoc.ch/favicon.ico'>\n");
@@ -119,10 +119,10 @@ void pd_bodyClose (int withTechs) {
      Close the div bic_main, body and html
      @param[in] withTechs - whether technologies should be shown
   */
-  puts ("</div>"); // bic_main
+  Rprintf ("</div>"); // bic_main
   if (withTechs) {
-    puts ("<div class=bic_footer></div>");
-    puts ("<div class=bic_technologies><table cellpadding=4><tr><td>\n"
+    Rprintf ("<div class=bic_footer></div>");
+    Rprintf ("<div class=bic_technologies><table cellpadding=4><tr><td>\n"
           "&nbsp;"
           "  <a href='http://www.ubuntu.com' target=techs><img src='http://bioinfoc.ch/biccss/poweredByUbuntu.jpeg' width=65 height=65 alt=poweredByUbuntu></a>\n"
           "&nbsp;"
@@ -136,5 +136,5 @@ void pd_bodyClose (int withTechs) {
           //"  <a href='http://www.stack.nl/~dimitri/doxygen' target=techs><img src='http://bioinfoc.ch/biccss/poweredByDoxygen.png' width=100 height=20 alt=poweredByDoxygen></a>\n"
           "</td></tr></table></div>");
   }
-  puts ("</body>\n</html>");
+  Rprintf ("</body>\n</html>");
 }

@@ -90,10 +90,7 @@ void pty_load (Properties this1,char* filename) {
 
   LineStream ls = ls_createFromFile (filename);
   while ((line = ls_nextLine (ls)) != NULL) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
     int inserted;
-#pragma GCC diagnostic pop
 
     char *pos = splitNameValue (line);
     oneNV.name = hlr_strdup (line);

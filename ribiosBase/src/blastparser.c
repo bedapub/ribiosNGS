@@ -30,6 +30,10 @@
 #define VERY_LARGE 1.0e6
 /// maximum length of certain variables
 #define STRING_SIZE 256
+/// default length of the expect string
+#define EXPECT_STRING_SIZE 20
+/// maximum length of the expect string
+#define EXPECT_STRING_MAX_SIZE 30
 
 /* --------------- begin module blastparser --------------------
    Secret: knows how to dissect the output of the BLAST program
@@ -344,8 +348,8 @@ void bp_run (LineStream ls) {
   char database[STRING_SIZE]; // database name
   char subject[STRING_SIZE]; // subject sequence name
   double expect; // Expect Value of current HSP
-  char expectStr[20]; // Expect value as a string in case of e.g. e-123
-  char expectStr1[20];
+  char expectStr[EXPECT_STRING_SIZE]; // Expect value as a string in case of e.g. e-123
+  char expectStr1[EXPECT_STRING_MAX_SIZE];
   float score; // blast score for a HSP
   int left,right; // temporary
   char seq[101];
@@ -468,7 +472,7 @@ again1:
       if (sscanf (line+offs,"%f %s",&score,expectStr) != 2)
         die ("Parsing error in line %d",ls_lineCountGet (ls));
       if (expectStr[0] == 'e')
-        sprintf (expectStr1,"1.0%s",expectStr);
+        snprintf (expectStr1,EXPECT_STRING_MAX_SIZE, "1.0%s",expectStr);
       else
         strcpy (expectStr1,expectStr);
       if (sscanf (expectStr1,"%lf",&expect) != 1)
@@ -571,7 +575,7 @@ again1:
              sscanf (line," Score = %f bits (%*d), Expect(%d) = %s",
                      &score,&expectN,expectStr) == 3) {
       if (expectStr[0] == 'e')
-        sprintf (expectStr1,"1.0%s",expectStr);
+        snprintf (expectStr1, EXPECT_STRING_MAX_SIZE, "1.0%s",expectStr);
       else
         strcpy (expectStr1,expectStr);
       if (sscanf (expectStr1,"%lf",&expect) != 1)

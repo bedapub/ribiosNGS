@@ -396,18 +396,3 @@ int cht_get (Stringa value) {
   }
   return token;
 }
-
-#if 0
-  {
-    /* for debugging the tokenizer module: */
-    Array value = stringCreate (10);
-    int token;
-    cht_init (argv[1]);
-    while (token = cht_get (value)) {
-      printf ("%d",token);
-      if (token >= 15)
-        printf (" '%s'",string (value));
-      puts ("");
-    }
-  }
-#endif

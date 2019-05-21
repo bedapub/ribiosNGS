@@ -197,7 +197,9 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
                         tbl <- cbind(tbl.estCor,
                                      PValue.cor0.01=tbl.priorCor$PValue,
                                      FDR.cor0.01=tbl.priorCor$FDR,
-                                     Score.cor0.01=pScore(tbl.priorCor$PValue, tbl.priorCor$Direction=="Up"))
+                                     Score.cor0.01=ribiosUtils::pScore(tbl.priorCor$PValue,
+                                                          tbl.priorCor$Direction=="Up",
+                                                          method="absLog10"))
                         rownames(tbl) <- NULL
                         tbl <- tbl[,c("GeneSet", "NGenes","Direction",
                                       "Correlation", "EffectSize", "PValue", "FDR", "Score",

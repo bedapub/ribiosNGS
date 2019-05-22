@@ -133,24 +133,21 @@ readBiokitAsDGEList <- function(dir,
     stop("No sample annotation was found. Contact the developer.")
   }
   
-  sampleIdGroupCols <- c("SAMPLEID_GROUP", "ID_GROUP")
-  sampleIdGroupCol <- intersect(sampleIdGroupCols, colnames(annot))
-  if(length(sampleIdGroupCol)==0) {
-    stop("The sampleID_group column is not found. Contact the developer")
-  } else if (length(sampleIdGroupCol)>1) {
-    sampleIdGroupCol <- sampleIdGroupCol[1]
-  }
-  annotSampleId <- as.character(annot[, sampleIdGroupCol])
-  if(!setequal(as.character(annotSampleId) , colnames(mat))) {
+  ## to have consistent formats of sample annotation, we rename the frist three columns of annot
+  colnames(annot)[1:3] <- c("SampleName", "SampleID", "group")
+  annotSampleName <- as.character(annot[, 1L])
+  annotSampleId <- annot[, 2L]
+  annotSampleGroup <- annot[, 3L]
+  if(!setequal(as.character(annotSampleName) , colnames(mat))) {
     stop("SampleID-group and gct file sample names do not match. Contact the developer.")
   } else {
-    mat <- mat[, annotSampleId, drop=FALSE]
+    mat <- mat[, annotSampleName, drop=FALSE]
   }
   
   genes <- data.frame(GeneID=rownames(mat), GeneSymbol=ribiosIO::gctDesc(mat),
                       stringsAsFactors = FALSE)
   
-  res <- DGEList(counts=mat, samples=annot, genes=genes, group = annot$group)
+  res <- DGEList(counts=mat, samples=annot, genes=genes, group = annotSampleGroup)
   res$BiokitAnno <- anno
   res$BiokitCountType <- countType
   return(res)

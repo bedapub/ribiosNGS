@@ -124,11 +124,17 @@ readBiokitAsDGEList <- function(dir,
   countType <- match.arg(countType)
   mat <- readBiokitGctFile(dir, anno=anno, type=countType)
   
-  ## read sample annotation
-  annotFile <- file.path(dir, "annot", "phenoData.meta")
-  if(file.exists(annotFile)) {
-    annot <- ribiosIO::readTable(annotFile, row.names=FALSE)
-    annot$group <- annot$GROUP
+  ## read sample annotation, either from annot/phenoData.meta or samples.txt
+  phenoDataFile <- file.path(dir, "annot", "phenoData.meta")
+  samplesFile <- file.path(dir, "samples.txt")
+  if(file.exists(phenoDataFile)) {
+    annot <- ribiosIO::readTable(phenoDataFile, row.names=FALSE)
+  } else if (file.exists(samplesFile)) {
+    annot <- ribiosIO::readTable(samplesFile, row.names=FALSE)
+    colnames(annot)[1:2] <- c("SampleID", "group")
+    annot <- cbind(SampleName=paste(as.character(annot[, 1]),
+                                as.character(annot[, 2]), sep="_"),
+                   annot)
   } else {
     stop("No sample annotation was found. Contact the developer.")
   }

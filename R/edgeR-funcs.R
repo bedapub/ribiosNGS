@@ -491,9 +491,7 @@ dgeWithEdgeR <- function(edgeObj) {
 #' @param edgeResult An object of the class \code{EdgeObject}
 #' @param geneSets An object of the class \code{GeneSets}
 #' 
-#' The function performs gene-set enrichment analysis. 
-#' If biological replicates of samples are available, then the CAMERA method is applied; 
-#' otherwise if no replicates are available, the GAGE method (Generally Applicable Gene-set Enrichment for pathway analysis) is applied.
+#' The function performs gene-set enrichment analysis. By default,the CAMERA method is applied. In case this is not successful, for instance because of lack of biological replicates, the GAGE method (Generally Applicable Gene-set Enrichment for pathway analysis) is applied.
 #' 
 #' @return An \code{EdgeGSE} object containing all information required to reproduce the gene-set enrichment analysis results, as well as the enrichment table. Apply \code{fullEnrichTable} to the object to extract a \code{data.frame} containing results of the gene-set enrichment analysis.
 #' 
@@ -520,10 +518,9 @@ dgeWithEdgeR <- function(edgeObj) {
 #' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
 #' exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
 doGse <- function(edgeResult, geneSets) {
-  if(hasNoReplicate(edgeResult)) {
+  res <- try(gseWithCamera(edgeResult, geneSets))
+  if(class(res)=="try-error") {
     res <- gseWithLogFCgage(edgeResult, geneSets)
-  } else {
-    res <- gseWithCamera(edgeResult, geneSets)
   }
   return(res)
 }

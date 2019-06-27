@@ -18,12 +18,16 @@ rowVars <- function (x, na.rm=TRUE) {
 #' 
 #' @param matrix Numeric matrix. Features in rows and samples in columns.
 #' @param ntop Integer or NULL. If not \code{NULL}, only \code{ntop} genes with the highest variance are used for the calculation.
+#' @param scale Logical, whether variance of features should be scaled to 1. Default \code{FALSE}, as recommended by Nguyen et al. (2019)
+#' 
+#' @references 
+#' Nguyen, Lan Huong, and Susan Holmes. “Ten Quick Tips for Effective Dimensionality Reduction.” PLOS Computational Biology 15, no. 6 (June 20, 2019): e1006907. https://doi.org/10.1371/journal.pcbi.1006907.
 #' 
 #' @examples 
 #' myTestExprs <- matrix(rnorm(1000), ncol=10, byrow=FALSE)
 #' myTestExprs[1:100, 6:10] <- myTestExprs[1:100, 6:10] + 2
 #' myTopPca <- prcompExprs(myTestExprs, ntop=100)
-prcompExprs <- function(matrix, ntop=NULL) {
+prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
   if(!is.null(ntop) && !is.na(ntop)) {
     rv <- rowVars(matrix)
     select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, 
@@ -33,7 +37,7 @@ prcompExprs <- function(matrix, ntop=NULL) {
   tMatAll <- t(matrix)
   isInvar <- rowVars(tMatAll) == 0
   tMat <- tMatAll[!isInvar,, drop=FALSE]
-  res <- prcomp(tMat, center=TRUE, scale.=TRUE) 
+  res <- prcomp(tMat, center=TRUE, scale.=scale) 
   return(res)
 }
 

@@ -27,6 +27,7 @@ importFrom("sva", "sva")
 importFrom("gage", "gage")
 importFrom("BioQC", "wmwTest")
 importFrom("dplyr", "%>%", "summarise_all")
+importFrom("vsn", "justvsn")
 
 importClassesFrom("ribiosGSEA", "GeneSets")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
@@ -193,7 +194,10 @@ export(readCameraResults,
 export(parseContributingGenes,
        parseGenesetsContributingGenes)
 
-export(rowVars, prcompExprs,
+export(cpmVsn2)
+
+export(rowVars, 
+       prcompExprs,
        prcomp.DGEList)
 
 export(checkBiokitSampleAnnotation,

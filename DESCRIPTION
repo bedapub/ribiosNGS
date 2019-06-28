@@ -17,7 +17,8 @@ Imports:
     readr,
     sva,
     dplyr,
-    gage
+    gage,
+    vsn
 Suggests:
     testthat
 License: GPL-3

@@ -10,13 +10,17 @@ readBiokitAsDGEList(dir, anno = c("refseq", "ensembl"),
 \arguments{
 \item{dir}{Biokit output directory}
 
-\item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is supported}
+\item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is
+supported}
 
-\item{type}{count type, either \code{count} or \code{uniqCount} are supported.}
+\item{type}{count type, either \code{count} or \code{uniqCount} are
+supported.}
 }
 \description{
 Read a Biokit output directory into a DGEList object for downstream analysis
 }
 \examples{
+
 ##... (TODO: add a mock output directory in testdata)
+
 }

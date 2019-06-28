@@ -10,9 +10,11 @@
 \arguments{
 \item{x}{A DGEList2 object}
 
-\item{ntop}{NULL or integer. If set, only \code{ntop} top-variable genes are used}
+\item{ntop}{NULL or integer. If set, only \code{ntop} top-variable genes are
+used}
 
-\item{fun}{Function, used to transform count data into continuous data used by PCA}
+\item{fun}{Function, used to transform count data into continuous data used
+by PCA}
 }
 \value{
 A list of \code{prcomp} objects.

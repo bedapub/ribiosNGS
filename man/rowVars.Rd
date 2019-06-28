@@ -9,13 +9,16 @@ rowVars(x, na.rm = TRUE)
 \arguments{
 \item{x}{Numeric matrix}
 
-\item{na.rm}{Logical. Should missing values (including NaN) be omitted from the calculations?}
+\item{na.rm}{Logical. Should missing values (including NaN) be omitted from
+the calculations?}
 }
 \description{
 Variance of features in rows
 }
 \examples{
+
 myVal <- matrix(1:9, nrow=3, byrow=FALSE)
 myVar <- rowVars(myVal)
 stopifnot(identical(myVar, c(9,9,9)))
+
 }

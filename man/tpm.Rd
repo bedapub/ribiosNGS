@@ -7,9 +7,11 @@
 tpm(x, gene.length)
 }
 \arguments{
-\item{x}{A count matrix or other objects that can be converted to a matrix by \code{as.matrix}}
+\item{x}{A count matrix or other objects that can be converted to a matrix
+by \code{as.matrix}}
 
-\item{gene.length}{A numeric vector of the same length as the row count of \code{x}, giving gene lengths}
+\item{gene.length}{A numeric vector of the same length as the row count of
+\code{x}, giving gene lengths}
 }
 \value{
 transcripts per million (TPM) values
@@ -18,9 +20,11 @@ transcripts per million (TPM) values
 Convert count matrix to TPM values
 }
 \examples{
+
 testMatrix <- matrix(rnbinom(200, size=5, prob=0.1), nrow=20, ncol=10)
 testMatrixGeneLen <- as.integer(10^rnorm(20, mean=3, sd=0.5))
 testMatrixTpm <- tpm(testMatrix, testMatrixGeneLen)
+
 }
 \seealso{
 \code{\link{rpkm2tpm}}

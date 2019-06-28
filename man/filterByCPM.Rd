@@ -11,16 +11,24 @@ filterByCPM(edgeObj, minCPM = 1, minCount = minGroupCount(edgeObj))
 
 \item{minCPM}{Minimal CPM value, see descriptions below}
 
-\item{minCount}{Minimal count of samples in which the CPM value is no less than \code{minCPM}
+\item{minCount}{Minimal count of samples in which the CPM value is no less
+than \code{minCPM}
 
-The filter is recommended by the authors of the \code{edgeR} package to remove lowly expressed genes, since including them in differential gene expression analysis will cause extreme differential expression fold-changes of lowly and stochastically expressed genes, and increase false positive rates.
+The filter is recommended by the authors of the \code{edgeR} package to
+remove lowly expressed genes, since including them in differential gene
+expression analysis will cause extreme differential expression fold-changes
+of lowly and stochastically expressed genes, and increase false positive
+rates.
 
-The filter removes genes that are less expressed than 1 copy per million reads (cpm) in at least \code{n} samples, where \code{n} equals the number of samples in the smallest group of the design.}
+The filter removes genes that are less expressed than 1 copy per million
+reads (cpm) in at least \code{n} samples, where \code{n} equals the number
+of samples in the smallest group of the design.}
 }
 \description{
 Filter EdgeObj and remove lowly expressed genes
 }
 \examples{
+
 myFac <- gl(3,2)
 set.seed(1234)
 myMat <- matrix(rpois(1200,100), nrow=200, ncol=6)
@@ -34,4 +42,5 @@ dim(counts(myEdgeObj))
 dim(counts(myFilteredEdgeObj))
 ## show unfiltered count matrix
 dim(counts(myFilteredEdgeObj, filter=FALSE))
+
 }

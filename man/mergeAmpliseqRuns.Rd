@@ -11,9 +11,11 @@ mergeAmpliseqRuns(readCountList, barcodeSummaryList, runNames = NULL)
 
 \item{barcodeSummaryList}{A list of barcode summary data.frames}
 
-\item{runNames}{Character strings, run names. If \code{NULL}, a sequential number will be given.
+\item{runNames}{Character strings, run names. If \code{NULL}, a sequential
+number will be given.
 
-The function is used internally to merge several runs into one ExpressionSet object.}
+The function is used internally to merge several runs into one ExpressionSet
+object.}
 }
 \description{
 Merge AmpliSeq runs

@@ -8,26 +8,34 @@ slurmEdgeRcommand(dgeList, designMatrix, contrastMatrix,
   outfilePrefix = NULL, outdir = "edgeR_output", mps = FALSE)
 }
 \arguments{
-\item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}}
+\item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes},
+and \code{samples}}
 
 \item{designMatrix}{The design matrix to model the data}
 
 \item{contrastMatrix}{The contrast matrix matching the design matrix}
 
-\item{outfilePrefix}{Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.}
+\item{outfilePrefix}{Prefix of the output files. It can include directories,
+e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+created.}
 
-\item{outdir}{Output directory of the edgeR script. Default value "edgeR_output".}
+\item{outdir}{Output directory of the edgeR script. Default value
+"edgeR_output".}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.
 
-This function wraps the function \code{\link{edgeRcommand}} to return the command needed to start a SLURM job.
+This function wraps the function \code{\link{edgeRcommand}} to return the
+command needed to start a SLURM job.
 
-It uses \code{outdir} to specify slurm output and error files as in the same directory of \code{outdir}. And the job name is set as the name of the output directory.}
+It uses \code{outdir} to specify slurm output and error files as in the same
+directory of \code{outdir}. And the job name is set as the name of the
+output directory.}
 }
 \description{
 Return the SLURM command to run the edgeR script
 }
 \examples{
+
  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
  rownames(mat) <- sprintf("gene\%d", 1:nrow(mat))
  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -36,6 +44,7 @@ Return the SLURM command to run the edgeR script
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
      outfilePrefix=NULL, outdir=tempdir())
+
 }
 \seealso{
 \code{\link{edgeRcommand}}

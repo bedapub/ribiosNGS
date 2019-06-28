@@ -2,7 +2,8 @@
 % Please edit documentation in R/sva.R
 \name{cpmRemoveSV}
 \alias{cpmRemoveSV}
-\title{Apply cpm to voom-transformed count data, and return the voom expression matrix with surrogate variables' effect removed}
+\title{Apply cpm to voom-transformed count data, and return the voom expression
+matrix with surrogate variables' effect removed}
 \usage{
 cpmRemoveSV(counts, designMatrix)
 }
@@ -15,13 +16,16 @@ cpmRemoveSV(counts, designMatrix)
 The cpm matrix, with SV effects removed
 }
 \description{
-Apply cpm to voom-transformed count data, and return the voom expression matrix with surrogate variables' effect removed
+Apply cpm to voom-transformed count data, and return the voom expression
+matrix with surrogate variables' effect removed
 }
 \examples{
+
 exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 exDesign <- model.matrix(~gl(2,3))
 head(cpmRemoveSV(exCounts, designMatrix=exDesign))
 ## compare the results without SV removal, note the values in the second and third column are much larger than the rest
 head(cpm(exCounts))
+
 }

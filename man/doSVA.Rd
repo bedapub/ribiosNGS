@@ -9,14 +9,19 @@ doSVA(edgeObj, transform = c("voom", "cpm"))
 \arguments{
 \item{edgeObj}{An \code{EdgeObject} object}
 
-\item{transform}{Function name to perform transformation, currently supported values include voom and cpm
+\item{transform}{Function name to perform transformation, currently
+supported values include voom and cpm
 
-The count data associated with the EdgeObject object is first transformed, and surrogate variables are estimated from the transformed data. Correspondingly the design matrix and contrast matrix associated with the object are updated, too.}
+The count data associated with the EdgeObject object is first transformed,
+and surrogate variables are estimated from the transformed data.
+Correspondingly the design matrix and contrast matrix associated with the
+object are updated, too.}
 }
 \description{
 Perform surrogate variable analysis (SVA) to an EdgeObject object
 }
 \examples{
+
 set.seed(1887)
 exMat <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 exMat[1:100,2:3] <- exMat[1:100, 2:3]+20
@@ -37,4 +42,5 @@ contrastMatrix(exSVAobj)
 ## notice that in the zero-intercept parameterisation, the SVA gives no-sense results.
 designMatrix(exObj) <- model.matrix(~0+exGroups)
 designMatrix(doSVA(exObj, transform="voom"))
+
 }

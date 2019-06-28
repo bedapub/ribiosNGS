@@ -9,30 +9,40 @@ slurmEdgeR(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
   mps = FALSE)
 }
 \arguments{
-\item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}}
+\item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes},
+and \code{samples}}
 
 \item{designMatrix}{The design matrix to model the data}
 
 \item{contrastMatrix}{The contrast matrix matching the design matrix}
 
-\item{outfilePrefix}{Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.}
+\item{outfilePrefix}{Prefix of the output files. It can include directories,
+e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+created.}
 
-\item{outdir}{Output directory of the edgeR script. Default value "edgeR_output".}
+\item{outdir}{Output directory of the edgeR script. Default value
+"edgeR_output".}
 
-\item{overwrite}{If \code{ask}, the user is asked before an existing output directory is overwritten. If \code{yes}, the job will start and an existing directory will be overwritten anyway. If \code{no}, and if an output directory is present, the job will not be started.}
+\item{overwrite}{If \code{ask}, the user is asked before an existing output
+directory is overwritten. If \code{yes}, the job will start and an existing
+directory will be overwritten anyway. If \code{no}, and if an output
+directory is present, the job will not be started.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
 }
 \value{
-A list of two items, \code{command}, the command line call, and \code{output}, the output of the SLURM command in bash
+A list of two items, \code{command}, the command line call, and
+\code{output}, the output of the SLURM command in bash
 }
 \description{
 Send an edgeR analysis job to SLURM
 }
 \note{
-Even if the output directory is empty, if \code{overwrite} is set to \code{no} (or if the user answers \code{no}), the job will not be started.
+Even if the output directory is empty, if \code{overwrite} is set to
+\code{no} (or if the user answers \code{no}), the job will not be started.
 }
 \examples{
+
  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
  rownames(mat) <- sprintf("gene\%d", 1:nrow(mat))
  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -43,4 +53,5 @@ Even if the output directory is empty, if \code{overwrite} is set to \code{no} (
  slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast, 
    outfilePrefix=NULL, outdir=tempdir())
  }
+
 }

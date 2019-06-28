@@ -9,7 +9,8 @@ dgeListCamera(dgeList, index, design, contrasts)
 \arguments{
 \item{dgeList}{A DGEList object, with GeneSymbol available}
 
-\item{index}{List of integer indices of genesets, names are namese of gene sets}
+\item{index}{List of integer indices of genesets, names are namese of gene
+sets}
 
 \item{design}{Design matrix}
 

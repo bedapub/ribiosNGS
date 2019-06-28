@@ -9,7 +9,8 @@ extractTargetAnno(readCountsList)
 \arguments{
 \item{readCountsList}{A list of read count data.frames
 
-The function is used internally to extract unique target annotation from multiple runs}
+The function is used internally to extract unique target annotation from
+multiple runs}
 }
 \description{
 Extract AmpliSeq target annotation from a list of read count data.frames

@@ -11,15 +11,22 @@ doGse(edgeResult, geneSets)
 
 \item{geneSets}{An object of the class \code{GeneSets}
 
-The function performs gene-set enrichment analysis. By default,the CAMERA method is applied. In case this is not successful, for instance because of lack of biological replicates, the GAGE method (Generally Applicable Gene-set Enrichment for pathway analysis) is applied.}
+The function performs gene-set enrichment analysis. By default,the CAMERA
+method is applied. In case this is not successful, for instance because of
+lack of biological replicates, the GAGE method (Generally Applicable
+Gene-set Enrichment for pathway analysis) is applied.}
 }
 \value{
-An \code{EdgeGSE} object containing all information required to reproduce the gene-set enrichment analysis results, as well as the enrichment table. Apply \code{fullEnrichTable} to the object to extract a \code{data.frame} containing results of the gene-set enrichment analysis.
+An \code{EdgeGSE} object containing all information required to
+reproduce the gene-set enrichment analysis results, as well as the
+enrichment table. Apply \code{fullEnrichTable} to the object to extract a
+\code{data.frame} containing results of the gene-set enrichment analysis.
 }
 \description{
 Perform gene-set enrichment (GSE) analysis
 }
 \examples{
+
 exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 exDesign <- model.matrix(~0+exGroups)
@@ -39,7 +46,12 @@ fullEnrichTable(exGse)
 
 exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
 exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
+
 }
 \seealso{
-\code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by this function to perform analysis with GAGE and CAMERA, respectively. \code{logFCgage} and \code{camera.EdgeResult} implements the logic, and returns an object of the \code{EdgeGSE} class, which contains all relevant information required to reproduce the analysis results.
+\code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by
+this function to perform analysis with GAGE and CAMERA, respectively.
+\code{logFCgage} and \code{camera.EdgeResult} implements the logic, and
+returns an object of the \code{EdgeGSE} class, which contains all relevant
+information required to reproduce the analysis results.
 }

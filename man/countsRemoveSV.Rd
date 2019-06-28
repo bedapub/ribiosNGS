@@ -2,7 +2,8 @@
 % Please edit documentation in R/sva.R
 \name{countsRemoveSV}
 \alias{countsRemoveSV}
-\title{Apply SVA to transformed count data and return the transformed matrix removing the effect of surrogate variables}
+\title{Apply SVA to transformed count data and return the transformed matrix
+removing the effect of surrogate variables}
 \usage{
 countsRemoveSV(counts, designMatrix, transformFunc = function(counts,
   designMatrix) voom(counts, designMatrix)$E)
@@ -18,11 +19,14 @@ countsRemoveSV(counts, designMatrix, transformFunc = function(counts,
 The expression matrix, with SV effects removed
 }
 \description{
-Apply SVA to transformed count data and return the transformed matrix removing the effect of surrogate variables
+Apply SVA to transformed count data and return the transformed matrix
+removing the effect of surrogate variables
 }
 \examples{
+
 exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 exDesign <- model.matrix(~gl(2,3))
 head(countsRemoveSV(exCounts, designMatrix=exDesign))
+
 }

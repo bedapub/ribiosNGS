@@ -7,7 +7,8 @@
 DGEList2(...)
 }
 \arguments{
-\item{...}{A list of DGEList2 objects, can be passed as individual objects or in a list}
+\item{...}{A list of DGEList2 objects, can be passed as individual objects
+or in a list}
 }
 \description{
 Construct a DGEList2 object

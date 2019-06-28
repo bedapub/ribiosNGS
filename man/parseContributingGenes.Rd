@@ -10,13 +10,16 @@ parseContributingGenes(str)
 \item{str}{Character string, containing contributing genes}
 }
 \value{
-A list of \code{data.frames}, each containing two columns, \code{Gene} and \code{Stat}
+A list of \code{data.frames}, each containing two columns,
+\code{Gene} and \code{Stat}
 }
 \description{
 Parse contributing genes from the output file
 }
 \examples{
+
 parseContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)")
 parseContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"))
+
 }

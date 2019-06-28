@@ -9,9 +9,11 @@
 \arguments{
 \item{y}{A EdgeResult object}
 
-\item{gscs}{Gene set collections, for example read by \code{\link[ribiosGSEA]{readGmt}}
+\item{gscs}{Gene set collections, for example read by
+\code{\link[ribiosGSEA]{readGmt}}
 
-Note that the EdgeResult object must have a column 'GeneSymbol' in its \code{fData}.}
+Note that the EdgeResult object must have a column 'GeneSymbol' in its
+\code{fData}.}
 }
 \description{
 Run CAMERA method using EdgeResult

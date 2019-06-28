@@ -16,6 +16,8 @@ isEmptySV(sv)
 Is the Surrogate Variable (SV) matrix empty
 }
 \examples{
+
 isEmptySV(matrix(0, 1,1))
 isEmptySV(matrix(rnorm(5), nrow=5))
+
 }

@@ -10,11 +10,16 @@ logFCmatrix(edgeResult, featureIdentifier = "GeneSymbol",
 \arguments{
 \item{edgeResult}{An \code{EdgeResult} object}
 
-\item{featureIdentifier}{Character, column name in \code{dgeTable} that will be used as rownames of the result matrix}
+\item{featureIdentifier}{Character, column name in \code{dgeTable} that will
+be used as rownames of the result matrix}
 
-\item{contrasts}{\code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned}
+\item{contrasts}{\code{NULL} or characters; if not \code{NULL}, only logFC
+values of given contrasts will be returned}
 
-\item{min.logCPM}{\code{NULL} or numeric. If set, features with logCPM lower than the given value is not considered. This option is helpful to remove genes that are lowly expressed which yet show strong differential expression.}
+\item{min.logCPM}{\code{NULL} or numeric. If set, features with logCPM lower
+than the given value is not considered. This option is helpful to remove
+genes that are lowly expressed which yet show strong differential
+expression.}
 }
 \description{
 Extract a matrix of log2(fold-change) values

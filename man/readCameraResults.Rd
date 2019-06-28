@@ -19,7 +19,18 @@ parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts) {
                do.call(rbind, genes))
   return(res)
 }
-Read CAMERA results into a tibble object}
+#' Parse contributing genesets by both genesets and contrasts #' @param str
+Character strings, containing contributing genes #' @param genesets
+Character strings, geneset labels. Its length must match the length of
+\code{str} #' @return A \code{data.frame} containing genesets, genes, and
+statistics #' #' @examples #' parseGenesetsContributingGenes("AKR1C4(-1.25),
+AKR1D1(-1.11)", "Metabolism") #'
+parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)", #'
+"AKT1(1.24), AKT2(1.11), AKT3(1.05)"), #' c("Metabolism", "AKTs"))
+parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts)
+genes <- parseContributingGenes(str) res <- cbind(Contrast=rep(contrasts,
+sapply(contrasts, nrow)), GeneSet=rep(genesets, sapply(genes, nrow)),
+do.call(rbind, genes)) return(res)}
 \usage{
 readCameraResults(file, minNGenes = 3, maxNGenes = 1000)
 }
@@ -31,22 +42,21 @@ readCameraResults(file, minNGenes = 3, maxNGenes = 1000)
 \item{maxNGenes}{NULL or integer, genesets with more genes are filtered out}
 }
 \description{
-#' Parse contributing genesets by both genesets and contrasts
-#' @param str Character strings, containing contributing genes
-#' @param genesets Character strings, geneset labels. Its length must match the length of \code{str}
-#' @return A \code{data.frame} containing genesets, genes, and statistics
-#' 
-#' @examples 
-#' parseGenesetsContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)", "Metabolism")
-#' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
-#'                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"),
-#'                          c("Metabolism", "AKTs"))
-parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts) {
-  genes <- parseContributingGenes(str)
-  res <- cbind(Contrast=rep(contrasts, sapply(contrasts, nrow)),
-               GeneSet=rep(genesets, sapply(genes, nrow)),
-               do.call(rbind, genes))
-  return(res)
+Read CAMERA results into a tibble object
 }
+\details{
+#' Parse contributing genesets by both genesets and contrasts #' @param str
+Character strings, containing contributing genes #' @param genesets
+Character strings, geneset labels. Its length must match the length of
+\code{str} #' @return A \code{data.frame} containing genesets, genes, and
+statistics #' #' @examples #' parseGenesetsContributingGenes("AKR1C4(-1.25),
+AKR1D1(-1.11)", "Metabolism") #'
+parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)", #'
+"AKT1(1.24), AKT2(1.11), AKT3(1.05)"), #' c("Metabolism", "AKTs"))
+parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts)
+genes <- parseContributingGenes(str) res <- cbind(Contrast=rep(contrasts,
+sapply(contrasts, nrow)), GeneSet=rep(genesets, sapply(genes, nrow)),
+do.call(rbind, genes)) return(res)
+
 Read CAMERA results into a tibble object
 }

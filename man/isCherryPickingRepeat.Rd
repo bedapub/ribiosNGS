@@ -18,6 +18,7 @@ Detect samples that are repeated in cherry-picking runs
 Only valid if the sample names are unique.
 }
 \examples{
+
 countFiles <- system.file("extdata/AmpliSeq_files/",
   sprintf("ReadCountFile-\%d.xls", 1:3), package="ribiosNGS")
 barcodeFiles <- system.file("extdata/AmpliSeq_files/",
@@ -25,4 +26,5 @@ barcodeFiles <- system.file("extdata/AmpliSeq_files/",
 exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
   runNames=c("R1", "R2", "R3"))
 summary(isCherryPickingRepeat(exampleAmpliSeq, "R3"))
+
 }

@@ -2,38 +2,46 @@
 % Please edit documentation in R/slurm.R
 \name{edgeRcommand}
 \alias{edgeRcommand}
-\title{Export an DGEList, designMatrix, and contrastMatrix to files and return the command to run the edgeR script}
+\title{Export an DGEList, designMatrix, and contrastMatrix to files and return the
+command to run the edgeR script}
 \usage{
 edgeRcommand(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
   outdir = "edgeR_output", mps = FALSE)
 }
 \arguments{
-\item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}}
+\item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes},
+and \code{samples}}
 
 \item{designMatrix}{The design matrix to model the data}
 
 \item{contrastMatrix}{The contrast matrix matching the design matrix}
 
-\item{outfilePrefix}{Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.}
+\item{outfilePrefix}{Prefix of the output files. It can include directories,
+e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+created.}
 
-\item{outdir}{Output directory of the edgeR script. Default value "edgeR_output".}
+\item{outdir}{Output directory of the edgeR script. Default value
+"edgeR_output".}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
 }
 \description{
-Export an DGEList, designMatrix, and contrastMatrix to files and return the command to run the edgeR script
+Export an DGEList, designMatrix, and contrastMatrix to files and return the
+command to run the edgeR script
 }
 \note{
-Following checks are done internally:
-\itemize{
-  \item The design matrix must have the same number of rows as the columns of the count matrix.
-  \item The contrast matrix must have the same number of rows as the columns of the design matrix.
-  \item Row names of the design matrix match the column names of the expression matrix. In case of suspect, the program will stop and report.
-}
+Following checks are done internally: \itemize{ \item The design
+matrix must have the same number of rows as the columns of the count matrix.
+\item The contrast matrix must have the same number of rows as the columns
+of the design matrix.  \item Row names of the design matrix match the column
+names of the expression matrix. In case of suspect, the program will stop
+and report. }
 
-The output file names start with the outfilePrefix, followed by '-' and customed file suffixes.
+The output file names start with the outfilePrefix, followed by '-' and
+customed file suffixes.
 }
 \examples{
+
  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
  rownames(mat) <- sprintf("gene\%d", 1:nrow(mat))
  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -42,4 +50,5 @@ The output file names start with the outfilePrefix, followed by '-' and customed
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
      outfilePrefix=NULL, outdir=tempdir())
+
 }

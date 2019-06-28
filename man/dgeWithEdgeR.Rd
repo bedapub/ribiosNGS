@@ -9,7 +9,7 @@ dgeWithEdgeR(edgeObj)
 \arguments{
 \item{edgeObj}{An object of \code{EdgeObject}
 
-The function performs end-to-end differential gene expression (DGE) analysis 
+The function performs end-to-end differential gene expression (DGE) analysis
 with common best practice using edgeR}
 }
 \value{
@@ -19,6 +19,7 @@ An \code{EdgeResult} object
 Perform differential gene expression analysis with edgeR
 }
 \examples{
+
 exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 exDesign <- model.matrix(~0+exGroups)
@@ -31,4 +32,5 @@ exObj <- EdgeObject(exMat, exDescon,
                      fData=exFdata, pData=exPdata)
 exDgeRes <- dgeWithEdgeR(exObj)
 dgeTable(exDgeRes)
+
 }

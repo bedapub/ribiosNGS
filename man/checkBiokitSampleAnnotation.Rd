@@ -2,22 +2,28 @@
 % Please edit documentation in R/writeBiokitSampleAnnotation.R
 \name{checkBiokitSampleAnnotation}
 \alias{checkBiokitSampleAnnotation}
-\title{Check sample annotation data.frame or tibble meets the requirement of the biokit pipeline}
+\title{Check sample annotation data.frame or tibble meets the requirement of the
+biokit pipeline}
 \usage{
 checkBiokitSampleAnnotation(df)
 }
 \arguments{
-\item{df}{Sample annotation, can be either a \code{data.frame} or \code{tbl_df} object}
+\item{df}{Sample annotation, can be either a \code{data.frame} or
+\code{tbl_df} object}
 }
 \value{
-Invisible \code{NULL} if the requirement is met, otherwise an error is printed and the function stops
+Invisible \code{NULL} if the requirement is met, otherwise an error
+is printed and the function stops
 
-The biokit pipeline requires that values in each column contain no empty spaces. This function ensures that.
+The biokit pipeline requires that values in each column contain no empty
+spaces. This function ensures that.
 }
 \description{
-Check sample annotation data.frame or tibble meets the requirement of the biokit pipeline
+Check sample annotation data.frame or tibble meets the requirement of the
+biokit pipeline
 }
 \examples{
+
 test <- data.frame(Char=LETTERS[1:6],
                    Integer=1:6,
                    Number=pi*1:6,
@@ -34,7 +40,9 @@ if(require("tibble")) {
                          regexp = "level 1.*level 2")
   testthat::expect_silent(checkBiokitSampleAnnotation(tibble::as_tibble(testFix)))
 }
+
 }
 \seealso{
-\code{\link{writeBiokitSampleAnnotation}}, which calls this function to ensure that the sample annotation file is ok
+\code{\link{writeBiokitSampleAnnotation}}, which calls this
+function to ensure that the sample annotation file is ok
 }

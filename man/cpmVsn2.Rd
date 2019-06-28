@@ -25,10 +25,12 @@ A matrix of vsn-transformed expression data
 Fit the vsn model to log2CPM data
 }
 \examples{
+
 myCounts <- matrix(rnbinom(1000, 10, 0.5), nrow=100)
 myDgeList <- DGEList(counts=myCounts,
   samples=data.frame(group=gl(5,2)))
   
 myCpmVsn2MatRes <- cpmVsn2(myCounts)
 myCpmVsn2DGEListRes <- cpmVsn2(myDgeList)
+
 }

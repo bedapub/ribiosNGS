@@ -10,16 +10,21 @@ readBiokitGctFile(dir, anno = c("refseq", "ensembl"), type = c("count",
 \arguments{
 \item{dir}{Biokit output directory}
 
-\item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is supported}
+\item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is
+supported}
 
-\item{type}{GCT file type, \code{count}, \code{rpkm}, \code{uniqCount} and \code{uniqRpkm} are supported.}
+\item{type}{GCT file type, \code{count}, \code{rpkm}, \code{uniqCount} and
+\code{uniqRpkm} are supported.}
 }
 \value{
-A numeric matrix with the attribute \code{desc} encoding the values in the description column of the GCT format
+A numeric matrix with the attribute \code{desc} encoding the values
+in the description column of the GCT format
 }
 \description{
 Read GCT files from Biokit output directory
 }
 \examples{
+
 ##... (TODO: add a mock output directory in testdata)
+
 }

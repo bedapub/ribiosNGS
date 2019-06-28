@@ -13,7 +13,8 @@ matchKeyValue(keys, dfList, keyColumn, valueColumns)
 
 \item{keyColumn}{The column of keys in the data.frames of dfList}
 
-\item{valueColumns}{One or more character strings, column names in the data.frames of dfList
+\item{valueColumns}{One or more character strings, column names in the
+data.frames of dfList
 
 #@importFrom ribiosUtils matchColumn}
 }

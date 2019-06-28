@@ -7,7 +7,8 @@
 rpkm2tpm(x)
 }
 \arguments{
-\item{x}{A count matrix or other objects that can be converted to a matrix by \code{as.matrix}}
+\item{x}{A count matrix or other objects that can be converted to a matrix
+by \code{as.matrix}}
 }
 \value{
 transcripts per million (TPM) values
@@ -16,11 +17,13 @@ transcripts per million (TPM) values
 Convert a RPKM matrix to a TPM matrix
 }
 \examples{
+
 testMatrix <- matrix(rnbinom(200, size=5, prob=0.1), nrow=20, ncol=10)
 testMatrixGeneLen <- as.integer(10^rnorm(20, mean=3, sd=0.5))
 testMatrixTpm <- tpm(testMatrix, testMatrixGeneLen)
 testMatrixRpkm <- edgeR::rpkm(testMatrix, testMatrixGeneLen)
 testthat::expect_equal(testMatrixTpm, rpkm2tpm(testMatrixRpkm))
+
 }
 \seealso{
 \code{\link{rpkm2tpm}}

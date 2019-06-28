@@ -9,7 +9,8 @@ parseGenesetsContributingGenes(str, genesets)
 \arguments{
 \item{str}{Character strings, containing contributing genes}
 
-\item{genesets}{Character strings, geneset labels. Its length must match the length of \code{str}}
+\item{genesets}{Character strings, geneset labels. Its length must match the
+length of \code{str}}
 }
 \value{
 A \code{data.frame} containing genesets, genes, and statistics
@@ -18,8 +19,10 @@ A \code{data.frame} containing genesets, genes, and statistics
 Parse contributing genes by genesets
 }
 \examples{
+
 parseGenesetsContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)", "Metabolism")
 parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"),
                          c("Metabolism", "AKTs"))
+
 }

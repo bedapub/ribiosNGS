@@ -38,11 +38,34 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
   return(res)
 }
 
+#' Fit the vsn model to log2CPM data
+#' @param x A matrix or DGEList object
+#' @param prior.count Integer, passed to \code{\link[edgeR]{cpm}}
+#' @param normalized.lib.sizes Logical, passed to \code{\link[edgeR]{cpm}}
+#' @param verbose Logical, whether diagnostic information is printed for vsn
+#' @param ... Other parameters passed to \code{\link[vsn]{justvsn}}
+#' 
+#' @return A matrix of vsn-transformed expression data
+#' @examples 
+#' myCounts <- matrix(rnbinom(1000, 10, 0.5), nrow=100)
+#' myDgeList <- DGEList(counts=myCounts,
+#'   samples=data.frame(group=gl(5,2)))
+#'   
+#' myCpmVsn2MatRes <- cpmVsn2(myCounts)
+#' myCpmVsn2DGEListRes <- cpmVsn2(myDgeList)
+cpmVsn2 <- function(x, prior.count=2, normalized.lib.sizes=TRUE,
+                   verbose=FALSE, ...) {
+  cpmRes <- edgeR::cpm(x, log=TRUE, prior.count=prior.count,
+                normalized.lib.sizes = normalized.lib.sizes)
+  res <- vsn::justvsn(cpmRes, verbose=verbose, ...)
+  return(res)
+}
+
 #' Principal component analysis of DGEList
 #' 
 #' @param x A \code{DGEList} object
 #' @param ntop Integer, how many top-variable genes should be used?
-#' @param fun Function, how to transform counts in the DGEList into data appropriate for PCA? log-cpm is used by default.
+#' @param fun Function, how to transform counts in the DGEList into data appropriate for PCA? vsn2 transformation of log2-cpm is used by default.
 #' @param scale Logical, whether variance of features should be scaled to 1. Default \code{FALSE}
 #' 
 #' If many genes have zero count in all samples, the PCA plot of samples can be sometimes delusive. Therefore, the function
@@ -51,7 +74,7 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
 #' @seealso \code{\link{prcompExprs}}
 #' 
 #' @examples
-#' myCounts <- matrix(rnbinom(100, 3, 0.25), nrow=10)
+#' myCounts <- matrix(rnbinom(1000, 3, 0.25), nrow=100)
 #' myDgeList <- DGEList(counts=myCounts,
 #'   samples=data.frame(group=gl(5,2)))
 #' myPrcomp <- prcomp(myDgeList)
@@ -63,7 +86,7 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
 #' stopifnot(identical(myPrcomp, myPrcomp2))
 prcomp.DGEList <- function(x, ntop=NULL, 
                            scale=FALSE,
-                           fun=function(x) cpm(x, log=TRUE)) {
+                           fun=function(x) cpmVsn2(x)) {
   ## remove all-zero-count features first, otherwise the PCA result can be delusive
   x <- x[rowSums(x$counts)>0, 1:ncol(x)]
   mat <- do.call(fun, list(x))

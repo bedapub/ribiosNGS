@@ -5,7 +5,7 @@
 \title{Principal component analysis of DGEList}
 \usage{
 \method{prcomp}{DGEList}(x, ntop = NULL, scale = FALSE,
-  fun = function(x) cpm(x, log = TRUE))
+  fun = function(x) cpmVsn2(x))
 }
 \arguments{
 \item{x}{A \code{DGEList} object}
@@ -17,13 +17,13 @@
 If many genes have zero count in all samples, the PCA plot of samples can be sometimes delusive. Therefore, the function
 removes such all-zero-count features prior to PCA analysis.}
 
-\item{fun}{Function, how to transform counts in the DGEList into data appropriate for PCA? log-cpm is used by default.}
+\item{fun}{Function, how to transform counts in the DGEList into data appropriate for PCA? vsn2 transformation of log2-cpm is used by default.}
 }
 \description{
 Principal component analysis of DGEList
 }
 \examples{
-myCounts <- matrix(rnbinom(100, 3, 0.25), nrow=10)
+myCounts <- matrix(rnbinom(1000, 3, 0.25), nrow=100)
 myDgeList <- DGEList(counts=myCounts,
   samples=data.frame(group=gl(5,2)))
 myPrcomp <- prcomp(myDgeList)

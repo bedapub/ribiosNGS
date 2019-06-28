@@ -4,18 +4,20 @@
 \alias{prcomp.DGEList}
 \title{Principal component analysis of DGEList}
 \usage{
-\method{prcomp}{DGEList}(x, ntop = NULL, fun = function(x) cpm(x, log =
-  TRUE))
+\method{prcomp}{DGEList}(x, ntop = NULL, scale = FALSE,
+  fun = function(x) cpm(x, log = TRUE))
 }
 \arguments{
 \item{x}{A \code{DGEList} object}
 
 \item{ntop}{Integer, how many top-variable genes should be used?}
 
-\item{fun}{Function, how to transform counts in the DGEList into data appropriate for PCA? log-cpm is used by default.
+\item{scale}{Logical, whether variance of features should be scaled to 1. Default \code{FALSE}
 
 If many genes have zero count in all samples, the PCA plot of samples can be sometimes delusive. Therefore, the function
 removes such all-zero-count features prior to PCA analysis.}
+
+\item{fun}{Function, how to transform counts in the DGEList into data appropriate for PCA? log-cpm is used by default.}
 }
 \description{
 Principal component analysis of DGEList
@@ -31,4 +33,7 @@ myDgeList2 <- DGEList(counts=rbind(myCounts, rep(0, 10)),
   samples=data.frame(group=gl(5,2)))
 myPrcomp2 <- prcomp(myDgeList2)
 stopifnot(identical(myPrcomp, myPrcomp2))
+}
+\seealso{
+\code{\link{prcompExprs}}
 }

@@ -19,10 +19,7 @@ rowVars <- function (x, na.rm=TRUE) {
 #' @param matrix Numeric matrix. Features in rows and samples in columns.
 #' @param ntop Integer or NULL. If not \code{NULL}, only \code{ntop} genes with the highest variance are used for the calculation.
 #' @param scale Logical, whether variance of features should be scaled to 1. Default \code{FALSE}, as recommended by Nguyen et al. (2019)
-#' 
-#' @references 
-#' Nguyen, Lan Huong, and Susan Holmes. “Ten Quick Tips for Effective Dimensionality Reduction.” PLOS Computational Biology 15, no. 6 (June 20, 2019): e1006907. https://doi.org/10.1371/journal.pcbi.1006907.
-#' 
+#' @references Nguyen, Lan Huong, and Susan Holmes. "Ten Quick Tips for Effective Dimensionality Reduction." PLOS Computational Biology 15, no. 6 (2019): e1006907
 #' @examples 
 #' myTestExprs <- matrix(rnorm(1000), ncol=10, byrow=FALSE)
 #' myTestExprs[1:100, 6:10] <- myTestExprs[1:100, 6:10] + 2
@@ -46,9 +43,12 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
 #' @param x A \code{DGEList} object
 #' @param ntop Integer, how many top-variable genes should be used?
 #' @param fun Function, how to transform counts in the DGEList into data appropriate for PCA? log-cpm is used by default.
+#' @param scale Logical, whether variance of features should be scaled to 1. Default \code{FALSE}
 #' 
 #' If many genes have zero count in all samples, the PCA plot of samples can be sometimes delusive. Therefore, the function
 #' removes such all-zero-count features prior to PCA analysis.
+#' 
+#' @seealso \code{\link{prcompExprs}}
 #' 
 #' @examples
 #' myCounts <- matrix(rnbinom(100, 3, 0.25), nrow=10)
@@ -62,10 +62,11 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
 #' myPrcomp2 <- prcomp(myDgeList2)
 #' stopifnot(identical(myPrcomp, myPrcomp2))
 prcomp.DGEList <- function(x, ntop=NULL, 
+                           scale=FALSE,
                            fun=function(x) cpm(x, log=TRUE)) {
   ## remove all-zero-count features first, otherwise the PCA result can be delusive
   x <- x[rowSums(x$counts)>0, 1:ncol(x)]
   mat <- do.call(fun, list(x))
-  res <- prcompExprs(mat, ntop=ntop)
+  res <- prcompExprs(mat, ntop=ntop, scale=scale)
   return(res)
 }

@@ -4,12 +4,14 @@
 \alias{prcompExprs}
 \title{Principal component analysis of expression matrix}
 \usage{
-prcompExprs(matrix, ntop = NULL)
+prcompExprs(matrix, ntop = NULL, scale = FALSE)
 }
 \arguments{
 \item{matrix}{Numeric matrix. Features in rows and samples in columns.}
 
 \item{ntop}{Integer or NULL. If not \code{NULL}, only \code{ntop} genes with the highest variance are used for the calculation.}
+
+\item{scale}{Logical, whether variance of features should be scaled to 1. Default \code{FALSE}, as recommended by Nguyen et al. (2019)}
 }
 \description{
 Principal component analysis of expression matrix
@@ -18,4 +20,7 @@ Principal component analysis of expression matrix
 myTestExprs <- matrix(rnorm(1000), ncol=10, byrow=FALSE)
 myTestExprs[1:100, 6:10] <- myTestExprs[1:100, 6:10] + 2
 myTopPca <- prcompExprs(myTestExprs, ntop=100)
+}
+\references{
+Nguyen, Lan Huong, and Susan Holmes. "Ten Quick Tips for Effective Dimensionality Reduction." PLOS Computational Biology 15, no. 6 (2019): e1006907
 }

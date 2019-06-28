@@ -53,15 +53,18 @@
 ##              }
 ##          })
 
-
 #' Parse contributing genes from the output file
+#'
 #' @param str Character string, containing contributing genes
-#' @return A list of \code{data.frames}, each containing two columns, \code{Gene} and \code{Stat}
+#' @return A list of \code{data.frames}, each containing two columns,
+#' \code{Gene} and \code{Stat}
+#' @examples
 #' 
-#' @examples 
 #' parseContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)")
 #' parseContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
 #'                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"))
+#' 
+#' @export parseContributingGenes
 parseContributingGenes <- function(str) {
   ss <- strsplit(str, ",")
   res <- lapply(ss, function(x) {
@@ -72,16 +75,23 @@ parseContributingGenes <- function(str) {
   return(res)
 }
 
+
+
 #' Parse contributing genes by genesets
-#' @param str Character strings, containing contributing genes
-#' @param genesets Character strings, geneset labels. Its length must match the length of \code{str}
-#' @return A \code{data.frame} containing genesets, genes, and statistics
 #' 
-#' @examples 
+#' 
+#' @param str Character strings, containing contributing genes
+#' @param genesets Character strings, geneset labels. Its length must match the
+#' length of \code{str}
+#' @return A \code{data.frame} containing genesets, genes, and statistics
+#' @examples
+#' 
 #' parseGenesetsContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)", "Metabolism")
 #' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
 #'                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"),
 #'                          c("Metabolism", "AKTs"))
+#' 
+#' @export parseGenesetsContributingGenes
 parseGenesetsContributingGenes <- function(str, genesets) {
   stopifnot(length(str)==length(genesets))
   genes <- parseContributingGenes(str)
@@ -162,10 +172,43 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 ##}
 
 ## skip the GSEresultList object, and directly parse camera table
+
+
+#' #' Parse contributing genesets by both genesets and contrasts #' @param str
+#' Character strings, containing contributing genes #' @param genesets
+#' Character strings, geneset labels. Its length must match the length of
+#' \code{str} #' @return A \code{data.frame} containing genesets, genes, and
+#' statistics #' #' @examples #' parseGenesetsContributingGenes("AKR1C4(-1.25),
+#' AKR1D1(-1.11)", "Metabolism") #'
+#' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)", #'
+#' "AKT1(1.24), AKT2(1.11), AKT3(1.05)"), #' c("Metabolism", "AKTs"))
+#' parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts)
+#' genes <- parseContributingGenes(str) res <- cbind(Contrast=rep(contrasts,
+#' sapply(contrasts, nrow)), GeneSet=rep(genesets, sapply(genes, nrow)),
+#' do.call(rbind, genes)) return(res)
+#' 
 #' Read CAMERA results into a tibble object
+#' 
+#' #' Parse contributing genesets by both genesets and contrasts #' @param str
+#' Character strings, containing contributing genes #' @param genesets
+#' Character strings, geneset labels. Its length must match the length of
+#' \code{str} #' @return A \code{data.frame} containing genesets, genes, and
+#' statistics #' #' @examples #' parseGenesetsContributingGenes("AKR1C4(-1.25),
+#' AKR1D1(-1.11)", "Metabolism") #'
+#' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)", #'
+#' "AKT1(1.24), AKT2(1.11), AKT3(1.05)"), #' c("Metabolism", "AKTs"))
+#' parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts)
+#' genes <- parseContributingGenes(str) res <- cbind(Contrast=rep(contrasts,
+#' sapply(contrasts, nrow)), GeneSet=rep(genesets, sapply(genes, nrow)),
+#' do.call(rbind, genes)) return(res)
+#' 
+#' Read CAMERA results into a tibble object
+#' 
+#' 
 #' @param file CAMERA results file
 #' @param minNGenes NULL or integer, genesets with fewer genes are filtered out
 #' @param maxNGenes NULL or integer, genesets with more genes are filtered out
+#' @export readCameraResults
 readCameraResults <- function(file, minNGenes=3, maxNGenes=1000) {
   res <- readr::read_tsv(file, col_types = "cccicddddddddc")
   if(!is.null(minNGenes)) {

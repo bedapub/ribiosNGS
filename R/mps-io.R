@@ -1,8 +1,10 @@
 #' Extract AmpliSeq target annotation from a list of read count data.frames
 #' 
+#' 
 #' @param readCountsList A list of read count data.frames
 #' 
-#' The function is used internally to extract unique target annotation from multiple runs
+#' The function is used internally to extract unique target annotation from
+#' multiple runs
 extractTargetAnno <- function(readCountsList) {
   annos <- lapply(readCountsList, function(x) data.frame(Target=x$Target, GeneSymbol=x$Gene))
   anno <- do.call(rbind, annos)
@@ -12,11 +14,14 @@ extractTargetAnno <- function(readCountsList) {
 
 #' Merge AmpliSeq runs
 #' 
+#' 
 #' @param readCountList A list of read count data.frames
 #' @param barcodeSummaryList A list of barcode summary data.frames
-#' @param runNames Character strings, run names. If \code{NULL}, a sequential number will be given.
+#' @param runNames Character strings, run names. If \code{NULL}, a sequential
+#' number will be given.
 #' 
-#' The function is used internally to merge several runs into one ExpressionSet object.
+#' The function is used internally to merge several runs into one ExpressionSet
+#' object.
 mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) {
   if(is.null(runNames))
     runNames <- seq(along=readCountList)
@@ -55,20 +60,24 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) 
 
 #' Read AmpliSeq results into an ExpressionSet object
 #' 
+#' 
 #' @param readCountFiles Character string vector, names of read count files
-#' @param barcodeSummaryFiles Character string vector, names of barcode summary files
+#' @param barcodeSummaryFiles Character string vector, names of barcode summary
+#' files
 #' @param runNames Character string vector, run names
 #' 
-#' This function parses read count files as well as barcode summary files, 
-#' and organise the data into an \code{\linkS4class{ExpressionSet}} object.
+#' This function parses read count files as well as barcode summary files, and
+#' organise the data into an \code{\linkS4class{ExpressionSet}} object.
+#' @examples
 #' 
-#' @examples 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",
 #'   sprintf("ReadCountFile-%d.xls", 1:3), package="ribiosNGS")
 #' barcodeFiles <- system.file("extdata/AmpliSeq_files/",
 #'   sprintf("BarcodeSummaryFile-%d.xls", 1:3), package="ribiosNGS")
 #' exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
 #'   runNames=c("R1", "R2", "R3"))
+#' 
+#' @export readAmpliSeq
 readAmpliSeq <- function(readCountFiles, 
                          barcodeSummaryFiles,
                          runNames=names(readCountFiles)) {
@@ -102,14 +111,15 @@ readAmpliSeq <- function(readCountFiles,
   return(res)
 }
 
+
 #' Detect samples that are repeated in cherry-picking runs
+#' 
 #' 
 #' @param eset An ExpressionSet object returned by \code{\link{readAmpliSeq}}
 #' @param cherryPickingRun Character string(s), name(s) of cherry picking runs
-#' 
 #' @note Only valid if the sample names are unique.
+#' @examples
 #' 
-#' @examples 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",
 #'   sprintf("ReadCountFile-%d.xls", 1:3), package="ribiosNGS")
 #' barcodeFiles <- system.file("extdata/AmpliSeq_files/",
@@ -117,6 +127,8 @@ readAmpliSeq <- function(readCountFiles,
 #' exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
 #'   runNames=c("R1", "R2", "R3"))
 #' summary(isCherryPickingRepeat(exampleAmpliSeq, "R3"))
+#' 
+#' @export isCherryPickingRepeat
 isCherryPickingRepeat <- function(eset, cherryPickingRun) {
   stopifnot(cherryPickingRun %in% eset$Run)
   dupSampleNames <- eset$SampleName[duplicated(eset$SampleName)]
@@ -126,11 +138,12 @@ isCherryPickingRepeat <- function(eset, cherryPickingRun) {
 
 #' Remove samples that are repeated in cherry-picking runs
 #' 
+#' 
 #' @param eset An ExpressionSet object returned by \code{\link{readAmpliSeq}}
 #' @param cherryPickingRun Character string(s), name(s) of cherry picking runs
-#' 
 #' @note Only valid if the sample names are unique.
-#' @examples 
+#' @examples
+#' 
 #' countFiles <- system.file("extdata/AmpliSeq_files/",
 #'   sprintf("ReadCountFile-%d.xls", 1:3), package="ribiosNGS")
 #' barcodeFiles <- system.file("extdata/AmpliSeq_files/",
@@ -138,6 +151,8 @@ isCherryPickingRepeat <- function(eset, cherryPickingRun) {
 #' exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
 #'   runNames=c("R1", "R2", "R3"))
 #' newAmpliSeq <- removeCherryPickingRepeat(exampleAmpliSeq, "R3")
+#' 
+#' @export removeCherryPickingRepeat
 removeCherryPickingRepeat <- function(eset, cherryPickingRun) {
   isDup <- isCherryPickingRepeat(eset, cherryPickingRun)
   return(eset[,!isDup])

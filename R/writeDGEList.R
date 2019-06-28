@@ -1,23 +1,34 @@
 #' Write an DGEList object as plain files for downstream analysis
+#' 
+#' 
 #' @param dgeList An DGEList object
 #' @param exprs.file File name where counts are saved
 #' @param fData.file File name where feature annotations are saved
 #' @param pData.file File name where sample annotations are saved
 #' @param group.file File name where the sample group information is saved
 #' @param groupLevels.file File where the sample group levels are saved
-#' @param feat.name Feature names. Can be a column name in \code{genes} of the DGEList object, or a vector of the same length as the fetaures. If \code{NULL}, row names of the count matrix are used.
-#' @param feat.desc Feature descriptions, used in GCT files. If \code{NULL}, 'GeneSymbol' will be used if the column is present, otherwise no description will be used
+#' @param feat.name Feature names. Can be a column name in \code{genes} of the
+#' DGEList object, or a vector of the same length as the fetaures. If
+#' \code{NULL}, row names of the count matrix are used.
+#' @param feat.desc Feature descriptions, used in GCT files. If \code{NULL},
+#' 'GeneSymbol' will be used if the column is present, otherwise no description
+#' will be used
 #' 
-#' Expression values are saved by default in the gct format, unless the file name ends with tsv in which case a tab-separated value (TSV) file will be saved.
+#' Expression values are saved by default in the gct format, unless the file
+#' name ends with tsv in which case a tab-separated value (TSV) file will be
+#' saved.
 #' 
-#' Sample group and group level information are derived from the \code{group} column of the sample annotation.
+#' Sample group and group level information are derived from the \code{group}
+#' column of the sample annotation.
+#' @note In case the input matrix has no feature name, the feature names are
+#' set to be the integer array starting from 1.
 #' 
-#' @note 
-#' In case the input matrix has no feature name, the feature names are set to be the integer array starting from 1.
+#' In case no \code{genes} item is available in the DGEList, a minimal
+#' data.frame containing one column, \code{Feature}, is exported with row names
+#' of the count matrix used as both row names as well as the content of the
+#' \code{Feature} column.
+#' @examples
 #' 
-#' In case no \code{genes} item is available in the DGEList, a minimal data.frame containing one column, \code{Feature}, is exported with row names of the count matrix used as both row names as well as the content of the \code{Feature} column.
-#' 
-#' @examples 
 #' 
 #' y <- matrix(rnbinom(10000,mu=5,size=2),ncol=4)
 #' d <- DGEList(counts=y, group=rep(1:2,each=2))
@@ -35,6 +46,8 @@
 #' head(ribiosIO::readMatrix(pDataFile))
 #' head(readLines(groupFile))
 #' head(readLines(groupLevelsFile))
+#' 
+#' @export writeDGEList
 writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file, 
                          group.file,
                          groupLevels.file,

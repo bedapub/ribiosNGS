@@ -8,8 +8,6 @@ ESF_LR_DEFAULT <- 0
 ESF_PVALUE_DEFAULT <- 1
 ESF_FDR_DEFAULT <- 1
 
-
-
 setClass("RiboSeq",
          representation=list(RNA="DGEList",
            RPF="DGEList",
@@ -134,6 +132,17 @@ ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.5, FDR=0.05)
 
 setClass("EdgeResult",
          representation=list("dgeGLM"="DGEGLM",
+
+
+#' Return a list of differential gene expression tables
+#' 
+#' 
+#' @param edgeResult An \code{EdgeResult} object
+#' @return A list of \code{data.frame}s, each containing the DGEtable for one
+#' contrast.
+#' @seealso \code{dgeTable} which returns one \code{data.frame} for one or more
+#' given contrasts.
+#' @export dgeTables
            "dgeTables"="list",
            "sigFilter"="EdgeSigFilter"),
          prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
@@ -172,7 +181,8 @@ setClass("DGEList2", representation("list"))
 
 #' Construct a DGEList2 object
 #' 
-#' @param ... A list of DGEList2 objects, can be passed as individual objects or in a list
+#' @param ... A list of DGEList2 objects, can be passed as individual objects
+#' or in a list
 DGEList2 <- function(...) {
   li <- as.list(...)
   res <- new("DGEList2", li)

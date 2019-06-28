@@ -551,10 +551,16 @@ setMethod("split", c("DGEList", "factor", "ANY"), function(x, f,
   return(res)
 })
 
+
+
 #' Build design matrix from a DGEList object
+#' 
+#' Build design matrix from a DGEList object
+#' 
 #' 
 #' @param object A DGEList object
 #' @param formula Formula, passed to \code{\link{model.matrix}}
+#' @export model.DGEList
 model.DGEList <- function(object, formula, ...) {
   model.matrix(formula, data=object$samples)
 }
@@ -659,12 +665,18 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
   voomSVA(object, designMatrix)
 })
 
+
+
 #' Run principal component analysis on a DGEList2 object
 #' 
-#' @param x A DGEList2 object
-#' @param ntop NULL or integer. If set, only \code{ntop} top-variable genes are used
-#' @param fun Function, used to transform count data into continuous data used by PCA
+#' Run principal component analysis on a DGEList2 object
 #' 
+#' 
+#' @param x A DGEList2 object
+#' @param ntop NULL or integer. If set, only \code{ntop} top-variable genes are
+#' used
+#' @param fun Function, used to transform count data into continuous data used
+#' by PCA
 #' @return A list of \code{prcomp} objects.
 prcomp.DGEList2 <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
   resList <- lapply(x@.Data,

@@ -67,17 +67,26 @@ hasNoReplicate <- function(edgeObj) {
   return(maxCountByGroup(edgeObj)<=1)
 }
 
+
 #' Filter EdgeObj and remove lowly expressed genes
+#' 
 #' 
 #' @param edgeObj An EdgeObject object
 #' @param minCPM Minimal CPM value, see descriptions below
-#' @param minCount Minimal count of samples in which the CPM value is no less than \code{minCPM}
+#' @param minCount Minimal count of samples in which the CPM value is no less
+#' than \code{minCPM}
 #' 
-#' The filter is recommended by the authors of the \code{edgeR} package to remove lowly expressed genes, since including them in differential gene expression analysis will cause extreme differential expression fold-changes of lowly and stochastically expressed genes, and increase false positive rates.
+#' The filter is recommended by the authors of the \code{edgeR} package to
+#' remove lowly expressed genes, since including them in differential gene
+#' expression analysis will cause extreme differential expression fold-changes
+#' of lowly and stochastically expressed genes, and increase false positive
+#' rates.
 #' 
-#' The filter removes genes that are less expressed than 1 copy per million reads (cpm) in at least \code{n} samples, where \code{n} equals the number of samples in the smallest group of the design. 
-#' 
+#' The filter removes genes that are less expressed than 1 copy per million
+#' reads (cpm) in at least \code{n} samples, where \code{n} equals the number
+#' of samples in the smallest group of the design.
 #' @examples
+#' 
 #' myFac <- gl(3,2)
 #' set.seed(1234)
 #' myMat <- matrix(rpois(1200,100), nrow=200, ncol=6)
@@ -91,6 +100,8 @@ hasNoReplicate <- function(edgeObj) {
 #' dim(counts(myFilteredEdgeObj))
 #' ## show unfiltered count matrix
 #' dim(counts(myFilteredEdgeObj, filter=FALSE))
+#' 
+#' @export filterByCPM
 filterByCPM <- function(edgeObj,
                         minCPM=1,
                         minCount=minGroupCount(edgeObj)) {
@@ -448,16 +459,20 @@ readMPS <- function(file) {
              genes=genes))
 }
 
+
+
 #' Perform differential gene expression analysis with edgeR
+#' 
+#' Perform differential gene expression analysis with edgeR
+#' 
 #' 
 #' @param edgeObj An object of \code{EdgeObject}
 #' 
-#' The function performs end-to-end differential gene expression (DGE) analysis 
+#' The function performs end-to-end differential gene expression (DGE) analysis
 #' with common best practice using edgeR
-#' 
 #' @return An \code{EdgeResult} object
-#' 
 #' @examples
+#' 
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 #' exDesign <- model.matrix(~0+exGroups)
@@ -470,6 +485,8 @@ readMPS <- function(file) {
 #'                      fData=exFdata, pData=exPdata)
 #' exDgeRes <- dgeWithEdgeR(exObj)
 #' dgeTable(exDgeRes)
+#' 
+#' @export dgeWithEdgeR
 dgeWithEdgeR <- function(edgeObj) {
   edgeObj.filter <- ribiosNGS::filterByCPM(edgeObj)
   edgeObj.norm <- ribiosNGS::normalize(edgeObj.filter)
@@ -486,18 +503,31 @@ dgeWithEdgeR <- function(edgeObj) {
   return(dgeTest)
 }
 
+
+
 #' Perform gene-set enrichment (GSE) analysis
+#' 
+#' Perform gene-set enrichment (GSE) analysis
+#' 
 #' 
 #' @param edgeResult An object of the class \code{EdgeObject}
 #' @param geneSets An object of the class \code{GeneSets}
 #' 
-#' The function performs gene-set enrichment analysis. By default,the CAMERA method is applied. In case this is not successful, for instance because of lack of biological replicates, the GAGE method (Generally Applicable Gene-set Enrichment for pathway analysis) is applied.
-#' 
-#' @return An \code{EdgeGSE} object containing all information required to reproduce the gene-set enrichment analysis results, as well as the enrichment table. Apply \code{fullEnrichTable} to the object to extract a \code{data.frame} containing results of the gene-set enrichment analysis.
-#' 
-#' @seealso \code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by this function to perform analysis with GAGE and CAMERA, respectively. \code{logFCgage} and \code{camera.EdgeResult} implements the logic, and returns an object of the \code{EdgeGSE} class, which contains all relevant information required to reproduce the analysis results.
-#' 
+#' The function performs gene-set enrichment analysis. By default,the CAMERA
+#' method is applied. In case this is not successful, for instance because of
+#' lack of biological replicates, the GAGE method (Generally Applicable
+#' Gene-set Enrichment for pathway analysis) is applied.
+#' @return An \code{EdgeGSE} object containing all information required to
+#' reproduce the gene-set enrichment analysis results, as well as the
+#' enrichment table. Apply \code{fullEnrichTable} to the object to extract a
+#' \code{data.frame} containing results of the gene-set enrichment analysis.
+#' @seealso \code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by
+#' this function to perform analysis with GAGE and CAMERA, respectively.
+#' \code{logFCgage} and \code{camera.EdgeResult} implements the logic, and
+#' returns an object of the \code{EdgeGSE} class, which contains all relevant
+#' information required to reproduce the analysis results.
 #' @examples
+#' 
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 #' exDesign <- model.matrix(~0+exGroups)
@@ -517,6 +547,8 @@ dgeWithEdgeR <- function(edgeObj) {
 #' 
 #' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
 #' exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
+#' 
+#' @export doGse
 doGse <- function(edgeResult, geneSets) {
   res <- try(gseWithCamera(edgeResult, geneSets))
   if(class(res)=="try-error") {

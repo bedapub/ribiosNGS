@@ -89,21 +89,29 @@ voomCamera <- function(edgeObj, gscs) {
   return(edgeGse)
 }
 
+
+
 #' Calculate mid-p quantile residuals
+#' 
+#' Calculate mid-p quantile residuals
+#' 
 #' 
 #' @param y An DGEList object
 #' @param design Design matrix
 #' @param contrast Contrast vector
 #' 
-#' The function is a carbon copy of edgeR:::.zscoreDGE, which is unfortunately not exported
+#' The function is a carbon copy of edgeR:::.zscoreDGE, which is unfortunately
+#' not exported
+#' @examples
 #' 
-#' @examples 
 #' dgeMatrix <- matrix(rpois(1200, 10), nrow=200)
 #' dgeList <- DGEList(dgeMatrix)
 #' dgeList <- estimateCommonDisp(dgeList)
 #' dgeDesign <- model.matrix(~gl(2,3))
 #' dgeZscore <- zscoreDGE(dgeList, dgeDesign, contrast=c(0,1))
 #' head(dgeZscore)
+#' 
+#' @export zscoreDGE
 zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
   allzero <- rowSums(y$counts > 1e-08) == 0
   if (any(allzero)) 
@@ -158,8 +166,10 @@ setMethod("humanGeneSymbols", "EdgeObject", function(object) fDataHumanGeneSymbo
 
 #' Perform camera using DGEList
 #' 
+#' 
 #' @param dgeList A DGEList object, with GeneSymbol available
-#' @param index List of integer indices of genesets, names are namese of gene sets
+#' @param index List of integer indices of genesets, names are namese of gene
+#' sets
 #' @param design Design matrix
 #' @param contrasts Contrast matrix
 dgeListCamera <- function(dgeList, index, design, contrasts) {
@@ -221,12 +231,20 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
   return(res)
 }
 
+
+
 #' Run CAMERA method using EdgeResult
 #' 
-#' @param y A EdgeResult object
-#' @param gscs Gene set collections, for example read by \code{\link[ribiosGSEA]{readGmt}}
+#' Run CAMERA method using EdgeResult
 #' 
-#' Note that the EdgeResult object must have a column 'GeneSymbol' in its \code{fData}.
+#' 
+#' @param y A EdgeResult object
+#' @param gscs Gene set collections, for example read by
+#' \code{\link[ribiosGSEA]{readGmt}}
+#' 
+#' Note that the EdgeResult object must have a column 'GeneSymbol' in its
+#' \code{fData}.
+#' @export camera.EdgeResult
 camera.EdgeResult <- function(y, gscs) {
   ctnames<- contrastNames(y)
   design <- designMatrix(y)

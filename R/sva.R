@@ -1,16 +1,19 @@
 #' Apply SVA to transformed count data
 #' 
+#' 
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
 #' @param transformFunc A function to transform the count data
-#' 
 #' @return The SV matrix
 #' @examples
+#' 
 #' set.seed(1887)
 #' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 #' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 #' exDesign <- model.matrix(~gl(2,3))
 #' countsSVA(exCounts, designMatrix=exDesign)
+#' 
+#' @export countsSVA
 countsSVA <- function(counts, designMatrix, 
                       transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E,
                       ...) {
@@ -19,18 +22,22 @@ countsSVA <- function(counts, designMatrix,
   return(sv)
 }
 
-#' Apply SVA to transformed count data and return the transformed matrix removing the effect of surrogate variables
+#' Apply SVA to transformed count data and return the transformed matrix
+#' removing the effect of surrogate variables
+#' 
 #' 
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
 #' @param transformFunc A function to transform the count data
-#' 
 #' @return The expression matrix, with SV effects removed
 #' @examples
+#' 
 #' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 #' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 #' exDesign <- model.matrix(~gl(2,3))
 #' head(countsRemoveSV(exCounts, designMatrix=exDesign))
+#' 
+#' @export countsRemoveSV
 countsRemoveSV <- function(counts, designMatrix,
                            transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E) {
   transformedData <- do.call(transformFunc, list(counts=counts, designMatrix=designMatrix))
@@ -39,75 +46,95 @@ countsRemoveSV <- function(counts, designMatrix,
   return(res)
 }
 
-#' Apply SVA to voom-transformed count data, and return the voom expression matrix with surrogate variables' effect removed
+#' Apply SVA to voom-transformed count data, and return the voom expression
+#' matrix with surrogate variables' effect removed
+#' 
 #' 
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
-#' 
-#' @return  The voom expression matrix, with SV effects removed
+#' @return The voom expression matrix, with SV effects removed
 #' @examples
+#' 
 #' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 #' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 #' exDesign <- model.matrix(~gl(2,3))
 #' head(voomRemoveSV(exCounts, designMatrix=exDesign))
 #' ## compare the results without SV removal, note the values in the second and third column are much larger than the rest
 #' head(voom(exCounts, exDesign)$E)
+#' 
+#' @export voomRemoveSV
 voomRemoveSV <- function(counts, designMatrix) {
   countsRemoveSV(counts, designMatrix, transform=function(counts, designMatrix) voom(counts, designMatrix)$E)
 }
 
+
 #' Apply SVA to cpm-transformed count data
+#' 
+#' 
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
-#' 
 #' @return The SV matrix
 #' @examples
+#' 
 #' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 #' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 #' exDesign <- model.matrix(~gl(2,3))
 #' cpmSVA(exCounts, designMatrix=exDesign)
+#' 
+#' @export cpmSVA
 cpmSVA <- function(counts, designMatrix) {
   countsSVA(counts, designMatrix, transform=function(counts, designMatrix) cpm(counts, log=TRUE))
 }
 
-#' Apply cpm to voom-transformed count data, and return the voom expression matrix with surrogate variables' effect removed
+#' Apply cpm to voom-transformed count data, and return the voom expression
+#' matrix with surrogate variables' effect removed
+#' 
 #' 
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
-#' 
-#' @return  The cpm matrix, with SV effects removed
+#' @return The cpm matrix, with SV effects removed
 #' @examples
+#' 
 #' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 #' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 #' exDesign <- model.matrix(~gl(2,3))
 #' head(cpmRemoveSV(exCounts, designMatrix=exDesign))
 #' ## compare the results without SV removal, note the values in the second and third column are much larger than the rest
 #' head(cpm(exCounts))
+#' 
+#' @export cpmRemoveSV
 cpmRemoveSV <- function(counts, designMatrix) {
   countsRemoveSV(counts, designMatrix, transform=function(counts, designMatrix) cpm(counts, log=TRUE))
 }
 
 #' Is the Surrogate Variable (SV) matrix empty
 #' 
-#' @param sv A surrogate variable (SV) matrix returned by \code{sva}
 #' 
+#' @param sv A surrogate variable (SV) matrix returned by \code{sva}
 #' @return \code{TRUE} if no valid SV was estimated; otherwise \code{FALSE}.
-#' @examples 
+#' @examples
+#' 
 #' isEmptySV(matrix(0, 1,1))
 #' isEmptySV(matrix(rnorm(5), nrow=5))
+#' 
+#' @export isEmptySV
 isEmptySV <- function(sv) {
   nrow(sv)==1 && ncol(sv)==1
 }
 
-
 #' Perform surrogate variable analysis (SVA) to an EdgeObject object
 #' 
+#' 
 #' @param edgeObj An \code{EdgeObject} object
-#' @param transform Function name to perform transformation, currently supported values include voom and cpm
+#' @param transform Function name to perform transformation, currently
+#' supported values include voom and cpm
 #' 
-#' The count data associated with the EdgeObject object is first transformed, and surrogate variables are estimated from the transformed data. Correspondingly the design matrix and contrast matrix associated with the object are updated, too.
+#' The count data associated with the EdgeObject object is first transformed,
+#' and surrogate variables are estimated from the transformed data.
+#' Correspondingly the design matrix and contrast matrix associated with the
+#' object are updated, too.
+#' @examples
 #' 
-#' @examples 
 #' set.seed(1887)
 #' exMat <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 #' exMat[1:100,2:3] <- exMat[1:100, 2:3]+20
@@ -128,6 +155,8 @@ isEmptySV <- function(sv) {
 #' ## notice that in the zero-intercept parameterisation, the SVA gives no-sense results.
 #' designMatrix(exObj) <- model.matrix(~0+exGroups)
 #' designMatrix(doSVA(exObj, transform="voom"))
+#' 
+#' @export doSVA
 doSVA <- function(edgeObj, transform=c("voom", "cpm")) {
   transform <- match.arg(transform)
   counts <- counts(edgeObj)

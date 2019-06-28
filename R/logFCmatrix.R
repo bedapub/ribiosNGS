@@ -1,11 +1,17 @@
 #' Extract a matrix of log2(fold-change) values
 #' 
-#' @param edgeResult An \code{EdgeResult} object
-#' @param featureIdentifier Character, column name in \code{dgeTable} that will be used as rownames of the result matrix
-#' @param contrasts \code{NULL} or characters; if not \code{NULL}, only logFC values of given contrasts will be returned
-#' @param min.logCPM \code{NULL} or numeric. If set, features with logCPM lower than the given value is not considered. This option is helpful to remove genes that are lowly expressed which yet show strong differential expression. 
 #' 
+#' @param edgeResult An \code{EdgeResult} object
+#' @param featureIdentifier Character, column name in \code{dgeTable} that will
+#' be used as rownames of the result matrix
+#' @param contrasts \code{NULL} or characters; if not \code{NULL}, only logFC
+#' values of given contrasts will be returned
+#' @param min.logCPM \code{NULL} or numeric. If set, features with logCPM lower
+#' than the given value is not considered. This option is helpful to remove
+#' genes that are lowly expressed which yet show strong differential
+#' expression.
 #' @note TODO: add edgeResult data example
+#' @export logFCmatrix
 logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", 
                         contrasts=NULL,
                         removeNAfeatures=TRUE,

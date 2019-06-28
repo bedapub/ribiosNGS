@@ -1,11 +1,18 @@
-#' Check sample annotation data.frame or tibble meets the requirement of the biokit pipeline
-#' @param df Sample annotation, can be either a \code{data.frame} or \code{tbl_df} object
-#' @return Invisible \code{NULL} if the requirement is met, otherwise an error is printed and the function stops
+#' Check sample annotation data.frame or tibble meets the requirement of the
+#' biokit pipeline
 #' 
-#' The biokit pipeline requires that values in each column contain no empty spaces. This function ensures that.
-#' @seealso \code{\link{writeBiokitSampleAnnotation}}, which calls this function to ensure that the sample annotation file is ok
 #' 
-#' @examples 
+#' @param df Sample annotation, can be either a \code{data.frame} or
+#' \code{tbl_df} object
+#' @return Invisible \code{NULL} if the requirement is met, otherwise an error
+#' is printed and the function stops
+#' 
+#' The biokit pipeline requires that values in each column contain no empty
+#' spaces. This function ensures that.
+#' @seealso \code{\link{writeBiokitSampleAnnotation}}, which calls this
+#' function to ensure that the sample annotation file is ok
+#' @examples
+#' 
 #' test <- data.frame(Char=LETTERS[1:6],
 #'                    Integer=1:6,
 #'                    Number=pi*1:6,
@@ -22,6 +29,8 @@
 #'                          regexp = "level 1.*level 2")
 #'   testthat::expect_silent(checkBiokitSampleAnnotation(tibble::as_tibble(testFix)))
 #' }
+#' 
+#' @export checkBiokitSampleAnnotation
 checkBiokitSampleAnnotation <- function(df) {
   classes <- df %>% dplyr::summarise_all(class) 
   for(i in seq(along=classes)) {
@@ -47,16 +56,18 @@ checkBiokitSampleAnnotation <- function(df) {
   return(invisible(NULL))
 }
 
-#' Write sample annotation into a tab-delimited file to start the Biokit pipeline
+
+#' Write sample annotation into a tab-delimited file to start the Biokit
+#' pipeline
+#' 
+#' 
 #' @param df A data.frame or anything that can be converted to a data.frame
 #' @param con Connection, can be a character string indicating file name
-#' 
 #' @return NULL, side effect is used
+#' @note Starting from version 1.0-36, the function checks the input
+#' \code{data.frame} or \code{tbl_df} before writing to the file
+#' @examples
 #' 
-#' @note 
-#' Starting from version 1.0-36, the function checks the input \code{data.frame} or \code{tbl_df} before writing to the file
-#' 
-#' @examples 
 #' testDf <- data.frame(ID=LETTERS[1:4], 
 #'    GROUP=gl(2,2), 
 #'    FASTQ1=sprintf("%s_R1.fastq.gz", LETTERS[1:4]),
@@ -64,6 +75,8 @@ checkBiokitSampleAnnotation <- function(df) {
 #' tmp <- tempfile()
 #' writeBiokitSampleAnnotation(testDf, con=tmp)
 #' readLines(tmp)
+#' 
+#' @export writeBiokitSampleAnnotation
 writeBiokitSampleAnnotation <- function(df, con) {
   checkBiokitSampleAnnotation(df)
   firstLine <- paste0("#", paste(colnames(df), collapse="\t"))

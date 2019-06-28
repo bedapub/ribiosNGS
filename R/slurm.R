@@ -1,22 +1,28 @@
-#' Export an DGEList, designMatrix, and contrastMatrix to files and return the command to run the edgeR script
-#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}
+#' Export an DGEList, designMatrix, and contrastMatrix to files and return the
+#' command to run the edgeR script
+#' 
+#' 
+#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
+#' and \code{samples}
 #' @param designMatrix The design matrix to model the data
 #' @param contrastMatrix The contrast matrix matching the design matrix
-#' @param outfilePrefix Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.
-#' @param outdir Output directory of the edgeR script. Default value "edgeR_output".
+#' @param outfilePrefix Prefix of the output files. It can include directories,
+#' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+#' created.
+#' @param outdir Output directory of the edgeR script. Default value
+#' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @note Following checks are done internally: \itemize{ \item The design
+#' matrix must have the same number of rows as the columns of the count matrix.
+#' \item The contrast matrix must have the same number of rows as the columns
+#' of the design matrix.  \item Row names of the design matrix match the column
+#' names of the expression matrix. In case of suspect, the program will stop
+#' and report. }
 #' 
-#' @note
-#' Following checks are done internally:
-#' \itemize{
-#'   \item The design matrix must have the same number of rows as the columns of the count matrix.
-#'   \item The contrast matrix must have the same number of rows as the columns of the design matrix.
-#'   \item Row names of the design matrix match the column names of the expression matrix. In case of suspect, the program will stop and report.
-#' }
-#' 
-#' The output file names start with the outfilePrefix, followed by '-' and customed file suffixes. 
-#' 
+#' The output file names start with the outfilePrefix, followed by '-' and
+#' customed file suffixes.
 #' @examples
+#' 
 #'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
 #'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -25,6 +31,8 @@
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
 #'  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
 #'      outfilePrefix=NULL, outdir=tempdir())
+#' 
+#' @export edgeRcommand
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outfilePrefix=NULL,
                          outdir="edgeR_output",
@@ -84,19 +92,28 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 }
 
 #' Return the SLURM command to run the edgeR script
-#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}
+#' 
+#' 
+#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
+#' and \code{samples}
 #' @param designMatrix The design matrix to model the data
 #' @param contrastMatrix The contrast matrix matching the design matrix
-#' @param outfilePrefix Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.
-#' @param outdir Output directory of the edgeR script. Default value "edgeR_output".
+#' @param outfilePrefix Prefix of the output files. It can include directories,
+#' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+#' created.
+#' @param outdir Output directory of the edgeR script. Default value
+#' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
 #' 
-#' This function wraps the function \code{\link{edgeRcommand}} to return the command needed to start a SLURM job.
+#' This function wraps the function \code{\link{edgeRcommand}} to return the
+#' command needed to start a SLURM job.
 #' 
-#' It uses \code{outdir} to specify slurm output and error files as in the same directory of \code{outdir}. And the job name is set as the name of the output directory.
-#' 
+#' It uses \code{outdir} to specify slurm output and error files as in the same
+#' directory of \code{outdir}. And the job name is set as the name of the
+#' output directory.
 #' @seealso \code{\link{edgeRcommand}}
-#' @examples 
+#' @examples
+#' 
 #'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
 #'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -105,6 +122,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
 #'  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
 #'      outfilePrefix=NULL, outdir=tempdir())
+#' 
+#' @export slurmEdgeRcommand
 slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outfilePrefix=NULL,
                               outdir="edgeR_output",
@@ -125,20 +144,28 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 }
 
 #' Send an edgeR analysis job to SLURM
-#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes}, and \code{samples}
+#' 
+#' 
+#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
+#' and \code{samples}
 #' @param designMatrix The design matrix to model the data
 #' @param contrastMatrix The contrast matrix matching the design matrix
-#' @param outfilePrefix Prefix of the output files. It can include directories, e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be created.
-#' @param outdir Output directory of the edgeR script. Default value "edgeR_output".
-#' @param overwrite If \code{ask}, the user is asked before an existing output directory is overwritten. If \code{yes}, the job will start and an existing directory will be overwritten anyway. If \code{no}, and if an output directory is present, the job will not be started.
+#' @param outfilePrefix Prefix of the output files. It can include directories,
+#' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+#' created.
+#' @param outdir Output directory of the edgeR script. Default value
+#' "edgeR_output".
+#' @param overwrite If \code{ask}, the user is asked before an existing output
+#' directory is overwritten. If \code{yes}, the job will start and an existing
+#' directory will be overwritten anyway. If \code{no}, and if an output
+#' directory is present, the job will not be started.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @return A list of two items, \code{command}, the command line call, and
+#' \code{output}, the output of the SLURM command in bash
+#' @note Even if the output directory is empty, if \code{overwrite} is set to
+#' \code{no} (or if the user answers \code{no}), the job will not be started.
+#' @examples
 #' 
-#' @return A list of two items, \code{command}, the command line call, and \code{output}, the output of the SLURM command in bash
-#' 
-#' @note 
-#' Even if the output directory is empty, if \code{overwrite} is set to \code{no} (or if the user answers \code{no}), the job will not be started.
-#' 
-#' @examples 
 #'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
 #'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -149,6 +176,8 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast, 
 #'    outfilePrefix=NULL, outdir=tempdir())
 #'  }
+#' 
+#' @export slurmEdgeR
 slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outfilePrefix=NULL,
                        outdir="edgeR_output",

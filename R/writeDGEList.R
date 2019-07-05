@@ -98,10 +98,18 @@ writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file,
   if (!missing(pData.file) && !is.null(pData.file)) {
     ribiosIO::writeMatrix(sampleAnno, pData.file)
   }
+  sampleGroup <- sampleAnno$group
+  if(is.factor(sampleGroup)) {
+    levels(sampleGroup) <- make.names(levels(sampleGroup))
+    sampleGroupLevels <- levels(sampleGroup)
+  } else {
+    sampleGroup <- make.names(as.character(sampleGroup))
+    sampleGroupLevels <- unique(sampleGroup)
+  }
   if (!missing(group.file) && !is.null(group.file)) {
     writeLines(as.character(sampleAnno$group), group.file)
   }
   if (!missing(groupLevels.file) && !is.null(groupLevels.file)) {
-    writeLines(levels(sampleAnno$group), groupLevels.file)
+    writeLines(sampleGroupLevels, groupLevels.file)
   }
 }

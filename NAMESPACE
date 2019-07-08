@@ -9,8 +9,7 @@ importFrom("readr",
            "count_fields", "tokenizer_tsv", "read_tsv")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
-importFrom("ribiosGSEA", "biosCamera", "geneSetPerm",
-           "matchGenes", "gsGenes", "gsCategory", "GeneSet")
+importFrom("ribiosGSEA", "biosCamera", "geneSetPerm")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
@@ -25,11 +24,11 @@ importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 importFrom("sva", "sva")
 importFrom("gage", "gage")
-importFrom("BioQC", "wmwTest")
+importFrom("BioQC", "wmwTest", "gsName", "gsDesc", "gsGenes", "matchGenes")
 importFrom("dplyr", "%>%", "summarise_all")
 importFrom("vsn", "justvsn")
 
-importClassesFrom("ribiosGSEA", "GeneSets")
+importClassesFrom("BioQC", "GmtList")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
 
 ## for RNA-seq analysis

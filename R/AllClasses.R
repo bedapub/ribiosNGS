@@ -163,7 +163,7 @@ setClass("FeatAnnoExprs",
            genes="data.frame"))
 
 setClass("EdgeGSE",
-         representation=list(geneSets="GeneSets",
+         representation=list(geneSets="GmtList",
            method="character",
            enrichTables="data.frame"),
          contains="EdgeResult")

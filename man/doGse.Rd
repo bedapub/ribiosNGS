@@ -26,7 +26,6 @@ enrichment table. Apply \code{fullEnrichTable} to the object to extract a
 Perform gene-set enrichment (GSE) analysis
 }
 \examples{
-
 exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 exDesign <- model.matrix(~0+exGroups)
@@ -39,14 +38,18 @@ exObj <- EdgeObject(exMat, exDescon,
                      fData=exFdata, pData=exPdata)
 exDgeRes <- dgeWithEdgeR(exObj)
 
-exGeneSets <- new("GeneSets", list("Set1"=ribiosGSEA::GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
-                                   "Set2"=ribiosGSEA::GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
+exGmtList <- GmtList(list(
+    list(name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3"), namespace="default"),
+    list(name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"), namespace="default")
+))
 exGse <- doGse(exDgeRes, exGeneSets)
 fullEnrichTable(exGse)
 
-exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
-exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
+exGseWithGage <- gseWithLogFCgage(exDgeRes, exGmtList)
+fullEnrichTable(exGseWithGage)
 
+exGseWithCamera <- gseWithCamera(exDgeRes, exGmtList)
+fullEnrichTable(exGseWithCamera)
 }
 \seealso{
 \code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by

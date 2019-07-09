@@ -460,9 +460,6 @@ readMPS <- function(file) {
 }
 
 
-
-#' Perform differential gene expression analysis with edgeR
-#' 
 #' Perform differential gene expression analysis with edgeR
 #' 
 #' 
@@ -504,9 +501,6 @@ dgeWithEdgeR <- function(edgeObj) {
 }
 
 
-
-#' Perform gene-set enrichment (GSE) analysis
-#' 
 #' Perform gene-set enrichment (GSE) analysis
 #' 
 #' 
@@ -526,8 +520,8 @@ dgeWithEdgeR <- function(edgeObj) {
 #' \code{logFCgage} and \code{camera.EdgeResult} implements the logic, and
 #' returns an object of the \code{EdgeGSE} class, which contains all relevant
 #' information required to reproduce the analysis results.
+#'
 #' @examples
-#' 
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 #' exDesign <- model.matrix(~0+exGroups)
@@ -540,14 +534,18 @@ dgeWithEdgeR <- function(edgeObj) {
 #'                      fData=exFdata, pData=exPdata)
 #' exDgeRes <- dgeWithEdgeR(exObj)
 #' 
-#' exGeneSets <- new("GeneSets", list("Set1"=ribiosGSEA::GeneSet(category="default", name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3")),
-#'                                    "Set2"=ribiosGSEA::GeneSet(category="default", name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"))))
+#' exGmtList <- GmtList(list(
+#'     list(name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3"), namespace="default"),
+#'     list(name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"), namespace="default")
+#' ))
 #' exGse <- doGse(exDgeRes, exGeneSets)
 #' fullEnrichTable(exGse)
 #' 
-#' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
-#' exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
+#' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGmtList)
+#' fullEnrichTable(exGseWithGage)
 #' 
+#' exGseWithCamera <- gseWithCamera(exDgeRes, exGmtList)
+#' fullEnrichTable(exGseWithCamera)
 #' @export doGse
 doGse <- function(edgeResult, geneSets) {
   res <- try(gseWithCamera(edgeResult, geneSets))
@@ -564,30 +562,6 @@ gseWithCamera <- function(edgeResult, geneSets) {
   gseRes <- camera.EdgeResult(edgeResult, geneSets)
   return(gseRes)
 }
-
-##annotateDataFrame <- function(df, annotation, key) {
-##  stopifnot(is.data.frame(annotation))
-##  if(!missing(key)) {
-##    keys <- annotation[, key]
-##  } else {
-##    keys <- rownames(annotation)
-##  }
-##  ind <- match(rownames(df), keys)
-##  df.anno <- annotation[ind,]
-##  if(any(!colnames(df.anno) %in% colnames(df))) {
-##    res <- cbind(df.anno, df)
-##  } else {
-##    res <- df
-##  }
-##  rownames(res) <- rownames(df)
-##  return(res)
-##}
-##annotateGenes <- function(edgeResult, annotation, key) {
-##  dt <- dgeTables(edgeResult)
-##  annodt <- lapply(dt, function(x) annotateDataFrame(x, annotation, key))
-##  edgeResult@dgeTables <- annodt
-##  return(edgeResult)
-##}
 
 
 ## report

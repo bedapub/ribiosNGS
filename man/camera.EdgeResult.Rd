@@ -4,13 +4,13 @@
 \alias{camera.EdgeResult}
 \title{Run CAMERA method using EdgeResult}
 \usage{
-\method{camera}{EdgeResult}(y, gscs)
+\method{camera}{EdgeResult}(y, gmtList)
 }
 \arguments{
 \item{y}{A EdgeResult object}
 
-\item{gscs}{Gene set collections, for example read by
-\code{\link[ribiosGSEA]{readGmt}}
+\item{gmtList}{Gene set collections, for example read by
+\code{\link[BioQC]{readGmt}}
 
 Note that the EdgeResult object must have a column 'GeneSymbol' in its
 \code{fData}.}

@@ -1,18 +1,26 @@
 ## TODO: replace data.frame with Objects
 
-## gage method
-myGage <- function(logFC, gsc) {
-    genes <- gsGenes(gsc)
-    cate <- gsCategory(gsc)
-    gdf <- data.frame(geneset=names(genes), category=cate)
-    gage.res <- gage::gage(logFC, gsets=genes, ref=NULL, samp=NULL)
-    greater <- as.data.frame(gage.res[[1]][,c("stat.mean", "p.val", "q.val", "set.size")])
-    less <- as.data.frame(gage.res[[2]][,c("p.val", "q.val")])
-    greater$geneset <- rownames(greater)
-    less$geneset <- rownames(less)
+#' Wrap the gage::gage method to report consistent results as the CAMERA method
+#' 
+#' @param logFC A named vector of logFC values of genes
+#' @param gmtList A \code{\link[BioQC]{GmtList}} object containing gene-sets
+#' @param ... Other parameters passed to \code{\link[gage]{gage}}
+myGage <- function(logFC, gmtList, ...) {
+  gsnames <- gsName(gmtList)
+    genes <- gsGenes(gmtList)
+    gsizes <- gsSize(gmtList)
+    cate <- gsNamespace(gmtList)
+    gdf <- data.frame(geneset=gsnames, namespace=cate)
+    gage.res <- gage::gage(logFC, gsets=genes, 
+                           set.size=c(min(gsizes), max(gsizes)),
+                           ref=NULL, samp=NULL, ...)
+    greater <- as.data.frame(gage.res$greater[,c("stat.mean", "p.val", "q.val", "set.size")])
+    less <- as.data.frame(gage.res$less[,c("p.val", "q.val")])
+    greater$geneset <- gsnames
+    less$geneset <- gsnames
     greater <- merge(greater, gdf, by="geneset")
     less <- merge(less, gdf, by="geneset")
-    res.raw <- merge(greater, less, by=c("geneset","category"),
+    res.raw <- merge(greater, less, by=c("geneset","namespace"),
                      suffix=c(".greater", ".less"))
     direction <- with(res.raw, ifelse(p.val.less<p.val.greater, "Down", "Up"))
     pVal.pmin <- with(res.raw, ifelse(p.val.less<p.val.greater, p.val.less, p.val.greater))
@@ -20,7 +28,7 @@ myGage <- function(logFC, gsc) {
 
     ## TODO: contributing genes
 
-    res <- data.frame(Category=res.raw$category,
+    res <- data.frame(Namespace=res.raw$namespace,
                       GeneSet=res.raw$geneset,
                       NGenes=res.raw$set.size,
                       Direction=direction,
@@ -32,22 +40,22 @@ myGage <- function(logFC, gsc) {
 }
 
 
-logFCgage <- function(edgeResult, gscs) {
+logFCgage <- function(edgeResult, gmtList) {
     geneSymbols <- fData(edgeResult)$GeneSymbol
     logFCs <- lapply(dgeTables(edgeResult), function(x) {
                          res <- x$logFC
                          names(res) <- x$GeneSymbol
                          return(res)
                      })
-    erTables <- lapply(logFCs, function(x) myGage(x, gscs))
+    erTables <- lapply(logFCs, function(x) myGage(x, gmtList))
     
     erTable <- do.call(rbind, erTables)
     erTable$Contrast <- rep(names(logFCs),sapply(erTables, nrow))
-    erTable <- putColsFirst(erTable, c("Category", "Contrast", "GeneSet"))
+    erTable <- putColsFirst(erTable, c("Namespace", "Contrast", "GeneSet"))
     rownames(erTable) <- NULL
     
     edgeGse <- as(edgeResult, "EdgeGSE")
-    edgeGse@geneSets <- gscs
+    edgeGse@geneSets <- gmtList
     edgeGse@method <- "gage"
     edgeGse@enrichTables <- erTable
     return(edgeGse)
@@ -57,33 +65,33 @@ logFCgage <- function(edgeResult, gscs) {
 ## camera
 ##----------------------------------------##
 ## voomCamera is outdated: use camera.EdgeResult instead
-voomCamera <- function(edgeObj, gscs) {
+voomCamera <- function(edgeObj, gmtList) {
   ## TODO: deprecate this after the script is fixed
   ## .Deprecated(new="camera.EdgeResult")
   design <- designMatrix(edgeObj)
   dgelist <- calcNormFactorsIfNot(dgeList(edgeObj))
   obj.voom <- voom(dgelist, design=design)
   ctnames<- contrastNames(edgeObj)
-
+  
   ct <- contrastMatrix(edgeObj)
   geneSymbols <- as.character(fData(edgeObj)$GeneSymbol)
-
-  categories <- gsCategory(gscs)
-  erTables <- tapply(gscs, categories, function(gsc) {
-                         tt <- gscCamera(obj.voom,
-                                         geneSymbols,
-                                         gsc=gsc, design=design, contrasts=ct)
-                         return(tt)
-                     })
-
+  
+  namespaces <- gsNamespace(gmtList)
+  erTables <- tapply(gmtList, namespaces, function(gsc) {
+    tt <- ribiosGSEA::gmtListCamera(obj.voom,
+                                    geneSymbols,
+                                    gmtList=GmtList(gsc), design=design, contrasts=ct)
+    return(tt)
+  })
+  
   erTable <- do.call(rbind, erTables)
-  erTable$Category <- rep(names(erTables), sapply(erTables, nrow))
-  erTable <- putColsFirst(erTable, "Category")
+  erTable$Namespace <- rep(names(erTables), sapply(erTables, nrow))
+  erTable <- putColsFirst(erTable, "Namespace")
   rownames(erTable) <- NULL
-
-
+  
+  
   edgeGse <-   as(edgeObj,"EdgeGSE")
-  edgeGse@geneSets <- gscs
+  edgeGse@geneSets <- gmtList
   edgeGse@method <- "voom+camera"
   edgeGse@enrichTables <- erTable
   return(edgeGse)
@@ -239,13 +247,13 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
 #' 
 #' 
 #' @param y A EdgeResult object
-#' @param gscs Gene set collections, for example read by
-#' \code{\link[ribiosGSEA]{readGmt}}
+#' @param gmtList Gene set collections, for example read by
+#' \code{\link[BioQC]{readGmt}}
 #' 
 #' Note that the EdgeResult object must have a column 'GeneSymbol' in its
 #' \code{fData}.
 #' @export camera.EdgeResult
-camera.EdgeResult <- function(y, gscs) {
+camera.EdgeResult <- function(y, gmtList) {
   ctnames<- contrastNames(y)
   design <- designMatrix(y)
   ct <- contrastMatrix(y)
@@ -253,11 +261,11 @@ camera.EdgeResult <- function(y, gscs) {
   if(is.null(geneSymbols))
     stop("EdgeResult must have 'GeneSymbol' in its fData to perform camera!")
 
-  categories <- ribiosGSEA::gsCategory(gscs)
-  gsIndex <- ribiosGSEA::matchGenes(gscs, geneSymbols, na.rm=TRUE)
+  namespaces <- BioQC::gsNamespace(gmtList)
+  gsIndex <- BioQC::matchGenes(gmtList, geneSymbols)
   names(gsIndex) <- make.unique(names(gsIndex))
   
-  erTables <- tapply(seq(along=gsIndex), categories, function(i) {
+  erTables <- tapply(seq(along=gsIndex), namespaces, function(i) {
     currInd <- gsIndex[i]
     tt <- dgeListCamera(y@dgeList,
                         index=currInd,
@@ -266,13 +274,13 @@ camera.EdgeResult <- function(y, gscs) {
   })
   
   erTable <- do.call(rbind, erTables)
-  erTable$Category <- rep(names(erTables), sapply(erTables, nrow))
-  erTable <- putColsFirst(erTable, "Category")
+  erTable$Namespace <- rep(names(erTables), sapply(erTables, nrow))
+  erTable <- putColsFirst(erTable, "Namespace")
   rownames(erTable) <- NULL
   
   
   edgeGse <-   as(y,"EdgeGSE")
-  edgeGse@geneSets <- gscs
+  edgeGse@geneSets <- gmtList
   edgeGse@method <- "camera.DGEList"
   edgeGse@enrichTables <- erTable
   return(edgeGse)

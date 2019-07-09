@@ -9,7 +9,7 @@ importFrom("readr",
            "count_fields", "tokenizer_tsv", "read_tsv")
 importFrom("methods", "show")
 importFrom("lattice", "xyplot", "barchart")
-importFrom("ribiosGSEA", "biosCamera", "geneSetPerm")
+importFrom("ribiosGSEA", "biosCamera", "geneSetPerm", "gmtListCamera")
 importFrom("ribiosAnnotation", "querydb", "annotateGeneIDs", "annotateGeneSymbols", "annotatemRNAs")
 importFrom("BiocGenerics", "counts", "annotation")
 importFrom("ribiosExpression",
@@ -24,7 +24,8 @@ importFrom("limma", "plotMDS", "zscoreT", "squeezeVar")
 importFrom("igraph", "make_empty_graph", "V", "graph_from_adjacency_matrix")
 importFrom("sva", "sva")
 importFrom("gage", "gage")
-importFrom("BioQC", "wmwTest", "gsName", "gsDesc", "gsGenes", "matchGenes")
+importFrom("BioQC", "GmtList","wmwTest", "gsName", 
+           "gsDesc", "gsGenes", "gsNamespace", "gsSize", "matchGenes")
 importFrom("dplyr", "%>%", "summarise_all")
 importFrom("vsn", "justvsn")
 

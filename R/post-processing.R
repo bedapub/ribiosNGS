@@ -2,7 +2,7 @@
 
 ## due to speed reasons S4 classes are for now not used
 ## setClass("GSEresult",
-##          representation(Category="character",
+##          representation(Namespace="character",
 ##                         Contrast="character",
 ##                         GeneSet="character",
 ##                         NGenes="integer",
@@ -24,12 +24,12 @@
 ##    if(title) {
 ##        formatStr <- sprintf("%%%ds  %%%ds  %%%ds  %%%ds  %%%ds  %%%ds\n",
 ##                             wCate, wContrast, wGeneSet, wDirection, wP, wFDR)
-##        title <- sprintf(formatStr, "Category","Contrast",
+##        title <- sprintf(formatStr, "Namespace","Contrast",
 ##                         "GeneSet", "Direction",
 ##                         "PValue","FDR")
 ##        cat(title)
 ##    }
-##    cat(fixWidthStr(x@Category, wCate, align="right"))
+##    cat(fixWidthStr(x@Namespace, wCate, align="right"))
 ##    cat("  ")
 ##    cat(fixWidthStr(x@Contrast, wContrast, align="right"))
 ##    cat("  ")
@@ -120,12 +120,12 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 
 
 
-##GSEresult <- function(Category,
+##GSEresult <- function(Namespace,
 ##                      Contrast, GeneSet, NGenes, Correlation, Direction, PValue, FDR,
 ##                      ContributingGenesStr) {
 ##    contGenes <- parseContributingGenes(as.character(ContributingGenesStr))
 ##    new("GSEresult",
-##        Category=as.character(Category),
+##        Namespace=as.character(Namespace),
 ##        Contrast=as.character(Contrast),
 ##        GeneSet=as.character(GeneSet),
 ##        NGenes=NGenes,
@@ -138,7 +138,7 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 ##
 ##GSEresultListFromDataFrame <- function(df) {
 ##    grs <- sapply(1:nrow(df),function(i) {
-##                      GSEresult(df[i,"Category"],
+##                      GSEresult(df[i,"Namespace"],
 ##                                df[i,"Contrast"],
 ##                                df[i,"GeneSet"],
 ##                                df[i,"NGenes"],
@@ -153,7 +153,7 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 ##}
 
 ##GSEresultListToDataFrame <- function(resList) {
-##    category <- sapply(resList, function(x) x@Category)
+##    namespace <- sapply(resList, function(x) x@Namespace)
 ##    contrast <- sapply(resList, function(x) x@Contrast)
 ##    geneset <- sapply(resList, function(x) x@GeneSet)
 ##    direction <- sapply(resList, function(x) x@Direction)
@@ -161,7 +161,7 @@ parseGenesetsContributingGenes <- function(str, genesets) {
 ##    genes <- lapply(resList, function(x) x@ContributingGenes)
 ##    nGenes <- sapply(genes, nrow)
 ##    geneTbl <- do.call(rbind, genes)
-##    path <- data.frame(Category=rep(category, nGenes),
+##    path <- data.frame(Namespace=rep(namespace, nGenes),
 ##                       Contrast=rep(contrast, nGenes),
 ##                       GeneSet=rep(geneset, nGenes),
 ##                       Direction=rep(direction, nGenes),
@@ -247,7 +247,7 @@ expandSigCameraResults <- function(cameraTable,
 
 cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     retObj <- list(graph=make_empty_graph(),
-                   resTbl=data.frame(Category=character(0),
+                   resTbl=data.frame(Namespace=character(0),
                         GeneSet=character(0),
                        score=numeric(0)))
     if(nrow(df)==0) {
@@ -255,7 +255,7 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     }
     
     scores <- df$Score
-    labels <- df$label <- with(df, paste(Category,":",GeneSet,sep=""))
+    labels <- df$label <- with(df, paste(Namespace,":",GeneSet,sep=""))
                                
     geneLists <- with(df, split(as.character(Gene), labels))
     gJacSim <- pairwiseJaccardIndex(geneLists)
@@ -264,12 +264,12 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     rownames(gJacBin) <- colnames(gJacBin) <- gLabels
 
 
-    gCategory <- sapply(strsplit(rownames(gJacBin), ":"), "[[", 1L)
+    gNamespace <- sapply(strsplit(rownames(gJacBin), ":"), "[[", 1L)
     gGeneSet <- sapply(strsplit(rownames(gJacBin), ":"), function(x) paste(x[2:length(x)], collapse=" "))
-    ugCategory <- unique(gCategory)
-    for(ugc in ugCategory) {
+    ugNamespace <- unique(gNamespace)
+    for(ugc in ugNamespace) {
         if(grepl("^MPS",ugc)) {  ## MPS specific!
-            isUgc <- gCategory==ugc
+            isUgc <- gNamespace==ugc
             gJacBin[isUgc, isUgc] <- 1L
         }
     }
@@ -294,7 +294,7 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
              edge.arrow.size=2, ...)
     }
     retObj$graph <- graph
-    retObj$resTbl <- data.frame(Category=gCategory,
+    retObj$resTbl <- data.frame(Namespace=gNamespace,
                                 GeneSet=gGeneSet,
                                 Score=graphVscores)
     return(retObj)

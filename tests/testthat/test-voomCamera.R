@@ -1,6 +1,7 @@
 library(ribiosNGS)
 library(ribiosGSEA)
 library(ribiosUtils)
+library(BioQC)
 library(testthat)
 
 mat <- matrix(c(10,3,5,9,3,5,
@@ -17,13 +18,13 @@ obj <- EdgeObject(mat,descon, fData=data.frame(GeneSymbol=rownames(mat)))
 
 ## NOTE THAT obj must have GeneSymbol in its fData
 
-gs1 <- GeneSet("DefaultCategory", "GeneSet1", "", c("gene1", "gene3"))
-gs2 <- GeneSet("DefaultCategory", "GeneSet2", "", c("gene2", "gene4"))
-gs3 <- GeneSet("DefaultCategory", "GeneSet3", "", c("gene1", "gene4"))
-gsc <- GeneSets(gs1, gs2, gs3)
-gsInd <- lapply(gsGenes(gsc), function(x) match(x, rownames(mat)))
+gs1 <- list(name="GeneSet1", desc="", genes=c("gene1", "gene3"), namespace="default")
+gs2 <- list(name="GeneSet2", desc="", genes=c("gene2", "gene4"), namespace="default")
+gs3 <- list(name="GeneSet3", desc="", genes=c("gene1", "gene4"), namespace="default")
+gmtlist <- GmtList(list(gs1, gs2, gs3))
+gsInd <- matchGenes(gmtlist, rownames(mat))
 
-voomCameraOut <- voomCamera(obj, gsc)
+voomCameraOut <- voomCamera(obj, gmtlist)
 
 voomCameraTbl <- voomCameraOut@enrichTables
 

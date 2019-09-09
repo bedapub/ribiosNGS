@@ -363,39 +363,39 @@ isSigNeg <- function(data.frame, sigFilter) {
 }
 
 ## TODO: fix: add InputFeature
-sigGene <- function(edgeResult, contrast) {
+sigGene <- function(edgeResult, contrast, value="GeneID") {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSig(tbl, sf)
-  tbl$GeneID[issig]
+  tbl[issig, value]
 }
-sigPosGene <- function(edgeResult, contrast) {
+sigPosGene <- function(edgeResult, contrast, value="GeneID") {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSigPos(tbl, sf)
-  tbl$GeneID[issig]
+  tbl[issig, value]
 }
 sigNegGene <- function(edgeResult, contrast) {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSigNeg(tbl, sf)
-  tbl$GeneID[issig]
+  tbl[issig, valueE]
 }
-sigGenes <- function(edgeResult) {
+sigGenes <- function(edgeResult, value="GeneID") {
   cs <- contrastNames(edgeResult)
-  res <- lapply(cs, function(x) sigGene(edgeResult, x))
+  res <- lapply(cs, function(x) sigGene(edgeResult, x, value=value))
   names(res) <- cs
   return(res)
 }
-sigPosGenes <- function(edgeResult) {
+sigPosGenes <- function(edgeResult, value="GeneID") {
   cs <- contrastNames(edgeResult)
-  res <- lapply(cs, function(x) sigPosGene(edgeResult, x))
+  res <- lapply(cs, function(x) sigPosGene(edgeResult, x, value=value))
   names(res) <- cs
   return(res)
 }
-sigNegGenes <- function(edgeResult) {
+sigNegGenes <- function(edgeResult, value="GeneID") {
   cs <- contrastNames(edgeResult)
-  res <- lapply(cs, function(x) sigNegGene(edgeResult, x))
+  res <- lapply(cs, function(x) sigNegGene(edgeResult, x, value=value))
   names(res) <- cs
   return(res)
 }

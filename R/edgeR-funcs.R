@@ -52,7 +52,32 @@ setMethod("EdgeObject",
                 dgeList=dgeList,
                 designContrast=designContrast)
           })
-minGroupCount <- function(edgeObj) {
+
+#' Return the size of the smallest group
+#' @param obj Object
+minGroupCount <- function(obj) {
+  UseMethod("minGroupCount")
+}
+
+#' Return the size of the smallest group defined in the \code{DGEList} object
+#' 
+#' @param dgeList A \code{DGEList} object
+#' @return Integer
+#' 
+#' @examples 
+#' y <- matrix(rnbinom(12000,mu=10,size=2),ncol=6)
+#' d <- DGEList(counts=y, group=rep(1:3,each=2))
+#' minGroupCount(d) ## 2 
+#' d2 <- DGEList(counts=y, group=rep(1:2,each=3))
+#' minGroupCount(d2) ## 3
+#' d3 <- DGEList(counts=y, group=rep(1:3, 1:3))
+#' minGroupCount(d3) ## 1
+minGroupCount.DGEList <- function(dgeList) {
+  groups <- dgeList$samples$group
+  return(min(table(groups)))
+}
+#' Return the size of the smallest group defined in the \code{EdgeObject} object
+minGroupCount.EdgeObject <- function(edgeObj) {
   groups <- groups(edgeObj@designContrast)
   return(min(table(groups)))
 }
@@ -68,6 +93,65 @@ hasNoReplicate <- function(edgeObj) {
 }
 
 
+
+#' Filter lowly expressed genes by counts per million (CPM)
+filterByCPM <- function(obj, ...) {
+  UseMethod("filterByCPM")
+}
+
+
+#' Filter lowly expressed genes by CPM
+#' 
+#' @param obj A matrix
+#' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
+#' @param minCount Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?
+#' 
+#' @return A logical vector of the same length as the row count of the matrix. \code{TRUE} means the gene is reasonably expressed, and \code{FALSE} means the gene is lowly expressed and should be filtered (removed)
+#' 
+#' @examples 
+#' set.seed(1887)
+#' mat <- rbind(matrix(rbinom(125, 5, 0.25), nrow=25), rep(0, 5))
+#' filterByCPM(mat)
+filterByCPM.matrix <- function(obj, minCPM=1, minCount=1) {
+  cpmRes <- cpm(obj)
+  filter <- apply(cpmRes, 1, function(x) sum(x>=minCPM)>=minCount)
+  return(filter)
+}
+
+#' Filter lowly expressed genes by CPM in DGEList
+#' 
+#' @param obj A \code{DGEList} object
+#' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
+#' @param minCount Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?
+#' 
+#' @return Another \code{DGEList} object, with lowly expressed genes removed. The original counts and gene annotation can be found in \code{counts.unfiltered} and \code{genes.unfiltered}
+#' 
+#' @examples 
+#' set.seed(1887)
+#' mat <- rbind(matrix(rbinom(150, 5, 0.25), nrow=25), rep(0, 6))
+#' d <- DGEList(mat, group=rep(1:3, each=2), genes=data.frame(Gene=sprintf("Gene%d", 1:nrow(mat))))
+#' df <- filterByCPM(d)
+#' 
+#' nrow(df$counts.unfiltered) ## 26
+#' nrow(df$counts) ## 25
+filterByCPM.DGEList <- function(obj, lib.size=NULL,
+                                minCPM=1,
+                                minCount=minGroupCount(obj)) {
+  y <- as.matrix(obj)
+  group <- obj$samples$group
+  if (is.null(group)) 
+    group <- rep_len(1L, ncol(y))
+  group <- as.factor(group)
+  if (is.null(lib.size)) 
+    lib.size <- obj$samples$lib.size * obj$samples$norm.factors
+
+  CPM <- cpm(y, lib.size = lib.size)
+  filter <- rowSums(CPM >= minCPM) >= minCount
+  res <- obj[filter,,]
+  res$counts.unfiltered <- obj$counts
+  res$genes.unfiltered <- obj$genes
+  return(res)
+}
 #' Filter EdgeObj and remove lowly expressed genes
 #' 
 #' 
@@ -101,17 +185,17 @@ hasNoReplicate <- function(edgeObj) {
 #' ## show unfiltered count matrix
 #' dim(counts(myFilteredEdgeObj, filter=FALSE))
 #' 
-#' @export filterByCPM
-filterByCPM <- function(edgeObj,
-                        minCPM=1,
-                        minCount=minGroupCount(edgeObj)) {
-  cpmRes <- cpm(edgeObj)
+#' @export filterByCPM.EdgeObject
+filterByCPM.EdgeObject <- function(obj,
+                                   minCPM=1,
+                                   minCount=minGroupCount(obj)) {
+  cpmRes <- cpm(obj)
   filter <- apply(cpmRes, 1, function(x) sum(x>=minCPM)>=minCount)
-  newDgeList <- edgeObj@dgeList[filter,]
-  newDgeList$counts.unfiltered <- edgeObj@dgeList$counts
-  newDgeList$genes.unfiltered <- edgeObj@dgeList$genes
-  edgeObj@dgeList <- newDgeList
-  return(edgeObj)
+  newDgeList <- obj@dgeList[filter,]
+  newDgeList$counts.unfiltered <- obj@dgeList$counts
+  newDgeList$genes.unfiltered <- obj@dgeList$genes
+  obj@dgeList <- newDgeList
+  return(obj)
 }
 isAnyNA <- function(edgeObj) {
     any(is.na(edgeObj@dgeList$counts))
@@ -375,11 +459,11 @@ sigPosGene <- function(edgeResult, contrast, value="GeneID") {
   issig <- isSigPos(tbl, sf)
   tbl[issig, value]
 }
-sigNegGene <- function(edgeResult, contrast) {
+sigNegGene <- function(edgeResult, contrast, value="GeneID") {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSigNeg(tbl, sf)
-  tbl[issig, valueE]
+  tbl[issig, value]
 }
 sigGenes <- function(edgeResult, value="GeneID") {
   cs <- contrastNames(edgeResult)
@@ -534,7 +618,7 @@ dgeWithEdgeR <- function(edgeObj) {
 #'                      fData=exFdata, pData=exPdata)
 #' exDgeRes <- dgeWithEdgeR(exObj)
 #' 
-#' exGmtList <- GmtList(list(
+#' exGeneSets <- BioQC::GmtList(list(
 #'     list(name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3"), namespace="default"),
 #'     list(name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"), namespace="default")
 #' ))

@@ -59,8 +59,12 @@ export(countsSVA, countsRemoveSV,
 export(cpm.EdgeObject)
 export(inferSV, voomSVA, updateDesignMatrixBySVA)
 
-export(filterByCPM,
-       isAnyNA, replaceNAwithZero,
+export(filterByCPM)
+S3method(filterByCPM, DGEList)
+S3method(filterByCPM, matrix)
+S3method(filterByCPM, EdgeObject)
+
+export(isAnyNA, replaceNAwithZero,
        estimateGLMDisp, fitGLM, testGLM)
 
 exportMethods(BCV, show,
@@ -181,8 +185,11 @@ export(edgeRcommand,
        slurmEdgeRcommand,
        slurmEdgeR)
 
-export(minGroupCount,
-       countByGroup,
+export(minGroupCount)
+S3method(minGroupCount, DGEList)
+S3method(minGroupCount, EdgeObject)
+
+export(countByGroup,
        maxCountByGroup,
        hasNoReplicate)
 

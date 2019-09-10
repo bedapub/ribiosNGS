@@ -38,7 +38,7 @@ exObj <- EdgeObject(exMat, exDescon,
                      fData=exFdata, pData=exPdata)
 exDgeRes <- dgeWithEdgeR(exObj)
 
-exGmtList <- GmtList(list(
+exGeneSets <- BioQC::GmtList(list(
     list(name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3"), namespace="default"),
     list(name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"), namespace="default")
 ))

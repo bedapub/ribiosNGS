@@ -45,10 +45,10 @@ exGeneSets <- BioQC::GmtList(list(
 exGse <- doGse(exDgeRes, exGeneSets)
 fullEnrichTable(exGse)
 
-exGseWithGage <- gseWithLogFCgage(exDgeRes, exGmtList)
+exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
 fullEnrichTable(exGseWithGage)
 
-exGseWithCamera <- gseWithCamera(exDgeRes, exGmtList)
+exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
 fullEnrichTable(exGseWithCamera)
 }
 \seealso{

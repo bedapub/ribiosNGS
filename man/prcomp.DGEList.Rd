@@ -5,22 +5,27 @@
 \title{Principal component analysis of DGEList}
 \usage{
 \method{prcomp}{DGEList}(x, ntop = NULL, scale = FALSE,
-  fun = function(x) cpmVsn2(x))
+  verbose = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{DGEList} object}
 
-\item{ntop}{Integer, how many top-variable genes should be used?}
+\item{ntop}{Integer, how many top-variable features should be used? If \code{NULL}, all features are used}
 
-\item{scale}{Logical, whether variance of features should be scaled to 1.
-Default \code{FALSE}
+\item{scale}{Logical, whether variance of features should be scaled to 1. \code{FALSE} by default (recommended!); set it to \code{TRUE} only if you are sure what you are doing}
 
-If many genes have zero count in all samples, the PCA plot of samples can be
-sometimes delusive. Therefore, the function removes such all-zero-count
-features prior to PCA analysis.}
+\item{verbose}{Logical, whether the function should print messages.}
 
-\item{fun}{Function, how to transform counts in the DGEList into data
-appropriate for PCA? vsn2 transformation of log2-cpm is used by default.}
+\item{...}{Other parameters passed to \code[vsn]{vsnMatrix}
+
+The function first remove all-zero-count features, because they can make the PCA plot of samples delusive. 
+
+Next, it applies \code{vsn} transformation implemented in the \code{vsn} package to the count matrix. 
+
+Finally, PCA is applied to the vsn-transformed matrix.}
+}
+\value{
+The function returns a \code{prcomp} object. The fit object is saved in the \code{vsnFit} field in the returned object, and the transformed matrix is saved in the \code{vsnMat} field.
 }
 \description{
 Principal component analysis of DGEList
@@ -32,7 +37,11 @@ myDgeList <- DGEList(counts=myCounts,
   samples=data.frame(group=gl(5,2)))
 myPrcomp <- prcomp(myDgeList)
 
-#' features with zero count in all samples do not contribute to the PCA analysis
+\dontrun{
+  vsn::meanSdPlot(myPrcomp$vsnFit)
+}
+
+## features with zero count in all samples do not contribute to the PCA analysis
 myDgeList2 <- DGEList(counts=rbind(myCounts, rep(0, 10)),
   samples=data.frame(group=gl(5,2)))
 myPrcomp2 <- prcomp(myDgeList2)

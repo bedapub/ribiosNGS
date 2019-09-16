@@ -52,46 +52,24 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
   return(res)
 }
 
-#' Fit the vsn model to log2CPM data
-#' 
-#' @param x A matrix or DGEList object
-#' @param prior.count Integer, passed to \code{\link[edgeR]{cpm}}
-#' @param normalized.lib.sizes Logical, passed to \code{\link[edgeR]{cpm}}
-#' @param verbose Logical, whether diagnostic information is printed for vsn
-#' @param ... Other parameters passed to \code{\link[vsn]{justvsn}}
-#' @return A matrix of vsn-transformed expression data
-#' @examples
-#' 
-#' myCounts <- matrix(rnbinom(1000, 10, 0.5), nrow=100)
-#' myDgeList <- DGEList(counts=myCounts,
-#'   samples=data.frame(group=gl(5,2)))
-#'   
-#' myCpmVsn2MatRes <- cpmVsn2(myCounts)
-#' myCpmVsn2DGEListRes <- cpmVsn2(myDgeList)
-#' 
-cpmVsn2 <- function(x, prior.count=2, normalized.lib.sizes=TRUE,
-                   verbose=FALSE, ...) {
-  cpmRes <- edgeR::cpm(x, log=TRUE, prior.count=prior.count,
-                normalized.lib.sizes = normalized.lib.sizes)
-  res <- vsn::justvsn(cpmRes, verbose=verbose, ...)
-  return(res)
-}
-
-
 #' Principal component analysis of DGEList
 #' 
-#' 
 #' @param x A \code{DGEList} object
-#' @param ntop Integer, how many top-variable genes should be used?
-#' @param scale Logical, whether variance of features should be scaled to 1.
-#' Default \code{FALSE}
+#' @param ntop Integer, how many top-variable features should be used? If \code{NULL}, all features are used
+#' @param scale Logical, whether variance of features should be scaled to 1. \code{FALSE} by default (recommended!); set it to \code{TRUE} only if you are sure what you are doing
+#' @param verbose Logical, whether the function should print messages.
+#' @param ... Other parameters passed to \code[vsn]{vsnMatrix}
 #' 
-#' If many genes have zero count in all samples, the PCA plot of samples can be
-#' sometimes delusive. Therefore, the function removes such all-zero-count
-#' features prior to PCA analysis.
-#' @param fun Function, how to transform counts in the DGEList into data
-#' appropriate for PCA? vsn2 transformation of log2-cpm is used by default.
+#' The function first remove all-zero-count features, because they can make the PCA plot of samples delusive. 
+#' 
+#' Next, it applies \code{vsn} transformation implemented in the \code{vsn} package to the count matrix. 
+#' 
+#' Finally, PCA is applied to the vsn-transformed matrix. 
+#' 
+#' @return The function returns a \code{prcomp} object. The fit object is saved in the \code{vsnFit} field in the returned object, and the transformed matrix is saved in the \code{vsnMat} field.
+#' 
 #' @seealso \code{\link{prcompExprs}}
+#' 
 #' @examples
 #' 
 #' myCounts <- matrix(rnbinom(1000, 3, 0.25), nrow=100)
@@ -99,7 +77,11 @@ cpmVsn2 <- function(x, prior.count=2, normalized.lib.sizes=TRUE,
 #'   samples=data.frame(group=gl(5,2)))
 #' myPrcomp <- prcomp(myDgeList)
 #' 
-#' #' features with zero count in all samples do not contribute to the PCA analysis
+#' \dontrun{
+#'   vsn::meanSdPlot(myPrcomp$vsnFit)
+#' }
+#' 
+#' ## features with zero count in all samples do not contribute to the PCA analysis
 #' myDgeList2 <- DGEList(counts=rbind(myCounts, rep(0, 10)),
 #'   samples=data.frame(group=gl(5,2)))
 #' myPrcomp2 <- prcomp(myDgeList2)
@@ -108,10 +90,14 @@ cpmVsn2 <- function(x, prior.count=2, normalized.lib.sizes=TRUE,
 #' @export prcomp.DGEList
 prcomp.DGEList <- function(x, ntop=NULL, 
                            scale=FALSE,
-                           fun=function(x) cpmVsn2(x)) {
+                           verbose=FALSE,
+                           ...) {
   ## remove all-zero-count features first, otherwise the PCA result can be delusive
   x <- x[rowSums(x$counts)>0, 1:ncol(x)]
-  mat <- do.call(fun, list(x))
+  fit <- vsn::vsnMatrix(x$counts, verbose=verbose, ...)
+  mat <- vsn::predict(fit, newdata=x$counts, useDataInFit=TRUE)
   res <- prcompExprs(mat, ntop=ntop, scale=scale)
+  res$vsnFit <- fit
+  res$vsnMat <- mat
   return(res)
 }

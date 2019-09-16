@@ -58,7 +58,7 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
 #' @param ntop Integer, how many top-variable features should be used? If \code{NULL}, all features are used
 #' @param scale Logical, whether variance of features should be scaled to 1. \code{FALSE} by default (recommended!); set it to \code{TRUE} only if you are sure what you are doing
 #' @param verbose Logical, whether the function should print messages.
-#' @param ... Other parameters passed to \code[vsn]{vsnMatrix}
+#' @param ... Other parameters passed to \code{\link[vsn]{vsnMatrix}}
 #' 
 #' The function first remove all-zero-count features, because they can make the PCA plot of samples delusive. 
 #' 

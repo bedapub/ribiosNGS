@@ -124,7 +124,7 @@ filterByCPM.matrix <- function(obj, minCPM=1, minCount=1) {
 #' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
 #' @param minCount Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?
 #' 
-#' @return Another \code{DGEList} object, with lowly expressed genes removed. The original counts and gene annotation can be found in \code{counts.unfiltered} and \code{genes.unfiltered}
+#' @return Another \code{DGEList} object, with lowly expressed genes removed. The original counts and gene annotation can be found in \code{counts.unfiltered} and \code{genes.unfiltered} fields, respectively. The logical vector of the filter is saved in the \code{cpmFilter} field.
 #' 
 #' @examples 
 #' set.seed(1887)
@@ -138,6 +138,7 @@ filterByCPM.DGEList <- function(obj, lib.size=NULL,
                                 minCPM=1,
                                 minCount=minGroupCount(obj)) {
   y <- as.matrix(obj)
+  genes <- obj$genes
   group <- obj$samples$group
   if (is.null(group)) 
     group <- rep_len(1L, ncol(y))
@@ -147,11 +148,13 @@ filterByCPM.DGEList <- function(obj, lib.size=NULL,
 
   CPM <- cpm(y, lib.size = lib.size)
   filter <- rowSums(CPM >= minCPM) >= minCount
-  res <- obj[filter,,]
-  res$counts.unfiltered <- obj$counts
-  res$genes.unfiltered <- obj$genes
+  res <- obj[filter,]
+  res$cpmFilter <- filter
+  res$counts.unfiltered <- y
+  res$genes.unfiltered <- genes
   return(res)
 }
+
 #' Filter EdgeObj and remove lowly expressed genes
 #' 
 #' 
@@ -625,10 +628,10 @@ dgeWithEdgeR <- function(edgeObj) {
 #' exGse <- doGse(exDgeRes, exGeneSets)
 #' fullEnrichTable(exGse)
 #' 
-#' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGmtList)
+#' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
 #' fullEnrichTable(exGseWithGage)
 #' 
-#' exGseWithCamera <- gseWithCamera(exDgeRes, exGmtList)
+#' exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
 #' fullEnrichTable(exGseWithCamera)
 #' @export doGse
 doGse <- function(edgeResult, geneSets) {

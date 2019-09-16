@@ -16,7 +16,7 @@
 
 \item{verbose}{Logical, whether the function should print messages.}
 
-\item{...}{Other parameters passed to \code[vsn]{vsnMatrix}
+\item{...}{Other parameters passed to \code{\link[vsn]{vsnMatrix}}
 
 The function first remove all-zero-count features, because they can make the PCA plot of samples delusive. 
 

@@ -100,6 +100,23 @@ parseGenesetsContributingGenes <- function(str, genesets) {
   return(res)
 }
 
+#' Parse contributing genes by genesets from the result data.frame of the \code{CAMERA} method
+#' 
+#' 
+#' @param cameraResTbl A \code{tibble} or \code{data.frame} holding results of \code{CAMERA}
+#' @param genesets Character strings, geneset labels
+#' 
+#' @return A list of gene symbols, indexed by geneset names that are found in the results.
+#' 
+#' @export parseCameraContributingGenes
+parseCameraContributingGenes <- function(cameraResTbl, genesets) {
+  res <- cameraResTbl %>% filter(GeneSet %in% genesets) %>% 
+    (function(x) parseGenesetsContributingGenes(x$ContributingGenes, x$GeneSet)) %>%
+    (function(x) split(as.character(x$Gene), x$GeneSet))
+  res <- res[genesets]
+  return(res)
+}
+
 #' #' Parse contributing genesets by both genesets and contrasts
 #' #' @param str Character strings, containing contributing genes
 #' #' @param genesets Character strings, geneset labels. Its length must match the length of \code{str}

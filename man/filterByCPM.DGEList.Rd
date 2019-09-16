@@ -15,7 +15,7 @@
 \item{minCount}{Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?}
 }
 \value{
-Another \code{DGEList} object, with lowly expressed genes removed. The original counts and gene annotation can be found in \code{counts.unfiltered} and \code{genes.unfiltered}
+Another \code{DGEList} object, with lowly expressed genes removed. The original counts and gene annotation can be found in \code{counts.unfiltered} and \code{genes.unfiltered} fields, respectively. The logical vector of the filter is saved in the \code{cpmFilter} field.
 }
 \description{
 Filter lowly expressed genes by CPM in DGEList

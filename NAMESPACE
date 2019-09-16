@@ -27,7 +27,7 @@ importFrom("gage", "gage")
 importFrom("BioQC", "GmtList","wmwTest", "gsName", 
            "gsDesc", "gsGenes", "gsNamespace", "gsSize", "matchGenes")
 importFrom("dplyr", "%>%", "summarise_all")
-importFrom("vsn", "justvsn")
+importFrom("vsn", "vsnMatrix", "meanSdPlot", "predict")
 
 importClassesFrom("BioQC", "GmtList")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
@@ -200,8 +200,6 @@ export(readCameraResults,
 
 export(parseContributingGenes,
        parseGenesetsContributingGenes)
-
-export(cpmVsn2)
 
 export(rowVars, 
        prcompExprs,

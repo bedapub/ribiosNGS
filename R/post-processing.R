@@ -113,7 +113,7 @@ parseCameraContributingGenes <- function(cameraResTbl, genesets) {
   res <- cameraResTbl %>% filter(GeneSet %in% genesets) %>% 
     (function(x) parseGenesetsContributingGenes(x$ContributingGenes, x$GeneSet)) %>%
     (function(x) split(as.character(x$Gene), x$GeneSet))
-  res <- res[genesets]
+  res <- lapply(res[genesets], unique)
   return(res)
 }
 

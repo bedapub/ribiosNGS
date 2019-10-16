@@ -4,8 +4,9 @@
 \alias{readBiokitGctFile}
 \title{Read GCT files from Biokit output directory}
 \usage{
-readBiokitGctFile(dir, anno = c("refseq", "ensembl"), type = c("count",
-  "rpkm", "uniqCount", "uniqRpkm"))
+readBiokitGctFile(dir, anno = c("refseq", "ensembl"),
+  type = c("counts", "rpkms", "uniqCounts", "uniqRpkms", "star-counts",
+  "star-rpkms", "star-tpms"))
 }
 \arguments{
 \item{dir}{Biokit output directory}
@@ -13,8 +14,8 @@ readBiokitGctFile(dir, anno = c("refseq", "ensembl"), type = c("count",
 \item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is
 supported}
 
-\item{type}{GCT file type, \code{count}, \code{rpkm}, \code{uniqCount} and
-\code{uniqRpkm} are supported.}
+\item{type}{GCT file type, \code{count}, \code{rpkm}, \code{uniqCount},
+\code{uniqRpkm}, \code{star-counts}, \code{star-rpkms}, and \code{star-tpms} are supported.}
 }
 \value{
 A numeric matrix with the attribute \code{desc} encoding the values

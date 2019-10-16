@@ -93,8 +93,8 @@ readBiokitExpression <- function(files,
 #' @param dir Biokit output directory
 #' @param anno Annotation type, either \code{refseq} or \code{ensembl} is
 #' supported
-#' @param type GCT file type, \code{count}, \code{rpkm}, \code{uniqCount} and
-#' \code{uniqRpkm} are supported.
+#' @param type GCT file type, \code{count}, \code{rpkm}, \code{uniqCount},
+#' \code{uniqRpkm}, \code{star-counts}, \code{star-rpkms}, and \code{star-tpms} are supported.
 #' @return A numeric matrix with the attribute \code{desc} encoding the values
 #' in the description column of the GCT format
 #' @examples
@@ -104,7 +104,10 @@ readBiokitExpression <- function(files,
 #' @export readBiokitGctFile
 readBiokitGctFile <- function(dir, 
                               anno=c("refseq", "ensembl"),
-                              type=c("count", "rpkm", "uniqCount", "uniqRpkm")) {
+                              type=c("counts", "rpkms", "uniqCounts", "uniqRpkms",
+                                     "star-counts",
+                                     "star-rpkms",
+                                     "star-tpms")) {
   anno <- match.arg(anno)  
   type <- match.arg(type)
   
@@ -116,10 +119,13 @@ readBiokitGctFile <- function(dir,
   assertDir(gctDir)
   
   filePattern <- switch(type,
-                        "count"=".*_counts.gct",
-                        "rpkm"=".*_rpkms.gct",
-                        "uniqCount"=".*uniq-counts.gct",
-                        "uniqRpkm"=".*uniq-rpkms.gct")
+                        "counts"=".*_counts.gct",
+                        "rpkms"=".*_rpkms.gct",
+                        "uniqCounts"=".*uniq-counts.gct",
+                        "uniqRpkms"=".*uniq-rpkms.gct",
+                        "star-counts"=".*_star-counts.gct",
+                        "star-rpkms"=".*_star-rpkms.gct",
+                        "star-tpms"=".*_star-tpms.gct")
   
   gctFile <- dir(gctDir, pattern=filePattern, full.names=TRUE)
   if(length(gctFile)==0 || !file.exists(gctFile))
@@ -143,11 +149,15 @@ readBiokitGctFile <- function(dir,
 #' @export readBiokitAsDGEList
 readBiokitAsDGEList <- function(dir, 
                                 anno=c("refseq", "ensembl"),
-                                countType=c("count", "uniqCount")) {
+                                countType=c("counts", "uniqCounts", "star-counts"),
+                                tpmType=c("tpms", "star-tpms")) {
   ## read gct file
   anno <- match.arg(anno)
   countType <- match.arg(countType)
-  mat <- readBiokitGctFile(dir, anno=anno, type=countType)
+  countMat <- readBiokitGctFile(dir, anno=anno, type=countType)
+  tpmMat <- readBiokitGctFile(dir, anno=anno, type=tpmType)
+  stopifnot(identical(rownames(countMat), rownames(tpmMat)))
+  stopifnot(identical(colnames(countMat), colnames(tpmMat)))
   
   ## read sample annotation, either from annot/phenoData.meta or samples.txt
   phenoDataFile <- file.path(dir, "annot", "phenoData.meta")
@@ -169,17 +179,20 @@ readBiokitAsDGEList <- function(dir,
   annotSampleName <- as.character(annot[, 1L])
   annotSampleId <- annot[, 2L]
   annotSampleGroup <- annot[, 3L]
-  if(!setequal(as.character(annotSampleName) , colnames(mat))) {
+  if(!setequal(as.character(annotSampleName) , colnames(countMat))) {
     stop("SampleID-group and gct file sample names do not match. Contact the developer.")
   } else {
-    mat <- mat[, annotSampleName, drop=FALSE]
+    countMat <- countMat[, annotSampleName, drop=FALSE]
+    tpmMat <- tpmMat[, annotSampleName, drop=FALSE]
   }
   
-  genes <- data.frame(GeneID=rownames(mat), GeneSymbol=ribiosIO::gctDesc(mat),
+  genes <- data.frame(GeneID=rownames(countMat), GeneSymbol=ribiosIO::gctDesc(countMat),
                       stringsAsFactors = FALSE)
   
-  res <- DGEList(counts=mat, samples=annot, genes=genes, group = annotSampleGroup)
+  res <- DGEList(counts=countMat, samples=annot, genes=genes, group = annotSampleGroup)
+  res$tpm <- tpmMat
   res$BiokitAnno <- anno
   res$BiokitCountType <- countType
+  res$BiokitTpmType <- tpmType
   return(res)
 }

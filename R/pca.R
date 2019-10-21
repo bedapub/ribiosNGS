@@ -19,6 +19,72 @@ rowVars <- function (x, na.rm=TRUE) {
 }
 
 
+#' Bin rows by mean expression, and return integer indices of rows with the highest variations from each bin
+#' 
+#' @param matrix A numeric matrix
+#' @param ntop Integer, the total number of rows that are expected to be returned
+#' @param nbin Integer, how many bins should be formed? If \code{NULL}, an automatic value is used.
+#' @return An integer vector of rows, containing indices
+#' 
+#' The function first bin rows by their average expression profile, and choose rows with the highest variation from each bin.
+#' 
+#' @note In case \code{ntop} is not a multiple of \code{nbin}, the \code{modulo} genes with the loweset variation are removed to garantee that the resulting matrix has exactly \code{ntop} rows.
+#' 
+#' @examples
+#' # myMat <- matrix(rnorm(2000), ncol=10, byrow=FALSE)
+#' # myTopVarMatInd <- topVarRowIndByMeanBinning(myMat, ntop=130, nbin=15)
+#' # myTopVarMatInd2 <- topVarRowIndByMeanBinning(myMat, ntop=135, nbin=15)
+#' @keywords internal
+topVarRowIndByMeanBinning <- function(matrix, ntop=NULL, nbin=NULL) {
+  if(is.null(ntop) || is.na(ntop)) {
+    return(matrix)
+  } else if (is.integer(ntop) && ntop>nrow(matrix)) {
+    return(matrix)
+  } 
+  
+  if(is.null(nbin) || is.na(nbin)) {
+    nbin <- pmin(100,
+                 pmax(nrow(matrix) %/% 10, 1L))
+  }
+
+  rv <- rowVars(matrix)
+  rm <- rowMeans(matrix, na.rm=TRUE)
+  rmf <- cut(rank(rm), breaks=nbin)
+  countEachBin <- ceiling(ntop/nbin)
+  selects <- tapply(1:nrow(matrix), rmf, function(ind) {
+    binrv <- rv[ind]
+    selLen <- pmin(countEachBin,length(ind))
+    selInd <- seq_len(selLen)
+    ord <- order(binrv, decreasing=TRUE)[selInd]
+    res <- ind[ord]
+  })
+  select <- unname(unlist(selects))
+  if(ntop %% nbin!=0) {
+    matrix <- matrix[select,, drop=FALSE]
+    rv <- rowVars(matrix)
+    select <- order(rv, decreasing=TRUE)[seq_len(ntop)]
+  }
+  return(select)
+}
+
+#' Bin rows by mean expression, and return rows with the highest variations from each bin
+#' 
+#' @param matrix A numeric matrix
+#' @param ntop Integer, the total number of rows that are expected to be returned
+#' @param nbin Integer, how many bins should be formed? If \code{NULL}, an automatic value is used.
+#' @return A subset of the matrix, containing exactly \code{ntop} rows.
+#' 
+#' @seealso \code{\link{topVarRowIndByMeanBinning}}
+#' @examples
+#' # myMat <- matrix(rnorm(2000), ncol=10, byrow=FALSE)
+#' # myTopVarMat <- topVarRowsByMeanBinning(myMat, ntop=130, nbin=15)
+#' # myTopVarMat2 <- topVarRowsByMeanBinning(myMat, ntop=135, nbin=15)
+#' @keywords internal
+topVarRowsByMeanBinning <- function(matrix, ntop=NULL, nbin=NULL) {
+  inds <- topVarRowIndByMeanBinning(matrix, ntop=ntop, nbin=nbin)
+  res <- matrix[inds,, drop=FALSE]
+  return(res)
+}
 
 #' Principal component analysis of an expression matrix
 #' 
@@ -28,22 +94,23 @@ rowVars <- function (x, na.rm=TRUE) {
 #' the highest variance are used for the calculation.
 #' @param scale Logical, whether variance of features should be scaled to 1.
 #' Default \code{FALSE}, as recommended by Nguyen et al. (2019)
+#' @param nbin Integer. Genes are divided into \code{nbin} bins by their average gene expression signal, and top variable genes (approximately \code{ntop/nbin}) are selected from each bin. If \code{NULL} or \code{NA}, an automatic value (100, or \code{nrow(matrix) %/% 10} when fewer are 1000 genes are used as input) is used. It is only used when \code{ntop} is not NULL.
+#' 
 #' @references Nguyen, Lan Huong, and Susan Holmes. "Ten Quick Tips for
 #' Effective Dimensionality Reduction." PLOS Computational Biology 15, no. 6
 #' (2019): e1006907
+#' 
+#' @seealso \code{\link{topVarRowsByMeanBinning}}
 #' @examples
 #' 
 #' myTestExprs <- matrix(rnorm(1000), ncol=10, byrow=FALSE)
-#' myTestExprs[1:100, 6:10] <- myTestExprs[1:100, 6:10] + 2
-#' myTopPca <- prcompExprs(myTestExprs, ntop=100)
+#' myTestExprs[1:50, 6:10] <- myTestExprs[1:50, 6:10] + 2
+#' myTopPca <- prcompExprs(myTestExprs, ntop=50, nbin=5)
 #' 
 #' @export prcompExprs
-prcompExprs <- function(matrix, ntop=NULL, scale=FALSE) {
+prcompExprs <- function(matrix, ntop=NULL, scale=FALSE, nbin=NULL) {
   if(!is.null(ntop) && !is.na(ntop)) {
-    rv <- rowVars(matrix)
-    select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, 
-                                                       length(rv)))]
-    matrix <- matrix[select,]
+    matrix <- topVarRowsByMeanBinning(matrix, ntop=ntop, nbin=nbin)
   }
   tMatAll <- t(matrix)
   isInvar <- rowVars(tMatAll) == 0

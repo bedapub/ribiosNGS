@@ -2,7 +2,7 @@ Package: ribiosNGS
 Type: Package
 Title: Utilities for next-generation sequencing data analysis in ribios
 Version: 1.0-48
-Date: 2019-10-16
+Date: 2019-10-21
 Author: Jitao David Zhang, with inputs from Roland Schmucki
 Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
 Description: NGS tasks in ribios, primarily differetial gene expression

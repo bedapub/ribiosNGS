@@ -27,3 +27,4 @@ Bin rows by mean expression, and return rows with the highest variations from ea
 \seealso{
 \code{\link{topVarRowIndByMeanBinning}}
 }
+\keyword{internal}

@@ -29,3 +29,4 @@ In case \code{ntop} is not a multiple of \code{nbin}, the \code{modulo} genes wi
 # myTopVarMatInd <- topVarRowIndByMeanBinning(myMat, ntop=130, nbin=15)
 # myTopVarMatInd2 <- topVarRowIndByMeanBinning(myMat, ntop=135, nbin=15)
 }
+\keyword{internal}

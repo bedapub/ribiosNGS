@@ -105,6 +105,7 @@ readBiokitExpression <- function(files,
 readBiokitGctFile <- function(dir, 
                               anno=c("refseq", "ensembl"),
                               type=c("counts", "rpkms", "uniqCounts", "uniqRpkms",
+                                     "tpms",
                                      "star-counts",
                                      "star-rpkms",
                                      "star-tpms")) {
@@ -123,6 +124,7 @@ readBiokitGctFile <- function(dir,
                         "rpkms"=".*_rpkms.gct",
                         "uniqCounts"=".*uniq-counts.gct",
                         "uniqRpkms"=".*uniq-rpkms.gct",
+                        "tpms"=".*_tpms.gct",
                         "star-counts"=".*_star-counts.gct",
                         "star-rpkms"=".*_star-rpkms.gct",
                         "star-tpms"=".*_star-tpms.gct")
@@ -154,10 +156,20 @@ readBiokitAsDGEList <- function(dir,
   ## read gct file
   anno <- match.arg(anno)
   countType <- match.arg(countType)
+  tpmType <- match.arg(tpmType)
   countMat <- readBiokitGctFile(dir, anno=anno, type=countType)
   tpmMat <- readBiokitGctFile(dir, anno=anno, type=tpmType)
-  stopifnot(identical(rownames(countMat), rownames(tpmMat)))
   stopifnot(identical(colnames(countMat), colnames(tpmMat)))
+  if(!identical(rownames(countMat), rownames(tpmMat))) {
+    warning("Count matrix and TPM matrix have different row names! TPM matrix is newly organized")
+    commonFeat <- intersect(rownames(countMat), rownames(tpmMat))
+    tpmUniqFeat <- setdiff(rownames(countMat), rownames(tpmMat))
+    tpmNewMat <- countMat
+    tpmNewMat[commonFeat,] <- tpmMat[commonFeat,]
+    tpmNewMat[tpmUniqFeat,] <- NA
+    tpmMat <- tpmNewMat
+  }
+
   
   ## read sample annotation, either from annot/phenoData.meta or samples.txt
   phenoDataFile <- file.path(dir, "annot", "phenoData.meta")

@@ -174,6 +174,9 @@ setMethod("volcanoPlot", "EdgeResult",
                    freeRelation=FALSE,
                    colramp=ribiosPlot::heat,
                    multipage=FALSE,
+                   xlim=NULL,
+                   ylim=NULL,
+                   main=NULL,
                    ...) {
   tables <- dgeTableList(object, contrast)
   logFCs <- unlist(sapply(tables, function(x) x$logFC))
@@ -181,8 +184,10 @@ setMethod("volcanoPlot", "EdgeResult",
   if(!freeRelation) {
     logFC.range <- quantileRange(logFCs, outlier=0.01, symmetric=TRUE)
     pValue.range <- quantileRange(ps, outlier=0.01, symmetric=FALSE)
-    xlim <- logFC.range
-    ylim <- c(0, max(-log10(pValue.range)))
+    if(is.null(xlim))
+      xlim <- logFC.range
+    if(is.null(ylim))
+      ylim <- c(0, max(-log10(pValue.range)))
   }
 
   if(!multipage) {
@@ -191,15 +196,21 @@ setMethod("volcanoPlot", "EdgeResult",
     op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
   }
   
+  if(is.null(main)) {
+    mains <- names(tables)
+  } else {
+    mains <- sprintf("%s [%s]", main, names(tables))
+  }
   for(i in seq(along=tables)) {
     if(freeRelation) {
       with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
                                       colramp=colramp,
-                                      main=names(tables[i]),...))
+                                      main=mains[i],
+                                      ...))
     }  else {
       with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
                                       colramp=colramp,
-                                      main=names(tables[i]),
+                                      main=mains[i],
                                       xlim=xlim, ylim=ylim, ...))
     }
     abline(h=0, col="lightgray")

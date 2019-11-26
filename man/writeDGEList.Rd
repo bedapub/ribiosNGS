@@ -4,8 +4,16 @@
 \alias{writeDGEList}
 \title{Write an DGEList object as plain files for downstream analysis}
 \usage{
-writeDGEList(dgeList, exprs.file, fData.file, pData.file, group.file,
-  groupLevels.file, feat.name = NULL, feat.desc = NULL)
+writeDGEList(
+  dgeList,
+  exprs.file,
+  fData.file,
+  pData.file,
+  group.file,
+  groupLevels.file,
+  feat.name = NULL,
+  feat.desc = NULL
+)
 }
 \arguments{
 \item{dgeList}{An DGEList object}

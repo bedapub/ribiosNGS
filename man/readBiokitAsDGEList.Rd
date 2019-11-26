@@ -4,9 +4,12 @@
 \alias{readBiokitAsDGEList}
 \title{Read a Biokit output directory into a DGEList object for downstream analysis}
 \usage{
-readBiokitAsDGEList(dir, anno = c("refseq", "ensembl"),
+readBiokitAsDGEList(
+  dir,
+  anno = c("refseq", "ensembl"),
   countType = c("counts", "uniqCounts", "star-counts"),
-  tpmType = c("tpms", "star-tpms"))
+  tpmType = c("tpms", "star-tpms")
+)
 }
 \arguments{
 \item{dir}{Biokit output directory}

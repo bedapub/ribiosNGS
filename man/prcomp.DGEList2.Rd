@@ -4,8 +4,7 @@
 \alias{prcomp.DGEList2}
 \title{Run principal component analysis on a DGEList2 object}
 \usage{
-\method{prcomp}{DGEList2}(x, ntop = NULL, fun = function(x) cpm(x, log
-  = TRUE))
+\method{prcomp}{DGEList2}(x, ntop = NULL, fun = function(x) cpm(x, log = TRUE))
 }
 \arguments{
 \item{x}{A DGEList2 object}

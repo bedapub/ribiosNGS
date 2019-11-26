@@ -4,8 +4,7 @@
 \alias{DGEListToLongTable}
 \title{Convert a DGEList object to a long data.frame containing expression, feature annotation, and sample annotation}
 \usage{
-DGEListToLongTable(x, exprsFun = function(dgeList) cpm(dgeList, log =
-  TRUE))
+DGEListToLongTable(x, exprsFun = function(dgeList) cpm(dgeList, log = TRUE))
 }
 \arguments{
 \item{x}{A DGEList object}

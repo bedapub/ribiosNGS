@@ -4,8 +4,7 @@
 \alias{prcomp.DGEList}
 \title{Principal component analysis of DGEList}
 \usage{
-\method{prcomp}{DGEList}(x, ntop = NULL, scale = FALSE,
-  verbose = FALSE, ...)
+\method{prcomp}{DGEList}(x, ntop = NULL, scale = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{DGEList} object}

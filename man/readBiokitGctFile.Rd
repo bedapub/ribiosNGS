@@ -4,9 +4,12 @@
 \alias{readBiokitGctFile}
 \title{Read GCT files from Biokit output directory}
 \usage{
-readBiokitGctFile(dir, anno = c("refseq", "ensembl"),
-  type = c("counts", "rpkms", "uniqCounts", "uniqRpkms", "tpms",
-  "star-counts", "star-rpkms", "star-tpms"))
+readBiokitGctFile(
+  dir,
+  anno = c("refseq", "ensembl"),
+  type = c("counts", "rpkms", "uniqCounts", "uniqRpkms", "tpms", "star-counts",
+    "star-rpkms", "star-tpms")
+)
 }
 \arguments{
 \item{dir}{Biokit output directory}

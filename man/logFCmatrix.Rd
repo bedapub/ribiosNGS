@@ -4,8 +4,13 @@
 \alias{logFCmatrix}
 \title{Extract a matrix of log2(fold-change) values}
 \usage{
-logFCmatrix(edgeResult, featureIdentifier = "GeneSymbol",
-  contrasts = NULL, removeNAfeatures = TRUE, min.logCPM = NULL)
+logFCmatrix(
+  edgeResult,
+  featureIdentifier = "GeneSymbol",
+  contrasts = NULL,
+  removeNAfeatures = TRUE,
+  min.logCPM = NULL
+)
 }
 \arguments{
 \item{edgeResult}{An \code{EdgeResult} object}

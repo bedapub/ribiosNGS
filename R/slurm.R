@@ -58,6 +58,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   haltifnot(ncol(designMatrix) == nrow(contrastMatrix),
             msg="The contrast matrix must have the same number of rows as the columns of the design matrix.")
   
+  createDir(dirname(outfilePrefix), recursive=TRUE, mode="0770")
+
   exprsFile <- paste0(outfilePrefix, "-counts.gct")
   fDataFile <- paste0(outfilePrefix, "-featureAnno.txt")
   pDataFile <- paste0(outfilePrefix, "-sampleAnno.txt")

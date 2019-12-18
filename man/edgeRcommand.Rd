@@ -5,14 +5,8 @@
 \title{Export an DGEList, designMatrix, and contrastMatrix to files and return the
 command to run the edgeR script}
 \usage{
-edgeRcommand(
-  dgeList,
-  designMatrix,
-  contrastMatrix,
-  outfilePrefix = NULL,
-  outdir = "edgeR_output",
-  mps = FALSE
-)
+edgeRcommand(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
+  outdir = "edgeR_output", mps = FALSE)
 }
 \arguments{
 \item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes},

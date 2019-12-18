@@ -5,11 +5,8 @@
 \title{Apply SVA to transformed count data and return the transformed matrix
 removing the effect of surrogate variables}
 \usage{
-countsRemoveSV(
-  counts,
-  designMatrix,
-  transformFunc = function(counts, designMatrix) voom(counts, designMatrix)$E
-)
+countsRemoveSV(counts, designMatrix, transformFunc = function(counts,
+  designMatrix) voom(counts, designMatrix)$E)
 }
 \arguments{
 \item{counts}{A matrix of counts}

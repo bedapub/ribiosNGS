@@ -4,15 +4,9 @@
 \alias{slurmEdgeR}
 \title{Send an edgeR analysis job to SLURM}
 \usage{
-slurmEdgeR(
-  dgeList,
-  designMatrix,
-  contrastMatrix,
-  outfilePrefix = NULL,
-  outdir = "edgeR_output",
-  overwrite = c("ask", "yes", "no"),
-  mps = FALSE
-)
+slurmEdgeR(dgeList, designMatrix, contrastMatrix, outfilePrefix = NULL,
+  outdir = "edgeR_output", overwrite = c("ask", "yes", "no"),
+  mps = FALSE)
 }
 \arguments{
 \item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes},

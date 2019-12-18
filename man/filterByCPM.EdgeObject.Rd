@@ -4,7 +4,8 @@
 \alias{filterByCPM.EdgeObject}
 \title{Filter EdgeObj and remove lowly expressed genes}
 \usage{
-\method{filterByCPM}{EdgeObject}(obj, minCPM = 1, minCount = minGroupCount(obj))
+\method{filterByCPM}{EdgeObject}(obj, minCPM = 1,
+  minCount = minGroupCount(obj))
 }
 \arguments{
 \item{minCPM}{Minimal CPM value, see descriptions below}

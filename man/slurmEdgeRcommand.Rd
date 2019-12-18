@@ -4,14 +4,8 @@
 \alias{slurmEdgeRcommand}
 \title{Return the SLURM command to run the edgeR script}
 \usage{
-slurmEdgeRcommand(
-  dgeList,
-  designMatrix,
-  contrastMatrix,
-  outfilePrefix = NULL,
-  outdir = "edgeR_output",
-  mps = FALSE
-)
+slurmEdgeRcommand(dgeList, designMatrix, contrastMatrix,
+  outfilePrefix = NULL, outdir = "edgeR_output", mps = FALSE)
 }
 \arguments{
 \item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes},

@@ -2,7 +2,8 @@ importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", 
            "assertDesignContrast", "ulen", "assertDir",
            "pairwiseJaccardIndex",
-           "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename")
+           "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename",
+           "createDir")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("ribiosIO", "read_biokit_exprs", "writeMatrix", "gctDesc", "GctMatrix")
 importFrom("readr",

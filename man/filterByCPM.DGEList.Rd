@@ -4,8 +4,7 @@
 \alias{filterByCPM.DGEList}
 \title{Filter lowly expressed genes by CPM in DGEList}
 \usage{
-\method{filterByCPM}{DGEList}(obj, lib.size = NULL, minCPM = 1,
-  minCount = minGroupCount(obj))
+\method{filterByCPM}{DGEList}(obj, lib.size = NULL, minCPM = 1, minCount = minGroupCount(obj))
 }
 \arguments{
 \item{obj}{A \code{DGEList} object}

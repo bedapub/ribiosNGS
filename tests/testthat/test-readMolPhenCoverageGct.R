@@ -1,9 +1,7 @@
 library(ribiosNGS)
 library(testthat)
 
-testDir <- ifelse(interactive(),
-                  "~/ribios/ribiosNGS/inst",
-                  system.file(package="ribiosNGS"))
+testDir <- system.file(package="ribiosNGS")
 testFile <- file.path(testDir,
                       "extdata",
                       "AmpliSeq_files/MolPhen-coverage-example-20200115.gct")

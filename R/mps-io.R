@@ -188,7 +188,7 @@ parseMolPhenFeat <- function(gctMatrix) {
 #' mpsCov <- readMolPhenCoverageGct(system.file(file.path("extdata",
 #'     "AmpliSeq_files",
 #'     "MolPhen-coverage-example-20200115.gct"), 
-#'   package="ribiosNGS")
+#'   package="ribiosNGS"))
 #'
 readMolPhenCoverageGct <- function(file) {
   mat <- ribiosIO::read_gct_matrix(file)

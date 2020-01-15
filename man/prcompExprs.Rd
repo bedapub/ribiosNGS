@@ -14,6 +14,8 @@ the highest variance are used for the calculation.}
 
 \item{scale}{Logical, whether variance of features should be scaled to 1.
 Default \code{FALSE}, as recommended by Nguyen et al. (2019)}
+
+\item{nbin}{Integer. Genes are divided into \code{nbin} bins by their average gene expression signal, and top variable genes (approximately \code{ntop/nbin}) are selected from each bin. If \code{NULL} or \code{NA}, an automatic value (100, or \code{nrow(matrix) \%/\% 10} when fewer are 1000 genes are used as input) is used. It is only used when \code{ntop} is not NULL.}
 }
 \description{
 Principal component analysis of an expression matrix

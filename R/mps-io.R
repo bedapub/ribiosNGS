@@ -157,3 +157,43 @@ removeCherryPickingRepeat <- function(eset, cherryPickingRun) {
   isDup <- isCherryPickingRepeat(eset, cherryPickingRun)
   return(eset[,!isDup])
 }
+
+#' Parse feature information from molecular-phenotyping GCT files
+#' @param gctMatrix A \code{GctMatrix} capturing the counts of 
+#'   a molecular phenotyping experiment
+#' @return A data.frame with following columns: \code{GeneID} (as integer), 
+#'   \code{GeneSymbol} (as character), and \code{Transcript},
+#'    with the original names as row names
+#' @seealso \code{\link{readMolPhenCoverageGct}}, which calls this function
+#'   internally to parse molecular phenotyping gene features
+parseMolPhenFeat <- function(gctMatrix) {
+  featureNames <- rownames(gctMatrix)
+  fsplit <- strsplit(featureNames, ";")
+  gs <- sapply(fsplit, "[[", 1L)
+  gid <- gsub("EntrezGeneID=", "", sapply(fsplit, "[[", 2L))
+  transcript <- ribiosIO::gctDesc(gctMatrix)
+  res <- data.frame(GeneID=as.integer(gid),
+                    GeneSymbol=I(gs),
+                    Transcript=I(transcript),
+                    row.names=featureNames)
+  return(res)
+}
+
+#' Read molecular phenotyping coverage file
+#' @param file Character string, a coverage GCT file of a molecular 
+#'   phenotyping experiment.
+#' @return A list of two elements: \code{coverage}, which represents the
+#'    coverage matrix, and \code{genes}, which represents feature annotation.
+#' @examples 
+#' mpsCov <- readMolPhenCoverageGct(system.file(file.path("extdata",
+#'     "AmpliSeq_files",
+#'     "MolPhen-coverage-example-20200115.gct"), 
+#'   package="ribiosNGS")
+#'
+readMolPhenCoverageGct <- function(file) {
+  mat <- ribiosIO::read_gct_matrix(file)
+  fData <- parseMolPhenFeat(mat)
+  res <- list(coverage=mat, genes=fData)
+  return(res)
+}
+

@@ -6,6 +6,7 @@ importFrom("ribiosUtils",
            "createDir")
 importFrom("Biobase", "featureNames", "sampleNames","fData")
 importFrom("ribiosIO", "read_biokit_exprs", "writeMatrix", "gctDesc", "GctMatrix")
+importFrom("readxl", "read_excel")
 importFrom("readr",
            "count_fields", "tokenizer_tsv", "read_tsv")
 importFrom("methods", "show")
@@ -107,6 +108,8 @@ export(mpsAnnotateReporters)
 export(doFisher)
 export(sigGeneBarchart)
 export(parseMolPhenFeat, readMolPhenCoverageGct)
+export(read_illumina_sampleSheet_xls)
+
 ## export(edgeBuild, edgeTest,edgeRun)
 
 ## for riboseq

@@ -1,16 +1,15 @@
 #' Export an DGEList, designMatrix, and contrastMatrix to files and return the
 #' command to run the edgeR script
 #' 
-#' 
 #' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
 #' and \code{samples}
 #' @param designMatrix The design matrix to model the data
 #' @param contrastMatrix The contrast matrix matching the design matrix
-#' @param outfilePrefix Prefix of the output files. It can include directories,
-#' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
-#' created.
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
+#' @param outfilePrefix Prefix of the output files, for instance a reasonable 
+#' name of the project, to identify the files uniquely. The files will be written in 
+#' \code{file.path(OUTDIR, 'input_data')}.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
 #' @note Following checks are done internally: \itemize{ \item The design
 #' matrix must have the same number of rows as the columns of the count matrix.
@@ -34,15 +33,15 @@
 #' 
 #' @export edgeRcommand
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
-                         outfilePrefix=NULL,
                          outdir="edgeR_output",
+                         outfilePrefix="an-unnamed-project-",
                          mps=FALSE) {
-  if(is.null(outfilePrefix) || is.na(outfilePrefix)) {
-    outfilePrefix <- tempfile(pattern="edgeRslurm")
-  }
-  
+
   ## remove trailing -s if any
   outfilePrefix <- gsub("-$", "", outfilePrefix)
+  outfileWithDir <- file.path(outdir,
+                              'input_data',
+                              basename(outfilePrefix))
   
   ## check consistency between names
   exprsMat <- dgeList$counts
@@ -58,15 +57,15 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   haltifnot(ncol(designMatrix) == nrow(contrastMatrix),
             msg="The contrast matrix must have the same number of rows as the columns of the design matrix.")
   
-  ribiosUtils::createDir(dirname(outfilePrefix), recursive=TRUE, mode="0770")
+  ribiosUtils::createDir(dirname(outfileWithDir), recursive=TRUE, mode="0770")
 
-  exprsFile <- paste0(outfilePrefix, "-counts.gct")
-  fDataFile <- paste0(outfilePrefix, "-featureAnno.txt")
-  pDataFile <- paste0(outfilePrefix, "-sampleAnno.txt")
-  groupFile <- paste0(outfilePrefix, "-sampleGroup.txt")
-  groupLevelFile <- paste0(outfilePrefix, "-sampleGroupLevels.txt")
-  designFile <- paste0(outfilePrefix, "-designMatrix.txt")
-  contrastFile <- paste0(outfilePrefix, "-contrastMatrix.txt")
+  exprsFile <- paste0(outfileWithDir, "-counts.gct")
+  fDataFile <- paste0(outfileWithDir, "-featureAnno.txt")
+  pDataFile <- paste0(outfileWithDir, "-sampleAnno.txt")
+  groupFile <- paste0(outfileWithDir, "-sampleGroup.txt")
+  groupLevelFile <- paste0(outfileWithDir, "-sampleGroupLevels.txt")
+  designFile <- paste0(outfileWithDir, "-designMatrix.txt")
+  contrastFile <- paste0(outfileWithDir, "-contrastMatrix.txt")
   
   writeDGEList(dgeList, exprs.file=exprsFile,
                fData.file = fDataFile,
@@ -127,12 +126,14 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' 
 #' @export slurmEdgeRcommand
 slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
-                              outfilePrefix=NULL,
                               outdir="edgeR_output",
+                              outfilePrefix="an-unnamed-project-",
                               mps=FALSE) {
-  comm <- edgeRcommand(dgeList=dgeList, designMatrix=designMatrix, contrastMatrix=contrastMatrix,
-                       outfilePrefix=outfilePrefix,
+  comm <- edgeRcommand(dgeList=dgeList, 
+                       designMatrix=designMatrix, 
+                       contrastMatrix=contrastMatrix,
                        outdir=outdir,
+                       outfilePrefix=outfilePrefix,
                        mps=mps)
   outdirBase <- basename(gsub("\\/$", "", outdir))
   outfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".out"))
@@ -181,8 +182,8 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' 
 #' @export slurmEdgeR
 slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
-                       outfilePrefix=NULL,
                        outdir="edgeR_output",
+                       outfilePrefix="an-unnamed-project-",
                        overwrite=c("ask", "yes", "no"),
                        mps=FALSE) {
   overwrite <- match.arg(overwrite)
@@ -215,10 +216,13 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
     return(invisible(NULL))
   }
   
-  comm <- slurmEdgeRcommand(dgeList=dgeList, designMatrix=designMatrix, contrastMatrix=contrastMatrix,
-                            outfilePrefix=outfilePrefix,
+  comm <- slurmEdgeRcommand(dgeList=dgeList, 
+                            designMatrix=designMatrix, 
+                            contrastMatrix=contrastMatrix,
                             outdir=outdir,
+                            outfilePrefix=outfilePrefix,
                             mps=mps)
   res <- system(comm, intern=TRUE)
   return(list(command=comm, output=res))
 }
+

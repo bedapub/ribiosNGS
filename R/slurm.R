@@ -9,12 +9,12 @@
 #' problemContrast <- limma::makeContrasts("Treatment"="Treatment",
 #'   "Batch=Batch", ## problematic
 #'   levels=testDesign)
-#' checkContrastMatrix(problemContrast, action="message")
+#' checkContrastMatrixNames(problemContrast, action="message")
 #' \dontrun{
-#'   checkContrastMatrix(problemContrast, action="warning")
-#'   checkContrastMatrix(problemContrast, action="error")
+#'   checkContrastMatrixNames(problemContrast, action="warning")
+#'   checkContrastMatrixNames(problemContrast, action="error")
 #' }
-checkContrastMatrix <- function(contrastMatrix,
+checkContrastMatrixNames <- function(contrastMatrix,
                                 action=c("message", "warning", "error")) {
   action <- match.arg(action)
   hasEqual <- grepl("=", colnames(contrastMatrix))
@@ -94,7 +94,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
             msg="Row names of the design matrix not matching column names of the expression matrix.")
   haltifnot(ncol(designMatrix) == nrow(contrastMatrix),
             msg="The contrast matrix must have the same number of rows as the columns of the design matrix.")
-  checkContrastMatrix(contrastMatrix, action="error")
+  checkContrastMatrixNames(contrastMatrix, action="error")
   
   ribiosUtils::createDir(dirname(outfileWithDir), recursive=TRUE, mode="0770")
 

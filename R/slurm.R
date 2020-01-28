@@ -9,12 +9,12 @@
 #' problemContrast <- limma::makeContrasts("Treatment"="Treatment",
 #'   "Batch=Batch", ## problematic
 #'   levels=testDesign)
-#' checkContrastMatrixNames(problemContrast, action="message")
+#' checkContrastNames(problemContrast, action="message")
 #' \dontrun{
-#'   checkContrastMatrixNames(problemContrast, action="warning")
-#'   checkContrastMatrixNames(problemContrast, action="error")
+#'   checkContrastNames(problemContrast, action="warning")
+#'   checkContrastNames(problemContrast, action="error")
 #' }
-checkContrastMatrixNames <- function(contrastMatrix,
+checkContrastNames <- function(contrastMatrix,
                                 action=c("message", "warning", "error")) {
   action <- match.arg(action)
   hasEqual <- grepl("=", colnames(contrastMatrix))
@@ -94,7 +94,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
             msg="Row names of the design matrix not matching column names of the expression matrix.")
   haltifnot(ncol(designMatrix) == nrow(contrastMatrix),
             msg="The contrast matrix must have the same number of rows as the columns of the design matrix.")
-  checkContrastMatrixNames(contrastMatrix, action="error")
+  checkContrastNames(contrastMatrix, action="error")
   
   ribiosUtils::createDir(dirname(outfileWithDir), recursive=TRUE, mode="0770")
 
@@ -116,6 +116,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   
   logFile <- paste0(gsub("\\/$", "", outdir), ".log")
   mpsComm <- ifelse(mps, "-mps", "")
+  commandFile <- paste0(outfileWithDir, "-edgeRcommand.txt")
   command <- paste("/pstore/apps/bioinfo/geneexpression/bin/ngsDge_edgeR.Rscript",
                    sprintf("-infile %s", exprsFile),
                    sprintf("-designFile %s", designFile),
@@ -128,6 +129,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    sprintf("-log %s", logFile),
                    sprintf("-writedb"),
                    mpsComm)
+  writeLines(command, con=commandFile)
   return(command)
 }
 

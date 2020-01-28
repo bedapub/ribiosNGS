@@ -1,3 +1,41 @@
+#' Check a contrast matrix to make sure that it is likely o.k.
+#' @param contrastMatrix A contrast matrix
+#' @param action Character strings, the action to perform in case the names show irregularities
+#' 
+#' Right now, the function checks no column names contain the equal sign.
+#' 
+#' @examples 
+#' testDesign <- cbind(Control=rep(1,8), Treatment=rep(c(0,1),4), Batch=rep(c(0, 1), each=4))
+#' problemContrast <- limma::makeContrasts("Treatment"="Treatment",
+#'   "Batch=Batch", ## problematic
+#'   levels=testDesign)
+#' checkContrastMatrix(problemContrast, action="message")
+#' \dontrun{
+#'   checkContrastMatrix(problemContrast, action="warning")
+#'   checkContrastMatrix(problemContrast, action="error")
+#' }
+checkContrastMatrix <- function(contrastMatrix,
+                                action=c("message", "warning", "error")) {
+  action <- match.arg(action)
+  hasEqual <- grepl("=", colnames(contrastMatrix))
+  if(any(hasEqual)) {
+    msg <- paste("Some columns in the contrast matrix contain equal signs '='. ",
+                 "This is often caused by setting contrasts in the form of ",
+                 "\"BvC=B-C\" instead of \"BvC\"=\"B-C\". ",
+                 "The problematic columns include:\n", 
+                 paste(colnames(contrastMatrix)[hasEqual], sep = "", collapse = "\n"),
+                 sep="")
+    if(action=="message") {
+      message(msg)
+    } else if (action=="warning") {
+      warning(msg)
+    } else if (action=="error") {
+      stop(msg)
+    }
+  }
+  return(invisible(NULL))
+}
+
 #' Export an DGEList, designMatrix, and contrastMatrix to files and return the
 #' command to run the edgeR script
 #' 
@@ -56,6 +94,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
             msg="Row names of the design matrix not matching column names of the expression matrix.")
   haltifnot(ncol(designMatrix) == nrow(contrastMatrix),
             msg="The contrast matrix must have the same number of rows as the columns of the design matrix.")
+  checkContrastMatrix(contrastMatrix, action="error")
   
   ribiosUtils::createDir(dirname(outfileWithDir), recursive=TRUE, mode="0770")
 

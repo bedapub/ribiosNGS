@@ -107,7 +107,7 @@ writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file,
     sampleGroupLevels <- unique(sampleGroup)
   }
   if (!missing(group.file) && !is.null(group.file)) {
-    writeLines(as.character(sampleAnno$group), group.file)
+    writeLines(as.character(sampleGroup), group.file)
   }
   if (!missing(groupLevels.file) && !is.null(groupLevels.file)) {
     writeLines(sampleGroupLevels, groupLevels.file)

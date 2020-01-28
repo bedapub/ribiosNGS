@@ -8,8 +8,8 @@ slurmEdgeR(
   dgeList,
   designMatrix,
   contrastMatrix,
-  outfilePrefix = NULL,
   outdir = "edgeR_output",
+  outfilePrefix = "an-unnamed-project-",
   overwrite = c("ask", "yes", "no"),
   mps = FALSE
 )
@@ -22,12 +22,12 @@ and \code{samples}}
 
 \item{contrastMatrix}{The contrast matrix matching the design matrix}
 
+\item{outdir}{Output directory of the edgeR script. Default value
+"edgeR_output".}
+
 \item{outfilePrefix}{Prefix of the output files. It can include directories,
 e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
 created.}
-
-\item{outdir}{Output directory of the edgeR script. Default value
-"edgeR_output".}
 
 \item{overwrite}{If \code{ask}, the user is asked before an existing output
 directory is overwritten. If \code{yes}, the job will start and an existing

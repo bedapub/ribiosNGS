@@ -213,3 +213,5 @@ export(rowVars,
 
 export(checkBiokitSampleAnnotation,
        writeBiokitSampleAnnotation)
+
+export(exportEdgeResult)

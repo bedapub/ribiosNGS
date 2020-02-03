@@ -688,5 +688,64 @@ plotMDS.EdgeObject <- function(x, col, ...) {
   plotMDS(dgeList(x), ...)
 }
 
-## sniff annotation
-
+#' Export dgeTest results
+#' @param dgeTest A \code{EdgeResult} object
+#' @param outRootDir Character string, output directory
+#' @param action Character string, what happens if the output directory exists
+#' 
+exportEdgeResult <- function(dgeTest, outRootDir,
+                                 action=c("ask", "overwrite",
+                                          "append", "no")) {
+  ow <- ribiosUtils::overwriteDir(outRootDir, action=action)
+  if(isFALSE(ow)) {
+    return(invisible(NULL))
+  }
+  
+  ## input data
+  inputDir <- file.path(outRootDir, "input-data")
+  createDir(inputDir)
+  countsUnfiltered <- dgeList(dgeTest)$counts.unfiltered
+  fDataUnfiltered <- dgeList(dgeTest)$genes.unfiltered
+  
+  writeGct(countsUnfiltered,
+           file.path(inputDir, "counts.gct"))
+  writeMatrix(designMatrix(dgeTest),
+              file.path(inputDir, "designMatrix.txt"))
+  writeMatrix(contrastMatrix(dgeTest),
+              file.path(inputDir, "contrastMatrix.txt"))
+  writeMatrix(fDataUnfiltered,
+              file.path(inputDir, "featureData.txt"))
+  writeMatrix(pData(dgeTest),
+              file.path(inputDir, "phenoData.txt"))
+  
+  ## filtering
+  filterDir <- file.path(outRootDir, "filtered-data")
+  createDir(filterDir)
+  writeGct(counts(dgeTest),
+           file.path(filterDir, "filteredCounts.gct"))
+  writeMatrix(fData(dgeTest),
+              file.path(filterDir, "filteredFeatureData.txt"))
+  
+  ## dge tables
+  dgeDir <- file.path(outRootDir, "dgeTables")
+  createDir(dgeDir)
+  writeDgeTables(dgeTest, outdir=dgeDir)
+  
+  ## truncated dgeTables
+  truncDir <- file.path(outRootDir, "truncated-dgeTables")
+  createDir(truncDir)
+  writeTruncatedDgeTables(dgeTest, outdir=truncDir)
+  
+  ## RData
+  rdataDir <- file.path(outRootDir, "RData")
+  createDir(rdataDir)
+  save(dgeTest, 
+       file=file.path(rdataDir, "ngsDge.RData"))
+  
+  ## dgeCounts
+  statdir <- file.path(outRootDir, "statistics")
+  createDir(statdir)
+  writeMatrix(sigGeneCounts(dgeTest), 
+              file=file.path(statdir, "ngs-diffGeneCounts.txt"),
+              row.names=TRUE)
+}

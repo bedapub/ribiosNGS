@@ -671,7 +671,7 @@ writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
                                      sprintf("TruncatedDEGtable-positive-%s.txt", 
                                              x)),
                            row.names=FALSE)
-               writeMatrix(degs$neg,
+               ribiosIO::writeMatrix(degs$neg,
                            file.path(outdir,
                                      sprintf("TruncatedDEGtable-negative-%s.txt", 
                                              x)))
@@ -693,7 +693,7 @@ plotMDS.EdgeObject <- function(x, col, ...) {
 #' @param outRootDir Character string, output directory
 #' @param action Character string, what happens if the output directory exists
 #' 
-exportEdgeResult <- function(dgeTest, outRootDir,
+exportEdgeResult <- function(edgeResult, outRootDir,
                                  action=c("ask", "overwrite",
                                           "append", "no")) {
   ow <- ribiosUtils::overwriteDir(outRootDir, action=action)
@@ -703,49 +703,58 @@ exportEdgeResult <- function(dgeTest, outRootDir,
   
   ## input data
   inputDir <- file.path(outRootDir, "input-data")
-  createDir(inputDir)
-  countsUnfiltered <- dgeList(dgeTest)$counts.unfiltered
-  fDataUnfiltered <- dgeList(dgeTest)$genes.unfiltered
+  ribiosUtils::createDir(inputDir)
+  countsUnfiltered <- dgeList(edgeResult)$counts.unfiltered
+  fDataUnfiltered <- dgeList(edgeResult)$genes.unfiltered
   
   writeGct(countsUnfiltered,
            file.path(inputDir, "counts.gct"))
-  writeMatrix(designMatrix(dgeTest),
+  ribiosIO::writeMatrix(designMatrix(edgeResult),
               file.path(inputDir, "designMatrix.txt"))
-  writeMatrix(contrastMatrix(dgeTest),
+  ribiosIO::writeMatrix(contrastMatrix(edgeResult),
               file.path(inputDir, "contrastMatrix.txt"))
-  writeMatrix(fDataUnfiltered,
+  ribiosIO::writeMatrix(fDataUnfiltered,
               file.path(inputDir, "featureData.txt"))
-  writeMatrix(pData(dgeTest),
+  ribiosIO::writeMatrix(pData(edgeResult),
               file.path(inputDir, "phenoData.txt"))
   
   ## filtering
   filterDir <- file.path(outRootDir, "filtered-data")
-  createDir(filterDir)
-  writeGct(counts(dgeTest),
+  ribiosUtils::createDir(filterDir)
+  writeGct(counts(edgeResult),
            file.path(filterDir, "filteredCounts.gct"))
-  writeMatrix(fData(dgeTest),
+  ribiosIO::writeMatrix(fData(edgeResult),
               file.path(filterDir, "filteredFeatureData.txt"))
   
   ## dge tables
   dgeDir <- file.path(outRootDir, "dgeTables")
-  createDir(dgeDir)
-  writeDgeTables(dgeTest, outdir=dgeDir)
+  ribiosUtils::createDir(dgeDir)
+  writeDgeTables(edgeResult, outdir=dgeDir)
   
   ## truncated dgeTables
   truncDir <- file.path(outRootDir, "truncated-dgeTables")
-  createDir(truncDir)
-  writeTruncatedDgeTables(dgeTest, outdir=truncDir)
+  ribiosUtils::createDir(truncDir)
+  writeTruncatedDgeTables(edgeResult, outdir=truncDir)
   
   ## RData
   rdataDir <- file.path(outRootDir, "RData")
-  createDir(rdataDir)
-  save(dgeTest, 
+  ribiosUtils::createDir(rdataDir)
+  save(edgeResult, 
        file=file.path(rdataDir, "ngsDge.RData"))
   
   ## dgeCounts
   statdir <- file.path(outRootDir, "statistics")
-  createDir(statdir)
-  writeMatrix(sigGeneCounts(dgeTest), 
+  ribiosUtils::createDir(statdir)
+  ribiosIO::writeMatrix(sigGeneCounts(edgeResult), 
               file=file.path(statdir, "ngs-diffGeneCounts.txt"),
               row.names=TRUE)
+  lfc <- logFCmatrix(edgeResult)
+  lfcPearson <- cor(lfc, use="complete.obs", method="pearson")
+  lfcSpearman <- cor(lfc, use="complete.obs", method="spearman")
+  ribiosIO::writeMatrix(lfc, 
+              file=file.path(statdir, "logFCmatrix.txt"))
+  ribiosIO::writeMatrix(lfcPearson,
+              file=file.path(statdir, "logFCmatrix-PearsonCorrelation.txt"))
+  ribiosIO::writeMatrix(lfcSpearman,
+              file=file.path(statdir, "logFCmatrix-SpearmanCorrelation.txt"))
 }

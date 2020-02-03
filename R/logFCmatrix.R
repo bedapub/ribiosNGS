@@ -23,9 +23,9 @@ logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol",
   allContrasts <- contrastNames(edgeResult)
   
   stopifnot(featureIdentifier %in% colnames(tbls[[1]]))
-  oriFeats <- mintersect(lapply(tbls, rownames))
+  oriFeats <- ribiosUtils::mintersect(lapply(tbls, rownames))
   feats <- tbls[[1]][, featureIdentifier]
-  mat <- sapply(tbls, function(x) matchColumn(oriFeats, x, 0L)$logFC)
+  mat <- sapply(tbls, function(x) ribiosUtils::matchColumn(oriFeats, x, 0L)$logFC)
   rownames(mat) <- feats
   colnames(mat) <- allContrasts
   if(removeNAfeatures) {

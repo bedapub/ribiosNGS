@@ -1,7 +1,7 @@
 importFrom("ribiosUtils",
            "haltifnot","assertContrast", "assertDesign", 
            "assertDesignContrast", "ulen", "assertDir",
-           "pairwiseJaccardIndex",
+           "pairwiseJaccardIndex", "mintersect",
            "sortByCol", "putColsFirst", "matchColumn", "pScore", "basefilename",
            "createDir")
 importFrom("Biobase", "featureNames", "sampleNames","fData")

@@ -215,3 +215,6 @@ export(checkBiokitSampleAnnotation,
        writeBiokitSampleAnnotation)
 
 export(exportEdgeResult)
+
+export(staticGeneLevelPlots,
+       exportStaticGeneLevelPlots)

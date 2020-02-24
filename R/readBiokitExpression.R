@@ -104,11 +104,11 @@ readBiokitExpression <- function(files,
 #' @export readBiokitGctFile
 readBiokitGctFile <- function(dir, 
                               anno=c("refseq", "ensembl"),
-                              type=c("counts", "rpkms", "uniqCounts", "uniqRpkms",
-                                     "tpms",
-                                     "star-counts",
-                                     "star-rpkms",
-                                     "star-tpms")) {
+                              type=c("count", "rpkm", "uniqCount", "uniqRpkm",
+                                     "tpm",
+                                     "star-count",
+                                     "star-rpkm",
+                                     "star-tpm")) {
   anno <- match.arg(anno)  
   type <- match.arg(type)
   
@@ -120,14 +120,14 @@ readBiokitGctFile <- function(dir,
   assertDir(gctDir)
   
   filePattern <- switch(type,
-                        "counts"=".*_counts.gct",
-                        "rpkms"=".*_rpkms.gct",
-                        "uniqCounts"=".*uniq-counts.gct",
-                        "uniqRpkms"=".*uniq-rpkms.gct",
-                        "tpms"=".*_tpms.gct",
-                        "star-counts"=".*_star-counts.gct",
-                        "star-rpkms"=".*_star-rpkms.gct",
-                        "star-tpms"=".*_star-tpms.gct")
+                        "count"=".*_count.gct",
+                        "rpkm"=".*_rpkm.gct",
+                        "uniqCount"=".*uniq-count.gct",
+                        "uniqRpkm"=".*uniq-rpkm.gct",
+                        "tpm"=".*_tpm.gct",
+                        "star-count"=".*_star-count.gct",
+                        "star-rpkm"=".*_star-rpkm.gct",
+                        "star-tpm"=".*_star-tpm.gct")
   
   gctFile <- dir(gctDir, pattern=filePattern, full.names=TRUE)
   if(length(gctFile)==0 || !file.exists(gctFile))
@@ -151,8 +151,8 @@ readBiokitGctFile <- function(dir,
 #' @export readBiokitAsDGEList
 readBiokitAsDGEList <- function(dir, 
                                 anno=c("refseq", "ensembl"),
-                                countType=c("counts", "uniqCounts", "star-counts"),
-                                tpmType=c("tpms", "star-tpms")) {
+                                countType=c("count", "uniqCount", "star-count"),
+                                tpmType=c("tpm", "star-tpm")) {
   ## read gct file
   anno <- match.arg(anno)
   countType <- match.arg(countType)

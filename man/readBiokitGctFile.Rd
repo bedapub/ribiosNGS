@@ -7,8 +7,8 @@
 readBiokitGctFile(
   dir,
   anno = c("refseq", "ensembl"),
-  type = c("counts", "rpkms", "uniqCounts", "uniqRpkms", "tpms", "star-counts",
-    "star-rpkms", "star-tpms")
+  type = c("count", "rpkm", "uniqCount", "uniqRpkm", "tpm", "star-count", "star-rpkm",
+    "star-tpm")
 )
 }
 \arguments{

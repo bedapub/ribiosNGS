@@ -7,8 +7,8 @@
 readBiokitAsDGEList(
   dir,
   anno = c("refseq", "ensembl"),
-  countType = c("counts", "uniqCounts", "star-counts"),
-  tpmType = c("tpms", "star-tpms")
+  countType = c("count", "uniqCount", "star-count"),
+  tpmType = c("tpm", "star-tpm")
 )
 }
 \arguments{

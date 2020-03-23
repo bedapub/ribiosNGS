@@ -74,15 +74,24 @@ minGroupCount <- function(obj) {
 #' minGroupCount(d3) ## 1
 minGroupCount.DGEList <- function(dgeList) {
   groups <- dgeList$samples$group
+  if(!is.factor(groups))
+    groups <- factor(groups)
+  groups <- droplevels(groups)
   return(min(table(groups)))
 }
 #' Return the size of the smallest group defined in the \code{EdgeObject} object
 minGroupCount.EdgeObject <- function(edgeObj) {
   groups <- groups(edgeObj@designContrast)
+  if(!is.factor(groups))
+    groups <- factor(groups)
+  groups <- droplevels(groups)
   return(min(table(groups)))
 }
 countByGroup <- function(edgeObj) {
   groups <- groups(edgeObj@designContrast)
+  if(!is.factor(groups))
+    groups <- factor(groups)
+  groups <- droplevels(groups)
   return(table(groups))
 }
 maxCountByGroup <- function(edgeObj) {

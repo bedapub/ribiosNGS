@@ -201,6 +201,8 @@ readBiokitAsDGEList <- function(dir,
   genes <- data.frame(GeneID=rownames(countMat), GeneSymbol=ribiosIO::gctDesc(countMat),
                       stringsAsFactors = FALSE)
   
+  ## remove the group column: it will be added by the DGEList function below
+  annot <- annot[, -3L]
   res <- DGEList(counts=countMat, samples=annot, genes=genes, group = annotSampleGroup)
   res$tpm <- tpmMat
   res$BiokitAnno <- anno

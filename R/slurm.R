@@ -146,6 +146,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param interactive Logical, whether the command should be run interactively
 #' 
 #' This function wraps the function \code{\link{edgeRcommand}} to return the
 #' command needed to start a SLURM job.
@@ -169,7 +170,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outdir="edgeR_output",
                               outfilePrefix="an-unnamed-project-",
-                              mps=FALSE) {
+                              mps=FALSE,
+                              interactive=FALSE) {
   comm <- edgeRcommand(dgeList=dgeList, 
                        designMatrix=designMatrix, 
                        contrastMatrix=contrastMatrix,
@@ -179,7 +181,13 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   outdirBase <- basename(gsub("\\/$", "", outdir))
   outfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".out"))
   errfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".err"))
-  res <- paste("sbatch -c 1",
+  if (interactive) {
+    prefix <- "srun --qos=interaction"
+  } else {
+    prefix <- "sbatch"
+  }
+  res <- paste(prefix,
+               "-c 1",
                sprintf("-e %s", errfile),
                sprintf("-J %s", outdirBase),
                sprintf("-o %s", outfile),

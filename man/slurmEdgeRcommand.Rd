@@ -10,7 +10,8 @@ slurmEdgeRcommand(
   contrastMatrix,
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
-  mps = FALSE
+  mps = FALSE,
+  interactive = FALSE
 )
 }
 \arguments{
@@ -28,7 +29,9 @@ and \code{samples}}
 e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
 created.}
 
-\item{mps}{Logical, whether molecular-phenotyping analysis is run.
+\item{mps}{Logical, whether molecular-phenotyping analysis is run.}
+
+\item{interactive}{Logical, whether the command should be run interactively
 
 This function wraps the function \code{\link{edgeRcommand}} to return the
 command needed to start a SLURM job.

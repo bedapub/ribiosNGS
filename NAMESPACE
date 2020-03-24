@@ -30,6 +30,13 @@ importFrom("BioQC", "GmtList","wmwTest", "gsName",
            "gsDesc", "gsGenes", "gsNamespace", "gsSize", "matchGenes")
 importFrom("dplyr", "%>%", "summarise_all")
 importFrom("vsn", "vsnMatrix", "meanSdPlot", "predict")
+importFrom("graphics", "abline", "boxplot", "grid", "legend",
+           "panel.smooth", "par", "strwidth", "text")
+importFrom("methods", "as", "new", "slot", "slotNames", "validObject")
+importFrom("stats", "cor", "filter", "fisher.test", "lm", "median",
+           "model.matrix", "na.omit", "p.adjust", "pchisq", "prcomp",
+           "quantile", "t.test", "update")
+importFrom("utils", "head", "read.table", "str", "write.table")
 
 importClassesFrom("BioQC", "GmtList")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
@@ -218,3 +225,6 @@ export(exportEdgeResult)
 
 export(staticGeneLevelPlots,
        exportStaticGeneLevelPlots)
+
+export(checkContrastNames)
+export(mergeDGEList)

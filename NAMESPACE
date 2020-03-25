@@ -37,6 +37,7 @@ importFrom("stats", "cor",  "fisher.test", "lm", "median",
            "model.matrix", "na.omit", "p.adjust", "pchisq", "prcomp",
            "quantile", "t.test", "update")
 importFrom("utils", "head", "read.table", "str", "write.table")
+importFrom("ribiosPlot", "pcaScores")
 
 importClassesFrom("BioQC", "GmtList")
 importClassesFrom("Biobase", "AnnotatedDataFrame", "ExpressionSet")
@@ -228,3 +229,6 @@ export(staticGeneLevelPlots,
 
 export(checkContrastNames)
 export(mergeDGEList)
+
+S3method(split, DGEList)
+export(vsnSVA)

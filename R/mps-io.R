@@ -246,10 +246,9 @@ toString.data.frame = function (object, ..., digits=NULL, quote=FALSE, right=TRU
 read_illumina_sampleSheet_xls <- function(file) {
    content <- readxl::read_excel(file, col_names=FALSE, 
                                  .name_repair = "minimal")
-   tmp <- textConnection("str", "w")
-   ribiosIO::writeMatrix(content, tmp, row.names = FALSE)
-   close(tmp)
-   res <- ribiosIO::read_illumina_sampleSheet(textConnection(str, "r"),
+   tmpf <- tempfile()
+   ribiosIO::writeMatrix(content, tmpf, row.names = FALSE)
+   res <- ribiosIO::read_illumina_sampleSheet(tmpf,
                                               sep="\t")
    return(res)
 }

@@ -3,8 +3,12 @@ Type: Package
 Title: Utilities for next-generation sequencing data analysis in ribios
 Version: 1.0-59
 Date: 2020-03-25
-Author: Jitao David Zhang, with inputs from Roland Schmucki
-Maintainer: Jitao David Zhang <jitao_david.zhang@roche.com>
+Authors@R: 
+  person(given = "Jitao David",
+         family = "Zhang",
+         role = c("aut", "cre", "ctb"),
+         email = "jitao_david.zhang@roche.com",
+         comment = c(ORCID="0000-0002-3085-0909"))
 Description: NGS tasks in ribios, primarily differetial gene expression
     analysis.
 Depends:

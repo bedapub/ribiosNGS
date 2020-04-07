@@ -12,4 +12,8 @@ NGS tasks in ribios, primarily differetial gene expression
 \details{
 ribiosNGS package provides functionalities used for next-generation sequencing data
 }
+\author{
+\strong{Maintainer}: Jitao David Zhang \email{jitao_david.zhang@roche.com} (\href{https://orcid.org/0000-0002-3085-0909}{ORCID}) [contributor]
+
+}
 \keyword{internal}

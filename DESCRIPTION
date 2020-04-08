@@ -17,7 +17,6 @@ Imports:
     BiocGenerics,
     ribiosExpression,
     edgeR,
-    ribiosExpression,
     ribiosAnnotation,
     ribiosUtils,
     methods,

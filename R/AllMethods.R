@@ -113,12 +113,15 @@ setMethod("fitGLM", "EdgeObject", function(object, ...) {
 ##-----------------------------------## 
 ## Test GLM
 ##-----------------------------------## 
+
+#' @importFrom edgeR glmLRT topTags
+#' @export
 setMethod("testGLM", c("EdgeObject", "DGEGLM"),
           function(object, fit) {
             contrasts <- contrastMatrix(object@designContrast)
             toptables <- apply(contrasts, 2, function(x) {
-              lrt <- glmLRT(fit, contrast=x)
-              x <- topTags(lrt, n=nrow(lrt$table))$table
+              lrt <- edgeR::glmLRT(fit, contrast=x)
+              x <- edgeR::topTags(lrt, n=nrow(lrt$table))$table
               assertEdgeToptable(x)
               return(x)
             })
@@ -208,6 +211,9 @@ setMethod("tagwiseBCV", "EdgeResult", function(x)  {
 setMethod("trendedBCV", "EdgeResult", function(x)  {
   trendedBCV(dgeList(x))
 })
+
+#' @importFrom edgeR getDispersion
+#' @export
 setMethod("BCV", "DGEList", function(x) {
   A <- x$AveLogCPM
   if(is.null(getDispersion(x))) stop("No dispersion available")

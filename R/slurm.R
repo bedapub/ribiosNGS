@@ -10,9 +10,11 @@
 #'   "Batch=Batch", ## problematic
 #'   levels=testDesign)
 #' checkContrastNames(problemContrast, action="message")
-#' \dontrun{
-#'   checkContrastNames(problemContrast, action="warning")
-#'   checkContrastNames(problemContrast, action="error")
+#' if(requireNamespace("testthat")) {
+#'   testthat::expect_warning(checkContrastNames(problemContrast, 
+#'          action="warning"))
+#'   testthat::expect_error(checkContrastNames(problemContrast, 
+#'          action="error"))
 #' }
 #' @export
 checkContrastNames <- function(contrastMatrix,
@@ -225,10 +227,10 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  y <- edgeR::DGEList(counts=mat, group=myFac)
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
-#'  \dontrun{
-#'  slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast, 
-#'    outfilePrefix=NULL, outdir=tempdir())
-#'  }
+#'  ## \dontrun{
+#'  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast, 
+#'  ##  outfilePrefix=NULL, outdir=tempdir())
+#'  ## }
 #' 
 #' @export slurmEdgeR
 slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,

@@ -4,7 +4,7 @@
 \alias{camera.EdgeResult}
 \title{Run CAMERA method using EdgeResult}
 \usage{
-camera.EdgeResult(y, gmtList)
+\method{camera}{EdgeResult}(y, gmtList)
 }
 \arguments{
 \item{y}{A EdgeResult object}

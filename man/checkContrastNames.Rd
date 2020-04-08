@@ -22,8 +22,10 @@ problemContrast <- limma::makeContrasts("Treatment"="Treatment",
   "Batch=Batch", ## problematic
   levels=testDesign)
 checkContrastNames(problemContrast, action="message")
-\dontrun{
-  checkContrastNames(problemContrast, action="warning")
-  checkContrastNames(problemContrast, action="error")
+if(requireNamespace("testthat")) {
+  testthat::expect_warning(checkContrastNames(problemContrast, 
+         action="warning"))
+  testthat::expect_error(checkContrastNames(problemContrast, 
+         action="error"))
 }
 }

@@ -36,7 +36,8 @@ Imports:
     gage,
     vsn,
     made4, 
-    stringr
+    stringr,
+    parallel
 Suggests:
     testthat,
     tibble

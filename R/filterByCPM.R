@@ -46,6 +46,8 @@ filterByCPM.matrix <- function(obj, minCPM=1, minCount=1) {
 #' nrow(df$counts.unfiltered) ## 26
 #' nrow(df$counts) ## 25
 #' 
+#' @importFrom edgeR DGEList
+#' @export DGEList
 #' @export
 filterByCPM.DGEList <- function(obj, lib.size=NULL,
                                 minCPM=1,

@@ -45,6 +45,7 @@ matchKeyValue <- function(keys, dfList, keyColumn, valueColumns) {
 #'   package="ribiosNGS")
 #' biokitEset <- readBiokitExpression(biokitFiles)
 #' 
+#' @importFrom Biobase `sampleNames<-`
 #' @export readBiokitExpression
 readBiokitExpression <- function(files,
                                  exprsType=c("ReadCount_UniqMap", "RPKM_UniqMap",

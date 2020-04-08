@@ -103,9 +103,6 @@ voomCamera <- function(edgeObj, gmtList) {
 
 #' Calculate mid-p quantile residuals
 #' 
-#' Calculate mid-p quantile residuals
-#' 
-#' 
 #' @param y An DGEList object
 #' @param design Design matrix
 #' @param contrast Contrast vector
@@ -116,11 +113,13 @@ voomCamera <- function(edgeObj, gmtList) {
 #' 
 #' dgeMatrix <- matrix(rpois(1200, 10), nrow=200)
 #' dgeList <- DGEList(dgeMatrix)
-#' dgeList <- estimateCommonDisp(dgeList)
+#' dgeList <- edgeR::estimateCommonDisp(dgeList)
 #' dgeDesign <- model.matrix(~gl(2,3))
 #' dgeZscore <- zscoreDGE(dgeList, dgeDesign, contrast=c(0,1))
 #' head(dgeZscore)
 #' 
+#' @importFrom edgeR getDispersion zscoreNBinom
+#' @importFrom limma contrastAsCoef
 #' @export zscoreDGE
 zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
   allzero <- rowSums(y$counts > 1e-08) == 0
@@ -171,6 +170,8 @@ zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
 #' @param design Design matrix
 #' @param contrasts Contrast matrix
 #' 
+#' @importFrom parallel mclapply
+#' @importFrom limma camera
 #' @export
 dgeListCamera <- function(dgeList, index, design, contrasts) {
   geneSymbols <- humanGeneSymbols(dgeList)

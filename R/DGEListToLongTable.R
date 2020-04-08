@@ -1,14 +1,18 @@
-#' Convert a DGEList object to a long data.frame containing expression, feature annotation, and sample annotation
+#' Convert a DGEList object to a long data.frame containing expression, 
+#' feature annotation, and sample annotation
 #' 
-#' @param x A DGEList object
-#' @param exprsFun The function to convert counts to expression data. Default: logCPM
+#' @param x A \code{DGEList} object
+#' @param exprsFun A function to convert counts to expression data. 
+#'   Default: logCPM
+#'  
 #' @examples
 #' mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #' rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
 #' y <- edgeR::DGEList(counts=mat, group=rep(1:2, each=5))
 #' DGEListToLongTable(y)
 #' 
-#' @export DGEListToLongTable
+#' @importFrom edgeR cpm
+#' @export
 DGEListToLongTable <- function (x, 
                                 exprsFun = function(dgeList) cpm(dgeList, log=TRUE)) {
   exp <- do.call(exprsFun, list(x))

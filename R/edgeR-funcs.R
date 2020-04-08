@@ -10,7 +10,8 @@
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 #' exDesign <- model.matrix(~0+exGroups)
-#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exContrast <- matrix(c(-1,1), ncol=1, 
+#'     dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
 #' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
 #' exFdata <- data.frame(Identifier=sprintf("Gene%d", 1:nrow(exMat)))
 #' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
@@ -25,6 +26,7 @@
 #' ## note that pData are appended after count information
 #' pData(exObj2)
 #' pData(exObj3)
+#' @export
 setMethod("EdgeObject",
           c("matrix", "DesignContrast"),
           function(object, designContrast, fData=NULL, pData=NULL, remove.zeros=FALSE) {

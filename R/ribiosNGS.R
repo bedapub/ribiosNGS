@@ -1,17 +1,20 @@
 #' ribiosNGS package provides functionalities used for next-generation sequencing data
+#'
+#' @name ribiosNGS-package
 #' @docType package
+#' @description Provides data structures and functions for next-generation sequencing gene expression analysis
 #' @keywords package
 NULL
 
 
-#' @importFrom made4 plotarrays ord
-#' @importFrom stringr str_length str_pad
+#' @importFrom methods setClass setGeneric setMethod setRefClass setReplaceMethod
+#' @importFrom ribiosExpression designMatrix contrastMatrix
 #' @importFrom Biobase `annotation<-` assayData `fData<-` fData `pData<-`
 #'             featureNames pData exprs `exprs<-` annotation
 #'             featureData phenoData sampleNames
 #'             `featureNames<-` storageMode
 #' @importMethodsFrom ribiosExpression designMatrix contrastMatrix
-#' @importMethodsFrom BiocGenerics counts
+#' @importMethodsFrom BiocGenerics counts annotation nrow ncol normalize
 #' @export `annotation<-` assayData `fData<-` fData `pData<-`
 #' @export featureNames pData exprs `exprs<-` annotation
 #' @export featureData phenoData sampleNames
@@ -20,11 +23,9 @@ NULL
 #' @importFrom ribiosIO read_biokit_exprs writeMatrix gctDesc GctMatrix
 #' @importFrom readxl read_excel
 #' @importFrom readr count_fields tokenizer_tsv read_tsv
-#' @importFrom methods show
 #' @importFrom lattice xyplot barchart
 #' @importFrom ribiosGSEA biosCamera geneSetPerm gmtListCamera
 #' @importFrom ribiosAnnotation querydb annotateGeneIDs annotateGeneSymbols annotatemRNAs
-#' @importFrom BiocGenerics counts annotation
 #' @importFrom ribiosExpression groups dispGroups designMatrix contrastMatrix contrastNames nContrast contrastSampleIndices truncateDgeTable annotate DesignContrast
 #' @importFrom edgeR cpm aveLogCPM estimateGLMRobustDisp rpkm
 #' @importFrom graphics pairs
@@ -42,7 +43,7 @@ NULL
 #' @importFrom ribiosPlot pcaScores
 #' @importClassesFrom BioQC GmtList
 #' @importClassesFrom Biobase AnnotatedDataFrame ExpressionSet
-#' @export dgeWithEdgeR doGse gseWithLogFCgage gseWithCamera sigGene sigGenes sigPosGene sigNegGene sigPosGenes sigNegGenes sigGeneCounts updateSigFilter logFCmatrix model.DGEList countsSVA countsRemoveSV voomSVA voomRemoveSV cpmSVA cpmRemoveSV isEmptySV doSVA cpm.EdgeObject inferSV voomSVA updateDesignMatrixBySVA filterByCPM isAnyNA replaceNAwithZero estimateGLMDisp fitGLM testGLM annotate dgeTables dgeTable writeDgeTables writeTruncatedDgeTables modLogCPM voom logFCgage voomCamera zscoreDGE camera.EdgeResult fullEnrichTable hasCommonDisp setCommonDispIfMissing normBoxplot plotMDS.EdgeObject pairs.EdgeResult volcanoPlot smearPlot isAnnotated readMPS mpsAnnotateReporters doFisher sigGeneBarchart parseMolPhenFeat readMolPhenCoverageGct read_illumina_sampleSheet_xls translationEfficiency doEdgeR doBabel summarizeBabel mergeBabelEdgeR babelAllRnks riboseq.panel xyplot xyplot.RiboSeq riboseq.panel plotRNAMDS plotRPFMDS refBoxplot write.tableList readGseaGeneSet doGeneSetTests cpmBoxplotFile exprsScatterFile mdsFile teBoxplotFile logFCscatterFile babelVolcanoFile rspaceFile upstreamFile functionFile pathwayFile fullTableFile rnkFiles writeHTML readAmpliSeq isCherryPickingRepeat removeCherryPickingRepeat mpsReporterAssocPathway mpsReporterUpstream mpsReporterUpstreamPos mpsReporterUpstreamNeg mpsReporterDownstream mpsReporterAssocGO mpsReporterAssocRCTM readBiokitExpression readBiokitGctFile readBiokitAsDGEList DGEListToLongTable writeDGEList tpm rpkm2tpm edgeRcommand slurmEdgeRcommand slurmEdgeR minGroupCount countByGroup maxCountByGroup hasNoReplicate readCameraResults expandSigCameraResults cameraTable2network visualizeCameraNetworksByContrast parseContributingGenes parseGenesetsContributingGenes parseCameraContributingGenes rowVars prcompExprs prcomp.DGEList checkBiokitSampleAnnotation writeBiokitSampleAnnotation exportEdgeResult staticGeneLevelPlots exportStaticGeneLevelPlots checkContrastNames mergeDGEList vsnSVA
+#' @export dgeWithEdgeR doGse gseWithLogFCgage gseWithCamera sigGene sigGenes sigPosGene sigNegGene sigPosGenes sigNegGenes sigGeneCounts updateSigFilter logFCmatrix model.DGEList countsSVA countsRemoveSV voomSVA voomRemoveSV cpmSVA cpmRemoveSV isEmptySV doSVA cpm.EdgeObject inferSV voomSVA updateDesignMatrixBySVA filterByCPM isAnyNA replaceNAwithZero estimateGLMDisp fitGLM testGLM annotate dgeTables dgeTable writeDgeTables writeTruncatedDgeTables modLogCPM voom logFCgage voomCamera zscoreDGE camera.EdgeResult fullEnrichTable hasCommonDisp setCommonDispIfMissing normBoxplot plotMDS.EdgeObject pairs.EdgeResult volcanoPlot smearPlot isAnnotated readMPS mpsAnnotateReporters doFisher sigGeneBarchart parseMolPhenFeat readMolPhenCoverageGct read_illumina_sampleSheet_xls translationEfficiency doEdgeR doBabel summarizeBabel mergeBabelEdgeR babelAllRnks riboseq.panel xyplot xyplot.RiboSeq riboseq.panel plotRNAMDS plotRPFMDS refBoxplot write.tableList readGseaGeneSet doGeneSetTests cpmBoxplotFile exprsScatterFile mdsFile teBoxplotFile logFCscatterFile babelVolcanoFile rspaceFile upstreamFile functionFile pathwayFile fullTableFile rnkFiles writeHTML readAmpliSeq isCherryPickingRepeat removeCherryPickingRepeat mpsReporterAssocPathway mpsReporterUpstream mpsReporterUpstreamPos mpsReporterUpstreamNeg mpsReporterDownstream mpsReporterAssocGO mpsReporterAssocRCTM readBiokitExpression readBiokitGctFile readBiokitAsDGEList DGEListToLongTable writeDGEList tpm rpkm2tpm edgeRcommand slurmEdgeRcommand slurmEdgeR minGroupCount countByGroup maxCountByGroup hasNoReplicate readCameraResults expandSigCameraResults cameraTable2network visualizeCameraNetworksByContrast parseContributingGenes parseGenesetsContributingGenes parseCameraContributingGenes rowVars prcompExprs prcomp.DGEList checkBiokitSampleAnnotation writeBiokitSampleAnnotation exportEdgeResult staticGeneLevelPlots exportStaticGeneLevelPlots checkContrastNames mergeDGEList
 #' @exportClass RiboSeq riboSeqAnalysisObject EdgeResult EdgeObject EdgeGSE DGEList2
 #' @exportMethod setRnks RiboSeq normalize countRNA countRPF cpmRNA cpmRPF cpmRNAGroupSum cpmRPFGroupSum cpmFilter featureNames sampleNames commonDisp commonDisp<- BCV show plotBCV dgeList normFactors EdgeObject isAnnotated designMatrix<- contrastMatrix<-
 #' @export groups dispGroups designMatrix contrastMatrix contrastNames nContrast DesignContrast

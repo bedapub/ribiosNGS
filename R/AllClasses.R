@@ -1,3 +1,6 @@
+#' @include ribiosNGS.R
+NULL
+
 ER_TCRATIO_DEFAULT <- Inf
 ER_TRENDED_DEFAULT <- Inf
 ER_AVELOGCPM_DEFAULT <- -Inf
@@ -8,10 +11,37 @@ ESF_LR_DEFAULT <- 0
 ESF_PVALUE_DEFAULT <- 1
 ESF_FDR_DEFAULT <- 1
 
+##-----------------------------------##
+## EdgeObject
+##-----------------------------------##
+#' EdgeObject argumenting DGEList by including designContrast information
+#' @slot dgeList A \code{DGEList} object
+#' @slot designContrast A \code{designContrast} object
+#' 
+#' @exportClass EdgeObject
+setClass("EdgeObject",
+         representation=list("dgeList"="DGEList",
+                             "designContrast"="DesignContrast"))
+
+
+##-----------------------------------##
+## RiboSeq classes
+##-----------------------------------##
+
+#' A S4-class object representing a RiboSeq experiment
+#' @slot RNA A \code{DGEList} object that represents RNA data
+#' @slot RPF A \code{DGEList} object that represents ribosome profiling 
+#'     (RPF) data
+#' @slot groups A factor vector that indicate sample groups
+#' 
+#' @exportClass RiboSeq
 setClass("RiboSeq",
          representation=list(RNA="DGEList",
            RPF="DGEList",
            groups="factor"))
+
+#' A S4-class represnts analysis results of a RiboSeq experiment
+#' @exportClass riboSeqAnalysisObject
 setClass("riboSeqAnalysisObject",
          representation=list(nFeature.RNA.raw="integer",
            nSample.RNA.raw="integer",
@@ -53,23 +83,35 @@ setClass("riboSeqAnalysisObject",
            file.pathway="riboseq-analysis-pathwayAnalysis.txt",
            file.indexHTML="index.html"))
 
-setClass("EdgeObject",
-         representation=list("dgeList"="DGEList",
-           "designContrast"="DesignContrast"))
 
+##-----------------------------##
+## EdgeResult
+##-----------------------------##
+
+#' EdgeSigFilter: EdgeR result filter for significantly regulated genes
+#' 
+#' @slot posLogFC Numeric, positive logFC threshold (larger values are kept)
+#' @slot negLogFC Numeric, negative logFC threshold (more negative values 
+#'     are kept)
+#' @slot logCPM Numeric, logCPM treshold (larger values are kept)
+#' @slot LR Numeric, likelihood ratio (LR) threshold (larger values are kept)
+#' @slot pValue Numeric, p-value treshold (smaller values are kept)
+#' @slot FDR Numeric, FDR treshold
+#' 
+#' @export 
 setClass("EdgeSigFilter",
          representation=list("posLogFC"="numeric",
-           "negLogFC"="numeric",
-           "logCPM"="numeric",
-           "LR"="numeric",
-           "pValue"="numeric",
-           "FDR"="numeric"),
+                             "negLogFC"="numeric",
+                             "logCPM"="numeric",
+                             "LR"="numeric",
+                             "pValue"="numeric",
+                             "FDR"="numeric"),
          prototype=list(posLogFC=ESF_POSLOGFC_DEFAULT,
-           negLogFC=ESF_NEGLOGFC_DEFAULT ,
-           logCPM=ESF_LOGCPM_DEFAULT,
-           LR=ESF_LR_DEFAULT,
-           pValue=ESF_PVALUE_DEFAULT,
-           FDR=ESF_FDR_DEFAULT),
+                        negLogFC=ESF_NEGLOGFC_DEFAULT ,
+                        logCPM=ESF_LOGCPM_DEFAULT,
+                        LR=ESF_LR_DEFAULT,
+                        pValue=ESF_PVALUE_DEFAULT,
+                        FDR=ESF_FDR_DEFAULT),
          validity=function(object) {
            stopifnot(validPosLogFC <- object@posLogFC >= 0)
            stopifnot(validNegLogFC <- object@negLogFC <= 0)
@@ -79,6 +121,23 @@ setClass("EdgeSigFilter",
            return(validPosLogFC & validNegLogFC & validLR & validPvalue & validFDR)
          })
 
+#' Update EdgeSigFilter
+#' 
+#' @param object An \code{EdgeSigFilter} object 
+#' @param logFC Numeric, logFC filter value, optional.
+#' @param posLogFC Numeric, positive logFC filter value, optional.
+#' @param negLogFC Numeric, negative logFC filter value, optional.
+#' @param logCPM Numeric, logCPM filter value, optional.
+#' @param LR Numeric, LR filter value, optional
+#' @param FDR Numeric, FDR filter value, optional
+#' 
+#' @return An updated \code{EdgeSigFilter} object.
+#' 
+#' @aliases `logFC<-` `negLogFC<-` `negLogFC<-` `logCPM<-`
+#'          `LR<-` `pValue<-` `FDR<-`
+#' 
+#' @importFrom stats update
+#' @export
 update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
   if(!missing(logFC)) logFC(object) <- logFC
   if(!missing(posLogFC)) posLogFC(object) <- posLogFC
@@ -90,31 +149,52 @@ update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, 
   validObject(object)
   return(object)
 }
+
+#' @describeIn update.EdgeSigFilter Updates the posLogFC threshold value
+#' @export
 `posLogFC<-` <- function(edgeSigDegFilter, value) {
   edgeSigDegFilter@posLogFC <- value
   return(edgeSigDegFilter)
 }
+
+#' @describeIn update.EdgeSigFilter Updates the negLogFC threshold value
+#' @export
 `negLogFC<-` <- function(edgeSigDegFilter, value) {
   edgeSigDegFilter@negLogFC <- value
   return(edgeSigDegFilter)
 }
+
+#' @describeIn update.EdgeSigFilter Updates the posLogFC threshold value
+#' @export
 `logFC<-` <- function(edgeSigDegFilter, value) {
   edgeSigDegFilter@posLogFC <- abs(value)
   edgeSigDegFilter@negLogFC <- -abs(value)
   return(edgeSigDegFilter)
 }
+
+#' @describeIn update.EdgeSigFilter Updates the logCPM threshold value
+#' @export
 `logCPM<-` <- function(edgeSigDegFilter, value) {
   edgeSigDegFilter@logCPM <- value
   return(edgeSigDegFilter)
 }
+
+#' @describeIn update.EdgeSigFilter Updates the LR threshold value
+#' @export
 `LR<-` <- function(edgeSigDegFilter, value) {
   edgeSigDegFilter@LR <- value
   return(edgeSigDegFilter)
 }
+
+#' @describeIn update.EdgeSigFilter Updates the pValue threshold value
+#' @export
 `pValue<-` <- function(edgeSigDegFilter, value) {
   edgeSigDegFilter@pValue <- value
   return(edgeSigDegFilter)
 }
+
+#' @describeIn update.EdgeSigFilter Updates the FDR threshold value
+#' @export
 `FDR<-` <- function(edgeSigDegFilter, value) {
   edgeSigDegFilter@FDR <- value
   return(edgeSigDegFilter)
@@ -132,10 +212,12 @@ ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.5, FDR=0.05)
 
 setClass("EdgeResult",
          representation=list("dgeGLM"="DGEGLM",
-
+           "dgeTables"="list",
+           "sigFilter"="EdgeSigFilter"),
+         prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
+         contains="EdgeObject")
 
 #' Return a list of differential gene expression tables
-#' 
 #' 
 #' @param edgeResult An \code{EdgeResult} object
 #' @return A list of \code{data.frame}s, each containing the DGEtable for one
@@ -143,11 +225,6 @@ setClass("EdgeResult",
 #' @seealso \code{dgeTable} which returns one \code{data.frame} for one or more
 #' given contrasts.
 #' @export dgeTables
-           "dgeTables"="list",
-           "sigFilter"="EdgeSigFilter"),
-         prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
-         contains="EdgeObject")
-
 EdgeResult <- function(edgeObj,
                        dgeGLM,
                        dgeTables) {
@@ -183,6 +260,8 @@ setClass("DGEList2", representation("list"))
 #' 
 #' @param ... A list of DGEList2 objects, can be passed as individual objects
 #' or in a list
+#' 
+#' @export
 DGEList2 <- function(...) {
   li <- as.list(...)
   res <- new("DGEList2", li)

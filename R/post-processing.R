@@ -117,111 +117,8 @@ parseCameraContributingGenes <- function(cameraResTbl, genesets) {
   return(res)
 }
 
-#' #' Parse contributing genesets by both genesets and contrasts
-#' #' @param str Character strings, containing contributing genes
-#' #' @param genesets Character strings, geneset labels. Its length must match the length of \code{str}
-#' #' @return A \code{data.frame} containing genesets, genes, and statistics
-#' #' 
-#' #' @examples 
-#' #' parseGenesetsContributingGenes("AKR1C4(-1.25), AKR1D1(-1.11)", "Metabolism")
-#' #' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)",
-#' #'                          "AKT1(1.24), AKT2(1.11), AKT3(1.05)"),
-#' #'                          c("Metabolism", "AKTs"))
-#' parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts) {
-#'   genes <- parseContributingGenes(str)
-#'   res <- cbind(Contrast=rep(contrasts, sapply(contrasts, nrow)),
-#'                GeneSet=rep(genesets, sapply(genes, nrow)),
-#'                do.call(rbind, genes))
-#'   return(res)
-#' }
 
-
-
-##GSEresult <- function(Namespace,
-##                      Contrast, GeneSet, NGenes, Correlation, Direction, PValue, FDR,
-##                      ContributingGenesStr) {
-##    contGenes <- parseContributingGenes(as.character(ContributingGenesStr))
-##    new("GSEresult",
-##        Namespace=as.character(Namespace),
-##        Contrast=as.character(Contrast),
-##        GeneSet=as.character(GeneSet),
-##        NGenes=NGenes,
-##        Correlation=Correlation,
-##        Direction=as.character(Direction),
-##        PValue=PValue,
-##        FDR=FDR,
-##        ContributingGenes=contGenes)
-##}
-##
-##GSEresultListFromDataFrame <- function(df) {
-##    grs <- sapply(1:nrow(df),function(i) {
-##                      GSEresult(df[i,"Namespace"],
-##                                df[i,"Contrast"],
-##                                df[i,"GeneSet"],
-##                                df[i,"NGenes"],
-##                                df[i,"Correlation"],
-##                                df[i,"Direction"],
-##                                df[i,"PValue"],
-##                                df[i,"FDR"],
-##                                df[i,"ContributingGenes"])
-##                  })
-##    grs <- as(grs, "GSEresultList")
-##    return(grs)
-##}
-
-##GSEresultListToDataFrame <- function(resList) {
-##    namespace <- sapply(resList, function(x) x@Namespace)
-##    contrast <- sapply(resList, function(x) x@Contrast)
-##    geneset <- sapply(resList, function(x) x@GeneSet)
-##    direction <- sapply(resList, function(x) x@Direction)
-##    pvals <- sapply(resList, function(x) x@PValue)
-##    genes <- lapply(resList, function(x) x@ContributingGenes)
-##    nGenes <- sapply(genes, nrow)
-##    geneTbl <- do.call(rbind, genes)
-##    path <- data.frame(Namespace=rep(namespace, nGenes),
-##                       Contrast=rep(contrast, nGenes),
-##                       GeneSet=rep(geneset, nGenes),
-##                       Direction=rep(direction, nGenes),
-##                       PValue=rep(pvals, nGenes))
-##    res <- cbind(path, geneTbl)
-##    res$Score <- with(res, pScore(PValue, Direction=="Up"))
-##    return(res)
-##}
-
-## skip the GSEresultList object, and directly parse camera table
-
-
-#' #' Parse contributing genesets by both genesets and contrasts #' @param str
-#' Character strings, containing contributing genes #' @param genesets
-#' Character strings, geneset labels. Its length must match the length of
-#' \code{str} #' @return A \code{data.frame} containing genesets, genes, and
-#' statistics #' #' @examples #' parseGenesetsContributingGenes("AKR1C4(-1.25),
-#' AKR1D1(-1.11)", "Metabolism") #'
-#' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)", #'
-#' "AKT1(1.24), AKT2(1.11), AKT3(1.05)"), #' c("Metabolism", "AKTs"))
-#' parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts)
-#' genes <- parseContributingGenes(str) res <- cbind(Contrast=rep(contrasts,
-#' sapply(contrasts, nrow)), GeneSet=rep(genesets, sapply(genes, nrow)),
-#' do.call(rbind, genes)) return(res)
-#' 
 #' Read CAMERA results into a tibble object
-#' 
-#' #' Parse contributing genesets by both genesets and contrasts #' @param str
-#' Character strings, containing contributing genes #' @param genesets
-#' Character strings, geneset labels. Its length must match the length of
-#' \code{str} #' @return A \code{data.frame} containing genesets, genes, and
-#' statistics #' #' @examples #' parseGenesetsContributingGenes("AKR1C4(-1.25),
-#' AKR1D1(-1.11)", "Metabolism") #'
-#' parseGenesetsContributingGenes(c("AKR1C4(-1.25), AKR1D1(-1.11)", #'
-#' "AKT1(1.24), AKT2(1.11), AKT3(1.05)"), #' c("Metabolism", "AKTs"))
-#' parseContrastGenesetsContributingGenes <- function(str, genesets, contrasts)
-#' genes <- parseContributingGenes(str) res <- cbind(Contrast=rep(contrasts,
-#' sapply(contrasts, nrow)), GeneSet=rep(genesets, sapply(genes, nrow)),
-#' do.call(rbind, genes)) return(res)
-#' 
-#' Read CAMERA results into a tibble object
-#' 
-#' 
 #' @param file CAMERA results file
 #' @param minNGenes NULL or integer, genesets with fewer genes are filtered out
 #' @param maxNGenes NULL or integer, genesets with more genes are filtered out
@@ -237,6 +134,7 @@ readCameraResults <- function(file, minNGenes=3, maxNGenes=1000) {
   return(res)
 }
 
+#' @export
 expandCameraTableGenes <- function(tbl) {
     genes <- tbl$ContributingGenes
     expGenes <- parseContributingGenes(genes)
@@ -249,6 +147,7 @@ expandCameraTableGenes <- function(tbl) {
     return(res)
 }
 
+#' @export
 expandSigCameraResults <- function(cameraTable,
                                    pVal=0.01, minNGenes=3, includeAllFromSigGenesets=FALSE) {
     if(includeAllFromSigGenesets) {
@@ -261,7 +160,7 @@ expandSigCameraResults <- function(cameraTable,
     return(expSigCameraTable)
 }
 
-
+#' @export
 cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     retObj <- list(graph=make_empty_graph(),
                    resTbl=data.frame(Namespace=character(0),
@@ -317,6 +216,7 @@ cameraTable2network <- function(df, jacThr=0.25, plot=TRUE, ...) {
     return(retObj)
 }
 
+#' @export
 visualizeCameraNetworksByContrast <- function(expCameraTable, ...) {
     contrasts <- sort(unique(expCameraTable$Contrast))
     nres <- lapply(as.character(contrasts), function(x) {

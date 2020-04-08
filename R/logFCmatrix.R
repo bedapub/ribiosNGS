@@ -1,6 +1,5 @@
 #' Extract a matrix of log2(fold-change) values
 #' 
-#' 
 #' @param edgeResult An \code{EdgeResult} object
 #' @param featureIdentifier Character, column name in \code{dgeTable} that will
 #' be used as rownames of the result matrix
@@ -11,6 +10,7 @@
 #' genes that are lowly expressed which yet show strong differential
 #' expression.
 #' @note TODO: add edgeResult data example
+#' @importFrom ribiosUtils mintersect
 #' @export logFCmatrix
 logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", 
                         contrasts=NULL,

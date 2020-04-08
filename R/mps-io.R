@@ -1,10 +1,11 @@
 #' Extract AmpliSeq target annotation from a list of read count data.frames
 #' 
-#' 
 #' @param readCountsList A list of read count data.frames
 #' 
 #' The function is used internally to extract unique target annotation from
 #' multiple runs
+#' 
+#' @export
 extractTargetAnno <- function(readCountsList) {
   annos <- lapply(readCountsList, function(x) data.frame(Target=x$Target, GeneSymbol=x$Gene))
   anno <- do.call(rbind, annos)
@@ -22,6 +23,8 @@ extractTargetAnno <- function(readCountsList) {
 #' 
 #' The function is used internally to merge several runs into one ExpressionSet
 #' object.
+#' 
+#' @export
 mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) {
   if(is.null(runNames))
     runNames <- seq(along=readCountList)
@@ -166,6 +169,7 @@ removeCherryPickingRepeat <- function(eset, cherryPickingRun) {
 #'    with the original names as row names
 #' @seealso \code{\link{readMolPhenCoverageGct}}, which calls this function
 #'   internally to parse molecular phenotyping gene features
+#' @export
 parseMolPhenFeat <- function(gctMatrix) {
   featureNames <- rownames(gctMatrix)
   fsplit <- strsplit(featureNames, ";")
@@ -189,7 +193,7 @@ parseMolPhenFeat <- function(gctMatrix) {
 #'     "AmpliSeq_files",
 #'     "MolPhen-coverage-example-20200115.gct"), 
 #'   package="ribiosNGS"))
-#'
+#' @export
 readMolPhenCoverageGct <- function(file) {
   mat <- ribiosIO::read_gct_matrix(file)
   fData <- parseMolPhenFeat(mat)
@@ -242,7 +246,7 @@ toString.data.frame = function (object, ..., digits=NULL, quote=FALSE, right=TRU
 #' @param file A XLS/XLSX file containing in the first sheet
 #'  the sample sheet of a molecular phenotyping experiment
 #' @return A \code{data.frame} annotating the samples
-#' 
+#' @export
 read_illumina_sampleSheet_xls <- function(file) {
    content <- readxl::read_excel(file, col_names=FALSE, 
                                  .name_repair = "minimal")

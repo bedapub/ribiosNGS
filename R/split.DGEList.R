@@ -17,6 +17,8 @@
 #' 
 #' d1SampleSplit <- split(d1, d1$samples$donor)
 #' d1GeneSplit <- split(d1, d1$genes$GeneType, bySample=FALSE)
+#' 
+#' @export
 split.DGEList <- function(x, f, drop=FALSE, bySample=TRUE) {
   if(!is.factor(f))
     f <- as.factor(f)

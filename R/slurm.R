@@ -14,6 +14,7 @@
 #'   checkContrastNames(problemContrast, action="warning")
 #'   checkContrastNames(problemContrast, action="error")
 #' }
+#' @export
 checkContrastNames <- function(contrastMatrix,
                                 action=c("message", "warning", "error")) {
   action <- match.arg(action)

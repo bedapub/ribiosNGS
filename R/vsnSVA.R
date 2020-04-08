@@ -1,4 +1,5 @@
-#' Perform SVA analysis using VSN-transformed DGEList
+#' Remove effects of surrogate variables using VSN-transformed DGEList
+#' 
 #' @param dgeList An \code{DGEList} object
 #' @param design Design matrix
 #' @param nullModel Null model matrix
@@ -38,6 +39,8 @@
 #' nullModel <-  model.matrix(~donor, data=d1$samples)
 #' d1VsnSvaRes <- vsnSVA(d1, design, nullModel)
 #' d2VsnSvaRes <- vsnSVA(d2, design, nullModel)
+#' @importFrom sva svaseq
+#' @export
 vsnSVA <- function(dgeList,
                    design, nullModel, verbose=FALSE,
                    offset) {

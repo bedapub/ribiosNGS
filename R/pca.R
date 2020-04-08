@@ -154,6 +154,8 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE, nbin=NULL) {
 #' myPrcomp2 <- prcomp(myDgeList2)
 #' stopifnot(identical(myPrcomp, myPrcomp2))
 #' 
+#' @importFrom vsn vsnMatrix predict
+#' @importFrom stats prcomp
 #' @export prcomp.DGEList
 prcomp.DGEList <- function(x, ntop=NULL, 
                            scale=FALSE,

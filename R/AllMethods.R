@@ -1,5 +1,131 @@
 #' @include AllClasses.R AllGenerics.R
 
+##-----------------------------------##
+## Dimensionalities
+##-----------------------------------##
+#' Return number of features 
+#' @importMethodsFrom BiocGenerics nrow
+#' @param x An EdgeResults object
+#' @return Integer
+#' @export
+setMethod("nrow", "EdgeResult", function(x) nrow(x@dgeList))
+
+#' Return number of samples 
+#' @importMethodsFrom BiocGenerics ncol
+#' @param x An EdgeResults object
+#' @return Integer
+#' @export
+setMethod("ncol", "EdgeResult", function(x) ncol(x@dgeList))
+
+#' Dimensions of an EdgeResults
+#' @param x An EdgeResult object
+#' @export
+dim.EdgeResult <- function(x) c(nrow(x), ncol(x))
+
+##-----------------------------------##
+## counts
+##-----------------------------------##
+#' Return counts in a DGEList object
+#' @importMethodsFrom BiocGenerics counts
+#' @export
+setMethod("counts", "DGEList", function(object) object$counts)
+#' Return counts in EdgeObject
+#' 
+#' @param object An EdgeObject
+#' @param filter Logical, whether filtered matrix (by default) or unfiltered matrix should be returned
+#' 
+#' @seealso \code{\link{filterByCPM}}
+#' @export
+setMethod("counts", "EdgeObject", function(object, filter=TRUE) {
+  if(filter) {
+    return(object@dgeList$counts)
+  } else {
+    return(object@dgeList$counts.unfiltered)
+  }
+})
+
+##-------------------------------------##
+## Human gene symbols
+##-------------------------------------##
+fDataHumanGeneSymbol <- function(object) {
+  gs <- fData(object)$GeneSymbol
+  if(!is.character(gs) && !is.null(gs)) {
+    gs <- as.character(gs)
+  }
+  return(gs)
+}
+
+#' @describeIn humanGeneSymbols Method for DGEList
+setMethod("humanGeneSymbols", "DGEList", function(object) fDataHumanGeneSymbol(object))
+#' @describeIn humanGeneSymbols Method for EdgeObject
+setMethod("humanGeneSymbols", "EdgeObject", function(object) fDataHumanGeneSymbol(object))
+
+##-------------------------------------##
+## Retrieve normalization factors
+##-------------------------------------##
+#' @describeIn normFactors Method for DGEList
+setMethod("normFactors", "DGEList", function(object) {
+  return(object$samples$norm.factors)
+})
+#' @describeIn normFactors Method for EdgeObject
+setMethod("normFactors", "EdgeObject", function(object) {
+  return(normFactors(object@dgeList))
+})
+
+##-------------------------------------##
+## GLM dispersion estimation
+##-------------------------------------##
+#' @describeIn estimateGLMDisp Method for EdgeObject
+#' 
+#' @param object An \code{EdgeObject} object
+#' @importFrom edgeR estimateDisp
+#' @return An updated \code{EdgeObject} object
+#' @export
+setMethod("estimateGLMDisp", "EdgeObject", function(object) {
+  dge <- object@dgeList
+  design <- designMatrix(object@designContrast)
+  dge <- estimateDisp(dge, design)
+  object@dgeList <- dge
+  return(object)
+})
+
+##-------------------------------------##
+## Fit GLM
+##-------------------------------------##
+#' @describeIn fitGLM Method for EdgeObject
+#' 
+#' @param object An \code{EdgeObject} object
+#' @param ... Passed to \code{\link[edgeR]{glmFit}}
+#' 
+#' @return The fit object
+#' 
+#' @importFrom edgeR glmFit
+#' @export
+setMethod("fitGLM", "EdgeObject", function(object, ...) {
+  fit <- edgeR::glmFit(object@dgeList,
+                       design=designMatrix(object@designContrast),
+                      ...)
+  return(fit)
+})
+
+##-----------------------------------## 
+## Test GLM
+##-----------------------------------## 
+setMethod("testGLM", c("EdgeObject", "DGEGLM"),
+          function(object, fit) {
+            contrasts <- contrastMatrix(object@designContrast)
+            toptables <- apply(contrasts, 2, function(x) {
+              lrt <- glmLRT(fit, contrast=x)
+              x <- topTags(lrt, n=nrow(lrt$table))$table
+              assertEdgeToptable(x)
+              return(x)
+            })
+            
+            return(EdgeResult(edgeObj=object,
+                              dgeGLM=fit,
+                              dgeTables=toptables))
+          })
+
 setMethod("dgeList", "EdgeObject", function(object) return(object@dgeList))
 setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 
@@ -54,7 +180,6 @@ setMethod("show", "DGEList2", function(object) {
   }
 })
 
-setMethod("counts", "DGEList", function(object) object$counts)
 setMethod("sampleNames", "DGEList", function(object) colnames(object$counts))
 setMethod("commonBCV", "DGEList", function(x) {
   naOrSqrt(x$common.dispersion)
@@ -679,9 +804,6 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
 })
 
 
-
-#' Run principal component analysis on a DGEList2 object
-#' 
 #' Run principal component analysis on a DGEList2 object
 #' 
 #' 
@@ -697,4 +819,16 @@ prcomp.DGEList2 <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
                       prcomp.DGEList(dgeList, fun=fun, ntop=ntop))
   names(resList) <- names(x)
   return(resList)
+}
+
+##---------------------##
+## plots
+##---------------------##
+
+#' plotMDS for EdgeObject
+#' @param x An EdgeObject object
+#' @importFrom limma plotMDS
+#' @export
+plotMDS.EdgeObject <- function(x,  ...) {
+  plotMDS(dgeList(x), ...)
 }

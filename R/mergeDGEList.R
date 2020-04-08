@@ -39,6 +39,10 @@
 #' 
 #' md <- mergeDGEList(d1, d2)
 #' md2 <- mergeDGEList(d1, d2, DGEListLabels=c("d1", "d2"))
+#' 
+#' @importFrom edgeR DGEList
+#' @importFrom ribiosUtils removeColumns
+#' @export
 mergeDGEList <- function(firstDgeList, secondDgeList,
                          DGEListLabels=NULL) {
   stopifnot(is.null(DGEListLabels) || length(DGEListLabels)==2)

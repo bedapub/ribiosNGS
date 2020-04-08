@@ -5,6 +5,8 @@
 #' @param logFC A named vector of logFC values of genes
 #' @param gmtList A \code{\link[BioQC]{GmtList}} object containing gene-sets
 #' @param ... Other parameters passed to \code{\link[gage]{gage}}
+#' 
+#' @export
 myGage <- function(logFC, gmtList, ...) {
   gsnames <- gsName(gmtList)
     genes <- gsGenes(gmtList)
@@ -157,29 +159,19 @@ zscoreDGE <- function(y, design=NULL, contrast=ncol(design)) {
   y <- zscoreNBinom(y$counts, 
                     mu = pmax(fit.null$fitted.values, 1e-17),
                     size = 1/dispersion)
-  y
+  return(y)
 }
 
-#' Get human gene symbols for gene-set enrichment analysis
-setGeneric("humanGeneSymbols", function(object) standardGeneric("humanGeneSymbols"))
-fDataHumanGeneSymbol <- function(object) {
-  gs <- fData(object)$GeneSymbol
-  if(!is.character(gs) && !is.null(gs)) {
-    gs <- as.character(gs)
-  }
-  return(gs)
-}
-setMethod("humanGeneSymbols", "DGEList", function(object) fDataHumanGeneSymbol(object))
-setMethod("humanGeneSymbols", "EdgeObject", function(object) fDataHumanGeneSymbol(object))
 
 #' Perform camera using DGEList
-#' 
 #' 
 #' @param dgeList A DGEList object, with GeneSymbol available
 #' @param index List of integer indices of genesets, names are namese of gene
 #' sets
 #' @param design Design matrix
 #' @param contrasts Contrast matrix
+#' 
+#' @export
 dgeListCamera <- function(dgeList, index, design, contrasts) {
   geneSymbols <- humanGeneSymbols(dgeList)
   if(is.null(geneSymbols))
@@ -241,10 +233,7 @@ dgeListCamera <- function(dgeList, index, design, contrasts) {
 
 
 
-#' Run CAMERA method using EdgeResult
-#' 
-#' Run CAMERA method using EdgeResult
-#' 
+#' Run CAMERA method using EdgeResult 
 #' 
 #' @param y A EdgeResult object
 #' @param gmtList Gene set collections, for example read by

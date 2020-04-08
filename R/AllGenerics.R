@@ -1,20 +1,12 @@
 #' @include ribiosNGS.R AllClasses.R
 
-setGeneric("normalize", function(object, ...) standardGeneric("normalize"))
-
-setGeneric("RiboSeq", function(RNA, RPF, groups, ...) standardGeneric("RiboSeq"))
-
-setGeneric("countRNA", function(object) standardGeneric("countRNA"))
-setGeneric("countRPF", function(object) standardGeneric("countRPF"))
-setGeneric("cpmRNA", function(object,...) standardGeneric("cpmRNA"))
-setGeneric("cpmRPF", function(object,...) standardGeneric("cpmRPF"))
-
+#' Extract dgeList from the object
+#' @export
 setGeneric("dgeList", function(object) standardGeneric("dgeList"))
 
+#' Extract normalisation factors from the object
+#' @export
 setGeneric("normFactors", function(object) standardGeneric("normFactors"))
-
-setGeneric("cpmRNAGroupSum", function(object) standardGeneric("cpmRNAGroupSum"))
-setGeneric("cpmRPFGroupSum", function(object) standardGeneric("cpmRPFGroupSum"))
 
 setGeneric("cpmFilter", function(object) standardGeneric("cpmFilter"))
 setGeneric("convertPDF2PNG", function(object, ...) standardGeneric("convertPDF2PNG"))
@@ -55,3 +47,49 @@ setGeneric("updateDesignMatrixBySVA",
 
 setGeneric("inferSV", function(object, design, ...) standardGeneric("inferSV"))
 setGeneric("voomSVA", function(object, design, ...) standardGeneric("voomSVA"))
+
+#' Get human gene symbols for gene-set enrichment analysis
+#' @export
+setGeneric("humanGeneSymbols", function(object) standardGeneric("humanGeneSymbols"))
+
+#' Fit generalized linear model
+#' @export
+setGeneric("fitGLM", function(object,...) standardGeneric("fitGLM"))
+
+#' Estimate generalized linear model dispersion
+#' @export
+setGeneric("estimateGLMDisp", function(object) standardGeneric("estimateGLMDisp"))
+
+#' Test GLM
+#' @export
+setGeneric("testGLM", function(object, fit) standardGeneric("testGLM"))
+##----------------------------------##
+## Riboseq
+##----------------------------------##
+#' RiboSeq generic function
+#' @export
+setGeneric("RiboSeq", function(RNA, RPF, groups, ...) standardGeneric("RiboSeq"))
+
+#' Get RNA counts
+#' @export
+setGeneric("countRNA", function(object) standardGeneric("countRNA"))
+
+#' Get RPF counts
+#' @export
+setGeneric("countRPF", function(object) standardGeneric("countRPF"))
+
+#' Get RNA counts per million (cpm)
+#' @export
+setGeneric("cpmRNA", function(object,...) standardGeneric("cpmRNA"))
+
+#' Get RPF counts per million (cpm)
+#' @export
+setGeneric("cpmRPF", function(object,...) standardGeneric("cpmRPF"))
+
+#' Get group sum of RNA cpm
+#' @export
+setGeneric("cpmRNAGroupSum", function(object) standardGeneric("cpmRNAGroupSum"))
+
+#' Get group sum of RPF cpm
+#' @export
+setGeneric("cpmRPFGroupSum", function(object) standardGeneric("cpmRPFGroupSum"))

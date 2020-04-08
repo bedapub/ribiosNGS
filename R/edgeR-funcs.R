@@ -12,114 +12,6 @@ hasNoReplicate <- function(edgeObj) {
   return(maxCountByGroup(edgeObj)<=1)
 }
 
-
-
-#' Filter lowly expressed genes by counts per million (CPM)
-filterByCPM <- function(obj, ...) {
-  UseMethod("filterByCPM")
-}
-
-
-#' Filter lowly expressed genes by CPM
-#' 
-#' @param obj A matrix
-#' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
-#' @param minCount Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?
-#' 
-#' @return A logical vector of the same length as the row count of the matrix. \code{TRUE} means the gene is reasonably expressed, and \code{FALSE} means the gene is lowly expressed and should be filtered (removed)
-#' 
-#' @examples 
-#' set.seed(1887)
-#' mat <- rbind(matrix(rbinom(125, 5, 0.25), nrow=25), rep(0, 5))
-#' filterByCPM(mat)
-filterByCPM.matrix <- function(obj, minCPM=1, minCount=1) {
-  cpmRes <- cpm(obj)
-  filter <- apply(cpmRes, 1, function(x) sum(x>=minCPM)>=minCount)
-  return(filter)
-}
-
-#' Filter lowly expressed genes by CPM in DGEList
-#' 
-#' @param obj A \code{DGEList} object
-#' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
-#' @param minCount Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?
-#' 
-#' @return Another \code{DGEList} object, with lowly expressed genes removed. The original counts and gene annotation can be found in \code{counts.unfiltered} and \code{genes.unfiltered} fields, respectively. The logical vector of the filter is saved in the \code{cpmFilter} field.
-#' 
-#' @examples 
-#' set.seed(1887)
-#' mat <- rbind(matrix(rbinom(150, 5, 0.25), nrow=25), rep(0, 6))
-#' d <- DGEList(mat, group=rep(1:3, each=2), genes=data.frame(Gene=sprintf("Gene%d", 1:nrow(mat))))
-#' df <- filterByCPM(d)
-#' 
-#' nrow(df$counts.unfiltered) ## 26
-#' nrow(df$counts) ## 25
-filterByCPM.DGEList <- function(obj, lib.size=NULL,
-                                minCPM=1,
-                                minCount=minGroupCount(obj)) {
-  y <- as.matrix(obj)
-  genes <- obj$genes
-  group <- obj$samples$group
-  if (is.null(group)) 
-    group <- rep_len(1L, ncol(y))
-  group <- as.factor(group)
-  if (is.null(lib.size)) 
-    lib.size <- obj$samples$lib.size * obj$samples$norm.factors
-
-  CPM <- cpm(y, lib.size = lib.size)
-  filter <- rowSums(CPM >= minCPM) >= minCount
-  res <- obj[filter,]
-  res$cpmFilter <- filter
-  res$counts.unfiltered <- y
-  res$genes.unfiltered <- genes
-  return(res)
-}
-
-#' Filter EdgeObj and remove lowly expressed genes
-#' 
-#' 
-#' @param edgeObj An EdgeObject object
-#' @param minCPM Minimal CPM value, see descriptions below
-#' @param minCount Minimal count of samples in which the CPM value is no less
-#' than \code{minCPM}
-#' 
-#' The filter is recommended by the authors of the \code{edgeR} package to
-#' remove lowly expressed genes, since including them in differential gene
-#' expression analysis will cause extreme differential expression fold-changes
-#' of lowly and stochastically expressed genes, and increase false positive
-#' rates.
-#' 
-#' The filter removes genes that are less expressed than 1 copy per million
-#' reads (cpm) in at least \code{n} samples, where \code{n} equals the number
-#' of samples in the smallest group of the design.
-#' @examples
-#' 
-#' myFac <- gl(3,2)
-#' set.seed(1234)
-#' myMat <- matrix(rpois(1200,100), nrow=200, ncol=6)
-#' myMat[1:3,] <- 0
-#' myEdgeObj <- EdgeObject(myMat, 
-#'                        DesignContrast(designMatrix=model.matrix(~myFac),
-#'                         contrastMatrix=matrix(c(0,1,0), ncol=1), groups=myFac),
-#'                         fData=data.frame(GeneSymbol=sprintf("Gene%d", 1:200)))
-#' myFilteredEdgeObj <- filterByCPM(myEdgeObj)
-#' dim(counts(myEdgeObj))
-#' dim(counts(myFilteredEdgeObj))
-#' ## show unfiltered count matrix
-#' dim(counts(myFilteredEdgeObj, filter=FALSE))
-#' 
-#' @export filterByCPM.EdgeObject
-filterByCPM.EdgeObject <- function(obj,
-                                   minCPM=1,
-                                   minCount=minGroupCount(obj)) {
-  cpmRes <- cpm(obj)
-  filter <- apply(cpmRes, 1, function(x) sum(x>=minCPM)>=minCount)
-  newDgeList <- obj@dgeList[filter,]
-  newDgeList$counts.unfiltered <- obj@dgeList$counts
-  newDgeList$genes.unfiltered <- obj@dgeList$genes
-  obj@dgeList <- newDgeList
-  return(obj)
-}
 isAnyNA <- function(edgeObj) {
     any(is.na(edgeObj@dgeList$counts))
 }
@@ -128,76 +20,11 @@ replaceNAwithZero <- function(edgeObj) {
   return(edgeObj)
 }
 
-setMethod("normalize", "EdgeObject", function(object, method="RLE", ...) {
-  object@dgeList <- calcNormFactors(object@dgeList, method=method, ...)
-  return(object)
-})
-
 setMethod("cpmRNA", "EdgeObject", function(object) {
   return(cpm(object@dgeList))
 })
 
-#' Return counts in EdgeObject
-#' 
-#' @param object An EdgeObject
-#' @param filter Logical, whether filtered matrix (by default) or unfiltered matrix should be returned
-#' 
-#' @seealso \code{\link{filterByCPM}}
-setMethod("counts", "EdgeObject", function(object, filter=TRUE) {
-  if(filter) {
-    return(object@dgeList$counts)
-  } else {
-    return(object@dgeList$counts.unfiltered)
-  }
-})
-setMethod("normFactors", "DGEList", function(object) {
-  return(object$samples$norm.factors)
-})
-setMethod("normFactors", "EdgeObject", function(object) {
-  return(normFactors(object@dgeList))
-})
-
-
-setGeneric("estimateGLMDisp", function(object) standardGeneric("estimateGLMDisp"))
-setMethod("estimateGLMDisp", "EdgeObject", function(object) {
-  dge <- object@dgeList
-  design <- designMatrix(object@designContrast)
-  ##dge <- estimateGLMCommonDisp(dge, design, verbose=FALSE)
-  ##dge <- estimateGLMTrendedDisp(dge, design, verbose=FALSE)
-  ##dge <- estimateGLMTagwiseDisp(dge, design)
-  dge <- estimateDisp(dge, design)
-  object@dgeList <- dge
-  return(object)
-})
-
-setGeneric("fitGLM", function(object,...) standardGeneric("fitGLM"))
-setMethod("fitGLM", "EdgeObject", function(object, ...) {
-  fit <- glmFit(object@dgeList,
-                design=designMatrix(object@designContrast),
-                ...)
-  return(fit)
-})
-
-setGeneric("testGLM", function(object, fit) standardGeneric("testGLM"))
-setMethod("testGLM", c("EdgeObject", "DGEGLM"),
-          function(object, fit) {
-  contrasts <- contrastMatrix(object@designContrast)
-  toptables <- apply(contrasts, 2, function(x) {
-    lrt <- glmLRT(fit, contrast=x)
-    x <- topTags(lrt, n=nrow(lrt$table))$table
-    assertEdgeToptable(x)
-    return(x)
-  })
-
-  return(EdgeResult(edgeObj=object,
-                    dgeGLM=fit,
-                    dgeTables=toptables))
-})
-
 ## some useful attributes
-setMethod("nrow", "EdgeResult", function(x) nrow(x@dgeList))
-setMethod("ncol", "EdgeResult", function(x) ncol(x@dgeList))
-dim.EdgeResult <- function(x) c(nrow(x), ncol(x))
 
 posLogFC <- function(edgeSigFilter) edgeSigFilter@posLogFC
 negLogFC <- function(edgeSigFilter) edgeSigFilter@negLogFC
@@ -570,7 +397,6 @@ gseWithCamera <- function(edgeResult, geneSets) {
   return(gseRes)
 }
 
-
 ## report
 writeDgeTables <- function(edgeResult, outdir=getwd()) {
   contrasts <- contrastNames(edgeResult)
@@ -602,17 +428,15 @@ writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
 groupCol <- function(edgeObj, panel="Set1") {
   fcbrewer(dispGroups(edgeObj))
 }
-## plotMDS
-plotMDS.EdgeObject <- function(x, col, ...) {
-  
-  plotMDS(dgeList(x), ...)
-}
+
 
 #' Export dgeTest results
+#' 
 #' @param dgeTest A \code{EdgeResult} object
 #' @param outRootDir Character string, output directory
 #' @param action Character string, what happens if the output directory exists
 #' 
+#' @export
 exportEdgeResult <- function(edgeResult, outRootDir,
                                  action=c("ask", "overwrite",
                                           "append", "no")) {
@@ -679,67 +503,3 @@ exportEdgeResult <- function(edgeResult, outRootDir,
               file=file.path(statdir, "logFCmatrix-SpearmanCorrelation.txt"))
 }
 
-
-#' Make static gene-level plots of an EdgeResult object
-#' @param edgeResult An EdgeResult object
-#' @return \code{NULL}, side effect is used
-#' 
-staticGeneLevelPlots <- function(edgeResult) {
-  objModLogCPM <- modLogCPM(edgeResult)
-  groupLabels <- dispGroups(edgeResult)
-  groupCol <- fcbrewer(groupLabels)
-  
-  ## Dimension reduction
-  ### MDS
-  limma::plotMDS(edgeResult, main="MDS plot")
-  
-  ### PCA (using modLogCPM)
-  objPca <- prcomp(t(objModLogCPM))
-  objPca.data <- ribiosPlot::plotPCA(objPca, points=FALSE, text=TRUE, main="modLogCPM PCA")
-  
-  ### COA (using mogLogCPM)
-  objCoa <- made4::ord(objModLogCPM)$or$co
-  made4::plotarrays(objCoa, classvec=dispGroups(edgeResult))
-  
-  ## BioQC
-  ### TODO: RPKM/TPM calculation needed
-  ## doLog("BioQC (TODO)")
-  
-  ## Normalization
-  ### boxplot of read counts (before and after normalization)
-  normBoxplot(obj, edgeResult)
-  
-  ### boxplot of normalization factors
-  boxplot(edgeResult, type="normFactors")
-  
-  ## Dispersion
-  ### BCV plot
-  plotBCV(edgeResult, main="BCV plot")
-  
-  ## Significant differentially expressed genes
-  ## number of significantly differentially expressed genes
-  sigGeneBarchart(edgeResult, stack=FALSE)
-  
-  ## volcano plot
-  volcanoPlot(edgeResult, multipage=TRUE)
-  
-  ## plotSmear
-  smearPlot(edgeResult, freeRelation=TRUE, smooth.scatter=FALSE, multipage=TRUE)
-  
-  ## pairs of correlations
-  if(ncol(contrastMatrix(edgeResult))>1) {
-    pairs(edgeResult, freeRelation=TRUE)
-  }
- 
-  return(invisible(NULL)) 
-}
-
-#' Export static gene-level plots in PDF
-#' @param edgeResult An \code{EdgeResult} object
-#' @param file Character string, the PDF file name
-#' 
-exportStaticGeneLevelPlots <- function(edgeResult, file) {
-  openFileDevice(file)
-  staticGeneLevelPlots(edgeResult)
-  closeFileDevice()
-}

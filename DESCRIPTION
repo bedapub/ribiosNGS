@@ -14,9 +14,10 @@ Description: NGS tasks in ribios, primarily differetial gene expression
 Depends: 
     R (>= 2.1.0),
 Imports:
+    BiocGenerics,
+    ribiosExpression,
     edgeR,
     ribiosExpression,
-    BiocGenerics,
     ribiosAnnotation,
     ribiosUtils,
     methods,
@@ -44,23 +45,28 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.0
 Collate: 
-    'AllClasses.R'
     'ribiosNGS.R'
+    'AllClasses.R'
     'AllGenerics.R'
     'AllMethods.R'
     'DGEListToLongTable.R'
+    'EdgeObject.R'
     'edgeR-funcs.R'
+    'filterByCPM.R'
     'gse.R'
     'logFCmatrix.R'
     'mergeDGEList.R'
+    'minGroupCount.R'
     'mps-funcs.R'
     'mps-io.R'
+    'normalize.R'
     'pca.R'
     'post-processing.R'
     'readBiokitExpression.R'
     'riboseq.R'
     'slurm.R'
     'split.DGEList.R'
+    'staticGeneLevelPlots.R'
     'sva.R'
     'tpm.R'
     'voomLimma.R'

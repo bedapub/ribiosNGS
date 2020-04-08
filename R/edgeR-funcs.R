@@ -1,39 +1,3 @@
-
-
-#' Return the size of the smallest group
-#' @param obj Object
-minGroupCount <- function(obj) {
-  UseMethod("minGroupCount")
-}
-
-#' Return the size of the smallest group defined in the \code{DGEList} object
-#' 
-#' @param dgeList A \code{DGEList} object
-#' @return Integer
-#' 
-#' @examples 
-#' y <- matrix(rnbinom(12000,mu=10,size=2),ncol=6)
-#' d <- DGEList(counts=y, group=rep(1:3,each=2))
-#' minGroupCount(d) ## 2 
-#' d2 <- DGEList(counts=y, group=rep(1:2,each=3))
-#' minGroupCount(d2) ## 3
-#' d3 <- DGEList(counts=y, group=rep(1:3, 1:3))
-#' minGroupCount(d3) ## 1
-minGroupCount.DGEList <- function(dgeList) {
-  groups <- dgeList$samples$group
-  if(!is.factor(groups))
-    groups <- factor(groups)
-  groups <- droplevels(groups)
-  return(min(table(groups)))
-}
-#' Return the size of the smallest group defined in the \code{EdgeObject} object
-minGroupCount.EdgeObject <- function(edgeObj) {
-  groups <- groups(edgeObj@designContrast)
-  if(!is.factor(groups))
-    groups <- factor(groups)
-  groups <- droplevels(groups)
-  return(min(table(groups)))
-}
 countByGroup <- function(edgeObj) {
   groups <- groups(edgeObj@designContrast)
   if(!is.factor(groups))

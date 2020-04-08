@@ -37,6 +37,7 @@ countsSVA <- function(counts, designMatrix,
 #' exDesign <- model.matrix(~gl(2,3))
 #' head(countsRemoveSV(exCounts, designMatrix=exDesign))
 #' 
+#' @importFrom limma removeBatchEffect
 #' @export countsRemoveSV
 countsRemoveSV <- function(counts, designMatrix,
                            transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E) {

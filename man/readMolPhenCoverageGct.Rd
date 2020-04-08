@@ -22,5 +22,4 @@ mpsCov <- readMolPhenCoverageGct(system.file(file.path("extdata",
     "AmpliSeq_files",
     "MolPhen-coverage-example-20200115.gct"), 
   package="ribiosNGS"))
-
 }

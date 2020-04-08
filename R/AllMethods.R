@@ -1,8 +1,10 @@
-#' @include AllClasses.R AllGenerics.R
+#' @include AllClasses.R AllGenerics.R ribiosNGS.R
+NULL
 
 ##-----------------------------------##
 ## Dimensionalities
 ##-----------------------------------##
+
 #' Return number of features 
 #' @importMethodsFrom BiocGenerics nrow
 #' @param x An EdgeResults object
@@ -129,12 +131,19 @@ setMethod("testGLM", c("EdgeObject", "DGEGLM"),
 setMethod("dgeList", "EdgeObject", function(object) return(object@dgeList))
 setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 
-setMethod("designMatrix", "EdgeObject", function(object) designMatrix(object@designContrast))
-setMethod("designMatrix", "EdgeResult", function(object) designMatrix(object@designContrast))
+#' @importMethodsFrom ribiosExpression designMatrix
+#' @importFrom ribiosExpression designMatrix
+#' @export
+setMethod("designMatrix", "EdgeObject", function(object) ribiosExpression::designMatrix(object@designContrast))
+#' @export
+setMethod("designMatrix", "EdgeResult", function(object) ribiosExpression::designMatrix(object@designContrast))
 
-setMethod("contrastMatrix", "EdgeObject", function(object) contrastMatrix(object@designContrast))
-setMethod("contrastMatrix", "EdgeResult", function(object) contrastMatrix(object@designContrast))
+#' @importMethodsFrom ribiosExpression contrastMatrix
+#' @importFrom ribiosExpression contrastMatrix
+setMethod("contrastMatrix", "EdgeObject", function(object) ribiosExpression::contrastMatrix(object@designContrast))
+setMethod("contrastMatrix", "EdgeResult", function(object) ribiosExpression::contrastMatrix(object@designContrast))
 
+#' @importMethodsFrom ribiosExpression contrastNames
 setMethod("contrastNames", "EdgeObject", function(object) colnames(contrastMatrix(object)))
 setMethod("contrastNames", "EdgeResult", function(object) colnames(contrastMatrix(object)))
 setMethod("contrastNames",
@@ -832,3 +841,8 @@ prcomp.DGEList2 <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
 plotMDS.EdgeObject <- function(x,  ...) {
   plotMDS(dgeList(x), ...)
 }
+
+##--------------------##
+## riboseq methods
+##--------------------##
+## see riboseq.R

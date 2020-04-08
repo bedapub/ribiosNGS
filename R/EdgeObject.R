@@ -1,5 +1,6 @@
 #' @include AllClasses.R
-#' 
+NULL
+
 #' Construct an EdgeObject object by a count matrix and DesignContrast
 #' 
 #' @param object A matrix containing counts of features

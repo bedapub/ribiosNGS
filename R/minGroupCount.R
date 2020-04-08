@@ -1,4 +1,5 @@
 #' @include AllClasses.R
+NULL
 
 #' Return the size of the smallest group
 #' 

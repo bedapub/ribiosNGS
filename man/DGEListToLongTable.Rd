@@ -2,17 +2,20 @@
 % Please edit documentation in R/DGEListToLongTable.R
 \name{DGEListToLongTable}
 \alias{DGEListToLongTable}
-\title{Convert a DGEList object to a long data.frame containing expression, feature annotation, and sample annotation}
+\title{Convert a DGEList object to a long data.frame containing expression, 
+feature annotation, and sample annotation}
 \usage{
 DGEListToLongTable(x, exprsFun = function(dgeList) cpm(dgeList, log = TRUE))
 }
 \arguments{
-\item{x}{A DGEList object}
+\item{x}{A \code{DGEList} object}
 
-\item{exprsFun}{The function to convert counts to expression data. Default: logCPM}
+\item{exprsFun}{A function to convert counts to expression data. 
+Default: logCPM}
 }
 \description{
-Convert a DGEList object to a long data.frame containing expression, feature annotation, and sample annotation
+Convert a DGEList object to a long data.frame containing expression, 
+feature annotation, and sample annotation
 }
 \examples{
 mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)

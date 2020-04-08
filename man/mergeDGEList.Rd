@@ -51,4 +51,5 @@ d2 <- DGEList(counts=y2, genes=genes2, samples=anno2)
 
 md <- mergeDGEList(d1, d2)
 md2 <- mergeDGEList(d1, d2, DGEListLabels=c("d1", "d2"))
+
 }

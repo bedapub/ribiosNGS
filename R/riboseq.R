@@ -1,3 +1,5 @@
+#' @include AllGenerics.R AllMethods.R
+
 setMethod("RiboSeq", c("DGEList", "DGEList", "vector"), function(RNA, RPF, groups) {
   if(!is.factor(groups)) {
     message("coerencing groups as factors")
@@ -43,6 +45,8 @@ setMethod("RiboSeq", c("matrix", "matrix", "vector"), function(RNA, RPF, groups)
 
 ## normalization
 
+#' @importMethodsFrom BiocGenerics normalize
+#' @export
 setMethod("normalize", "RiboSeq",
           function(object, method=c("TMM","RLE", "upperquartile", "none"), ...) {
             object@RNA <- calcNormFactors(object@RNA, method=method, ...)

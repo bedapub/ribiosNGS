@@ -1,5 +1,8 @@
 #' @include AllClasses.R
+NULL
 
+#' Normalize an EdgeObject
+#'
 #' @describeIn normalize Normalize an EdgeObject by calculating normalization
 #'   factors using the given method
 #' @param obj An \code{EdgeObject} object

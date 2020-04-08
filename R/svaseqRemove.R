@@ -1,4 +1,4 @@
-#' Remove effects of surrogate variables using VSN-transformed DGEList
+#' Detect surrogate variables from count data and remove their effects VSN-transformed counts
 #' 
 #' @param dgeList An \code{DGEList} object
 #' @param design Design matrix
@@ -37,11 +37,14 @@
 #' 
 #' design <- model.matrix(~treatment+donor, data=d1$samples)
 #' nullModel <-  model.matrix(~donor, data=d1$samples)
-#' d1VsnSvaRes <- vsnSVA(d1, design, nullModel)
-#' d2VsnSvaRes <- vsnSVA(d2, design, nullModel)
+#' d1VsnSvaRes <- svaseqRemove(d1, design, nullModel)
+#' d2VsnSvaRes <- svaseqRemove(d2, design, nullModel)
 #' @importFrom sva svaseq
+#' @importFrom vsn vsnMatrix predict
+#' @importFrom limma removeBatchEffect
+#' @importFrom ribiosPlot pcaScores
 #' @export
-vsnSVA <- function(dgeList,
+svaseqRemove <- function(dgeList,
                    design, nullModel, verbose=FALSE,
                    offset) {
   svaRes <- sva::svaseq(dgeList$counts,
@@ -53,7 +56,7 @@ vsnSVA <- function(dgeList,
   if(svaRes$n.sv!=0) {
     sv <- svaRes$sv
     colnames(sv) <- sprintf("sv%d", 1:ncol(sv))
-    vsnBatchRemoved <- removeBatchEffect(mat, 
+    vsnBatchRemoved <- limma::removeBatchEffect(mat, 
                                          covariates=sv, 
                                          design=design)
   } else {

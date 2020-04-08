@@ -3,6 +3,7 @@
 #' @param edgeResult An EdgeResult object
 #' @return \code{NULL}, side effect is used
 #' 
+#' @importFrom made4 plotarrays ord
 #' @export
 staticGeneLevelPlots <- function(edgeResult) {
   objModLogCPM <- modLogCPM(edgeResult)

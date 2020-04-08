@@ -30,4 +30,5 @@ d1 <- DGEList(counts=y1, genes=genes1, samples=anno1)
 
 d1SampleSplit <- split(d1, d1$samples$donor)
 d1GeneSplit <- split(d1, d1$genes$GeneType, bySample=FALSE)
+
 }

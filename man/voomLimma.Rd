@@ -41,3 +41,13 @@ voomLimma(
 \description{
 Perform the voom+limma procedure
 }
+\examples{
+y <- matrix(rnbinom(10000,mu=5,size=2),ncol=4)
+d <- edgeR::DGEList(counts=y, group=rep(1:2,each=2))
+d <- edgeR::calcNormFactors(d)
+design <- model.matrix(~gl(2,2))
+colnames(design) <- c("baseline", "treatment")
+contrasts <- limma::makeContrasts("treatment", levels=design)
+dvl <- voomLimma(d, design=design, contrasts=contrasts)
+
+}

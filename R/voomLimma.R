@@ -11,7 +11,7 @@
 #' 
 #' @return \code{MArrayLM} object returned by \code{\link[limma]{eBayes}}, with voom object in the \code{voom} element of the list
 #' 
-#' @example 
+#' @examples
 #' y <- matrix(rnbinom(10000,mu=5,size=2),ncol=4)
 #' d <- edgeR::DGEList(counts=y, group=rep(1:2,each=2))
 #' d <- edgeR::calcNormFactors(d)

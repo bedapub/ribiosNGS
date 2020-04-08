@@ -1,3 +1,5 @@
+#' @include AllClasses.R AllGenerics.R
+
 setMethod("dgeList", "EdgeObject", function(object) return(object@dgeList))
 setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 

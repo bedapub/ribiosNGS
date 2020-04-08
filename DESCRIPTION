@@ -11,11 +11,19 @@ Authors@R:
          comment = c(ORCID="0000-0002-3085-0909"))
 Description: NGS tasks in ribios, primarily differetial gene expression
     analysis.
-Depends:
-    edgeR,ribiosAnnotation,
-    ribiosExpression
+Depends: 
+    R (>= 2.1.0),
 Imports:
-    ribiosUtils,methods,Biobase,lattice,ribiosGSEA,ribiosIO,
+    edgeR,
+    ribiosExpression,
+    BiocGenerics,
+    ribiosAnnotation,
+    ribiosUtils,
+    methods,
+    Biobase,
+    lattice,
+    ribiosGSEA,
+    ribiosIO,
     BiocGenerics,ribiosPlot,graphics,limma,igraph,
     BioQC,
     readr,
@@ -23,10 +31,36 @@ Imports:
     sva,
     dplyr,
     gage,
-    vsn
+    vsn,
+    made4, 
+    stringr
 Suggests:
     testthat,
     tibble
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.0
+Collate: 
+    'AllClasses.R'
+    'ribiosNGS.R'
+    'AllGenerics.R'
+    'AllMethods.R'
+    'DGEListToLongTable.R'
+    'edgeR-funcs.R'
+    'gse.R'
+    'logFCmatrix.R'
+    'mergeDGEList.R'
+    'mps-funcs.R'
+    'mps-io.R'
+    'pca.R'
+    'post-processing.R'
+    'readBiokitExpression.R'
+    'riboseq.R'
+    'slurm.R'
+    'split.DGEList.R'
+    'sva.R'
+    'tpm.R'
+    'voomLimma.R'
+    'vsnSVA.R'
+    'writeBiokitSampleAnnotation.R'
+    'writeDGEList.R'

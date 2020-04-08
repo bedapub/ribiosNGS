@@ -1,3 +1,5 @@
+#' @include ribiosNGS.R AllClasses.R
+
 setGeneric("normalize", function(object, ...) standardGeneric("normalize"))
 
 setGeneric("RiboSeq", function(RNA, RPF, groups, ...) standardGeneric("RiboSeq"))

@@ -94,6 +94,8 @@ cpmSVA <- function(counts, designMatrix) {
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
 #' @return The cpm matrix, with SV effects removed
+#' @importFrom edgeR cpm
+#' @export cpm
 #' @examples
 #' 
 #' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)

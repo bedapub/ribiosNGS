@@ -67,7 +67,6 @@ Collate:
     'pca.R'
     'plotMethods.R'
     'readBiokitExpression.R'
-    'riboseq.R'
     'slurm.R'
     'split.DGEList.R'
     'staticGeneLevelPlots.R'

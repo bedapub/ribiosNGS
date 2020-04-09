@@ -9,6 +9,9 @@ sniffFeatures(object)
 
 \S4method{sniffFeatures}{EdgeObject}(object)
 }
+\arguments{
+\item{object}{An object}
+}
 \description{
 Sniff features
 }

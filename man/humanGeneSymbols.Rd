@@ -12,6 +12,9 @@ humanGeneSymbols(object)
 
 \S4method{humanGeneSymbols}{EdgeObject}(object)
 }
+\arguments{
+\item{object}{An object}
+}
 \description{
 Get human gene symbols for gene-set enrichment analysis
 }

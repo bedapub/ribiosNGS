@@ -12,6 +12,9 @@ normFactors(object)
 
 \S4method{normFactors}{EdgeObject}(object)
 }
+\arguments{
+\item{object}{An object}
+}
 \description{
 Extract normalisation factors from the object
 }

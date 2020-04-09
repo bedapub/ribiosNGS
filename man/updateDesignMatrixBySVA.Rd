@@ -9,6 +9,13 @@ updateDesignMatrixBySVA(object, design, ...)
 
 \S4method{updateDesignMatrixBySVA}{DGEList,formula}(object, design, ...)
 }
+\arguments{
+\item{object}{An object}
+
+\item{design}{Design matrix or formula}
+
+\item{...}{Other parameters}
+}
 \description{
 Update design matrix by SVA
 }

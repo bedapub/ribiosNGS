@@ -133,11 +133,11 @@ setMethod("testGLM", c("EdgeObject", "DGEGLM"),
                               dgeTables=toptables))
           })
 
-#' Extract the DGEList object
+#' @describeIn dgeList Extract DGEList from EdgeObject
 #' @export
 setMethod("dgeList", "EdgeObject", function(object) return(object@dgeList))
 
-#' Extract the DGEList object
+#' @describeIn dgeList Extract DGEList from EdgeResult
 #' @export
 setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 
@@ -303,12 +303,6 @@ setMethod("dispGroups", "EdgeObject", function(object) {
   return(dispGroups(object@designContrast))
 })
 
-#' @describeIn cpmRNA Method for EdgeObject
-#' @export
-setMethod("cpmRNA", "EdgeObject", function(object, ...) {
-  return(cpm(object@dgeList, ...))
-})
-
 #' @describeIn modLogCPM Method for DGEList
 #' @importFrom edgeR cpm
 #' @export
@@ -407,13 +401,13 @@ localSetCommonDispIfMissing <- function(object, common.disp) {
 #' @describeIn setCommonDispIfMissing Method for DGEList
 #' @export
 setMethod("setCommonDispIfMissing", c("DGEList","numeric"), function(object, value) {
-  localSetCommonDispIfMissing(object, common.disp)
+  localSetCommonDispIfMissing(object, value)
 })
 
 #' @describeIn setCommonDispIfMissing Method for EdgeObject
 #' @export
 setMethod("setCommonDispIfMissing", c("EdgeObject","numeric"), function(object, value) {
-  localSetCommonDispIfMissing(object, common.disp)
+  localSetCommonDispIfMissing(object, value)
 })
 
 ##----------------------------------------##

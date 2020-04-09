@@ -6,6 +6,9 @@
 \usage{
 testGLM(object, fit)
 }
+\arguments{
+\item{object}{An object}
+}
 \description{
 Test GLM
 }

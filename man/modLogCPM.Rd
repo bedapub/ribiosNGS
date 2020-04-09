@@ -14,6 +14,8 @@ modLogCPM(object, ...)
 }
 \arguments{
 \item{object}{An object}
+
+\item{...}{Other parameters}
 }
 \description{
 Modulated logCPM

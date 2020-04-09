@@ -89,7 +89,7 @@ readAmpliSeq <- function(readCountFiles,
   if(!is.null(runNames)) {
     stopifnot(length(readCountFiles)==length(runNames))
   } else {
-    runNames <- seq(along=readCountFileList)
+    runNames <- seq(along=readCountFiles)
   }
   readCountList <- lapply(readCountFiles, function(f) {
     fields <- readr::count_fields(f, 

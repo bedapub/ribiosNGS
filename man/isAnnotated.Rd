@@ -9,6 +9,9 @@ isAnnotated(object)
 
 \S4method{isAnnotated}{EdgeObject}(object)
 }
+\arguments{
+\item{object}{An object}
+}
 \description{
 Is the object annotated
 }

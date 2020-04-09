@@ -12,6 +12,11 @@ setCommonDispIfMissing(object, value)
 
 \S4method{setCommonDispIfMissing}{EdgeObject,numeric}(object, value)
 }
+\arguments{
+\item{object}{An object}
+
+\item{value}{Numeric}
+}
 \description{
 Set common dispersion if missing
 }

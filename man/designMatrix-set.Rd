@@ -9,6 +9,11 @@ designMatrix(object) <- value
 
 \S4method{designMatrix}{EdgeObject,matrix}(object) <- value
 }
+\arguments{
+\item{object}{An object}
+
+\item{value}{Matrix}
+}
 \description{
 Assign the design matrix
 }

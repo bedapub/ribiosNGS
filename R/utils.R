@@ -14,8 +14,9 @@ calcNormFactorsIfNot <- function(dgeList) {
 #' @param y An EdgeObject object
 #' @param ... Passed to \code{cpm}
 #' @seealso \code{\link[edgeR]{cpm}}
+#' @importFrom edgeR cpm
 #' @export
 cpm.EdgeObject <- function(y, ...) {
-	edgeR::cpm(dgeList(y),...)
+  edgeR::cpm(dgeList(y),...)
 }
 

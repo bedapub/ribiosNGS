@@ -12,6 +12,9 @@ tagwiseBCV(x)
 
 \S4method{tagwiseBCV}{EdgeResult}(x)
 }
+\arguments{
+\item{x}{An object}
+}
 \description{
 Tagwise biological coefficients of variance
 }

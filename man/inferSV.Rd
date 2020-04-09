@@ -15,6 +15,13 @@ inferSV(object, design, ...)
 
 \S4method{inferSV}{DGEList,formula}(object, design, ...)
 }
+\arguments{
+\item{object}{An object}
+
+\item{design}{Design matrix or formula}
+
+\item{...}{Other parameters}
+}
 \description{
 Infer surrogate variables
 }

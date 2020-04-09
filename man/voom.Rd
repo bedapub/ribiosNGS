@@ -18,6 +18,11 @@ voom(object, ...)
 
 \S4method{voom}{EdgeObject}(object, ...)
 }
+\arguments{
+\item{object}{An object}
+
+\item{...}{Other parameters}
+}
 \description{
 Perform VOOM analysis
 }

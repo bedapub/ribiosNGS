@@ -12,6 +12,9 @@ hasCommonDisp(object)
 
 \S4method{hasCommonDisp}{EdgeObject}(object)
 }
+\arguments{
+\item{object}{An object}
+}
 \description{
 Tells whether common dispersion has been set
 }

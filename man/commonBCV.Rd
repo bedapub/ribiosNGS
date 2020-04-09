@@ -12,6 +12,9 @@ commonBCV(x)
 
 \S4method{commonBCV}{EdgeResult}(x)
 }
+\arguments{
+\item{x}{An object}
+}
 \description{
 Common biological coefficients of variance (BCV)
 }

@@ -9,6 +9,11 @@ contrastMatrix(object) <- value
 
 \S4method{contrastMatrix}{EdgeObject,matrix}(object) <- value
 }
+\arguments{
+\item{object}{An object}
+
+\item{value}{Matrix}
+}
 \description{
 Assign contrast matrix
 }

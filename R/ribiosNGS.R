@@ -20,11 +20,7 @@ NULL
 #' @importFrom ribiosUtils assertDir assertFile openFileDevice closeFileDevice munion matrix2longdf
 #' @importFrom ribiosPlot pdf2png
 #' @importFrom lattice panel.points panel.abline panel.smoothScatter
-babel babel.rnks common.disp
-  estimateGLMCommonDisp estimateGLMTagwiseDisp estimateGLMTrendedDisp
-  exp.rna exp.rpf obj 
-  readCountFileList
-
+#' @importFrom edgeR estimateGLMCommonDisp estimateGLMTagwiseDisp estimateGLMTrendedDisp
 #' @importMethodsFrom ribiosExpression designMatrix contrastMatrix
 #' @importMethodsFrom BiocGenerics counts annotation nrow ncol normalize
 #' @export `annotation<-` assayData `fData<-` fData `pData<-`

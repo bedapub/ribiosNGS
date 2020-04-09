@@ -6,6 +6,9 @@
 \usage{
 cpmFilter(object)
 }
+\arguments{
+\item{object}{An object}
+}
 \description{
 Filter by counts per million (cpm)
 }

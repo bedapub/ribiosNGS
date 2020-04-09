@@ -184,7 +184,7 @@ setMethod("show", "DGEList", function(object) {
   cat(sprintf("  - Following items are available: %s\n",
               paste(names(object), collapse=",")))
 })
-setMethod("show", "DGEList2", function(object) {
+setMethod("show", "DGEListList", function(object) {
   cat(sprintf("A list of %d DGEList objects:\n", length(object)))
   for(i in seq(along=object@.Data)) {
     cat(sprintf("[[%d]]", i))
@@ -672,7 +672,7 @@ setMethod("isAnnotated", "EdgeObject", function(object) {
   return(!is.null(annotation(object)))
 })
 
-#' Split DGEList by a factor into a DGEList2 object
+#' Split DGEList by a factor into a DGEListList object
 #' 
 #' @param x A \code{DGEList} object
 #' @param f A factor
@@ -699,7 +699,7 @@ setMethod("split", c("DGEList", "factor", "ANY"), function(x, f,
     }
     return(res)
   })
-  res <- new("DGEList2", .Data=resList)
+  res <- new("DGEListList", .Data=resList)
   names(res) <- levels(f)
   return(res)
 })
@@ -819,16 +819,16 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
 })
 
 
-#' Run principal component analysis on a DGEList2 object
+#' Run principal component analysis on a DGEListList object
 #' 
 #' 
-#' @param x A DGEList2 object
+#' @param x A DGEListList object
 #' @param ntop NULL or integer. If set, only \code{ntop} top-variable genes are
 #' used
 #' @param fun Function, used to transform count data into continuous data used
 #' by PCA
 #' @return A list of \code{prcomp} objects.
-prcomp.DGEList2 <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
+prcomp.DGEListList <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
   resList <- lapply(x@.Data,
                     function(dgeList) 
                       prcomp.DGEList(dgeList, fun=fun, ntop=ntop))

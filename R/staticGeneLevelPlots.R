@@ -1,3 +1,6 @@
+#' @include plotMethods.R
+NULL
+
 #' Make static gene-level plots of an EdgeResult object
 #' 
 #' @param edgeResult An EdgeResult object

@@ -80,6 +80,7 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) 
 #' exampleAmpliSeq <- readAmpliSeq(countFiles, barcodeFiles, 
 #'   runNames=c("R1", "R2", "R3"))
 #' 
+#' @importFrom readr count_fields tokenizer_tsv read_tsv
 #' @export readAmpliSeq
 readAmpliSeq <- function(readCountFiles, 
                          barcodeSummaryFiles,

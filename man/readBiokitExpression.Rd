@@ -21,12 +21,9 @@ resulting ExpressionSet.}
 Bioinformatics NGS pipeline, a headerless TSV file including sample name,
 sample group, and FASTQ files, one sample per line
 
-\code{readBiokitExpression} calls read_biokit_exprs in ribiosIO to read
-BioKit expression data, and combine data from multiple files into one
-ExpressionSet object
-
-# @importFrom ribiosIO read_biokit_exprs # @importClassesFrom Biobase
-ExpressionSet AnnotatedDataFrame}
+\code{readBiokitExpression} calls \code{\link[ribiosIO]{read_biokit_exprs}}
+to read #' BioKit expression data, and combine data from multiple files 
+into one \code{ExpressionSet} object.}
 }
 \description{
 Read Biokit Expression files

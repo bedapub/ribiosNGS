@@ -139,7 +139,7 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE, nbin=NULL) {
 #' 
 #' @examples
 #' 
-#' myCounts <- matrix(rnbinom(1000, 3, 0.25), nrow=100)
+#' myCounts <- matrix(rnbinom(10000, 3, 0.25), nrow=1000)
 #' myDgeList <- DGEList(counts=myCounts,
 #'   samples=data.frame(group=gl(5,2)))
 #' myPrcomp <- prcomp(myDgeList)

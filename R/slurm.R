@@ -72,6 +72,8 @@ checkContrastNames <- function(contrastMatrix,
 #'  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
 #'      outfilePrefix=NULL, outdir=tempdir())
 #' 
+#' @importFrom ribiosUtils haltifnot createDir
+#' @importFrom ribiosIO writeMatrix
 #' @export edgeRcommand
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outdir="edgeR_output",

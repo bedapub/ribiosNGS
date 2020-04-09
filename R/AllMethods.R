@@ -436,41 +436,6 @@ setMethod("sampleNames", "EdgeObject", function(object) {
   return(colnames(dgeList(object)$counts))
 })
 
-#' Split DGEList by a factor into a DGEListList object
-#' 
-#' @param x A \code{DGEList} object
-#' @param f A factor
-#' @param drop Logical, whether unused levels in the factor should be dropped
-#' @param keep.lib.sizes Logical, whether library sizes are kept
-#' @param sampleDropLevels logical, whether unused levels of factors in the sample annotation data frame should be dropped
-#' @export
-setMethod("split", c("DGEList", "factor", "ANY"), function(x, f, 
-                                                           drop=FALSE, 
-                                                           keep.lib.sizes=TRUE, 
-                                                           sampleDropLevels=TRUE) {
-  if(drop)
-    f <- droplevels(f)
-  samInds <- seq(1, dim(x)[2])
-  resList <- tapply(samInds, f, function(inds) {
-    res <- x[, inds, keep.lib.sizes]
-    if(sampleDropLevels) {
-      if(!is.null(res$samples)) {
-        for(i in 1:ncol(res$samples)) {
-          if(is.factor(res$samples[,i])) {
-            res$samples[,i] <- droplevels(res$samples[,i])
-          }
-        }
-      }
-    }
-    return(res)
-  })
-  res <- new("DGEListList", .Data=resList)
-  names(res) <- levels(f)
-  return(res)
-})
-
-
-
 #' Build design matrix from a DGEList object
 #' 
 #' @param object A DGEList object

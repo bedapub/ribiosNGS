@@ -4,7 +4,7 @@
 \alias{split.DGEList}
 \title{Split a DGEList object by a factor of samples (default) or genes}
 \usage{
-split.DGEList(x, f, drop = FALSE, bySample = TRUE)
+\method{split}{DGEList}(x, f, drop = FALSE, bySample = TRUE, sampleDropLevels = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{DGEList} object}
@@ -15,6 +15,9 @@ split.DGEList(x, f, drop = FALSE, bySample = TRUE)
 
 \item{bySample}{Logical, if \code{TRUE}, the samples are split. Otherwise, 
 genes are split.}
+
+\item{sampleDropLevels}{Logical, if \code{TRUE}, unused levels in factors 
+in the sample annotation are dropped}
 }
 \description{
 Split a DGEList object by a factor of samples (default) or genes

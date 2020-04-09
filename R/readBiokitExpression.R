@@ -32,12 +32,15 @@ matchKeyValue <- function(keys, dfList, keyColumn, valueColumns) {
 #' Bioinformatics NGS pipeline, a headerless TSV file including sample name,
 #' sample group, and FASTQ files, one sample per line
 #' 
-#' \code{readBiokitExpression} calls read_biokit_exprs in ribiosIO to read
-#' BioKit expression data, and combine data from multiple files into one
-#' ExpressionSet object
+#' \code{readBiokitExpression} calls \code{\link[ribiosIO]{read_biokit_exprs}}
+#' to read #' BioKit expression data, and combine data from multiple files 
+#' into one \code{ExpressionSet} object.
 #' 
-#' # @importFrom ribiosIO read_biokit_exprs # @importClassesFrom Biobase
-#' ExpressionSet AnnotatedDataFrame
+#' @importFrom ribiosIO read_biokit_exprs 
+#' @importFrom Biobase `sampleNames<-`
+#' @importFrom utils read.table
+#' @importFrom ribiosUtils matchColumn basefilename
+#' @importClassesFrom Biobase ExpressionSet AnnotatedDataFrame
 #' @examples
 #' 
 #' biokitFiles <- system.file("extdata/biokit_expression_files",
@@ -45,7 +48,6 @@ matchKeyValue <- function(keys, dfList, keyColumn, valueColumns) {
 #'   package="ribiosNGS")
 #' biokitEset <- readBiokitExpression(biokitFiles)
 #' 
-#' @importFrom Biobase `sampleNames<-`
 #' @export readBiokitExpression
 readBiokitExpression <- function(files,
                                  exprsType=c("ReadCount_UniqMap", "RPKM_UniqMap",
@@ -77,9 +79,9 @@ readBiokitExpression <- function(files,
              featureData=new("AnnotatedDataFrame", featTbl))
   sampleNames(res) <- basefilename(files)
   if(!is.null(ngsPipelineSampleInfoFile)) {
-    sampleInfo <- read.table(ngsPipelineSampleInfoFile, head=FALSE,
+    sampleInfo <- utils::read.table(ngsPipelineSampleInfoFile, head=FALSE,
                              col.names=c("SampleName", "SampleGroup", "Fastq1", "Fastq2"))
-    sampleInfo <- matchColumn(sampleNames(res), sampleInfo, "SampleName")
+    sampleInfo <- ribiosUtils::matchColumn(sampleNames(res), sampleInfo, "SampleName")
     rownames(sampleInfo) <- sampleNames(res)
     pData(res) <- sampleInfo
   }

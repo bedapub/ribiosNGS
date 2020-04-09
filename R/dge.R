@@ -24,6 +24,8 @@ NULL
 #' exDgeRes <- dgeWithEdgeR(exObj)
 #' dgeTable(exDgeRes)
 #' 
+#' @importFrom ribiosExpression DesignContrast
+#' @export DesignContrast
 #' @export dgeWithEdgeR
 dgeWithEdgeR <- function(edgeObj) {
   edgeObj.filter <- filterByCPM(edgeObj)

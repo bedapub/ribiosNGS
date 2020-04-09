@@ -1,16 +1,19 @@
+#' @importFrom ribiosIO write.tableList
 writeDgeTables <- function(edgeResult, outdir=getwd()) {
   contrasts <- contrastNames(edgeResult)
   outfiles <- file.path(outdir,
                         sprintf("topTable-%s.txt", contrasts))
   tables <- lapply(contrasts, function(x) dgeTable(edgeResult, x))
-  write.tableList(tables, outfiles, row.names=TRUE)
+  ribiosIO::write.tableList(tables, outfiles, row.names=TRUE)
 }
 
+
+#' @importFrom ribiosExpression truncateDgeTable
 writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
     contrasts <- contrastNames(edgeResult)
     lapply(contrasts, function(x) {
                tbl <- dgeTable(edgeResult, x)
-               degs <- truncateDgeTable(tbl)
+               degs <- ribiosExpression::truncateDgeTable(tbl)
                writeMatrix(degs$pos,
                            file.path(outdir,
                                      sprintf("TruncatedDEGtable-positive-%s.txt", 
@@ -35,6 +38,7 @@ NULL
 #' 
 #' @importFrom ribiosUtils overwriteDir createDir
 #' @importFrom ribiosIO writeMatrix
+#' @importFrom ribiosExpression writeGct
 #' @export
 exportEdgeResult <- function(edgeResult, outRootDir,
                                  action=c("ask", "overwrite",
@@ -50,7 +54,7 @@ exportEdgeResult <- function(edgeResult, outRootDir,
   countsUnfiltered <- dgeList(edgeResult)$counts.unfiltered
   fDataUnfiltered <- dgeList(edgeResult)$genes.unfiltered
   
-  writeGct(countsUnfiltered,
+  ribiosExpression::writeGct(countsUnfiltered,
            file.path(inputDir, "counts.gct"))
   ribiosIO::writeMatrix(designMatrix(edgeResult),
               file.path(inputDir, "designMatrix.txt"))

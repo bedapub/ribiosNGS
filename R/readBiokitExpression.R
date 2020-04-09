@@ -103,6 +103,7 @@ readBiokitExpression <- function(files,
 #' 
 #' ##... (TODO: add a mock output directory in testdata)
 #' 
+#' @importFrom ribiosIO read_gct_matrix
 #' @export readBiokitGctFile
 readBiokitGctFile <- function(dir, 
                               anno=c("refseq", "ensembl"),
@@ -134,7 +135,7 @@ readBiokitGctFile <- function(dir,
   gctFile <- dir(gctDir, pattern=filePattern, full.names=TRUE)
   if(length(gctFile)==0 || !file.exists(gctFile))
     stop(paste0("GCT file with the pattern'", filePattern, "' does not exist!"))
-  mat <- read_gct_matrix(gctFile)
+  mat <- ribiosIO::read_gct_matrix(gctFile)
   return(mat)
 }
 

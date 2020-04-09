@@ -70,7 +70,7 @@ countsRemoveSV <- function(counts, designMatrix,
 #' @export voomRemoveSV
 voomRemoveSV <- function(counts, designMatrix) {
   countsRemoveSV(counts, designMatrix, 
-		 transform=function(counts, designMatrix) 
+		 transformFunc=function(counts, designMatrix) 
 			 voom(counts, designMatrix)$E)
 }
 
@@ -91,7 +91,7 @@ voomRemoveSV <- function(counts, designMatrix) {
 #' @export cpmSVA
 cpmSVA <- function(counts, designMatrix) {
   countsSVA(counts, designMatrix, 
-	    transform=function(counts, designMatrix) cpm(counts, log=TRUE))
+	    transformFunc=function(counts, designMatrix) cpm(counts, log=TRUE))
 }
 
 #' Apply cpm to voom-transformed count data, and return the voom expression
@@ -116,7 +116,7 @@ cpmSVA <- function(counts, designMatrix) {
 #' @export cpmRemoveSV
 cpmRemoveSV <- function(counts, designMatrix) {
   countsRemoveSV(counts, designMatrix, 
-		 transform=function(counts, designMatrix) cpm(counts, log=TRUE))
+		 transformFunc=function(counts, designMatrix) cpm(counts, log=TRUE))
 }
 
 #' Is the Surrogate Variable (SV) matrix empty

@@ -332,11 +332,12 @@ sigNegGenes <- function(edgeResult, value = "GeneID") {
 #' @param edgeResult An EdgeResult object
 #' @return A data.frame containing counts of positively and negatively regulated
 #'    genes, the sum, as well as total number of features
+#' @importFrom ribiosUtils ulen
 #' @export
 sigGeneCounts <- function(edgeResult) {
   allCount <- geneCount(edgeResult)
-  posCounts <- sapply(sigPosGenes(edgeResult), ulen)
-  negCounts <- sapply(sigNegGenes(edgeResult), ulen)
+  posCounts <- sapply(sigPosGenes(edgeResult), ribiosUtils::ulen)
+  negCounts <- sapply(sigNegGenes(edgeResult), ribiosUtils::ulen)
   total <- posCounts + negCounts
   res <- data.frame(
     posCount = posCounts,

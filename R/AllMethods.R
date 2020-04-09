@@ -117,6 +117,7 @@ setMethod("fitGLM", "EdgeObject", function(object, ...) {
 ## Test GLM
 ##-----------------------------------## 
 
+#' @describeIn testGLM Method for EdgeObject and DGEGLM.
 #' @importFrom edgeR glmLRT topTags
 #' @export
 setMethod("testGLM", c("EdgeObject", "DGEGLM"),
@@ -134,32 +135,50 @@ setMethod("testGLM", c("EdgeObject", "DGEGLM"),
                               dgeTables=toptables))
           })
 
+#' Extract DGEList from an EdgeObject 
+#' @param object An EdgeObject
 #' @describeIn dgeList Extract DGEList from EdgeObject
 #' @export
 setMethod("dgeList", "EdgeObject", function(object) return(object@dgeList))
 
+#' Extract DGEList from an EdgeResult object
+#' @param object An EdgeResult object
 #' @describeIn dgeList Extract DGEList from EdgeResult
 #' @export
 setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 
+#' Extract design matrix from an EdgeObject object
+#' @param object An EdgeObject object
 #' @importMethodsFrom ribiosExpression designMatrix
 #' @importFrom ribiosExpression designMatrix
 #' @export
 setMethod("designMatrix", "EdgeObject", function(object) ribiosExpression::designMatrix(object@designContrast))
+
+#' Extract design matrix from an EdgeResult object
+#' @param object An EdgeResult object
 #' @export
 setMethod("designMatrix", "EdgeResult", function(object) ribiosExpression::designMatrix(object@designContrast))
 
+#' Extract contrast matrix from an EdgeObject object
+#' @param object An EdgeObject object
 #' @importMethodsFrom ribiosExpression contrastMatrix
 #' @importFrom ribiosExpression contrastMatrix
 #' @export
 setMethod("contrastMatrix", "EdgeObject", function(object) ribiosExpression::contrastMatrix(object@designContrast))
+
+#' Extract contrast matrix from an EdgeResult object
+#' @param object An EdgeResult object
 #' @export
 setMethod("contrastMatrix", "EdgeResult", function(object) ribiosExpression::contrastMatrix(object@designContrast))
 
+#' Extract contrast names from an EdgeObject object
+#' @param object An EdgeObject object
 #' @importMethodsFrom ribiosExpression contrastNames
 #' @export
 setMethod("contrastNames", "EdgeObject", function(object) colnames(contrastMatrix(object)))
 
+#' Extract contrast names from an EdgeResult object
+#' @param object An EdgeResult object
 #' @export
 setMethod("contrastNames", "EdgeResult", function(object) colnames(contrastMatrix(object)))
 
@@ -208,6 +227,8 @@ naOrSqrt <- function(x) {
   return(sqrt(x))
 }
 
+#' Show DGEList
+#' @param object A DGEList object
 #' @export
 setMethod("show", "DGEList", function(object) {
   cat(sprintf("A DGEList object with %s features and %d samples\n",
@@ -216,6 +237,8 @@ setMethod("show", "DGEList", function(object) {
               paste(names(object), collapse=",")))
 })
 
+#' Show DGEListList
+#' @param object A DGEListList object
 #' @export
 setMethod("show", "DGEListList", function(object) {
   cat(sprintf("A list of %d DGEList objects:\n", length(object)))
@@ -225,6 +248,8 @@ setMethod("show", "DGEListList", function(object) {
   }
 })
 
+#' Return sample names from a DGEList object
+#' @param object A DGEList object
 #' @importMethodsFrom Biobase sampleNames
 #' @export
 setMethod("sampleNames", "DGEList", function(object) colnames(object$counts))
@@ -528,6 +553,8 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
 ## show
 ##----------------------------------------##
 
+#' Show an EdgeSigFilter object
+#' @param object An EdgeSigFilter object
 #' @importMethodsFrom methods show
 #' @export
 setMethod("show", "EdgeSigFilter", function(object) {
@@ -561,6 +588,8 @@ setMethod("show", "EdgeSigFilter", function(object) {
   return(invisible(messages))
 })
 
+#' Show an EdgeResult object
+#' @param object An EdgeResult object
 #' @export
 setMethod("show", "EdgeResult", function(object) {
   summary <- sprintf("EdgeResult object: %d genes, %d samples, %d contrasts",

@@ -6,6 +6,10 @@
 #' @keywords package
 NULL
 
+#' @importFrom edgeR DGEList cpm
+#' @importClassesFrom edgeR DGEList
+#' @importClassesFrom ribiosExpression DesignContrast
+#' @importFrom ribiosExpression DesignContrast
 #' @importFrom methods setClass setGeneric setMethod setRefClass setReplaceMethod
 #' @importFrom ribiosExpression designMatrix contrastMatrix
 #' @importFrom Biobase `annotation<-` assayData `fData<-` fData `pData<-`
@@ -29,3 +33,10 @@ NULL
 #' @export `featureNames<-`
 NULL
 
+#' DesignContrast is imported from DesignContrast and exported for convenience
+#' @name DesignContrast
+NULL
+
+#' cpm is imported from edgeR and exported for convenience
+#' @name cpm
+NULL

@@ -136,33 +136,3 @@ setGeneric("estimateGLMDisp", function(object) standardGeneric("estimateGLMDisp"
 #' Test GLM
 #' @export
 setGeneric("testGLM", function(object, fit) standardGeneric("testGLM"))
-##----------------------------------##
-## Riboseq
-##----------------------------------##
-#' RiboSeq generic function
-#' @export
-setGeneric("RiboSeq", function(RNA, RPF, groups, ...) standardGeneric("RiboSeq"))
-
-#' Get RNA counts
-#' @export
-setGeneric("countRNA", function(object) standardGeneric("countRNA"))
-
-#' Get RPF counts
-#' @export
-setGeneric("countRPF", function(object) standardGeneric("countRPF"))
-
-#' Get RNA counts per million (cpm)
-#' @export
-setGeneric("cpmRNA", function(object,...) standardGeneric("cpmRNA"))
-
-#' Get RPF counts per million (cpm)
-#' @export
-setGeneric("cpmRPF", function(object,...) standardGeneric("cpmRPF"))
-
-#' Get group sum of RNA cpm
-#' @export
-setGeneric("cpmRNAGroupSum", function(object) standardGeneric("cpmRNAGroupSum"))
-
-#' Get group sum of RPF cpm
-#' @export
-setGeneric("cpmRPFGroupSum", function(object) standardGeneric("cpmRPFGroupSum"))

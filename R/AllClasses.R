@@ -24,66 +24,6 @@ setClass("EdgeObject",
                              "designContrast"="DesignContrast"))
 
 
-##-----------------------------------##
-## RiboSeq classes
-##-----------------------------------##
-
-#' A S4-class object representing a RiboSeq experiment
-#' @slot RNA A \code{DGEList} object that represents RNA data
-#' @slot RPF A \code{DGEList} object that represents ribosome profiling 
-#'     (RPF) data
-#' @slot groups A factor vector that indicate sample groups
-#' 
-#' @exportClass RiboSeq
-setClass("RiboSeq",
-         representation=list(RNA="DGEList",
-           RPF="DGEList",
-           groups="factor"))
-
-#' A S4-class represnts analysis results of a RiboSeq experiment
-#' @exportClass riboSeqAnalysisObject
-setClass("riboSeqAnalysisObject",
-         representation=list(nFeature.RNA.raw="integer",
-           nSample.RNA.raw="integer",
-           nFeature.RPF.raw="integer",
-           nSample.RPF.raw="integer",
-           nFeature.comb.raw="integer",
-           nSample.comb.raw="integer",
-           nFeature.filter="integer",
-           nSample.filter="integer",
-           groups="factor",
-           contrasts="character",
-           nBootstrap="integer",
-           outdir="character",
-           plot.cpmBoxplot="character",
-           plot.exprsScatter="character",
-           plot.MDS="character",
-           plot.teBoxplot="character",
-           plot.logFCscatter="character",
-           plot.babelVolcano="character",
-           file.rspace="character",
-           file.fulltable="character",
-           rnkNames="character",
-           file.rnks="character",
-           file.upstream="character",
-           file.function="character",
-           file.pathway="character",
-           file.indexHTML="character"),
-         prototype=list(outdir=getwd(),
-           plot.cpmBoxplot="cpm-boxplots.pdf",
-           plot.exprsScatter="exprs-scatterplot.pdf",
-           plot.MDS="MDS-RNA-RPF.pdf",
-           plot.teBoxplot="boxplot-TErates.pdf",
-           plot.logFCscatter="scatterplot-logFC.RPF-logFC.RNA.pdf",
-           plot.babelVolcano="volcano-plot.pdf",
-           file.rspace="ribioseq-analysis-workspace.RData",
-           file.fulltable="riboseq-analysis-results.txt",
-           file.upstream="riboseq-analysis-upstreamAnalysis.txt",
-           file.function="riboseq-analysis-functionalAnalysis.txt",
-           file.pathway="riboseq-analysis-pathwayAnalysis.txt",
-           file.indexHTML="index.html"))
-
-
 ##-----------------------------##
 ## EdgeResult
 ##-----------------------------##

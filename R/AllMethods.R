@@ -1,4 +1,4 @@
-#' @include AllClasses.R AllGenerics.R ribiosNGS.R
+#' @include AllClasses.R AllGenerics.R ribiosNGS.R utils.R
 NULL
 
 ##-----------------------------------##
@@ -223,19 +223,20 @@ setMethod("sampleNames", "DGEList", function(object) colnames(object$counts))
 ##----------------------------------------##
 ## BCV methods
 ##----------------------------------------## 
+
 #' @describeIn commonBCV method for DGEList
 #' @export
 setMethod("commonBCV", "DGEList", function(x) {
   naOrSqrt(x$common.dispersion)
 })
 
-#' @describeIn tagwiseBCV method for DGEList
+#' @describeIn commonBCV method for DGEList
 #' @export
 setMethod("tagwiseBCV", "DGEList", function(x) {
   naOrSqrt(x$tagwise.dispersion)
 })
 
-#' @describeIn trendedBCV method for DGEList
+#' @describeIn commonBCV method for DGEList
 #' @export
 setMethod("trendedBCV", "DGEList", function(x) {
   naOrSqrt(x$trended.dispersion)
@@ -247,13 +248,13 @@ setMethod("commonBCV", "EdgeResult", function(x)  {
   commonBCV(dgeList(x))
 })
 
-#' @describeIn tagwiseBCV method for EdgeResult
+#' @describeIn commonBCV method for EdgeResult
 #' @export
 setMethod("tagwiseBCV", "EdgeResult", function(x)  {
   tagwiseBCV(dgeList(x))
 })
 
-#' @describeIn trendedBCV method for EdgeResult
+#' @describeIn commonBCV method for EdgeResult
 #' @export
 setMethod("trendedBCV", "EdgeResult", function(x)  {
   trendedBCV(dgeList(x))

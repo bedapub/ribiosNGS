@@ -8,6 +8,8 @@ testGLM(object, fit)
 }
 \arguments{
 \item{object}{An object}
+
+\item{fit}{A fit object}
 }
 \description{
 Test GLM

@@ -3,7 +3,7 @@ NULL
 
 #' Return the size of the smallest group
 #' 
-#' @param dgeList A \code{DGEList} or \code{EdgeObject} object
+#' @param obj A \code{DGEList} or \code{EdgeObject} object
 #' @return Integer
 #' 
 #' @examples 

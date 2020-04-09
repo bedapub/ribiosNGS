@@ -39,6 +39,10 @@
 #' nullModel <-  model.matrix(~donor, data=d1$samples)
 #' d1VsnSvaRes <- svaseqRemove(d1, design, nullModel)
 #' d2VsnSvaRes <- svaseqRemove(d2, design, nullModel)
+#' @note This function needs to be harmonized with the other SVA functions.
+#'  The reason is that svaseq was for a long time not stable until recently.
+#'  Therefore this function is written later, and unfortunately the 
+#'  outcome is not harmonized yet.
 #' @importFrom sva svaseq
 #' @importFrom vsn vsnMatrix predict
 #' @importFrom limma removeBatchEffect

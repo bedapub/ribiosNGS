@@ -18,7 +18,9 @@ voomSVA(object, design, ...)
 \arguments{
 \item{object}{A count matrix}
 
-\item{design}{Design matrix}
+\item{design}{Design matrix or formula}
+
+\item{...}{Other parameters}
 }
 \value{
 SV matrix

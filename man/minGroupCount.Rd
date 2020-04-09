@@ -8,12 +8,12 @@
 \usage{
 minGroupCount(obj)
 
-\method{minGroupCount}{DGEList}(dgeList)
+\method{minGroupCount}{DGEList}(obj)
 
-\method{minGroupCount}{EdgeObject}(edgeObj)
+\method{minGroupCount}{EdgeObject}(obj)
 }
 \arguments{
-\item{dgeList}{A \code{DGEList} object}
+\item{obj}{A \code{DGEList} or \code{EdgeObject} object}
 }
 \value{
 Integer

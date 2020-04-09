@@ -21,6 +21,9 @@ be used as rownames of the result matrix}
 \item{contrasts}{\code{NULL} or characters; if not \code{NULL}, only logFC
 values of given contrasts will be returned}
 
+\item{removeNAfeatures}{Logical, if \code{TRUE}, features containing \code{NA}
+values are removed.}
+
 \item{min.logCPM}{\code{NULL} or numeric. If set, features with logCPM lower
 than the given value is not considered. This option is helpful to remove
 genes that are lowly expressed which yet show strong differential

@@ -18,6 +18,8 @@ genes are split.}
 
 \item{sampleDropLevels}{Logical, if \code{TRUE}, unused levels in factors 
 in the sample annotation are dropped}
+
+\item{...}{Not used so far.}
 }
 \description{
 Split a DGEList object by a factor of samples (default) or genes

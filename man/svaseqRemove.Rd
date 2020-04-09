@@ -37,6 +37,12 @@ A list with following items
 \description{
 Detect surrogate variables from count data and remove their effects VSN-transformed counts
 }
+\note{
+This function needs to be harmonized with the other SVA functions.
+ The reason is that svaseq was for a long time not stable until recently.
+ Therefore this function is written later, and unfortunately the 
+ outcome is not harmonized yet.
+}
 \examples{
 y1org <- matrix(rnbinom(4000, mu=5, size=2), ncol=8)
 genes1 <- data.frame(GeneSymbol=sprintf("Gene\%d", 1:nrow(y1org)))

@@ -7,6 +7,8 @@
 \method{filterByCPM}{EdgeObject}(obj, minCPM = 1, minCount = minGroupCount(obj), ...)
 }
 \arguments{
+\item{obj}{An EdgeObject object}
+
 \item{minCPM}{Minimal CPM value, see descriptions below}
 
 \item{minCount}{Minimal count of samples in which the CPM value is no less
@@ -23,8 +25,6 @@ rates.
 The filter removes genes that are less expressed than 1 copy per million
 reads (cpm) in at least \code{n} samples, where \code{n} equals the number
 of samples in the smallest group of the design.}
-
-\item{edgeObj}{An EdgeObject object}
 }
 \description{
 Filter EdgeObj and remove lowly expressed genes

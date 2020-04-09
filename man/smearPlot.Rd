@@ -27,6 +27,28 @@ smearPlot(object, ...)
 \item{object}{An object}
 
 \item{...}{Other parameters}
+
+\item{contrast}{Character, contrast of interest}
+
+\item{freeRelation}{Logical}
+
+\item{xlab}{Character}
+
+\item{ylab}{Character}
+
+\item{pch}{Character or integer}
+
+\item{cex}{Numeric}
+
+\item{smearWidth}{Numeric}
+
+\item{panel.first}{Grid}
+
+\item{smooth.scatter}{Logical}
+
+\item{lowess}{Logical}
+
+\item{multipage}{Logical}
 }
 \description{
 Smear plot

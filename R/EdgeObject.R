@@ -5,9 +5,7 @@ NULL
 #' 
 #' @param object A matrix containing counts of features
 #' @param designContrast A \code{DesignContrast} object
-#' @param fData A \code{data.frame} containing annotation information for each gene
-#' @param pData A \code{data.frame} containing annotation information for each sample
-#' @param remove.zeros Logical, whether to remove rows that have 0 total count
+#' @param ... Other parameters
 #' 
 #' @examples 
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
@@ -33,6 +31,9 @@ NULL
 setGeneric("EdgeObject", function(object, designContrast, ...) standardGeneric("EdgeObject"))
 
 #' @describeIn EdgeObject The method for matrix as input
+#' @param fData A \code{data.frame} containing annotation information for genes
+#' @param pData A \code{data.frame} containing annotation information for samples
+#' @param remove.zeros Logical, whether to remove rows that have 0 total count
 #' @export
 setMethod("EdgeObject",
           c("matrix", "DesignContrast"),
@@ -53,6 +54,8 @@ setMethod("EdgeObject",
           })
 
 #' @describeIn EdgeObject The method for FeatAnnoExprs as input
+#' @param pData A \code{data.frame} containing annotation information for samples
+#' @param remove.zeros Logical, whether to remove rows that have 0 total count
 #' @export
 setMethod("EdgeObject",
           c("FeatAnnoExprs", "DesignContrast"),

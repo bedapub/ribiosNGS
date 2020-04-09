@@ -23,6 +23,21 @@ volcanoPlot(object, ...)
 \item{object}{An object}
 
 \item{...}{Other parameters}
+
+\item{contrast}{Character, contrast of interest. If \code{NULL}, 
+all contrasts are used}
+
+\item{freeRelation}{Logical.}
+
+\item{colramp}{Function, color palette.}
+
+\item{multipage}{Logical.}
+
+\item{xlim}{NULL or a numeric vector of two}
+
+\item{ylim}{NULL or a numeric vector of two.}
+
+\item{main}{Character, title.}
 }
 \description{
 Volcano plot

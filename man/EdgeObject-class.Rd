@@ -17,6 +17,13 @@
 
 \S4method{EdgeObject}{FeatAnnoExprs,DesignContrast}(object, designContrast, pData = NULL, remove.zeros = FALSE)
 }
+\arguments{
+\item{fData}{A \code{data.frame} containing annotation information for genes}
+
+\item{pData}{A \code{data.frame} containing annotation information for samples}
+
+\item{remove.zeros}{Logical, whether to remove rows that have 0 total count}
+}
 \description{
 EdgeObject argumenting DGEList by including designContrast information
 }

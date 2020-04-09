@@ -1,5 +1,6 @@
 #' Filter lowly expressed genes by counts per million (CPM)
 #' @param obj An object
+#' @param ... Other parameters
 #' @export
 filterByCPM <- function(obj, ...) {
   UseMethod("filterByCPM")
@@ -77,7 +78,7 @@ filterByCPM.DGEList <- function(obj,
 
 #' Filter EdgeObj and remove lowly expressed genes
 #' 
-#' @param edgeObj An EdgeObject object
+#' @param obj An EdgeObject object
 #' @param minCPM Minimal CPM value, see descriptions below
 #' @param minCount Minimal count of samples in which the CPM value is no less
 #' than \code{minCPM}

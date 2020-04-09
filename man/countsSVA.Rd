@@ -17,6 +17,8 @@ countsSVA(
 \item{designMatrix}{Design matrix}
 
 \item{transformFunc}{A function to transform the count data}
+
+\item{...}{Passed to \code{inferSV}}
 }
 \value{
 The SV matrix

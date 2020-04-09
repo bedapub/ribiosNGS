@@ -7,9 +7,11 @@
 \S4method{normalize}{EdgeObject}(object, method = "RLE", ...)
 }
 \arguments{
+\item{object}{An \code{EdgeObject} object.}
+
 \item{method}{Method passed to \code{\link[edgeR]{calcNormFactors}}.}
 
-\item{obj}{An \code{EdgeObject} object}
+\item{...}{Other parameters passed to \code{\link[edgeR]{calcNormFactors}}.}
 }
 \description{
 Normalize an EdgeObject

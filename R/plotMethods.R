@@ -55,6 +55,10 @@ nonNull <- function(x, val) return(ifelse(is.null(x), val, x))
 #' Boxplot of an EdgeObject
 #' @param x An EdgeObject
 #' @param type The type of boxplot: 'normFactors' and 'modLogCPM' are supported.
+#' @param xlab Character, xlab.
+#' @param ylab Character, ylab.
+#' @param main Character, title.
+#' @param ... Passed to \code{boxplot}.
 #' @importFrom graphics boxplot
 #' @export
 setMethod("boxplot", "EdgeObject",
@@ -99,6 +103,14 @@ quantileRange <- function(x, outlier=0.01, symmetric=TRUE) {
 ##----------------------------------------## 
 
 #' @describeIn volcanoPlot Method for EdgeResult
+#' @param contrast Character, contrast of interest. If \code{NULL}, 
+#'    all contrasts are used
+#' @param freeRelation Logical.
+#' @param colramp Function, color palette.
+#' @param multipage Logical.
+#' @param xlim NULL or a numeric vector of two
+#' @param ylim NULL or a numeric vector of two.
+#' @param main Character, title.
 #' @importFrom graphics smoothScatter
 #' @export
 setMethod("volcanoPlot", "EdgeResult",
@@ -189,6 +201,17 @@ customSmearPlot <- function(tbl, main,
 }
 
 #' @describeIn smearPlot Method for EdgeResult
+#' @param contrast Character, contrast of interest
+#' @param freeRelation Logical
+#' @param xlab Character
+#' @param ylab Character
+#' @param pch Character or integer
+#' @param cex Numeric
+#' @param smearWidth Numeric
+#' @param panel.first Grid
+#' @param smooth.scatter Logical
+#' @param lowess Logical
+#' @param multipage Logical
 #' @export
 setMethod("smearPlot", "EdgeResult",
           function(object, contrast=NULL, freeRelation=FALSE,

@@ -6,6 +6,11 @@
 \usage{
 \S4method{contrastSampleIndices}{EdgeResult,character}(object, contrast)
 }
+\arguments{
+\item{object}{An EdgeResult object.}
+
+\item{contrast}{Character, indicating the contrast of interest.}
+}
 \description{
 Extract contrast sample indices
 }

@@ -14,8 +14,6 @@ commonDisp(object)
 }
 \arguments{
 \item{object}{An object}
-
-\item{value}{Numeric, value to be specified as common dispersion}
 }
 \description{
 Common dispersion

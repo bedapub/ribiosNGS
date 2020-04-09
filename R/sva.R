@@ -4,6 +4,7 @@
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
 #' @param transformFunc A function to transform the count data
+#' @param ... Passed to \code{inferSV}
 #' @return The SV matrix
 #' @examples
 #' 

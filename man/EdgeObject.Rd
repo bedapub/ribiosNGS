@@ -11,11 +11,7 @@ EdgeObject(object, designContrast, ...)
 
 \item{designContrast}{A \code{DesignContrast} object}
 
-\item{fData}{A \code{data.frame} containing annotation information for each gene}
-
-\item{pData}{A \code{data.frame} containing annotation information for each sample}
-
-\item{remove.zeros}{Logical, whether to remove rows that have 0 total count}
+\item{...}{Other parameters}
 }
 \description{
 Construct an EdgeObject object by a count matrix and DesignContrast

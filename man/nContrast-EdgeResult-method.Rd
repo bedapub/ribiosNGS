@@ -6,6 +6,9 @@
 \usage{
 \S4method{nContrast}{EdgeResult}(object)
 }
+\arguments{
+\item{object}{An \code{EdgeResult} object.}
+}
 \description{
 Return the number of contrasts
 }

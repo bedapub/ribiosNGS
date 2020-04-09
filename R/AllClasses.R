@@ -69,8 +69,11 @@ setClass("EdgeSigFilter",
 #' @param negLogFC Numeric, negative logFC filter value, optional.
 #' @param logCPM Numeric, logCPM filter value, optional.
 #' @param LR Numeric, LR filter value, optional
+#' @param pValue Numeric, LR filter value, optional
 #' @param FDR Numeric, FDR filter value, optional
+#' @param value Numeric, vssigned threshold value
 #' @param ... not used now
+#'
 #' @return An updated \code{EdgeSigFilter} object.
 #' 
 #' @aliases `logFC<-` `negLogFC<-` `negLogFC<-` `logCPM<-`
@@ -92,52 +95,52 @@ update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, 
 
 #' @describeIn update.EdgeSigFilter Updates the posLogFC threshold value
 #' @export
-`posLogFC<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@posLogFC <- value
-  return(edgeSigDegFilter)
+`posLogFC<-` <- function(object, value) {
+  object@posLogFC <- value
+  return(object)
 }
 
 #' @describeIn update.EdgeSigFilter Updates the negLogFC threshold value
 #' @export
-`negLogFC<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@negLogFC <- value
-  return(edgeSigDegFilter)
+`negLogFC<-` <- function(object, value) {
+  object@negLogFC <- value
+  return(object)
 }
 
 #' @describeIn update.EdgeSigFilter Updates the posLogFC threshold value
 #' @export
-`logFC<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@posLogFC <- abs(value)
-  edgeSigDegFilter@negLogFC <- -abs(value)
-  return(edgeSigDegFilter)
+`logFC<-` <- function(object, value) {
+  object@posLogFC <- abs(value)
+  object@negLogFC <- -abs(value)
+  return(object)
 }
 
 #' @describeIn update.EdgeSigFilter Updates the logCPM threshold value
 #' @export
-`logCPM<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@logCPM <- value
-  return(edgeSigDegFilter)
+`logCPM<-` <- function(object, value) {
+  object@logCPM <- value
+  return(object)
 }
 
 #' @describeIn update.EdgeSigFilter Updates the LR threshold value
 #' @export
-`LR<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@LR <- value
-  return(edgeSigDegFilter)
+`LR<-` <- function(object, value) {
+  object@LR <- value
+  return(object)
 }
 
 #' @describeIn update.EdgeSigFilter Updates the pValue threshold value
 #' @export
-`pValue<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@pValue <- value
-  return(edgeSigDegFilter)
+`pValue<-` <- function(object, value) {
+  object@pValue <- value
+  return(object)
 }
 
 #' @describeIn update.EdgeSigFilter Updates the FDR threshold value
 #' @export
-`FDR<-` <- function(edgeSigDegFilter, value) {
-  edgeSigDegFilter@FDR <- value
-  return(edgeSigDegFilter)
+`FDR<-` <- function(object, value) {
+  object@FDR <- value
+  return(object)
 }
 
 EdgeSigFilter <- function(logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
@@ -150,6 +153,11 @@ EdgeSigFilter <- function(logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
 ER_SIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.5, FDR=0.05)
 
 
+#' Object that contains test results, dgeTable, and EdgeSigFilter
+#' @slot dgeGLM A DGEGLM class object that contains GLM test results
+#' @slot dgeTables A list of dgeTable
+#' @slot sigFilter Significantly regulated gene filter
+#' @export
 setClass("EdgeResult",
          representation=list("dgeGLM"="DGEGLM",
            "dgeTables"="list",
@@ -165,6 +173,7 @@ setClass("EdgeResult",
 #' @seealso \code{dgeTable} which returns one \code{data.frame} for one or more
 #' given contrasts.
 #' @export dgeTables
+#' @export
 EdgeResult <- function(edgeObj,
                        dgeGLM,
                        dgeTables) {
@@ -175,6 +184,10 @@ EdgeResult <- function(edgeObj,
       dgeTables=dgeTables)
 }
 
+#' A class that contain feature annotation and expression matrix
+#' @param exprs A matrix of expression
+#' @param genes A data.frame
+#' @export
 setClass("FeatAnnoExprs",
          representation=list(exprs="matrix",
            genes="data.frame"))

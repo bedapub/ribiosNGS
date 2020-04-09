@@ -17,6 +17,14 @@
 \item{x}{An EdgeObject}
 
 \item{type}{The type of boxplot: 'normFactors' and 'modLogCPM' are supported.}
+
+\item{xlab}{Character, xlab.}
+
+\item{ylab}{Character, ylab.}
+
+\item{main}{Character, title.}
+
+\item{...}{Passed to \code{boxplot}.}
 }
 \description{
 Boxplot of an EdgeObject

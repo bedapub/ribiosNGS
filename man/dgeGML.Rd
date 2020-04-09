@@ -6,6 +6,9 @@
 \usage{
 dgeGML(edgeResult)
 }
+\arguments{
+\item{edgeResult}{An \code{EdgeResult} object.}
+}
 \description{
 Return the dgeGML method
 }

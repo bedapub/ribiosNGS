@@ -3,7 +3,7 @@ NULL
 
 #' Get automatic group color
 #'
-#' @param edgeR An EdgeObject or EdgeResult object
+#' @param edgeObj An EdgeObject or EdgeResult object
 #' @param panel passed to \code{fcbrewer}
 #' @return A fcbase object
 #' @importFrom ribiosPlot fcbrewer
@@ -84,7 +84,7 @@ exportStaticGeneLevelPlots <- function(edgeResult, file) {
 
 #' Barchart of significantly regulated genes
 #'
-#' @param edgeResults An EdgeResult object
+#' @param edgeResult An EdgeResult object
 #' @param logy Logical, whether y-axis should be log-10 transformed
 #' @param scales passed to \code{lattice::barchart}
 #' @param stack passed to \code{lattice::barchart}

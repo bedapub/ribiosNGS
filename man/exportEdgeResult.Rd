@@ -11,11 +11,11 @@ exportEdgeResult(
 )
 }
 \arguments{
+\item{edgeResult}{A \code{EdgeResult} object}
+
 \item{outRootDir}{Character string, output directory}
 
 \item{action}{Character string, what happens if the output directory exists}
-
-\item{dgeTest}{A \code{EdgeResult} object}
 }
 \description{
 Export dgeTest results

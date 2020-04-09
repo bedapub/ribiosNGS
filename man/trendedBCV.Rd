@@ -13,7 +13,7 @@ trendedBCV(x)
 \S4method{trendedBCV}{EdgeResult}(x)
 }
 \arguments{
-\item{An}{object}
+\item{x}{An object}
 }
 \description{
 Trended biological coefficients of variance

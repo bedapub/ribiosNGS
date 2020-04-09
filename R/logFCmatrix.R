@@ -9,6 +9,8 @@
 #' than the given value is not considered. This option is helpful to remove
 #' genes that are lowly expressed which yet show strong differential
 #' expression.
+#' @param removeNAfeatures Logical, if \code{TRUE}, features containing \code{NA}
+#'   values are removed.
 #' @note TODO: add edgeResult data example
 #' @importFrom ribiosUtils mintersect
 #' @export logFCmatrix

@@ -145,8 +145,8 @@ readBiokitGctFile <- function(dir,
 #' @param dir Biokit output directory
 #' @param anno Annotation type, either \code{refseq} or \code{ensembl} is
 #' supported
-#' @param type count type, either \code{count} or \code{uniqCount} are
-#' supported.
+#' @param countType Character string, type of count data.
+#' @param tpmType Character string, type of TPM data.
 #' @examples
 #' 
 #' ##... (TODO: add a mock output directory in testdata)

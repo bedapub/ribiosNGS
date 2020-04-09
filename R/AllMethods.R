@@ -30,6 +30,7 @@ dim.EdgeResult <- function(x) c(nrow(x), ncol(x))
 
 #' Return counts in a DGEList object
 #' @importMethodsFrom BiocGenerics counts
+#' @param object A \code{DGEList} object.
 #' @export
 setMethod("counts", "DGEList", function(object) object$counts)
 
@@ -178,17 +179,22 @@ setMethod("contrastMatrix<-", c("EdgeObject", "matrix"), function(object, value)
 
 #' Return the number of contrasts
 #' @importMethodsFrom ribiosExpression nContrast
+#' @param object An \code{EdgeResult} object.
 #' @export
 setMethod("nContrast", "EdgeResult", function(object) {nContrast(object@designContrast)})
 
 #' Extract contrast sample indices
 #' @importMethodsFrom ribiosExpression contrastSampleIndices
+#' @param object An EdgeResult object.
+#' @param contrast Character, indicating the contrast of interest.
 #' @export
 setMethod("contrastSampleIndices", c("EdgeResult", "character"), function(object, contrast) {
               contrastSampleIndices(object@designContrast, contrast)
           })
 
 #' Extract contrast sample indices
+#' @param object An EdgeResult object.
+#' @param contrast Character, indicating the contrast of interest.
 #' @export
 setMethod("contrastSampleIndices", c("EdgeResult", "integer"), function(object, contrast) {
               contrastSampleIndices(object@designContrast, contrast)
@@ -291,6 +297,7 @@ aveLogCPM.EdgeResult <- function(y,...) {
 
 #' Get sample groups from an EdgeObject object
 #' @importMethodsFrom ribiosExpression groups
+#' @param object An \code{EdgeObject} object
 #' @export
 setMethod("groups", "EdgeObject", function(object) {
   return(groups(object@designContrast))
@@ -298,6 +305,7 @@ setMethod("groups", "EdgeObject", function(object) {
 
 #' Get display labels of sample groups
 #' @importMethodsFrom ribiosExpression dispGroups
+#' @param An \code{EdgeObject} object
 #' @export
 setMethod("dispGroups", "EdgeObject", function(object) {
   return(dispGroups(object@designContrast))
@@ -305,6 +313,8 @@ setMethod("dispGroups", "EdgeObject", function(object) {
 
 #' @describeIn modLogCPM Method for DGEList
 #' @importFrom edgeR cpm
+#' @param object A DGEList object
+#' @param prior.count Integer, prior count.
 #' @export
 setMethod("modLogCPM", "DGEList", function(object, prior.count=2) {
   return(edgeR::cpm(object, prior.count=prior.count, log=TRUE))

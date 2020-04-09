@@ -8,6 +8,8 @@ filterByCPM(obj, ...)
 }
 \arguments{
 \item{obj}{An object}
+
+\item{...}{Other parameters}
 }
 \description{
 Filter lowly expressed genes by counts per million (CPM)

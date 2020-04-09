@@ -6,6 +6,9 @@
 \usage{
 \S4method{groups}{EdgeObject}(object)
 }
+\arguments{
+\item{object}{An \code{EdgeObject} object}
+}
 \description{
 Get sample groups from an EdgeObject object
 }

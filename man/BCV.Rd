@@ -13,7 +13,7 @@ BCV(x)
 \S4method{BCV}{EdgeResult}(x)
 }
 \arguments{
-\item{object}{An object}
+\item{x}{An object}
 }
 \description{
 Return a data.frame of BCV values

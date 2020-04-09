@@ -32,7 +32,7 @@ NULL
 
 #' Export dgeTest results
 #' 
-#' @param dgeTest A \code{EdgeResult} object
+#' @param edgeResult A \code{EdgeResult} object
 #' @param outRootDir Character string, output directory
 #' @param action Character string, what happens if the output directory exists
 #' 

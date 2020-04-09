@@ -17,8 +17,9 @@ readBiokitAsDGEList(
 \item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is
 supported}
 
-\item{type}{count type, either \code{count} or \code{uniqCount} are
-supported.}
+\item{countType}{Character string, type of count data.}
+
+\item{tpmType}{Character string, type of TPM data.}
 }
 \description{
 Read a Biokit output directory into a DGEList object for downstream analysis

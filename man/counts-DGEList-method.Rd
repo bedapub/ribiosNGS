@@ -6,6 +6,9 @@
 \usage{
 \S4method{counts}{DGEList}(object)
 }
+\arguments{
+\item{object}{A \code{DGEList} object.}
+}
 \description{
 Return counts in a DGEList object
 }

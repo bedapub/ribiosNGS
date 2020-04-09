@@ -7,6 +7,7 @@
 #'   genes are split.
 #' @param sampleDropLevels Logical, if \code{TRUE}, unused levels in factors 
 #'   in the sample annotation are dropped
+#' @param ... Not used so far.
 #' 
 #' @examples 
 #' y1 <- matrix(rnbinom(1000, mu=5, size=2), ncol=4)

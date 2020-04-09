@@ -26,12 +26,12 @@ setGeneric("commonBCV", function(x) standardGeneric("commonBCV"))
 setGeneric("tagwiseBCV", function(x) standardGeneric("tagwiseBCV"))
 
 #' Trended biological coefficients of variance
-#' @param An object
+#' @param x An object
 #' @exportMethod trendedBCV
 setGeneric("trendedBCV", function(x) standardGeneric("trendedBCV"))
 
 #' Return a data.frame of BCV values
-#' @param object An object
+#' @param x An object
 #' @export
 setGeneric("BCV", function(x) standardGeneric("BCV"))
 
@@ -43,7 +43,6 @@ setGeneric("plotBCV", function(x, ...) standardGeneric("plotBCV"))
 
 #' Common dispersion
 #' @param object An object
-#' @param value Numeric, value to be specified as common dispersion
 #' @export
 setGeneric("commonDisp", function(object) standardGeneric("commonDisp"))
 
@@ -133,8 +132,8 @@ setGeneric("inferSV", function(object, design, ...) standardGeneric("inferSV"))
 #' Run SVA on a count matrix transformed by voom
 #' 
 #' @param object A count matrix
-#' @param design Design matrix
-#' 
+#' @param design Design matrix or formula
+#' @param ... Other parameters
 #' @return SV matrix
 #' @examples
 #' set.seed(1887)
@@ -163,5 +162,6 @@ setGeneric("estimateGLMDisp", function(object) standardGeneric("estimateGLMDisp"
 
 #' Test GLM
 #' @param object An object
+#' @param fit A fit object
 #' @export
 setGeneric("testGLM", function(object, fit) standardGeneric("testGLM"))

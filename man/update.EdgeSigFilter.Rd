@@ -19,19 +19,19 @@
 \usage{
 \method{update}{EdgeSigFilter}(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR, ...)
 
-posLogFC(edgeSigDegFilter) <- value
+posLogFC(object) <- value
 
-negLogFC(edgeSigDegFilter) <- value
+negLogFC(object) <- value
 
-logFC(edgeSigDegFilter) <- value
+logFC(object) <- value
 
-logCPM(edgeSigDegFilter) <- value
+logCPM(object) <- value
 
-LR(edgeSigDegFilter) <- value
+LR(object) <- value
 
-pValue(edgeSigDegFilter) <- value
+pValue(object) <- value
 
-FDR(edgeSigDegFilter) <- value
+FDR(object) <- value
 }
 \arguments{
 \item{object}{An \code{EdgeSigFilter} object}
@@ -46,9 +46,13 @@ FDR(edgeSigDegFilter) <- value
 
 \item{LR}{Numeric, LR filter value, optional}
 
+\item{pValue}{Numeric, LR filter value, optional}
+
 \item{FDR}{Numeric, FDR filter value, optional}
 
 \item{...}{not used now}
+
+\item{value}{Numeric, vssigned threshold value}
 }
 \value{
 An updated \code{EdgeSigFilter} object.

@@ -122,6 +122,7 @@ isUnsetSigFilter <- function(object) {
 }
 
 #' Return the dgeGML method
+#' @param edgeResult An \code{EdgeResult} object.
 #' @export
 dgeGML <- function(edgeResult)
   return(edgeResult@dgeGLM)

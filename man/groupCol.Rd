@@ -7,9 +7,9 @@
 groupCol(edgeObj, panel = "Set1")
 }
 \arguments{
-\item{panel}{passed to \code{fcbrewer}}
+\item{edgeObj}{An EdgeObject or EdgeResult object}
 
-\item{edgeR}{An EdgeObject or EdgeResult object}
+\item{panel}{passed to \code{fcbrewer}}
 }
 \value{
 A fcbase object

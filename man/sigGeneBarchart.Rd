@@ -16,6 +16,8 @@ sigGeneBarchart(
 )
 }
 \arguments{
+\item{edgeResult}{An EdgeResult object}
+
 \item{logy}{Logical, whether y-axis should be log-10 transformed}
 
 \item{scales}{passed to \code{lattice::barchart}}
@@ -29,8 +31,6 @@ sigGeneBarchart(
 \item{auto.key}{passed to \code{lattice::barchart}}
 
 \item{...}{passed to \code{lattice::barchart}}
-
-\item{edgeResults}{An EdgeResult object}
 }
 \description{
 Barchart of significantly regulated genes

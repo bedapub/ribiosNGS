@@ -13,9 +13,11 @@ modLogCPM(object, ...)
 \S4method{modLogCPM}{EdgeObject}(object)
 }
 \arguments{
-\item{object}{An object}
+\item{object}{A DGEList object}
 
 \item{...}{Other parameters}
+
+\item{prior.count}{Integer, prior count.}
 }
 \description{
 Modulated logCPM

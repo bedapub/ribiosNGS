@@ -31,7 +31,7 @@ filterByCPM.matrix <- function(obj, minCPM=1, minCount=1, ...) {
 #' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
 #' @param minCount Integer, how many samples must have CPM larger than 
 #'     \code{minCPM} to keep this gene?
-#' @parm lib.size Integers of library size, or \code{NULL}
+#' @param lib.size Integers of library size, or \code{NULL}
 #' @param ... Not used
 #' 
 #' @return Another \code{DGEList} object, with lowly expressed genes removed. 

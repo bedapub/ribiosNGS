@@ -3,7 +3,7 @@ NULL
 
 #' Return the size of the smallest group
 #' 
-#' @param dgeList A \code{DGEList} object
+#' @param dgeList A \code{DGEList} or \code{EdgeObject} object
 #' @return Integer
 #' 
 #' @examples 
@@ -23,8 +23,8 @@ minGroupCount <- function(obj) {
 #' @describeIn minGroupCount Return the size of the smallest group defined in
 #'  the \code{DGEList} object
 #' @export
-minGroupCount.DGEList <- function(dgeList) {
-  groups <- dgeList$samples$group
+minGroupCount.DGEList <- function(obj) {
+  groups <- obj$samples$group
   if(!is.factor(groups))
     groups <- factor(groups)
   groups <- droplevels(groups)
@@ -33,8 +33,8 @@ minGroupCount.DGEList <- function(dgeList) {
 #' @describeIn minGroupCount Return the size of the smallest group defined in
 #'   the \code{EdgeObject} object
 #' @export
-minGroupCount.EdgeObject <- function(edgeObj) {
-  groups <- groups(edgeObj@designContrast)
+minGroupCount.EdgeObject <- function(obj) {
+  groups <- groups(obj@designContrast)
   if(!is.factor(groups))
     groups <- factor(groups)
   groups <- droplevels(groups)

@@ -1,5 +1,16 @@
-#' @include plotMethods.R
+#' @include plotMethods.R edgeR-funcs.R
 NULL
+
+#' Get automatic group color
+#'
+#' @param edgeR An EdgeObject or EdgeResult object
+#' @param panel passed to \code{fcbrewer}
+#' @return A fcbase object
+#' @importFrom ribiosPlot fcbrewer
+#' @export
+groupCol <- function(edgeObj, panel="Set1") {
+  ribiosPlot::fcbrewer(dispGroups(edgeObj), panel)
+}
 
 #' Make static gene-level plots of an EdgeResult object
 #' 
@@ -69,3 +80,44 @@ exportStaticGeneLevelPlots <- function(edgeResult, file) {
   staticGeneLevelPlots(edgeResult)
   closeFileDevice()
 }
+
+
+#' Barchart of significantly regulated genes
+#'
+#' @param edgeResults An EdgeResult object
+#' @param logy Logical, whether y-axis should be log-10 transformed
+#' @param scales passed to \code{lattice::barchart}
+#' @param stack passed to \code{lattice::barchart}
+#' @param ylab passed to \code{lattice::barchart}
+#' @param col passed to \code{lattice::barchart}
+#' @param auto.key passed to \code{lattice::barchart}
+#' @param ... passed to \code{lattice::barchart}
+#'
+#' @importFrom ribiosUtils ofactor
+#' @importFrom lattice barchart
+#' @export
+sigGeneBarchart <- function(edgeResult,
+                            logy=FALSE,
+                            scales=list(x=list(rot=45),
+                              y=list(alternating=1, tck=c(1,0))),
+                            stack=FALSE,
+                            ylab="Significant DEGs",
+                            col=c("positive"="orange",
+                              "negative"="lightblue"),
+                            auto.key=list(columns=2),
+                            ...) {
+  counts <- sigGeneCounts(edgeResult)
+  contrasts <- ribiosUtils::ofactor(contrastNames(edgeResult))
+  positive <- counts$posCount
+  negative <- counts$negCount
+  scales$y$log <- ifelse(logy, 10, FALSE)
+  lattice::barchart(positive + negative ~ contrasts,
+                    stack=stack,
+                    ylab=ylab,
+                    scales=scales,
+                    par.settings=list(superpose.polygon=list(col=col)),
+                    auto.key=auto.key,
+                    origin=0,
+                    ...)
+}
+

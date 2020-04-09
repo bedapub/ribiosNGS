@@ -170,3 +170,20 @@ prcomp.DGEList <- function(x, ntop=NULL,
   res$vsnMat <- mat
   return(res)
 }
+
+#' Run principal component analysis on a DGEListList object
+#' 
+#' @param x A \code{DGEListList} object
+#' @param ntop NULL or integer. If set, only \code{ntop} top-variable genes are
+#' used
+#' @param fun Function, used to transform count data into continuous data used
+#' by PCA
+#' @return A list of \code{prcomp} objects.
+prcomp.DGEListList <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
+  resList <- lapply(x@.Data,
+                    function(dgeList) 
+                      prcomp.DGEList(dgeList, fun=fun, ntop=ntop))
+  names(resList) <- names(x)
+  return(resList)
+}
+

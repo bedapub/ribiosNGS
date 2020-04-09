@@ -1,505 +1,382 @@
+#' @include AllClasses.R AllGenerics.R AllMethods.R
+
+#' Sample counts by group
+#' @param edgeObj An EdgeObject object
+#' @aliases maxCountByGroup hasNoReplicate
+#' @return A named vector if integers, sample counts by group
+#' @export
 countByGroup <- function(edgeObj) {
   groups <- groups(edgeObj@designContrast)
-  if(!is.factor(groups))
+  if (!is.factor(groups))
     groups <- factor(groups)
   groups <- droplevels(groups)
   return(table(groups))
 }
+
+#' @describeIn countByGroup Returns the max count
+#' @export
 maxCountByGroup <- function(edgeObj) {
   return(max(countByGroup(edgeObj)))
 }
+
+#' @describeIn countByGroup Returns \code{TRUE} if the largest group has only one sample
 hasNoReplicate <- function(edgeObj) {
-  return(maxCountByGroup(edgeObj)<=1)
+  return(maxCountByGroup(edgeObj) <= 1)
 }
 
 isAnyNA <- function(edgeObj) {
-    any(is.na(edgeObj@dgeList$counts))
+  any(is.na(edgeObj@dgeList$counts))
 }
+
+#' Replace NA counts with zero counts
+#' @param edgeObj An EdgeObject object
+#' @return An EdgeObject object
+#' @export
 replaceNAwithZero <- function(edgeObj) {
   edgeObj@dgeList$counts[is.na(edgeObj@dgeList$counts)] <- 0
   return(edgeObj)
 }
 
-setMethod("cpmRNA", "EdgeObject", function(object) {
-  return(cpm(object@dgeList))
-})
-
 ## some useful attributes
 
-posLogFC <- function(edgeSigFilter) edgeSigFilter@posLogFC
-negLogFC <- function(edgeSigFilter) edgeSigFilter@negLogFC
-logCPM <- function(edgeSigFilter) edgeSigFilter@logCPM
-LR <- function(edgeSigFilter) edgeSigFilter@LR
-pValue <- function(edgeSigFilter) edgeSigFilter@pValue
-FDR <- function(edgeSigFilter) edgeSigFilter@FDR
-isUnsetPosLogFC <- function(edgeSigFilter) posLogFC(edgeSigFilter)==ESF_POSLOGFC_DEFAULT
-isUnsetNegLogFC <- function(edgeSigFilter) negLogFC(edgeSigFilter)==ESF_NEGLOGFC_DEFAULT
-isUnsetLogCPM <- function(edgeSigFilter) logCPM(edgeSigFilter)==ESF_LOGCPM_DEFAULT
-isUnsetLR <- function(edgeSigFilter) LR(edgeSigFilter)==ESF_LR_DEFAULT
-isUnsetPValue <- function(edgeSigFilter) pValue(edgeSigFilter)==ESF_PVALUE_DEFAULT
-isUnsetFDR <- function(edgeSigFilter) FDR(edgeSigFilter)==ESF_FDR_DEFAULT
+#' Get settings in the significance filter
+#' @param edgeSigFilter An EdgeSigFilter object
+#' @returns Numeric values of the thresholds
+#' @export
+posLogFC <- function(edgeSigFilter)
+  edgeSigFilter@posLogFC
 
-setMethod("show", "EdgeSigFilter", function(object) {
-  title <- "Edge Significantly Expressed Genes Filter"
-  msgs <- c()
-  if(!isUnsetPosLogFC(object))
-    msgs <- c(msgs,
-                  sprintf("posLogFC filter set: logFC>=%f", posLogFC(object)))
-  if(!isUnsetNegLogFC(object))
-    msgs <- c(msgs,
-                  sprintf("negLogFC filter set: logFC<=%f", negLogFC(object)))
-  if(!isUnsetLogCPM(object))
-    msgs <- c(msgs,
-                  sprintf("logCPM filter set: logCPM>=%f", logCPM(object)))                  
-  if(!isUnsetLR(object))
-    msgs <- c(msgs,
-                 sprintf("LR filter set: LR>=%f", LR(object)))
-  if(!isUnsetPValue(object))
-    msgs <- c(msgs,
-                  sprintf("pValue filter set: pValue<=%f", pValue(object)))
-  if(!isUnsetFDR(object))
-    msgs <- c(msgs,
-                  sprintf("FDR filter set: FDR<=%f", FDR(object)))
-  if(length(msgs)==0L)
-    msgs <- c(msgs, "No active filter set")
-  messages <- paste(paste(title,
-                          paste("*", msgs, collapse="\n"),
-                          sep="\n"), "\n", sep="")
-  
-  cat(messages)
-  return(invisible(messages))
-})
+#' @rdname posLogFC
+#' @export
+negLogFC <- function(edgeSigFilter)
+  edgeSigFilter@negLogFC
 
+#' @rdname posLogFC
+#' @export
+logCPM <- function(edgeSigFilter)
+  edgeSigFilter@logCPM
 
+#' @rdname posLogFC
+#' @export
+LR <- function(edgeSigFilter)
+  edgeSigFilter@LR
+pValue <- function(edgeSigFilter)
+  edgeSigFilter@pValue
 
-dgeGML <- function(edgeResult) return(edgeResult@dgeGLM)
+#' @rdname posLogFC
+#' @export
+FDR <- function(edgeSigFilter)
+  edgeSigFilter@FDR
 
+#' Tells whether the threshold was not set
+#' @param edgeSigFilter An EdgeSigFilter object
+#' @returns Logical, whether the thresholds are the default values
+#' @export
+isUnsetPosLogFC <-
+  function(edgeSigFilter)
+    posLogFC(edgeSigFilter) == ESF_POSLOGFC_DEFAULT
 
-dgeTable <- function(edgeResult, contrast=NULL) {
-    tbls <- edgeResult@dgeTables
-    if(is.logical(contrast) || is.numeric(contrast)) {
-        contrast <- contrastNames(edgeResult)[contrast]
-    }
-    if(!is.null(contrast)) {
-        if(length(contrast)==0) {
-            stop("No contrast selected")
-        } else if (!all(contrast %in% contrastNames(edgeResult))) {
-            stop("Following contrasts are not found:",
-                 setdiff(contrast, contrastNames(edgeResult)))
-        }
-    }
-    
-    if(!is.null(contrast) && length(contrast)==1) {
-        res <- tbls[[contrast]]
-        res$Contrast <- contrast
-    } else {
-        if(is.null(contrast)) {
-            res <- do.call(rbind, tbls)
-            res$Contrast <- rep(contrastNames(edgeResult), sapply(tbls, nrow))
-        } else {
-            subtbls <- tbls[contrast]
-            res <- do.call(rbind, subtbls)
-            res$Contrast <- rep(contrast, sapply(subtbls, nrow))
-        }
-    }
-    res <- putColsFirst(res, "Contrast")
-    rownames(res) <- NULL
-    return(res)
-}
+#' @rdname isUnsetPosLogFC
+#' @export
+isUnsetNegLogFC <-
+  function(edgeSigFilter)
+    negLogFC(edgeSigFilter) == ESF_NEGLOGFC_DEFAULT
 
-dgeTableList <- function(edgeResult, contrast=NULL) {
-  tbls <- edgeResult@dgeTables
-  if(is.null(contrast)) {
-    res <- tbls
-  } else {
-    res <- tbls[contrast]
-  }
+#' @rdname isUnsetPosLogFC
+#' @export
+isUnsetLogCPM <-
+  function(edgeSigFilter)
+    logCPM(edgeSigFilter) == ESF_LOGCPM_DEFAULT
+
+#' @rdname isUnsetPosLogFC
+#' @export
+isUnsetLR <-
+  function(edgeSigFilter)
+    LR(edgeSigFilter) == ESF_LR_DEFAULT
+
+#' @rdname isUnsetPosLogFC
+#' @export
+isUnsetPValue <-
+  function(edgeSigFilter)
+    pValue(edgeSigFilter) == ESF_PVALUE_DEFAULT
+
+#' @rdname isUnsetPosLogFC
+#' @export
+isUnsetFDR <-
+  function(edgeSigFilter)
+    FDR(edgeSigFilter) == ESF_FDR_DEFAULT
+
+#' Whether the EdgeSigFilter is the default one
+#' @param object An EdgeSigFilter object
+#' @return Logical, whether it is unset
+#' @export
+isUnsetSigFilter <- function(object) {
+  res <- isUnsetPosLogFC(object) &
+    isUnsetNegLogFC(object) &
+    isUnsetLogCPM(object) &
+    isUnsetLR(object) &
+    isUnsetPValue(object)  &
+    isUnsetFDR(object)
   return(res)
 }
 
-#' Return a list of differential gene expression tables 
-#' 
+#' Return the dgeGML method
+#' @export
+dgeGML <- function(edgeResult)
+  return(edgeResult@dgeGLM)
+
+#' Return the EdgeSigFilter in use
 #' @param edgeResult An \code{EdgeResult} object
-#' 
-#' @return A list of \code{data.frame}s, each containing the DGEtable for one contrast.
-#' 
-#' @seealso \code{dgeTable} which returns one \code{data.frame} for one or more given contrasts.
-dgeTables <- function(edgeResult) {
-  contrs <- contrastNames(edgeResult)
-  res <- lapply(contrs, function(ctr) dgeTable(edgeResult, contrast=ctr))
-  names(res) <- contrs
-  return(res)
-}
+#' @return An \code{EdgeSigFilter} object
+sigFilter <- function(edgeResult)
+  return(edgeResult@sigFilter)
 
+#' Update the EdgeSigFilter
+#' @param edgeResult An \code{EdgeResult} object
+#' @param logFC Numeric
+#' @param posLogFC Numeric
+#' @param negLogFC Numeric
+#' @param logCPM Numeric
+#' @param LR Numeric
+#' @param pValue Numeric
+#' @param FDR Numeric
+#' @return An updated \code{EdgeResult} object with updated \code{EdgeSigFilter}
+#' @export
+updateSigFilter <-
+  function(edgeResult,
+           logFC,
+           posLogFC,
+           negLogFC,
+           logCPM,
+           LR,
+           pValue,
+           FDR) {
+    sf <- sigFilter(edgeResult)
+    sf <- update(
+      sf,
+      logFC = logFC,
+      posLogFC = posLogFC,
+      negLogFC = negLogFC,
+      logCPM = logCPM,
+      LR = LR,
+      pValue = pValue,
+      FDR = FDR
+    )
+    sigFilter(edgeResult) <- sf
+    return(edgeResult)
+  }
 
-sigFilter <- function(edgeResult) return(edgeResult@sigFilter)
-
-sigDge <- function(edgeResult, contrast) {
-  table <- dgeTable(edgeResult, contrast)
-  sf <- sigFilter(edgeResult)
-}
-
+#' Replace the EdgeSigFilter of an EdgeResult
+#' @param edgeResult An EdgeResult object
+#' @param value An EdgeSigFilter object
+#' @return An updated \code{EdgeResult} object
+#' @export
 `sigFilter<-` <- function(edgeResult, value) {
   edgeResult@sigFilter <- value
   return(edgeResult)
 }
-updateSigFilter <- function(edgeResult, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
-  sf <- sigFilter(edgeResult)
-  sf <- update(sf,
-               logFC=logFC, posLogFC=posLogFC, negLogFC=negLogFC, logCPM=logCPM, LR=LR, pValue=pValue, FDR=FDR)
-  sigFilter(edgeResult) <- sf
-  return(edgeResult)
-}
 
-
-setMethod("show", "EdgeResult", function(object) {
-  summary <- sprintf("EdgeResult object: %d genes, %d samples, %d contrasts",
-                     nrow(getCounts(dgeList(object))),
-                     ncol(getCounts(dgeList(object))),
-                     length(object@dgeTables))
-  showBCV <- "Call plotBCV() to visualize biological coefficient of variance"
-  sigFilterInfo <-  sprintf("* Significant DGE filter (call updateSigFilter() to update the settings): \n%s",
-                            show(sigFilter(object)))
-  ER_SHOW_SEP <- paste(rep("-", 40), collapse="")
-  messages <- paste(summary, showBCV,
-                    ER_SHOW_SEP, sigFilterInfo, "", sep="\n")
-  cat(messages)
-  return(invisible(messages))
-})
-
-getGenes <- function(edgeResult) {
-  rownames(edgeR::getCounts(dgeList(edgeResult)))
-}
-
+#' Return gene count
+#' @param edgeResult An EdgeResult object
+#' @return Integer
+#' @importFrom edgeR getCounts
+#' @export
 geneCount <- function(edgeResult) {
   nrow(edgeR::getCounts(dgeList(edgeResult)))
 }
 
+#' Assert that the input data.frame is a valid EdgeTopTable
+#' @param x A data.frame
+#' @return Logical
+#' @export
 assertEdgeToptable <- function(x) {
   stopifnot(is.data.frame(x)
-            & all(c("logFC", "logCPM", "LR", "PValue", "FDR") %in% colnames(x)))
+            &
+              all(c("logFC", "logCPM", "LR", "PValue", "FDR") %in% colnames(x)))
 }
+
+#' Return logical vector indicating which genes are significantly regulated
+#' @param data.frame A \code{data.frame} that must pass \code{assertEdgeToptable}
+#' @param sigFilter An EdgeSigFilter object
+#' @returns A logical vector of the same length as the row number of the input data.frame
+#' @export
 isSig <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
-  with(data.frame,
-       (logFC >= posLogFC(sigFilter) | logFC <= negLogFC(sigFilter)) & logCPM>=logCPM(sigFilter) & LR>=LR(sigFilter) & PValue <= pValue(sigFilter) & FDR <= FDR(sigFilter))
+  with(
+    data.frame,
+    (logFC >= posLogFC(sigFilter) |
+       logFC <= negLogFC(sigFilter)) &
+      logCPM >= logCPM(sigFilter) &
+      LR >= LR(sigFilter) &
+      PValue <= pValue(sigFilter) &
+      FDR <= FDR(sigFilter)
+  )
 }
+
+#' @describeIn isSig Returns which genes are significantly positively regulated
+#' @export
 isSigPos <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
-  with(data.frame,
-       logFC >= posLogFC(sigFilter) & logCPM>=logCPM(sigFilter) & LR>=LR(sigFilter) & PValue <= pValue(sigFilter) & FDR <= FDR(sigFilter))
-
+  with(
+    data.frame,
+    logFC >= posLogFC(sigFilter) &
+      logCPM >= logCPM(sigFilter) &
+      LR >= LR(sigFilter) &
+      PValue <= pValue(sigFilter) &
+      FDR <= FDR(sigFilter)
+  )
+  
 }
+
+#' @describeIn isSig Returns which genes are significantly negatively regulated
+#' @export
+isSigPos <- function(data.frame, sigFilter) {
+  assertEdgeToptable(data.frame)
+  with(
+    data.frame,
+    logFC >= posLogFC(sigFilter) &
+      logCPM >= logCPM(sigFilter) &
+      LR >= LR(sigFilter) &
+      PValue <= pValue(sigFilter) &
+      FDR <= FDR(sigFilter)
+  )
+}
+
 isSigNeg <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
-  with(data.frame,
-       logFC <= negLogFC(sigFilter) & logCPM>=logCPM(sigFilter) & LR>=LR(sigFilter) & PValue <= pValue(sigFilter) & FDR <= FDR(sigFilter))
+  with(
+    data.frame,
+    logFC <= negLogFC(sigFilter) &
+      logCPM >= logCPM(sigFilter) &
+      LR >= LR(sigFilter) &
+      PValue <= pValue(sigFilter) &
+      FDR <= FDR(sigFilter)
+  )
 }
 
-## TODO: fix: add InputFeature
-sigGene <- function(edgeResult, contrast, value="GeneID") {
+#' Return significantly regulated genes
+#'
+#' @param edgeResult An EdgeResult object
+#' @param contrast Character, contrast(s) of interest
+#' @param value Character, type of identifier returned
+#' @return A vector of identifiers
+#' @note TODO fix: add InputFeature
+#'
+#' @export
+sigGene <- function(edgeResult, contrast, value = "GeneID") {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSig(tbl, sf)
   tbl[issig, value]
 }
-sigPosGene <- function(edgeResult, contrast, value="GeneID") {
+
+#' @describeIn sigGene Only return positively significantly regulated genes
+#' @export
+sigPosGene <- function(edgeResult, contrast, value = "GeneID") {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSigPos(tbl, sf)
   tbl[issig, value]
 }
-sigNegGene <- function(edgeResult, contrast, value="GeneID") {
+
+#' @describeIn sigGene Only return negatively significantly regulated genes
+#' @export
+sigNegGene <- function(edgeResult, contrast, value = "GeneID") {
   tbl <- dgeTable(edgeResult, contrast)
   sf <- sigFilter(edgeResult)
   issig <- isSigNeg(tbl, sf)
   tbl[issig, value]
 }
-sigGenes <- function(edgeResult, value="GeneID") {
+
+#' Return significantly regulated genes of all contrastsin lists
+#'
+#' @param edgeResult An EdgeResult object
+#' @param value Character, type of identifier returned
+#' @return A list of vectors of identifiers
+#' @note TODO fix: add InputFeature
+#'
+#' @export
+sigGenes <- function(edgeResult, value = "GeneID") {
   cs <- contrastNames(edgeResult)
-  res <- lapply(cs, function(x) sigGene(edgeResult, x, value=value))
+  res <- lapply(cs, function(x)
+    sigGene(edgeResult, x, value = value))
   names(res) <- cs
   return(res)
 }
-sigPosGenes <- function(edgeResult, value="GeneID") {
+
+#' @describeIn sigGenes Only return negatively significantly regulated genes
+#' @export
+sigPosGenes <- function(edgeResult, value = "GeneID") {
   cs <- contrastNames(edgeResult)
-  res <- lapply(cs, function(x) sigPosGene(edgeResult, x, value=value))
+  res <-
+    lapply(cs, function(x)
+      sigPosGene(edgeResult, x, value = value))
   names(res) <- cs
   return(res)
 }
-sigNegGenes <- function(edgeResult, value="GeneID") {
+
+#' @describeIn sigGenes Only return negatively significantly regulated genes
+#' @export
+sigNegGenes <- function(edgeResult, value = "GeneID") {
   cs <- contrastNames(edgeResult)
-  res <- lapply(cs, function(x) sigNegGene(edgeResult, x, value=value))
+  res <-
+    lapply(cs, function(x)
+      sigNegGene(edgeResult, x, value = value))
   names(res) <- cs
   return(res)
 }
+
+
+#' Return counts of significantly regulated genes
+#' @param edgeResult An EdgeResult object
+#' @return A data.frame containing counts of positively and negatively regulated
+#'    genes, the sum, as well as total number of features
+#' @export
 sigGeneCounts <- function(edgeResult) {
   allCount <- geneCount(edgeResult)
   posCounts <- sapply(sigPosGenes(edgeResult), ulen)
   negCounts <- sapply(sigNegGenes(edgeResult), ulen)
-  total <- posCounts+negCounts
-  res <- data.frame(posCount=posCounts,
-                    negCount=negCounts,
-                    posnegCount=posCounts+negCounts,
-                    all=allCount)
+  total <- posCounts + negCounts
+  res <- data.frame(
+    posCount = posCounts,
+    negCount = negCounts,
+    posnegCount = posCounts + negCounts,
+    all = allCount
+  )
   return(res)
 }
 
-sigGeneBarchart <- function(edgeResult,
-                            scales=list(x=list(rot=45),
-                              y=list(alternating=1, tck=c(1,0))),
-                            stack=FALSE,
-                            ylab="Significant DEGs",
-                            col=c("positive"="orange",
-                              "negative"="lightblue"),
-                            logy=FALSE,
-                            auto.key=list(columns=2),
-                            ...) {
-  counts <- sigGeneCounts(edgeResult)
-  contrasts <- ribiosUtils::ofactor(contrastNames(edgeResult))
-  positive <- counts$posCount
-  negative <- counts$negCount
-  scales$y$log <- ifelse(logy, 10, FALSE)
-  lattice::barchart(positive + negative ~ contrasts,
-                    stack=stack,
-                    ylab=ylab,
-                    scales=scales,
-                    par.settings=list(superpose.polygon=list(col=col)),
-                    auto.key=auto.key,
-                    origin=0,
-                    ...)
-}
 
-isUnsetSigFilter <- function(object) {
-  isUnsetPosLogFC(object) & isUnsetNegLogFC(object) & isUnsetLogCPM(object) & isUnsetLR(object) & isUnsetPValue(object)  & isUnsetFDR(object)
-}
-
-
-## annotation
-annotateMPS <- function(mat) {
-  ampl <- attr(mat, "desc")
-  stopifnot(!is.null(ampl) & all(grepl("^AMPL", ampl)))
-  reporters <- mpsReporter()
-  genes <- matchColumn(ampl, reporters, "Amplicon")
-  rownames(genes) <- ampl
-  return(genes)
-}
-readMPS <- function(file) {
-  tbl <- read_exprs_matrix(file)
-  genes <- annotateMPS(tbl)
-  tbl <- data.matrix(tbl)
-  return(new("FeatAnnoExprs",
-             exprs=tbl,
-             genes=genes))
-}
-
-
-#' Perform differential gene expression analysis with edgeR
-#' 
-#' 
-#' @param edgeObj An object of \code{EdgeObject}
-#' 
-#' The function performs end-to-end differential gene expression (DGE) analysis
-#' with common best practice using edgeR
-#' @return An \code{EdgeResult} object
-#' @examples
-#' 
-#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
-#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
-#' exDesign <- model.matrix(~0+exGroups)
-#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
-#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
-#' exFdata <- data.frame(Identifier=sprintf("Gene%d", 1:nrow(exMat)))
-#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
-#'                      Group=exGroups)
-#' exObj <- EdgeObject(exMat, exDescon, 
-#'                      fData=exFdata, pData=exPdata)
-#' exDgeRes <- dgeWithEdgeR(exObj)
-#' dgeTable(exDgeRes)
-#' 
-#' @export dgeWithEdgeR
-dgeWithEdgeR <- function(edgeObj) {
-  edgeObj.filter <- ribiosNGS::filterByCPM(edgeObj)
-  edgeObj.norm <- ribiosNGS::normalize(edgeObj.filter)
-  edgeObj.disp <- estimateGLMDisp(edgeObj.norm)
-  ## in case of single replicate
-  ## edgeR recommendation for common dispersion: 0.4 for human study, 0.1 for well-controlled, 0.01 for tech replicates
-  if(!hasCommonDisp(edgeObj.disp)) {
-    warning("No common dispersion estimate available. Possible reason may be no replicates")
-    warning("Common dispersion is set as 0.4. Note that the number of DEGs is sensitive to this setting")
-    edgeObj.disp <- setCommonDispIfMissing(edgeObj.disp, 0.4)
-  }
-  edgeObj.fit <- fitGLM(edgeObj.disp)
-  dgeTest <- testGLM(edgeObj.disp, edgeObj.fit)
-  return(dgeTest)
-}
-
-
-#' Perform gene-set enrichment (GSE) analysis
-#' 
-#' 
-#' @param edgeResult An object of the class \code{EdgeObject}
-#' @param geneSets An object of the class \code{GeneSets}
-#' 
-#' The function performs gene-set enrichment analysis. By default,the CAMERA
-#' method is applied. In case this is not successful, for instance because of
-#' lack of biological replicates, the GAGE method (Generally Applicable
-#' Gene-set Enrichment for pathway analysis) is applied.
-#' @return An \code{EdgeGSE} object containing all information required to
-#' reproduce the gene-set enrichment analysis results, as well as the
-#' enrichment table. Apply \code{fullEnrichTable} to the object to extract a
-#' \code{data.frame} containing results of the gene-set enrichment analysis.
-#' @seealso \code{gseWithLogFCgage} and \code{gseWithCamera} are wrapped by
-#' this function to perform analysis with GAGE and CAMERA, respectively.
-#' \code{logFCgage} and \code{camera.EdgeResult} implements the logic, and
-#' returns an object of the \code{EdgeGSE} class, which contains all relevant
-#' information required to reproduce the analysis results.
-#'
-#' @examples
-#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
-#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
-#' exDesign <- model.matrix(~0+exGroups)
-#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
-#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
-#' exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
-#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
-#'                      Group=exGroups)
-#' exObj <- EdgeObject(exMat, exDescon, 
-#'                      fData=exFdata, pData=exPdata)
-#' exDgeRes <- dgeWithEdgeR(exObj)
-#' 
-#' exGeneSets <- BioQC::GmtList(list(
-#'     list(name="Set1", desc="set 1", genes=c("Gene1", "Gene2", "Gene3"), namespace="default"),
-#'     list(name="Set2", desc="set 2", genes=c("Gene18", "Gene6", "Gene4"), namespace="default")
-#' ))
-#' exGse <- doGse(exDgeRes, exGeneSets)
-#' fullEnrichTable(exGse)
-#' 
-#' exGseWithGage <- gseWithLogFCgage(exDgeRes, exGeneSets)
-#' fullEnrichTable(exGseWithGage)
-#' 
-#' exGseWithCamera <- gseWithCamera(exDgeRes, exGeneSets)
-#' fullEnrichTable(exGseWithCamera)
-#' @export doGse
-doGse <- function(edgeResult, geneSets) {
-  res <- try(gseWithCamera(edgeResult, geneSets))
-  if(class(res)=="try-error") {
-    res <- gseWithLogFCgage(edgeResult, geneSets)
-  }
-  return(res)
-}
-gseWithLogFCgage <- function(edgeResult, geneSets) {
-  gseRes <- logFCgage(edgeResult, geneSets)
-  return(gseRes)
-}
-gseWithCamera <- function(edgeResult, geneSets) {
-  gseRes <- camera.EdgeResult(edgeResult, geneSets)
-  return(gseRes)
-}
 
 ## report
-writeDgeTables <- function(edgeResult, outdir=getwd()) {
+writeDgeTables <- function(edgeResult, outdir = getwd()) {
   contrasts <- contrastNames(edgeResult)
   outfiles <- file.path(outdir,
                         sprintf("topTable-%s.txt", contrasts))
-  tables <- lapply(contrasts, function(x) dgeTable(edgeResult, x))
-  write.tableList(tables, outfiles, row.names=TRUE)
+  tables <- lapply(contrasts, function(x)
+    dgeTable(edgeResult, x))
+  write.tableList(tables, outfiles, row.names = TRUE)
 }
 
 ## write truncated DEG lists
-writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
-    contrasts <- contrastNames(edgeResult)
-    lapply(contrasts, function(x) {
-               tbl <- dgeTable(edgeResult, x)
-               degs <- truncateDgeTable(tbl)
-               writeMatrix(degs$pos,
-                           file.path(outdir,
-                                     sprintf("TruncatedDEGtable-positive-%s.txt", 
-                                             x)),
-                           row.names=FALSE)
-               ribiosIO::writeMatrix(degs$neg,
-                           file.path(outdir,
-                                     sprintf("TruncatedDEGtable-negative-%s.txt", 
-                                             x)))
-           })
-    return(invisible(NULL))
+writeTruncatedDgeTables <- function(edgeResult, outdir = getwd()) {
+  contrasts <- contrastNames(edgeResult)
+  lapply(contrasts, function(x) {
+    tbl <- dgeTable(edgeResult, x)
+    degs <- truncateDgeTable(tbl)
+    writeMatrix(degs$pos,
+                file.path(outdir,
+                          sprintf(
+                            "TruncatedDEGtable-positive-%s.txt",
+                            x
+                          )),
+                row.names = FALSE)
+    ribiosIO::writeMatrix(degs$neg,
+                          file.path(outdir,
+                                    sprintf(
+                                      "TruncatedDEGtable-negative-%s.txt",
+                                      x
+                                    )))
+  })
+  return(invisible(NULL))
 }
-
-groupCol <- function(edgeObj, panel="Set1") {
-  fcbrewer(dispGroups(edgeObj))
-}
-
-
-#' Export dgeTest results
-#' 
-#' @param dgeTest A \code{EdgeResult} object
-#' @param outRootDir Character string, output directory
-#' @param action Character string, what happens if the output directory exists
-#' 
-#' @export
-exportEdgeResult <- function(edgeResult, outRootDir,
-                                 action=c("ask", "overwrite",
-                                          "append", "no")) {
-  ow <- ribiosUtils::overwriteDir(outRootDir, action=action)
-  if(isFALSE(ow)) {
-    return(invisible(NULL))
-  }
-  
-  ## input data
-  inputDir <- file.path(outRootDir, "input-data")
-  ribiosUtils::createDir(inputDir)
-  countsUnfiltered <- dgeList(edgeResult)$counts.unfiltered
-  fDataUnfiltered <- dgeList(edgeResult)$genes.unfiltered
-  
-  writeGct(countsUnfiltered,
-           file.path(inputDir, "counts.gct"))
-  ribiosIO::writeMatrix(designMatrix(edgeResult),
-              file.path(inputDir, "designMatrix.txt"))
-  ribiosIO::writeMatrix(contrastMatrix(edgeResult),
-              file.path(inputDir, "contrastMatrix.txt"))
-  ribiosIO::writeMatrix(fDataUnfiltered,
-              file.path(inputDir, "featureData.txt"))
-  ribiosIO::writeMatrix(pData(edgeResult),
-              file.path(inputDir, "phenoData.txt"))
-  
-  ## filtering
-  filterDir <- file.path(outRootDir, "filtered-data")
-  ribiosUtils::createDir(filterDir)
-  writeGct(counts(edgeResult),
-           file.path(filterDir, "filteredCounts.gct"))
-  ribiosIO::writeMatrix(fData(edgeResult),
-              file.path(filterDir, "filteredFeatureData.txt"))
-  
-  ## dge tables
-  dgeDir <- file.path(outRootDir, "dgeTables")
-  ribiosUtils::createDir(dgeDir)
-  writeDgeTables(edgeResult, outdir=dgeDir)
-  
-  ## truncated dgeTables
-  truncDir <- file.path(outRootDir, "truncated-dgeTables")
-  ribiosUtils::createDir(truncDir)
-  writeTruncatedDgeTables(edgeResult, outdir=truncDir)
-  
-  ## RData
-  rdataDir <- file.path(outRootDir, "RData")
-  ribiosUtils::createDir(rdataDir)
-  save(edgeResult, 
-       file=file.path(rdataDir, "ngsDge.RData"))
-  
-  ## dgeCounts
-  statdir <- file.path(outRootDir, "statistics")
-  ribiosUtils::createDir(statdir)
-  ribiosIO::writeMatrix(sigGeneCounts(edgeResult), 
-              file=file.path(statdir, "ngs-diffGeneCounts.txt"),
-              row.names=TRUE)
-  lfc <- logFCmatrix(edgeResult)
-  lfcPearson <- cor(lfc, use="complete.obs", method="pearson")
-  lfcSpearman <- cor(lfc, use="complete.obs", method="spearman")
-  ribiosIO::writeMatrix(lfc, 
-              file=file.path(statdir, "logFCmatrix.txt"))
-  ribiosIO::writeMatrix(lfcPearson,
-              file=file.path(statdir, "logFCmatrix-PearsonCorrelation.txt"))
-  ribiosIO::writeMatrix(lfcSpearman,
-              file=file.path(statdir, "logFCmatrix-SpearmanCorrelation.txt"))
-}
-

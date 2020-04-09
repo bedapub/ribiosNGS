@@ -33,10 +33,12 @@ NULL
 #' @export `featureNames<-`
 NULL
 
-#' DesignContrast is imported from DesignContrast and exported for convenience
-#' @name DesignContrast
-NULL
+#' @export
+edgeR::DGEList
 
-#' cpm is imported from edgeR and exported for convenience
-#' @name cpm
-NULL
+#' @export
+ribiosExpression::DesignContrast
+
+#' @export
+edgeR::cpm
+

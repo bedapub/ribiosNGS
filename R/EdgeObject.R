@@ -31,6 +31,8 @@ NULL
 setGeneric("EdgeObject", function(object, designContrast, ...) standardGeneric("EdgeObject"))
 
 #' @describeIn EdgeObject The method for matrix as input
+#' @param object A matrix containing counts of features
+#' @param designContrast A \code{DesignContrast} object
 #' @param fData A \code{data.frame} containing annotation information for genes
 #' @param pData A \code{data.frame} containing annotation information for samples
 #' @param remove.zeros Logical, whether to remove rows that have 0 total count
@@ -54,6 +56,8 @@ setMethod("EdgeObject",
           })
 
 #' @describeIn EdgeObject The method for FeatAnnoExprs as input
+#' @param object A \code{FeatAnnoExprs} object
+#' @param designContrast A \code{DesignContrast} object
 #' @param pData A \code{data.frame} containing annotation information for samples
 #' @param remove.zeros Logical, whether to remove rows that have 0 total count
 #' @export

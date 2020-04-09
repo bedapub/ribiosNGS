@@ -18,6 +18,10 @@
 \S4method{EdgeObject}{FeatAnnoExprs,DesignContrast}(object, designContrast, pData = NULL, remove.zeros = FALSE)
 }
 \arguments{
+\item{object}{A \code{FeatAnnoExprs} object}
+
+\item{designContrast}{A \code{DesignContrast} object}
+
 \item{fData}{A \code{data.frame} containing annotation information for genes}
 
 \item{pData}{A \code{data.frame} containing annotation information for samples}

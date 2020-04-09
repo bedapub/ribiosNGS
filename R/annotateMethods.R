@@ -52,6 +52,7 @@ subsetFeatures <- function(x, n=100) {
 }
            
 #' @importMethodsFrom ribiosExpression annotate
+#' @importFrom ribiosAnnotation  annotateEnsembl annotateGeneIDs annotateGeneSymbols annotateRefSeqs
 #' @export
 setMethod("annotate", c("EdgeObject","character", "logical"),
           function(object, target, check.target) {
@@ -75,11 +76,11 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
             } else if (target=="GeneSymbol") {
                 ## this is very slow because of the database table look up, but is working...
               organism <- ifelse(likeHumanGeneSymbol(feats), "human", "any")
-              anno <- annotateGeneSymbols(feats,organism=organism, orthologue = TRUE)
+              anno <- ribiosAnnotation::annotateGeneSymbols(feats,organism=organism, orthologue = TRUE)
             } else if (target=="RefSeq") {
-              anno <- annotateRefSeqs(feats,orthologue = TRUE)
+              anno <- ribiosAnnotation::annotateRefSeqs(feats,orthologue = TRUE)
             } else if (target=="EnsEMBL") {
-              anno <- annotateEnsembl(feats,orthologue = TRUE)
+              anno <- ribiosAnnotation::annotateEnsembl(feats,orthologue = TRUE)
             }
             if(check.target) {
               positive.thr <- 0.5

@@ -1,4 +1,4 @@
-#' @include ribiosNGS.R AllClasses.R
+#' @include ribiosNGS.R AllClasses.R 
 
 #' Extract dgeList from the object
 #' @export
@@ -18,18 +18,18 @@ setGeneric("setRnks", function(object, names) standardGeneric("setRnks"))
 
 #' Common, tagwise and trended biological coefficients of variance (BCV)
 #' @param x An object
-#' @aliases tagwiseBCV trendedBCV BCV
-#' @export
+#' @exportMethod commonBCV
 setGeneric("commonBCV", function(x) standardGeneric("commonBCV"))
 
-#' @describeIn commonBCV common BCV
+#' @describeIn commonBCV tagwise BCV
 #' @export
 setGeneric("tagwiseBCV", function(x) standardGeneric("tagwiseBCV"))
-#' @describeIn trendedBCV trended BCV
+
+#' @describeIn commonBCV trended BCV
 #' @export
 setGeneric("trendedBCV", function(x) standardGeneric("trendedBCV"))
 
-#' @describeIn commonBCV A \code{data.frame} of BCV values
+#' Return a data.frame of BCV values
 #' @export
 setGeneric("BCV", function(x) standardGeneric("BCV"))
 

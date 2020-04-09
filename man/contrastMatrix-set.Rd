@@ -2,6 +2,7 @@
 % Please edit documentation in R/AllGenerics.R, R/AllMethods.R
 \name{contrastMatrix-set}
 \alias{contrastMatrix-set}
+\alias{contrastMatrix<-}
 \alias{contrastMatrix<-,EdgeObject,matrix-method}
 \title{Assign contrast matrix}
 \usage{

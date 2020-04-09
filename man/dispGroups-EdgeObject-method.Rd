@@ -7,7 +7,7 @@
 \S4method{dispGroups}{EdgeObject}(object)
 }
 \arguments{
-\item{An}{\code{EdgeObject} object}
+\item{object}{An \code{EdgeObject} object}
 }
 \description{
 Get display labels of sample groups

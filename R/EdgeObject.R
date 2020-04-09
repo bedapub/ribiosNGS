@@ -27,10 +27,10 @@ NULL
 #' ## note that pData are appended after count information
 #' pData(exObj2)
 #' pData(exObj3)
-#' @export
+#' @exportMethod EdgeObject
 setGeneric("EdgeObject", function(object, designContrast, ...) standardGeneric("EdgeObject"))
 
-#' @describeIn EdgeObject The method for matrix as input
+#' @describeIn EdgeObject-method The method for matrix as input
 #' @param fData A \code{data.frame} containing annotation information for genes
 #' @param pData A \code{data.frame} containing annotation information for samples
 #' @param remove.zeros Logical, whether to remove rows that have 0 total count
@@ -53,7 +53,7 @@ setMethod("EdgeObject",
                 designContrast=designContrast)
           })
 
-#' @describeIn EdgeObject The method for FeatAnnoExprs as input
+#' @describeIn EdgeObject-method The method for FeatAnnoExprs as input
 #' @param pData A \code{data.frame} containing annotation information for samples
 #' @param remove.zeros Logical, whether to remove rows that have 0 total count
 #' @export

@@ -28,3 +28,4 @@ NULL
 #' @export featureData phenoData sampleNames
 #' @export `featureNames<-`
 NULL
+

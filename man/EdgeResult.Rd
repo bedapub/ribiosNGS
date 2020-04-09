@@ -7,16 +7,15 @@
 EdgeResult(edgeObj, dgeGLM, dgeTables)
 }
 \arguments{
-\item{edgeResult}{An \code{EdgeResult} object}
+\item{edgeObj}{An EdgeObject}
+
+\item{dgeGLM}{A DGEGLM object}
+
+\item{dgeTables}{A list of DGEtables.}
 }
 \value{
-A list of \code{data.frame}s, each containing the DGEtable for one
-contrast.
+An \code{EdgeResult object}
 }
 \description{
 Return a list of differential gene expression tables
-}
-\seealso{
-\code{dgeTable} which returns one \code{data.frame} for one or more
-given contrasts.
 }

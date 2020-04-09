@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{An EdgeObject object}
+
+\item{...}{Other parameters passed to \code{\link[limma]{plotMDS}}.}
 }
 \description{
 plotMDS for EdgeObject

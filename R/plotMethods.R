@@ -288,6 +288,7 @@ pairs.EdgeResult <- function(x, lower.panel=panel.lmSmooth, upper.panel=panel.co
 
 #' plotMDS for EdgeObject
 #' @param x An EdgeObject object
+#' @param ... Other parameters passed to \code{\link[limma]{plotMDS}}.
 #' @importFrom limma plotMDS
 #' @export
 plotMDS.EdgeObject <- function(x,  ...) {

@@ -2,6 +2,7 @@
 % Please edit documentation in R/AllGenerics.R, R/AllMethods.R
 \name{designMatrix-set}
 \alias{designMatrix-set}
+\alias{designMatrix<-}
 \alias{designMatrix<-,EdgeObject,matrix-method}
 \title{Assign the design matrix}
 \usage{

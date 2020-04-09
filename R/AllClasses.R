@@ -14,6 +14,7 @@ ESF_FDR_DEFAULT <- 1
 ##-----------------------------------##
 ## EdgeObject
 ##-----------------------------------##
+
 #' EdgeObject argumenting DGEList by including designContrast information
 #' @slot dgeList A \code{DGEList} object
 #' @slot designContrast A \code{designContrast} object
@@ -167,12 +168,10 @@ setClass("EdgeResult",
 
 #' Return a list of differential gene expression tables
 #' 
-#' @param edgeResult An \code{EdgeResult} object
-#' @return A list of \code{data.frame}s, each containing the DGEtable for one
-#' contrast.
-#' @seealso \code{dgeTable} which returns one \code{data.frame} for one or more
-#' given contrasts.
-#' @export dgeTables
+#' @param edgeObj An EdgeObject
+#' @param dgeGLM A DGEGLM object
+#' @param dgeTables A list of DGEtables.
+#' @return An \code{EdgeResult object}
 #' @export
 EdgeResult <- function(edgeObj,
                        dgeGLM,

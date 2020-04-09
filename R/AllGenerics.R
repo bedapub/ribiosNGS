@@ -104,12 +104,14 @@ setGeneric("isAnnotated", function(object) standardGeneric("isAnnotated"))
 #' @param object An object
 #' @param value Matrix
 #' @name designMatrix-set
+#' @aliases designMatrix<-
 #' @export
 setGeneric("designMatrix<-", function(object, value) standardGeneric("designMatrix<-"))
 
 #' Assign contrast matrix
 #' @param object An object
 #' @param value Matrix
+#' @aliases contrastMatrix<-
 #' @name contrastMatrix-set
 #' @export
 setGeneric("contrastMatrix<-", function(object, value) standardGeneric("contrastMatrix<-"))

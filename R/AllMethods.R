@@ -305,7 +305,7 @@ setMethod("groups", "EdgeObject", function(object) {
 
 #' Get display labels of sample groups
 #' @importMethodsFrom ribiosExpression dispGroups
-#' @param An \code{EdgeObject} object
+#' @param object An \code{EdgeObject} object
 #' @export
 setMethod("dispGroups", "EdgeObject", function(object) {
   return(dispGroups(object@designContrast))

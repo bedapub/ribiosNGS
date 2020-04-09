@@ -156,7 +156,7 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE, nbin=NULL) {
 #' 
 #' @importFrom vsn vsnMatrix predict
 #' @importFrom stats prcomp
-#' @export prcomp.DGEList
+#' @export 
 prcomp.DGEList <- function(x, ntop=NULL, 
                            scale=FALSE,
                            verbose=FALSE,

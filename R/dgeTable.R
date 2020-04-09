@@ -3,6 +3,7 @@
 #' @param contrast Character, contrast name of interest. If \code{NULL}, 
 #'   all tables are returned in a rbind-form.
 #' @return A \code{data.frame}
+#' @importFrom ribiosUtils putColsFirst
 #' @export
 dgeTable <- function(edgeResult, contrast=NULL) {
     tbls <- edgeResult@dgeTables
@@ -31,7 +32,7 @@ dgeTable <- function(edgeResult, contrast=NULL) {
             res$Contrast <- rep(contrast, sapply(subtbls, nrow))
         }
     }
-    res <- putColsFirst(res, "Contrast")
+    res <- ribiosUtils::putColsFirst(res, "Contrast")
     rownames(res) <- NULL
     return(res)
 }

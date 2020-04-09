@@ -42,7 +42,7 @@ staticGeneLevelPlots <- function(edgeResult) {
   
   ## Normalization
   ### boxplot of read counts (before and after normalization)
-  normBoxplot(obj, edgeResult)
+  boxplot(edgeResult, type="modLogCPM")
   
   ### boxplot of normalization factors
   boxplot(edgeResult, type="normFactors")

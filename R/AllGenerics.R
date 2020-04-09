@@ -16,17 +16,16 @@ setGeneric("cpmFilter", function(object) standardGeneric("cpmFilter"))
 #' @export
 setGeneric("setRnks", function(object, names) standardGeneric("setRnks"))
 
-#' Common, tagwise and trended biological coefficients of variance (BCV)
-#' @param x An object
+#' Common biological coefficients of variance (BCV)
 #' @exportMethod commonBCV
 setGeneric("commonBCV", function(x) standardGeneric("commonBCV"))
 
-#' @describeIn commonBCV tagwise BCV
-#' @export
+#' Tagwise biological coefficients of variance
+#' @exportMethod tagwiseBCV
 setGeneric("tagwiseBCV", function(x) standardGeneric("tagwiseBCV"))
 
-#' @describeIn commonBCV trended BCV
-#' @export
+#' Trended biological coefficients of variance
+#' @exportMethod trendedBCV
 setGeneric("trendedBCV", function(x) standardGeneric("trendedBCV"))
 
 #' Return a data.frame of BCV values
@@ -42,11 +41,20 @@ setGeneric("plotBCV", function(x, ...) standardGeneric("plotBCV"))
 #' Common dispersion
 #' @param object An object
 #' @param value Numeric, value to be specified as common dispersion
-#' @aliases commonDisp `commonDisp<-` hasCommonDisp setCOmmonDispIfMissing
 #' @export
 setGeneric("commonDisp", function(object) standardGeneric("commonDisp"))
+
+#' Set common dispersion
+#' @name commonDisp-set
+#' @export
 setGeneric("commonDisp<-", function(object,value) standardGeneric("commonDisp<-"))
+
+#' Tells whether common dispersion has been set
+#' @export
 setGeneric("hasCommonDisp", function(object) standardGeneric("hasCommonDisp"))
+
+#' Set common dispersion if missing
+#' @export
 setGeneric("setCommonDispIfMissing", function(object, value) standardGeneric("setCommonDispIfMissing"))
 
 #' Modulated logCPM
@@ -79,11 +87,13 @@ setGeneric("sniffFeatures", function(object) standardGeneric("sniffFeatures"))
 #' @export
 setGeneric("isAnnotated", function(object) standardGeneric("isAnnotated"))
 
-#' Assign design matrix
+#' Assign the design matrix
+#' @name designMatrix-set
 #' @export
 setGeneric("designMatrix<-", function(object, value) standardGeneric("designMatrix<-"))
 
 #' Assign contrast matrix
+#' @name contrastMatrix-set
 #' @export
 setGeneric("contrastMatrix<-", function(object, value) standardGeneric("contrastMatrix<-"))
 

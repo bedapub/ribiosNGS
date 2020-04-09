@@ -6,7 +6,6 @@
 #' @keywords package
 NULL
 
-
 #' @importFrom methods setClass setGeneric setMethod setRefClass setReplaceMethod
 #' @importFrom ribiosExpression designMatrix contrastMatrix
 #' @importFrom Biobase `annotation<-` assayData `fData<-` fData `pData<-`
@@ -14,7 +13,6 @@ NULL
 #'             featureData phenoData sampleNames
 #'             `featureNames<-` storageMode
 #' @importMethodsFrom ribiosExpression designMatrix contrastMatrix
-#' @importFrom BiocGenerics counts annotation nrow ncol normalize
 #' @importMethodsFrom BiocGenerics counts annotation nrow ncol normalize
 #' @export `annotation<-` assayData `fData<-` fData `pData<-`
 #' @export featureNames pData exprs `exprs<-` annotation

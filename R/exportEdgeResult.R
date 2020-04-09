@@ -25,6 +25,7 @@ writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
 }
 
 #' @include AllClasses.R AllGenerics.R AllMethods.R
+NULL
 
 #' Export dgeTest results
 #' 

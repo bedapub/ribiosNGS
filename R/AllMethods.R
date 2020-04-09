@@ -133,10 +133,11 @@ setMethod("testGLM", c("EdgeObject", "DGEGLM"),
                               dgeTables=toptables))
           })
 
-#' @describeIn dgeList Method for EdgeObject
+#' Extract the DGEList object
 #' @export
 setMethod("dgeList", "EdgeObject", function(object) return(object@dgeList))
-#' @describeIn dgeList Method for EdgeResult
+
+#' Extract the DGEList object
 #' @export
 setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 
@@ -157,35 +158,37 @@ setMethod("contrastMatrix", "EdgeResult", function(object) ribiosExpression::con
 #' @importMethodsFrom ribiosExpression contrastNames
 #' @export
 setMethod("contrastNames", "EdgeObject", function(object) colnames(contrastMatrix(object)))
+
 #' @export
 setMethod("contrastNames", "EdgeResult", function(object) colnames(contrastMatrix(object)))
 
-#' @describeIn designMatrix<- Method for EdgeObject
+#' @describeIn designMatrix-set Method for EdgeObject
 #' @export
 setMethod("designMatrix<-", c("EdgeObject", "matrix"), function(object, value) {
   object@designContrast@design <- value
   return(object)
 })
-#' @describeIn contrastMatrix<- Method for EdgeObject
+
+#' @describeIn contrastMatrix-set Method for EdgeObject
 #' @export
 setMethod("contrastMatrix<-", c("EdgeObject", "matrix"), function(object, value) {
   object@designContrast@contrasts <- value
   return(object)
 })
 
-#' @describeIn nContrast Method for EdgeResult
+#' Return the number of contrasts
 #' @importMethodsFrom ribiosExpression nContrast
 #' @export
 setMethod("nContrast", "EdgeResult", function(object) {nContrast(object@designContrast)})
 
-#' @describeIn contrastSampleIndices Method for EdgeResult
+#' Extract contrast sample indices
 #' @importMethodsFrom ribiosExpression contrastSampleIndices
 #' @export
 setMethod("contrastSampleIndices", c("EdgeResult", "character"), function(object, contrast) {
               contrastSampleIndices(object@designContrast, contrast)
           })
 
-#' @describeIn contrastSampleIndices Method for EdgeResult
+#' Extract contrast sample indices
 #' @export
 setMethod("contrastSampleIndices", c("EdgeResult", "integer"), function(object, contrast) {
               contrastSampleIndices(object@designContrast, contrast)
@@ -230,13 +233,13 @@ setMethod("commonBCV", "DGEList", function(x) {
   naOrSqrt(x$common.dispersion)
 })
 
-#' @describeIn commonBCV method for DGEList
+#' @describeIn tagwiseBCV method for DGEList
 #' @export
 setMethod("tagwiseBCV", "DGEList", function(x) {
   naOrSqrt(x$tagwise.dispersion)
 })
 
-#' @describeIn commonBCV method for DGEList
+#' @describeIn trendedBCV method for DGEList
 #' @export
 setMethod("trendedBCV", "DGEList", function(x) {
   naOrSqrt(x$trended.dispersion)
@@ -248,13 +251,13 @@ setMethod("commonBCV", "EdgeResult", function(x)  {
   commonBCV(dgeList(x))
 })
 
-#' @describeIn commonBCV method for EdgeResult
+#' @describeIn tagwiseBCV method for EdgeResult
 #' @export
 setMethod("tagwiseBCV", "EdgeResult", function(x)  {
   tagwiseBCV(dgeList(x))
 })
 
-#' @describeIn commonBCV method for EdgeResult
+#' @describeIn trendedBCV method for EdgeResult
 #' @export
 setMethod("trendedBCV", "EdgeResult", function(x)  {
   trendedBCV(dgeList(x))
@@ -286,14 +289,14 @@ aveLogCPM.EdgeResult <- function(y,...) {
     return(aveLogCPM(dgeList(y)))
 }
 
-#' @describeIn groups Method for EdgeObject
+#' Get sample groups from an EdgeObject object
 #' @importMethodsFrom ribiosExpression groups
 #' @export
 setMethod("groups", "EdgeObject", function(object) {
   return(groups(object@designContrast))
 })
 
-#' @describeIn dispGroups Method for EdgeObject
+#' Get display labels of sample groups
 #' @importMethodsFrom ribiosExpression dispGroups
 #' @export
 setMethod("dispGroups", "EdgeObject", function(object) {
@@ -380,15 +383,14 @@ setMethod("hasCommonDisp", "EdgeObject", function(object) {
   return(hasCommonDisp(dgeList(object)))
 })
 
-
-#' @describeIn commonDisp<- Method for DGEList
+#' @describeIn commonDisp-set Method for DGEList
 #' @export
 setReplaceMethod("commonDisp", c("DGEList", "numeric"), function(object, value) {
   object$common.dispersion <- value
   return(object)
 })
 
-#' @describeIn commonDisp<- Method for EdgeObject
+#' @describeIn commonDisp-set Method for EdgeObject
 #' @export
 setReplaceMethod("commonDisp", c("EdgeObject", "numeric"), function(object, value) {
   object@dgeList$common.dispersion <- value

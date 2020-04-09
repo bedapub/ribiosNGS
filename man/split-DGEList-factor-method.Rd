@@ -2,7 +2,7 @@
 % Please edit documentation in R/AllMethods.R
 \name{split,DGEList,factor-method}
 \alias{split,DGEList,factor-method}
-\title{Split DGEList by a factor into a DGEList2 object}
+\title{Split DGEList by a factor into a DGEListList object}
 \usage{
 \S4method{split}{DGEList,factor}(x, f, drop = FALSE, keep.lib.sizes = TRUE, sampleDropLevels = TRUE)
 }
@@ -18,5 +18,5 @@
 \item{sampleDropLevels}{logical, whether unused levels of factors in the sample annotation data frame should be dropped}
 }
 \description{
-Split DGEList by a factor into a DGEList2 object
+Split DGEList by a factor into a DGEListList object
 }

@@ -1,4 +1,5 @@
 #' @include AllClasses.R AllGenerics.R AllMethods.R edgeR-funcs.R
+NULL
 
 #' Perform differential gene expression analysis with edgeR
 #' 

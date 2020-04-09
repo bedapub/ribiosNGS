@@ -9,7 +9,11 @@ model.DGEList(object, formula, ...)
 \arguments{
 \item{object}{A DGEList object}
 
-\item{formula}{Formula, passed to \code{\link{model.matrix}}}
+\item{formula}{Formula, passed to \code{\link{model.matrix}}
+
+Sample annotation is used to construct the formula}
+
+\item{...}{Not used so far}
 }
 \description{
 Build design matrix from a DGEList object

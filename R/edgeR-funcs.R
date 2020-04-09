@@ -1,4 +1,5 @@
 #' @include AllClasses.R AllGenerics.R AllMethods.R
+NULL
 
 #' Sample counts by group
 #' @param edgeObj An EdgeObject object
@@ -346,37 +347,3 @@ sigGeneCounts <- function(edgeResult) {
   return(res)
 }
 
-
-
-## report
-writeDgeTables <- function(edgeResult, outdir = getwd()) {
-  contrasts <- contrastNames(edgeResult)
-  outfiles <- file.path(outdir,
-                        sprintf("topTable-%s.txt", contrasts))
-  tables <- lapply(contrasts, function(x)
-    dgeTable(edgeResult, x))
-  write.tableList(tables, outfiles, row.names = TRUE)
-}
-
-## write truncated DEG lists
-writeTruncatedDgeTables <- function(edgeResult, outdir = getwd()) {
-  contrasts <- contrastNames(edgeResult)
-  lapply(contrasts, function(x) {
-    tbl <- dgeTable(edgeResult, x)
-    degs <- truncateDgeTable(tbl)
-    writeMatrix(degs$pos,
-                file.path(outdir,
-                          sprintf(
-                            "TruncatedDEGtable-positive-%s.txt",
-                            x
-                          )),
-                row.names = FALSE)
-    ribiosIO::writeMatrix(degs$neg,
-                          file.path(outdir,
-                                    sprintf(
-                                      "TruncatedDEGtable-negative-%s.txt",
-                                      x
-                                    )))
-  })
-  return(invisible(NULL))
-}

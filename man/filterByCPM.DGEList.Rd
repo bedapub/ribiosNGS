@@ -20,6 +20,8 @@
 \item{minCount}{Integer, how many samples must have CPM larger than 
 \code{minCPM} to keep this gene?}
 
+\item{lib.size}{Integers of library size, or \code{NULL}}
+
 \item{...}{Not used}
 }
 \value{

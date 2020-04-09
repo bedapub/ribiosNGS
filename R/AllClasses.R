@@ -239,32 +239,19 @@ setClass("FeatAnnoExprs",
          representation=list(exprs="matrix",
            genes="data.frame"))
 
-setClass("EdgeGSE",
-         representation=list(geneSets="GmtList",
-           method="character",
-           enrichTables="data.frame"),
-         contains="EdgeResult")
+#' An S4 class to represent a list of DGEListList objects
+#' @exportClass DGEListList
+setClass("DGEListList", representation("list"))
 
-EdgeGSE <- function(edgeObj, gsc) {
-  haltifnot(all(c("GeneID", "GeneSymbol") %in% colnames(dgeList(edgeObj)$genes)),
-            msg="Gene annotation of the edgeObj must contain columns 'GeneID' with EntrezGeneIDs and 'GeneSymbol' with official gene symbols")
-  egse <- as(edgeObj,"EdgeGSE")
-  egse@geneSets <- gsc
-  return(egse)
-}
-
-#' An S4 class to represent a list of DGEList2 objects
-setClass("DGEList2", representation("list"))
-
-#' Construct a DGEList2 object
+#' Construct a DGEListList object
 #' 
-#' @param ... A list of DGEList2 objects, can be passed as individual objects
+#' @param ... A list of DGEListList objects, can be passed as individual objects
 #' or in a list
 #' 
 #' @export
-DGEList2 <- function(...) {
+DGEListList <- function(...) {
   li <- as.list(...)
-  res <- new("DGEList2", li)
+  res <- new("DGEListList", li)
   names(res@.Data) <- names(li)
   return(res)
 }

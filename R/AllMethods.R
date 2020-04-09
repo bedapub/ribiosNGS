@@ -524,6 +524,7 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
 ## show
 ##----------------------------------------##
 
+#' @importMethodsFrom methods show
 #' @export
 setMethod("show", "EdgeSigFilter", function(object) {
   title <- "Edge Significantly Expressed Genes Filter"

@@ -27,7 +27,8 @@ exMat <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
 exMat[1:100,2:3] <- exMat[1:100, 2:3]+20
 exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 exDesign <- model.matrix(~exGroups)
-exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+exContrast <- matrix(c(-1,1), ncol=1, 
+              dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
 exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
 exFdata <- data.frame(GeneSymbol=sprintf("Gene\%d", 1:nrow(exMat)))
 exPdata <- data.frame(Name=sprintf("Sample\%d", 1:ncol(exMat)),
@@ -38,8 +39,9 @@ exSVAobj <- doSVA(exObj, transform="voom")
 designMatrix(exSVAobj)
 contrastMatrix(exSVAobj)
 
-## Note that the SVA is sensitive against parameterisation, see the example below
-## notice that in the zero-intercept parameterisation, the SVA gives no-sense results.
+## Note that the SVA is sensitive against parameterisation, see 
+## the example below. Also notice that in the zero-intercept parameterisation, 
+## the SVA does not give meaningful results.
 designMatrix(exObj) <- model.matrix(~0+exGroups)
 designMatrix(doSVA(exObj, transform="voom"))
 

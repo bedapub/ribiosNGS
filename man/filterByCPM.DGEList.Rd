@@ -4,7 +4,13 @@
 \alias{filterByCPM.DGEList}
 \title{Filter lowly expressed genes by CPM in DGEList}
 \usage{
-\method{filterByCPM}{DGEList}(obj, lib.size = NULL, minCPM = 1, minCount = minGroupCount(obj))
+\method{filterByCPM}{DGEList}(
+  obj,
+  minCPM = 1,
+  minCount = minGroupCount(obj),
+  lib.size = NULL,
+  ...
+)
 }
 \arguments{
 \item{obj}{A \code{DGEList} object}
@@ -13,6 +19,8 @@
 
 \item{minCount}{Integer, how many samples must have CPM larger than 
 \code{minCPM} to keep this gene?}
+
+\item{...}{Not used}
 }
 \value{
 Another \code{DGEList} object, with lowly expressed genes removed. 

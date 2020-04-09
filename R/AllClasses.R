@@ -130,7 +130,7 @@ setClass("EdgeSigFilter",
 #' @param logCPM Numeric, logCPM filter value, optional.
 #' @param LR Numeric, LR filter value, optional
 #' @param FDR Numeric, FDR filter value, optional
-#' 
+#' @param ... not used now
 #' @return An updated \code{EdgeSigFilter} object.
 #' 
 #' @aliases `logFC<-` `negLogFC<-` `negLogFC<-` `logCPM<-`
@@ -138,7 +138,7 @@ setClass("EdgeSigFilter",
 #' 
 #' @importFrom stats update
 #' @export
-update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
+update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR, ...) {
   if(!missing(logFC)) logFC(object) <- logFC
   if(!missing(posLogFC)) posLogFC(object) <- posLogFC
   if(!missing(negLogFC)) negLogFC(object) <- negLogFC

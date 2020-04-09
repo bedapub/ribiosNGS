@@ -25,7 +25,7 @@ setMethod("RiboSeq", c("matrix", "matrix", "vector"), function(RNA, RPF, groups)
               ncol(RNA), length(groups)))
   haltifnot(ncol(RPF)==length(groups),
             msg=sprintf("RPF file sample number (%d) does not equal group number (%d)",
-              ncol(RNRPF), length(groups)))  
+              ncol(RPF), length(groups)))  
   crns <- munion(rownames(RNA), rownames(RPF))
   RNA <- RNA[match(crns, rownames(RNA)),,drop=FALSE]
   RPF <- RPF[match(crns, rownames(RPF)),,drop=FALSE]

@@ -12,6 +12,11 @@ NULL
 #'             featureNames pData exprs `exprs<-` annotation
 #'             featureData phenoData sampleNames
 #'             `featureNames<-` storageMode
+#' @importFrom graphics abline grid par strwidth
+#' @importFrom methods new show slot slotNames validObject
+#' @importFrom stats cor median model.matrix quantile 
+#' @importFrom utils head write.table
+#' @importFrom magrittr %>%
 #' @importMethodsFrom ribiosExpression designMatrix contrastMatrix
 #' @importMethodsFrom BiocGenerics counts annotation nrow ncol normalize
 #' @export `annotation<-` assayData `fData<-` fData `pData<-`

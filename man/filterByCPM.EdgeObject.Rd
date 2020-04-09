@@ -4,13 +4,15 @@
 \alias{filterByCPM.EdgeObject}
 \title{Filter EdgeObj and remove lowly expressed genes}
 \usage{
-\method{filterByCPM}{EdgeObject}(obj, minCPM = 1, minCount = minGroupCount(obj))
+\method{filterByCPM}{EdgeObject}(obj, minCPM = 1, minCount = minGroupCount(obj), ...)
 }
 \arguments{
 \item{minCPM}{Minimal CPM value, see descriptions below}
 
 \item{minCount}{Minimal count of samples in which the CPM value is no less
-than \code{minCPM}
+than \code{minCPM}}
+
+\item{...}{Not used
 
 The filter is recommended by the authors of the \code{edgeR} package to
 remove lowly expressed genes, since including them in differential gene

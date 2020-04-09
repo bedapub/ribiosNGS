@@ -17,7 +17,7 @@
 \alias{FDR<-}
 \title{Update EdgeSigFilter}
 \usage{
-\method{update}{EdgeSigFilter}(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR)
+\method{update}{EdgeSigFilter}(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR, ...)
 
 posLogFC(edgeSigDegFilter) <- value
 
@@ -47,6 +47,8 @@ FDR(edgeSigDegFilter) <- value
 \item{LR}{Numeric, LR filter value, optional}
 
 \item{FDR}{Numeric, FDR filter value, optional}
+
+\item{...}{not used now}
 }
 \value{
 An updated \code{EdgeSigFilter} object.

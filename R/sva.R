@@ -15,7 +15,8 @@
 #' 
 #' @export countsSVA
 countsSVA <- function(counts, designMatrix, 
-                      transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E,
+                      transformFunc=function(counts, designMatrix) 
+			      voom(counts, designMatrix)$E,
                       ...) {
   transData <- do.call(transformFunc, list(counts=counts, designMatrix=designMatrix))
   sv <- inferSV(transData, designMatrix, ...)
@@ -40,8 +41,10 @@ countsSVA <- function(counts, designMatrix,
 #' @importFrom limma removeBatchEffect
 #' @export countsRemoveSV
 countsRemoveSV <- function(counts, designMatrix,
-                           transformFunc=function(counts, designMatrix) voom(counts, designMatrix)$E) {
-  transformedData <- do.call(transformFunc, list(counts=counts, designMatrix=designMatrix))
+                           transformFunc=function(counts, designMatrix) 
+				   voom(counts, designMatrix)$E) {
+  transformedData <- do.call(transformFunc, list(counts=counts, 
+						 designMatrix=designMatrix))
   sv <- countsSVA(counts, designMatrix, transformFunc=transformFunc)
   res <- removeBatchEffect(transformedData, covariates=sv, design=designMatrix)
   return(res)
@@ -60,12 +63,15 @@ countsRemoveSV <- function(counts, designMatrix,
 #' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 #' exDesign <- model.matrix(~gl(2,3))
 #' head(voomRemoveSV(exCounts, designMatrix=exDesign))
-#' ## compare the results without SV removal, note the values in the second and third column are much larger than the rest
+#' ## compare the results without SV removal, note the values in the 
+#' ## second and third column are much larger than the rest
 #' head(voom(exCounts, exDesign)$E)
 #' 
 #' @export voomRemoveSV
 voomRemoveSV <- function(counts, designMatrix) {
-  countsRemoveSV(counts, designMatrix, transform=function(counts, designMatrix) voom(counts, designMatrix)$E)
+  countsRemoveSV(counts, designMatrix, 
+		 transform=function(counts, designMatrix) 
+			 voom(counts, designMatrix)$E)
 }
 
 
@@ -84,7 +90,8 @@ voomRemoveSV <- function(counts, designMatrix) {
 #' 
 #' @export cpmSVA
 cpmSVA <- function(counts, designMatrix) {
-  countsSVA(counts, designMatrix, transform=function(counts, designMatrix) cpm(counts, log=TRUE))
+  countsSVA(counts, designMatrix, 
+	    transform=function(counts, designMatrix) cpm(counts, log=TRUE))
 }
 
 #' Apply cpm to voom-transformed count data, and return the voom expression
@@ -102,12 +109,14 @@ cpmSVA <- function(counts, designMatrix) {
 #' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
 #' exDesign <- model.matrix(~gl(2,3))
 #' head(cpmRemoveSV(exCounts, designMatrix=exDesign))
-#' ## compare the results without SV removal, note the values in the second and third column are much larger than the rest
+#' ## compare the results without SV removal, note the values in the second 
+#' ## and third column are much larger than the rest
 #' head(cpm(exCounts))
 #' 
 #' @export cpmRemoveSV
 cpmRemoveSV <- function(counts, designMatrix) {
-  countsRemoveSV(counts, designMatrix, transform=function(counts, designMatrix) cpm(counts, log=TRUE))
+  countsRemoveSV(counts, designMatrix, 
+		 transform=function(counts, designMatrix) cpm(counts, log=TRUE))
 }
 
 #' Is the Surrogate Variable (SV) matrix empty
@@ -143,7 +152,8 @@ isEmptySV <- function(sv) {
 #' exMat[1:100,2:3] <- exMat[1:100, 2:3]+20
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 #' exDesign <- model.matrix(~exGroups)
-#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exContrast <- matrix(c(-1,1), ncol=1, 
+#'               dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
 #' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
 #' exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
 #' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
@@ -154,8 +164,9 @@ isEmptySV <- function(sv) {
 #' designMatrix(exSVAobj)
 #' contrastMatrix(exSVAobj)
 #' 
-#' ## Note that the SVA is sensitive against parameterisation, see the example below
-#' ## notice that in the zero-intercept parameterisation, the SVA gives no-sense results.
+#' ## Note that the SVA is sensitive against parameterisation, see 
+#' ## the example below. Also notice that in the zero-intercept parameterisation, 
+#' ## the SVA does not give meaningful results.
 #' designMatrix(exObj) <- model.matrix(~0+exGroups)
 #' designMatrix(doSVA(exObj, transform="voom"))
 #' 
@@ -177,7 +188,8 @@ doSVA <- function(edgeObj, transform=c("voom", "cpm")) {
     designMatrix(edgeObj) <- newDesign
     newContrast <- rbind(contrast, 
                          matrix(0, nrow=ncol(sv), ncol=ncol(contrast),
-                                dimnames=list(colnames(sv), colnames(contrast))))
+                                dimnames=list(colnames(sv), 
+					      colnames(contrast))))
     contrastMatrix(edgeObj) <- newContrast
   }  
   return(edgeObj)

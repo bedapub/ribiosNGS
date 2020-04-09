@@ -10,7 +10,8 @@ filterByCPM <- function(obj, ...) {
 #' @param obj A matrix
 #' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
 #' @param minCount Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?
-#' 
+#' @param ... Not used
+#'
 #' @return A logical vector of the same length as the row count of the matrix. \code{TRUE} means the gene is reasonably expressed, and \code{FALSE} means the gene is lowly expressed and should be filtered (removed)
 #' 
 #' @examples 
@@ -18,7 +19,7 @@ filterByCPM <- function(obj, ...) {
 #' mat <- rbind(matrix(rbinom(125, 5, 0.25), nrow=25), rep(0, 5))
 #' filterByCPM(mat)
 #' @export
-filterByCPM.matrix <- function(obj, minCPM=1, minCount=1) {
+filterByCPM.matrix <- function(obj, minCPM=1, minCount=1, ...) {
   cpmRes <- cpm(obj)
   filter <- apply(cpmRes, 1, function(x) sum(x>=minCPM)>=minCount)
   return(filter)
@@ -30,6 +31,8 @@ filterByCPM.matrix <- function(obj, minCPM=1, minCount=1) {
 #' @param minCPM Numeric, the minimum CPM accepted as expressed in one sample
 #' @param minCount Integer, how many samples must have CPM larger than 
 #'     \code{minCPM} to keep this gene?
+#' @parm lib.size Integers of library size, or \code{NULL}
+#' @param ... Not used
 #' 
 #' @return Another \code{DGEList} object, with lowly expressed genes removed. 
 #'   The original counts and gene annotation can be found in 
@@ -49,9 +52,10 @@ filterByCPM.matrix <- function(obj, minCPM=1, minCount=1) {
 #' @importFrom edgeR DGEList
 #' @export DGEList
 #' @export
-filterByCPM.DGEList <- function(obj, lib.size=NULL,
+filterByCPM.DGEList <- function(obj, 
                                 minCPM=1,
-                                minCount=minGroupCount(obj)) {
+                                minCount=minGroupCount(obj),
+				lib.size=NULL, ...) {
   y <- as.matrix(obj)
   genes <- obj$genes
   group <- obj$samples$group
@@ -77,6 +81,7 @@ filterByCPM.DGEList <- function(obj, lib.size=NULL,
 #' @param minCPM Minimal CPM value, see descriptions below
 #' @param minCount Minimal count of samples in which the CPM value is no less
 #' than \code{minCPM}
+#' @param ... Not used
 #' 
 #' The filter is recommended by the authors of the \code{edgeR} package to
 #' remove lowly expressed genes, since including them in differential gene
@@ -106,7 +111,7 @@ filterByCPM.DGEList <- function(obj, lib.size=NULL,
 #' @export
 filterByCPM.EdgeObject <- function(obj,
                                    minCPM=1,
-                                   minCount=minGroupCount(obj)) {
+                                   minCount=minGroupCount(obj), ...) {
   cpmRes <- cpm(obj)
   filter <- apply(cpmRes, 1, function(x) sum(x>=minCPM)>=minCount)
   newDgeList <- obj@dgeList[filter,]

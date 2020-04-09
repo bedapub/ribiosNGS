@@ -4,7 +4,7 @@
 \alias{filterByCPM.matrix}
 \title{Filter lowly expressed genes by CPM}
 \usage{
-\method{filterByCPM}{matrix}(obj, minCPM = 1, minCount = 1)
+\method{filterByCPM}{matrix}(obj, minCPM = 1, minCount = 1, ...)
 }
 \arguments{
 \item{obj}{A matrix}
@@ -12,6 +12,8 @@
 \item{minCPM}{Numeric, the minimum CPM accepted as expressed in one sample}
 
 \item{minCount}{Integer, how many samples must have CPM larger than \code{minCPM} to keep this gene?}
+
+\item{...}{Not used}
 }
 \value{
 A logical vector of the same length as the row count of the matrix. \code{TRUE} means the gene is reasonably expressed, and \code{FALSE} means the gene is lowly expressed and should be filtered (removed)

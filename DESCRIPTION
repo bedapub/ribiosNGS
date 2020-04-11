@@ -23,7 +23,6 @@ Imports:
     methods,
     Biobase,
     lattice,
-    ribiosGSEA,
     ribiosIO,
     ribiosPlot,
     graphics,
@@ -47,7 +46,7 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.1.0
 Collate: 
-    'ribiosNGS.R'
+    'ribiosNGS-package.R'
     'AllClasses.R'
     'AllGenerics.R'
     'utils.R'

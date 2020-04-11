@@ -1,4 +1,4 @@
-#' @include ribiosNGS.R AllClasses.R 
+#' @include ribiosNGS-package.R AllClasses.R 
 
 #' Extract dgeList from the object
 #' @param object An object from which a \code{DGEList} object can be extracted

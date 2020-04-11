@@ -1,4 +1,4 @@
-#' @include ribiosNGS.R
+#' @include ribiosNGS-package.R
 NULL
 
 ER_TCRATIO_DEFAULT <- Inf

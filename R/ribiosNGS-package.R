@@ -21,8 +21,8 @@ NULL
 #' @importFrom stats cor median model.matrix quantile 
 #' @importFrom utils head write.table
 #' @importFrom magrittr %>%
-#' @importFrom ribiosUtils assertDir assertFile openFileDevice closeFileDevice munion matrix2longdf
-#' @importFrom ribiosPlot pdf2png
+#' @importFrom ribiosUtils assertDir assertFile munion matrix2longdf
+#' @importFrom ribiosPlot pdf2png openFileDevice closeFileDevice 
 #' @importFrom lattice panel.points panel.abline panel.smoothScatter
 #' @importFrom edgeR estimateGLMCommonDisp estimateGLMTagwiseDisp estimateGLMTrendedDisp
 #' @importMethodsFrom ribiosExpression designMatrix contrastMatrix

@@ -1,4 +1,4 @@
-#' @include AllClasses.R AllGenerics.R ribiosNGS.R utils.R
+#' @include AllClasses.R AllGenerics.R ribiosNGS-package.R utils.R
 NULL
 
 ##-----------------------------------##

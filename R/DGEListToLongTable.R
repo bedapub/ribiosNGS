@@ -5,6 +5,8 @@
 #' @param exprsFun A function to convert counts to expression data. 
 #'   Default: logCPM
 #'  
+#' @note Columns with empty names will be discard.
+#' 
 #' @examples
 #' mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #' rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
@@ -13,8 +15,9 @@
 #' 
 #' @importFrom edgeR cpm
 #' @export
-DGEListToLongTable <- function (x, 
-                                exprsFun = function(dgeList) cpm(dgeList, log=TRUE)) {
+DGEListToLongTable <- function (x,
+                                exprsFun = function(dgeList)
+                                  cpm(dgeList, log = TRUE)) {
   exp <- do.call(exprsFun, list(x))
   if (is.data.frame(exp)) {
     expVec <- unlist(exp)
@@ -28,22 +31,26 @@ DGEListToLongTable <- function (x,
   pDataCol <- colnames(x$samples)
   pfCommon <- intersect(fDataCol, pDataCol)
   for (i in colnames(fData(x))) {
-    if (i %in% pfCommon) {
-      inew <- sprintf("fData.%s", i)
+    if (i != "") {
+      if (i %in% pfCommon) {
+        inew <- sprintf("fData.%s", i)
+      }
+      else {
+        inew <- i
+      }
+      exprsLong[, inew] <- rep(fData(x)[, i], dim(x)[2])
     }
-    else {
-      inew <- i
-    }
-    exprsLong[, inew] <- rep(fData(x)[, i], dim(x)[2])
   }
   for (j in colnames(pData(x))) {
-    if (j %in% pfCommon) {
-      jnew <- sprintf("pData.%s", j)
+    if (j != "") {
+      if (j %in% pfCommon) {
+        jnew <- sprintf("pData.%s", j)
+      }
+      else {
+        jnew <- j
+      }
+      exprsLong[, jnew] <- rep(pData(x)[, j], each = dim(x)[1])
     }
-    else {
-      jnew <- j
-    }
-    exprsLong[, jnew] <- rep(pData(x)[, j], each = dim(x)[1])
   }
   return(exprsLong)
 }

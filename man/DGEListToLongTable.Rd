@@ -17,6 +17,9 @@ Default: logCPM}
 Convert a DGEList object to a long data.frame containing expression, 
 feature annotation, and sample annotation
 }
+\note{
+Columns with empty names will be discard.
+}
 \examples{
 mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 rownames(mat) <- sprintf("gene\%d", 1:nrow(mat))

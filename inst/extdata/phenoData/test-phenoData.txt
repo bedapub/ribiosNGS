@@ -1,0 +1,5 @@
+    ID GROUP   Donor
+1   S1  Control D1
+2   S2  Control D2
+3   S3  Treatment   D1
+4   S4  Treatment   D2

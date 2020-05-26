@@ -67,6 +67,8 @@ Collate:
     'pca.R'
     'plotMethods.R'
     'readBiokitExpression.R'
+    'readFeatureAnnotationFileForEdgeR.R'
+    'readSampleAnnotationFileForEdgeR.R'
     'slurm.R'
     'split.DGEList.R'
     'staticGeneLevelPlots.R'

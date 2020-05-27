@@ -49,6 +49,89 @@ setMethod("counts", "EdgeObject", function(object, filter=TRUE) {
   }
 })
 
+##---------------------------------------------------##
+## Getting/setting feature and sample annotations
+##---------------------------------------------------##
+
+#' Get annotation information from an EdgeObject
+#' @param object An \code{EdgeObject}.
+#' @return A character string, indicating the annotation type
+#' @importMethodsFrom BiocGenerics annotation
+#' @export
+setMethod("annotation", "EdgeObject", function(object) {
+  return(object@dgeList$annotation)
+})
+
+#' @describeIn isAnnotated Method for EdgeObject
+#' @export
+setMethod("isAnnotated", "EdgeObject", function(object) {
+  anno <- annotation(object)
+  res <- !is.null(anno) && !is.na(anno) && anno!=""
+  return(res)
+})
+
+#' Get fData
+#' @param object A DGEList
+#' @importMethodsFrom Biobase fData fData<-
+#' @export
+setMethod("fData", "DGEList", function(object) object$genes)
+
+#' Set fData
+#' @param object A DGEList
+#' @param value A \code{data.frame}
+#' @export
+setMethod("fData<-", c("DGEList", "data.frame"), function(object, value) {
+  object@genes <- value
+  return(object)
+})
+
+#' Get fData
+#' @param object An EdgeObject
+#' @export
+setMethod("fData", "EdgeObject", function(object) {
+  return(object@dgeList$genes)
+})
+
+#' Set fData
+#' @param object An EdgeObject
+#' @param value A \code{data.frame}
+#' @export
+setMethod("fData<-", c("EdgeObject", "data.frame"), function(object, value) {
+  object@dgeList$genes <- value
+  return(object)
+})
+
+#' Get pData (sample annotation)
+#' @param object A DGEList
+#' @importMethodsFrom Biobase pData pData<-
+#' @export
+setMethod("pData", "DGEList", function(object) object$samples)
+
+#' Set pData (sample annotation)
+#' @param object A DGEList
+#' @param value A \code{data.frame}
+#' @export
+setMethod("pData<-", c("DGEList", "data.frame"), function(object, value) {
+  object@samples <- value
+  return(object)
+})
+
+#' Get pData
+#' @param object An EdgeObject
+#' @export
+setMethod("pData", "EdgeObject", function(object) {
+  return(object@dgeList$samples)
+})
+
+#' Set pData (sample annotation)
+#' @param object A DGEList
+#' @param value A \code{data.frame}
+#' @export
+setMethod("pData<-", c("EdgeObject", "data.frame"), function(object, value) {
+  object@dgeList$samples <- value
+  return(object)
+})
+
 ##-------------------------------------##
 ## Human gene symbols
 ##-------------------------------------##

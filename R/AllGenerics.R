@@ -90,11 +90,6 @@ setGeneric("smearPlot", function(object,...) standardGeneric("smearPlot"))
 #' @export
 setGeneric("voom", function(object, ...) standardGeneric("voom"))
 
-#' Sniff features
-#' @param object An object
-#' @export
-setGeneric("sniffFeatures", function(object) standardGeneric("sniffFeatures"))
-
 #' Is the object annotated
 #' @param object An object
 #' @export

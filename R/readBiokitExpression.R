@@ -214,7 +214,7 @@ readBiokitFeatureAnnotation <-
                               col_names = TRUE,
                               col_types = "cnnnn")
     res <- merge(annotTbl, lenTbl,
-                 by.x = "FeatureID", by.y = colnames(lenTbl)[1])
+                 by.x = "FeatureID", by.y = colnames(lenTbl)[1], all.x=TRUE)
     rownames(res) <- as.character(res$FeatureID)
     return(res)
   }
@@ -281,10 +281,9 @@ readBiokitAsDGEList <- function(dir,
   genes <- readBiokitFeatureAnnotation(dir, anno=anno)
   if(!setequal(rownames(countMat), rownames(genes))) {
     warnings("FeatureIDs different bewteen gct file and feature annotation")
-    genes <- genes[as.character(rownames(countMat)),]
-    rownames(genes) <- rownames(countMat)
   }
-  stopifnot(identical(rownames(countMat), rownames(genes)))
+  genes <- genes[as.character(rownames(countMat)),]
+  rownames(genes) <- rownames(countMat)
             
   ## remove the 3rd (group) column: 
   ## it will be added by the DGEList function below

@@ -130,6 +130,95 @@ readBiokitGctFile <- function(dir,
   return(mat)
 }
 
+#' Read Biokit phenodata
+#' 
+#' @param dir Character string, Biokit output directory
+#' @return A \code{data.frame} with sample annotation in columns, and sample 
+#'   names (identical as the names in gct files, character strings) are row 
+#'   names. Nmes of the first three columns are fixed:
+#'   \enumerate{
+#'     \item \code{SampleName}, \code{SampleID} and \code{group} concatenated by 
+#'        underscore
+#'     \item \code{SampleID}
+#'     \item \code{group}
+#'   }
+#' @export
+readBiokitPhenodata <- function(dir) {
+  ## read sample annotation from annot/phenoData.meta
+  phenoDataFile <- file.path(dir, "annot", "phenoData.meta")
+  ribiosUtils::assertFile(phenoDataFile)
+  
+  ## to have consistent formats of sample annotation, we rename the frist three columns of annot
+  annot <- ribiosIO::readTable(phenoDataFile, row.names=FALSE)
+  colnames(annot)[1:3] <- c("SampleName", "SampleID", "group")
+  annotSampleName <- as.character(annot[, 1L])
+  annotSampleId <- annot[, 2L]
+  annotSampleGroup <- annot[, 3L]
+  rownames(annot) <- annotSampleName
+  
+  return(annot)
+}
+
+#' Read feature annotation from Biokit directory
+#' 
+#' @param dir Character string, a Biokit output directory.
+#' @param anno Character, indicating the annotation type.
+#' @return A \code{data.frame} containing feature annotation, with feature IDs 
+#'   as characters in rownames. The data frame contains following columns 
+#'   depending on the \code{anno} parameter: 
+#'   \enumerate{
+#'     \item FeatureID
+#'     \item GeneID (refseq only) or EnsemblID (ensembl only)
+#'     \item GeneSymbol
+#'     \item mean: mean length
+#'     \item median: median length
+#'     \item longest_isoform: longest isoform
+#'     \item merged: total length of merged exons
+#'   }
+#' @export
+#' @examples 
+#' ## TODO add small example files
+readBiokitFeatureAnnotation <-
+  function(dir, anno = c("refseq", "ensembl")) {
+    anno <- match.arg(anno)
+    annoDir <- file.path(dir, "annot")
+    if (anno == "refseq")  {
+      annotFile <- file.path(annoDir, "refseq.annot.gz")
+      lenFile <- file.path(annoDir, "refseq.geneLength.gz")
+    } else if (anno == "ensembl") {
+      annotFile <- file.path(annoDir, "ensembl.annot.gz")
+      lenFile <- file.path(annoDir, "ensembl.geneLength.gz")
+    }
+    assertFile(annotFile)
+    assertFile(lenFile)
+    if (anno == "refseq") {
+      ## in the current file, some gene names are not present,
+      ## they will cause parsing failures
+      suppressWarnings(annotTbl <- readr::read_tsv(
+        annotFile,
+        col_names = c("GeneID", "GeneSymbol", "GeneName"),
+        col_types = "icc"
+      ))
+      annotTbl <- mutate(annotTbl, FeatureID=GeneID) %>%
+        select("FeatureID", everything())
+    } else if (anno == "ensembl") {
+      suppressWarnings(annotTbl <- readr::read_tsv(
+        annotFile,
+        col_names = c("EnsemblID", "GeneSymbol"),
+        col_types = "cc"
+      ))
+      annotTbl <- mutate(annotTbl, FeatureID=EnsemblID) %>%
+        select("FeatureID", everything())
+    }
+    lenTbl <- readr::read_tsv(lenFile,
+                              col_names = TRUE,
+                              col_types = "cnnnn")
+    res <- merge(annotTbl, lenTbl,
+                 by.x = "FeatureID", by.y = colnames(lenTbl)[1])
+    rownames(res) <- as.character(res$FeatureID)
+    return(res)
+  }
+
 #' Read a Biokit output directory into a DGEList object for downstream analysis
 #' 
 #' 
@@ -178,31 +267,31 @@ readBiokitAsDGEList <- function(dir,
   }
   stopifnot(identical(rownames(countMat), rownames(tpmMat)))
   
-  ## read sample annotation, either from annot/phenoData.meta
-  phenoDataFile <- file.path(dir, "annot", "phenoData.meta")
-  ribiosUtils::assertFile(phenoDataFile)
-  
-  ## to have consistent formats of sample annotation, we rename the frist three columns of annot
-  annot <- ribiosIO::readTable(phenoDataFile, row.names=FALSE)
-  colnames(annot)[1:3] <- c("SampleName", "SampleID", "group")
-  annotSampleName <- as.character(annot[, 1L])
-  annotSampleId <- annot[, 2L]
-  annotSampleGroup <- annot[, 3L]
-  rownames(annot) <- annotSampleName
-  if(!setequal(as.character(annotSampleName) , colnames(countMat))) {
+  ## sample annotation
+  annot <- readBiokitPhenodata(dir)
+  annotSampleName <- rownames(annot)
+  if(!setequal(annotSampleName , colnames(countMat))) {
     stop("SampleID-group and gct file sample names do not match. Contact the developer.")
   } else {
     countMat <- countMat[, annotSampleName, drop=FALSE]
     tpmMat <- tpmMat[, annotSampleName, drop=FALSE]
   }
   
-  genes <- data.frame(GeneID=rownames(countMat),
-                      GeneSymbol=ribiosIO::gctDesc(countMat),
-                      stringsAsFactors = FALSE)
-  
-  ## remove the group column: it will be added by the DGEList function below
+  ## feature annotation
+  genes <- readBiokitFeatureAnnotation(dir, anno=anno)
+  if(!setequal(rownames(countMat), rownames(genes))) {
+    warnings("FeatureIDs different bewteen gct file and feature annotation")
+    genes <- genes[as.character(rownames(countMat)),]
+    rownames(genes) <- rownames(countMat)
+  }
+  stopifnot(identical(rownames(countMat), rownames(genes)))
+            
+  ## remove the 3rd (group) column: 
+  ## it will be added by the DGEList function below
+  annotSampleGroup <- annot[, 3L]
   annot <- annot[, -3L]
-  res <- DGEList(counts=countMat, samples=annot, genes=genes, group = annotSampleGroup)
+  res <- DGEList(counts=countMat, samples=annot, genes=genes, 
+                 group = annotSampleGroup)
   res$tpm <- tpmMat
   res$BiokitAnno <- anno
   return(res)

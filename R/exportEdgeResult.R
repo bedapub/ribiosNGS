@@ -1,4 +1,12 @@
+#' @include AllClasses.R AllGenerics.R AllMethods.R
+NULL
+
+#' Write DGE tables
+#' @param edgeResult An \code{EdgeResult} object
+#' @param outdir Output directory
+#' @return \code{NULL}, side effects are used
 #' @importFrom ribiosIO write.tableList
+#' @export
 writeDgeTables <- function(edgeResult, outdir=getwd()) {
   contrasts <- contrastNames(edgeResult)
   outfiles <- file.path(outdir,
@@ -8,7 +16,12 @@ writeDgeTables <- function(edgeResult, outdir=getwd()) {
 }
 
 
+#' Write truncated DGE tables
+#' @param edgeResult An \code{EdgeResult} object
+#' @param outdir Output directory
+#' @return \code{NULL}, side effects are used
 #' @importFrom ribiosExpression truncateDgeTable
+#' @export
 writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
     contrasts <- contrastNames(edgeResult)
     lapply(contrasts, function(x) {
@@ -26,9 +39,6 @@ writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
            })
     return(invisible(NULL))
 }
-
-#' @include AllClasses.R AllGenerics.R AllMethods.R
-NULL
 
 #' Export dgeTest results
 #' 

@@ -11,7 +11,8 @@ slurmEdgeR(
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
   overwrite = c("ask", "yes", "no"),
-  mps = FALSE
+  mps = FALSE,
+  interactive = FALSE
 )
 }
 \arguments{
@@ -35,6 +36,10 @@ directory will be overwritten anyway. If \code{no}, and if an output
 directory is present, the job will not be started.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
+
+\item{interactive}{Logical, whether the command should be run interactively, 
+using \code{srun} and the 'interaction' queue of jobs instead of using 
+\code{sbatch}.}
 }
 \value{
 A list of two items, \code{command}, the command line call, and

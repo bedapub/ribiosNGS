@@ -31,7 +31,9 @@ created.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
 
-\item{interactive}{Logical, whether the command should be run interactively
+\item{interactive}{Logical, whether the command should be run interactively, 
+using \code{srun} and the 'interaction' queue of jobs instead of using 
+\code{sbatch}.
 
 This function wraps the function \code{\link{edgeRcommand}} to return the
 command needed to start a SLURM job.

@@ -12,6 +12,8 @@
 \item{target}{Character, target of annotation.}
 
 \item{check.target}{Logical, check whether the target is valid or not.}
+
+\item{majority}{A numeric value, used for majority voting, passed to \code{sniffFeatureType}.}
 }
 \description{
 Annotate an EdgeObject

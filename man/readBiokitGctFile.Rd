@@ -7,8 +7,7 @@
 readBiokitGctFile(
   dir,
   anno = c("refseq", "ensembl"),
-  type = c("count", "rpkm", "uniqCount", "uniqRpkm", "tpm", "star-count", "star-rpkm",
-    "star-tpm")
+  type = c("count", "tpm", "count_collapsed", "tpm_collapsed", "log2tpm")
 )
 }
 \arguments{
@@ -17,12 +16,12 @@ readBiokitGctFile(
 \item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is
 supported}
 
-\item{type}{GCT file type, \code{count}, \code{rpkm}, \code{uniqCount},
-\code{uniqRpkm}, \code{star-counts}, \code{star-rpkms}, and \code{star-tpms} are supported.}
+\item{type}{GCT file type, \code{count}, \code{tpm}, \code{count_collapsed}, 
+\code{tpm_collapsed}, and \code{log2tpm} are supported.}
 }
 \value{
 A numeric matrix with the attribute \code{desc} encoding the values
-in the description column of the GCT format
+  in the description column of the GCT format.
 }
 \description{
 Read GCT files from Biokit output directory

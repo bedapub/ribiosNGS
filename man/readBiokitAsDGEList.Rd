@@ -7,8 +7,7 @@
 readBiokitAsDGEList(
   dir,
   anno = c("refseq", "ensembl"),
-  countType = c("count", "uniqCount", "star-count"),
-  tpmType = c("tpm", "star-tpm")
+  useCollapsedData = FALSE
 )
 }
 \arguments{
@@ -17,9 +16,9 @@ readBiokitAsDGEList(
 \item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is
 supported}
 
-\item{countType}{Character string, type of count data.}
-
-\item{tpmType}{Character string, type of TPM data.}
+\item{useCollapsedData}{Logical, \code{FALSE} as default. If set to 
+\code{TRUE}, counts are collapsed by gene symbols. This is not recommended
+because gene symbols are not stable identifiers.}
 }
 \description{
 Read a Biokit output directory into a DGEList object for downstream analysis

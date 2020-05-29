@@ -104,6 +104,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   ribiosUtils::createDir(dirname(outfileWithDir), recursive=TRUE, mode="0770")
 
   exprsFile <- paste0(outfileWithDir, "-counts.gct")
+  tpmFile <- paste0(outfileWithDir, "-tpm.gct")
   fDataFile <- paste0(outfileWithDir, "-featureAnno.txt")
   pDataFile <- paste0(outfileWithDir, "-sampleAnno.txt")
   groupFile <- paste0(outfileWithDir, "-sampleGroup.txt")
@@ -151,7 +152,9 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param interactive Logical, whether the command should be run interactively
+#' @param interactive Logical, whether the command should be run interactively, 
+#' using \code{srun} and the 'interaction' queue of jobs instead of using 
+#' \code{sbatch}.
 #' 
 #' This function wraps the function \code{\link{edgeRcommand}} to return the
 #' command needed to start a SLURM job.
@@ -189,7 +192,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   if (interactive) {
     prefix <- "srun --qos=interaction"
   } else {
-    prefix <- "sbatch"
+    prefix <- "sbatch --qos=short"
   }
   res <- paste(prefix,
                "-c 1",
@@ -217,6 +220,10 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' directory will be overwritten anyway. If \code{no}, and if an output
 #' directory is present, the job will not be started.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param interactive Logical, whether the command should be run interactively, 
+#' using \code{srun} and the 'interaction' queue of jobs instead of using 
+#' \code{sbatch}.
+#' 
 #' @return A list of two items, \code{command}, the command line call, and
 #' \code{output}, the output of the SLURM command in bash
 #' @note Even if the output directory is empty, if \code{overwrite} is set to
@@ -239,7 +246,8 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outdir="edgeR_output",
                        outfilePrefix="an-unnamed-project-",
                        overwrite=c("ask", "yes", "no"),
-                       mps=FALSE) {
+                       mps=FALSE, 
+                       interactive=FALSE) {
   overwrite <- match.arg(overwrite)
   ans <- NA
   if(overwrite=="ask") {
@@ -275,7 +283,8 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                             contrastMatrix=contrastMatrix,
                             outdir=outdir,
                             outfilePrefix=outfilePrefix,
-                            mps=mps)
+                            mps=mps,
+                            interactive=interactive)
   res <- system(comm, intern=TRUE)
   return(list(command=comm, output=res))
 }

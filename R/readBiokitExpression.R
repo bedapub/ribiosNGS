@@ -159,6 +159,8 @@ readBiokitPhenodata <- function(dir) {
   return(annot)
 }
 
+utils::globalVariables(c("GeneID", "EnsemblID"))
+
 #' Read feature annotation from Biokit directory
 #' 
 #' @param dir Character string, a Biokit output directory.
@@ -176,7 +178,8 @@ readBiokitPhenodata <- function(dir) {
 #'     \item merged: total length of merged exons
 #'   }
 #' @export
-#' @examples 
+#' @importFrom dplyr mutate select everything
+#' @examples
 #' ## TODO add small example files
 readBiokitFeatureAnnotation <-
   function(dir, anno = c("refseq", "ensembl")) {
@@ -199,16 +202,16 @@ readBiokitFeatureAnnotation <-
         col_names = c("GeneID", "GeneSymbol", "GeneName"),
         col_types = "icc"
       ))
-      annotTbl <- mutate(annotTbl, FeatureID=GeneID) %>%
-        select("FeatureID", everything())
+      annotTbl <- dplyr::mutate(annotTbl, FeatureID=GeneID) %>%
+        dplyr::select("FeatureID", dplyr::everything())
     } else if (anno == "ensembl") {
       suppressWarnings(annotTbl <- readr::read_tsv(
         annotFile,
         col_names = c("EnsemblID", "GeneSymbol"),
         col_types = "cc"
       ))
-      annotTbl <- mutate(annotTbl, FeatureID=EnsemblID) %>%
-        select("FeatureID", everything())
+      annotTbl <- dplyr::mutate(annotTbl, FeatureID=EnsemblID) %>%
+        dplyr::select("FeatureID", everything())
     }
     lenTbl <- readr::read_tsv(lenFile,
                               col_names = TRUE,

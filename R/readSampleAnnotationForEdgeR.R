@@ -18,7 +18,7 @@ readSampleAnnotationForEdgeR <- function(sampleNames,
                                              file=NULL, ...) {
   stopifnot((!is.null(file) && file.exists(file)) | !is.null(sampleNames))
   sampleNames <- as.character(sampleNames)
-  if (file.exists(file)) {
+  if (!is.null(file) && file.exists(file)) {
     pdAll <- ribiosExpression::readSampleAnnotationFile(file, ...)
     pdDropCols <- c("lib.size", "norm.factors")
     pd <- pdAll[,!colnames(pdAll) %in% pdDropCols, drop=FALSE]

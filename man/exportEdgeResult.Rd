@@ -7,7 +7,7 @@
 exportEdgeResult(
   edgeResult,
   outRootDir,
-  action = c("ask", "overwrite", "append", "no")
+  action = c("ask", "append", "overwrite", "no")
 )
 }
 \arguments{

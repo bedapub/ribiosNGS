@@ -11,7 +11,7 @@ readFeatureAnnotationForEdgeR <- function(featureNames,
                                           file=NULL) {
   haltifnot(!missing(featureNames),
             msg="`featureNames` must be given.")
-  if (file.exists(file)) {
+  if (!is.null(file) && file.exists(file)) {
     featAnno <- ribiosExpression::readFeatureAnnotationFile(file)
     res <- ribiosUtils::matchColumn(featureNames, featAnno, "FeatureName")
   } else {

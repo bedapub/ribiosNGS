@@ -5,9 +5,10 @@ NULL
 #' @param object An EdgeObject.
 #' @param target Character, target of annotation.
 #' @param check.target Logical, check whether the target is valid or not.
-#' @param majority A numeric value, used for majority voting, passed to \code{sniffFeatureType}.
 #' @importMethodsFrom ribiosExpression annotate
-#' @importFrom ribiosAnnotation  annotateEnsembl annotateGeneIDs annotateGeneSymbols annotateRefSeqs
+#' @importFrom ribiosAnnotation annotateEnsembl annotateGeneIDs annotateGeneSymbols annotateRefSeqs
+#' @importFrom ribiosAnnotation isValidFeatureID likeHumanGeneSymbol
+#' @importFrom ribiosExpression sniffFeatureType
 #' @export
 setMethod("annotate", c("EdgeObject","character", "logical"),
           function(object, target, check.target) {
@@ -16,7 +17,7 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
                                           "RefSeq", "Ensembl", "UniProt", 
                                           "Unknown"))
             if(target=="Automatic") {
-              target <- sniffFeatureType(object)
+              target <- ribiosExpression::sniffFeatureType(object)
             }
             if(target=="Unknown") {
               ## no annotations available

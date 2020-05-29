@@ -1,4 +1,5 @@
 #' @include AllClasses.R AllGenerics.R utils.R
+NULL
 
 #' Annotate an EdgeObject
 #' @param object An EdgeObject.

@@ -12,6 +12,8 @@ readSampleAnnotationForEdgeR(sampleNames, file = NULL, ...)
 \item{file}{Character string, path to a tab-delimited file, or \code{NULL}. The first column must be 
 either row names (namely no colum name), or sample names in the same order
 of \code{sampleNames}.}
+
+\item{...}{Other parameter passed to \code{read.table}.}
 }
 \value{
 A \code{data.frame} containing sample annotation, removing
@@ -24,6 +26,6 @@ Read sample annotation from tab-delimited file for EdgeR analysis
 \examples{
 phenoDataFile <- system.file("extdata/phenoData/test-phenoData.txt",
   package="ribiosNGS")
-readSampleAnnotationFileForEdgeR(phenoDataFile)
-readSampleAnnotationFileForEdgeR(file=NULL, sampleNames=as.character(1:4))
+readSampleAnnotationForEdgeR(phenoDataFile)
+readSampleAnnotationForEdgeR(file=NULL, sampleNames=as.character(1:4))
 }

@@ -7,12 +7,7 @@
 #'   `lib.size`, and `norm.factors` because they will be added
 #'   by the edgeR pipeline
 #'   
-#' Either \code{file} or \code{sampleNames} must be provided. If both provided,
-#' information in \code{file} has priority.
-#' 
-#' @importFrom Biobase read.AnnotatedDataFrame
-#' @importFrom methods as
-#' @importFrom ribiosUtils putColsFirst
+#' @importFrom ribiosExpression readSampleAnnotationFile
 #' @export
 #' @examples 
 #' phenoDataFile <- system.file("extdata/phenoData/test-phenoData.txt",
@@ -24,18 +19,15 @@ readSampleAnnotationForEdgeR <- function(sampleNames,
   stopifnot((!is.null(file) && file.exists(file)) | !is.null(sampleNames))
   sampleNames <- as.character(sampleNames)
   if (file.exists(file)) {
-    pdAnnoDf <- Biobase::read.AnnotatedDataFrame(file, ...)
-    pdAll <- methods::as(pdAnnoDf, "data.frame")
+    pdAll <- ribiosExpression::readSampleAnnotationFile(file, ...)
     pdDropCols <- c("lib.size", "norm.factors")
     pd <- pdAll[,!colnames(pdAll) %in% pdDropCols, drop=FALSE]
-    haltifnot(identical(sampleNames, pd[,1L]),
-              msg="sampleNames do not match the first column")
-    if("SampleName" %in% colnames(pd)[-1]) {
-      warning("The original SampleName column will be named as 'SampleName.1`")
-      colnames(pd)[colnames(pd)=="SampleName"] <- "SampleName.1"
+    if(!setequal(sampleNames, pd[,1L])) {
+      stop("sampleNames do not match the first column of sample annotation file")
     }
-    pd$SampleName <- as.character(pd[,1])
-    pd <- ribiosUtils::putColsFirst(pd, "SampleName")
+    if(!identical(sampleNames, pd[, 1L])) {
+      pd <- matchColumn(sampleNames, pd, 1L)
+    }
   } else {
     pd <- data.frame(SampleName=sampleNames,
                      row.names=sampleNames)

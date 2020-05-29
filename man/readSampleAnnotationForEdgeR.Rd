@@ -17,9 +17,6 @@ of \code{sampleNames}.}
 A \code{data.frame} containing sample annotation, removing
   `lib.size`, and `norm.factors` because they will be added
   by the edgeR pipeline
-  
-Either \code{file} or \code{sampleNames} must be provided. If both provided,
-information in \code{file} has priority.
 }
 \description{
 Read sample annotation from tab-delimited file for EdgeR analysis

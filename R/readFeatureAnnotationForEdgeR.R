@@ -16,7 +16,7 @@ readFeatureAnnotationForEdgeR <- function(featureNames,
     res <- ribiosUtils::matchColumn(featureNames, featAnno, "FeatureName")
   } else {
     res <- ribiosAnnotation::annotateAnyIDs(featureNames)
-    colnames(res) <- "FeatureName"
+    colnames(res)[1] <- "FeatureName"
   }
   return(res)
 }

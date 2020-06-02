@@ -21,6 +21,7 @@ maxCountByGroup <- function(edgeObj) {
 }
 
 #' @describeIn countByGroup Returns \code{TRUE} if the largest group has only one sample
+#' @export
 hasNoReplicate <- function(edgeObj) {
   return(maxCountByGroup(edgeObj) <= 1)
 }

@@ -1,8 +1,8 @@
 Package: ribiosNGS
 Type: Package
 Title: Utilities for next-generation sequencing data analysis in ribios
-Version: 1.1-6
-Date: 2020-06-01
+Version: 1.1-7
+Date: 2020-06-03
 Authors@R: 
   c(person(given = "Jitao David",
          family = "Zhang",
@@ -69,11 +69,13 @@ Collate:
     'readBiokitExpression.R'
     'readFeatureAnnotationForEdgeR.R'
     'readSampleAnnotationForEdgeR.R'
+    'renameContrast.R'
     'slurm.R'
     'split.DGEList.R'
     'staticGeneLevelPlots.R'
     'sva.R'
     'svaseqRemove.R'
+    'topDgeExpression.R'
     'tpm.R'
     'voomLimma.R'
     'writeBiokitSampleAnnotation.R'

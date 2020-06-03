@@ -24,6 +24,10 @@ A \code{data.frame} containing feature annotation, with feature IDs
     \item longest_isoform: longest isoform
     \item merged: total length of merged exons
   }
+  
+The function depends on the \code{refseq.annot.gz} (\code{ensembl.annot.gz}) 
+and \code{refseq.geneLength.gz} (\code{ensembl.geneLength.gz}) files in the 
+biokit directory.
 }
 \description{
 Read feature annotation from Biokit directory

@@ -19,6 +19,9 @@ A \code{data.frame} with sample annotation in columns, and sample
     \item \code{SampleID}
     \item \code{group}
   }
+  
+The function depends on the \code{annot/phenoData.meta} file in the biokit
+ output directory.
 }
 \description{
 Read Biokit phenodata

@@ -22,6 +22,10 @@ supported}
 \value{
 A numeric matrix with the attribute \code{desc} encoding the values
   in the description column of the GCT format.
+
+The function depends on \code{gct} (in case \code{anno="refseq"}) or
+ \code{gct-ens} (in case \code{anno="ensembl"}) sub-directory in the biokit
+ output directory.
 }
 \description{
 Read GCT files from Biokit output directory

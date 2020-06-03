@@ -17,8 +17,11 @@ readBiokitAsDGEList(
 supported}
 
 \item{useCollapsedData}{Logical, \code{FALSE} as default. If set to 
-\code{TRUE}, counts are collapsed by gene symbols. This is not recommended
-because gene symbols are not stable identifiers.}
+  \code{TRUE}, counts are collapsed by gene symbols. This is not recommended
+  because gene symbols are not stable identifiers.
+  
+The function depends on \code{gct} (\code{gct-ens}) and \code{annot} 
+directories of biokit output directory.}
 }
 \description{
 Read a Biokit output directory into a DGEList object for downstream analysis

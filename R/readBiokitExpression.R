@@ -31,7 +31,7 @@ matchKeyValue <- function(keys, dfList, keyColumn, valueColumns) {
 #' sample group, and FASTQ files, one sample per line
 #' 
 #' \code{readBiokitExpression} calls \code{\link[ribiosIO]{read_biokit_exprs}}
-#' to read #' BioKit expression data, and combine data from multiple files 
+#' to read biokit expression data, and combine data from multiple files 
 #' into one \code{ExpressionSet} object.
 #' 
 #' @importFrom ribiosIO read_biokit_exprs 
@@ -89,7 +89,6 @@ readBiokitExpression <- function(files,
 
 #' Read GCT files from Biokit output directory
 #' 
-#' 
 #' @param dir Biokit output directory
 #' @param anno Annotation type, either \code{refseq} or \code{ensembl} is
 #' supported
@@ -97,6 +96,11 @@ readBiokitExpression <- function(files,
 #'   \code{tpm_collapsed}, and \code{log2tpm} are supported.
 #' @return A numeric matrix with the attribute \code{desc} encoding the values
 #'   in the description column of the GCT format.
+#'
+#' The function depends on \code{gct} (in case \code{anno="refseq"}) or
+#'  \code{gct-ens} (in case \code{anno="ensembl"}) sub-directory in the biokit
+#'  output directory.
+#'  
 #' @examples
 #' 
 #' ##... (TODO: add a mock output directory in testdata)
@@ -142,6 +146,10 @@ readBiokitGctFile <- function(dir,
 #'     \item \code{SampleID}
 #'     \item \code{group}
 #'   }
+#'   
+#' The function depends on the \code{annot/phenoData.meta} file in the biokit
+#'  output directory.
+#'  
 #' @export
 readBiokitPhenodata <- function(dir) {
   ## read sample annotation from annot/phenoData.meta
@@ -177,6 +185,11 @@ utils::globalVariables(c("GeneID", "EnsemblID"))
 #'     \item longest_isoform: longest isoform
 #'     \item merged: total length of merged exons
 #'   }
+#'   
+#' The function depends on the \code{refseq.annot.gz} (\code{ensembl.annot.gz}) 
+#' and \code{refseq.geneLength.gz} (\code{ensembl.geneLength.gz}) files in the 
+#' biokit directory.
+#' 
 #' @export
 #' @importFrom dplyr mutate select everything
 #' @examples
@@ -231,6 +244,10 @@ readBiokitFeatureAnnotation <-
 #' @param useCollapsedData Logical, \code{FALSE} as default. If set to 
 #'   \code{TRUE}, counts are collapsed by gene symbols. This is not recommended
 #'   because gene symbols are not stable identifiers.
+#'   
+#' The function depends on \code{gct} (\code{gct-ens}) and \code{annot} 
+#' directories of biokit output directory.
+#' 
 #' @examples
 #' 
 #' ##... (TODO: add a mock output directory in testdata)

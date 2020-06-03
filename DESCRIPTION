@@ -60,6 +60,7 @@ Collate:
     'exportEdgeResult.R'
     'filterByCPM.R'
     'logFCmatrix.R'
+    'logFCpca.R'
     'mergeDGEList.R'
     'minGroupCount.R'
     'mps-io.R'

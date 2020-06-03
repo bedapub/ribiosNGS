@@ -24,7 +24,7 @@ Imports:
     Biobase,
     lattice,
     ribiosIO,
-    ribiosPlot,
+    ribiosPlot (>= 1.2-9),
     graphics,
     limma,
     igraph,

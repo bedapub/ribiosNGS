@@ -1,8 +1,8 @@
 Package: ribiosNGS
 Type: Package
 Title: Utilities for next-generation sequencing data analysis in ribios
-Version: 1.1-7
-Date: 2020-06-03
+Version: 1.1-8
+Date: 2020-06-04
 Authors@R: 
   c(person(given = "Jitao David",
          family = "Zhang",

@@ -147,7 +147,9 @@ readBiokitFeatureAnnotation <-
     } else {
       gctMat <- readBiokitGctFile(dir, anno=anno)
       annotTbl <- data.frame(FeatureName=rownames(gctMat),
-                             Description=gctDesc(gctMat))
+                             Description=gctDesc(gctMat),
+                             GeneID=rownames(gctMat),
+                             GeneSymbol=gctDesc(gctMat))
     }
     if(file.exists(lenFile)) {
       lenTbl <- readr::read_tsv(lenFile,

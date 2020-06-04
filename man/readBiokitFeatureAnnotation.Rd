@@ -16,7 +16,7 @@ A \code{data.frame} containing feature annotation, with feature IDs
   as characters in rownames. The data frame contains following columns 
   depending on the \code{anno} parameter: 
   \enumerate{
-    \item FeatureID
+    \item FeatureName, the primary key of feature name as characters
     \item GeneID (refseq only) or EnsemblID (ensembl only)
     \item GeneSymbol
     \item mean: mean length
@@ -28,6 +28,14 @@ A \code{data.frame} containing feature annotation, with feature IDs
 The function depends on the \code{refseq.annot.gz} (\code{ensembl.annot.gz}) 
 and \code{refseq.geneLength.gz} (\code{ensembl.geneLength.gz}) files in the 
 biokit directory.
+
+If \code{.annot.gz} file is not found (which can be the case, for instance,
+  when older biokit output directories are used), feature annotation is
+  read from the count GCT file. The resulting \code{data.frame} will only 
+  contain two columns: \code{FeatureName} and \code{Description}.
+  
+If \code{.geneLength.gz} file is not found, no gene length information is
+ appended.
 }
 \description{
 Read feature annotation from Biokit directory

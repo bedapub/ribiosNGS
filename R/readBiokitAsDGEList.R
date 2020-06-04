@@ -150,6 +150,9 @@ readBiokitFeatureAnnotation <-
                              Description=gctDesc(gctMat),
                              GeneID=rownames(gctMat),
                              GeneSymbol=gctDesc(gctMat))
+      if(anno=="ensembl") {
+        colnames(annotTbl)[3L] <- "EnsemblID"
+      }
     }
     if(file.exists(lenFile)) {
       lenTbl <- readr::read_tsv(lenFile,

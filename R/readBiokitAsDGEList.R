@@ -88,7 +88,7 @@ utils::globalVariables(c("GeneID", "EnsemblID"))
 #'   as characters in rownames. The data frame contains following columns 
 #'   depending on the \code{anno} parameter: 
 #'   \enumerate{
-#'     \item FeatureID
+#'     \item FeatureName, the primary key of feature name as characters
 #'     \item GeneID (refseq only) or EnsemblID (ensembl only)
 #'     \item GeneSymbol
 #'     \item mean: mean length
@@ -100,6 +100,14 @@ utils::globalVariables(c("GeneID", "EnsemblID"))
 #' The function depends on the \code{refseq.annot.gz} (\code{ensembl.annot.gz}) 
 #' and \code{refseq.geneLength.gz} (\code{ensembl.geneLength.gz}) files in the 
 #' biokit directory.
+#' 
+#' If \code{.annot.gz} file is not found (which can be the case, for instance,
+#'   when older biokit output directories are used), feature annotation is
+#'   read from the count GCT file. The resulting \code{data.frame} will only 
+#'   contain two columns: \code{FeatureName} and \code{Description}.
+#'   
+#' If \code{.geneLength.gz} file is not found, no gene length information is
+#'  appended.
 #' 
 #' @export
 #' @importFrom dplyr mutate select everything
@@ -116,33 +124,41 @@ readBiokitFeatureAnnotation <-
       annotFile <- file.path(annoDir, "ensembl.annot.gz")
       lenFile <- file.path(annoDir, "ensembl.geneLength.gz")
     }
-    assertFile(annotFile)
-    assertFile(lenFile)
-    if (anno == "refseq") {
-      ## in the current file, some gene names are not present,
-      ## they will cause parsing failures
-      suppressWarnings(annotTbl <- readr::read_tsv(
-        annotFile,
-        col_names = c("GeneID", "GeneSymbol", "GeneName"),
-        col_types = "icc"
-      ))
-      annotTbl <- dplyr::mutate(annotTbl, FeatureID=GeneID) %>%
-        dplyr::select("FeatureID", dplyr::everything())
-    } else if (anno == "ensembl") {
-      suppressWarnings(annotTbl <- readr::read_tsv(
-        annotFile,
-        col_names = c("EnsemblID", "GeneSymbol"),
-        col_types = "cc"
-      ))
-      annotTbl <- dplyr::mutate(annotTbl, FeatureID=EnsemblID) %>%
-        dplyr::select("FeatureID", everything())
+    if(file.exists(annotFile)) {
+      if (anno == "refseq") {
+        ## in the current file, some gene names are not present,
+        ## they will cause parsing failures
+        suppressWarnings(annotTbl <- readr::read_tsv(
+          annotFile,
+          col_names = c("GeneID", "GeneSymbol", "GeneName"),
+          col_types = "icc"
+        ))
+        annotTbl <- dplyr::mutate(annotTbl, FeatureName=GeneID) %>%
+          dplyr::select("FeatureName", dplyr::everything())
+      } else if (anno == "ensembl") {
+        suppressWarnings(annotTbl <- readr::read_tsv(
+          annotFile,
+          col_names = c("EnsemblID", "GeneSymbol"),
+          col_types = "cc"
+        ))
+        annotTbl <- dplyr::mutate(annotTbl, FeatureName=EnsemblID) %>%
+          dplyr::select("FeatureName", everything())
+      }
+    } else {
+      gctMat <- readBiokitGctFile(dir, anno=anno)
+      annotTbl <- data.frame(FeatureName=rownames(gctMat),
+                             Description=gctDesc(gctMat))
     }
-    lenTbl <- readr::read_tsv(lenFile,
-                              col_names = TRUE,
-                              col_types = "cnnnn")
-    res <- merge(annotTbl, lenTbl,
-                 by.x = "FeatureID", by.y = colnames(lenTbl)[1], all.x=TRUE)
-    rownames(res) <- as.character(res$FeatureID)
+    if(file.exists(lenFile)) {
+      lenTbl <- readr::read_tsv(lenFile,
+                                col_names = TRUE,
+                                col_types = "cnnnn")
+      res <- merge(annotTbl, lenTbl,
+                   by.x = "FeatureName", by.y = colnames(lenTbl)[1], all.x=TRUE)
+    } else {
+      res <- annotTbl
+    }
+    rownames(res) <- as.character(res$FeatureName)
     return(res)
   }
 
@@ -211,7 +227,7 @@ readBiokitAsDGEList <- function(dir,
   ## feature annotation
   genes <- readBiokitFeatureAnnotation(dir, anno=anno)
   if(!setequal(rownames(countMat), rownames(genes))) {
-    warnings("FeatureIDs different bewteen gct file and feature annotation")
+    warnings("FeatureNames different bewteen gct file and feature annotation")
   }
   genes <- genes[as.character(rownames(countMat)),]
   rownames(genes) <- rownames(countMat)

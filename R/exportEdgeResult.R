@@ -51,9 +51,9 @@ writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
 #' @importFrom ribiosExpression writeGct
 #' @export
 exportEdgeResult <- function(edgeResult, outRootDir,
-                                 action=c("ask", "append",
-					  "overwrite",
-					  "no")) {
+                             action=c("ask", "append",
+                                      "overwrite",
+                                      "no")) {
   ow <- ribiosUtils::overwriteDir(outRootDir, action=action)
   if(isFALSE(ow)) {
     return(invisible(NULL))
@@ -95,7 +95,7 @@ exportEdgeResult <- function(edgeResult, outRootDir,
   writeTruncatedDgeTables(edgeResult, outdir=truncDir)
 
   ## RData
-  rdataDir <- file.path(outRootDir, "RData")
+  rdataDir <- outRootDir
   ribiosUtils::createDir(rdataDir)
   save(edgeResult, 
        file=file.path(rdataDir, "ngsDge.RData"))

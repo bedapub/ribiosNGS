@@ -73,6 +73,9 @@ setMethod("boxplot", "EdgeObject",
             } 
           })
 
+#' Plot distribution of normalized counts
+#' @param edgeObj An \code{EdgeObject}
+#' @export
 normBoxplot <- function(before.norm, after.norm, ...) {
   op <- par(mfrow=c(1,2))
   on.exit(par(op))

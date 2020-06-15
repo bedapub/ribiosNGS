@@ -58,6 +58,7 @@ writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file,
     fData <- data.frame(Feature=rownames(countMat), row.names=rownames(countMat))
   }
   sampleAnno <- dgeList$samples
+  rownames(sampleAnno) <- colnames(countMat)
 
   exprs.file.format <- ifelse(grepl("tsv$", exprs.file),
                               "tsv", "gct")
@@ -96,7 +97,7 @@ writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file,
     ribiosIO::writeMatrix(fData, fData.file, row.names=FALSE)
   }
   if (!missing(pData.file) && !is.null(pData.file)) {
-    ribiosIO::writeMatrix(sampleAnno, pData.file, row.names=FALSE)
+    ribiosIO::writeMatrix(sampleAnno, pData.file, row.names=TRUE)
   }
   sampleGroup <- sampleAnno$group
   if(is.factor(sampleGroup)) {

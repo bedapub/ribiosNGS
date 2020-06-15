@@ -195,7 +195,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
     prefix <- "sbatch --qos=short"
   }
   res <- paste(prefix,
-               "-c 1",
+               "-n 1 -c 12",
                sprintf("-e %s", errfile),
                sprintf("-J %s", outdirBase),
                sprintf("-o %s", outfile),

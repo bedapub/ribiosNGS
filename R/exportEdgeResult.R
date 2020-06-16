@@ -1,4 +1,4 @@
-#' @include AllClasses.R AllGenerics.R AllMethods.R
+#' @include AllClasses.R AllGenerics.R AllMethods.R pseudoT.R
 NULL
 
 #' Write DGE tables
@@ -15,6 +15,21 @@ writeDgeTables <- function(edgeResult, outdir=getwd()) {
   ribiosIO::write.tableList(tables, outfiles, row.names=TRUE)
 }
 
+#' Write dgeTables with pseudo T statistics
+#' @param edgeResult An \code{EdgeResult} object
+#' @param outdir Output directory
+#' @return \code{NULL}, side effects are used
+#' @seealso \code{\link{dgeTableWithPseudoT}}
+#' @importFrom ribiosIO write.tableList
+#' @export
+writeDgeTablesWithPseudoT <- function (edgeResult, outdir = getwd()) {
+  contrasts <- contrastNames(edgeResult)
+  outfiles <- file.path(outdir, sprintf("topTableWithPseudoT-%s.txt", 
+                                        contrasts))
+  tables <- lapply(contrasts, function(x) dgeTableWithPseudoT(edgeResult, 
+                                                   x))
+  ribiosIO::write.tableList(tables, outfiles, row.names = TRUE)
+}
 
 #' Write truncated DGE tables
 #' @param edgeResult An \code{EdgeResult} object

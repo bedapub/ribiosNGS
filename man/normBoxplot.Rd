@@ -7,7 +7,9 @@
 normBoxplot(before.norm, after.norm, ...)
 }
 \arguments{
-\item{edgeObj}{An \code{EdgeObject}}
+\item{before.norm}{An \code{EdgeObject} before normalization}
+
+\item{after.norm}{An \code{EdgeObject} after normalization}
 }
 \description{
 Plot distribution of normalized counts

@@ -11,7 +11,8 @@ slurmEdgeRcommand(
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
   mps = FALSE,
-  interactive = FALSE
+  interactive = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -33,7 +34,10 @@ created.}
 
 \item{interactive}{Logical, whether the command should be run interactively, 
 using \code{srun} and the 'interaction' queue of jobs instead of using 
-\code{sbatch}.
+\code{sbatch}.}
+
+\item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of
+  the installed version. The option is passed to \code{edgeRcommand}.
 
 This function wraps the function \code{\link{edgeRcommand}} to return the
 command needed to start a SLURM job.

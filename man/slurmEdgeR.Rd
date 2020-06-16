@@ -12,7 +12,8 @@ slurmEdgeR(
   outfilePrefix = "an-unnamed-project-",
   overwrite = c("ask", "yes", "no"),
   mps = FALSE,
-  interactive = FALSE
+  interactive = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ directory is present, the job will not be started.}
 \item{interactive}{Logical, whether the command should be run interactively, 
 using \code{srun} and the 'interaction' queue of jobs instead of using 
 \code{sbatch}.}
+
+\item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of
+the installed version. The option is passed to \code{edgeRcommand}.}
 }
 \value{
 A list of two items, \code{command}, the command line call, and

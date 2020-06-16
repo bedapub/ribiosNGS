@@ -52,6 +52,9 @@ checkContrastNames <- function(contrastMatrix,
 #' name of the project, to identify the files uniquely. The files will be written in 
 #' \code{file.path(OUTDIR, 'input_data')}.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
+#'   the installed version
+#'   
 #' @note Following checks are done internally: \itemize{ \item The design
 #' matrix must have the same number of rows as the columns of the count matrix.
 #' \item The contrast matrix must have the same number of rows as the columns
@@ -78,7 +81,8 @@ checkContrastNames <- function(contrastMatrix,
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outdir="edgeR_output",
                          outfilePrefix="an-unnamed-project-",
-                         mps=FALSE) {
+                         mps=FALSE,
+                         debug=FALSE) {
 
   ## remove trailing -s if any
   outfilePrefix <- gsub("-$", "", outfilePrefix)
@@ -123,7 +127,12 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   logFile <- paste0(gsub("\\/$", "", outdir), ".log")
   mpsComm <- ifelse(mps, "-mps", "")
   commandFile <- paste0(outfileWithDir, "-edgeRcommand.txt")
-  command <- paste("/pstore/apps/bioinfo/geneexpression/bin/ngsDge_edgeR.Rscript",
+  
+  scriptFile <- file.path("/pstore/apps/bioinfo/geneexpression/",
+                         ifelse(debug, "rsrc", "bin"),
+                         "ngsDge_edgeR.Rscript")
+                         
+  command <- paste(scriptFile,
                    sprintf("-infile %s", exprsFile),
                    sprintf("-designFile %s", designFile),
                    sprintf("-contrastFile %s", contrastFile),
@@ -155,6 +164,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param interactive Logical, whether the command should be run interactively, 
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.
+#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
+#'   the installed version. The option is passed to \code{edgeRcommand}.
 #' 
 #' This function wraps the function \code{\link{edgeRcommand}} to return the
 #' command needed to start a SLURM job.
@@ -179,13 +190,15 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outdir="edgeR_output",
                               outfilePrefix="an-unnamed-project-",
                               mps=FALSE,
-                              interactive=FALSE) {
+                              interactive=FALSE,
+                              debug=FALSE) {
   comm <- edgeRcommand(dgeList=dgeList, 
                        designMatrix=designMatrix, 
                        contrastMatrix=contrastMatrix,
                        outdir=outdir,
                        outfilePrefix=outfilePrefix,
-                       mps=mps)
+                       mps=mps,
+                       debug=debug)
   outdirBase <- basename(gsub("\\/$", "", outdir))
   outfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".out"))
   errfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".err"))
@@ -223,7 +236,8 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param interactive Logical, whether the command should be run interactively, 
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.
-#' 
+#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
+#'   the installed version. The option is passed to \code{edgeRcommand}.
 #' @return A list of two items, \code{command}, the command line call, and
 #' \code{output}, the output of the SLURM command in bash
 #' @note Even if the output directory is empty, if \code{overwrite} is set to
@@ -247,7 +261,8 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outfilePrefix="an-unnamed-project-",
                        overwrite=c("ask", "yes", "no"),
                        mps=FALSE, 
-                       interactive=FALSE) {
+                       interactive=FALSE,
+                       debug=FALSE) {
   overwrite <- match.arg(overwrite)
   ans <- NA
   if(overwrite=="ask") {
@@ -284,7 +299,8 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                             outdir=outdir,
                             outfilePrefix=outfilePrefix,
                             mps=mps,
-                            interactive=interactive)
+                            interactive=interactive,
+                            debug=debug)
   res <- system(comm, intern=TRUE)
   return(list(command=comm, output=res))
 }

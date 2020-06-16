@@ -11,7 +11,8 @@ edgeRcommand(
   contrastMatrix,
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
-  mps = FALSE
+  mps = FALSE,
+  debug = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ name of the project, to identify the files uniquely. The files will be written i
 \code{file.path(OUTDIR, 'input_data')}.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
+
+\item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of
+the installed version}
 }
 \description{
 Export an DGEList, designMatrix, and contrastMatrix to files and return the

@@ -111,6 +111,7 @@ utils::globalVariables(c("GeneID", "EnsemblID"))
 #' 
 #' @export
 #' @importFrom dplyr mutate select everything
+#' @importFrom ribiosIO gctDesc
 #' @examples
 #' ## TODO add small example files
 readBiokitFeatureAnnotation <-

@@ -50,7 +50,8 @@ writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
                ribiosIO::writeMatrix(degs$neg,
                            file.path(outdir,
                                      sprintf("TruncatedDEGtable-negative-%s.txt", 
-                                             x)))
+                                             x)),
+                           row.names=FALSE)
            })
     return(invisible(NULL))
 }

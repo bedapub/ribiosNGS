@@ -113,20 +113,27 @@ quantileRange <- function(x, outlier=0.01, symmetric=TRUE) {
 #' @param freeRelation Logical.
 #' @param colramp Function, color palette.
 #' @param multipage Logical.
+#' @param yValue Character string, either \code{PValue} or \code{FDR}.
 #' @param xlim NULL or a numeric vector of two
 #' @param ylim NULL or a numeric vector of two.
+#' @param topLabel NULL or an integer number, number of top features to be labelled
+#' @param labelType NULL or a character string, a column name in the feature annotation
 #' @param main Character, title.
-#' @importFrom graphics smoothScatter
+#' @importFrom graphics smoothScatter text
 #' @export
 setMethod("volcanoPlot", "EdgeResult",
           function(object, contrast=NULL,
                    freeRelation=FALSE,
                    colramp=ribiosPlot::heat,
                    multipage=FALSE,
+                   yValue=c("PValue", "FDR"),
                    xlim=NULL,
                    ylim=NULL,
                    main=NULL,
+                   topLabel=NULL,
+                   labelType=NULL,
                    ...) {
+            yValue <- match.arg(yValue)
   tables <- dgeTableList(object, contrast)
   logFCs <- unlist(sapply(tables, function(x) x$logFC))
   ps <- unlist(sapply(tables, function(x) x$PValue))
@@ -151,16 +158,38 @@ setMethod("volcanoPlot", "EdgeResult",
     mains <- sprintf("%s [%s]", main, names(tables))
   }
   for(i in seq(along=tables)) {
+    currTbl <- tables[[i]]
+    if(yValue=="FDR") {
+      yVal <- -log10(tables[[i]]$FDR)
+    } else if (yValue=="PValue") {
+      yVal <- -log10(tables[[i]]$PValue)
+    } else {
+      stop("Cannot be here")
+    }
+    yLab <- paste0("-log10(", yValue, ")")
     if(freeRelation) {
-      with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
+      with(currTbl, smoothScatter(yVal~logFC,
                                       colramp=colramp,
                                       main=mains[i],
+                                      ylab=yLab,
                                       ...))
     }  else {
-      with(tables[[i]], smoothScatter(-log10(PValue)~logFC,
+      with(currTbl, smoothScatter(yVal~logFC,
                                       colramp=colramp,
                                       main=mains[i],
-                                      xlim=xlim, ylim=ylim, ...))
+                                      xlim=xlim, ylim=ylim,
+                                      ylab=yLab,
+                                      ...))
+    }
+    if(!is.null(topLabel)) {
+      stopifnot(is.numeric(topLabel) & !is.null(labelType))
+      topLabel <- as.integer(topLabel)
+      topCurrTbl <- currTbl[1:topLabel,] 
+      topCurrY <- yVal[1:topLabel]
+      topCurrLabel <- topCurrTbl[, labelType]
+      text(topCurrTbl$logFC,
+           topCurrY,
+           label=topCurrLabel, pos=3)
     }
     abline(h=0, col="lightgray")
     abline(v=0, col="lightgray")

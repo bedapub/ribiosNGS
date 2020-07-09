@@ -13,9 +13,12 @@ volcanoPlot(object, ...)
   freeRelation = FALSE,
   colramp = ribiosPlot::heat,
   multipage = FALSE,
+  yValue = c("PValue", "FDR"),
   xlim = NULL,
   ylim = NULL,
   main = NULL,
+  topLabel = NULL,
+  labelType = NULL,
   ...
 )
 }
@@ -33,11 +36,17 @@ all contrasts are used}
 
 \item{multipage}{Logical.}
 
+\item{yValue}{Character string, either \code{PValue} or \code{FDR}.}
+
 \item{xlim}{NULL or a numeric vector of two}
 
 \item{ylim}{NULL or a numeric vector of two.}
 
 \item{main}{Character, title.}
+
+\item{topLabel}{NULL or an integer number, number of top features to be labelled}
+
+\item{labelType}{NULL or a character string, a column name in the feature annotation}
 }
 \description{
 Volcano plot

@@ -205,10 +205,10 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   if (interactive) {
     prefix <- "srun --qos=interaction"
   } else {
-    prefix <- "sbatch --qos=short"
+    prefix <- "sbatch --qos=normal"
   }
   res <- paste(prefix,
-               "-n 1 -c 12",
+               "-n 1 -c 24",
                sprintf("-e %s", errfile),
                sprintf("-J %s", outdirBase),
                sprintf("-o %s", outfile),

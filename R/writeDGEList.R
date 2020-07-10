@@ -94,7 +94,7 @@ writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file,
     stop("Should not be here")
   }
   if (!missing(fData.file) && !is.null(fData.file)) {
-    ribiosIO::writeMatrix(fData, fData.file, row.names=FALSE)
+    ribiosIO::writeMatrix(fData, fData.file, row.names=TRUE)
   }
   if (!missing(pData.file) && !is.null(pData.file)) {
     ribiosIO::writeMatrix(sampleAnno, pData.file, row.names=TRUE)

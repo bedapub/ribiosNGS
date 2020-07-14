@@ -12,7 +12,7 @@ writeDgeTables <- function(edgeResult, outdir=getwd()) {
   outfiles <- file.path(outdir,
                         sprintf("topTable-%s.txt", contrasts))
   tables <- lapply(contrasts, function(x) dgeTable(edgeResult, x))
-  ribiosIO::write.tableList(tables, outfiles, row.names=TRUE)
+  ribiosIO::write.tableList(tables, outfiles, quote=FALSE, sep="\t", row.names=FALSE, dec=".")
 }
 
 #' Write dgeTables with pseudo T statistics
@@ -28,7 +28,7 @@ writeDgeTablesWithPseudoT <- function (edgeResult, outdir = getwd()) {
                                         contrasts))
   tables <- lapply(contrasts, function(x) dgeTableWithPseudoT(edgeResult, 
                                                    x))
-  ribiosIO::write.tableList(tables, outfiles, row.names = TRUE)
+  ribiosIO::write.tableList(tables, outfiles, quote=FALSE, sep="\t", row.names=FALSE, dec=".")
 }
 
 #' Write truncated DGE tables

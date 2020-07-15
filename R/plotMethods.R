@@ -139,11 +139,16 @@ setMethod("volcanoPlot", "EdgeResult",
   ps <- unlist(sapply(tables, function(x) x$PValue))
   if(!freeRelation) {
     logFC.range <- quantileRange(logFCs, outlier=0.01, symmetric=TRUE)
-    pValue.range <- quantileRange(ps, outlier=0.01, symmetric=FALSE)
+    if(!all(ps==0)) {
+      pValue.range <- quantileRange(ps[ps!=0], outlier=0.01, symmetric=FALSE)
+      ylim2 <- max(-log10(pValue.range))
+    } else {
+      ylim2 <- 5L
+    }
     if(is.null(xlim))
       xlim <- logFC.range
     if(is.null(ylim))
-      ylim <- c(0, max(-log10(pValue.range)))
+      ylim <- c(0, ylim2)
   }
 
   if(!multipage) {

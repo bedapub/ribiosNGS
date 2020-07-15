@@ -5,14 +5,14 @@ NULL
 #' @param edgeResult An \code{EdgeResult} object
 #' @param outdir Output directory
 #' @return \code{NULL}, side effects are used
-#' @importFrom ribiosIO write.tableList
+#' @importFrom ribiosIO writeMatrix.tableList
 #' @export
 writeDgeTables <- function(edgeResult, outdir=getwd()) {
   contrasts <- contrastNames(edgeResult)
   outfiles <- file.path(outdir,
                         sprintf("topTable-%s.txt", contrasts))
   tables <- lapply(contrasts, function(x) dgeTable(edgeResult, x))
-  ribiosIO::write.tableList(tables, outfiles, quote=FALSE, sep="\t", row.names=FALSE, dec=".")
+  ribiosIO::writeMatrix.tableList(tables, outfiles, row.names=FALSE)
 }
 
 #' Write dgeTables with pseudo T statistics
@@ -20,7 +20,7 @@ writeDgeTables <- function(edgeResult, outdir=getwd()) {
 #' @param outdir Output directory
 #' @return \code{NULL}, side effects are used
 #' @seealso \code{\link{dgeTableWithPseudoT}}
-#' @importFrom ribiosIO write.tableList
+#' @importFrom ribiosIO writeMatrix.tableList
 #' @export
 writeDgeTablesWithPseudoT <- function (edgeResult, outdir = getwd()) {
   contrasts <- contrastNames(edgeResult)
@@ -28,7 +28,7 @@ writeDgeTablesWithPseudoT <- function (edgeResult, outdir = getwd()) {
                                         contrasts))
   tables <- lapply(contrasts, function(x) dgeTableWithPseudoT(edgeResult, 
                                                    x))
-  ribiosIO::write.tableList(tables, outfiles, quote=FALSE, sep="\t", row.names=FALSE, dec=".")
+  ribiosIO::writeMatrix.tableList(tables, outfiles, row.names=FALSE)
 }
 
 #' Write truncated DGE tables

@@ -3,6 +3,26 @@ NULL
 
 utils::globalVariables(c("PValue", "logFC"))
 
+#' Convert p-values to t-statistics
+#' @param p Numeric, a numeric vector between 0 and 1.
+#' @param df Numeric, degree of freedom.
+#' @param sign Logical or integer, positive numbers or \code{TRUE} are interpreted as positive, and negative numbers or \code{TRUE} are interpreted as negative.
+#' 
+#' @importFrom stats qt
+#' @examples 
+#' pVals <- 10^(seq(-11,0))
+#' signs <- rep(c(TRUE, FALSE), 6)
+#' tVals <- pseudoTfromPvalue(pVals, 5, sign=signs)
+#' logFCs <- rep(c(1.2,-1.2),6)
+#' tValsLogFCs <- pseudoTfromPvalue(pVals, 5, sign=logFCs)
+#' @export
+pseudoTfromPvalue <- function(p, df, sign) {
+  if(is.logical(sign))
+    sign <- ifelse(sign, 1, -1)
+  ts <- stats::qt(p=p/2, df=df, lower.tail=FALSE) * sign(sign)
+  return(ts)
+}
+
 #' Append degree of freedom and pseudo t-statistics to dgeTable
 #' @param edgeResult An \code{EdgeResult} object
 #' @param dgeTable A \code{data.frame}, derived from \code{dgeTables} or \code{dgeTable} usually.
@@ -10,7 +30,6 @@ utils::globalVariables(c("PValue", "logFC"))
 #' The function relies on the fact that the degree of freedom (`df.residual` in GLM result) is the same for all genes.
 #' If this is not the case, it will use the `FeatureName` column in gene annotation to match the degree of freedoms.
 #' The function is only used internally by \code{dgeTablesWithPseudoT} and \code{dgeTableWithPseudoT}.
-#' @importFrom stats qt
 #' @importFrom magrittr %>%
 #' @importFrom dplyr left_join mutate
 #' @note the \code{lower.tail} option in \code{qt} is not vectorized, therefore the sign should be provided separately.
@@ -24,8 +43,7 @@ appendPseudoT <- function(edgeResult, dgeTable) {
     dgeTable <- dgeTable %>% dplyr::left_join(dfTbl, by="FeatureName")
   }
   res <- dgeTable%>%
-    mutate(pseudoT=stats::qt(p=PValue, df=df, 
-                             lower.tail=FALSE) * ifelse(logFC<=0, -1, 1))
+    mutate(pseudoT=pseudoTfromPvalue(PValue, df, logFC))
   return(res)
 }
 #' Append dgeTables with pseudo t-statistic

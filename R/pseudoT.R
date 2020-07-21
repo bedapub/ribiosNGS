@@ -46,6 +46,7 @@ appendPseudoT <- function(edgeResult, dgeTable) {
     mutate(pseudoT=pseudoTfromPvalue(PValue, df, logFC))
   return(res)
 }
+
 #' Append dgeTables with pseudo t-statistic
 #' @param edgeResult An \code{EdgeResult} object.
 #' @return Similar as \code{dgeTables}, a list of \code{data.frame}, but with additional columns \code{df} (degree of freedom) and \code{pseudoT}.

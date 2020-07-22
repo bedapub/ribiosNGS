@@ -19,7 +19,7 @@ utils::globalVariables(c("PValue", "logFC"))
 pseudoTfromPvalue <- function(p, df, sign) {
   if(is.logical(sign))
     sign <- ifelse(sign, 1, -1)
-  ts <- stats::qt(p=p/2, df=df, lower.tail=FALSE) * sign(sign)
+  ts <- stats::qt(p=1-p/2, df=df) * sign(sign)
   return(ts)
 }
 

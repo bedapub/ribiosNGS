@@ -1,12 +1,12 @@
-#' @include oseudoT.R
+#' @include pseudoT.R
 NULL
 
 ## in pseudoT.R, we implement the pseudoT statistic.
 ## We can also use zscore, which do not allow comparison between studies of different sample sizes, but deliver less extreme values.
 
 #' Append zscores to dgeTable
-#' @param edgeResult An \code{EdgeResult} object
-#' @param dgeTable A \code{data.frame}, derived from \code{dgeTables} or \code{dgeTable} usually.
+#' @param dgeTable A \code{data.frame}, derived from \code{dgeTables} or \code{dgeTable} usually. It must contain the following two columns: \code{PValue}, and \code{logFC} (case sensitive).
+#' 
 #' @return A new \code{data.frame} with one new column, \code{zScore}, containing the z-score transformed from p-values. If that column exists, it will be rewritten.
 #' The function is similar to \code{appendPseudoT}, with the difference that the Gaussian distribution is used instead of the t-distribution. This solution
 #' delivers less extreme values, because t-distribution is heavy-tailed. It allows comparison between studies of different sample sizes.
@@ -26,7 +26,7 @@ appendZScore <- function(dgeTable) {
 #' @export
 dgeTablesWithZScore <- function(edgeResult) {
   dts <- dgeTables(edgeResult)
-  res <- lapply(dts, function(x) appendZScore(edgeResult, x))
+  res <- lapply(dts, appendZScore)
   return(res)
 }
 

@@ -1,8 +1,8 @@
 Package: ribiosNGS
 Type: Package
 Title: Utilities for next-generation sequencing data analysis in ribios
-Version: 1.1-15
-Date: 2020-07-21
+Version: 1.1-16
+Date: 2020-07-22
 Authors@R: 
   c(person(given = "Jitao David",
          family = "Zhang",
@@ -54,10 +54,11 @@ Collate:
     'DGEListToLongTable.R'
     'EdgeObject.R'
     'annotateMethods.R'
+    'pseudoT.R'
+    'appendZScore.R'
     'edgeR-funcs.R'
     'dge.R'
     'dgeTable.R'
-    'pseudoT.R'
     'exportEdgeResult.R'
     'filterByCPM.R'
     'logFCmatrix.R'

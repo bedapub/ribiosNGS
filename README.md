@@ -1,5 +1,9 @@
-*ribiosNGS*: Next-generation sequencing data analysis
+*ribiosNGS*: Next-generation sequencing data analysis with ribios
 ===
+
+<!-- badges: start -->
+<!-- [![R build status](https://github.com/bedapub/ribiosNGS/workflows/R-CMD-check/badge.svg)](https://github.com/bedapub/ribiosNGS/actions) -->
+<!-- badges: end -->
 
 ## What is *ribiosNGS*?
 

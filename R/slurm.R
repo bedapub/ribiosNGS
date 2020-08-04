@@ -52,7 +52,7 @@ checkContrastNames <- function(contrastMatrix,
 #' name of the project, to identify the files uniquely. The files will be written in 
 #' \code{file.path(OUTDIR, 'input_data')}.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param appendGmt Directory of GMT file to perform gene-set analysis.
+#' @param appendGmt GMT file to perform gene-set analysis.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
 #'   the installed version
 #'   
@@ -165,7 +165,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param appendGmt Directory of GMT file to perform gene-set analysis.
+#' @param appendGmt GMT file to perform gene-set analysis.
 #' @param interactive Logical, whether the command should be run interactively, 
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.
@@ -240,7 +240,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' directory will be overwritten anyway. If \code{no}, and if an output
 #' directory is present, the job will not be started.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param appendGmt Directory of GMT file to perform gene-set analysis.
+#' @param appendGmt GMT file to perform gene-set analysis.
 #' @param interactive Logical, whether the command should be run interactively, 
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.

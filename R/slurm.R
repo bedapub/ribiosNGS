@@ -52,6 +52,7 @@ checkContrastNames <- function(contrastMatrix,
 #' name of the project, to identify the files uniquely. The files will be written in 
 #' \code{file.path(OUTDIR, 'input_data')}.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param appendGmt Directory of GMT file to perform gene-set analysis.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
 #'   the installed version
 #'   
@@ -82,6 +83,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outdir="edgeR_output",
                          outfilePrefix="an-unnamed-project-",
                          mps=FALSE,
+                         appendGmt="",
                          debug=FALSE) {
 
   ## remove trailing -s if any
@@ -115,6 +117,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   groupLevelFile <- paste0(outfileWithDir, "-sampleGroupLevels.txt")
   designFile <- paste0(outfileWithDir, "-designMatrix.txt")
   contrastFile <- paste0(outfileWithDir, "-contrastMatrix.txt")
+  gmtFile <- appendGmt
   
   writeDGEList(dgeList, exprs.file=exprsFile,
                fData.file = fDataFile,
@@ -141,6 +144,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    sprintf("-featureAnnotationFile %s", fDataFile),
                    sprintf("-phenoData %s", pDataFile),
                    sprintf("-outdir %s", outdir),
+                   sprintf("-appendGmt %s", gmtFile),
                    sprintf("-log %s", logFile),
                    sprintf("-writedb"),
                    mpsComm)
@@ -161,6 +165,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param appendGmt Directory of GMT file to perform gene-set analysis.
 #' @param interactive Logical, whether the command should be run interactively, 
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.
@@ -190,6 +195,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outdir="edgeR_output",
                               outfilePrefix="an-unnamed-project-",
                               mps=FALSE,
+                              appendGmt="",
                               interactive=FALSE,
                               debug=FALSE) {
   comm <- edgeRcommand(dgeList=dgeList, 
@@ -198,6 +204,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                        outdir=outdir,
                        outfilePrefix=outfilePrefix,
                        mps=mps,
+                       appendGmt=appendGmt,
                        debug=debug)
   outdirBase <- basename(gsub("\\/$", "", outdir))
   outfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".out"))
@@ -233,6 +240,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' directory will be overwritten anyway. If \code{no}, and if an output
 #' directory is present, the job will not be started.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param appendGmt Directory of GMT file to perform gene-set analysis.
 #' @param interactive Logical, whether the command should be run interactively, 
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.
@@ -260,7 +268,8 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outdir="edgeR_output",
                        outfilePrefix="an-unnamed-project-",
                        overwrite=c("ask", "yes", "no"),
-                       mps=FALSE, 
+                       mps=FALSE,
+                       appendGmt="",
                        interactive=FALSE,
                        debug=FALSE) {
   overwrite <- match.arg(overwrite)
@@ -299,6 +308,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                             outdir=outdir,
                             outfilePrefix=outfilePrefix,
                             mps=mps,
+                            appendGmt=appendGmt,
                             interactive=interactive,
                             debug=debug)
   res <- system(comm, intern=TRUE)

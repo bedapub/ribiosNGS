@@ -52,17 +52,18 @@ checkContrastNames <- function(contrastMatrix,
 #' name of the project, to identify the files uniquely. The files will be written in 
 #' \code{file.path(OUTDIR, 'input_data')}.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param appendGmt GMT file to perform gene-set analysis.
-#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
-#'   the installed version
-#'   
+#' @param appendGmt \code{NULL} or character string, path to an additional
+#'   GMT file besides the default GMT file used to perform gene-set analysis.
+#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used
+#'   instead of the installed version.
+#'
 #' @note Following checks are done internally: \itemize{ \item The design
 #' matrix must have the same number of rows as the columns of the count matrix.
 #' \item The contrast matrix must have the same number of rows as the columns
 #' of the design matrix.  \item Row names of the design matrix match the column
 #' names of the expression matrix. In case of suspect, the program will stop
 #' and report. }
-#' 
+#'
 #' The output file names start with the outfilePrefix, followed by '-' and
 #' customed file suffixes.
 #' @examples
@@ -73,17 +74,17 @@ checkContrastNames <- function(contrastMatrix,
 #'  y <- edgeR::DGEList(counts=mat, group=myFac)
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
-#'  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
+#'  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
 #'      outfilePrefix=NULL, outdir=tempdir())
-#' 
-#' @importFrom ribiosUtils haltifnot createDir
+#'
+#' @importFrom ribiosUtils haltifnot createDir assertFile
 #' @importFrom ribiosIO writeMatrix
 #' @export edgeRcommand
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outdir="edgeR_output",
                          outfilePrefix="an-unnamed-project-",
                          mps=FALSE,
-                         appendGmt="",
+                         appendGmt=NULL,
                          debug=FALSE) {
 
   ## remove trailing -s if any
@@ -91,7 +92,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   outfileWithDir <- file.path(outdir,
                               'input_data',
                               basename(outfilePrefix))
-  
+
   ## check consistency between names
   exprsMat <- dgeList$counts
   if(!identical(rownames(designMatrix), colnames(exprsMat)) &&
@@ -106,7 +107,14 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   haltifnot(ncol(designMatrix) == nrow(contrastMatrix),
             msg="The contrast matrix must have the same number of rows as the columns of the design matrix.")
   checkContrastNames(contrastMatrix, action="error")
-  
+
+  if(!is.null(appendGmt)) {
+    ribiosUtils::assertFile(appendGmt)
+    appendGmtComm <- sprintf("-appendGmt %s", appendGmt)
+  } else {
+    appendGmtComm <- ""
+  }
+
   ribiosUtils::createDir(dirname(outfileWithDir), recursive=TRUE, mode="0770")
 
   exprsFile <- paste0(outfileWithDir, "-counts.gct")
@@ -117,8 +125,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   groupLevelFile <- paste0(outfileWithDir, "-sampleGroupLevels.txt")
   designFile <- paste0(outfileWithDir, "-designMatrix.txt")
   contrastFile <- paste0(outfileWithDir, "-contrastMatrix.txt")
-  gmtFile <- appendGmt
-  
+
   writeDGEList(dgeList, exprs.file=exprsFile,
                fData.file = fDataFile,
                pData.file = pDataFile,
@@ -126,15 +133,15 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                groupLevels.file = groupLevelFile)
   writeMatrix(designMatrix, designFile)
   writeMatrix(contrastMatrix, contrastFile)
-  
+
   logFile <- paste0(gsub("\\/$", "", outdir), ".log")
   mpsComm <- ifelse(mps, "-mps", "")
   commandFile <- paste0(outfileWithDir, "-edgeRcommand.txt")
-  
+
   scriptFile <- file.path("/pstore/apps/bioinfo/geneexpression/",
                          ifelse(debug, "rsrc", "bin"),
                          "ngsDge_edgeR.Rscript")
-                         
+
   command <- paste(scriptFile,
                    sprintf("-infile %s", exprsFile),
                    sprintf("-designFile %s", designFile),
@@ -144,7 +151,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    sprintf("-featureAnnotationFile %s", fDataFile),
                    sprintf("-phenoData %s", pDataFile),
                    sprintf("-outdir %s", outdir),
-                   sprintf("-appendGmt %s", gmtFile),
+                   appendGmtComm,
                    sprintf("-log %s", logFile),
                    sprintf("-writedb"),
                    mpsComm)
@@ -153,8 +160,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 }
 
 #' Return the SLURM command to run the edgeR script
-#' 
-#' 
+#'
 #' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
 #' and \code{samples}
 #' @param designMatrix The design matrix to model the data
@@ -165,13 +171,15 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param appendGmt GMT file to perform gene-set analysis.
-#' @param interactive Logical, whether the command should be run interactively, 
-#' using \code{srun} and the 'interaction' queue of jobs instead of using 
+#' @param appendGmt \code{NULL} or character string, path to an additional GMT
+#'   file for gene-set analysis. The option is passed to
+#'   \code{\link{edgeRcommand}}.
+#' @param interactive Logical, whether the command should be run interactively,
+#' using \code{srun} and the 'interaction' queue of jobs instead of using
 #' \code{sbatch}.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
 #'   the installed version. The option is passed to \code{edgeRcommand}.
-#' 
+#'
 #' This function wraps the function \code{\link{edgeRcommand}} to return the
 #' command needed to start a SLURM job.
 #' 
@@ -195,7 +203,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outdir="edgeR_output",
                               outfilePrefix="an-unnamed-project-",
                               mps=FALSE,
-                              appendGmt="",
+                              appendGmt=NULL,
                               interactive=FALSE,
                               debug=FALSE) {
   comm <- edgeRcommand(dgeList=dgeList, 
@@ -240,7 +248,9 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' directory will be overwritten anyway. If \code{no}, and if an output
 #' directory is present, the job will not be started.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param appendGmt GMT file to perform gene-set analysis.
+#' @param appendGmt \code{NULL} or character string, path to an additional GMT
+#'   file for gene-set analysis. The option is passed to
+#'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
 #' @param interactive Logical, whether the command should be run interactively, 
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.
@@ -251,7 +261,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @note Even if the output directory is empty, if \code{overwrite} is set to
 #' \code{no} (or if the user answers \code{no}), the job will not be started.
 #' @examples
-#' 
+#'
 #'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
 #'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -269,7 +279,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outfilePrefix="an-unnamed-project-",
                        overwrite=c("ask", "yes", "no"),
                        mps=FALSE,
-                       appendGmt="",
+                       appendGmt=NULLt,
                        interactive=FALSE,
                        debug=FALSE) {
   overwrite <- match.arg(overwrite)
@@ -302,8 +312,8 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
     return(invisible(NULL))
   }
   
-  comm <- slurmEdgeRcommand(dgeList=dgeList, 
-                            designMatrix=designMatrix, 
+  comm <- slurmEdgeRcommand(dgeList=dgeList,
+                            designMatrix=designMatrix,
                             contrastMatrix=contrastMatrix,
                             outdir=outdir,
                             outfilePrefix=outfilePrefix,

@@ -2,17 +2,20 @@ Package: ribiosNGS
 Type: Package
 Title: Utilities for next-generation sequencing data analysis in ribios
 Version: 1.1-16
-Date: 2020-07-22
-Authors@R: 
+Date: 2020-08-05
+Authors@R:
   c(person(given = "Jitao David",
          family = "Zhang",
          role = c("aut", "cre", "ctb"),
          email = "jitao_david.zhang@roche.com",
          comment = c(ORCID="0000-0002-3085-0909")),
+    person(given="Ailu",
+           family="Mading",
+           role="ctb"),
     person("F.Hoffmann-La Roche AG", role="cph"))
 Description: NGS tasks in ribios, primarily differetial gene expression
     analysis.
-Depends: 
+Depends:
     R (>= 2.1.0),
 Imports:
     BiocGenerics,

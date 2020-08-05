@@ -16,10 +16,11 @@ A \code{DGEList} object containing counts, gene, and sample annotation
 Read mpsnake output directory into a DGEList object
 }
 \examples{
-mpsnakeDir <- system.file("extdata/mpsnake-minimal-outdir", "ribiosNGS")
+mpsnakeDir <- system.file("extdata/mpsnake-minimal-outdir", package="ribiosNGS")
 mpsDgeList <- readMpsnakeAsDGEList(mpsnakeDir)
 
 ## equivalent
-mpsnakeResDir <- file.path(mpsnakeDir, "results")
+mpsnakeResDir <- system.file("extdata/mpsnake-minimal-outdir", "results",
+  package="ribiosNGS")
 mpsDgeList <- readMpsnakeAsDGEList(mpsnakeResDir)
 }

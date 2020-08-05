@@ -1,0 +1,11 @@
+ID_GROUP	ID	GROUP	donor	treatment
+s1_ctrl	s1	ctrl	d1	ctrl
+s2_trt	s2	trt	d1	trt
+s3_ctrl	s3	ctrl	d2	ctrl
+s4_trt	s4	trt	d2	ctrl
+s5_ctrl	s5	ctrl	d3	ctrl
+s6_trt	s6	trt	d3	trt
+s7_ctrl	s7	ctrl	d4	ctrl
+s8_trt	s8	trt	d4	trt
+s9_ctrl	s9	ctrl	d5	ctrl
+s10_trt	s10	trt	d5	trt

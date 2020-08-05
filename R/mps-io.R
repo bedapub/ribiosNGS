@@ -1,3 +1,75 @@
+#' Get GCT filename from a directory
+#' @param dir Character string, path to a directory where a GCT file is saved
+#' @return Character string, full name of the GCT file
+#' If no file is found, the function reports an error. If more than one file is
+#' found, a warning message is raised, and only the first file is used.
+gctFilename <- function(dir) {
+  gctFilePattern <- ".*.gct"
+  gctFile <- dir(dir, pattern=gctFilePattern, full.names=TRUE)
+  if(length(gctFile)>1) {
+    warning(sprintf("More than one GCT file detected (%s)- only the first one (%s) is used":
+                      paste(gctFile, collapse=","),
+                    gctFile[1]))
+    gctFile <- gctFile[1]
+  } else if (length(gctFile) == 0 || !file.exists(gctFile)) {
+    stop(paste0("GCT file with the pattern'", gctFilePattern, 
+                "' does not exist in ",
+                dir, "!"))
+  }
+  return(gctFile)
+}
+
+#' Read mpsnake output directory into a DGEList object
+#' @param dir Character string, path of mpsnake pipeline directory (or the \code{results} subdirectory).
+#' @return A \code{DGEList} object containing counts, gene, and sample annotation
+#' @examples
+#' mpsnakeDir <- system.file("extdata/mpsnake-minimal-outdir", "ribiosNGS")
+#' mpsDgeList <- readMpsnakeAsDGEList(mpsnakeDir)
+#' 
+#' ## equivalent
+#' mpsnakeResDir <- file.path(mpsnakeDir, "results")
+#' mpsDgeList <- readMpsnakeAsDGEList(mpsnakeResDir)
+#' @importFrom ribiosIO readTable
+#' @importFrom ribiosUtils assertFile isDir
+#' @export
+readMpsnakeAsDGEList <- function(dir) {
+  if(ribiosUtils::isDir(file.path(dir, "results"))) {
+    dir <- file.path(dir, "results")
+  }
+  if(!ribiosUtils::isDir(file.path(dir, "annot")) || !ribiosUtils::isDir(file.path(dir, "gct"))) {
+    stop(sprintf("Not found in %s: `annot` and `gct` subdirectories.", dir))
+  }
+  ribiosUtils::assertFile(featFile <- file.path(dir, "annot/feature.annot"))
+  feat <- ribiosIO::readTable(featFile, row.names=FALSE)
+  samples <- readBiokitPhenodata(dir)
+  gctFile <- gctFilename(file.path(dir, "gct"))
+  gct <- read_gct_matrix(gctFile)
+  res <- edgeR::DGEList(counts=gct,
+                        samples=samples,
+                        genes=feat,
+                        group=samples$group)
+}
+
+#' Read Illumina MolPhen sample sheet from XLS files
+#' @param file A XLS/XLSX file containing in the first sheet
+#'  the sample sheet of a molecular phenotyping experiment
+#' @return A \code{data.frame} annotating the samples
+#' @export
+read_illumina_sampleSheet_xls <- function(file) {
+  content <- readxl::read_excel(file, col_names=FALSE, 
+                                .name_repair = "minimal")
+  tmpf <- tempfile()
+  ribiosIO::writeMatrix(content, tmpf, row.names = FALSE)
+  res <- ribiosIO::read_illumina_sampleSheet(tmpf,
+                                             sep="\t")
+  return(res)
+}
+
+
+##----------------------##
+## deprecated funcs
+##----------------------##
+
 #' Extract AmpliSeq target annotation from a list of read count data.frames
 #' 
 #' @param readCountsList A list of read count data.frames
@@ -7,6 +79,7 @@
 #' 
 #' @export
 extractTargetAnno <- function(readCountsList) {
+  .Deprecated("readMpsnakeAsDGEList")
   annos <- lapply(readCountsList, function(x) data.frame(Target=x$Target, GeneSymbol=x$Gene))
   anno <- do.call(rbind, annos)
   res <- unique(anno)
@@ -26,6 +99,7 @@ extractTargetAnno <- function(readCountsList) {
 #' 
 #' @export
 mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) {
+  .Deprecated("readMpsnakeAsDGEList")
   if(is.null(runNames))
     runNames <- seq(along=readCountList)
   stopifnot(length(readCountList)==length(barcodeSummaryList))
@@ -85,6 +159,7 @@ mergeAmpliseqRuns <- function(readCountList, barcodeSummaryList, runNames=NULL) 
 readAmpliSeq <- function(readCountFiles, 
                          barcodeSummaryFiles,
                          runNames=names(readCountFiles)) {
+  .Deprecated("readMpsnakeAsDGEList")
   stopifnot(length(readCountFiles)==length(barcodeSummaryFiles))
   if(!is.null(runNames)) {
     stopifnot(length(readCountFiles)==length(runNames))
@@ -134,6 +209,7 @@ readAmpliSeq <- function(readCountFiles,
 #' 
 #' @export isCherryPickingRepeat
 isCherryPickingRepeat <- function(eset, cherryPickingRun) {
+  .Deprecated("readMpsnakeAsDGEList")
   stopifnot(cherryPickingRun %in% eset$Run)
   dupSampleNames <- eset$SampleName[duplicated(eset$SampleName)]
   isDup <- eset$SampleName %in% dupSampleNames & !eset$Run %in% cherryPickingRun
@@ -158,6 +234,7 @@ isCherryPickingRepeat <- function(eset, cherryPickingRun) {
 #' 
 #' @export removeCherryPickingRepeat
 removeCherryPickingRepeat <- function(eset, cherryPickingRun) {
+  .Deprecated("readMpsnakeAsDGEList")
   isDup <- isCherryPickingRepeat(eset, cherryPickingRun)
   return(eset[,!isDup])
 }
@@ -209,14 +286,11 @@ readMolPhenCoverageGct <- function(file) {
 #' #todo
 #' @export
 readMolPhenAsDGEList <- function(dir) {
+  .Deprecated("readMpsnakeAsDGEList",
+              msg=paste("readMolPhenAsDGEList works with older mpsnake versions (<0.7).",
+              "For results of newer versions of mpsnake, use radMpsnakeAsDGEList"))
   assertDir(dir)
-  gctDir <- file.path(dir, "gct")
-  gctFilePattern <- ".*.gct"
-  gctFile <- dir(gctDir, pattern=gctFilePattern, full.names=TRUE)
-  if (length(gctFile) == 0 || !file.exists(gctFile)) {
-    stop(paste0("GCT file with the pattern'", gctFilePattern, 
-                "' does not exist!"))
-  }
+  gctFile <- gctFilename(file.path(dir, "gct"))
   counts <- readMolPhenCoverageGct(gctFile)
   
   phenoFile <- file.path(dir, "anno", "phenoData.meta")
@@ -231,17 +305,3 @@ readMolPhenAsDGEList <- function(dir) {
   return(res)
 } 
 
-#' Read Illumina MolPhen sample sheet from XLS files
-#' @param file A XLS/XLSX file containing in the first sheet
-#'  the sample sheet of a molecular phenotyping experiment
-#' @return A \code{data.frame} annotating the samples
-#' @export
-read_illumina_sampleSheet_xls <- function(file) {
-   content <- readxl::read_excel(file, col_names=FALSE, 
-                                 .name_repair = "minimal")
-   tmpf <- tempfile()
-   ribiosIO::writeMatrix(content, tmpf, row.names = FALSE)
-   res <- ribiosIO::read_illumina_sampleSheet(tmpf,
-                                              sep="\t")
-   return(res)
-}

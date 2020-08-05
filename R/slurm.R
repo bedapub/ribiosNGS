@@ -281,7 +281,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outfilePrefix="an-unnamed-project-",
                        overwrite=c("ask", "yes", "no"),
                        mps=FALSE,
-                       appendGmt=NULLt,
+                       appendGmt=NULL,
                        interactive=FALSE,
                        debug=FALSE) {
   overwrite <- match.arg(overwrite)

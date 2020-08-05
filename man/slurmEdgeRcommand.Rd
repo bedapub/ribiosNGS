@@ -11,6 +11,7 @@ slurmEdgeRcommand(
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
   mps = FALSE,
+  appendGmt = NULL,
   interactive = FALSE,
   debug = FALSE
 )
@@ -32,8 +33,12 @@ created.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
 
-\item{interactive}{Logical, whether the command should be run interactively, 
-using \code{srun} and the 'interaction' queue of jobs instead of using 
+\item{appendGmt}{\code{NULL} or character string, path to an additional GMT
+file for gene-set analysis. The option is passed to
+\code{\link{edgeRcommand}}.}
+
+\item{interactive}{Logical, whether the command should be run interactively,
+using \code{srun} and the 'interaction' queue of jobs instead of using
 \code{sbatch}.}
 
 \item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of

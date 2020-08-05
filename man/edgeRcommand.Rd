@@ -12,6 +12,7 @@ edgeRcommand(
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
   mps = FALSE,
+  appendGmt = NULL,
   debug = FALSE
 )
 }
@@ -32,8 +33,12 @@ name of the project, to identify the files uniquely. The files will be written i
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
 
-\item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of
-the installed version}
+\item{appendGmt}{\code{NULL} or character string, path to an additional
+GMT file besides the default GMT file used to perform gene-set analysis.
+The GMT file must exist.}
+
+\item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used
+instead of the installed version.}
 }
 \description{
 Export an DGEList, designMatrix, and contrastMatrix to files and return the
@@ -58,7 +63,7 @@ customed file suffixes.
  y <- edgeR::DGEList(counts=mat, group=myFac)
  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
- edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
+ edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
      outfilePrefix=NULL, outdir=tempdir())
 
 }

@@ -54,6 +54,7 @@ checkContrastNames <- function(contrastMatrix,
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
 #' @param appendGmt \code{NULL} or character string, path to an additional
 #'   GMT file besides the default GMT file used to perform gene-set analysis.
+#'   The GMT file must exist.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used
 #'   instead of the installed version.
 #'
@@ -77,7 +78,7 @@ checkContrastNames <- function(contrastMatrix,
 #'  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
 #'      outfilePrefix=NULL, outdir=tempdir())
 #'
-#' @importFrom ribiosUtils haltifnot createDir assertFile
+#' @importFrom ribiosUtils haltifnot createDir assertFile trim
 #' @importFrom ribiosIO writeMatrix
 #' @export edgeRcommand
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
@@ -86,7 +87,6 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          mps=FALSE,
                          appendGmt=NULL,
                          debug=FALSE) {
-
   ## remove trailing -s if any
   outfilePrefix <- gsub("-$", "", outfilePrefix)
   outfileWithDir <- file.path(outdir,
@@ -121,7 +121,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   tpmFile <- paste0(outfileWithDir, "-tpm.gct")
   fDataFile <- paste0(outfileWithDir, "-featureAnno.txt")
   pDataFile <- paste0(outfileWithDir, "-sampleAnno.txt")
-  groupFile <- paste0(outfileWithDir, "-sampleGroup.txt")
+  groupFile <- paste0(outfileWithDir, "-sampleGroups.txt")
   groupLevelFile <- paste0(outfileWithDir, "-sampleGroupLevels.txt")
   designFile <- paste0(outfileWithDir, "-designMatrix.txt")
   contrastFile <- paste0(outfileWithDir, "-contrastMatrix.txt")
@@ -151,10 +151,12 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    sprintf("-featureAnnotationFile %s", fDataFile),
                    sprintf("-phenoData %s", pDataFile),
                    sprintf("-outdir %s", outdir),
-                   appendGmtComm,
                    sprintf("-log %s", logFile),
                    sprintf("-writedb"),
+                   appendGmtComm,
                    mpsComm)
+  command <- ribiosUtils::trim(gsub("\\s+", " ", command))
+  
   writeLines(command, con=commandFile)
   return(command)
 }

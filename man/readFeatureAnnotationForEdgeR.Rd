@@ -14,7 +14,23 @@ readFeatureAnnotationForEdgeR(featureNames, file = NULL)
 \value{
 A \code{data.frame}, with the first column named \code{FeatureName},
   which are the input feature names. The rest columns contain annotations.
+
+The functions tries to parse feature annotation file if it is present. If
+not, it will use \code{\link[ribiosAnnotation]{guessAndAnnotate}} to 
+annotate the features.
 }
 \description{
 Read feature annotation for EdgeR pipeline
+}
+\examples{
+anno <- "GeneID\tGeneSymbol\n1234\tCCR5\n1235\tCCR6"
+annoFile <- tempfile()
+writeLines(anno, annoFile)
+
+featIds <- c("1235", "1234")
+## use file
+readFeatureAnnotationForEdgeR(featIds, file=annoFile)
+## use ribiosAnnotation
+readFeatureAnnotationForEdgeR(featIds, file=NULL)
+
 }

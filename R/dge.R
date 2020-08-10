@@ -3,7 +3,6 @@ NULL
 
 #' Perform differential gene expression analysis with edgeR
 #' 
-#' 
 #' @param edgeObj An object of \code{EdgeObject}
 #' 
 #' The function performs end-to-end differential gene expression (DGE) analysis
@@ -14,6 +13,7 @@ NULL
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 #' exDesign <- model.matrix(~0+exGroups)
+#' colnames(exDesign) <- levels(exGroups)
 #' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
 #' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
 #' exFdata <- data.frame(Identifier=sprintf("Gene%d", 1:nrow(exMat)))
@@ -41,4 +41,58 @@ dgeWithEdgeR <- function(edgeObj) {
   edgeObj.fit <- fitGLM(edgeObj.disp)
   dgeTest <- testGLM(edgeObj.disp, edgeObj.fit)
   return(dgeTest)
+}
+
+utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
+
+#' Perform differential gene expression analysis with edgeR-limma
+#' 
+#' @param edgeObj An object of \code{EdgeObject}
+#' 
+#' The function performs end-to-end differential gene expression (DGE) analysis
+#' with common best practice using voom-limma
+#' 
+#' @return An \code{EdgeResult} object
+#' @examples
+#' 
+#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
+#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
+#' exDesign <- model.matrix(~0+exGroups)
+#' colnames(exDesign) <- levels(exGroups)
+#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+#' exFdata <- data.frame(Identifier=sprintf("Gene%d", 1:nrow(exMat)))
+#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
+#'                      Group=exGroups)
+#' exObj <- EdgeObject(exMat, exDescon, 
+#'                      fData=exFdata, pData=exPdata)
+#' exLimmaVoomRes <- dgeWithLimmaVoom(exObj)
+#' dgeTable(exLimmaVoomRes)
+#' 
+#' @importFrom ribiosExpression DesignContrast
+#' @importFrom limma lmFit contrasts.fit eBayes topTable
+#' @importFrom magrittr %>%
+#' @export 
+dgeWithLimmaVoom <- function(edgeObj) {
+  edgeObj.filter <- filterByCPM(edgeObj)
+  edgeObj.norm <- voom(edgeObj.filter)
+
+  edgeObj.fit <- limma::lmFit(edgeObj.norm, designMatrix(edgeObj))
+  contrasts <- contrastMatrix(edgeObj)
+  contrastFit <- limma::contrasts.fit(edgeObj.fit, contrasts)
+  eBayesFit <- limma::eBayes(edgeObj.fit)
+  noFeat <- nrow(counts(edgeObj))
+  featAnno <- fData(edgeObj)
+  topTables <- lapply(1:ncol(contrasts), function(i) {
+    res <- limma::topTable(eBayesFit, coef=i, number=noFeat, 
+             genelist=featAnno, confint=TRUE)
+    res <- res %>% dplyr::rename(PValue=P.Value, FDR=adj.P.Val,
+                                 CIL=CI.L,
+                                 CIR=CI.R)
+    return(res)
+  })
+  res <- LimmaVoomResult(edgeObj=edgeObj,
+                           marrayLM = eBayesFit,
+                           dgeTables=topTables)
+  return(res)
 }

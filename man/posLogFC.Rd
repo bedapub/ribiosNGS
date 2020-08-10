@@ -3,7 +3,7 @@
 \name{posLogFC}
 \alias{posLogFC}
 \alias{negLogFC}
-\alias{logCPM}
+\alias{aveExpr}
 \alias{LR}
 \alias{FDR}
 \title{Get settings in the significance filter}
@@ -12,7 +12,7 @@ posLogFC(edgeSigFilter)
 
 negLogFC(edgeSigFilter)
 
-logCPM(edgeSigFilter)
+aveExpr(edgeSigFilter)
 
 LR(edgeSigFilter)
 

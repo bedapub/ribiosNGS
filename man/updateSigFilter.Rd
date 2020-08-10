@@ -4,7 +4,16 @@
 \alias{updateSigFilter}
 \title{Update the EdgeSigFilter}
 \usage{
-updateSigFilter(edgeResult, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR)
+updateSigFilter(
+  edgeResult,
+  logFC,
+  posLogFC,
+  negLogFC,
+  aveExpr,
+  LR,
+  pValue,
+  FDR
+)
 }
 \arguments{
 \item{edgeResult}{An \code{EdgeResult} object}
@@ -15,7 +24,7 @@ updateSigFilter(edgeResult, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR)
 
 \item{negLogFC}{Numeric}
 
-\item{logCPM}{Numeric}
+\item{aveExpr}{Numeric}
 
 \item{LR}{Numeric}
 

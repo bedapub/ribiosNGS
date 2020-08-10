@@ -9,7 +9,7 @@ logFCmatrix(
   featureIdentifier = "GeneSymbol",
   contrasts = NULL,
   removeNAfeatures = TRUE,
-  min.logCPM = NULL
+  minAveExpr = NULL
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ values of given contrasts will be returned}
 \item{removeNAfeatures}{Logical, if \code{TRUE}, features containing \code{NA}
 values are removed.}
 
-\item{min.logCPM}{\code{NULL} or numeric. If set, features with logCPM lower
+\item{minAveExpr}{\code{NULL} or numeric. If set, features with aveExpr lower
 than the given value is not considered. This option is helpful to remove
 genes that are lowly expressed which yet show strong differential
 expression.}

@@ -15,7 +15,7 @@ EdgeSigFilter: EdgeR result filter for significantly regulated genes
 \item{\code{negLogFC}}{Numeric, negative logFC threshold (more negative values 
 are kept)}
 
-\item{\code{logCPM}}{Numeric, logCPM treshold (larger values are kept)}
+\item{\code{aveExpr}}{Numeric, threshold of average expression (larger values are kept)}
 
 \item{\code{LR}}{Numeric, likelihood ratio (LR) threshold (larger values are kept)}
 

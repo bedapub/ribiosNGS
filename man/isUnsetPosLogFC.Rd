@@ -3,7 +3,7 @@
 \name{isUnsetPosLogFC}
 \alias{isUnsetPosLogFC}
 \alias{isUnsetNegLogFC}
-\alias{isUnsetLogCPM}
+\alias{isUnsetAveExpr}
 \alias{isUnsetLR}
 \alias{isUnsetPValue}
 \alias{isUnsetFDR}
@@ -13,7 +13,7 @@ isUnsetPosLogFC(edgeSigFilter)
 
 isUnsetNegLogFC(edgeSigFilter)
 
-isUnsetLogCPM(edgeSigFilter)
+isUnsetAveExpr(edgeSigFilter)
 
 isUnsetLR(edgeSigFilter)
 

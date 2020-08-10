@@ -4,20 +4,20 @@
 \alias{update.EdgeSigFilter}
 \alias{`logFC<-`}
 \alias{`negLogFC<-`}
-\alias{`logCPM<-`}
+\alias{`aveExpr<-`}
 \alias{`LR<-`}
 \alias{`pValue<-`}
 \alias{`FDR<-`}
 \alias{posLogFC<-}
 \alias{negLogFC<-}
 \alias{logFC<-}
-\alias{logCPM<-}
+\alias{aveExpr<-}
 \alias{LR<-}
 \alias{pValue<-}
 \alias{FDR<-}
 \title{Update EdgeSigFilter}
 \usage{
-\method{update}{EdgeSigFilter}(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR, ...)
+\method{update}{EdgeSigFilter}(object, logFC, posLogFC, negLogFC, aveExpr, LR, pValue, FDR, ...)
 
 posLogFC(object) <- value
 
@@ -25,7 +25,7 @@ negLogFC(object) <- value
 
 logFC(object) <- value
 
-logCPM(object) <- value
+aveExpr(object) <- value
 
 LR(object) <- value
 
@@ -42,7 +42,7 @@ FDR(object) <- value
 
 \item{negLogFC}{Numeric, negative logFC filter value, optional.}
 
-\item{logCPM}{Numeric, logCPM filter value, optional.}
+\item{aveExpr}{Numeric, AveExpr filter value, optional.}
 
 \item{LR}{Numeric, LR filter value, optional}
 
@@ -68,7 +68,7 @@ Update EdgeSigFilter
 
 \item \code{logFC<-}: Updates the posLogFC threshold value
 
-\item \code{logCPM<-}: Updates the logCPM threshold value
+\item \code{aveExpr<-}: Updates the aveExpr threshold value
 
 \item \code{LR<-}: Updates the LR threshold value
 

@@ -200,6 +200,8 @@ setMethod("fitGLM", "EdgeObject", function(object, ...) {
 ## Test GLM
 ##-----------------------------------## 
 
+utils::globalVariables("logCPM")
+
 #' @describeIn testGLM Method for EdgeObject and DGEGLM.
 #' @importFrom edgeR glmLRT topTags
 #' @export
@@ -209,6 +211,7 @@ setMethod("testGLM", c("EdgeObject", "DGEGLM"),
             toptables <- apply(contrasts, 2, function(x) {
               lrt <- edgeR::glmLRT(fit, contrast=x)
               x <- edgeR::topTags(lrt, n=nrow(lrt$table))$table
+              x <- dplyr::rename(x, AveExpr=logCPM)
               assertEdgeToptable(x)
               return(x)
             })
@@ -649,9 +652,9 @@ setMethod("show", "EdgeSigFilter", function(object) {
   if(!isUnsetNegLogFC(object))
     msgs <- c(msgs,
                   sprintf("negLogFC filter set: logFC<=%f", negLogFC(object)))
-  if(!isUnsetLogCPM(object))
+  if(!isUnsetAveExpr(object))
     msgs <- c(msgs,
-                  sprintf("logCPM filter set: logCPM>=%f", logCPM(object)))                  
+                  sprintf("aveExpr filter set: aveExpr>=%f", aveExpr(object)))
   if(!isUnsetLR(object))
     msgs <- c(msgs,
                  sprintf("LR filter set: LR>=%f", LR(object)))

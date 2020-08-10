@@ -52,6 +52,7 @@ checkContrastNames <- function(contrastMatrix,
 #' name of the project, to identify the files uniquely. The files will be written in 
 #' \code{file.path(OUTDIR, 'input_data')}.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param limmaVoom Logical, whether the limma-voom model is run instead of the edgeR model
 #' @param appendGmt \code{NULL} or character string, path to an additional
 #'   GMT file besides the default GMT file used to perform gene-set analysis.
 #'   The GMT file must exist.
@@ -85,6 +86,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outdir="edgeR_output",
                          outfilePrefix="an-unnamed-project-",
                          mps=FALSE,
+                         limmaVoom=FALSE,
                          appendGmt=NULL,
                          debug=FALSE) {
   ## remove trailing -s if any
@@ -136,6 +138,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 
   logFile <- paste0(gsub("\\/$", "", outdir), ".log")
   mpsComm <- ifelse(mps, "-mps", "")
+  limmaVommComm <- ifelse(limmaVoom, "-limmaVoom", "")
   commandFile <- paste0(outfileWithDir, "-edgeRcommand.txt")
 
   scriptFile <- file.path("/pstore/apps/bioinfo/geneexpression/",
@@ -154,7 +157,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    sprintf("-log %s", logFile),
                    sprintf("-writedb"),
                    appendGmtComm,
-                   mpsComm)
+                   mpsComm,
+                   limmaVommComm)
   command <- ribiosUtils::trim(gsub("\\s+", " ", command))
   
   writeLines(command, con=commandFile)
@@ -173,6 +177,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param limmaVoom Logical, whether the limma-voom model is run instead of the edgeR model
 #' @param appendGmt \code{NULL} or character string, path to an additional GMT
 #'   file for gene-set analysis. The option is passed to
 #'   \code{\link{edgeRcommand}}.
@@ -205,6 +210,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outdir="edgeR_output",
                               outfilePrefix="an-unnamed-project-",
                               mps=FALSE,
+                              limmaVoom=FALSE,
                               appendGmt=NULL,
                               interactive=FALSE,
                               debug=FALSE) {
@@ -214,6 +220,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                        outdir=outdir,
                        outfilePrefix=outfilePrefix,
                        mps=mps,
+                       limmaVoom=limmaVoom,
                        appendGmt=appendGmt,
                        debug=debug)
   outdirBase <- basename(gsub("\\/$", "", outdir))
@@ -250,6 +257,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' directory will be overwritten anyway. If \code{no}, and if an output
 #' directory is present, the job will not be started.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param limmaVoom Logical, whether the limma-voom model is run instead of the edgeR model.
 #' @param appendGmt \code{NULL} or character string, path to an additional GMT
 #'   file for gene-set analysis. The option is passed to
 #'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
@@ -281,6 +289,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outfilePrefix="an-unnamed-project-",
                        overwrite=c("ask", "yes", "no"),
                        mps=FALSE,
+                       limmaVoom=FALSE,
                        appendGmt=NULL,
                        interactive=FALSE,
                        debug=FALSE) {
@@ -320,6 +329,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                             outdir=outdir,
                             outfilePrefix=outfilePrefix,
                             mps=mps,
+                            limmaVoom=limmaVoom,
                             appendGmt=appendGmt,
                             interactive=interactive,
                             debug=debug)

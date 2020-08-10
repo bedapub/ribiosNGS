@@ -182,12 +182,12 @@ EdgeResult <- function(edgeObj,
       dgeTables=dgeTables)
 }
 
-#' Voom-Limma Object that contains test results, dgeTable, and EdgeSigFilter
+#' The LimmaVoom Object that contains test results, dgeTable, and EdgeSigFilter
 #' @slot marrayLM A \code{MArrayLM} class object that contains results of eBayesFit
 #' @slot dgeTables A list of dgeTable
 #' @slot sigFilter Significantly regulated gene filter
 #' @export
-setClass("VoomLimmaResult",
+setClass("LimmaVoomResult",
          representation=list("marrayLM"="MArrayLM",
                              "dgeTables"="list",
                              "sigFilter"="EdgeSigFilter"),

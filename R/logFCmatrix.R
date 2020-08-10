@@ -5,7 +5,7 @@
 #' be used as rownames of the result matrix
 #' @param contrasts \code{NULL} or characters; if not \code{NULL}, only logFC
 #' values of given contrasts will be returned
-#' @param min.logCPM \code{NULL} or numeric. If set, features with logCPM lower
+#' @param min.aveExpr \code{NULL} or numeric. If set, features with aveExpr lower
 #' than the given value is not considered. This option is helpful to remove
 #' genes that are lowly expressed which yet show strong differential
 #' expression.
@@ -17,10 +17,10 @@
 logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol", 
                         contrasts=NULL,
                         removeNAfeatures=TRUE,
-                        min.logCPM=NULL) {
+                        minAveExpr=NULL) {
   tbls <- edgeResult@dgeTables
-  if(!is.null(min.logCPM)) {
-    tbls <- lapply(tbls, function(x) subset(x, logCPM>=min.logCPM))
+  if(!is.null(min.aveExpr)) {
+    tbls <- lapply(tbls, function(x) subset(x, AveExpr>=minAveExpr))
   }
   allContrasts <- contrastNames(edgeResult)
   

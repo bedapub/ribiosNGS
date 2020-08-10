@@ -229,7 +229,7 @@ customSmearPlot <- function(tbl, main,
                               ylab = "logFC", pch = 19, cex = 0.2, smearWidth = 0.5, panel.first = grid(), 
                               smooth.scatter = FALSE, lowess = FALSE, ...) {
   edgeR::maPlot(x=NULL, y=NULL,
-                logAbundance=tbl$logCPM,
+                logAbundance=tbl$AveExpr,
                 logFC=tbl$logFC,
                 xlab = xlab, ylab = ylab, 
                 pch = pch, cex = cex, smearWidth = smearWidth,
@@ -255,13 +255,14 @@ customSmearPlot <- function(tbl, main,
 setMethod("smearPlot", "EdgeResult",
           function(object, contrast=NULL, freeRelation=FALSE,
                    xlab = "Average logCPM", 
-                   ylab = "logFC", pch = 19, cex = 0.2, smearWidth = 0.5, panel.first = grid(), 
+                   ylab = "logFC", pch = 19, cex = 0.2, smearWidth = 0.5, 
+                   panel.first = grid(), 
                    smooth.scatter = FALSE, lowess = FALSE,
                    multipage=FALSE,
                    ...) {
               tables <- dgeTableList(object, contrast)
               logFCs <- unlist(sapply(tables, function(x) x$logFC))
-              logCPMs <- unlist(sapply(tables, function(x) x$logCPM))
+              logCPMs <- unlist(sapply(tables, function(x) x$AveExpr))
               if(!freeRelation) {
                 logFC.range <- quantile(logFCs, c(0.0005, 0.9995), na.rm=TRUE)
                 logCPM.range <- quantile(logCPMs, c(0.0005, 0.9995), na.rm=TRUE)

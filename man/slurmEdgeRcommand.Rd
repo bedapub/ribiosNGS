@@ -11,6 +11,7 @@ slurmEdgeRcommand(
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
   mps = FALSE,
+  limmaVoom = FALSE,
   appendGmt = NULL,
   interactive = FALSE,
   debug = FALSE
@@ -32,6 +33,8 @@ e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
 created.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
+
+\item{limmaVoom}{Logical, whether the limma-voom model is run instead of the edgeR model}
 
 \item{appendGmt}{\code{NULL} or character string, path to an additional GMT
 file for gene-set analysis. The option is passed to

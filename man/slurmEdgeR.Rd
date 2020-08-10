@@ -12,6 +12,7 @@ slurmEdgeR(
   outfilePrefix = "an-unnamed-project-",
   overwrite = c("ask", "yes", "no"),
   mps = FALSE,
+  limmaVoom = FALSE,
   appendGmt = NULL,
   interactive = FALSE,
   debug = FALSE
@@ -38,6 +39,8 @@ directory will be overwritten anyway. If \code{no}, and if an output
 directory is present, the job will not be started.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
+
+\item{limmaVoom}{Logical, whether the limma-voom model is run instead of the edgeR model.}
 
 \item{appendGmt}{\code{NULL} or character string, path to an additional GMT
 file for gene-set analysis. The option is passed to

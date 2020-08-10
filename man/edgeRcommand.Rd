@@ -12,6 +12,7 @@ edgeRcommand(
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
   mps = FALSE,
+  limmaVoom = FALSE,
   appendGmt = NULL,
   debug = FALSE
 )
@@ -32,6 +33,8 @@ name of the project, to identify the files uniquely. The files will be written i
 \code{file.path(OUTDIR, 'input_data')}.}
 
 \item{mps}{Logical, whether molecular-phenotyping analysis is run.}
+
+\item{limmaVoom}{Logical, whether the limma-voom model is run instead of the edgeR model}
 
 \item{appendGmt}{\code{NULL} or character string, path to an additional
 GMT file besides the default GMT file used to perform gene-set analysis.

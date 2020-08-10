@@ -55,8 +55,8 @@ negLogFC <- function(edgeSigFilter)
 
 #' @rdname posLogFC
 #' @export
-logCPM <- function(edgeSigFilter)
-  edgeSigFilter@logCPM
+aveExpr <- function(edgeSigFilter)
+  edgeSigFilter@aveExpr
 
 #' @rdname posLogFC
 #' @export
@@ -86,9 +86,9 @@ isUnsetNegLogFC <-
 
 #' @rdname isUnsetPosLogFC
 #' @export
-isUnsetLogCPM <-
+isUnsetAveExpr <-
   function(edgeSigFilter)
-    logCPM(edgeSigFilter) == ESF_LOGCPM_DEFAULT
+    aveExpr(edgeSigFilter) == ESF_AVEEXPR_DEFAULT
 
 #' @rdname isUnsetPosLogFC
 #' @export
@@ -115,7 +115,7 @@ isUnsetFDR <-
 isUnsetSigFilter <- function(object) {
   res <- isUnsetPosLogFC(object) &
     isUnsetNegLogFC(object) &
-    isUnsetLogCPM(object) &
+    isUnsetAveExpr(object) &
     isUnsetLR(object) &
     isUnsetPValue(object)  &
     isUnsetFDR(object)
@@ -139,7 +139,7 @@ sigFilter <- function(edgeResult)
 #' @param logFC Numeric
 #' @param posLogFC Numeric
 #' @param negLogFC Numeric
-#' @param logCPM Numeric
+#' @param aveExpr Numeric
 #' @param LR Numeric
 #' @param pValue Numeric
 #' @param FDR Numeric
@@ -150,7 +150,7 @@ updateSigFilter <-
            logFC,
            posLogFC,
            negLogFC,
-           logCPM,
+           aveExpr,
            LR,
            pValue,
            FDR) {
@@ -160,7 +160,7 @@ updateSigFilter <-
       logFC = logFC,
       posLogFC = posLogFC,
       negLogFC = negLogFC,
-      logCPM = logCPM,
+      aveExpr = aveExpr,
       LR = LR,
       pValue = pValue,
       FDR = FDR
@@ -195,7 +195,7 @@ geneCount <- function(edgeResult) {
 assertEdgeToptable <- function(x) {
   stopifnot(is.data.frame(x)
             &
-              all(c("logFC", "logCPM", "LR", "PValue", "FDR") %in% colnames(x)))
+              all(c("logFC", "AveExpr", "LR", "PValue", "FDR") %in% colnames(x)))
 }
 
 #' Return logical vector indicating which genes are significantly regulated
@@ -209,7 +209,7 @@ isSig <- function(data.frame, sigFilter) {
     data.frame,
     (logFC >= posLogFC(sigFilter) |
        logFC <= negLogFC(sigFilter)) &
-      logCPM >= logCPM(sigFilter) &
+      AveExpr >= aveExpr(sigFilter) &
       LR >= LR(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
@@ -223,7 +223,7 @@ isSigPos <- function(data.frame, sigFilter) {
   with(
     data.frame,
     logFC >= posLogFC(sigFilter) &
-      logCPM >= logCPM(sigFilter) &
+      AveExpr >= aveExpr(sigFilter) &
       LR >= LR(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
@@ -238,7 +238,7 @@ isSigPos <- function(data.frame, sigFilter) {
   with(
     data.frame,
     logFC >= posLogFC(sigFilter) &
-      logCPM >= logCPM(sigFilter) &
+      AveExpr >= aveExpr(sigFilter) &
       LR >= LR(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
@@ -250,7 +250,7 @@ isSigNeg <- function(data.frame, sigFilter) {
   with(
     data.frame,
     logFC <= negLogFC(sigFilter) &
-      logCPM >= logCPM(sigFilter) &
+      AveExpr >= aveExpr(sigFilter) &
       LR >= LR(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)

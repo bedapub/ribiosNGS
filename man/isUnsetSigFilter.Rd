@@ -2,16 +2,16 @@
 % Please edit documentation in R/edgeR-funcs.R
 \name{isUnsetSigFilter}
 \alias{isUnsetSigFilter}
-\title{Whether the EdgeSigFilter is the default one}
+\title{Whether the SigFilter is the default one}
 \usage{
 isUnsetSigFilter(object)
 }
 \arguments{
-\item{object}{An EdgeSigFilter object}
+\item{object}{An SigFilter object}
 }
 \value{
 Logical, whether it is unset
 }
 \description{
-Whether the EdgeSigFilter is the default one
+Whether the SigFilter is the default one
 }

@@ -4,25 +4,22 @@
 \alias{isUnsetPosLogFC}
 \alias{isUnsetNegLogFC}
 \alias{isUnsetAveExpr}
-\alias{isUnsetLR}
 \alias{isUnsetPValue}
 \alias{isUnsetFDR}
 \title{Tells whether the threshold was not set}
 \usage{
-isUnsetPosLogFC(edgeSigFilter)
+isUnsetPosLogFC(sigFilter)
 
-isUnsetNegLogFC(edgeSigFilter)
+isUnsetNegLogFC(sigFilter)
 
-isUnsetAveExpr(edgeSigFilter)
+isUnsetAveExpr(sigFilter)
 
-isUnsetLR(edgeSigFilter)
+isUnsetPValue(sigFilter)
 
-isUnsetPValue(edgeSigFilter)
-
-isUnsetFDR(edgeSigFilter)
+isUnsetFDR(sigFilter)
 }
 \arguments{
-\item{edgeSigFilter}{An EdgeSigFilter object}
+\item{sigFilter}{An SigFilter object}
 }
 \value{
 Logical, whether the thresholds are the default values

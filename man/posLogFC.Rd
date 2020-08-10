@@ -4,22 +4,22 @@
 \alias{posLogFC}
 \alias{negLogFC}
 \alias{aveExpr}
-\alias{LR}
+\alias{pValue}
 \alias{FDR}
 \title{Get settings in the significance filter}
 \usage{
-posLogFC(edgeSigFilter)
+posLogFC(sigFilter)
 
-negLogFC(edgeSigFilter)
+negLogFC(sigFilter)
 
-aveExpr(edgeSigFilter)
+aveExpr(sigFilter)
 
-LR(edgeSigFilter)
+pValue(sigFilter)
 
-FDR(edgeSigFilter)
+FDR(sigFilter)
 }
 \arguments{
-\item{edgeSigFilter}{An EdgeSigFilter object}
+\item{sigFilter}{An SigFilter object}
 }
 \value{
 Numeric values of the thresholds

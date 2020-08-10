@@ -26,7 +26,7 @@ exDesign <- model.matrix(~0+exGroups)
 colnames(exDesign) <- levels(exGroups)
 exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
 exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
-exFdata <- data.frame(Identifier=sprintf("Gene\%d", 1:nrow(exMat)))
+exFdata <- data.frame(GeneSymbol=sprintf("Gene\%d", 1:nrow(exMat)))
 exPdata <- data.frame(Name=sprintf("Sample\%d", 1:ncol(exMat)),
                      Group=exGroups)
 exObj <- EdgeObject(exMat, exDescon, 

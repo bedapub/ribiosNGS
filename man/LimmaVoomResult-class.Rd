@@ -3,9 +3,9 @@
 \docType{class}
 \name{LimmaVoomResult-class}
 \alias{LimmaVoomResult-class}
-\title{The LimmaVoom Object that contains test results, dgeTable, and EdgeSigFilter}
+\title{The LimmaVoom Object that contains test results, dgeTable, and SigFilter}
 \description{
-The LimmaVoom Object that contains test results, dgeTable, and EdgeSigFilter
+The LimmaVoom Object that contains test results, dgeTable, and SigFilter
 }
 \section{Slots}{
 

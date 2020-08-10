@@ -2,18 +2,9 @@
 % Please edit documentation in R/edgeR-funcs.R
 \name{updateSigFilter}
 \alias{updateSigFilter}
-\title{Update the EdgeSigFilter}
+\title{Update the SigFilter}
 \usage{
-updateSigFilter(
-  edgeResult,
-  logFC,
-  posLogFC,
-  negLogFC,
-  aveExpr,
-  LR,
-  pValue,
-  FDR
-)
+updateSigFilter(edgeResult, logFC, posLogFC, negLogFC, aveExpr, pValue, FDR)
 }
 \arguments{
 \item{edgeResult}{An \code{EdgeResult} object}
@@ -26,15 +17,13 @@ updateSigFilter(
 
 \item{aveExpr}{Numeric}
 
-\item{LR}{Numeric}
-
 \item{pValue}{Numeric}
 
 \item{FDR}{Numeric}
 }
 \value{
-An updated \code{EdgeResult} object with updated \code{EdgeSigFilter}
+An updated \code{EdgeResult} object with updated \code{SigFilter}
 }
 \description{
-Update the EdgeSigFilter
+Update the SigFilter
 }

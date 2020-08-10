@@ -2,18 +2,18 @@
 % Please edit documentation in R/edgeR-funcs.R
 \name{sigFilter<-}
 \alias{sigFilter<-}
-\title{Replace the EdgeSigFilter of an EdgeResult}
+\title{Replace the SigFilter of an EdgeResult}
 \usage{
 sigFilter(edgeResult) <- value
 }
 \arguments{
 \item{edgeResult}{An EdgeResult object}
 
-\item{value}{An EdgeSigFilter object}
+\item{value}{An SigFilter object}
 }
 \value{
 An updated \code{EdgeResult} object
 }
 \description{
-Replace the EdgeSigFilter of an EdgeResult
+Replace the SigFilter of an EdgeResult
 }

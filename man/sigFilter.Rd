@@ -2,7 +2,7 @@
 % Please edit documentation in R/edgeR-funcs.R
 \name{sigFilter}
 \alias{sigFilter}
-\title{Return the EdgeSigFilter in use}
+\title{Return the SigFilter in use}
 \usage{
 sigFilter(edgeResult)
 }
@@ -10,8 +10,8 @@ sigFilter(edgeResult)
 \item{edgeResult}{An \code{EdgeResult} object}
 }
 \value{
-An \code{EdgeSigFilter} object
+An \code{SigFilter} object
 }
 \description{
-Return the EdgeSigFilter in use
+Return the SigFilter in use
 }

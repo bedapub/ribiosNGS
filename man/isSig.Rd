@@ -14,7 +14,7 @@ isSigPos(data.frame, sigFilter)
 \arguments{
 \item{data.frame}{A \code{data.frame} that must pass \code{assertEdgeToptable}}
 
-\item{sigFilter}{An EdgeSigFilter object}
+\item{sigFilter}{An SigFilter object}
 }
 \value{
 A logical vector of the same length as the row number of the input data.frame

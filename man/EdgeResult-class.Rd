@@ -3,9 +3,9 @@
 \docType{class}
 \name{EdgeResult-class}
 \alias{EdgeResult-class}
-\title{Object that contains test results, dgeTable, and EdgeSigFilter}
+\title{Object that contains test results, dgeTable, and SigFilter}
 \description{
-Object that contains test results, dgeTable, and EdgeSigFilter
+Object that contains test results, dgeTable, and SigFilter
 }
 \section{Slots}{
 

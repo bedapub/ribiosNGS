@@ -137,12 +137,12 @@ SigFilter <- function(logFC, posLogFC, negLogFC, aveExpr, pValue, FDR) {
 
 ER_SIGFILTER_DEFAULT <- SigFilter(logFC=0.5, FDR=0.05)
 
-#' Object that contains input data, dgeTables, and sigFilter
+#' Object that contains count data, dgeTables, and sigFilter
 #' @slot dgeTables A list of dgeTable
 #' @slot sigFilter Significantly regulated gene filter
 #' 
 #' The object is used only for inheritance
-setClass("DgeResult",
+setClass("CountDgeResult",
          representation=list("dgeTables"="list",
                              "sigFilter"="SigFilter"),
          prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
@@ -155,7 +155,7 @@ setClass("DgeResult",
 #' @export
 setClass("EdgeResult",
          representation=list("dgeGLM"="DGEGLM"),
-         contains="DgeResult")
+         contains="CountDgeResult")
 
 #' Return a list of differential gene expression tables
 #' 
@@ -182,7 +182,7 @@ EdgeResult <- function(edgeObj,
 setClass("LimmaVoomResult",
          representation=list("marrayLM"="MArrayLM"),
          prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
-         contains="DgeResult")
+         contains="CountDgeResult")
 
 #' Construct a LimmaVoomResult object
 #' 

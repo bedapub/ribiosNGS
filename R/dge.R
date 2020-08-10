@@ -69,7 +69,8 @@ utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
 #' exLimmaVoomRes <- dgeWithLimmaVoom(exObj)
 #' dgeTable(exLimmaVoomRes)
 #' 
-#' ## exportEdgeResult(exLimmaVoomRes, paste0(tempdir(), "test"), "overwrite")
+#' ## LimmaVoomResult can be also used with exportEdgeResult
+#' exportEdgeResult(exLimmaVoomRes, paste0(tempdir(), "test"), "overwrite")
 #' @importFrom ribiosExpression DesignContrast
 #' @importFrom limma lmFit contrasts.fit eBayes topTable
 #' @importFrom magrittr %>%
@@ -92,6 +93,7 @@ dgeWithLimmaVoom <- function(edgeObj) {
                                  CIR=CI.R)
     return(res)
   })
+  names(topTables) <- colnames(contrasts)
   res <- LimmaVoomResult(edgeObj=edgeObj.filter,
                            marrayLM = eBayesFit,
                            dgeTables=topTables)

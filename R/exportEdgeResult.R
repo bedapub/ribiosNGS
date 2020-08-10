@@ -1,7 +1,7 @@
 #' @include AllClasses.R AllGenerics.R AllMethods.R pseudoT.R
 NULL
 
-#' Write DGE tables in individual files, and the merged file in one file
+#' Write DGE tables in individual files, and the merged table in one file
 #' @param edgeResult An \code{EdgeResult} object
 #' @param outdir Output directory
 #' @return \code{NULL}, side effects are used

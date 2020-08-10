@@ -2,7 +2,7 @@
 % Please edit documentation in R/exportEdgeResult.R
 \name{writeDgeTables}
 \alias{writeDgeTables}
-\title{Write DGE tables}
+\title{Write DGE tables in individual files, and the merged table in one file}
 \usage{
 writeDgeTables(edgeResult, outdir = getwd())
 }
@@ -15,5 +15,5 @@ writeDgeTables(edgeResult, outdir = getwd())
 \code{NULL}, side effects are used
 }
 \description{
-Write DGE tables
+Write DGE tables in individual files, and the merged table in one file
 }

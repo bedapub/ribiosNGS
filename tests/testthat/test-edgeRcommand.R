@@ -27,7 +27,6 @@ test_that("edgeRcommand works with default options", {
 })
 
 ## testing the mps option
-
 mpsComm <- edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
                         outfilePrefix="test", outdir=myDir, mps=TRUE)
 expMpsComm <- paste(expComm, "-mps")
@@ -42,13 +41,30 @@ writeLines("GeneSetA\tDescription\tAKT1\tAKT2\tAKT3", appendGmt)
 gmtComm <- edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
                         outfilePrefix="test", outdir=myDir, appendGmt=appendGmt)
 expGmtComm <- paste(expComm, sprintf("-appendGmt %s", appendGmt))
-
-## testing the appendGmt option
-
 test_that("edgeRcommand works with the appendGmt option, when appendGmt is a character string, path to the GMT file", {
   ## appendGmt
   expect_equal(gmtComm, expGmtComm)
 })
+
+
+## testing the limmaVoom option
+lvComm <- edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
+                        outfilePrefix="test", outdir=myDir, mps=FALSE, limmaVoom=TRUE)
+expLvComm <- paste(expComm, "-limmaVoom")
+test_that("edgeRcommand works with the voomLimma", {
+  expect_equal(lvComm, expLvComm)
+})
+
+## testing the debug option
+
+debugComm <- edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
+                          outfilePrefix="test", outdir=myDir, debug=TRUE)
+expDebugComm  <- gsub("\\/bin\\/", "\\/rsrc\\/", expComm)
+
+test_that("edgeRcommand works with the debug option", {
+  expect_equal(debugComm, expDebugComm)
+})
+
 
 ## testing the debug option
 

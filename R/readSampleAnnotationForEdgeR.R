@@ -30,7 +30,7 @@ readSampleAnnotationForEdgeR <- function(sampleNames,
       pd <- matchColumn(sampleNames, pd, 1L)
     }
   } else {
-    pd <- data.frame(SampleName=sampleNames,
+    pd <- data.frame(ExperimentName=sampleNames,
                      row.names=sampleNames)
   }
   return(pd)

@@ -42,74 +42,74 @@ replaceNAwithZero <- function(edgeObj) {
 ## some useful attributes
 
 #' Get settings in the significance filter
-#' @param edgeSigFilter An EdgeSigFilter object
+#' @param sigFilter An SigFilter object
 #' @returns Numeric values of the thresholds
 #' @export
-posLogFC <- function(edgeSigFilter)
-  edgeSigFilter@posLogFC
+posLogFC <- function(sigFilter)
+  sigFilter@posLogFC
 
 #' @rdname posLogFC
 #' @export
-negLogFC <- function(edgeSigFilter)
-  edgeSigFilter@negLogFC
+negLogFC <- function(sigFilter)
+  sigFilter@negLogFC
 
 #' @rdname posLogFC
 #' @export
-aveExpr <- function(edgeSigFilter)
-  edgeSigFilter@aveExpr
+aveExpr <- function(sigFilter)
+  sigFilter@aveExpr
 
 #' @rdname posLogFC
 #' @export
-LR <- function(edgeSigFilter)
-  edgeSigFilter@LR
-pValue <- function(edgeSigFilter)
-  edgeSigFilter@pValue
+LR <- function(sigFilter)
+  sigFilter@LR
+pValue <- function(sigFilter)
+  sigFilter@pValue
 
 #' @rdname posLogFC
 #' @export
-FDR <- function(edgeSigFilter)
-  edgeSigFilter@FDR
+FDR <- function(sigFilter)
+  sigFilter@FDR
 
 #' Tells whether the threshold was not set
-#' @param edgeSigFilter An EdgeSigFilter object
+#' @param sigFilter An SigFilter object
 #' @returns Logical, whether the thresholds are the default values
 #' @export
 isUnsetPosLogFC <-
-  function(edgeSigFilter)
-    posLogFC(edgeSigFilter) == ESF_POSLOGFC_DEFAULT
+  function(sigFilter)
+    posLogFC(sigFilter) == ESF_POSLOGFC_DEFAULT
 
 #' @rdname isUnsetPosLogFC
 #' @export
 isUnsetNegLogFC <-
-  function(edgeSigFilter)
-    negLogFC(edgeSigFilter) == ESF_NEGLOGFC_DEFAULT
+  function(sigFilter)
+    negLogFC(sigFilter) == ESF_NEGLOGFC_DEFAULT
 
 #' @rdname isUnsetPosLogFC
 #' @export
 isUnsetAveExpr <-
-  function(edgeSigFilter)
-    aveExpr(edgeSigFilter) == ESF_AVEEXPR_DEFAULT
+  function(sigFilter)
+    aveExpr(sigFilter) == ESF_AVEEXPR_DEFAULT
 
 #' @rdname isUnsetPosLogFC
 #' @export
 isUnsetLR <-
-  function(edgeSigFilter)
-    LR(edgeSigFilter) == ESF_LR_DEFAULT
+  function(sigFilter)
+    LR(sigFilter) == ESF_LR_DEFAULT
 
 #' @rdname isUnsetPosLogFC
 #' @export
 isUnsetPValue <-
-  function(edgeSigFilter)
-    pValue(edgeSigFilter) == ESF_PVALUE_DEFAULT
+  function(sigFilter)
+    pValue(sigFilter) == ESF_PVALUE_DEFAULT
 
 #' @rdname isUnsetPosLogFC
 #' @export
 isUnsetFDR <-
-  function(edgeSigFilter)
-    FDR(edgeSigFilter) == ESF_FDR_DEFAULT
+  function(sigFilter)
+    FDR(sigFilter) == ESF_FDR_DEFAULT
 
-#' Whether the EdgeSigFilter is the default one
-#' @param object An EdgeSigFilter object
+#' Whether the SigFilter is the default one
+#' @param object An SigFilter object
 #' @return Logical, whether it is unset
 #' @export
 isUnsetSigFilter <- function(object) {
@@ -128,13 +128,13 @@ isUnsetSigFilter <- function(object) {
 dgeGML <- function(edgeResult)
   return(edgeResult@dgeGLM)
 
-#' Return the EdgeSigFilter in use
+#' Return the SigFilter in use
 #' @param edgeResult An \code{EdgeResult} object
-#' @return An \code{EdgeSigFilter} object
+#' @return An \code{SigFilter} object
 sigFilter <- function(edgeResult)
   return(edgeResult@sigFilter)
 
-#' Update the EdgeSigFilter
+#' Update the SigFilter
 #' @param edgeResult An \code{EdgeResult} object
 #' @param logFC Numeric
 #' @param posLogFC Numeric
@@ -143,7 +143,7 @@ sigFilter <- function(edgeResult)
 #' @param LR Numeric
 #' @param pValue Numeric
 #' @param FDR Numeric
-#' @return An updated \code{EdgeResult} object with updated \code{EdgeSigFilter}
+#' @return An updated \code{EdgeResult} object with updated \code{SigFilter}
 #' @export
 updateSigFilter <-
   function(edgeResult,
@@ -169,9 +169,9 @@ updateSigFilter <-
     return(edgeResult)
   }
 
-#' Replace the EdgeSigFilter of an EdgeResult
+#' Replace the SigFilter of an EdgeResult
 #' @param edgeResult An EdgeResult object
-#' @param value An EdgeSigFilter object
+#' @param value An SigFilter object
 #' @return An updated \code{EdgeResult} object
 #' @export
 `sigFilter<-` <- function(edgeResult, value) {
@@ -201,7 +201,7 @@ assertEdgeToptable <- function(x) {
 
 #' Return logical vector indicating which genes are significantly regulated
 #' @param data.frame A \code{data.frame} that must pass \code{assertEdgeToptable}
-#' @param sigFilter An EdgeSigFilter object
+#' @param sigFilter An SigFilter object
 #' @returns A logical vector of the same length as the row number of the input data.frame
 #' @export
 isSig <- function(data.frame, sigFilter) {

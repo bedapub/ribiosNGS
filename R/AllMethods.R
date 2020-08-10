@@ -639,11 +639,11 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
 ## show
 ##----------------------------------------##
 
-#' Show an EdgeSigFilter object
-#' @param object An EdgeSigFilter object
+#' Show an SigFilter object
+#' @param object An SigFilter object
 #' @importMethodsFrom methods show
 #' @export
-setMethod("show", "EdgeSigFilter", function(object) {
+setMethod("show", "SigFilter", function(object) {
   title <- "Edge Significantly Expressed Genes Filter"
   msgs <- c()
   if(!isUnsetPosLogFC(object))

@@ -195,7 +195,8 @@ geneCount <- function(edgeResult) {
 assertEdgeToptable <- function(x) {
   stopifnot(is.data.frame(x)
             &
-              all(c("logFC", "AveExpr", "LR", "PValue", "FDR") %in% colnames(x)))
+              all(c("logFC", "AveExpr", "PValue", "FDR") %in% colnames(x)) &
+              ("LR" %in% colnames(x) || "t" %in% colnames(x)))
 }
 
 #' Return logical vector indicating which genes are significantly regulated

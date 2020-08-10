@@ -3,10 +3,9 @@ NULL
 
 ER_TCRATIO_DEFAULT <- Inf
 ER_TRENDED_DEFAULT <- Inf
-ER_AVELOGCPM_DEFAULT <- -Inf
 ESF_POSLOGFC_DEFAULT <- 0
 ESF_NEGLOGFC_DEFAULT <- 0
-ESF_LOGCPM_DEFAULT <- -Inf
+ESF_AVEEXPR_DEFAULT <- -Inf
 ESF_LR_DEFAULT <- 0
 ESF_PVALUE_DEFAULT <- 1
 ESF_FDR_DEFAULT <- 1
@@ -34,7 +33,7 @@ setClass("EdgeObject",
 #' @slot posLogFC Numeric, positive logFC threshold (larger values are kept)
 #' @slot negLogFC Numeric, negative logFC threshold (more negative values 
 #'     are kept)
-#' @slot logCPM Numeric, logCPM treshold (larger values are kept)
+#' @slot aveExpr Numeric, threshold of average expression (larger values are kept)
 #' @slot LR Numeric, likelihood ratio (LR) threshold (larger values are kept)
 #' @slot pValue Numeric, p-value treshold (smaller values are kept)
 #' @slot FDR Numeric, FDR treshold
@@ -43,13 +42,13 @@ setClass("EdgeObject",
 setClass("EdgeSigFilter",
          representation=list("posLogFC"="numeric",
                              "negLogFC"="numeric",
-                             "logCPM"="numeric",
+                             "aveExpr"="numeric",
                              "LR"="numeric",
                              "pValue"="numeric",
                              "FDR"="numeric"),
          prototype=list(posLogFC=ESF_POSLOGFC_DEFAULT,
                         negLogFC=ESF_NEGLOGFC_DEFAULT ,
-                        logCPM=ESF_LOGCPM_DEFAULT,
+                        aveExpr=ESF_AVEEXPR_DEFAULT,
                         LR=ESF_LR_DEFAULT,
                         pValue=ESF_PVALUE_DEFAULT,
                         FDR=ESF_FDR_DEFAULT),
@@ -68,7 +67,7 @@ setClass("EdgeSigFilter",
 #' @param logFC Numeric, logFC filter value, optional.
 #' @param posLogFC Numeric, positive logFC filter value, optional.
 #' @param negLogFC Numeric, negative logFC filter value, optional.
-#' @param logCPM Numeric, logCPM filter value, optional.
+#' @param aveExpr Numeric, AveExpr filter value, optional.
 #' @param LR Numeric, LR filter value, optional
 #' @param pValue Numeric, LR filter value, optional
 #' @param FDR Numeric, FDR filter value, optional
@@ -77,16 +76,16 @@ setClass("EdgeSigFilter",
 #'
 #' @return An updated \code{EdgeSigFilter} object.
 #' 
-#' @aliases `logFC<-` `negLogFC<-` `negLogFC<-` `logCPM<-`
+#' @aliases `logFC<-` `negLogFC<-` `negLogFC<-` `aveExpr<-`
 #'          `LR<-` `pValue<-` `FDR<-`
 #' 
 #' @importFrom stats update
 #' @export
-update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR, ...) {
+update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, LR, pValue, FDR, ...) {
   if(!missing(logFC)) logFC(object) <- logFC
   if(!missing(posLogFC)) posLogFC(object) <- posLogFC
   if(!missing(negLogFC)) negLogFC(object) <- negLogFC
-  if(!missing(logCPM)) logCPM(object) <- logCPM
+  if(!missing(aveExpr)) aveExpr(object) <- aveExpr
   if(!missing(LR)) LR(object) <- LR
   if(!missing(pValue)) pValue(object) <- pValue
   if(!missing(FDR)) FDR(object) <- FDR
@@ -116,10 +115,10 @@ update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, 
   return(object)
 }
 
-#' @describeIn update.EdgeSigFilter Updates the logCPM threshold value
+#' @describeIn update.EdgeSigFilter Updates the aveExpr threshold value
 #' @export
-`logCPM<-` <- function(object, value) {
-  object@logCPM <- value
+`aveExpr<-` <- function(object, value) {
+  object@aveExpr <- value
   return(object)
 }
 
@@ -144,10 +143,10 @@ update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, logCPM, LR, 
   return(object)
 }
 
-EdgeSigFilter <- function(logFC, posLogFC, negLogFC, logCPM, LR, pValue, FDR) {
+EdgeSigFilter <- function(logFC, posLogFC, negLogFC, aveExpr, LR, pValue, FDR) {
   object <- new("EdgeSigFilter")
   object <- update(object, logFC=logFC, posLogFC=posLogFC, negLogFC=negLogFC,
-                   logCPM=logCPM, LR=LR, pValue=pValue, FDR=FDR)
+                   aveExpr=aveExpr, LR=LR, pValue=pValue, FDR=FDR)
   return(object)
 }
 
@@ -180,6 +179,35 @@ EdgeResult <- function(edgeObj,
       dgeList=edgeObj@dgeList,
       designContrast=edgeObj@designContrast,
       dgeGLM=dgeGLM,
+      dgeTables=dgeTables)
+}
+
+#' Voom-Limma Object that contains test results, dgeTable, and EdgeSigFilter
+#' @slot marrayLM A \code{MArrayLM} class object that contains results of eBayesFit
+#' @slot dgeTables A list of dgeTable
+#' @slot sigFilter Significantly regulated gene filter
+#' @export
+setClass("VoomLimmaResult",
+         representation=list("marrayLM"="MArrayLM",
+                             "dgeTables"="list",
+                             "sigFilter"="EdgeSigFilter"),
+         prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
+         contains="EdgeObject")
+
+#' Construct a LimmaVoomResult object
+#' 
+#' @param edgeObj An EdgeObject
+#' @param marrayLM A MArrayLM object
+#' @param dgeTables A list of DGEtables.
+#' @return An \code{LimmaVoomResult} object.
+#' @export
+LimmaVoomResult <- function(edgeObj,
+                       marrayLM,
+                       dgeTables) {
+  new("LimmaVoomResult",
+      dgeList=edgeObj@dgeList,
+      designContrast=edgeObj@designContrast,
+      marrayLM=marrayLM,
       dgeTables=dgeTables)
 }
 

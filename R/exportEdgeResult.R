@@ -1,11 +1,11 @@
 #' @include AllClasses.R AllGenerics.R AllMethods.R pseudoT.R
 NULL
 
-#' Write DGE tables
+#' Write DGE tables in individual files, and the merged file in one file
 #' @param edgeResult An \code{EdgeResult} object
 #' @param outdir Output directory
 #' @return \code{NULL}, side effects are used
-#' @importFrom ribiosIO writeMatrix.tableList
+#' @importFrom ribiosIO writeMatrix.tableList writeMatrix
 #' @export
 writeDgeTables <- function(edgeResult, outdir=getwd()) {
   contrasts <- contrastNames(edgeResult)
@@ -13,6 +13,8 @@ writeDgeTables <- function(edgeResult, outdir=getwd()) {
                         sprintf("topTable-%s.txt", contrasts))
   tables <- lapply(contrasts, function(x) dgeTable(edgeResult, x))
   ribiosIO::writeMatrix.tableList(tables, outfiles, row.names=FALSE)
+  ribiosIO::writeMatrix(dgeTable(edgeResult),
+                        file.path(outdir, "topTable.txt"), row.names=FALSE)
 }
 
 #' Write dgeTables with pseudo T statistics

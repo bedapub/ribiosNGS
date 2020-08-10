@@ -86,3 +86,5 @@ Collate:
     'voomLimma.R'
     'writeBiokitSampleAnnotation.R'
     'writeDGEList.R'
+URL: https://github.com/bedapub/ribiosNGS
+BugReports: https://github.com/bedapub/ribiosNGS/issues

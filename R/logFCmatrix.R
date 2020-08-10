@@ -1,3 +1,5 @@
+utils::globalVariables("AveExpr")
+
 #' Extract a matrix of log2(fold-change) values
 #' 
 #' @param edgeResult An \code{EdgeResult} object
@@ -5,7 +7,7 @@
 #' be used as rownames of the result matrix
 #' @param contrasts \code{NULL} or characters; if not \code{NULL}, only logFC
 #' values of given contrasts will be returned
-#' @param min.aveExpr \code{NULL} or numeric. If set, features with aveExpr lower
+#' @param minAveExpr \code{NULL} or numeric. If set, features with aveExpr lower
 #' than the given value is not considered. This option is helpful to remove
 #' genes that are lowly expressed which yet show strong differential
 #' expression.
@@ -19,7 +21,7 @@ logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol",
                         removeNAfeatures=TRUE,
                         minAveExpr=NULL) {
   tbls <- edgeResult@dgeTables
-  if(!is.null(min.aveExpr)) {
+  if(!is.null(minAveExpr)) {
     tbls <- lapply(tbls, function(x) subset(x, AveExpr>=minAveExpr))
   }
   allContrasts <- contrastNames(edgeResult)

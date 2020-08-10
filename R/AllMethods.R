@@ -655,9 +655,6 @@ setMethod("show", "SigFilter", function(object) {
   if(!isUnsetAveExpr(object))
     msgs <- c(msgs,
                   sprintf("aveExpr filter set: aveExpr>=%f", aveExpr(object)))
-  if(!isUnsetLR(object))
-    msgs <- c(msgs,
-                 sprintf("LR filter set: LR>=%f", LR(object)))
   if(!isUnsetPValue(object))
     msgs <- c(msgs,
                   sprintf("pValue filter set: pValue<=%f", pValue(object)))

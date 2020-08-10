@@ -6,7 +6,6 @@ ER_TRENDED_DEFAULT <- Inf
 ESF_POSLOGFC_DEFAULT <- 0
 ESF_NEGLOGFC_DEFAULT <- 0
 ESF_AVEEXPR_DEFAULT <- -Inf
-ESF_LR_DEFAULT <- 0
 ESF_PVALUE_DEFAULT <- 1
 ESF_FDR_DEFAULT <- 1
 
@@ -23,7 +22,6 @@ setClass("EdgeObject",
          representation=list("dgeList"="DGEList",
                              "designContrast"="DesignContrast"))
 
-
 ##-----------------------------##
 ## EdgeResult
 ##-----------------------------##
@@ -34,7 +32,6 @@ setClass("EdgeObject",
 #' @slot negLogFC Numeric, negative logFC threshold (more negative values 
 #'     are kept)
 #' @slot aveExpr Numeric, threshold of average expression (larger values are kept)
-#' @slot LR Numeric, likelihood ratio (LR) threshold (larger values are kept)
 #' @slot pValue Numeric, p-value treshold (smaller values are kept)
 #' @slot FDR Numeric, FDR treshold
 #' 
@@ -43,22 +40,19 @@ setClass("SigFilter",
          representation=list("posLogFC"="numeric",
                              "negLogFC"="numeric",
                              "aveExpr"="numeric",
-                             "LR"="numeric",
                              "pValue"="numeric",
                              "FDR"="numeric"),
          prototype=list(posLogFC=ESF_POSLOGFC_DEFAULT,
                         negLogFC=ESF_NEGLOGFC_DEFAULT ,
                         aveExpr=ESF_AVEEXPR_DEFAULT,
-                        LR=ESF_LR_DEFAULT,
                         pValue=ESF_PVALUE_DEFAULT,
                         FDR=ESF_FDR_DEFAULT),
          validity=function(object) {
            stopifnot(validPosLogFC <- object@posLogFC >= 0)
            stopifnot(validNegLogFC <- object@negLogFC <= 0)
-           stopifnot(validLR <- object@LR>=0)
            stopifnot(validPvalue <- object@pValue >= 0 & object@pValue <= 1)
            stopifnot(validFDR <- object@FDR >= 0 & object@FDR <= 1)
-           return(validPosLogFC & validNegLogFC & validLR & validPvalue & validFDR)
+           return(validPosLogFC & validNegLogFC & validPvalue & validFDR)
          })
 
 #' Update SigFilter
@@ -68,8 +62,7 @@ setClass("SigFilter",
 #' @param posLogFC Numeric, positive logFC filter value, optional.
 #' @param negLogFC Numeric, negative logFC filter value, optional.
 #' @param aveExpr Numeric, AveExpr filter value, optional.
-#' @param LR Numeric, LR filter value, optional
-#' @param pValue Numeric, LR filter value, optional
+#' @param pValue Numeric, pValue filter value, optional
 #' @param FDR Numeric, FDR filter value, optional
 #' @param value Numeric, vssigned threshold value
 #' @param ... not used now
@@ -77,16 +70,15 @@ setClass("SigFilter",
 #' @return An updated \code{SigFilter} object.
 #' 
 #' @aliases `logFC<-` `negLogFC<-` `negLogFC<-` `aveExpr<-`
-#'          `LR<-` `pValue<-` `FDR<-`
+#'          `pValue<-` `FDR<-`
 #' 
 #' @importFrom stats update
 #' @export
-update.SigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, LR, pValue, FDR, ...) {
+update.SigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, pValue, FDR, ...) {
   if(!missing(logFC)) logFC(object) <- logFC
   if(!missing(posLogFC)) posLogFC(object) <- posLogFC
   if(!missing(negLogFC)) negLogFC(object) <- negLogFC
   if(!missing(aveExpr)) aveExpr(object) <- aveExpr
-  if(!missing(LR)) LR(object) <- LR
   if(!missing(pValue)) pValue(object) <- pValue
   if(!missing(FDR)) FDR(object) <- FDR
   validObject(object)
@@ -122,13 +114,6 @@ update.SigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, LR, pVa
   return(object)
 }
 
-#' @describeIn update.SigFilter Updates the LR threshold value
-#' @export
-`LR<-` <- function(object, value) {
-  object@LR <- value
-  return(object)
-}
-
 #' @describeIn update.SigFilter Updates the pValue threshold value
 #' @export
 `pValue<-` <- function(object, value) {
@@ -143,15 +128,25 @@ update.SigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, LR, pVa
   return(object)
 }
 
-SigFilter <- function(logFC, posLogFC, negLogFC, aveExpr, LR, pValue, FDR) {
+SigFilter <- function(logFC, posLogFC, negLogFC, aveExpr, pValue, FDR) {
   object <- new("SigFilter")
   object <- update(object, logFC=logFC, posLogFC=posLogFC, negLogFC=negLogFC,
-                   aveExpr=aveExpr, LR=LR, pValue=pValue, FDR=FDR)
+                   aveExpr=aveExpr, pValue=pValue, FDR=FDR)
   return(object)
 }
 
 ER_SIGFILTER_DEFAULT <- SigFilter(logFC=0.5, FDR=0.05)
 
+#' Object that contains input data, dgeTables, and sigFilter
+#' @slot dgeTables A list of dgeTable
+#' @slot sigFilter Significantly regulated gene filter
+#' 
+#' The object is used only for inheritance
+setClass("DgeResult",
+         representation=list("dgeTables"="list",
+                             "sigFilter"="SigFilter"),
+         prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
+         contains="EdgeObject")
 
 #' Object that contains test results, dgeTable, and SigFilter
 #' @slot dgeGLM A DGEGLM class object that contains GLM test results
@@ -159,11 +154,8 @@ ER_SIGFILTER_DEFAULT <- SigFilter(logFC=0.5, FDR=0.05)
 #' @slot sigFilter Significantly regulated gene filter
 #' @export
 setClass("EdgeResult",
-         representation=list("dgeGLM"="DGEGLM",
-           "dgeTables"="list",
-           "sigFilter"="SigFilter"),
-         prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
-         contains="EdgeObject")
+         representation=list("dgeGLM"="DGEGLM"),
+         contains="DgeResult")
 
 #' Return a list of differential gene expression tables
 #' 
@@ -188,11 +180,9 @@ EdgeResult <- function(edgeObj,
 #' @slot sigFilter Significantly regulated gene filter
 #' @export
 setClass("LimmaVoomResult",
-         representation=list("marrayLM"="MArrayLM",
-                             "dgeTables"="list",
-                             "sigFilter"="SigFilter"),
+         representation=list("marrayLM"="MArrayLM"),
          prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
-         contains="EdgeObject")
+         contains="DgeResult")
 
 #' Construct a LimmaVoomResult object
 #' 

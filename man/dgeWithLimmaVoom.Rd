@@ -22,6 +22,7 @@ Perform differential gene expression analysis with edgeR-limma
 }
 \examples{
 
+set.seed(1887)
 exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 exDesign <- model.matrix(~0+exGroups)
@@ -35,6 +36,9 @@ exObj <- EdgeObject(exMat, exDescon,
                      fData=exFdata, pData=exPdata)
 exLimmaVoomRes <- dgeWithLimmaVoom(exObj)
 dgeTable(exLimmaVoomRes)
+
+## compare with edgeR
+dgeTable(dgeWithEdgeR(exObj))
 
 ## LimmaVoomResult can be also used with exportEdgeResult
 exportEdgeResult(exLimmaVoomRes, paste0(tempdir(), "test"), "overwrite")

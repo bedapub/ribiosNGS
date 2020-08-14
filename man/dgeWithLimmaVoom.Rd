@@ -4,10 +4,12 @@
 \alias{dgeWithLimmaVoom}
 \title{Perform differential gene expression analysis with edgeR-limma}
 \usage{
-dgeWithLimmaVoom(edgeObj)
+dgeWithLimmaVoom(edgeObj, ...)
 }
 \arguments{
-\item{edgeObj}{An object of \code{EdgeObject}
+\item{edgeObj}{An object of \code{EdgeObject}}
+
+\item{...}{Passed to \code{voom}
 
 The function performs end-to-end differential gene expression (DGE) analysis
 with common best practice using voom-limma}

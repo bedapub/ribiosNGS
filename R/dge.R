@@ -82,7 +82,7 @@ dgeWithLimmaVoom <- function(edgeObj) {
   edgeObj.fit <- limma::lmFit(edgeObj.norm, designMatrix(edgeObj))
   contrasts <- contrastMatrix(edgeObj)
   contrastFit <- limma::contrasts.fit(edgeObj.fit, contrasts)
-  eBayesFit <- limma::eBayes(edgeObj.fit)
+  eBayesFit <- limma::eBayes(contrastFit)
   noFeat <- nrow(counts(edgeObj))
   featAnno <- fData(edgeObj)
   topTables <- lapply(1:ncol(contrasts), function(i) {

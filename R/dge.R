@@ -48,6 +48,7 @@ utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
 #' Perform differential gene expression analysis with edgeR-limma
 #' 
 #' @param edgeObj An object of \code{EdgeObject}
+#' @param ... Passed to \code{voom}
 #' 
 #' The function performs end-to-end differential gene expression (DGE) analysis
 #' with common best practice using voom-limma
@@ -55,6 +56,7 @@ utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
 #' @return An \code{EdgeResult} object
 #' @examples
 #' 
+#' set.seed(1887)
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
 #' exDesign <- model.matrix(~0+exGroups)
@@ -69,28 +71,30 @@ utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
 #' exLimmaVoomRes <- dgeWithLimmaVoom(exObj)
 #' dgeTable(exLimmaVoomRes)
 #' 
+#' ## compare with edgeR
+#' dgeTable(dgeWithEdgeR(exObj))
+#' 
 #' ## LimmaVoomResult can be also used with exportEdgeResult
 #' exportEdgeResult(exLimmaVoomRes, paste0(tempdir(), "test"), "overwrite")
-#' @importFrom ribiosExpression DesignContrast
+#' @importFrom ribiosExpression DesignContrast limmaTopTable2dgeTable
 #' @importFrom limma lmFit contrasts.fit eBayes topTable
 #' @importFrom magrittr %>%
 #' @export 
-dgeWithLimmaVoom <- function(edgeObj) {
+dgeWithLimmaVoom <- function(edgeObj, ...) {
   edgeObj.filter <- filterByCPM(edgeObj)
-  edgeObj.norm <- ribiosNGS::voom(edgeObj.filter)
-  
+  edgeObj.norm <- ribiosNGS::voom(edgeObj.filter, ...)
+
   edgeObj.fit <- limma::lmFit(edgeObj.norm, designMatrix(edgeObj))
+  edgeObj.fit$genes <- fData(edgeObj.filter)
   contrasts <- contrastMatrix(edgeObj)
   contrastFit <- limma::contrasts.fit(edgeObj.fit, contrasts)
   eBayesFit <- limma::eBayes(contrastFit)
-  noFeat <- nrow(counts(edgeObj))
-  featAnno <- fData(edgeObj)
+  noFeat <- nrow(edgeObj.fit$genes)
   topTables <- lapply(1:ncol(contrasts), function(i) {
-    res <- limma::topTable(eBayesFit, coef=i, number=noFeat, 
-                           genelist=featAnno, confint=TRUE)
-    res <- res %>% dplyr::rename(PValue=P.Value, FDR=adj.P.Val,
-                                 CIL=CI.L,
-                                 CIR=CI.R)
+    res <- limma::topTable(eBayesFit, coef=i, number=noFeat,
+                           genelist=edgeObj.fit$genes, confint=TRUE)
+    res <- ribiosExpression::limmaTopTable2dgeTable(res)
+    assertEdgeToptable(res)
     return(res)
   })
   names(topTables) <- colnames(contrasts)

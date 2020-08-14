@@ -138,10 +138,13 @@ SigFilter <- function(logFC, posLogFC, negLogFC, aveExpr, pValue, FDR) {
 ER_SIGFILTER_DEFAULT <- SigFilter(logFC=0.5, FDR=0.05)
 
 #' Object that contains count data, dgeTables, and sigFilter
+#' @note The object is used only for inheritance
+#' 
 #' @slot dgeTables A list of dgeTable
 #' @slot sigFilter Significantly regulated gene filter
-#' 
-#' The object is used only for inheritance
+#'
+#' @exportClass CountDgeResult
+#'
 setClass("CountDgeResult",
          representation=list("dgeTables"="list",
                              "sigFilter"="SigFilter"),
@@ -176,26 +179,29 @@ EdgeResult <- function(edgeObj,
 
 #' The LimmaVoom Object that contains test results, dgeTable, and SigFilter
 #' @slot marrayLM A \code{MArrayLM} class object that contains results of eBayesFit
-#' @slot dgeTables A list of dgeTable
-#' @slot sigFilter Significantly regulated gene filter
+#' @slot voom The \code{voom} object
 #' @export
 setClass("LimmaVoomResult",
-         representation=list("marrayLM"="MArrayLM"),
+         representation=list("marrayLM"="MArrayLM",
+                             "voom"="EList"),
          prototype=list(sigFilter=ER_SIGFILTER_DEFAULT),
          contains="CountDgeResult")
 
 #' Construct a LimmaVoomResult object
 #' 
-#' @param edgeObj An EdgeObject
-#' @param marrayLM A MArrayLM object
+#' @param edgeObj An EdgeObject.
+#' @param voom The voom (\code{EList}) object.
+#' @param marrayLM A MArrayLM object.
 #' @param dgeTables A list of DGEtables.
 #' @return An \code{LimmaVoomResult} object.
 #' @export
 LimmaVoomResult <- function(edgeObj,
-                       marrayLM,
-                       dgeTables) {
+                            voom,
+                            marrayLM,
+                            dgeTables) {
   new("LimmaVoomResult",
       dgeList=edgeObj@dgeList,
+      voom=voom,
       designContrast=edgeObj@designContrast,
       marrayLM=marrayLM,
       dgeTables=dgeTables)

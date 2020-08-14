@@ -4,12 +4,14 @@
 \alias{LimmaVoomResult}
 \title{Construct a LimmaVoomResult object}
 \usage{
-LimmaVoomResult(edgeObj, marrayLM, dgeTables)
+LimmaVoomResult(edgeObj, voom, marrayLM, dgeTables)
 }
 \arguments{
-\item{edgeObj}{An EdgeObject}
+\item{edgeObj}{An EdgeObject.}
 
-\item{marrayLM}{A MArrayLM object}
+\item{voom}{The voom (\code{EList}) object.}
+
+\item{marrayLM}{A MArrayLM object.}
 
 \item{dgeTables}{A list of DGEtables.}
 }

@@ -12,8 +12,9 @@ Object that contains count data, dgeTables, and sigFilter
 \describe{
 \item{\code{dgeTables}}{A list of dgeTable}
 
-\item{\code{sigFilter}}{Significantly regulated gene filter
-
-The object is used only for inheritance}
+\item{\code{sigFilter}}{Significantly regulated gene filter}
 }}
 
+\note{
+The object is used only for inheritance
+}

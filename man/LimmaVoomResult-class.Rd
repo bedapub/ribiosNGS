@@ -12,8 +12,6 @@ The LimmaVoom Object that contains test results, dgeTable, and SigFilter
 \describe{
 \item{\code{marrayLM}}{A \code{MArrayLM} class object that contains results of eBayesFit}
 
-\item{\code{dgeTables}}{A list of dgeTable}
-
-\item{\code{sigFilter}}{Significantly regulated gene filter}
+\item{\code{voom}}{The \code{voom} object}
 }}
 

@@ -77,8 +77,8 @@ utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
 #' @export 
 dgeWithLimmaVoom <- function(edgeObj) {
   edgeObj.filter <- filterByCPM(edgeObj)
-  edgeObj.norm <- voom(edgeObj.filter)
-
+  edgeObj.norm <- ribiosNGS::voom(edgeObj.filter)
+  
   edgeObj.fit <- limma::lmFit(edgeObj.norm, designMatrix(edgeObj))
   contrasts <- contrastMatrix(edgeObj)
   contrastFit <- limma::contrasts.fit(edgeObj.fit, contrasts)
@@ -87,7 +87,7 @@ dgeWithLimmaVoom <- function(edgeObj) {
   featAnno <- fData(edgeObj)
   topTables <- lapply(1:ncol(contrasts), function(i) {
     res <- limma::topTable(eBayesFit, coef=i, number=noFeat, 
-             genelist=featAnno, confint=TRUE)
+                           genelist=featAnno, confint=TRUE)
     res <- res %>% dplyr::rename(PValue=P.Value, FDR=adj.P.Val,
                                  CIL=CI.L,
                                  CIR=CI.R)
@@ -95,7 +95,8 @@ dgeWithLimmaVoom <- function(edgeObj) {
   })
   names(topTables) <- colnames(contrasts)
   res <- LimmaVoomResult(edgeObj=edgeObj.filter,
-                           marrayLM = eBayesFit,
-                           dgeTables=topTables)
+                         voom=edgeObj.norm,
+                         marrayLM = eBayesFit,
+                         dgeTables=topTables)
   return(res)
 }

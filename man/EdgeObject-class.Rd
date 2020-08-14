@@ -5,6 +5,7 @@
 \alias{EdgeObject-class}
 \alias{EdgeObject,matrix,DesignContrast-method}
 \alias{EdgeObject,FeatAnnoExprs,DesignContrast-method}
+\alias{EdgeObject,DGEList,DesignContrast-method}
 \title{EdgeObject argumenting DGEList by including designContrast information}
 \usage{
 \S4method{EdgeObject}{matrix,DesignContrast}(
@@ -16,9 +17,11 @@
 )
 
 \S4method{EdgeObject}{FeatAnnoExprs,DesignContrast}(object, designContrast, pData = NULL, remove.zeros = FALSE)
+
+\S4method{EdgeObject}{DGEList,DesignContrast}(object, designContrast)
 }
 \arguments{
-\item{object}{A \code{FeatAnnoExprs} object}
+\item{object}{A \code{DGEList} object}
 
 \item{designContrast}{A \code{DesignContrast} object}
 
@@ -36,6 +39,8 @@ EdgeObject argumenting DGEList by including designContrast information
 \item \code{EdgeObject}: The method for matrix as input
 
 \item \code{EdgeObject}: The method for FeatAnnoExprs as input
+
+\item \code{EdgeObject}: The method for DGEList as input
 }}
 
 \section{Slots}{

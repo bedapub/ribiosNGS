@@ -33,6 +33,9 @@ exObj3 <- EdgeObject(exMat, exDescon,
             
 fData(exObj3)
 
+dgeList <- edgeR::DGEList(counts=exMat, samples=exPdata, genes=exFdata)
+exObj4 <- EdgeObject(dgeList, exDescon)
+
 ## note that pData are appended after count information
 pData(exObj2)
 pData(exObj3)

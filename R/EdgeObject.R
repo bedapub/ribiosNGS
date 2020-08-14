@@ -6,7 +6,8 @@ NULL
 #' @param object A matrix containing counts of features
 #' @param designContrast A \code{DesignContrast} object
 #' @param ... Other parameters
-#' 
+#'
+#' @importFrom edgeR DGEList 
 #' @examples 
 #' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 #' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
@@ -23,6 +24,9 @@ NULL
 #'                      fData=exFdata, pData=exPdata)
 #'             
 #' fData(exObj3)
+#' 
+#' dgeList <- edgeR::DGEList(counts=exMat, samples=exPdata, genes=exFdata)
+#' exObj4 <- EdgeObject(dgeList, exDescon)
 #' 
 #' ## note that pData are appended after count information
 #' pData(exObj2)
@@ -70,4 +74,14 @@ setMethod("EdgeObject",
             new("EdgeObject",
                 dgeList=dgeList,
                 designContrast=designContrast)
+          })
+
+#' @describeIn EdgeObject The method for DGEList as input
+#' @param object A \code{DGEList} object
+#' @param designContrast A \code{DesignContrast} object
+#' @export
+setMethod("EdgeObject", c("DGEList", "DesignContrast"),
+          function(object, designContrast) {
+            res <- new("EdgeObject", dgeList=object, designContrast=designContrast)
+            return(res)
           })

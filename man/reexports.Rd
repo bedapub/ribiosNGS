@@ -13,7 +13,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{edgeR}{\code{\link[edgeR]{DGEList}}, \code{\link[edgeR]{cpm}}}
+  \item{edgeR}{\code{\link[edgeR]{cpm}}, \code{\link[edgeR]{DGEList}}}
 
   \item{ribiosExpression}{\code{\link[ribiosExpression]{DesignContrast}}}
 }}

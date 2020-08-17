@@ -32,9 +32,9 @@ staticGeneLevelPlots <- function(edgeResult) {
   objPca <- prcomp(t(objModLogCPM))
   objPca.data <- ribiosPlot::plotPCA(objPca, points=FALSE, text=TRUE, main="modLogCPM PCA")
   
-  ### COA (using mogLogCPM)
-  objCoa <- made4::ord(objModLogCPM)$or$co
-  made4::plotarrays(objCoa, classvec=dispGroups(edgeResult))
+  ### COA (using mogLogCPM - leaving out for now, because array2ade4 reports an error, since matrix has two classes (matrix and vector) in R-4.0.1)
+  ## objCoa <- made4::ord(objModLogCPM)$or$co
+  ## made4::plotarrays(objCoa, classvec=dispGroups(edgeResult))
   
   ## BioQC
   ### TODO: RPKM/TPM calculation needed
@@ -49,7 +49,7 @@ staticGeneLevelPlots <- function(edgeResult) {
   
   ## Dispersion
   ### BCV plot
-  plotBCV(edgeResult, main="BCV plot")
+  ribiosNGS::plotBCV(edgeResult, main="BCV plot")
   
   ## Significant differentially expressed genes
   ## number of significantly differentially expressed genes

@@ -1,14 +1,6 @@
 #' @include ribiosNGS-package.R
 NULL
 
-ER_TCRATIO_DEFAULT <- Inf
-ER_TRENDED_DEFAULT <- Inf
-ESF_POSLOGFC_DEFAULT <- 0
-ESF_NEGLOGFC_DEFAULT <- 0
-ESF_AVEEXPR_DEFAULT <- -Inf
-ESF_PVALUE_DEFAULT <- 1
-ESF_FDR_DEFAULT <- 1
-
 ##-----------------------------------##
 ## EdgeObject
 ##-----------------------------------##
@@ -22,9 +14,19 @@ setClass("EdgeObject",
          representation=list("dgeList"="DGEList",
                              "designContrast"="DesignContrast"))
 
-##-----------------------------##
-## EdgeResult
-##-----------------------------##
+ER_TCRATIO_DEFAULT <- Inf
+ER_TRENDED_DEFAULT <- Inf
+ESF_POSLOGFC_DEFAULT <- 0
+ESF_NEGLOGFC_DEFAULT <- 0
+EST_LOGCPM_DEFAULT <- -Inf
+ESF_AVEEXPR_DEFAULT <- -Inf
+ESF_PVALUE_DEFAULT <- 1
+ESF_FDR_DEFAULT <- 1
+
+
+##-----------------------------------##
+## SigFilter
+##-----------------------------------##
 
 #' Base result filter for significantly regulated genes
 #' 
@@ -57,7 +59,7 @@ setClass("SigFilter",
 #' @export
 setClass("EdgeSigFilter",
          representation = list("logCPM"="numeric"),
-         prototype=list(logCPM=ESF_AVEEXPR_DEFAULT),
+         prototype=list(logCPM=EST_LOGCPM_DEFAULT),
          contains="SigFilter")
 
 #' Extends BaseSigFilter to filter genes base on aveExpr
@@ -74,7 +76,6 @@ setClass("LimmaSigFilter",
 #' @param logFC Numeric, logFC filter value, optional.
 #' @param posLogFC Numeric, positive logFC filter value, optional.
 #' @param negLogFC Numeric, negative logFC filter value, optional.
-#' @param aveExpr Numeric, AveExpr filter value, optional.
 #' @param pValue Numeric, pValue filter value, optional
 #' @param FDR Numeric, FDR filter value, optional
 #' @param value Numeric, vssigned threshold value
@@ -82,20 +83,33 @@ setClass("LimmaSigFilter",
 #'
 #' @return An updated \code{SigFilter} object.
 #' 
-#' @aliases `logFC<-` `negLogFC<-` `negLogFC<-` `aveExpr<-`
+#' @aliases `logFC<-` `posLogFC<-` `negLogFC<-` `aveExpr<-` `logCPM<-`
 #'          `pValue<-` `FDR<-`
 #' 
 #' @importFrom stats update
 #' @export
-update.SigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, pValue, FDR, ...) {
+update.SigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, ...) {
   if(!missing(logFC)) logFC(object) <- logFC
   if(!missing(posLogFC)) posLogFC(object) <- posLogFC
   if(!missing(negLogFC)) negLogFC(object) <- negLogFC
-  if(!missing(aveExpr)) aveExpr(object) <- aveExpr
   if(!missing(pValue)) pValue(object) <- pValue
   if(!missing(FDR)) FDR(object) <- FDR
   validObject(object)
   return(object)
+}
+
+update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, logCPM, ...) {
+  res <- update.SigFilter(object, logFC, posLogFC, negLogFC, pValue, FDR)
+  if(!missing(logCPM)) logCPM(res) <- logCPM
+  validObject(res)
+  return(res)
+}
+
+update.LimmaSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, aveExpr, ...) {
+  res <- update.SigFilter(object, logFC, posLogFC, negLogFC, pValue, FDR)
+  if(!missing(aveExpr)) aveExpr(res) <- aveExpr
+  validObject(res)
+  return(res)
 }
 
 #' @describeIn update.SigFilter Updates the posLogFC threshold value
@@ -127,6 +141,12 @@ update.SigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, pValue,
   return(object)
 }
 
+#' @describeIn update.SigFilter Updates the logCPM threshold value
+`logCPM<-` <- function(object, value) {
+  object@logCPM <- value
+  return(object)
+}
+
 #' @describeIn update.SigFilter Updates the pValue threshold value
 #' @export
 `pValue<-` <- function(object, value) {
@@ -141,16 +161,69 @@ update.SigFilter <- function(object, logFC, posLogFC, negLogFC, aveExpr, pValue,
   return(object)
 }
 
-SigFilter <- function(logFC, posLogFC, negLogFC, aveExpr, pValue, FDR) {
+#' Build a SigFilter
+#' @param logFC Missing or positive numeric
+#' @param posLogFC Missing or positive numeric
+#' @param negLogFC Missing or negative numeric
+#' @param pValue Missing or numeric between 0 and 1
+#' @param FDR Missing or numeric between 0 and 1
+#' @return A \code{SigFilter} object
+#' @aliases EdgeSigFilter LimmaSigFilter
+#' @examples 
+#' SigFilter()
+#' SigFilter(logFC=2)
+#' SigFilter(negLogFC=-1)
+#' SigFilter(FDR=0.05)
+SigFilter <- function(logFC, posLogFC, negLogFC, pValue, FDR) {
   object <- new("SigFilter")
-  object <- update(object, logFC=logFC, posLogFC=posLogFC, negLogFC=negLogFC,
-                   aveExpr=aveExpr, pValue=pValue, FDR=FDR)
+  object <- update(object, 
+                   logFC=logFC, 
+                   posLogFC=posLogFC, 
+                   negLogFC=negLogFC,
+                   pValue=pValue, FDR=FDR)
+  return(object)
+}
+
+#' @describeIn SigFilter
+#' @examples
+#' esf <- EdgeSigFilter(logFC=2, FDR=0.05, logCPM=0)
+EdgeSigFilter <- function(logFC, posLogFC, negLogFC, pValue, FDR, logCPM) {
+  object <- new("EdgeSigFilter")
+  object <- update(object, 
+                   logFC=logFC, 
+                   posLogFC=posLogFC, 
+                   negLogFC=negLogFC,
+                   pValue=pValue, 
+                   FDR=FDR,
+                   logCPM=logCPM)
+  return(object)
+}
+
+#' @describeIn SigFilter
+#' @examples 
+#' LimmaSigFilter(logFC=1, FDR=0.05, aveExpr=10)
+LimmaSigFilter <- function(logFC, posLogFC, negLogFC, pValue, FDR, aveExpr) {
+  object <- new("EdgeSigFilter")
+  object <- update(object, 
+                   logFC=logFC, 
+                   posLogFC=posLogFC, 
+                   negLogFC=negLogFC,
+                   pValue=pValue, 
+                   FDR=FDR,
+                   aveExpr=aveExpr)
   return(object)
 }
 
 ER_SIGFILTER_DEFAULT <- SigFilter(logFC=0.5, FDR=0.05)
 
-setClass("EdgeSigFilter", list(logCPM="numeric"), contains="SigFilter")
+ER_EDGESIGFILTER_DEFAULT <- EdgeSigFilter(logFC=0.5, FDR=0.05, logCPM=0)
+
+
+
+
+##-----------------------------##
+## EdgeResult
+##-----------------------------##
 
 #' Object that contains count data, dgeTables, and sigFilter
 #' @note The object is used only for inheritance
@@ -173,6 +246,7 @@ setClass("CountDgeResult",
 #' @export
 setClass("EdgeResult",
          representation=list("dgeGLM"="DGEGLM"),
+         prototype=list("sigFilter"=ER_EDGESIGFILTER_DEFAULT),
          contains="CountDgeResult")
 
 #' Return a list of differential gene expression tables
@@ -222,6 +296,9 @@ LimmaVoomResult <- function(edgeObj,
       dgeTables=dgeTables)
 }
 
+##-----------------------------------##
+## Helper classes
+##-----------------------------------##
 #' A class that contain feature annotation and expression matrix
 #' @param exprs A matrix of expression
 #' @param genes A data.frame

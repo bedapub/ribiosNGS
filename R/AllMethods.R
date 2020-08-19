@@ -652,9 +652,6 @@ setMethod("show", "SigFilter", function(object) {
   if(!isUnsetNegLogFC(object))
     msgs <- c(msgs,
                   sprintf("negLogFC filter set: logFC<=%f", negLogFC(object)))
-  if(!isUnsetAveExpr(object))
-    msgs <- c(msgs,
-                  sprintf("aveExpr filter set: aveExpr>=%f", aveExpr(object)))
   if(!isUnsetPValue(object))
     msgs <- c(msgs,
                   sprintf("pValue filter set: pValue<=%f", pValue(object)))

@@ -26,12 +26,11 @@ setClass("EdgeObject",
 ## EdgeResult
 ##-----------------------------##
 
-#' SigFilter: EdgeR result filter for significantly regulated genes
+#' Base result filter for significantly regulated genes
 #' 
 #' @slot posLogFC Numeric, positive logFC threshold (larger values are kept)
 #' @slot negLogFC Numeric, negative logFC threshold (more negative values 
 #'     are kept)
-#' @slot aveExpr Numeric, threshold of average expression (larger values are kept)
 #' @slot pValue Numeric, p-value treshold (smaller values are kept)
 #' @slot FDR Numeric, FDR treshold
 #' 
@@ -39,12 +38,10 @@ setClass("EdgeObject",
 setClass("SigFilter",
          representation=list("posLogFC"="numeric",
                              "negLogFC"="numeric",
-                             "aveExpr"="numeric",
                              "pValue"="numeric",
                              "FDR"="numeric"),
          prototype=list(posLogFC=ESF_POSLOGFC_DEFAULT,
                         negLogFC=ESF_NEGLOGFC_DEFAULT ,
-                        aveExpr=ESF_AVEEXPR_DEFAULT,
                         pValue=ESF_PVALUE_DEFAULT,
                         FDR=ESF_FDR_DEFAULT),
          validity=function(object) {
@@ -54,6 +51,22 @@ setClass("SigFilter",
            stopifnot(validFDR <- object@FDR >= 0 & object@FDR <= 1)
            return(validPosLogFC & validNegLogFC & validPvalue & validFDR)
          })
+
+#' Extends BaseSigFilter to filter genes base on logCPM and LR
+#' @slot logCPM Numeric, logCPM threshold (larger values are kept)
+#' @export
+setClass("EdgeSigFilter",
+         representation = list("logCPM"="numeric"),
+         prototype=list(logCPM=ESF_AVEEXPR_DEFAULT),
+         contains="SigFilter")
+
+#' Extends BaseSigFilter to filter genes base on aveExpr
+#' @slot aveExpr Numeric, AveExpr threshold (larger values are kept)
+#' @export
+setClass("LimmaSigFilter",
+         representation = list("aveExpr"="numeric"),
+         prototype=list(aveExpr=ESF_AVEEXPR_DEFAULT),
+         contains="SigFilter")
 
 #' Update SigFilter
 #' 
@@ -136,6 +149,8 @@ SigFilter <- function(logFC, posLogFC, negLogFC, aveExpr, pValue, FDR) {
 }
 
 ER_SIGFILTER_DEFAULT <- SigFilter(logFC=0.5, FDR=0.05)
+
+setClass("EdgeSigFilter", list(logCPM="numeric"), contains="SigFilter")
 
 #' Object that contains count data, dgeTables, and sigFilter
 #' @note The object is used only for inheritance

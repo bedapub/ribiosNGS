@@ -183,7 +183,26 @@ geneCount <- function(edgeResult) {
 assertEdgeToptable <- function(x) {
   stopifnot(is.data.frame(x)
             &
-              all(c("logFC", "AveExpr", "PValue", "FDR") %in% colnames(x)))
+              all(c("logFC", "PValue", "FDR") %in% colnames(x)) &
+              any(c("AveExpr", "logCPM") %in% colnames(x)))
+}
+
+isHighAveExpr <- function(data.frame, sigFilter) {
+  if(class(sigFilter)=="EdgeSigFilter") {
+    thr <- sigFilter@logCPM
+  } else if(class(sigFilter)=="SigFilter") {
+    thr <- sigFilter@aveExpr
+  } else {
+    stop("Slot 'aveExpr' or 'logCPM' was not found in sigFilter.")
+  }
+  if("AveExpr" %in% colnames(data.frame)) {
+    isAveExpr <- with(data.frame, AveExpr >= thr)
+  } else if ("logCPM" %in% colnames(data.frame)) {
+    isAveExpr <- with(data.frame, logCPM >= thr)
+  } else {
+    stop("Column 'AveExpr' or 'logCPM' was not found.")
+  } 
+  return(isAveExpr)
 }
 
 #' Return logical vector indicating which genes are significantly regulated
@@ -193,52 +212,60 @@ assertEdgeToptable <- function(x) {
 #' @export
 isSig <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
-  with(
-    data.frame,
+  resExcAveExpr <- with(data.frame,
     (logFC >= posLogFC(sigFilter) |
        logFC <= negLogFC(sigFilter)) &
-      AveExpr >= aveExpr(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
   )
+  
+  isAveExpr <- isHighAveExpr(data.frame, sigFilter)
+  res <- resExcAveExpr & isAveExpr
+  return(res)
 }
 
 #' @describeIn isSig Returns which genes are significantly positively regulated
 #' @export
 isSigPos <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
-  with(
+  resExcAveExpr <- with(
     data.frame,
     logFC >= posLogFC(sigFilter) &
       AveExpr >= aveExpr(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
   )
-  
+  isAveExpr <- isHighAveExpr(data.frame, sigFilter)
+  res <- resExcAveExpr & isAveExpr
+  return(res)
 }
 
 #' @describeIn isSig Returns which genes are significantly negatively regulated
 #' @export
 isSigPos <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
-  with(
+  resExcAveExpr <- with(
     data.frame,
     logFC >= posLogFC(sigFilter) &
-      AveExpr >= aveExpr(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
   )
+  isAveExpr <- isHighAveExpr(data.frame, sigFilter)
+  res <- resExcAveExpr & isAveExpr
+  return(res)
 }
 
 isSigNeg <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
-  with(
+  resExcAveExpr <- with(
     data.frame,
     logFC <= negLogFC(sigFilter) &
-      AveExpr >= aveExpr(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
   )
+  isAveExpr <- isHighAveExpr(data.frame, sigFilter)
+  res <- resExcAveExpr & isAveExpr
+  return(res)
 }
 
 #' Return significantly regulated genes

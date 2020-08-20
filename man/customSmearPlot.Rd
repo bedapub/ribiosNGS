@@ -7,8 +7,8 @@
 customSmearPlot(
   tbl,
   main,
-  xlab = "Average logCPM",
-  ylab = "logFC",
+  xlab,
+  ylab,
   pch = 19,
   cex = 0.2,
   smearWidth = 0.5,

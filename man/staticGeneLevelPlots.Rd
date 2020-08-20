@@ -15,3 +15,11 @@ staticGeneLevelPlots(edgeResult)
 \description{
 Make static gene-level plots of an EdgeResult object
 }
+\examples{
+edgeObj <- exampleEdgeObject()
+edgeRes <- dgeWithEdgeR(edgeObj)
+staticGeneLevelPlots(edgeRes)
+
+limmaVoomRes <- dgeWithEdgeR(edgeObj)
+staticGeneLevelPlots(limmaVoomRes)
+}

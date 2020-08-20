@@ -34,8 +34,8 @@ dgeWithEdgeR <- function(edgeObj) {
   ## in case of single replicate
   ## edgeR recommendation for common dispersion: 0.4 for human study, 0.1 for well-controlled, 0.01 for tech replicates
   if(!hasCommonDisp(edgeObj.disp)) {
-    warning("No common dispersion estimate available. Possible reason may be no replicates")
-    warning("Common dispersion is set as 0.4. Note that the number of DEGs is sensitive to this setting")
+    warning("No common dispersion estimate available. Possible reason may be no replicates\n")
+    warning("Common dispersion is set as 0.4. Note that the number of DEGs is sensitive to this setting\n")
     edgeObj.disp <- setCommonDispIfMissing(edgeObj.disp, 0.4)
   }
   edgeObj.fit <- fitGLM(edgeObj.disp)

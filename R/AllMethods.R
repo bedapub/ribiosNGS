@@ -211,7 +211,6 @@ setMethod("testGLM", c("EdgeObject", "DGEGLM"),
             toptables <- apply(contrasts, 2, function(x) {
               lrt <- edgeR::glmLRT(fit, contrast=x)
               x <- edgeR::topTags(lrt, n=nrow(lrt$table))$table
-              x <- dplyr::rename(x, AveExpr=logCPM)
               assertEdgeToptable(x)
               return(x)
             })

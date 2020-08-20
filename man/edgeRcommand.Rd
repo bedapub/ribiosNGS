@@ -67,6 +67,6 @@ customed file suffixes.
  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
-     outfilePrefix=NULL, outdir=tempdir())
+     outfilePrefix="test", outdir=tempdir())
 
 }

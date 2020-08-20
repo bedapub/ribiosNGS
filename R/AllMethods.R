@@ -501,6 +501,8 @@ setMethod("hasCommonDisp", "EdgeObject", function(object) {
 #' @export
 setReplaceMethod("commonDisp", c("DGEList", "numeric"), function(object, value) {
   object$common.dispersion <- value
+  object@dgeList$trended.dispersion <- NULL
+  object@dgeList$tagwise.dispersion <- NULL
   return(object)
 })
 
@@ -508,6 +510,8 @@ setReplaceMethod("commonDisp", c("DGEList", "numeric"), function(object, value) 
 #' @export
 setReplaceMethod("commonDisp", c("EdgeObject", "numeric"), function(object, value) {
   object@dgeList$common.dispersion <- value
+  object@dgeList$trended.dispersion <- NULL
+  object@dgeList$tagwise.dispersion <- NULL
   return(object)
 })
 

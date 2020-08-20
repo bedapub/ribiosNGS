@@ -18,6 +18,13 @@ groupCol <- function(edgeObj, panel="Set1") {
 #' @return \code{NULL}, side effect is used
 #' 
 #' @importFrom made4 plotarrays ord
+#' @examples 
+#' edgeObj <- exampleEdgeObject()
+#' edgeRes <- dgeWithEdgeR(edgeObj)
+#' staticGeneLevelPlots(edgeRes)
+#' 
+#' limmaVoomRes <- dgeWithEdgeR(edgeObj)
+#' staticGeneLevelPlots(limmaVoomRes)
 #' @export
 staticGeneLevelPlots <- function(edgeResult) {
   objModLogCPM <- modLogCPM(edgeResult)

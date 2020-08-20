@@ -225,11 +225,22 @@ setMethod("volcanoPlot", "EdgeResult",
 #' @importFrom edgeR maPlot
 #' @export
 customSmearPlot <- function(tbl, main, 
-                              xlab = "Average logCPM", 
-                              ylab = "logFC", pch = 19, cex = 0.2, smearWidth = 0.5, panel.first = grid(), 
+                              xlab, 
+                              ylab, pch = 19, cex = 0.2, smearWidth = 0.5, panel.first = grid(), 
                               smooth.scatter = FALSE, lowess = FALSE, ...) {
+  if(missing(ylab))
+    ylab <- "logFC"
+  if("AveExpr" %in% colnames(tbl)) {
+    abundance <- tbl$AveExpr
+    if(missing(xlab)) xlab <- "Average expression"
+  } else if ("logCPM" %in% colnames(tbl)) {
+    abundance <- tbl$logCPM
+    if(missing(xlab)) xlab <- "Average logCPM"
+  } else {
+    stop("Neither 'AveExpr' or 'logCPM' is found")
+  }
   edgeR::maPlot(x=NULL, y=NULL,
-                logAbundance=tbl$AveExpr,
+                logAbundance=abundance,
                 logFC=tbl$logFC,
                 xlab = xlab, ylab = ylab, 
                 pch = pch, cex = cex, smearWidth = smearWidth,

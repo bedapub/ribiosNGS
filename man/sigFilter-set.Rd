@@ -2,18 +2,18 @@
 % Please edit documentation in R/edgeR-funcs.R
 \name{sigFilter<-}
 \alias{sigFilter<-}
-\title{Replace the SigFilter of an EdgeResult}
+\title{Replace the SigFilter of an CountDgeResult}
 \usage{
-sigFilter(edgeResult) <- value
+sigFilter(countDgeResult) <- value
 }
 \arguments{
-\item{edgeResult}{An EdgeResult object}
+\item{countDgeResult}{An \code{EdgeResult} or \code{LimmaVoomResult} object}
 
 \item{value}{An SigFilter object}
 }
 \value{
-An updated \code{EdgeResult} object
+An updated \code{countDgeResult} object
 }
 \description{
-Replace the SigFilter of an EdgeResult
+Replace the SigFilter of an CountDgeResult
 }

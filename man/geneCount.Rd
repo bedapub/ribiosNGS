@@ -4,10 +4,10 @@
 \alias{geneCount}
 \title{Return gene count}
 \usage{
-geneCount(edgeResult)
+geneCount(countDgeResult)
 }
 \arguments{
-\item{edgeResult}{An EdgeResult object}
+\item{countDgeResult}{An EdgeResult object}
 }
 \value{
 Integer

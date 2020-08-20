@@ -74,7 +74,7 @@ Even if the output directory is empty, if \code{overwrite} is set to
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
  ## \dontrun{
  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast, 
- ##  outfilePrefix=NULL, outdir=tempdir())
+ ##  outfilePrefix="test", outdir=tempdir())
  ## }
 
 }

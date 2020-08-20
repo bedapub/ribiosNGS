@@ -7,8 +7,6 @@
 NULL
 
 #' @importFrom edgeR DGEList cpm
-#' @importClassesFrom edgeR DGEList
-#' @importClassesFrom ribiosExpression DesignContrast
 #' @importFrom ribiosExpression DesignContrast
 #' @importFrom methods setClass setGeneric setMethod setRefClass setReplaceMethod
 #' @importFrom ribiosExpression designMatrix contrastMatrix

@@ -85,3 +85,50 @@ setMethod("EdgeObject", c("DGEList", "DesignContrast"),
             res <- new("EdgeObject", dgeList=object, designContrast=designContrast)
             return(res)
           })
+
+
+#' Return an example of EdgeObject
+#' @param nfeat Integer, number of features
+#' @param nsample Integer, number of samples
+#' @param ngroup Integer, number of groups, must be divisible by \code{nsample}.
+#' @param lambda Integer, passed to \code{rpois} to generate random counts.
+#' @return An \code{EdgeObject}
+#' @importFrom stats rpois
+#' @examples
+#' set.seed(1887) ## fix random generators
+#' exampleEdgeObject()
+#' exampleEdgeObject(50, 12, ngroup=4)
+#' @export
+exampleEdgeObject <- function(nfeat=20, nsample=6, ngroup=3, lambda=10) {
+  ribiosUtils::haltifnot(nsample %% ngroup==0 && ngroup>1,
+                         msg="nsample must be multitudes of ngroup.")
+  exMat <- matrix(rpois(nfeat*nsample, lambda), nrow=nfeat, ncol=nsample)
+  nsamplePerGroup <- nsample/ngroup
+  exGroups <- gl(ngroup, nsamplePerGroup, labels=sprintf("Group%d", seq(ngroup)))
+  exDesign <- model.matrix(~0+exGroups)
+  colnames(exDesign) <- levels(exGroups)
+  exContrast <- sapply(2:ngroup, function(i) {
+    res <- rep(0, ngroup)
+    res[1] <- -1
+    res[i] <- 1
+    return(res)
+  })
+  dimnames(exContrast) <- list(levels(exGroups), 
+                               sprintf("%s.vs.Group1", levels(exGroups)[-1]))
+  exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+  exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
+  exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
+                        Group=exGroups)
+  exObj <- EdgeObject(exMat, exDescon, 
+                      fData=exFdata, pData=exPdata)
+  return(exObj)
+}
+
+#' Retrieve the design/contrast object
+#' @param edgeObject An \code{EdgeObject}
+#' @examples 
+#' designContrast(exampleEdgeObject())
+#' @export
+designContrast <- function(edgeObject) {
+  return(edgeObject@designContrast)
+}

@@ -203,7 +203,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
 #'  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
-#'      outfilePrefix=NULL, outdir=tempdir())
+#'      outfilePrefix="test", outdir=tempdir())
 #' 
 #' @export slurmEdgeRcommand
 slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
@@ -280,7 +280,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
 #'  ## \dontrun{
 #'  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast, 
-#'  ##  outfilePrefix=NULL, outdir=tempdir())
+#'  ##  outfilePrefix="test", outdir=tempdir())
 #'  ## }
 #' 
 #' @export slurmEdgeR

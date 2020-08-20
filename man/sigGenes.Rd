@@ -6,14 +6,14 @@
 \alias{sigNegGenes}
 \title{Return significantly regulated genes of all contrastsin lists}
 \usage{
-sigGenes(edgeResult, value = "GeneID")
+sigGenes(countDgeResult, value = "GeneID")
 
-sigPosGenes(edgeResult, value = "GeneID")
+sigPosGenes(countDgeResult, value = "GeneID")
 
-sigNegGenes(edgeResult, value = "GeneID")
+sigNegGenes(countDgeResult, value = "GeneID")
 }
 \arguments{
-\item{edgeResult}{An EdgeResult object}
+\item{countDgeResult}{An EdgeResult object}
 
 \item{value}{Character, type of identifier returned}
 }

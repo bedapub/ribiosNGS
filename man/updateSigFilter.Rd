@@ -4,10 +4,10 @@
 \alias{updateSigFilter}
 \title{Update the SigFilter}
 \usage{
-updateSigFilter(edgeResult, logFC, posLogFC, negLogFC, aveExpr, pValue, FDR)
+updateSigFilter(countDgeResult, logFC, posLogFC, negLogFC, pValue, FDR, ...)
 }
 \arguments{
-\item{edgeResult}{An \code{EdgeResult} object}
+\item{countDgeResult}{An \code{EdgeResult} or \code{LimmaVoomResult} object}
 
 \item{logFC}{Numeric}
 
@@ -15,14 +15,14 @@ updateSigFilter(edgeResult, logFC, posLogFC, negLogFC, aveExpr, pValue, FDR)
 
 \item{negLogFC}{Numeric}
 
-\item{aveExpr}{Numeric}
-
 \item{pValue}{Numeric}
 
 \item{FDR}{Numeric}
+
+\item{...}{Other parameters, now used ones including \code{aveExpr} (for LimmaSigFilter) and \code{logCPM} (for EdgeSigFilter)}
 }
 \value{
-An updated \code{EdgeResult} object with updated \code{SigFilter}
+An updated \code{CountDgeResult} object with updated \code{SigFilter}
 }
 \description{
 Update the SigFilter

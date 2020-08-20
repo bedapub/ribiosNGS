@@ -39,141 +39,68 @@ replaceNAwithZero <- function(edgeObj) {
   return(edgeObj)
 }
 
-## some useful attributes
-
-#' Get settings in the significance filter
-#' @param sigFilter An SigFilter object
-#' @returns Numeric values of the thresholds
-#' @export
-posLogFC <- function(sigFilter)
-  sigFilter@posLogFC
-
-#' @rdname posLogFC
-#' @export
-negLogFC <- function(sigFilter)
-  sigFilter@negLogFC
-
-#' @rdname posLogFC
-#' @export
-aveExpr <- function(sigFilter)
-  sigFilter@aveExpr
-
-#' @rdname posLogFC
-#' @export
-pValue <- function(sigFilter)
-  sigFilter@pValue
-
-#' @rdname posLogFC
-#' @export
-FDR <- function(sigFilter)
-  sigFilter@FDR
-
-#' Tells whether the threshold was not set
-#' @param sigFilter An SigFilter object
-#' @returns Logical, whether the thresholds are the default values
-#' @export
-isUnsetPosLogFC <-
-  function(sigFilter)
-    posLogFC(sigFilter) == ESF_POSLOGFC_DEFAULT
-
-#' @rdname isUnsetPosLogFC
-#' @export
-isUnsetNegLogFC <-
-  function(sigFilter)
-    negLogFC(sigFilter) == ESF_NEGLOGFC_DEFAULT
-
-#' @rdname isUnsetPosLogFC
-#' @export
-isUnsetAveExpr <-
-  function(sigFilter)
-    aveExpr(sigFilter) == ESF_AVEEXPR_DEFAULT
-
-#' @rdname isUnsetPosLogFC
-#' @export
-isUnsetPValue <-
-  function(sigFilter)
-    pValue(sigFilter) == ESF_PVALUE_DEFAULT
-
-#' @rdname isUnsetPosLogFC
-#' @export
-isUnsetFDR <-
-  function(sigFilter)
-    FDR(sigFilter) == ESF_FDR_DEFAULT
-
-#' Whether the SigFilter is the default one
-#' @param object An SigFilter object
-#' @return Logical, whether it is unset
-#' @export
-isUnsetSigFilter <- function(object) {
-  res <- isUnsetPosLogFC(object) &
-    isUnsetNegLogFC(object) &
-    isUnsetAveExpr(object) &
-    isUnsetPValue(object)  &
-    isUnsetFDR(object)
-  return(res)
-}
-
 #' Return the dgeGML method
 #' @param edgeResult An \code{EdgeResult} object.
 #' @export
 dgeGML <- function(edgeResult)
   return(edgeResult@dgeGLM)
 
+#' @rdname SigFilter \code{sigFilter} can be used to retrieve SigFilter objects from other objects
 #' Return the SigFilter in use
-#' @param edgeResult An \code{EdgeResult} object
+#' @param countDgeResult An \code{countDgeResult} object
 #' @return An \code{SigFilter} object
-sigFilter <- function(edgeResult)
-  return(edgeResult@sigFilter)
+sigFilter <- function(countDgeResult)
+  return(countDgeResult@sigFilter)
 
 #' Update the SigFilter
-#' @param edgeResult An \code{EdgeResult} object
+#' @param countDgeResult An \code{EdgeResult} or \code{LimmaVoomResult} object
 #' @param logFC Numeric
 #' @param posLogFC Numeric
 #' @param negLogFC Numeric
-#' @param aveExpr Numeric
 #' @param pValue Numeric
 #' @param FDR Numeric
-#' @return An updated \code{EdgeResult} object with updated \code{SigFilter}
+#' @param ... Other parameters, now used ones including \code{aveExpr} (for LimmaSigFilter) and \code{logCPM} (for EdgeSigFilter)
+#' @return An updated \code{CountDgeResult} object with updated \code{SigFilter}
 #' @export
 updateSigFilter <-
-  function(edgeResult,
+  function(countDgeResult,
            logFC,
            posLogFC,
            negLogFC,
-           aveExpr,
            pValue,
-           FDR) {
-    sf <- sigFilter(edgeResult)
+           FDR, ...) {
+    sf <- sigFilter(countDgeResult)
     sf <- update(
       sf,
       logFC = logFC,
       posLogFC = posLogFC,
       negLogFC = negLogFC,
-      aveExpr = aveExpr,
       pValue = pValue,
-      FDR = FDR
+      FDR = FDR,
+      ...
     )
-    sigFilter(edgeResult) <- sf
-    return(edgeResult)
+    sigFilter(countDgeResult) <- sf
+    return(countDgeResult)
   }
 
-#' Replace the SigFilter of an EdgeResult
-#' @param edgeResult An EdgeResult object
+
+#' Replace the SigFilter of an CountDgeResult
+#' @param countDgeResult An \code{EdgeResult} or \code{LimmaVoomResult} object
 #' @param value An SigFilter object
-#' @return An updated \code{EdgeResult} object
+#' @return An updated \code{countDgeResult} object
 #' @export
-`sigFilter<-` <- function(edgeResult, value) {
-  edgeResult@sigFilter <- value
-  return(edgeResult)
+`sigFilter<-` <- function(countDgeResult, value) {
+  countDgeResult@sigFilter <- value
+  return(countDgeResult)
 }
 
 #' Return gene count
-#' @param edgeResult An EdgeResult object
+#' @param countDgeResult An EdgeResult object
 #' @return Integer
 #' @importFrom edgeR getCounts
 #' @export
-geneCount <- function(edgeResult) {
-  nrow(edgeR::getCounts(dgeList(edgeResult)))
+geneCount <- function(countDgeResult) {
+  nrow(edgeR::getCounts(dgeList(countDgeResult)))
 }
 
 #' Assert that the input data.frame is a valid EdgeTopTable
@@ -188,20 +115,24 @@ assertEdgeToptable <- function(x) {
 }
 
 isHighAveExpr <- function(data.frame, sigFilter) {
-  if(class(sigFilter)=="EdgeSigFilter") {
-    thr <- sigFilter@logCPM
-  } else if(class(sigFilter)=="SigFilter") {
-    thr <- sigFilter@aveExpr
+  if(class(sigFilter)=="SigFilter") { ## SigFilter does not support filtering by AveExpr
+    isAveExpr <- rep(TRUE, nrow(data.frame))
   } else {
-    stop("Slot 'aveExpr' or 'logCPM' was not found in sigFilter.")
+    if(class(sigFilter)=="EdgeSigFilter") {
+      thr <- sigFilter@logCPM
+    } else if(class(sigFilter)=="LimmaSigFilter") {
+      thr <- sigFilter@aveExpr
+    } else {
+      stop("Slot 'aveExpr' or 'logCPM' was not found in sigFilter.")
+    }
+    if("AveExpr" %in% colnames(data.frame)) {
+      isAveExpr <- with(data.frame, AveExpr >= thr)
+    } else if ("logCPM" %in% colnames(data.frame)) {
+      isAveExpr <- with(data.frame, logCPM >= thr)
+    } else {
+      stop("Column 'AveExpr' or 'logCPM' was not found.")
+    } 
   }
-  if("AveExpr" %in% colnames(data.frame)) {
-    isAveExpr <- with(data.frame, AveExpr >= thr)
-  } else if ("logCPM" %in% colnames(data.frame)) {
-    isAveExpr <- with(data.frame, logCPM >= thr)
-  } else {
-    stop("Column 'AveExpr' or 'logCPM' was not found.")
-  } 
   return(isAveExpr)
 }
 
@@ -270,87 +201,87 @@ isSigNeg <- function(data.frame, sigFilter) {
 
 #' Return significantly regulated genes
 #'
-#' @param edgeResult An EdgeResult object
+#' @param countDgeResult An EdgeResult object
 #' @param contrast Character, contrast(s) of interest
 #' @param value Character, type of identifier returned
 #' @return A vector of identifiers
 #' @note TODO fix: add InputFeature
 #'
 #' @export
-sigGene <- function(edgeResult, contrast, value = "GeneID") {
-  tbl <- dgeTable(edgeResult, contrast)
-  sf <- sigFilter(edgeResult)
+sigGene <- function(countDgeResult, contrast, value = "GeneID") {
+  tbl <- dgeTable(countDgeResult, contrast)
+  sf <- sigFilter(countDgeResult)
   issig <- isSig(tbl, sf)
   tbl[issig, value]
 }
 
 #' @describeIn sigGene Only return positively significantly regulated genes
 #' @export
-sigPosGene <- function(edgeResult, contrast, value = "GeneID") {
-  tbl <- dgeTable(edgeResult, contrast)
-  sf <- sigFilter(edgeResult)
+sigPosGene <- function(countDgeResult, contrast, value = "GeneID") {
+  tbl <- dgeTable(countDgeResult, contrast)
+  sf <- sigFilter(countDgeResult)
   issig <- isSigPos(tbl, sf)
   tbl[issig, value]
 }
 
 #' @describeIn sigGene Only return negatively significantly regulated genes
 #' @export
-sigNegGene <- function(edgeResult, contrast, value = "GeneID") {
-  tbl <- dgeTable(edgeResult, contrast)
-  sf <- sigFilter(edgeResult)
+sigNegGene <- function(countDgeResult, contrast, value = "GeneID") {
+  tbl <- dgeTable(countDgeResult, contrast)
+  sf <- sigFilter(countDgeResult)
   issig <- isSigNeg(tbl, sf)
   tbl[issig, value]
 }
 
 #' Return significantly regulated genes of all contrastsin lists
 #'
-#' @param edgeResult An EdgeResult object
+#' @param countDgeResult An EdgeResult object
 #' @param value Character, type of identifier returned
 #' @return A list of vectors of identifiers
 #' @note TODO fix: add InputFeature
 #'
 #' @export
-sigGenes <- function(edgeResult, value = "GeneID") {
-  cs <- contrastNames(edgeResult)
+sigGenes <- function(countDgeResult, value = "GeneID") {
+  cs <- contrastNames(countDgeResult)
   res <- lapply(cs, function(x)
-    sigGene(edgeResult, x, value = value))
+    sigGene(countDgeResult, x, value = value))
   names(res) <- cs
   return(res)
 }
 
 #' @describeIn sigGenes Only return negatively significantly regulated genes
 #' @export
-sigPosGenes <- function(edgeResult, value = "GeneID") {
-  cs <- contrastNames(edgeResult)
+sigPosGenes <- function(countDgeResult, value = "GeneID") {
+  cs <- contrastNames(countDgeResult)
   res <-
     lapply(cs, function(x)
-      sigPosGene(edgeResult, x, value = value))
+      sigPosGene(countDgeResult, x, value = value))
   names(res) <- cs
   return(res)
 }
 
 #' @describeIn sigGenes Only return negatively significantly regulated genes
 #' @export
-sigNegGenes <- function(edgeResult, value = "GeneID") {
-  cs <- contrastNames(edgeResult)
+sigNegGenes <- function(countDgeResult, value = "GeneID") {
+  cs <- contrastNames(countDgeResult)
   res <-
     lapply(cs, function(x)
-      sigNegGene(edgeResult, x, value = value))
+      sigNegGene(countDgeResult, x, value = value))
   names(res) <- cs
   return(res)
 }
 
 
 #' Return counts of significantly regulated genes
-#' @param edgeResult An EdgeResult object
+#' @param countDgeResult An EdgeResult object
 #' @return A data.frame containing counts of positively and negatively regulated
 #'    genes, the sum, as well as total number of features
 #' @importFrom ribiosUtils ulen
 #' @export
-sigGeneCounts <- function(edgeResult) {
-  allCount <- geneCount(edgeResult)
-  posCounts <- sapply(sigPosGenes(edgeResult), ribiosUtils::ulen)
-  negCounts <- sapply(sigNegGenes(edgeResult), ribiosUtils::ulen)
+sigGeneCounts <- function(countDgeResult) {
+  allCount <- geneCount(countDgeResult)
+  posCounts <- sapply(sigPosGenes(countDgeResult), ribiosUtils::ulen)
+  negCounts <- sapply(sigNegGenes(countDgeResult), ribiosUtils::ulen)
   total <- posCounts + negCounts
   res <- data.frame(
     posCount = posCounts,

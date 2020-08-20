@@ -16,8 +16,10 @@
 #' featIds <- c("1235", "1234")
 #' ## use file
 #' readFeatureAnnotationForEdgeR(featIds, file=annoFile)
-#' ## use ribiosAnnotation
-#' readFeatureAnnotationForEdgeR(featIds, file=NULL)
+#' \dontrun{
+#'   ## use ribiosAnnotation, depending on database connection
+#'   readFeatureAnnotationForEdgeR(featIds, file=NULL)
+#' }
 #' 
 #' @importFrom ribiosExpression readFeatureAnnotationFile
 #' @importFrom ribiosUtils haltifnot matchColumn

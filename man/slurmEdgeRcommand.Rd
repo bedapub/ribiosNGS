@@ -66,7 +66,7 @@ Return the SLURM command to run the edgeR script
  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
-     outfilePrefix=NULL, outdir=tempdir())
+     outfilePrefix="test", outdir=tempdir())
 
 }
 \seealso{

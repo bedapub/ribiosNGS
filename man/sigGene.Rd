@@ -6,14 +6,14 @@
 \alias{sigNegGene}
 \title{Return significantly regulated genes}
 \usage{
-sigGene(edgeResult, contrast, value = "GeneID")
+sigGene(countDgeResult, contrast, value = "GeneID")
 
-sigPosGene(edgeResult, contrast, value = "GeneID")
+sigPosGene(countDgeResult, contrast, value = "GeneID")
 
-sigNegGene(edgeResult, contrast, value = "GeneID")
+sigNegGene(countDgeResult, contrast, value = "GeneID")
 }
 \arguments{
-\item{edgeResult}{An EdgeResult object}
+\item{countDgeResult}{An EdgeResult object}
 
 \item{contrast}{Character, contrast(s) of interest}
 

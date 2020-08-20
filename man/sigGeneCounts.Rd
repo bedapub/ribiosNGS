@@ -4,10 +4,10 @@
 \alias{sigGeneCounts}
 \title{Return counts of significantly regulated genes}
 \usage{
-sigGeneCounts(edgeResult)
+sigGeneCounts(countDgeResult)
 }
 \arguments{
-\item{edgeResult}{An EdgeResult object}
+\item{countDgeResult}{An EdgeResult object}
 }
 \value{
 A data.frame containing counts of positively and negatively regulated

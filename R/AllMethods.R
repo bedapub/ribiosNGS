@@ -644,7 +644,7 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
 #' @importMethodsFrom methods show
 #' @export
 setMethod("show", "SigFilter", function(object) {
-  title <- "Edge Significantly Expressed Genes Filter"
+  title <- "Significantly Differentially Expressed Genes Filter"
   msgs <- c()
   if(!isUnsetPosLogFC(object))
     msgs <- c(msgs,
@@ -666,6 +666,33 @@ setMethod("show", "SigFilter", function(object) {
   
   cat(messages)
   return(invisible(messages))
+})
+
+#' Show an EdgeSigFilter object
+#' @param object An SigFilter object
+#' @importFrom methods callNextMethod
+#' @export
+setMethod("show", "EdgeSigFilter", function(object) {
+  msgs <- callNextMethod()
+  if(!isUnsetLogCPM(object)) {
+    msg <- sprintf("* logCPM filter set: logCPM>=%f", logCPM(object))
+    cat(msg)
+    msgs <- c(msgs, msg)
+  }
+  return(invisible(msgs))
+})
+
+#' Show an LimmaSigFilter object
+#' @param object An LimmaSigFilter object
+#' @export
+setMethod("show", "LimmaSigFilter", function(object) {
+  msgs <- callNextMethod()
+  if(!isUnsetAveExpr(object)) {
+    msg <- sprintf("* aveExpr filter set: aveExpr>=%f", aveExpr(object))
+    cat(msg)
+    msgs <- c(msgs, msg)
+  }
+  return(invisible(msgs))
 })
 
 #' Show an EdgeResult object

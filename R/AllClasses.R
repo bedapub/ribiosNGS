@@ -30,14 +30,13 @@ ESF_PVALUE_DEFAULT <- 1
 ESF_FDR_DEFAULT <- 1
 
 #' Base result filter for significantly regulated genes
-#' 
 #' @slot posLogFC Numeric, positive logFC threshold (larger values are kept)
 #' @slot negLogFC Numeric, negative logFC threshold (more negative values 
 #'     are kept)
 #' @slot pValue Numeric, p-value treshold (smaller values are kept)
 #' @slot FDR Numeric, FDR treshold
 #' 
-#' @export 
+#' @exportClass SigFilter
 setClass("SigFilter",
          representation=list("posLogFC"="numeric",
                              "negLogFC"="numeric",
@@ -156,7 +155,7 @@ isUnsetSigFilter <- function(object) {
 
 #' Extends BaseSigFilter to filter genes base on logCPM and LR
 #' @slot logCPM Numeric, logCPM threshold (larger values are kept)
-#' @export
+#' @exportClass EdgeSigFilter
 setClass("EdgeSigFilter",
          representation = list("logCPM"="numeric"),
          prototype=list(logCPM=ESF_LOGCPM_DEFAULT),
@@ -188,7 +187,7 @@ logCPM <- function(edgeSigFilter) { return(edgeSigFilter@logCPM)}
 
 #' LimmaSigFilter Extending BaseSigFilter to filter genes base on aveExpr
 #' @slot aveExpr Numeric, AveExpr threshold (larger values are kept)
-#' @export
+#' @exportClass LimmaSigFilter
 setClass("LimmaSigFilter",
          representation = list("aveExpr"="numeric"),
          prototype=list(aveExpr=ESF_AVEEXPR_DEFAULT),
@@ -258,6 +257,7 @@ update.LimmaSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR
 
 
 #' Build a SigFilter
+#'
 #' @param logFC Missing or positive numeric
 #' @param posLogFC Missing or positive numeric
 #' @param negLogFC Missing or negative numeric
@@ -265,11 +265,12 @@ update.LimmaSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR
 #' @param FDR Missing or numeric between 0 and 1
 #' @return A \code{SigFilter} object
 #' @aliases EdgeSigFilter LimmaSigFilter sigFilter
-#' @examples 
+#' @examples
 #' SigFilter()
 #' SigFilter(logFC=2)
 #' SigFilter(negLogFC=-1)
 #' SigFilter(FDR=0.05)
+#'
 #' @export
 SigFilter <- function(logFC, posLogFC, negLogFC, pValue, FDR) {
   object <- new("SigFilter")
@@ -329,7 +330,6 @@ ER_LIMMASIGFILTER_DEFALT <- LimmaSigFilter(logFC=0.5, FDR=0.05)
 #' @slot sigFilter Significantly regulated gene filter
 #'
 #' @exportClass CountDgeResult
-#'
 setClass("CountDgeResult",
          representation=list("dgeTables"="list",
                              "sigFilter"="SigFilter"),
@@ -340,7 +340,7 @@ setClass("CountDgeResult",
 #' @slot dgeGLM A DGEGLM class object that contains GLM test results
 #' @slot dgeTables A list of dgeTable
 #' @slot sigFilter Significantly regulated gene filter
-#' @export
+#' @exportClass EdgeResult
 setClass("EdgeResult",
          representation=list("dgeGLM"="DGEGLM"),
          prototype=list("sigFilter"=ER_EDGESIGFILTER_DEFAULT),
@@ -366,7 +366,7 @@ EdgeResult <- function(edgeObj,
 #' The LimmaVoom Object that contains test results, dgeTable, and SigFilter
 #' @slot marrayLM A \code{MArrayLM} class object that contains results of eBayesFit
 #' @slot voom The \code{voom} object
-#' @export
+#' @exportClass LimmaVoomResult
 setClass("LimmaVoomResult",
          representation=list("marrayLM"="MArrayLM",
                              "voom"="EList"),
@@ -399,7 +399,7 @@ LimmaVoomResult <- function(edgeObj,
 #' A class that contain feature annotation and expression matrix
 #' @param exprs A matrix of expression
 #' @param genes A data.frame
-#' @export
+#' @exportClass FeatAnnoExprs
 setClass("FeatAnnoExprs",
          representation=list(exprs="matrix",
            genes="data.frame"))

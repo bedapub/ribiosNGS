@@ -27,7 +27,7 @@ logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol",
       if("AveExpr" %in% colnames(x)) {
         x <- subset(x, AveExpr>=minAveExpr)
       } else if ("logCPM" %in% colnames(x)) {
-        x <- subset(x, logCPM>=minAveExp)
+        x <- subset(x, logCPM>=minAveExpr)
       } else {
         stop("AveExpr or logCPM not found in top table.")
       }

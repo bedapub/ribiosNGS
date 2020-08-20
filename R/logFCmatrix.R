@@ -22,7 +22,17 @@ logFCmatrix <- function(edgeResult, featureIdentifier="GeneSymbol",
                         minAveExpr=NULL) {
   tbls <- edgeResult@dgeTables
   if(!is.null(minAveExpr)) {
-    tbls <- lapply(tbls, function(x) subset(x, AveExpr>=minAveExpr))
+    tbls <- lapply(tbls, function(x) {
+      ## TODO: remove logic redundancy 
+      if("AveExpr" %in% colnames(x)) {
+        x <- subset(x, AveExpr>=minAveExpr)
+      } else if ("logCPM" %in% colnames(x)) {
+        x <- subset(x, logCPM>=minAveExp)
+      } else {
+        stop("AveExpr or logCPM not found in top table.")
+      }
+      return(x)
+    })
   }
   allContrasts <- contrastNames(edgeResult)
   

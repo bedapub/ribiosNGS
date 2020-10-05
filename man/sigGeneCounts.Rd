@@ -4,10 +4,12 @@
 \alias{sigGeneCounts}
 \title{Return counts of significantly regulated genes}
 \usage{
-sigGeneCounts(countDgeResult)
+sigGeneCounts(countDgeResult, value = NULL)
 }
 \arguments{
 \item{countDgeResult}{An EdgeResult object}
+
+\item{value}{\code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.}
 }
 \value{
 A data.frame containing counts of positively and negatively regulated

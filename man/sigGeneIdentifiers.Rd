@@ -4,7 +4,7 @@
 \alias{sigGeneIdentifiers}
 \title{Return gene identifiers of significant DGEs}
 \usage{
-sigGeneIdentifiers(dgeResult, contrast, sigFunc = isSig)
+sigGeneIdentifiers(dgeResult, contrast, sigFunc = isSig, value = NULL)
 }
 \arguments{
 \item{dgeResult}{An DgeResult object.}
@@ -12,6 +12,8 @@ sigGeneIdentifiers(dgeResult, contrast, sigFunc = isSig)
 \item{contrast}{A character string, a contrast of interest.}
 
 \item{sigFunc}{A function, defining the type of significant genes.}
+
+\item{value}{\code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.}
 }
 \value{
 A vector of character strings indicating the gene identifiers that are significantly regulated. If no defined types are found, either rownames or the first column is returned

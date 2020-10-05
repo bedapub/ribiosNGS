@@ -6,14 +6,16 @@
 \alias{sigNegGenes}
 \title{Return significantly regulated genes of all contrasts}
 \usage{
-sigGenes(countDgeResult)
+sigGenes(countDgeResult, value = NULL)
 
-sigPosGenes(countDgeResult)
+sigPosGenes(countDgeResult, value = NULL)
 
-sigNegGenes(countDgeResult)
+sigNegGenes(countDgeResult, value = NULL)
 }
 \arguments{
 \item{countDgeResult}{An EdgeResult object}
+
+\item{value}{\code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.}
 }
 \value{
 A list of vectors of identifiers

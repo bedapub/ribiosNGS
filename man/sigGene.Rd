@@ -6,16 +6,18 @@
 \alias{sigNegGene}
 \title{Return significantly regulated genes}
 \usage{
-sigGene(countDgeResult, contrast)
+sigGene(countDgeResult, contrast, value = NULL)
 
-sigPosGene(countDgeResult, contrast)
+sigPosGene(countDgeResult, contrast, value = NULL)
 
-sigNegGene(countDgeResult, contrast)
+sigNegGene(countDgeResult, contrast, value = NULL)
 }
 \arguments{
 \item{countDgeResult}{An EdgeResult object}
 
 \item{contrast}{Character, contrast(s) of interest}
+
+\item{value}{\code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.}
 }
 \value{
 A vector of identifiers
@@ -39,7 +41,8 @@ exDesign <- model.matrix(~0+exGroups)
 colnames(exDesign) <- levels(exGroups)
 exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
 exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
-exFdata <- data.frame(GeneSymbol=sprintf("Gene\%d", 1:nrow(exMat)))
+exFdata <- data.frame(GeneID=1:nrow(exMat),
+  GeneSymbol=sprintf("Gene\%d", 1:nrow(exMat)))
 exPdata <- data.frame(Name=sprintf("Sample\%d", 1:ncol(exMat)),
                      Group=exGroups)
 exObj <- EdgeObject(exMat, exDescon, 
@@ -48,4 +51,8 @@ exDgeRes <- dgeWithEdgeR(exObj)
 sigGenes(exDgeRes)
 sigPosGenes(exDgeRes)
 sigNegGenes(exDgeRes)
+## specify the value type to return
+sigGenes(exDgeRes, value="GeneSymbol")
+sigPosGenes(exDgeRes, value="GeneSymbol")
+sigNegGenes(exDgeRes, value="GeneSymbol")
 }

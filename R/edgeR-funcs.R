@@ -215,15 +215,23 @@ geneIdentifierTypes <- function(dgeResult) {
 #' @param dgeResult An DgeResult object.
 #' @param contrast A character string, a contrast of interest.
 #' @param sigFunc A function, defining the type of significant genes.
+#' @param value \code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.
+#' 
 #' @return A vector of character strings indicating the gene identifiers that are significantly regulated. If no defined types are found, either rownames or the first column is returned
 #' @seealso \code{\link{geneIdentifierTypes}}
 #' @export
-sigGeneIdentifiers <- function(dgeResult, contrast, sigFunc=isSig) {
+sigGeneIdentifiers <- function(dgeResult, contrast, sigFunc=isSig, value=NULL) {
   tbl <- dgeTable(dgeResult, contrast)
   sf <- sigFilter(dgeResult)
   issig <- do.call(sigFunc, list(tbl, sf))
 
-  idtypes <- geneIdentifierTypes(dgeResult)
+  if(!is.null(value)) {
+    haltifnot(value %in% colnames(fData(dgeResult)),
+              msg=sprintf("%s not found in feature annotation", value))
+    idtypes <- value
+  } else {
+    idtypes <- geneIdentifierTypes(dgeResult)
+  }
   if(length(idtypes)>0) {
     res <- tbl[issig, idtypes[1]]
   } else {
@@ -240,6 +248,7 @@ sigGeneIdentifiers <- function(dgeResult, contrast, sigFunc=isSig) {
 #'
 #' @param countDgeResult An EdgeResult object
 #' @param contrast Character, contrast(s) of interest
+#' @param value \code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.
 #' @return A vector of identifiers
 #'
 #' @examples 
@@ -251,7 +260,8 @@ sigGeneIdentifiers <- function(dgeResult, contrast, sigFunc=isSig) {
 #' colnames(exDesign) <- levels(exGroups)
 #' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
 #' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
-#' exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
+#' exFdata <- data.frame(GeneID=1:nrow(exMat),
+#'   GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
 #' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
 #'                      Group=exGroups)
 #' exObj <- EdgeObject(exMat, exDescon, 
@@ -260,59 +270,64 @@ sigGeneIdentifiers <- function(dgeResult, contrast, sigFunc=isSig) {
 #' sigGenes(exDgeRes)
 #' sigPosGenes(exDgeRes)
 #' sigNegGenes(exDgeRes)
+#' ## specify the value type to return
+#' sigGenes(exDgeRes, value="GeneSymbol")
+#' sigPosGenes(exDgeRes, value="GeneSymbol")
+#' sigNegGenes(exDgeRes, value="GeneSymbol")
 #' @export
-sigGene <- function(countDgeResult, contrast) {
-  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSig)
+sigGene <- function(countDgeResult, contrast, value=NULL) {
+  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSig, value=value)
   return(res)
 }
 
 #' @describeIn sigGene Only return positively significantly regulated genes
 #' @export
-sigPosGene <- function(countDgeResult, contrast) {
-  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSigPos)
+sigPosGene <- function(countDgeResult, contrast, value=NULL) {
+  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSigPos, value=value)
   return(res)
 }
 
 #' @describeIn sigGene Only return negatively significantly regulated genes
 #' @export
-sigNegGene <- function(countDgeResult, contrast) {
-  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSigNeg)
+sigNegGene <- function(countDgeResult, contrast, value=NULL) {
+  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSigNeg, value=value)
   return(res)
 }
 
 #' Return significantly regulated genes of all contrasts
 #'
 #' @param countDgeResult An EdgeResult object
+#' @param value \code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.
 #' @return A list of vectors of identifiers
 #' @note TODO fix: add InputFeature
 #'
 #' @export
-sigGenes <- function(countDgeResult) {
+sigGenes <- function(countDgeResult, value=NULL) {
   cs <- contrastNames(countDgeResult)
   res <- lapply(cs, function(x)
-    sigGene(countDgeResult, x))
+    sigGene(countDgeResult, x, value=value))
   names(res) <- cs
   return(res)
 }
 
 #' @describeIn sigGenes Only return significantly positively regulated genes
 #' @export
-sigPosGenes <- function(countDgeResult) {
+sigPosGenes <- function(countDgeResult, value=NULL) {
   cs <- contrastNames(countDgeResult)
   res <-
     lapply(cs, function(x)
-      sigPosGene(countDgeResult, x))
+      sigPosGene(countDgeResult, x, value=value))
   names(res) <- cs
   return(res)
 }
 
 #' @describeIn sigGenes Only return significantly negatively regulated genes
 #' @export
-sigNegGenes <- function(countDgeResult) {
+sigNegGenes <- function(countDgeResult, value=NULL) {
   cs <- contrastNames(countDgeResult)
   res <-
     lapply(cs, function(x)
-      sigNegGene(countDgeResult, x))
+      sigNegGene(countDgeResult, x, value=value))
   names(res) <- cs
   return(res)
 }
@@ -320,6 +335,7 @@ sigNegGenes <- function(countDgeResult) {
 
 #' Return counts of significantly regulated genes
 #' @param countDgeResult An EdgeResult object
+#' @param value \code{NULL} or character string, if not \code{NULL}, it must be a column name in the feature annotation data.
 #' @return A data.frame containing counts of positively and negatively regulated
 #'    genes, the sum, as well as total number of features
 #' @importFrom ribiosUtils ulen
@@ -340,7 +356,7 @@ sigNegGenes <- function(countDgeResult) {
 #' exDgeRes <- dgeWithEdgeR(exObj)
 #' sigGeneCounts(exDgeRes)
 #' @export
-sigGeneCounts <- function(countDgeResult) {
+sigGeneCounts <- function(countDgeResult, value=NULL) {
   allCount <- geneCount(countDgeResult)
   posCounts <- sapply(sigPosGenes(countDgeResult), ribiosUtils::ulen)
   negCounts <- sapply(sigNegGenes(countDgeResult), ribiosUtils::ulen)

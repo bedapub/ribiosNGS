@@ -45,7 +45,7 @@ replaceNAwithZero <- function(edgeObj) {
 dgeGML <- function(edgeResult)
   return(edgeResult@dgeGLM)
 
-#' @rdname SigFilter \code{sigFilter} can be used to retrieve SigFilter objects from other objects
+#' @rdname SigFilter can be used to retrieve SigFilter objects from other objects
 #' Return the SigFilter in use
 #' @param countDgeResult An \code{countDgeResult} object
 #' @return An \code{SigFilter} object
@@ -199,74 +199,120 @@ isSigNeg <- function(data.frame, sigFilter) {
   return(res)
 }
 
+#' Return gene identifier types
+#' @param dgeResult An DgeResult object
+#' @return A character string indicating the gene identifiers found
+#' The following terms are recognized: GeneID, EnsemblID, GeneSymbol, FeatureName
+#' @export
+geneIdentifierTypes <- function(dgeResult) {
+  fcnames <- colnames(fData(dgeResult))
+  keywords <- c("GeneID", "EnsemblID", "GeneSymbol", "FeatureName")
+  res <- intersect(keywords, fcnames)
+  return(res)
+}
+
+#' Return gene identifiers of significant DGEs
+#' @param dgeResult An DgeResult object.
+#' @param contrast A character string, a contrast of interest.
+#' @param sigFunc A function, defining the type of significant genes.
+#' @return A vector of character strings indicating the gene identifiers that are significantly regulated. If no defined types are found, either rownames or the first column is returned
+#' @seealso \code{\link{geneIdentifierTypes}}
+#' @export
+sigGeneIdentifiers <- function(dgeResult, contrast, sigFunc=isSig) {
+  tbl <- dgeTable(dgeResult, contrast)
+  sf <- sigFilter(dgeResult)
+  issig <- do.call(sigFunc, list(tbl, sf))
+
+  idtypes <- geneIdentifierTypes(dgeResult)
+  if(length(idtypes)>0) {
+    res <- tbl[issig, idtypes[1]]
+  } else {
+    if(!is.null(rownames(tbl))) {
+      res <- rownames(tbl)[issig]
+    } else {
+      res <- tbl[issig, 1L]
+    }
+  }
+  return(res)
+}
+
 #' Return significantly regulated genes
 #'
 #' @param countDgeResult An EdgeResult object
 #' @param contrast Character, contrast(s) of interest
-#' @param value Character, type of identifier returned
 #' @return A vector of identifiers
-#' @note TODO fix: add InputFeature
 #'
+#' @examples 
+#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
+#' exMat[2:4, 4:6] <- exMat[2:4, 4:6]+20
+#' exMat[7:9, 1:3] <- exMat[7:9, 1:3]+20
+#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
+#' exDesign <- model.matrix(~0+exGroups)
+#' colnames(exDesign) <- levels(exGroups)
+#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+#' exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
+#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
+#'                      Group=exGroups)
+#' exObj <- EdgeObject(exMat, exDescon, 
+#'                    fData=exFdata, pData=exPdata)
+#' exDgeRes <- dgeWithEdgeR(exObj)
+#' sigGenes(exDgeRes)
+#' sigPosGenes(exDgeRes)
+#' sigNegGenes(exDgeRes)
 #' @export
-sigGene <- function(countDgeResult, contrast, value = "GeneID") {
-  tbl <- dgeTable(countDgeResult, contrast)
-  sf <- sigFilter(countDgeResult)
-  issig <- isSig(tbl, sf)
-  tbl[issig, value]
+sigGene <- function(countDgeResult, contrast) {
+  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSig)
+  return(res)
 }
 
 #' @describeIn sigGene Only return positively significantly regulated genes
 #' @export
-sigPosGene <- function(countDgeResult, contrast, value = "GeneID") {
-  tbl <- dgeTable(countDgeResult, contrast)
-  sf <- sigFilter(countDgeResult)
-  issig <- isSigPos(tbl, sf)
-  tbl[issig, value]
+sigPosGene <- function(countDgeResult, contrast) {
+  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSigPos)
+  return(res)
 }
 
 #' @describeIn sigGene Only return negatively significantly regulated genes
 #' @export
-sigNegGene <- function(countDgeResult, contrast, value = "GeneID") {
-  tbl <- dgeTable(countDgeResult, contrast)
-  sf <- sigFilter(countDgeResult)
-  issig <- isSigNeg(tbl, sf)
-  tbl[issig, value]
+sigNegGene <- function(countDgeResult, contrast) {
+  res <- sigGeneIdentifiers(countDgeResult, contrast, sigFunc=isSigNeg)
+  return(res)
 }
 
-#' Return significantly regulated genes of all contrastsin lists
+#' Return significantly regulated genes of all contrasts
 #'
 #' @param countDgeResult An EdgeResult object
-#' @param value Character, type of identifier returned
 #' @return A list of vectors of identifiers
 #' @note TODO fix: add InputFeature
 #'
 #' @export
-sigGenes <- function(countDgeResult, value = "GeneID") {
+sigGenes <- function(countDgeResult) {
   cs <- contrastNames(countDgeResult)
   res <- lapply(cs, function(x)
-    sigGene(countDgeResult, x, value = value))
+    sigGene(countDgeResult, x))
   names(res) <- cs
   return(res)
 }
 
-#' @describeIn sigGenes Only return negatively significantly regulated genes
+#' @describeIn sigGenes Only return significantly positively regulated genes
 #' @export
-sigPosGenes <- function(countDgeResult, value = "GeneID") {
+sigPosGenes <- function(countDgeResult) {
   cs <- contrastNames(countDgeResult)
   res <-
     lapply(cs, function(x)
-      sigPosGene(countDgeResult, x, value = value))
+      sigPosGene(countDgeResult, x))
   names(res) <- cs
   return(res)
 }
 
-#' @describeIn sigGenes Only return negatively significantly regulated genes
+#' @describeIn sigGenes Only return significantly negatively regulated genes
 #' @export
-sigNegGenes <- function(countDgeResult, value = "GeneID") {
+sigNegGenes <- function(countDgeResult) {
   cs <- contrastNames(countDgeResult)
   res <-
     lapply(cs, function(x)
-      sigNegGene(countDgeResult, x, value = value))
+      sigNegGene(countDgeResult, x))
   names(res) <- cs
   return(res)
 }
@@ -277,6 +323,22 @@ sigNegGenes <- function(countDgeResult, value = "GeneID") {
 #' @return A data.frame containing counts of positively and negatively regulated
 #'    genes, the sum, as well as total number of features
 #' @importFrom ribiosUtils ulen
+#' @examples 
+#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
+#' exMat[2:4, 4:6] <- exMat[2:4, 4:6]+20
+#' exMat[7:9, 1:3] <- exMat[7:9, 1:3]+20
+#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
+#' exDesign <- model.matrix(~0+exGroups)
+#' colnames(exDesign) <- levels(exGroups)
+#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+#' exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
+#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
+#'                      Group=exGroups)
+#' exObj <- EdgeObject(exMat, exDescon, 
+#'                    fData=exFdata, pData=exPdata)
+#' exDgeRes <- dgeWithEdgeR(exObj)
+#' sigGeneCounts(exDgeRes)
 #' @export
 sigGeneCounts <- function(countDgeResult) {
   allCount <- geneCount(countDgeResult)

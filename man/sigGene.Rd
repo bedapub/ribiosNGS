@@ -6,18 +6,16 @@
 \alias{sigNegGene}
 \title{Return significantly regulated genes}
 \usage{
-sigGene(countDgeResult, contrast, value = "GeneID")
+sigGene(countDgeResult, contrast)
 
-sigPosGene(countDgeResult, contrast, value = "GeneID")
+sigPosGene(countDgeResult, contrast)
 
-sigNegGene(countDgeResult, contrast, value = "GeneID")
+sigNegGene(countDgeResult, contrast)
 }
 \arguments{
 \item{countDgeResult}{An EdgeResult object}
 
 \item{contrast}{Character, contrast(s) of interest}
-
-\item{value}{Character, type of identifier returned}
 }
 \value{
 A vector of identifiers
@@ -32,6 +30,22 @@ Return significantly regulated genes
 \item \code{sigNegGene}: Only return negatively significantly regulated genes
 }}
 
-\note{
-TODO fix: add InputFeature
+\examples{
+exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
+exMat[2:4, 4:6] <- exMat[2:4, 4:6]+20
+exMat[7:9, 1:3] <- exMat[7:9, 1:3]+20
+exGroups <- gl(2,3, labels=c("Group1", "Group2"))
+exDesign <- model.matrix(~0+exGroups)
+colnames(exDesign) <- levels(exGroups)
+exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+exFdata <- data.frame(GeneSymbol=sprintf("Gene\%d", 1:nrow(exMat)))
+exPdata <- data.frame(Name=sprintf("Sample\%d", 1:ncol(exMat)),
+                     Group=exGroups)
+exObj <- EdgeObject(exMat, exDescon, 
+                   fData=exFdata, pData=exPdata)
+exDgeRes <- dgeWithEdgeR(exObj)
+sigGenes(exDgeRes)
+sigPosGenes(exDgeRes)
+sigNegGenes(exDgeRes)
 }

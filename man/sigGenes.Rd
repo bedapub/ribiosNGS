@@ -4,30 +4,28 @@
 \alias{sigGenes}
 \alias{sigPosGenes}
 \alias{sigNegGenes}
-\title{Return significantly regulated genes of all contrastsin lists}
+\title{Return significantly regulated genes of all contrasts}
 \usage{
-sigGenes(countDgeResult, value = "GeneID")
+sigGenes(countDgeResult)
 
-sigPosGenes(countDgeResult, value = "GeneID")
+sigPosGenes(countDgeResult)
 
-sigNegGenes(countDgeResult, value = "GeneID")
+sigNegGenes(countDgeResult)
 }
 \arguments{
 \item{countDgeResult}{An EdgeResult object}
-
-\item{value}{Character, type of identifier returned}
 }
 \value{
 A list of vectors of identifiers
 }
 \description{
-Return significantly regulated genes of all contrastsin lists
+Return significantly regulated genes of all contrasts
 }
 \section{Functions}{
 \itemize{
-\item \code{sigPosGenes}: Only return negatively significantly regulated genes
+\item \code{sigPosGenes}: Only return significantly positively regulated genes
 
-\item \code{sigNegGenes}: Only return negatively significantly regulated genes
+\item \code{sigNegGenes}: Only return significantly negatively regulated genes
 }}
 
 \note{

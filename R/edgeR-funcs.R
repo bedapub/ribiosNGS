@@ -362,10 +362,12 @@ sigGeneCounts <- function(countDgeResult, value=NULL) {
   negCounts <- sapply(sigNegGenes(countDgeResult), ribiosUtils::ulen)
   total <- posCounts + negCounts
   res <- data.frame(
+    Contrast=contrastNames(countDgeResult),
     posCount = posCounts,
     negCount = negCounts,
     posnegCount = posCounts + negCounts,
-    all = allCount
+    all = allCount,
+    row.names=NULL
   )
   return(res)
 }

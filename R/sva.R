@@ -1,6 +1,5 @@
 #' Apply SVA to transformed count data
 #' 
-#' 
 #' @param counts A matrix of counts
 #' @param designMatrix Design matrix
 #' @param transformFunc A function to transform the count data
@@ -135,6 +134,31 @@ isEmptySV <- function(sv) {
   nrow(sv)==1 && ncol(sv)==1
 }
 
+#' Update a contrast matrix given a surrogate variable matrix
+#' @param contrastMatrix A contrast matrix
+#' @param svMatrix A surrogate-variable matrix, for instance returned by sva
+#' @return An updated matrix, with surrogate matrix variables appended to the rows
+#' @importFrom limma makeContrasts
+#' @export
+#' @examples 
+#' exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)
+#' exCounts[1:100, 2:3] <- exCounts[1:100,2:3]+20
+#' exDesign <- model.matrix(~gl(2,3))
+#' colnames(exDesign) <- c("Baseline", "Treatment")
+#' exContrast <- limma::makeContrasts("Treatment"="Treatment", levels=exDesign)
+#' exVoomSvaRes <- voomSVA(exCounts, exDesign)
+#' updateContrastMatrixWithSV(exContrast, exVoomSvaRes) 
+updateContrastMatrixWithSV <- function(contrastMatrix, svMatrix) {
+  svColnames <- colnames(svMatrix)
+  if(is.null(svColnames))
+    svColnames <- sprintf("sv%d", 1:ncol(svMatrix))
+  res <- rbind(contrastMatrix,
+               matrix(0, nrow=ncol(svMatrix), ncol=ncol(contrastMatrix), 
+                      dimnames=list(svColnames, 
+                                    colnames(contrastMatrix))))
+  return(res)
+}
+
 #' Perform surrogate variable analysis (SVA) to an EdgeObject object
 #' 
 #' 
@@ -187,10 +211,7 @@ doSVA <- function(edgeObj, transform=c("voom", "cpm")) {
   if(!isEmptySV(sv)) {
     newDesign <- cbind(design, sv)
     designMatrix(edgeObj) <- newDesign
-    newContrast <- rbind(contrast, 
-                         matrix(0, nrow=ncol(sv), ncol=ncol(contrast),
-                                dimnames=list(colnames(sv), 
-					      colnames(contrast))))
+    newContrast <- updateContrastMatrixWithSV(contrast, sv)
     contrastMatrix(edgeObj) <- newContrast
   }  
   return(edgeObj)

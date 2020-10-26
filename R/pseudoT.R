@@ -7,8 +7,9 @@ utils::globalVariables(c("PValue", "logFC"))
 #' @param p Numeric, a numeric vector between 0 and 1.
 #' @param df Numeric, degree of freedom.
 #' @param sign Logical or integer, positive numbers or \code{TRUE} are interpreted as positive, and negative numbers or \code{TRUE} are interpreted as negative.
-#' 
+#' @param replaceZero Logical, whether small p values or 0 should be replaced by a sufficient small number. Default and recommended: \code{TRUE}
 #' @importFrom stats qt
+#' @importFrom ribiosUtils replaceZeroPvalue
 #' @examples 
 #' pVals <- 10^(seq(-11,0))
 #' signs <- rep(c(TRUE, FALSE), 6)
@@ -16,10 +17,13 @@ utils::globalVariables(c("PValue", "logFC"))
 #' logFCs <- rep(c(1.2,-1.2),6)
 #' tValsLogFCs <- pseudoTfromPvalue(pVals, 5, sign=logFCs)
 #' @export
-pseudoTfromPvalue <- function(p, df, sign) {
+pseudoTfromPvalue <- function(p, df, sign, replaceZero=TRUE) {
+  if(replaceZero) {
+    p <- replaceZeroPvalue(p, factor=2)
+  }
   if(is.logical(sign))
     sign <- ifelse(sign, 1, -1)
-  ts <- stats::qt(p=1-p/2, df=df) * sign(sign)
+  ts <- abs(stats::qt(p=p/2, df=df)) * sign(sign)
   return(ts)
 }
 

@@ -4,7 +4,7 @@
 \alias{pseudoTfromPvalue}
 \title{Convert p-values to t-statistics}
 \usage{
-pseudoTfromPvalue(p, df, sign)
+pseudoTfromPvalue(p, df, sign, replaceZero = TRUE)
 }
 \arguments{
 \item{p}{Numeric, a numeric vector between 0 and 1.}
@@ -12,6 +12,8 @@ pseudoTfromPvalue(p, df, sign)
 \item{df}{Numeric, degree of freedom.}
 
 \item{sign}{Logical or integer, positive numbers or \code{TRUE} are interpreted as positive, and negative numbers or \code{TRUE} are interpreted as negative.}
+
+\item{replaceZero}{Logical, whether small p values or 0 should be replaced by a sufficient small number. Default and recommended: \code{TRUE}}
 }
 \description{
 Convert p-values to t-statistics

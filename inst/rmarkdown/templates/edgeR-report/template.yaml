@@ -1,0 +1,4 @@
+name: ngsDge_edgeR pipeline report
+description: >
+  Generating a HTML report summarising ngsDge_edgeR pipeline results
+create_dir: false

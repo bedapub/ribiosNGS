@@ -1,0 +1,284 @@
+---
+title: "Report of the ngs_edgeR pipeline"
+author: '`r Sys.info()["effective_user"]`'
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  html_document:
+    df_print: paged
+    theme: spacelab
+    mathjax: default
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: inline
+params:
+  directory: NULL
+  nSignedTopGenes: 3
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.height=6, fig.width=6)
+library(ribiosUtils)
+library(ribiosIO)
+library(ribiosPlot)
+library(ribiosNGS)
+library(ribiosExpression)
+library(ribiosGSEA)
+library(limma)
+library(edgeR)
+library(openxlsx)
+library(tidyverse)
+library(ggplot2)
+library(ComplexHeatmap)
+library(corrplot)
+library(Vennerable)
+library(igraph)
+library(BioQC)
+library(ggrepel)
+set.seed(1887)
+theme_set(theme_light(base_size=13))
+if(is.null(params$directory)) {
+  workDir <- getwd()
+} else {
+  workDir <- normalizePath(params$directory)
+}
+wdFile <- function(x) file.path(workDir, x)
+```
+
+# Analysis
+
+## Reading in
+
+```{r readin}
+edgeRes <- loadObject(wdFile("ngsDge.RData"))
+print(edgeRes)
+edgeLfc <- logFCmatrix(edgeRes)
+```
+
+```{r figSize}
+nctrt <- nContrast(edgeRes)
+nctrtSqrt <- ceiling(sqrt(nctrt))
+```
+
+## Volcano plots
+
+```{r volcanoPlotSize}
+vcpWidth <- 2 * nctrtSqrt
+vcpHeight <- 2 * nctrtSqrt
+```
+
+
+```{r volcanoPlot, fig.dim=c(vcpWidth, vcpHeight)}
+volcanoPlot(edgeRes)
+```
+
+## DGE count
+
+```{r dgeCountSize}
+dgepWidth <- pmax(6, 0.4 * nctrt)
+```
+
+```{r dgeDgeCount, fig.width=dgepWidth}
+sigGeneBarchart(edgeRes)
+```
+
+## Top differentially expressed genes
+
+```{r topSigGenesSize}
+nSigned <- params$nSignedTopGenes
+groupSize <- ulen(dgeList(edgeRes)$samples$group)
+tsgWidth <- pmax(6, 0.35 * nSigned * groupSize)
+tsgHeight <- pmax(6, 2 * nctrt)
+```
+
+```{r topSigGenes, fig.height=tsgHeight, fig.width=tsgWidth}
+topSigGenesPlot <- plotTopSigGenes(edgeRes, nSigned = nSigned)
+print(topSigGenesPlot)
+```
+
+## PCA of contrasts
+
+```{r lfcCorSize}
+lfcCorSize <- pmax(6, 0.45 * nctrt)
+diffpcaSize <-  pmax(6, 1.25 * nctrtSqrt)
+```
+
+```{r lfcCor, fig.height=lfcCorSize, fig.width=lfcCorSize}
+lfcCor <- cor(edgeLfc, method="spearman")
+corrplot::corrplot(lfcCor, method="ellipse", col=royalbluered(100), tl.cex=0.8,
+         mar=c(0,0,3,0), addCoef.col = "cyan3", number.cex=0.85,
+         title="Correlation of differential gene expression profiles")
+```
+
+```{r diffPca, fig.height=diffpcaSize, fig.width=diffpcaSize}
+diffPcaScore <- pcaScoresFromLogFC(edgeLfc)
+diffPcaPlot <- ggplot(as.data.frame(diffPcaScore), 
+       aes(x=PC1, y=PC2, label=contrastNames(edgeRes))) +
+  geom_point(size=4) +
+  xlab(expVarLabel(diffPcaScore, 1, compact = TRUE)) +
+  ylab(expVarLabel(diffPcaScore, 2, compact = TRUE)) +
+  ggtitle("PCA of differential gene expression") +
+  geom_vline(xintercept = 0) +
+  ggrepel::geom_text_repel() +
+  geom_hline(yintercept = 0)
+print(diffPcaPlot)
+```
+
+## Pathway analysis
+
+```{r cameraReadin}
+cameraRes <- readCameraResults(wdFile("geneset-analysis/camera-results.txt"))
+cameraSig <- cameraRes %>% filter(PValue<0.01,
+                                  NGenes>=5,
+                                  NGenes<=200,
+                                  abs(EffectSize)>=0.5,
+                                  ! Namespace %in% c("goslim", "immunespace", 
+                                                     "immunomics", "mbdisease",
+                                                     "mbpathology", "mbtoxicity",
+                                                     "msigdbC7", "msigdbC2",
+                                                     "MolecularPhenotyping"))
+cameraMat <- cameraRes %>% filter(GeneSet %in% cameraSig$GeneSet) %>%
+  longdf2matrix(row.col="GeneSet", column.col="Contrast", value.col="Score")
+```
+
+```{r cameraHeatmapWidth}
+cameraHeatmapWidth <- pmax(6, 0.18 * nctrt)
+cameraHeatmapHeight <- pmax(7, log2(nrow(cameraMat)))
+```
+
+```{r cameraHeatmap, fig.height=cameraHeatmapHeight, fig.width=cameraHeatmapWidth}
+biosHeatmap(cameraMat, col="yellowmagenta", zlim=c(-2,2),
+            Colv=FALSE, dendrogram="row",
+            lwid=c(1,3), lhei=c(1,9), cexCol=1, labRow=NA,
+            xlab="Contrast", ylab="Gene-sets",
+            color.key.title = "ES")
+```
+
+```{r repGenesets}
+goi <- rownames(cameraMat)
+goiGenes <- parseCameraContributingGenes(cameraRes,goi)
+repGeneSets <- kmeansGeneset(cameraMat, genesetGenes = goiGenes, optK=25,
+                             thrCumJaccardIndex = 0.5, maxRepPerCluster = 3)
+```
+
+```{r repGnesetsHeatmapHeight}
+repGeneCount <- length(repGeneSets$repGenesets)
+repGenesetsHeatmapWidth <- pmax(7L, 0.6 * nctrt)
+repGenesetsHeatmapHeight <- pmax(7L, repGeneCount * 0.2)
+rgHei <- c(1, repGenesetsHeatmapHeight-1)
+rgWid <- c(1, repGenesetsHeatmapWidth-1)
+```
+
+### Representative pathways
+
+We visualize representative gene-sets.
+
+```{r repGenesetsHeatmap, fig.height=repGenesetsHeatmapHeight, fig.width=repGenesetsHeatmapWidth}
+repGsMat <- cameraMat[repGeneSets$repGenesets,]
+repGsLabel <- prettyRonetGenesetNames(rownames(repGsMat), nchar=40)
+ha <- ComplexHeatmap::HeatmapAnnotation(GeneSetCluster=repGeneSets$repGenesetClusters,
+                                        col=list(GeneSetCluster=fcbase(fcbrewer(repGeneSets$repGenesetClusters))),
+                                        which="row")
+gsMaxRownamesWidth <- unit(6, "inch")
+ComplexHeatmap::Heatmap(repGsMat,
+                        right_annotation = ha,
+                        row_names_side="left",
+                        row_names_max_width=gsMaxRownamesWidth,
+                        cluster_rows = FALSE, cluster_columns=FALSE,
+                        name="Enrichment score",
+                        col=circlize::colorRamp2(breaks=c(-3,0, 3),
+                                 colors=yellowmagenta(3)),
+                        row_labels = repGsLabel,
+                        column_labels = colnames(repGsMat),
+                        row_names_gp = gpar(fontsize=10),
+                        column_names_gp = gpar(fontsize=12))
+```
+
+We visualize representative gene-sets and contrasts with only gene-sets clustered.
+
+```{r repGenesetsHeatmapRowClustered, fig.height=repGenesetsHeatmapHeight, fig.width=repGenesetsHeatmapWidth}
+ComplexHeatmap::Heatmap(repGsMat,
+                        row_names_side="left",
+                        row_names_max_width=gsMaxRownamesWidth,
+                        cluster_rows = TRUE, cluster_columns=FALSE,
+                        clustering_method_rows = "ward.D2",
+                        name="Enrichment score",
+                        col=circlize::colorRamp2(breaks=c(-3,0, 3),
+                                 colors=yellowmagenta(3)),
+                        row_labels = repGsLabel,
+                        column_labels = colnames(repGsMat),
+                        row_names_gp = gpar(fontsize=10),
+                        column_names_gp = gpar(fontsize=12))
+```
+
+We visualize representative gene-sets and contrasts with both dimensions clustered.
+
+```{r repGenesetsHeatmapBothClustered, fig.height=repGenesetsHeatmapHeight, fig.width=repGenesetsHeatmapWidth}
+ComplexHeatmap::Heatmap(repGsMat,
+                        row_names_side="left",
+                        row_names_max_width=gsMaxRownamesWidth,
+                        cluster_rows = TRUE, cluster_columns=TRUE,
+                        clustering_method_rows = "ward.D2",
+                        clustering_method_columns = "ward.D2",
+                        name="Enrichment score",
+                        col=circlize::colorRamp2(breaks=c(-3,0, 3),
+                                 colors=yellowmagenta(3)),
+                        row_labels = repGsLabel,
+                        column_labels = colnames(repGsMat),
+                        row_names_gp = gpar(fontsize=10),
+                        column_names_gp = gpar(fontsize=12))
+```
+
+## Exported heatmaps of individual genesets
+
+We export heatmaps of differential gene expression of genes in these representative pathways. They can be found in [this PDF file](figures/repGenesetHeatmaps.pdf).
+
+```{r exportFigures}
+strEdgeRes <- updateSigFilter(edgeRes, logFC=0.5, FDR=0.05)
+strEdgeSigGenes <- munion(sigGenes(strEdgeRes, value="GeneSymbol"))
+repGoiGenes <- lapply(goiGenes[repGeneSets$repGenesets],
+                      function(x) intersect(x, strEdgeSigGenes))
+try({
+  createDir(wdFile("figures"))
+  openFileDevice(wdFile("figures/repGenesetHeatmaps.pdf"),
+                  width=cameraHeatmapWidth,
+                 height=repGenesetsHeatmapHeight)
+  sapply(repGeneSets$repGenesets,
+         function(gs) {
+           genes <- repGoiGenes[[gs]]
+           biosHeatmap(edgeLfc[genes,], main=gs, zlim=c(-2,2), 
+                       lhei=c(1, repGenesetsHeatmapHeight-1),
+                       color.key.title = "logFC", col="royalbluered")
+         })
+  closeFileDevice()
+})
+```
+
+## Save the environment
+
+```{r save}
+save(lfcCor, diffPcaScore, diffPcaPlot,
+     repGsMat,repGsLabel,repGeneSets,
+     repGenesetsHeatmapWidth,repGenesetsHeatmapHeight,
+     file="edgeR-report.RData")
+```
+
+# Session information
+
+```{r bedaInfo}
+bedaInfo()
+```
+
+```{r sessionInfo}
+sessionInfo()
+```

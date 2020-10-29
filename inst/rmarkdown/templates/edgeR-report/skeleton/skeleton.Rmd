@@ -173,8 +173,8 @@ repGeneSets <- kmeansGeneset(cameraMat, genesetGenes = goiGenes, optK=25,
 
 ```{r repGnesetsHeatmapHeight}
 repGeneCount <- length(repGeneSets$repGenesets)
-repGenesetsHeatmapWidth <- pmax(7L, 0.6 * nctrt)
-repGenesetsHeatmapHeight <- pmax(7L, repGeneCount * 0.2)
+repGenesetsHeatmapWidth <- pmax(7L, 0.28 * nctrt)
+repGenesetsHeatmapHeight <- pmax(7L, repGeneCount * 0.25)
 rgHei <- c(1, repGenesetsHeatmapHeight-1)
 rgWid <- c(1, repGenesetsHeatmapWidth-1)
 ```
@@ -190,7 +190,7 @@ ha <- ComplexHeatmap::HeatmapAnnotation(GeneSetCluster=repGeneSets$repGenesetClu
                                         col=list(GeneSetCluster=fcbase(fcbrewer(repGeneSets$repGenesetClusters))),
                                         which="row")
 gsMaxRownamesWidth <- unit(6, "inch")
-ComplexHeatmap::Heatmap(repGsMat,
+repGsHeatmap <- ComplexHeatmap::Heatmap(repGsMat,
                         right_annotation = ha,
                         row_names_side="left",
                         row_names_max_width=gsMaxRownamesWidth,
@@ -200,14 +200,15 @@ ComplexHeatmap::Heatmap(repGsMat,
                                  colors=yellowmagenta(3)),
                         row_labels = repGsLabel,
                         column_labels = colnames(repGsMat),
-                        row_names_gp = gpar(fontsize=10),
-                        column_names_gp = gpar(fontsize=12))
+                        row_names_gp = gpar(fontsize=13),
+                        column_names_gp = gpar(fontsize=13))
+print(repGsHeatmap)
 ```
 
 We visualize representative gene-sets and contrasts with only gene-sets clustered.
 
 ```{r repGenesetsHeatmapRowClustered, fig.height=repGenesetsHeatmapHeight, fig.width=repGenesetsHeatmapWidth}
-ComplexHeatmap::Heatmap(repGsMat,
+repGsHeatmapRowClustered <- ComplexHeatmap::Heatmap(repGsMat,
                         row_names_side="left",
                         row_names_max_width=gsMaxRownamesWidth,
                         cluster_rows = TRUE, cluster_columns=FALSE,
@@ -217,14 +218,15 @@ ComplexHeatmap::Heatmap(repGsMat,
                                  colors=yellowmagenta(3)),
                         row_labels = repGsLabel,
                         column_labels = colnames(repGsMat),
-                        row_names_gp = gpar(fontsize=10),
-                        column_names_gp = gpar(fontsize=12))
+                        row_names_gp = gpar(fontsize=13),
+                        column_names_gp = gpar(fontsize=13))
+print(repGsHeatmapRowClustered)
 ```
 
 We visualize representative gene-sets and contrasts with both dimensions clustered.
 
 ```{r repGenesetsHeatmapBothClustered, fig.height=repGenesetsHeatmapHeight, fig.width=repGenesetsHeatmapWidth}
-ComplexHeatmap::Heatmap(repGsMat,
+repGsHeatmapTwoWayClustered <- ComplexHeatmap::Heatmap(repGsMat,
                         row_names_side="left",
                         row_names_max_width=gsMaxRownamesWidth,
                         cluster_rows = TRUE, cluster_columns=TRUE,
@@ -235,8 +237,9 @@ ComplexHeatmap::Heatmap(repGsMat,
                                  colors=yellowmagenta(3)),
                         row_labels = repGsLabel,
                         column_labels = colnames(repGsMat),
-                        row_names_gp = gpar(fontsize=10),
-                        column_names_gp = gpar(fontsize=12))
+                        row_names_gp = gpar(fontsize=13),
+                        column_names_gp = gpar(fontsize=13))
+print(repGsHeatmapTwoWayClustered)
 ```
 
 ## Exported heatmaps of individual genesets
@@ -268,8 +271,9 @@ try({
 
 ```{r save}
 save(lfcCor, diffPcaScore, diffPcaPlot,
-     repGsMat,repGsLabel,repGeneSets,
-     repGenesetsHeatmapWidth,repGenesetsHeatmapHeight,
+     repGsMat,repGsLabel,repGeneSets,gsMaxRownamesWidth,
+     repGenesetsHeatmapWidth, repGenesetsHeatmapHeight,
+     repGsHeatmap, repGsHeatmapRowClustered, repGsHeatmapTwoWayClustered,
      file="edgeR-report.RData")
 ```
 

@@ -181,7 +181,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param appendGmt \code{NULL} or character string, path to an additional GMT
 #'   file for gene-set analysis. The option is passed to
 #'   \code{\link{edgeRcommand}}.
-#' @param interactive Logical, whether the command should be run interactively,
+#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
 #' using \code{srun} and the 'interaction' queue of jobs instead of using
 #' \code{sbatch}.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
@@ -212,8 +212,9 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               mps=FALSE,
                               limmaVoom=FALSE,
                               appendGmt=NULL,
-                              interactive=FALSE,
+                              qos=c("short", "interactive", "normal"),
                               debug=FALSE) {
+  qos <- match.arg(qos)
   comm <- edgeRcommand(dgeList=dgeList, 
                        designMatrix=designMatrix, 
                        contrastMatrix=contrastMatrix,
@@ -226,11 +227,16 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   outdirBase <- basename(gsub("\\/$", "", outdir))
   outfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".out"))
   errfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".err"))
-  if (interactive) {
+  if(qos == "short") {
+    prefix <- "sbatch --qos=short"
+  } else if (qos=="interactive") {
     prefix <- "srun --qos=interaction"
-  } else {
+  } else if (qos=="normal") {
     prefix <- "sbatch --qos=normal"
+  } else {
+    stop("Should not be here")
   }
+
   res <- paste(prefix,
                "-n 1 -c 12",
                sprintf("-e %s", errfile),
@@ -241,7 +247,6 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 }
 
 #' Send an edgeR analysis job to SLURM
-#' 
 #' 
 #' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
 #' and \code{samples}
@@ -261,7 +266,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param appendGmt \code{NULL} or character string, path to an additional GMT
 #'   file for gene-set analysis. The option is passed to
 #'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
-#' @param interactive Logical, whether the command should be run interactively, 
+#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
 #' using \code{srun} and the 'interaction' queue of jobs instead of using 
 #' \code{sbatch}.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
@@ -291,8 +296,9 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        mps=FALSE,
                        limmaVoom=FALSE,
                        appendGmt=NULL,
-                       interactive=FALSE,
+                       qos=c("short", "interactive", "normal"),
                        debug=FALSE) {
+  qos <- match.arg(qos)
   overwrite <- match.arg(overwrite)
   ans <- NA
   if(overwrite=="ask") {
@@ -331,7 +337,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                             mps=mps,
                             limmaVoom=limmaVoom,
                             appendGmt=appendGmt,
-                            interactive=interactive,
+                            qos=qos,
                             debug=debug)
   res <- system(comm, intern=TRUE)
   return(list(command=comm, output=res))

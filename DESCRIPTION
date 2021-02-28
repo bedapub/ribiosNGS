@@ -90,3 +90,9 @@ Collate:
     'writeDGEList.R'
 URL: https://github.com/bedapub/ribiosNGS
 BugReports: https://github.com/bedapub/ribiosNGS/issues
+Remotes:
+    github::bedapub/ribiosExpression,
+    github::bedapub/ribiosAnnotation,
+    github::bedapub/ribiosUtils,
+    github::bedapub/ribiosIO,
+    github::bedapub/ribiosPlot

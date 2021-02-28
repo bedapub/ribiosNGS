@@ -81,5 +81,5 @@ writeBiokitSampleAnnotation <- function(df, con) {
   checkBiokitSampleAnnotation(df)
   firstLine <- paste0("#", paste(colnames(df), collapse="\t"))
   writeLines(firstLine, con=con)
-  readr::write_tsv(df, path=con, append=TRUE)
+  readr::write_tsv(df, file=con, append=TRUE)
 }

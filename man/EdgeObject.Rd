@@ -5,6 +5,8 @@
 \title{Construct an EdgeObject object by a count matrix and DesignContrast}
 \usage{
 EdgeObject(object, designContrast, ...)
+
+EdgeObject(object, designContrast, ...)
 }
 \arguments{
 \item{object}{A matrix containing counts of features}
@@ -14,6 +16,8 @@ EdgeObject(object, designContrast, ...)
 \item{...}{Other parameters}
 }
 \description{
+Construct an EdgeObject object by a count matrix and DesignContrast
+
 Construct an EdgeObject object by a count matrix and DesignContrast
 }
 \examples{

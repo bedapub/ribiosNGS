@@ -2,12 +2,6 @@
 NULL
 
 #' Construct an EdgeObject object by a count matrix and DesignContrast
-#' @param object A S3 class, for instance GctMatrix from ribiosIO
-#' @export
-EdgeObject <- function(object, ...) UseMethod("EdgeObject")
-
-
-#' Construct an EdgeObject object by a count matrix and DesignContrast
 #' 
 #' @param object A matrix containing counts of features
 #' @param designContrast A \code{DesignContrast} object
@@ -64,20 +58,6 @@ setMethod("EdgeObject",
                 dgeList=dgeList,
                 designContrast=designContrast)
           })
-
-#' S3 method to create an EdgeObject from GctMatrix object
-#' @param object A GctMatrix object, probably from \code{\link[ribiosIO]{read_gct_matrix}}.
-#' @param designContrast A \code{DesignContrast} object.
-#' @param fData Feature data
-#' @param pData Pheno data
-#' @param remove.zeros Logical
-#' See \code{EdgeObject} for help
-#' @export
-EdgeObject.GctMatrix <- function(object, designContrast,
-                                 fData=NULL, pData=NULL, remove.zeros=FALSE) {
-  EdgeObject(as.matrix(object), designContrast, fData=fData,
-             pData=pData, remove.zeros=remove.zeros)
-}
 
 #' @describeIn EdgeObject The method for FeatAnnoExprs as input
 #' @param object A \code{FeatAnnoExprs} object

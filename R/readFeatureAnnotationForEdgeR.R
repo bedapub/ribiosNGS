@@ -36,7 +36,9 @@ readFeatureAnnotationForEdgeR <- function(featureNames,
     if(!"package:ribiosAnnotation" %in% search()) {
       attachNamespace("ribiosAnnotation")
     }
-    anno <- ribiosAnnotation::guessAndAnnotate(featureNames)
+    anno <- ribiosAnnotation::guessAndAnnotate(featureNames,
+                                               orthologue=TRUE,
+                                               organism="any")
     res <- cbind(FeatureName=featureNames, anno)
   }
   return(res)

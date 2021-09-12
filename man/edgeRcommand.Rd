@@ -15,7 +15,8 @@ edgeRcommand(
   limmaVoom = FALSE,
   appendGmt = NULL,
   debug = FALSE,
-  rootPath = "/pstore/apps/bioinfo/geneexpression/"
+  rootPath = "/pstore/apps/bioinfo/geneexpression/",
+  contrastAnno = NULL
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ The GMT file must exist.}
 instead of the installed version.}
 
 \item{rootPath}{Character, the root path of the script}
+
+\item{contrastAnno}{A \code{data.frame} or \code{NULL}, contrast annotation.}
 }
 \description{
 Export an DGEList, designMatrix, and contrastMatrix to files and return the

@@ -59,6 +59,7 @@ checkContrastNames <- function(contrastMatrix,
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used
 #'   instead of the installed version.
 #' @param rootPath Character, the root path of the script
+#' @param contrastAnno A \code{data.frame} or \code{NULL}, contrast annotation.
 #'
 #' @note Following checks are done internally: \itemize{ \item The design
 #' matrix must have the same number of rows as the columns of the count matrix.
@@ -90,7 +91,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          limmaVoom=FALSE,
                          appendGmt=NULL,
                          debug=FALSE,
-                         rootPath="/pstore/apps/bioinfo/geneexpression/") {
+                         rootPath="/pstore/apps/bioinfo/geneexpression/",
+                         contrastAnno=NULL) {
   ## remove trailing -s if any
   outfilePrefix <- gsub("-$", "", outfilePrefix)
   outfileWithDir <- file.path(outdir,
@@ -129,7 +131,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   groupLevelFile <- paste0(outfileWithDir, "-sampleGroupLevels.txt")
   designFile <- paste0(outfileWithDir, "-designMatrix.txt")
   contrastFile <- paste0(outfileWithDir, "-contrastMatrix.txt")
-
+  contrastAnnoFile <- paste0(outfileWithDir, "-contrastAnnotation.txt")
+  
   writeDGEList(dgeList, exprs.file=exprsFile,
                fData.file = fDataFile,
                pData.file = pDataFile,
@@ -137,6 +140,9 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                groupLevels.file = groupLevelFile)
   writeMatrix(designMatrix, designFile)
   writeMatrix(contrastMatrix, contrastFile)
+  if(!is.null(contrastAnno)) {
+    writeMatrix(contrastAnno, contrastAnnoFile)
+  }
 
   logFile <- paste0(gsub("\\/$", "", outdir), ".log")
   mpsComm <- ifelse(mps, "-mps", "")
@@ -287,6 +293,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  lsfEdgeRcommand(y, designContrast=myDesCon,
 #'      outfilePrefix="test", outdir=tempdir())
 #'
+#' @importFrom ribiosExpression contrastAnnotation
 #' @export
 lsfEdgeRcommand <- function(dgeList, designContrast,
                             outdir="edgeR_output",
@@ -306,7 +313,8 @@ lsfEdgeRcommand <- function(dgeList, designContrast,
                        limmaVoom=limmaVoom,
                        appendGmt=appendGmt,
                        debug=debug,
-                       rootPath="/projects/site/pred/beda/apps/geneexpression")
+                       rootPath="/projects/site/pred/beda/apps/geneexpression",
+                       contrastAnno = ribiosExpression::contrastAnnotation(designContrast))
   outdirBase <- basename(gsub("\\/$", "", outdir))
   outfile <- file.path(dirname(outdir), paste0("lsf-", outdirBase, ".out"))
   errfile <- file.path(dirname(outdir), paste0("lsf-", outdirBase, ".err"))

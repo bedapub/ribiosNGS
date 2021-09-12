@@ -283,8 +283,8 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  y <- edgeR::DGEList(counts=mat, group=myFac)
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
-#'  myDesCon <- DesignContrast(design=myDesign, contrsat=myContrast)
-#'  slurmEdgeRcommand(y, designContrast=myDesCon,
+#'  myDesCon <- DesignContrast(designMatrix=myDesign, contrastMatrix=myContrast)
+#'  lsfEdgeRcommand(y, designContrast=myDesCon,
 #'      outfilePrefix="test", outdir=tempdir())
 #'
 #' @export

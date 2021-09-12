@@ -416,6 +416,9 @@ setClass("DGEListList", representation("list"))
 #' @export
 DGEListList <- function(...) {
   li <- as.list(...)
+  if(!is.null(dim(li))) {
+    dim(li) <- NULL
+  }
   res <- new("DGEListList", li)
   names(res@.Data) <- names(li)
   return(res)

@@ -328,7 +328,7 @@ setMethod("show", "DGEList", function(object) {
 setMethod("show", "DGEListList", function(object) {
   cat(sprintf("A list of %d DGEList objects:\n", length(object)))
   for(i in seq(along=object@.Data)) {
-    cat(sprintf("[[%d]]", i))
+    cat(sprintf("[[%d]] ", i))
     show(object@.Data[[i]])
   }
 })

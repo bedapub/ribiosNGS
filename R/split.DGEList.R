@@ -43,3 +43,11 @@ split.DGEList <- function(x, f, drop=FALSE, bySample=TRUE, sampleDropLevels=TRUE
   names(resList) <- levels(f)
   return(resList)
 }
+
+#' @describeIn split.DGEList
+#' A wrapper of split.DGEList
+#' @export
+splitDGEList <- function(x, f, drop=FALSE, bySample=TRUE, sampleDropLevels=TRUE, ...) {
+  split.DGEList(x, f, drop=drop, bySample=bySample,
+                sampleDropLevels = sampleDropLevels, ...)
+}

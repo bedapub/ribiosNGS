@@ -1,19 +1,19 @@
 #' Check a contrast matrix to make sure that it is likely o.k.
 #' @param contrastMatrix A contrast matrix
 #' @param action Character strings, the action to perform in case the names show irregularities
-#' 
+#'
 #' Right now, the function checks no column names contain the equal sign.
-#' 
-#' @examples 
+#'
+#' @examples
 #' testDesign <- cbind(Control=rep(1,8), Treatment=rep(c(0,1),4), Batch=rep(c(0, 1), each=4))
 #' problemContrast <- limma::makeContrasts("Treatment"="Treatment",
 #'   "Batch=Batch", ## problematic
 #'   levels=testDesign)
 #' checkContrastNames(problemContrast, action="message")
 #' if(requireNamespace("testthat")) {
-#'   testthat::expect_warning(checkContrastNames(problemContrast, 
+#'   testthat::expect_warning(checkContrastNames(problemContrast,
 #'          action="warning"))
-#'   testthat::expect_error(checkContrastNames(problemContrast, 
+#'   testthat::expect_error(checkContrastNames(problemContrast,
 #'          action="error"))
 #' }
 #' @export
@@ -25,7 +25,7 @@ checkContrastNames <- function(contrastMatrix,
     msg <- paste("Some columns in the contrast matrix contain equal signs '='. ",
                  "This is often caused by setting contrasts in the form of ",
                  "\"BvC=B-C\" instead of \"BvC\"=\"B-C\". ",
-                 "The problematic columns include:\n", 
+                 "The problematic columns include:\n",
                  paste(colnames(contrastMatrix)[hasEqual], sep = "", collapse = "\n"),
                  sep="")
     if(action=="message") {
@@ -41,15 +41,15 @@ checkContrastNames <- function(contrastMatrix,
 
 #' Export an DGEList, designMatrix, and contrastMatrix to files and return the
 #' command to run the edgeR script
-#' 
+#'
 #' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
 #' and \code{samples}
 #' @param designMatrix The design matrix to model the data
 #' @param contrastMatrix The contrast matrix matching the design matrix
 #' @param outdir Output directory of the edgeR script. Default value
 #' "edgeR_output".
-#' @param outfilePrefix Prefix of the output files, for instance a reasonable 
-#' name of the project, to identify the files uniquely. The files will be written in 
+#' @param outfilePrefix Prefix of the output files, for instance a reasonable
+#' name of the project, to identify the files uniquely. The files will be written in
 #' \code{file.path(OUTDIR, 'input_data')}.
 #' @param mps Logical, whether molecular-phenotyping analysis is run.
 #' @param limmaVoom Logical, whether the limma-voom model is run instead of the edgeR model
@@ -58,6 +58,7 @@ checkContrastNames <- function(contrastMatrix,
 #'   The GMT file must exist.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used
 #'   instead of the installed version.
+#' @param rootPath Character, the root path of the script
 #'
 #' @note Following checks are done internally: \itemize{ \item The design
 #' matrix must have the same number of rows as the columns of the count matrix.
@@ -69,7 +70,7 @@ checkContrastNames <- function(contrastMatrix,
 #' The output file names start with the outfilePrefix, followed by '-' and
 #' customed file suffixes.
 #' @examples
-#' 
+#'
 #'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
 #'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -88,7 +89,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          mps=FALSE,
                          limmaVoom=FALSE,
                          appendGmt=NULL,
-                         debug=FALSE) {
+                         debug=FALSE,
+                         rootPath="/pstore/apps/bioinfo/geneexpression/") {
   ## remove trailing -s if any
   outfilePrefix <- gsub("-$", "", outfilePrefix)
   outfileWithDir <- file.path(outdir,
@@ -98,7 +100,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   ## check consistency between names
   exprsMat <- dgeList$counts
   if(!identical(rownames(designMatrix), colnames(exprsMat)) &&
-     (is.null(rownames(designMatrix)) || identical(rownames(designMatrix), 
+     (is.null(rownames(designMatrix)) || identical(rownames(designMatrix),
                                                    as.character(1:nrow(designMatrix))))) {
     rownames(designMatrix) <- colnames(exprsMat)
   }
@@ -141,7 +143,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   limmaVommComm <- ifelse(limmaVoom, "-limmaVoom", "")
   commandFile <- paste0(outfileWithDir, "-edgeRcommand.txt")
 
-  scriptFile <- file.path("/pstore/apps/bioinfo/geneexpression/",
+  scriptFile <- file.path(rootPath,
                          ifelse(debug, "rsrc", "bin"),
                          "ngsDge_edgeR.Rscript")
 
@@ -160,7 +162,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    mpsComm,
                    limmaVommComm)
   command <- ribiosUtils::trim(gsub("\\s+", " ", command))
-  
+
   writeLines(command, con=commandFile)
   return(command)
 }
@@ -189,22 +191,22 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'
 #' This function wraps the function \code{\link{edgeRcommand}} to return the
 #' command needed to start a SLURM job.
-#' 
+#'
 #' It uses \code{outdir} to specify slurm output and error files as in the same
 #' directory of \code{outdir}. And the job name is set as the name of the
 #' output directory.
 #' @seealso \code{\link{edgeRcommand}}
 #' @examples
-#' 
+#'
 #'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
 #'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
 #'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
 #'  y <- edgeR::DGEList(counts=mat, group=myFac)
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
-#'  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast, 
+#'  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
 #'      outfilePrefix="test", outdir=tempdir())
-#' 
+#'
 #' @export slurmEdgeRcommand
 slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outdir="edgeR_output",
@@ -215,8 +217,8 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               qos=c("short", "interactive", "normal"),
                               debug=FALSE) {
   qos <- match.arg(qos)
-  comm <- edgeRcommand(dgeList=dgeList, 
-                       designMatrix=designMatrix, 
+  comm <- edgeRcommand(dgeList=dgeList,
+                       designMatrix=designMatrix,
                        contrastMatrix=contrastMatrix,
                        outdir=outdir,
                        outfilePrefix=outfilePrefix,
@@ -246,8 +248,85 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
   return(res)
 }
 
+#' Return the LSF command to run the edgeR script
+#'
+#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
+#' and \code{samples}
+#' @param designContrast The DesignContrast object to model the data
+#' @param outfilePrefix Prefix of the output files. It can include directories,
+#' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+#' created.
+#' @param outdir Output directory of the edgeR script. Default value
+#' "edgeR_output".
+#' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param limmaVoom Logical, whether the limma-voom model is run instead of the edgeR model
+#' @param appendGmt \code{NULL} or character string, path to an additional GMT
+#'   file for gene-set analysis. The option is passed to
+#'   \code{\link{edgeRcommand}}.
+#' @param qos Character, specifying Quality of Service of LSF Available values include \code{long}, \code{short}, and \code{preempty}.
+#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
+#'   the installed version. The option is passed to \code{edgeRcommand}.
+#'
+#' This function wraps the function \code{\link{edgeRcommand}} to return the
+#' command needed to start a LSF job.
+#'
+#' It uses \code{outdir} to specify slurm output and error files as in the same
+#' directory of \code{outdir}. And the job name is set as the name of the
+#' output directory.
+#'
+#' @seealso \code{\link{edgeRcommand}}
+#' @examples
+#'
+#'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
+#'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
+#'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
+#'  y <- edgeR::DGEList(counts=mat, group=myFac)
+#'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
+#'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
+#'  myDesCon <- DesignContrast(design=myDesign, contrsat=myContrast)
+#'  slurmEdgeRcommand(y, designContrast=myDesCon,
+#'      outfilePrefix="test", outdir=tempdir())
+#'
+#' @export
+lsfEdgeRcommand <- function(dgeList, designContrast,
+                            outdir="edgeR_output",
+                            outfilePrefix="an-unnamed-project-",
+                            mps=FALSE,
+                            limmaVoom=FALSE,
+                            appendGmt=NULL,
+                            qos=c("long", "preempty","short"),
+                            debug=FALSE) {
+  qos <- match.arg(qos)
+  comm <- edgeRcommand(dgeList=dgeList,
+                       designMatrix=designMatrix(designContrast),
+                       contrastMatrix=contrastMatrix(designContrast),
+                       outdir=outdir,
+                       outfilePrefix=outfilePrefix,
+                       mps=mps,
+                       limmaVoom=limmaVoom,
+                       appendGmt=appendGmt,
+                       debug=debug,
+                       rootPath="/projects/site/pred/beda/apps/geneexpression")
+  outdirBase <- basename(gsub("\\/$", "", outdir))
+  outfile <- file.path(dirname(outdir), paste0("lsf-", outdirBase, ".out"))
+  errfile <- file.path(dirname(outdir), paste0("lsf-", outdirBase, ".err"))
+  bsub <- c("#!/bin/bash",
+            sprintf("#BSUB -J edgeR_%s ## job name", outfilePrefix),
+            "#BSUB -n 12 ## processors on serial clusters",
+            ## "#BSUB -c 12 ## number of CPUs",
+            sprintf("#BSUB -q %s ##short (3h)/long(15d)/preempt(no limit)", qos),
+            sprintf("#BSUB -o %s-%%J.out ## output file", outfilePrefix),
+            sprintf("#BSUB -e %s-%%J.err ## error file", outfilePrefix),
+            comm)
+  bsubFile <- paste0(gsub("-$", "", outfilePrefix), ".bsub")
+  writeLines(bsub, bsubFile)
+
+  res <- paste0("ml load .testing; ml load R/4.0.5-foss-2020a; bsub < ", bsubFile)
+  return(res)
+}
+
 #' Send an edgeR analysis job to SLURM
-#' 
+#'
 #' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
 #' and \code{samples}
 #' @param designMatrix The design matrix to model the data
@@ -267,7 +346,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'   file for gene-set analysis. The option is passed to
 #'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
 #' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
-#' using \code{srun} and the 'interaction' queue of jobs instead of using 
+#' using \code{srun} and the 'interaction' queue of jobs instead of using
 #' \code{sbatch}.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
 #'   the installed version. The option is passed to \code{edgeRcommand}.
@@ -284,10 +363,10 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
 #'  ## \dontrun{
-#'  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast, 
+#'  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast,
 #'  ##  outfilePrefix="test", outdir=tempdir())
 #'  ## }
-#' 
+#'
 #' @export slurmEdgeR
 slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outdir="edgeR_output",
@@ -328,7 +407,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
   if(!doOverwrite & dir.exists(outdir)) {
     return(invisible(NULL))
   }
-  
+
   comm <- slurmEdgeRcommand(dgeList=dgeList,
                             designMatrix=designMatrix,
                             contrastMatrix=contrastMatrix,

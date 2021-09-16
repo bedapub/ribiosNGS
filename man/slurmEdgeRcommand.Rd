@@ -14,6 +14,7 @@ slurmEdgeRcommand(
   limmaVoom = FALSE,
   appendGmt = NULL,
   qos = c("short", "interactive", "normal"),
+  params = "",
   debug = FALSE
 )
 }
@@ -43,6 +44,8 @@ file for gene-set analysis. The option is passed to
 \item{qos}{Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
 using \code{srun} and the 'interaction' queue of jobs instead of using
 \code{sbatch}.}
+
+\item{params}{Character, further parameters to pass to sbatch, for instance "--partition ANOTHER_PARITION"}
 
 \item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of
   the installed version. The option is passed to \code{edgeRcommand}.

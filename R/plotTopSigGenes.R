@@ -96,6 +96,11 @@ plotTopSigGenes <- function(countDgeResult,
                             nSigned=NULL,
                             identifier="GeneSymbol") {
   allContrasts <- contrastNames(countDgeResult)
+  if(any(duplicated(allContrasts))) {
+    warning("Duplicated contrasts detected and removed:",
+            paste(allContrasts[duplicated(allContrasts)], collapse=","))
+    allContrasts <- unique(allContrasts)
+  }
   contrastPlots <- lapply(allContrasts, function(ctr) {
     plotTopSigGenesByContrast(countDgeResult, 
                               contrast=ctr,

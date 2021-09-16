@@ -192,6 +192,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
 #' using \code{srun} and the 'interaction' queue of jobs instead of using
 #' \code{sbatch}.
+#' @param params Character, further parameters to pass to sbatch, for instance "--partition ANOTHER_PARITION"
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
 #'   the installed version. The option is passed to \code{edgeRcommand}.
 #'
@@ -221,6 +222,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               limmaVoom=FALSE,
                               appendGmt=NULL,
                               qos=c("short", "interactive", "normal"),
+                              params = "",
                               debug=FALSE) {
   qos <- match.arg(qos)
   comm <- edgeRcommand(dgeList=dgeList,
@@ -250,6 +252,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                sprintf("-e %s", errfile),
                sprintf("-J %s", outdirBase),
                sprintf("-o %s", outfile),
+               params,
                comm)
   return(res)
 }

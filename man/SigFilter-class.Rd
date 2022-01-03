@@ -3,24 +3,10 @@
 \docType{class}
 \name{SigFilter-class}
 \alias{SigFilter-class}
-\alias{EdgeSigFilter}
-\alias{LimmaSigFilter}
 \title{Base result filter for significantly regulated genes}
-\usage{
-EdgeSigFilter(logFC, posLogFC, negLogFC, pValue, FDR, logCPM)
-
-LimmaSigFilter(logFC, posLogFC, negLogFC, pValue, FDR, aveExpr)
-}
 \description{
 Base result filter for significantly regulated genes
 }
-\section{Functions}{
-\itemize{
-\item \code{EdgeSigFilter}: EdgeSigFilter
-
-\item \code{LimmaSigFilter}: LimmaSigFilter
-}}
-
 \section{Slots}{
 
 \describe{
@@ -34,7 +20,3 @@ are kept)}
 \item{\code{FDR}}{Numeric, FDR treshold}
 }}
 
-\examples{
-esf <- EdgeSigFilter(logFC=2, FDR=0.05, logCPM=0)
-LimmaSigFilter(logFC=1, FDR=0.05, aveExpr=10)
-}

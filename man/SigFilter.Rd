@@ -4,10 +4,13 @@
 \alias{SigFilter}
 \alias{EdgeSigFilter}
 \alias{LimmaSigFilter}
-\alias{sigFilter}
 \title{Build a SigFilter}
 \usage{
 SigFilter(logFC, posLogFC, negLogFC, pValue, FDR)
+
+EdgeSigFilter(logFC, posLogFC, negLogFC, pValue, FDR, logCPM)
+
+LimmaSigFilter(logFC, posLogFC, negLogFC, pValue, FDR, aveExpr)
 }
 \arguments{
 \item{logFC}{Missing or positive numeric}
@@ -19,6 +22,10 @@ SigFilter(logFC, posLogFC, negLogFC, pValue, FDR)
 \item{pValue}{Missing or numeric between 0 and 1}
 
 \item{FDR}{Missing or numeric between 0 and 1}
+
+\item{logCPM}{logCPM filter, only valid for \code{EdgeSigFilter}}
+
+\item{aveExpr}{Average expression filter, only valid for \code{LimmaSigFilter}}
 }
 \value{
 A \code{SigFilter} object
@@ -32,4 +39,6 @@ SigFilter(logFC=2)
 SigFilter(negLogFC=-1)
 SigFilter(FDR=0.05)
 
+esf <- EdgeSigFilter(logFC=2, FDR=0.05, logCPM=0)
+LimmaSigFilter(logFC=1, FDR=0.05, aveExpr=10)
 }

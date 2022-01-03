@@ -264,7 +264,6 @@ update.LimmaSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR
 #' @param pValue Missing or numeric between 0 and 1
 #' @param FDR Missing or numeric between 0 and 1
 #' @return A \code{SigFilter} object
-#' @aliases EdgeSigFilter LimmaSigFilter sigFilter
 #' @examples
 #' SigFilter()
 #' SigFilter(logFC=2)
@@ -282,7 +281,8 @@ SigFilter <- function(logFC, posLogFC, negLogFC, pValue, FDR) {
   return(object)
 }
 
-#' @describeIn SigFilter EdgeSigFilter
+#' @rdname SigFilter
+#' @param logCPM logCPM filter, only valid for \code{EdgeSigFilter}
 #' @examples
 #' esf <- EdgeSigFilter(logFC=2, FDR=0.05, logCPM=0)
 #' @export
@@ -298,12 +298,13 @@ EdgeSigFilter <- function(logFC, posLogFC, negLogFC, pValue, FDR, logCPM) {
   return(object)
 }
 
-#' @describeIn SigFilter LimmaSigFilter
-#' @examples 
+#' @rdname SigFilter
+#' @param aveExpr Average expression filter, only valid for \code{LimmaSigFilter}
+#' @examples
 #' LimmaSigFilter(logFC=1, FDR=0.05, aveExpr=10)
 #' @export
 LimmaSigFilter <- function(logFC, posLogFC, negLogFC, pValue, FDR, aveExpr) {
-  object <- new("EdgeSigFilter")
+  object <- new("LimmaSigFilter")
   object <- update(object, 
                    logFC=logFC, 
                    posLogFC=posLogFC, 

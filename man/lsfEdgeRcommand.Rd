@@ -63,6 +63,8 @@ Return the LSF command to run the edgeR script
  myDesCon <- DesignContrast(designMatrix=myDesign, contrastMatrix=myContrast)
  lsfEdgeRcommand(y, designContrast=myDesCon,
      outfilePrefix="test", outdir=tempdir())
+ ## remove the bsub file
+ file.remove("test.bsub")
 
 }
 \seealso{

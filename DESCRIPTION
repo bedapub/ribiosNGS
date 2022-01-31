@@ -46,7 +46,10 @@ Imports:
     parallel,
     rlang,
     gt,
-    scales
+    scales,
+    UpSetR,
+    ggrepel,
+    reshape2
 Suggests:
     testthat,
     tibble

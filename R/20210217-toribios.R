@@ -1,3 +1,7 @@
+utils::globalVariables(c("FDRScore", "GeneSymbol", "pScore", "value", "variable"))
+
+#' @importFrom ggrepel geom_text_repel
+#' @importFrom dplyr slice_min group_by
 newVolcanoPlot <- function(edgeRes, 
                            contrasts=NULL, 
                            addSigFilterLines=FALSE,
@@ -43,6 +47,10 @@ clipVolcanoPlot <- function(newVolcanoPlot, ylim=c(0,30), xlim=c(-3,3)) {
   return(res)
 }
 
+#' @importFrom reshape2 melt
+#' @importFrom ribiosUtils relevels
+#' @importFrom ribiosPlot royalredblue
+#' @importFrom ggplot2 geom_bar geom_vline coord_cartesian
 newSigGeneBarchart <- function(edgeResult, contrasts=NULL) {
   if(is.null(contrasts))
     contrasts <- contrastNames(edgeResult)
@@ -51,7 +59,7 @@ newSigGeneBarchart <- function(edgeResult, contrasts=NULL) {
     mutate(Contrast=factor(Contrast, contrasts)) %>%
     reshape2::melt(id.vars="Contrast") %>%
     filter(variable %in% c("posCount", "negCount")) %>%
-    mutate(variable=relevels(variable, c("posCount"="Positive", "negCount"="Negative")))
+    mutate(variable=ribiosUtils::relevels(variable, c("posCount"="Positive", "negCount"="Negative")))
   ggplot(counts, aes(x=Contrast, y=value, fill=variable, group=variable)) +
     geom_bar(stat="identity", position="dodge2") +
     scale_fill_manual(values=ribiosPlot::royalredblue(5)[c(1,5)],name="Regulation") +
@@ -66,7 +74,6 @@ newSigGeneBarchart <- function(edgeResult, contrasts=NULL) {
 
 
 
-library(UpSetR)
 
 .sigFilterLabel <- function(sigfilter,
                             type=c("sig", "pos", "neg")) {
@@ -95,6 +102,8 @@ setGeneric("sigFilterLabel", function(object, type) standardGeneric("sigFilterLa
 setMethod("sigFilterLabel", "SigFilter", function(object, type) .sigFilterLabel(object, type))
 setMethod("sigFilterLabel", "CountDgeResult", function(object, type) .sigFilterLabel(object@sigFilter, type))
 
+
+#' @importFrom UpSetR upset fromList
 sigUpsetByContrast <- function(edgeRes, contrasts=NULL, value=NULL,
                                type=c("sig", "pos", "neg"),
                                mainbar.y.label=NULL, text.scale=1.25,

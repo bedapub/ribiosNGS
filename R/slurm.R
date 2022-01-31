@@ -295,6 +295,8 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  myDesCon <- DesignContrast(designMatrix=myDesign, contrastMatrix=myContrast)
 #'  lsfEdgeRcommand(y, designContrast=myDesCon,
 #'      outfilePrefix="test", outdir=tempdir())
+#'  ## remove the bsub file
+#'  file.remove("test.bsub")
 #'
 #' @importFrom ribiosExpression contrastAnnotation
 #' @export

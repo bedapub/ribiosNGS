@@ -136,10 +136,23 @@ setMethod("pData<-", c("EdgeObject", "data.frame"), function(object, value) {
 ## Human gene symbols
 ##-------------------------------------##
 fDataHumanGeneSymbol <- function(object) {
-  gs <- fData(object)$GeneSymbol
+  fd <- fData(object)
+  fdcols <- colnames(fd)
+  isHumanGeneSymbol <- grepl("humangenesymbol", fdcols, ignore.case=TRUE)
+  if(any(isHumanGeneSymbol)) {
+      if(sum(isHumanGeneSymbol)>1) {
+	warning("Following columns found for HumanGeneSymbol, only the first is used",
+		paste(fdcols[isHumanGeneSymbol], collapse=","))
+      }
+      gs <- fd[, which(isHumanGeneSymbol)[1]]
+  } else {
+      gs <- fd$GeneSymbol
+  }
   if(!is.character(gs) && !is.null(gs)) {
     gs <- as.character(gs)
   }
+  if(is.null(gs))
+     warning("No HumanGeneSymbol or GeneSymbol column was found!")
   return(gs)
 }
 

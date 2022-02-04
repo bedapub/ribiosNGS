@@ -26,37 +26,41 @@ appendRanks <- function(dgeTbl) {
 
 #' Retrieve a knockdown table from edgeRes
 #' @param edgeRes An \code{EdgeResult} object
+#' @param feature The feature to be retrieved
 #' @param feature_label The column which contains feature label, gene symbol by
 #' default
-#' @param feature The feature to be retrieved
 #' @return A compact table containing essential information about knockdown
 #' @importFrom rlang '!!'
 #' @export
-kdTable <- function(edgeRes, feature_label="GeneSymbol", feature) {
+kdTable <- function(edgeRes, feature, feature_label="GeneSymbol") {
   kdAllTbl <- do.call(rbind, lapply(ribiosNGS::dgeTables(edgeRes), appendRanks))
   kdTbl <- kdAllTbl %>% filter(!!as.symbol(feature_label) == feature)
   res <- kdTbl %>%
+    mutate(knockdown_efficiency=1-2^logFC) %>%
            select(Contrast, !!as.symbol(feature_label), logFC, FDR,
-           rank_PValue, rank_logFC, rank_absLogFC, total_features)
+                  knockdown_efficiency,
+                  rank_PValue, rank_logFC, rank_absLogFC, total_features)
   return(res)
 }
 
 #' Print a kdTable nicely with gt
 #' @param kdTable a knockdown table (kdTable) returned by \code{kdTable}
 #' @param feature_label The column which contains feature label, gene symbol by
+#' @param ... Passed to \code{\link[gt]{gt}}
 #' default
 #' @return A \code{gt} table object
 #' @export
-#' @importFrom gt gt tab_header fmt_number fmt_scientific tab_options pct
+#' @importFrom gt gt tab_header fmt_number fmt_scientific fmt_percent tab_options pct
 #' @importFrom dplyr vars
-gtKdTable <- function(kdTable, feature_label="GeneSymbol") {
+gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
   rank_Pvalue <- rank_logFC <- rank_absLogFC <- total_features <- NULL
   gs <- kdTable[,feature_label][1]
-  res <- kdTable %>% gt::gt() %>%
+  res <- kdTable %>% gt::gt(...) %>%
     tab_header(title = paste(gs, "knockdown summary")) %>%
-    fmt_number(columns=vars(rank_PValue, rank_logFC, rank_absLogFC), decimals=0) %>%
-    fmt_number(columns=vars(logFC,  total_features), n_sigfig=3) %>%
-    fmt_scientific(columns=vars(FDR)) %>%
+    fmt_number(columns=c(rank_PValue, rank_logFC, rank_absLogFC), decimals=0) %>%
+    fmt_number(columns=c(logFC,  total_features), n_sigfig=3) %>%
+    fmt_percent(columns=c(knockdown_efficiency)) %>%
+    fmt_scientific(columns=c(FDR)) %>%
     tab_options(table.width = pct(100))
 }
 

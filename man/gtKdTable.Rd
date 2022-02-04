@@ -4,12 +4,14 @@
 \alias{gtKdTable}
 \title{Print a kdTable nicely with gt}
 \usage{
-gtKdTable(kdTable, feature_label = "GeneSymbol")
+gtKdTable(kdTable, feature_label = "GeneSymbol", ...)
 }
 \arguments{
 \item{kdTable}{a knockdown table (kdTable) returned by \code{kdTable}}
 
-\item{feature_label}{The column which contains feature label, gene symbol by
+\item{feature_label}{The column which contains feature label, gene symbol by}
+
+\item{...}{Passed to \code{\link[gt]{gt}}
 default}
 }
 \value{

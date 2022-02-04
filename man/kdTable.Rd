@@ -4,15 +4,15 @@
 \alias{kdTable}
 \title{Retrieve a knockdown table from edgeRes}
 \usage{
-kdTable(edgeRes, feature_label = "GeneSymbol", feature)
+kdTable(edgeRes, feature, feature_label = "GeneSymbol")
 }
 \arguments{
 \item{edgeRes}{An \code{EdgeResult} object}
 
+\item{feature}{The feature to be retrieved}
+
 \item{feature_label}{The column which contains feature label, gene symbol by
 default}
-
-\item{feature}{The feature to be retrieved}
 }
 \value{
 A compact table containing essential information about knockdown

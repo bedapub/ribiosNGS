@@ -37,7 +37,8 @@ kdTable <- function(edgeRes, feature, feature_label="GeneSymbol") {
   kdTbl <- kdAllTbl %>% filter(!!as.symbol(feature_label) == feature)
   res <- kdTbl %>%
     mutate(knockdown_efficiency=1-2^logFC) %>%
-           select(Contrast, !!as.symbol(feature_label), logFC, FDR,
+           select(!!as.symbol(feature_label),
+                  Contrast, logFC, FDR,
                   knockdown_efficiency,
                   rank_PValue, rank_logFC, rank_absLogFC, total_features)
   return(res)
@@ -59,7 +60,7 @@ gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
     tab_header(title = paste(gs, "knockdown summary")) %>%
     fmt_number(columns=c(rank_PValue, rank_logFC, rank_absLogFC), decimals=0) %>%
     fmt_number(columns=c(logFC,  total_features), n_sigfig=3) %>%
-    fmt_percent(columns=c(knockdown_efficiency)) %>%
+    fmt_percent(columns=c(knockdown_efficiency), decimals=1) %>%
     fmt_scientific(columns=c(FDR)) %>%
     tab_options(table.width = pct(100))
 }

@@ -40,7 +40,7 @@ kdTable <- function(edgeRes, feature, feature_label="GeneSymbol") {
            select(!!as.symbol(feature_label),
                   Contrast, logFC, FDR,
                   knockdown_efficiency,
-                  rank_PValue, rank_logFC, rank_absLogFC, total_features)
+                  rank_logFC, rank_absLogFC, rank_PValue, total_features)
   return(res)
 }
 

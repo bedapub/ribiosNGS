@@ -33,6 +33,7 @@ appendRanks <- function(dgeTbl) {
 #' @importFrom rlang '!!'
 #' @export
 kdTable <- function(edgeRes, feature, feature_label="GeneSymbol") {
+  knockdown_efficiency <- NULL
   kdAllTbl <- do.call(rbind, lapply(ribiosNGS::dgeTables(edgeRes), appendRanks))
   kdTbl <- kdAllTbl %>% filter(!!as.symbol(feature_label) == feature)
   res <- kdTbl %>%
@@ -55,6 +56,7 @@ kdTable <- function(edgeRes, feature, feature_label="GeneSymbol") {
 #' @importFrom dplyr vars
 gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
   rank_Pvalue <- rank_logFC <- rank_absLogFC <- total_features <- NULL
+  knockdown_efficiency <- FDR <- NULL
   gs <- kdTable[,feature_label][1]
   res <- kdTable %>% gt::gt(...) %>%
     tab_header(title = paste(gs, "knockdown summary")) %>%

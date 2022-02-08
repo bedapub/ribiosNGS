@@ -276,7 +276,7 @@ slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' @param rootPath Character string, the directory of geneexpression scripts, under which \code{bin/ngsDge_edgeR.Rscript} is found.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
 #'   the installed version. The option is passed to \code{edgeRcommand}.
-#' @param bsubFile \code{NULL} or character string, file name that contains LSF jobs. If \code{NULL}, a file will be generated within the current directory following the pattern of \code{outfilePrefix-bsub.bsub}.
+#' @param bsubFile \code{NULL} or character string, file name that contains LSF jobs. If \code{NULL}, a file will be generated within the current directory following the pattern of \code{outfilePrefix.bsub}.
 #'
 #' This function wraps the function \code{\link{edgeRcommand}} to return the
 #' command needed to start a LSF job.
@@ -337,7 +337,7 @@ lsfEdgeRcommand <- function(dgeList,
             sprintf("#BSUB -e %s-%%J.err ## error file", outfilePrefix),
             comm)
   if(is.null(bsubFile)) {
-    bsubFile <- paste0(gsub("-$", "", outfilePrefix), "-bsub.bsub")
+    bsubFile <- paste0(gsub("-$", "", outfilePrefix), ".bsub")
   }
   writeLines(bsub, bsubFile)
 

@@ -46,7 +46,7 @@ file for gene-set analysis. The option is passed to
 \item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of
 the installed version. The option is passed to \code{edgeRcommand}.}
 
-\item{bsubFile}{\code{NULL} or character string, file name that contains LSF jobs. If \code{NULL}, a file will be generated within the current directory following the pattern of \code{outfilePrefix-bsub.bsub}.
+\item{bsubFile}{\code{NULL} or character string, file name that contains LSF jobs. If \code{NULL}, a file will be generated within the current directory following the pattern of \code{outfilePrefix.bsub}.
 
 This function wraps the function \code{\link{edgeRcommand}} to return the
 command needed to start a LSF job.

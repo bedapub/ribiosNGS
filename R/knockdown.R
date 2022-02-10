@@ -139,8 +139,8 @@ plotKnockdown <- function(goiExpr,
     geom_hline(yintercept=medianControl, linetype=2) +
     scale_y_continuous(trans=trans, n.breaks=10,
                        sec.axis = sec_axis(~1-./medianControl,
-                                           breaks=c(0, 0.2,0.5,0.6,.7,.8,.9),
-                                           labels=scales::percent,
+                                           breaks=seq(0, 1, 0.1),
+                                           labels=function(x) scales::percent(x, accuracy = 1),
                                            name="KD efficiency")) +
     ggpubr::stat_compare_means(label = "p.signif", 
                                method=test,

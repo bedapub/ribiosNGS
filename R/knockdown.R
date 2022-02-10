@@ -45,6 +45,10 @@ kdTable <- function(edgeRes, feature, feature_label="GeneSymbol") {
   return(res)
 }
 
+rankAndPct <- function(rank, n_total) {
+  sprintf("%d (%.1f%%)", rank, rank/n_total*100)
+}
+
 #' Print a kdTable nicely with gt
 #' @param kdTable a knockdown table (kdTable) returned by \code{kdTable}
 #' @param feature_label The column which contains feature label, gene symbol by
@@ -52,19 +56,38 @@ kdTable <- function(edgeRes, feature, feature_label="GeneSymbol") {
 #' default
 #' @return A \code{gt} table object
 #' @export
-#' @importFrom gt gt tab_header fmt_number fmt_scientific fmt_percent tab_options pct
+#' @importFrom gt gt tab_header fmt_number fmt_scientific fmt_percent tab_options pct cols_align tab_footnote cells_column_labels
 #' @importFrom dplyr vars
 gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
   rank_Pvalue <- rank_logFC <- rank_absLogFC <- total_features <- NULL
-  knockdown_efficiency <- FDR <- NULL
+  `Knockdown Efficiency` <- knockdown_efficiency <- FDR <- NULL
+  `PValue rank` <- `logFC rank` <- `abslogFC rank` <- NULL
   gs <- kdTable[,feature_label][1]
-  res <- kdTable %>% gt::gt(...) %>%
-    tab_header(title = paste(gs, "knockdown summary")) %>%
-    fmt_number(columns=c(rank_PValue, rank_logFC, rank_absLogFC), decimals=0) %>%
-    fmt_number(columns=c(logFC,  total_features), n_sigfig=3) %>%
-    fmt_percent(columns=c(knockdown_efficiency), decimals=1) %>%
-    fmt_scientific(columns=c(FDR)) %>%
-    tab_options(table.width = pct(100))
+  nfeat <- kdTable[, "total_features"][1]
+  kdTableUpdate <- kdTable %>% 
+    rename(`Knockdown Efficiency`=knockdown_efficiency) %>%
+    select(-1) %>%
+    mutate(`PValue rank`=rankAndPct(rank_PValue, nfeat)) %>%
+    mutate(`logFC rank`=rankAndPct(rank_logFC, nfeat)) %>%
+    mutate(`abslogFC rank`=rankAndPct(rank_absLogFC, nfeat)) %>%
+    select(-total_features, -rank_PValue,
+           -rank_logFC, -rank_absLogFC)
+  
+  res <- kdTableUpdate %>%
+    gt::gt(...) %>%
+    gt::tab_header(title = paste(gs, "knockdown summary")) %>%
+    gt::fmt_number(columns=c(logFC), n_sigfig=2) %>%
+    gt::fmt_percent(columns=c(`Knockdown Efficiency`), decimals=1) %>%
+    gt::cols_align(align="right",
+                   columns = c(`PValue rank`,
+                               `logFC rank`,
+                               `abslogFC rank`)) %>%
+    gt::fmt_scientific(columns=c(FDR)) %>%
+    gt::tab_options(table.width = gt::pct(100)) %>%
+    gt::tab_footnote(footnote=paste0("Ascending. Format: 'rank (percentage)'. Total features: ", nfeat, "."),
+                     locations=gt::cells_column_labels(c(`PValue rank`, `logFC rank`))) %>%
+    gt::tab_footnote(footnote="Descending.",
+                     locations=gt::cells_column_labels(c(`abslogFC rank`)))
 }
 
 #' Plot gene expression with knockdown efficiency

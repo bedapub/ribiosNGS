@@ -67,12 +67,15 @@ gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
     tab_options(table.width = pct(100))
 }
 
-#' Plot Gene knockdown with knockdown efficiency
-#' @param goiExpr A data.frame containing expression of gene of interest, which
-#'   must contain following columns: \code{log2_CPM}, \code{GROUP} (a column or
-#'   character strings, among which a case-sensitive \code{Control} is available)
-#' @note The function is just a prototype and will be likely updated to make it more
-#' standardized and flexible.
+#' Plot gene expression with knockdown efficiency
+#' @param goiExpr A data.frame containing expression of gene of interest in linear scale, which
+#'   must contain columns given below as \code{exprsVar} and \code{groupVar}.
+#' @param exprsVar Character, the variable name of expression. The unit must be in linear scale, not in logarithmic scale, otherwise the knockdown efficiency calculation will be wrong.
+#' @param groupVar Character, the variable name of grouping. The column must be a factor or a character.
+#' @param controlGroup \code{NULL} or character. If \code{groupVar} is a factor and \code{controlGroup} is \code{NULL}, then the first level is assumed to be the control. Otherwise, \code{controlGroup} must be in the group variable.
+#' @param trans Character, transformation of the y-axis, commonly used values include \code{identity} (do not transform), \code{log10}, and \code{log2}.
+#' @param exprsUnit Character, unit name of expression (TPM, CPM, RPKM, etc.)
+#' @param test Character, statistical test, \code{wilcox.test} and \code{t.test} are supported.
 #' @importFrom magrittr '%>%'
 #' @importFrom dplyr mutate
 #' @importFrom ggplot2 ggplot aes_string geom_boxplot scale_fill_manual theme_bw
@@ -80,27 +83,69 @@ gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
 #'   scale_y_continuous sec_axis
 #' @importFrom ggpubr stat_compare_means
 #' @importFrom scales percent
+#' @importFrom ribiosUtils haltifnot
+#' @importFrom rlang .data
 #' @export
-plotGeneKnockdown <- function(goiExpr) {
-  log2_CPM <- NULL
-  goiExpr <- goiExpr %>% mutate(CPM=2^log2_CPM)
-  geneBaseTpm <- with(goiExpr, median(CPM[GROUP=="Control"]))
-  ggplot(goiExpr, aes_string(x = "GROUP", y = "CPM",
-                             color="GROUP", fill = "GROUP", group = "GROUP")) +
+#' @examples 
+#' 
+#' myData <- data.frame(group=gl(3,4),
+#'  exprs=as.vector(sapply(c(100, 10, 1), function(x) rnorm(4, x))))
+#' plotKnockdown(myData)
+#' 
+#' myData2 <-  data.frame(group=rep(c("Vehicle", "Dose1", "Dose2"), each=4),
+#'  exprs=as.vector(sapply(c(100, 10, 1), function(x) rnorm(4, x))))
+#' plotKnockdown(myData2, controlGroup="Vehicle")
+plotKnockdown <- function(goiExpr,
+                              exprsVar="exprs",
+                              groupVar="group",
+                              controlGroup=NULL,
+                              trans = "identity",
+                              exprsUnit="Arbitrary Unit",
+                              test=c("wilcox.test", "t.test")) {
+  test <- match.arg(test)
+  haltifnot(exprsVar %in% colnames(goiExpr),
+            msg=sprintf("Column '%s' not found in inputData", exprsVar))
+  haltifnot(groupVar %in% colnames(goiExpr),
+            msg=sprintf("Column '%s' not found in inputData", groupVar))
+  group <- goiExpr[, groupVar]
+  if(is.factor(group) && is.null(controlGroup)) {
+    controlGroup <- levels(group)[1]
+  } else {
+    if(!is.factor(group)) {
+      haltifnot(!is.null(controlGroup),
+                msg=sprintf("'%s' is a character vector, therefore controlGroup cannot be NULL.",
+                            groupVar))
+    }
+    haltifnot(controlGroup %in% group,
+              msg=sprintf(sprintf("'%s' is a factor, but the control group ('%s') is not found.",
+                                  groupVar, controlGroup)))
+    goiExpr[, groupVar] <- relevels(group, refs=controlGroup, 
+                                    missingLevels = "pass",
+                                    unrecognisedLevels = "error")
+  }
+  isControl <- group==controlGroup
+  controlExpr <- goiExpr[isControl, exprsVar]
+  medianControl <- median(controlExpr, na.rm=TRUE)
+  res <- ggplot(goiExpr, aes_string(x = groupVar, y = exprsVar,
+                                    color= groupVar, 
+                                    group = groupVar)) +
     geom_boxplot(outlier.shape = NA) + 
     theme_bw(base_size=13) + theme(legend.position = "none") +
     geom_point(position = position_jitterdodge(), pch=4) +
-    ylab("Expression [cpm]") + xlab("Treatment") +
-    scale_y_log10(n.breaks=10) +
+    ylab(sprintf("Expression [%s]", exprsUnit)) + 
+    xlab(groupVar) +
     theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=0.5),
           legend.position = "none") +
-    geom_hline(yintercept=geneBaseTpm, linetype=2) +
-    scale_y_continuous(trans="log10", n.breaks=10,
-                       sec.axis = sec_axis(~1-./geneBaseTpm,
+    geom_hline(yintercept=medianControl, linetype=2) +
+    scale_y_continuous(trans=trans, n.breaks=10,
+                       sec.axis = sec_axis(~1-./medianControl,
                                            breaks=c(0, 0.2,0.5,0.6,.7,.8,.9),
                                            labels=scales::percent,
                                            name="KD efficiency")) +
-    ggpubr::stat_compare_means(aes(label = "..p.signif.."), method="wilcox.test",
+    ggpubr::stat_compare_means(label = "p.signif", 
+                               method=test,
                                size=7, col="red",
-                               ref.group = "Control", hide.ns = TRUE, label.y.npc=.9)
+                               symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1), symbols = c("***", "**", "*", "ns")),
+                               ref.group = controlGroup, hide.ns = TRUE, label.y.npc=.9)
+  return(res)
 }

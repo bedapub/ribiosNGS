@@ -83,7 +83,7 @@ checkContrastNames <- function(contrastMatrix,
 #'
 #' @importFrom ribiosUtils haltifnot createDir assertFile trim
 #' @importFrom ribiosIO writeMatrix
-#' @export edgeRcommand
+#' @export
 edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                          outdir="edgeR_output",
                          outfilePrefix="an-unnamed-project-",
@@ -214,7 +214,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
 #'      outfilePrefix="test", outdir=tempdir())
 #'
-#' @export slurmEdgeRcommand
+#' @export
 slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                               outdir="edgeR_output",
                               outfilePrefix="an-unnamed-project-",
@@ -388,7 +388,7 @@ lsfEdgeRcommand <- function(dgeList,
 #'  ##  outfilePrefix="test", outdir=tempdir())
 #'  ## }
 #'
-#' @export slurmEdgeR
+#' @export
 slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
                        outdir="edgeR_output",
                        outfilePrefix="an-unnamed-project-",
@@ -465,7 +465,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
 #'  ##  outfilePrefix="test", outdir=tempdir())
 #'  ## }
 #'
-#' @export slurmEdgeR
+#' @export
 lsfEdgeR <- function(dgeList, designContrast,
                      outdir="edgeR_output",
                      outfilePrefix="an-unnamed-project-",

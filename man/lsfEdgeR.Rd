@@ -9,7 +9,7 @@ lsfEdgeR(
   designContrast,
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
-  overwrite = c("ask", "yes", "no"),
+  overwrite = c("ask", "overwrite", "append", "no"),
   mps = FALSE,
   limmaVoom = FALSE,
   appendGmt = NULL,

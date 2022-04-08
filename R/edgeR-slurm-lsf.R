@@ -329,12 +329,12 @@ lsfEdgeRcommand <- function(dgeList,
   outfile <- file.path(dirname(outdir), paste0("lsf-", outdirBase, ".out"))
   errfile <- file.path(dirname(outdir), paste0("lsf-", outdirBase, ".err"))
   bsub <- c("#!/bin/bash",
-            sprintf("#BSUB -J edgeR_%s ## job name", outfilePrefix),
+            sprintf("#BSUB -J \"edgeR_%s\" ## job name", outfilePrefix),
             "#BSUB -n 12 ## processors on serial clusters",
             ## "#BSUB -c 12 ## number of CPUs",
-            sprintf("#BSUB -q %s ##short (3h)/long(15d)/preempt(no limit)", qos),
-            sprintf("#BSUB -o %s-%%J.out ## output file", outfilePrefix),
-            sprintf("#BSUB -e %s-%%J.err ## error file", outfilePrefix),
+            sprintf("#BSUB -q \"%s\" ##short (3h)/long(15d)/preempt(no limit)", qos),
+            sprintf("#BSUB -o \"%s-%%J.out\" ## output file", outfilePrefix),
+            sprintf("#BSUB -e \"%s-%%J.err\" ## error file", outfilePrefix),
             comm)
   if(is.null(bsubFile)) {
     bsubFile <- paste0(gsub("-$", "", outfilePrefix), ".bsub")

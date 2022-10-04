@@ -6,7 +6,8 @@ NULL
 #' @param target Character, target of annotation.
 #' @param check.target Logical, check whether the target is valid or not.
 #' @importMethodsFrom ribiosExpression annotate
-#' @importFrom ribiosAnnotation annotateEnsembl annotateGeneIDs annotateGeneSymbols annotateRefSeqs
+#' @importFrom ribiosAnnotation annotateEnsemblGeneIDs annotateGeneIDs
+#' annotateAnyIDs
 #' @importFrom ribiosAnnotation isValidFeatureID likeHumanGeneSymbol
 #' @importFrom ribiosExpression sniffFeatureType
 #' @export
@@ -31,15 +32,16 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
             feats <- substr(feats, 1, 20)
             if(target=="GeneID") {
               anno <- annotateGeneIDs(feats,orthologue = TRUE)
-            } else if (target=="GeneSymbol") {
-                ## this is very slow because of the database table look up, but is working...
-              organism <- ifelse(likeHumanGeneSymbol(feats), "human", "any")
-              anno <- ribiosAnnotation::annotateGeneSymbols(feats,organism=organism, orthologue = TRUE)
-            } else if (target=="RefSeq") {
-              anno <- ribiosAnnotation::annotateRefSeqs(feats,orthologue = TRUE)
-            } else if (target=="Ensembl") {
-              anno <- ribiosAnnotation::annotateEnsembl(feats,orthologue = TRUE)
-            } else if (target=="UniProt") {
+            } else if (target=="EnsemblGeneID") {
+              anno <- ribiosAnnotation::annotateEnsemblGeneIDs(feats,orthologue = TRUE)
+         ## } else if (target=="GeneSymbol") {
+              ## this is very slow because of the database table look up, but is working...
+              ## organism <- ifelse(likeHumanGeneSymbol(feats), "human", "any")
+              ## anno <- ribiosAnnotation::annotateGeneSymbols(feats,organism=organism, orthologue = TRUE)
+              ## } else if (target=="RefSeq") {
+              ## anno <- ribiosAnnotation::annotateRefSeqs(feats,orthologue = TRUE)
+              ## } else if (target=="UniProt") {
+            } else {
               anno <- ribiosAnnotation::annotateAnyIDs(feats, orthologue = TRUE)
             }
             if(check.target) {

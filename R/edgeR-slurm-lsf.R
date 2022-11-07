@@ -116,7 +116,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 
   if(!is.null(appendGmt)) {
     ribiosUtils::assertFile(appendGmt)
-    appendGmtComm <- sprintf("-appendGmt %s", appendGmt)
+    appendGmtComm <- sprintf("-appendGmt \"%s\"", appendGmt)
   } else {
     appendGmtComm <- ""
   }

@@ -11,15 +11,15 @@ comm <- edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
                      outfilePrefix="test", outdir=myDir)
 inputDir <- file.path(myDir, "input_data")
 expComm <- paste("/pstore/apps/bioinfo/geneexpression//bin/ngsDge_edgeR.Rscript",
-                 sprintf("-infile %s", file.path(inputDir, "test-counts.gct")),
-                 sprintf("-designFile %s", file.path(inputDir, "test-designMatrix.txt")),
-                 sprintf("-contrastFile %s", file.path(inputDir, "test-contrastMatrix.txt")),
-                 sprintf("-sampleGroups %s", file.path(inputDir, "test-sampleGroups.txt")),
-                 sprintf("-groupLevels %s", file.path(inputDir, "test-sampleGroupLevels.txt")),
-                 sprintf("-featureAnnotationFile %s", file.path(inputDir, "test-featureAnno.txt")),
-                 sprintf("-phenoData %s", file.path(inputDir, "test-sampleAnno.txt")),
-                 sprintf("-outdir %s", myDir),
-                 sprintf("-log %s.log", myDir),
+                 sprintf("-infile \"%s\"", file.path(inputDir, "test-counts.gct")),
+                 sprintf("-designFile \"%s\"", file.path(inputDir, "test-designMatrix.txt")),
+                 sprintf("-contrastFile \"%s\"", file.path(inputDir, "test-contrastMatrix.txt")),
+                 sprintf("-sampleGroups \"%s\"", file.path(inputDir, "test-sampleGroups.txt")),
+                 sprintf("-groupLevels \"%s\"", file.path(inputDir, "test-sampleGroupLevels.txt")),
+                 sprintf("-featureAnnotationFile \"%s\"", file.path(inputDir, "test-featureAnno.txt")),
+                 sprintf("-phenoData \"%s\"", file.path(inputDir, "test-sampleAnno.txt")),
+                 sprintf("-outdir \"%s\"", myDir),
+                 sprintf("-log \"%s.log\"", myDir),
                  "-writedb")
 
 test_that("edgeRcommand works with default options", {
@@ -40,7 +40,7 @@ appendGmt <- tempfile()
 writeLines("GeneSetA\tDescription\tAKT1\tAKT2\tAKT3", appendGmt)
 gmtComm <- edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
                         outfilePrefix="test", outdir=myDir, appendGmt=appendGmt)
-expGmtComm <- paste(expComm, sprintf("-appendGmt %s", appendGmt))
+expGmtComm <- paste(expComm, sprintf("-appendGmt \"%s\"", appendGmt))
 test_that("edgeRcommand works with the appendGmt option, when appendGmt is a character string, path to the GMT file", {
   ## appendGmt
   expect_equal(gmtComm, expGmtComm)

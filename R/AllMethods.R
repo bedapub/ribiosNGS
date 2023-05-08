@@ -173,6 +173,7 @@ setMethod("normFactors", "EdgeObject", function(object) {
   return(normFactors(object@dgeList))
 })
 
+#' @importFrom edgeR estimateGLMDisp
 estimateGLMDisp <- function(object) {
   dge <- object@dgeList
   design <- designMatrix(object@designContrast)

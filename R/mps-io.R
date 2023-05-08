@@ -21,7 +21,7 @@ gctFilename <- function(dir) {
 
 #' Read mpsnake output directory into a DGEList object
 #' @param dir Character string, path of mpsnake pipeline directory (or the \code{results} subdirectory).
-#' @param minReads \{NULL} or tnteger, minimalistic read numbers for a sample to be considered. In case of \{NULL}, no filtering is performed.
+#' @param minReads \code{NULL} or tnteger, minimalistic read numbers for a sample to be considered. In case of \code{NULL}, no filtering is performed.
 #' @return A \code{DGEList} object containing counts, gene, and sample annotation
 #' @examples
 #' mpsnakeDir <- system.file("extdata/mpsnake-minimal-outdir", package="ribiosNGS")

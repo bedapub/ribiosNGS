@@ -4,12 +4,12 @@
 \alias{readMpsnakeAsDGEList}
 \title{Read mpsnake output directory into a DGEList object}
 \usage{
-readMpsnakeAsDGEList(dir, minReads = 1e+06)
+readMpsnakeAsDGEList(dir, minReads = NULL)
 }
 \arguments{
 \item{dir}{Character string, path of mpsnake pipeline directory (or the \code{results} subdirectory).}
 
-\item{minReads}{Integer, minimalistic read numbers for a sample to be considered}
+\item{minReads}{\code{NULL} or tnteger, minimalistic read numbers for a sample to be considered. In case of \code{NULL}, no filtering is performed.}
 }
 \value{
 A \code{DGEList} object containing counts, gene, and sample annotation

@@ -21,6 +21,7 @@ gctFilename <- function(dir) {
 
 #' Read mpsnake output directory into a DGEList object
 #' @param dir Character string, path of mpsnake pipeline directory (or the \code{results} subdirectory).
+#' @param minReads Integer, minimalistic read numbers for a sample to be considered
 #' @return A \code{DGEList} object containing counts, gene, and sample annotation
 #' @examples
 #' mpsnakeDir <- system.file("extdata/mpsnake-minimal-outdir", package="ribiosNGS")
@@ -33,7 +34,7 @@ gctFilename <- function(dir) {
 #' @importFrom ribiosIO readTable
 #' @importFrom ribiosUtils assertFile isDir
 #' @export
-readMpsnakeAsDGEList <- function(dir) {
+readMpsnakeAsDGEList <- function(dir, minReads=1E6) {
   if(ribiosUtils::isDir(file.path(dir, "results"))) {
     dir <- file.path(dir, "results")
   }
@@ -49,6 +50,16 @@ readMpsnakeAsDGEList <- function(dir) {
                         samples=samples,
                         genes=feat,
                         group=samples$group)
+  
+  too_few_reads <- res$samples$lib.size < minReads
+  if(any(too_few_reads)) {
+    warning("Following ",
+            sum(too_few_reads),
+            " samples removed due to too few reads:",
+            paste(sampleNames(res)[too_few_reads], collapse=","))
+    res <- res[, !too_few_reads]
+  }
+  return(res)
 }
 
 #' Read Illumina MolPhen sample sheet from XLS files

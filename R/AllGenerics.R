@@ -152,11 +152,6 @@ setGeneric("humanGeneSymbols", function(object) standardGeneric("humanGeneSymbol
 #' @export
 setGeneric("fitGLM", function(object,...) standardGeneric("fitGLM"))
 
-#' Estimate generalized linear model dispersion
-#' @param object An object
-#' @export
-setGeneric("estimateGLMDisp", function(object) standardGeneric("estimateGLMDisp"))
-
 #' Test GLM
 #' @param object An object
 #' @param fit A fit object

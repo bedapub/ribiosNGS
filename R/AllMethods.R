@@ -173,22 +173,13 @@ setMethod("normFactors", "EdgeObject", function(object) {
   return(normFactors(object@dgeList))
 })
 
-##-------------------------------------##
-## GLM dispersion estimation
-##-------------------------------------##
-#' @describeIn estimateGLMDisp Method for EdgeObject
-#' 
-#' @param object An \code{EdgeObject} object
-#' @importFrom edgeR estimateDisp
-#' @return An updated \code{EdgeObject} object
-#' @export
-setMethod("estimateGLMDisp", "EdgeObject", function(object) {
+estimateGLMDisp <- function(object) {
   dge <- object@dgeList
   design <- designMatrix(object@designContrast)
   dge <- estimateDisp(dge, design)
   object@dgeList <- dge
   return(object)
-})
+}
 
 ##-------------------------------------##
 ## Fit GLM

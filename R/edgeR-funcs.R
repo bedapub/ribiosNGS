@@ -45,7 +45,7 @@ replaceNAwithZero <- function(edgeObj) {
 dgeGML <- function(edgeResult)
   return(edgeResult@dgeGLM)
 
-#' @rdname SigFilter can be used to retrieve SigFilter objects from other objects
+#' Retrieve SigFilter objects from other objects
 #' Return the SigFilter in use
 #' @param countDgeResult An \code{countDgeResult} object
 #' @return An \code{SigFilter} object

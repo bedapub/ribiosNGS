@@ -17,6 +17,6 @@ Is the object annotated
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{EdgeObject}: Method for EdgeObject
-}}
+\item \code{isAnnotated(EdgeObject)}: Method for EdgeObject
 
+}}

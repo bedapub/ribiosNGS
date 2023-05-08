@@ -20,8 +20,8 @@ Tagwise biological coefficients of variance
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: method for DGEList
+\item \code{tagwiseBCV(DGEList)}: method for DGEList
 
-\item \code{EdgeResult}: method for EdgeResult
+\item \code{tagwiseBCV(EdgeResult)}: method for EdgeResult
+
 }}
-

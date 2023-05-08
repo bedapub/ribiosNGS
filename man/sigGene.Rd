@@ -27,11 +27,11 @@ Return significantly regulated genes
 }
 \section{Functions}{
 \itemize{
-\item \code{sigPosGene}: Only return positively significantly regulated genes
+\item \code{sigPosGene()}: Only return positively significantly regulated genes
 
-\item \code{sigNegGene}: Only return negatively significantly regulated genes
+\item \code{sigNegGene()}: Only return negatively significantly regulated genes
+
 }}
-
 \examples{
 exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
 exMat[2:4, 4:6] <- exMat[2:4, 4:6]+20

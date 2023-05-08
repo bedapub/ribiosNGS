@@ -36,13 +36,13 @@ EdgeObject argumenting DGEList by including designContrast information
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{EdgeObject}: The method for matrix as input
+\item \code{EdgeObject(object = matrix, designContrast = DesignContrast)}: The method for matrix as input
 
-\item \code{EdgeObject}: The method for FeatAnnoExprs as input
+\item \code{EdgeObject(object = FeatAnnoExprs, designContrast = DesignContrast)}: The method for FeatAnnoExprs as input
 
-\item \code{EdgeObject}: The method for DGEList as input
+\item \code{EdgeObject(object = DGEList, designContrast = DesignContrast)}: The method for DGEList as input
+
 }}
-
 \section{Slots}{
 
 \describe{

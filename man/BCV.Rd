@@ -20,8 +20,8 @@ Return a data.frame of BCV values
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{BCV(DGEList)}: Method for DGEList
 
-\item \code{EdgeResult}: Method for EdgeResult
+\item \code{BCV(EdgeResult)}: Method for EdgeResult
+
 }}
-

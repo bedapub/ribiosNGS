@@ -59,18 +59,18 @@ Update SigFilter
 }
 \section{Functions}{
 \itemize{
-\item \code{posLogFC<-}: Updates the posLogFC threshold value
+\item \code{posLogFC(object) <- value}: Updates the posLogFC threshold value
 
-\item \code{negLogFC<-}: Updates the negLogFC threshold value
+\item \code{negLogFC(object) <- value}: Updates the negLogFC threshold value
 
-\item \code{logFC<-}: Updates the posLogFC threshold value
+\item \code{logFC(object) <- value}: Updates the posLogFC threshold value
 
-\item \code{pValue<-}: Updates the pValue threshold value
+\item \code{pValue(object) <- value}: Updates the pValue threshold value
 
-\item \code{FDR<-}: Updates the FDR threshold value
+\item \code{FDR(object) <- value}: Updates the FDR threshold value
 
-\item \code{logCPM<-}: Updates the logCPM threshold value
+\item \code{logCPM(object) <- value}: Updates the logCPM threshold value
 
-\item \code{aveExpr<-}: Updates the aveExpr threshold value
+\item \code{aveExpr(object) <- value}: Updates the aveExpr threshold value
+
 }}
-

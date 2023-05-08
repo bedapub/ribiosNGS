@@ -25,10 +25,10 @@ Plot BCV
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{plotBCV(DGEList)}: Method for DGEList
 
-\item \code{EdgeObject}: Method for EdgeObject
+\item \code{plotBCV(EdgeObject)}: Method for EdgeObject
 
-\item \code{EdgeResult}: Method for EdgeResult
+\item \code{plotBCV(EdgeResult)}: Method for EdgeResult
+
 }}
-

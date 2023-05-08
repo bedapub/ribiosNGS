@@ -19,6 +19,6 @@ Test GLM
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{object = EdgeObject,fit = DGEGLM}: Method for EdgeObject and DGEGLM.
-}}
+\item \code{testGLM(object = EdgeObject, fit = DGEGLM)}: Method for EdgeObject and DGEGLM.
 
+}}

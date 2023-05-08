@@ -30,13 +30,13 @@ Run SVA on a count matrix transformed by voom
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{object = matrix,design = matrix}: Method for count matrix and design matrix
+\item \code{voomSVA(object = matrix, design = matrix)}: Method for count matrix and design matrix
 
-\item \code{object = DGEList,design = matrix}: Method for DGEList and design matrix
+\item \code{voomSVA(object = DGEList, design = matrix)}: Method for DGEList and design matrix
 
-\item \code{object = DGEList,design = formula}: Method for count matrix and design formula
+\item \code{voomSVA(object = DGEList, design = formula)}: Method for count matrix and design formula
+
 }}
-
 \examples{
 set.seed(1887)
 exCounts <- matrix(rpois(12000, 10), nrow=2000, ncol=6)

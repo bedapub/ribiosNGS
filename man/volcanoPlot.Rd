@@ -53,6 +53,6 @@ Volcano plot
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{EdgeResult}: Method for EdgeResult
-}}
+\item \code{volcanoPlot(EdgeResult)}: Method for EdgeResult
 
+}}

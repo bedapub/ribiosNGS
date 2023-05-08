@@ -22,8 +22,8 @@ Set common dispersion if missing
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{object = DGEList,value = numeric}: Method for DGEList
+\item \code{setCommonDispIfMissing(object = DGEList, value = numeric)}: Method for DGEList
 
-\item \code{object = EdgeObject,value = numeric}: Method for EdgeObject
+\item \code{setCommonDispIfMissing(object = EdgeObject, value = numeric)}: Method for EdgeObject
+
 }}
-

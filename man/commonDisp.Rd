@@ -20,8 +20,8 @@ Common dispersion
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{commonDisp(DGEList)}: Method for DGEList
 
-\item \code{EdgeObject}: Method for EdgeObject
+\item \code{commonDisp(EdgeObject)}: Method for EdgeObject
+
 }}
-

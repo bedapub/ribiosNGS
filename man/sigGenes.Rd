@@ -25,11 +25,11 @@ Return significantly regulated genes of all contrasts
 }
 \section{Functions}{
 \itemize{
-\item \code{sigPosGenes}: Only return significantly positively regulated genes
+\item \code{sigPosGenes()}: Only return significantly positively regulated genes
 
-\item \code{sigNegGenes}: Only return significantly negatively regulated genes
+\item \code{sigNegGenes()}: Only return significantly negatively regulated genes
+
 }}
-
 \note{
 TODO fix: add InputFeature
 }

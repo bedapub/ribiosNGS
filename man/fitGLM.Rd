@@ -22,6 +22,6 @@ Fit generalized linear model
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{EdgeObject}: Method for EdgeObject
-}}
+\item \code{fitGLM(EdgeObject)}: Method for EdgeObject
 
+}}

@@ -24,8 +24,8 @@ Modulated logCPM
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{modLogCPM(DGEList)}: Method for DGEList
 
-\item \code{EdgeObject}: Method for EdgeObject
+\item \code{modLogCPM(EdgeObject)}: Method for EdgeObject
+
 }}
-

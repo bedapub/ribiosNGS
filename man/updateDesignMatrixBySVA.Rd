@@ -21,6 +21,6 @@ Update design matrix by SVA
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{object = DGEList,design = formula}: for DGEList and formula
-}}
+\item \code{updateDesignMatrixBySVA(object = DGEList, design = formula)}: for DGEList and formula
 
+}}

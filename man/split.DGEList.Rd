@@ -29,9 +29,9 @@ Split a DGEList object by a factor of samples (default) or genes
 }
 \section{Functions}{
 \itemize{
-\item \code{splitDGEList}: A wrapper of split.DGEList
-}}
+\item \code{splitDGEList()}: A wrapper of split.DGEList
 
+}}
 \examples{
 y1 <- matrix(rnbinom(1000, mu=5, size=2), ncol=4)
 genes1 <- data.frame(GeneSymbol=sprintf("Gene\%d", 1:nrow(y1)),

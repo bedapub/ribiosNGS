@@ -23,8 +23,8 @@ Sample counts by group
 }
 \section{Functions}{
 \itemize{
-\item \code{maxCountByGroup}: Returns the max count
+\item \code{maxCountByGroup()}: Returns the max count
 
-\item \code{hasNoReplicate}: Returns \code{TRUE} if the largest group has only one sample
+\item \code{hasNoReplicate()}: Returns \code{TRUE} if the largest group has only one sample
+
 }}
-

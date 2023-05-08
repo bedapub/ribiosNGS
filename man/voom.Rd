@@ -28,12 +28,12 @@ Perform VOOM analysis
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{voom(DGEList)}: Method for DGEList
 
-\item \code{matrix}: Method for matrix
+\item \code{voom(matrix)}: Method for matrix
 
-\item \code{ExpressionSet}: Method for matrix
+\item \code{voom(ExpressionSet)}: Method for matrix
 
-\item \code{EdgeObject}: Method for EdgeObject, norm.factors are calculated first if not done yet
+\item \code{voom(EdgeObject)}: Method for EdgeObject, norm.factors are calculated first if not done yet
+
 }}
-

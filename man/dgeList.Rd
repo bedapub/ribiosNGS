@@ -22,8 +22,8 @@ Extract DGEList from an EdgeResult object
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{EdgeObject}: Extract DGEList from EdgeObject
+\item \code{dgeList(EdgeObject)}: Extract DGEList from EdgeObject
 
-\item \code{EdgeResult}: Extract DGEList from EdgeResult
+\item \code{dgeList(EdgeResult)}: Extract DGEList from EdgeResult
+
 }}
-

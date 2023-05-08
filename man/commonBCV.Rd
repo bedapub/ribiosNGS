@@ -20,8 +20,8 @@ Common biological coefficients of variance (BCV)
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: method for DGEList
+\item \code{commonBCV(DGEList)}: method for DGEList
 
-\item \code{EdgeResult}: method for EdgeResult
+\item \code{commonBCV(EdgeResult)}: method for EdgeResult
+
 }}
-

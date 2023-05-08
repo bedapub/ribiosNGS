@@ -23,13 +23,13 @@ Return the size of the smallest group
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Return the size of the smallest group defined in
+\item \code{minGroupCount(DGEList)}: Return the size of the smallest group defined in
 the \code{DGEList} object
 
-\item \code{EdgeObject}: Return the size of the smallest group defined in
+\item \code{minGroupCount(EdgeObject)}: Return the size of the smallest group defined in
 the \code{EdgeObject} object
-}}
 
+}}
 \examples{
 y <- matrix(rnbinom(12000,mu=10,size=2),ncol=6)
 d <- DGEList(counts=y, group=rep(1:3,each=2))

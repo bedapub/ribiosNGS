@@ -55,7 +55,7 @@ Suggests:
     tibble
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Collate: 
     '20210217-toribios.R'
     'ribiosNGS-package.R'

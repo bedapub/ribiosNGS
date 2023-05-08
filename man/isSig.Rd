@@ -24,8 +24,8 @@ Return logical vector indicating which genes are significantly regulated
 }
 \section{Functions}{
 \itemize{
-\item \code{isSigPos}: Returns which genes are significantly positively regulated
+\item \code{isSigPos()}: Returns which genes are significantly positively regulated
 
-\item \code{isSigPos}: Returns which genes are significantly negatively regulated
+\item \code{isSigPos()}: Returns which genes are significantly negatively regulated
+
 }}
-

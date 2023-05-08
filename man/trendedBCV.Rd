@@ -20,8 +20,8 @@ Trended biological coefficients of variance
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: method for DGEList
+\item \code{trendedBCV(DGEList)}: method for DGEList
 
-\item \code{EdgeResult}: method for EdgeResult
+\item \code{trendedBCV(EdgeResult)}: method for EdgeResult
+
 }}
-

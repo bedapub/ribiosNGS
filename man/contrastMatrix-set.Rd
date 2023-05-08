@@ -20,6 +20,6 @@ Assign contrast matrix
 }
 \section{Functions}{
 \itemize{
-\item \code{contrastMatrix<-,EdgeObject,matrix-method}: Method for EdgeObject
-}}
+\item \code{contrastMatrix(object = EdgeObject) <- value}: Method for EdgeObject
 
+}}

@@ -22,8 +22,8 @@ Set common dispersion
 }
 \section{Functions}{
 \itemize{
-\item \code{commonDisp<-,DGEList,numeric-method}: Method for DGEList
+\item \code{commonDisp(object = DGEList) <- value}: Method for DGEList
 
-\item \code{commonDisp<-,EdgeObject,numeric-method}: Method for EdgeObject
+\item \code{commonDisp(object = EdgeObject) <- value}: Method for EdgeObject
+
 }}
-

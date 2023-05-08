@@ -18,7 +18,7 @@ Normalize an EdgeObject
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{EdgeObject}: Normalize an EdgeObject by calculating normalization
+\item \code{normalize(EdgeObject)}: Normalize an EdgeObject by calculating normalization
 factors using the given method
-}}
 
+}}

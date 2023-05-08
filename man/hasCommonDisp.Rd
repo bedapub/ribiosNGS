@@ -20,8 +20,8 @@ Tells whether common dispersion has been set
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{hasCommonDisp(DGEList)}: Method for DGEList
 
-\item \code{EdgeObject}: Method for EdgeObject
+\item \code{hasCommonDisp(EdgeObject)}: Method for EdgeObject
+
 }}
-

@@ -20,8 +20,8 @@ Get human gene symbols for gene-set enrichment analysis
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{humanGeneSymbols(DGEList)}: Method for DGEList
 
-\item \code{EdgeObject}: Method for EdgeObject
+\item \code{humanGeneSymbols(EdgeObject)}: Method for EdgeObject
+
 }}
-

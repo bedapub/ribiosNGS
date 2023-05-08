@@ -27,12 +27,12 @@ Infer surrogate variables
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{object = matrix,design = matrix}: method for matrix as input
+\item \code{inferSV(object = matrix, design = matrix)}: method for matrix as input
 
-\item \code{object = DGEList,design = matrix}: method for voom-transformed DGEList and design matrix 
+\item \code{inferSV(object = DGEList, design = matrix)}: method for voom-transformed DGEList and design matrix 
 as input
 
-\item \code{object = DGEList,design = formula}: method for voom-transformed DGEList and formula
+\item \code{inferSV(object = DGEList, design = formula)}: method for voom-transformed DGEList and formula
 as input
+
 }}
-

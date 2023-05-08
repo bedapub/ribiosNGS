@@ -20,6 +20,6 @@ Assign the design matrix
 }
 \section{Functions}{
 \itemize{
-\item \code{designMatrix<-,EdgeObject,matrix-method}: Method for EdgeObject
-}}
+\item \code{designMatrix(object = EdgeObject) <- value}: Method for EdgeObject
 
+}}

@@ -20,8 +20,8 @@ Extract normalisation factors from the object
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{DGEList}: Method for DGEList
+\item \code{normFactors(DGEList)}: Method for DGEList
 
-\item \code{EdgeObject}: Method for EdgeObject
+\item \code{normFactors(EdgeObject)}: Method for EdgeObject
+
 }}
-

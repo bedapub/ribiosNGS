@@ -63,9 +63,18 @@ filterByCPM.DGEList <- function(obj,
   if (is.null(group)) 
     group <- rep_len(1L, ncol(y))
   group <- as.factor(group)
-  if (is.null(lib.size)) 
+  if (is.null(lib.size)) {
+    if(is.null(obj$samples$norm.factors)) {
+      obj$samples$norm.factors <- 1
+    }
+    if(is.null(obj$samples$lib.size)) {
+      obj$samples$lib.size <- colSums(y, na.rm=TRUE)
+    }
     lib.size <- obj$samples$lib.size * obj$samples$norm.factors
-  
+    if(is.null(lib.size) || any(is.na(lib.size))) {
+      stop("lib.size is NULL or contains NA: please check the input data")
+    }
+  }
   CPM <- cpm(y, lib.size = lib.size)
   filter <- rowSums(CPM >= minCPM) >= minCount
   res <- obj[filter,]

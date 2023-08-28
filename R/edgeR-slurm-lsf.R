@@ -341,7 +341,7 @@ lsfEdgeRcommand <- function(dgeList,
   }
   writeLines(bsub, bsubFile)
 
-  res <- paste0("ml load .testing; ml load R/4.1.2-foss-2020a; bsub < ", bsubFile)
+  res <- paste0("ml load .testing; ml load R/4.2.2-foss-2020a; bsub < ", bsubFile)
   return(res)
 }
 
@@ -366,7 +366,7 @@ lsfEdgeRcommand <- function(dgeList,
 #' @param appendGmt \code{NULL} or character string, path to an additional GMT
 #'   file for gene-set analysis. The option is passed to
 #'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
-#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
+#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{long} (useful if the job is expected to run more than three hours.)
 #' using \code{srun} and the 'interaction' queue of jobs instead of using
 #' \code{sbatch}.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
@@ -439,7 +439,7 @@ slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
 #' @param appendGmt \code{NULL} or character string, path to an additional GMT
 #'   file for gene-set analysis. The option is passed to
 #'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
-#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
+#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{long} (useful if the job is expected to run more than three hours.)
 #' using \code{srun} and the 'interaction' queue of jobs instead of using
 #' \code{sbatch}.
 #' @param rootPath Character string, the directory of geneexpression scripts, under which \code{bin/ngsDge_edgeR.Rscript} is found.
@@ -473,7 +473,7 @@ lsfEdgeR <- function(dgeList, designContrast,
                      mps=FALSE,
                      limmaVoom=FALSE,
                      appendGmt=NULL,
-                     qos=c("short", "interactive", "normal"),
+                     qos=c("short", "interactive", "long"),
                      rootPath = "~/apps/geneexpression",
                      debug=FALSE) {
   qos <- match.arg(qos)

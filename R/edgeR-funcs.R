@@ -45,10 +45,12 @@ replaceNAwithZero <- function(edgeObj) {
 dgeGML <- function(edgeResult)
   return(edgeResult@dgeGLM)
 
+
 #' Retrieve SigFilter objects from other objects
 #' Return the SigFilter in use
 #' @param countDgeResult An \code{countDgeResult} object
 #' @return An \code{SigFilter} object
+#' @rdname sigFilter-func
 sigFilter <- function(countDgeResult)
   return(countDgeResult@sigFilter)
 
@@ -115,12 +117,12 @@ assertEdgeToptable <- function(x) {
 }
 
 isHighAveExpr <- function(data.frame, sigFilter) {
-  if(class(sigFilter)=="SigFilter") { ## SigFilter does not support filtering by AveExpr
+  if(isa(sigFilter, "SigFilter")) { ## SigFilter does not support filtering by AveExpr
     isAveExpr <- rep(TRUE, nrow(data.frame))
   } else {
-    if(class(sigFilter)=="EdgeSigFilter") {
+    if(isa(sigFilter, "EdgeSigFilter")) {
       thr <- sigFilter@logCPM
-    } else if(class(sigFilter)=="LimmaSigFilter") {
+    } else if(isa(sigFilter, "LimmaSigFilter")) {
       thr <- sigFilter@aveExpr
     } else {
       stop("Slot 'aveExpr' or 'logCPM' was not found in sigFilter.")

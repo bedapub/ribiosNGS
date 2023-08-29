@@ -46,7 +46,7 @@ directory is present, the job will not be started.}
 file for gene-set analysis. The option is passed to
 \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.}
 
-\item{qos}{Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{normal} (useful if the job is expected to run more than three hours.)
+\item{qos}{Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{long} (useful if the job is expected to run more than three hours.)
 using \code{srun} and the 'interaction' queue of jobs instead of using
 \code{sbatch}.}
 

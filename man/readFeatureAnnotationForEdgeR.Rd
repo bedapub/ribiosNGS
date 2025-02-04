@@ -18,6 +18,8 @@ A \code{data.frame}, with the first column named \code{FeatureName},
 The functions tries to parse feature annotation file if it is present. If
 not, it will use \code{\link[ribiosAnnotation]{guessAndAnnotate}} to 
 annotate the features.
+
+Note that for gene symbols, only human gene symbols are supported.
 }
 \description{
 Read feature annotation for EdgeR pipeline

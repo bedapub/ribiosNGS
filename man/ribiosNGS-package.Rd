@@ -2,9 +2,28 @@
 % Please edit documentation in R/ribiosNGS-package.R
 \docType{package}
 \name{ribiosNGS-package}
+\alias{ribiosNGS}
 \alias{ribiosNGS-package}
 \title{ribiosNGS package provides functionalities used for next-generation sequencing data}
 \description{
 Provides data structures and functions for next-generation sequencing gene expression analysis
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/bedapub/ribiosNGS}
+  \item Report bugs at \url{https://github.com/bedapub/ribiosNGS/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Jitao David Zhang \email{jitao_david.zhang@roche.com} (\href{https://orcid.org/0000-0002-3085-0909}{ORCID}) [contributor]
+
+Other contributors:
+\itemize{
+  \item Ailu Mading [contributor]
+  \item F.Hoffmann-La Roche AG [copyright holder]
+}
+
 }
 \keyword{package}

@@ -8,6 +8,8 @@
 #' not, it will use \code{\link[ribiosAnnotation]{guessAndAnnotate}} to 
 #' annotate the features.
 #' 
+#' Note that for gene symbols, only human gene symbols are supported.
+#' 
 #' @examples
 #' anno <- "GeneID\tGeneSymbol\n1234\tCCR5\n1235\tCCR6"
 #' annoFile <- tempfile()
@@ -38,7 +40,7 @@ readFeatureAnnotationForEdgeR <- function(featureNames,
     }
     anno <- ribiosAnnotation::guessAndAnnotate(featureNames,
                                                orthologue=TRUE,
-                                               organism="any")
+                                               taxId=9606)
     res <- cbind(FeatureName=featureNames, anno)
   }
   return(res)

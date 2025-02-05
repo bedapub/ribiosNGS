@@ -1,8 +1,7 @@
-#' ribiosNGS package provides functionalities used for next-generation sequencing data
-#'
-#' @name ribiosNGS-package
-#' @docType package
-#' @description Provides data structures and functions for next-generation sequencing gene expression analysis
+#' _PACKAGE
+#' @name ribiosNGS
+#' @description ribiosNGS provides data structures and functions for
+#'  next-generation sequencing gene expression analysis
 #' @keywords package
 NULL
 

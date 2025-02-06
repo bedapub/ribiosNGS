@@ -16,3 +16,6 @@ The following terms are recognized: GeneID, EnsemblID, GeneSymbol, FeatureName
 \description{
 Return gene identifier types
 }
+\note{
+Note that the order matters: FeatureName > GeneID = EnsemblID > GeneSymbol
+}

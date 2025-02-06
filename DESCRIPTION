@@ -1,8 +1,8 @@
 Package: ribiosNGS
 Type: Package
 Title: Utilities for next-generation sequencing data analysis in ribios
-Version: 1.4.8.9007
-Date: 2025-02-04
+Version: 1.4.8.9009
+Date: 2025-02-06
 Authors@R:
   c(person(given = "Jitao David",
          family = "Zhang",
@@ -52,12 +52,12 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 Collate: 
-    '20210217-toribios.R'
+    'utils.R'
     'ribiosNGS-package.R'
     'AllClasses.R'
     'AllGenerics.R'
-    'utils.R'
     'AllMethods.R'
+    '20210217-toribios.R'
     'DGEListToLongTable.R'
     'EdgeObject.R'
     'annotateMethods.R'

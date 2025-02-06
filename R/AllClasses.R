@@ -241,6 +241,7 @@ update.SigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, ...
   return(object)
 }
 
+#' @export
 update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, logCPM, ...) {
   res <- update.SigFilter(object, logFC, posLogFC, negLogFC, pValue, FDR)
   if(!missing(logCPM)) logCPM(res) <- logCPM
@@ -248,6 +249,7 @@ update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR,
   return(res)
 }
 
+#' @export
 update.LimmaSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, aveExpr, ...) {
   res <- update.SigFilter(object, logFC, posLogFC, negLogFC, pValue, FDR)
   if(!missing(aveExpr)) aveExpr(res) <- aveExpr

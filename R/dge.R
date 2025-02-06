@@ -65,7 +65,8 @@ utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
 #' dgeTable(dgeWithEdgeR(exObj))
 #' 
 #' ## LimmaVoomResult can be also used with exportEdgeResult
-#' exportEdgeResult(exLimmaVoomRes, paste0(tempdir(), "test"), "overwrite")
+#' exportEdgeResult(exLimmaVoomRes, tempdir(), "overwrite")
+#' 
 #' @importFrom ribiosExpression DesignContrast limmaTopTable2dgeTable
 #' @importFrom limma lmFit contrasts.fit eBayes topTable
 #' @importFrom magrittr %>%

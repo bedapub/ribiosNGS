@@ -1,3 +1,6 @@
+#' @include AllClasses.R AllGenerics.R AllMethods.R
+NULL
+
 utils::globalVariables(c("FDRScore", "GeneSymbol", "pScore", "value", "variable"))
 
 #' @importFrom ggrepel geom_text_repel

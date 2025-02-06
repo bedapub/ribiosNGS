@@ -26,7 +26,21 @@ test_that("exampleEdgeObject works", {
   expect_equivalent(expContrastMat, gotContrastMat)
 })
 
-testEdgeResult <- dgeWithEdgeR(testEdgeObj)
-show(testEdgeResult)
+test_that("dgeWithEdgeR works", {
+  testEdgeResult <- dgeWithEdgeR(testEdgeObj)
+  testDgeTable <- dgeTable(testEdgeResult)
+  expect_equal(testDgeTable$Contrast,
+                    rep(c("Group2.vs.Group1",
+                          "Group3.vs.Group1"), each=25))
+  expect_equal(colnames(testDgeTable),
+               c("Contrast", "GeneSymbol",
+                 "logFC", "logCPM",
+                 "LR", "PValue", "FDR"))
+})
 
-testEdgeResult2 <- updateSigFilter(testEdgeResult, logCPM=2)
+test_that("updateSigFilter works", {
+  testEdgeResult <- dgeWithEdgeR(testEdgeObj)
+  testEdgeResult2 <- updateSigFilter(testEdgeResult, logCPM=2)
+  expect_equal(testEdgeResult2@sigFilter@logCPM,
+               2)
+})

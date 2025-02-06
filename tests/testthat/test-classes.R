@@ -1,5 +1,5 @@
-library(ribiosNGS)
 library(testthat)
+library(ribiosNGS)
 
 testEdgeObj <- exampleEdgeObject(nfeat=25, nsample=15, ngroup=3)
 
@@ -41,6 +41,5 @@ test_that("dgeWithEdgeR works", {
 test_that("updateSigFilter works", {
   testEdgeResult <- dgeWithEdgeR(testEdgeObj)
   testEdgeResult2 <- updateSigFilter(testEdgeResult, logCPM=2)
-  expect_equal(testEdgeResult2@sigFilter@logCPM,
-               2)
+  expect_equal(testEdgeResult2@sigFilter@logCPM, 2)
 })

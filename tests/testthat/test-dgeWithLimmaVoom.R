@@ -12,4 +12,4 @@ dgeTable(exLimmaVoomRes)
 dgeTable(dgeWithEdgeR(exObj))
 
 ## LimmaVoomResult can be also used with exportEdgeResult
-exportEdgeResult(exLimmaVoomRes, paste0(tempdir(), "test"), "overwrite")
+exportEdgeResult(exLimmaVoomRes, tempdir(), "overwrite")

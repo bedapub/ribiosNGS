@@ -205,10 +205,12 @@ isSigNeg <- function(data.frame, sigFilter) {
 #' @param dgeResult An DgeResult object
 #' @return A character string indicating the gene identifiers found
 #' The following terms are recognized: GeneID, EnsemblID, GeneSymbol, FeatureName
+#' @note
+#' Note that the order matters: FeatureName > GeneID = EnsemblID > GeneSymbol
 #' @export
 geneIdentifierTypes <- function(dgeResult) {
   fcnames <- colnames(fData(dgeResult))
-  keywords <- c("GeneID", "EnsemblID", "GeneSymbol", "FeatureName")
+  keywords <- c("FeatureName", "GeneID", "EnsemblID", "GeneSymbol")
   res <- intersect(keywords, fcnames)
   return(res)
 }
@@ -371,6 +373,42 @@ sigGeneCounts <- function(countDgeResult, value=NULL) {
     all = allCount,
     row.names=NULL
   )
+  return(res)
+}
+
+#' Return dgeTable containing significantly regulated genes in respective contrasts
+#' @param countDgeResult An EdgeResult object
+#' @param value A character string, it must be a column name in the feature annotation data. Default: FeatureName.
+#' @return A data.frame containing dgeTable of positively and negatively regulated
+#'    genes in respective contrasts
+#' @importFrom ribiosUtils matchColumn
+#' @examples 
+#' exMat <- matrix(rpois(120, 10), nrow=20, ncol=6)
+#' exMat[2:4, 4:6] <- exMat[2:4, 4:6]+20
+#' exMat[7:9, 1:3] <- exMat[7:9, 1:3]+20
+#' exGroups <- gl(2,3, labels=c("Group1", "Group2"))
+#' exDesign <- model.matrix(~0+exGroups)
+#' colnames(exDesign) <- levels(exGroups)
+#' exContrast <- matrix(c(-1,1), ncol=1, dimnames=list(c("Group1", "Group2"), c("Group2.vs.Group1")))
+#' exDescon <- DesignContrast(exDesign, exContrast, groups=exGroups)
+#' exFdata <- data.frame(GeneSymbol=sprintf("Gene%d", 1:nrow(exMat)))
+#' exPdata <- data.frame(Name=sprintf("Sample%d", 1:ncol(exMat)),
+#'                      Group=exGroups)
+#' exObj <- EdgeObject(exMat, exDescon, 
+#'                    fData=exFdata, pData=exPdata)
+#' exDgeRes <- dgeWithEdgeR(exObj)
+#' sigGeneDgeTable(exDgeRes, value="GeneSymbol")
+#' @export
+sigGeneDgeTable <- function(countDgeResult, value="FeatrueName") {
+  stopifnot(value %in% colnames(fData(countDgeResult)))
+  sgenes <- sigGenes(countDgeResult, value=value)
+  stbls <- lapply(names(sgenes), function(ctr) {
+    tbl <- dgeTable(countDgeResult, contrast=ctr)
+    siggenes <- sgenes[[ctr]]
+    subtbl <- ribiosUtils::matchColumn(siggenes, tbl, value)
+    return(subtbl)
+  })
+  res <- do.call(rbind, stbls)
   return(res)
 }
 

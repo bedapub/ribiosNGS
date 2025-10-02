@@ -13,8 +13,8 @@ lsfEdgeR(
   mps = FALSE,
   limmaVoom = FALSE,
   appendGmt = NULL,
-  qos = c("short", "interactive", "long"),
-  rootPath = "~/apps/geneexpression",
+  qos = c("preempt_cpu", "interactive_cpu", "batch_cpu"),
+  rootPath = "/apps/rocs/pRED/groups/bioinfo/geneexpression",
   debug = FALSE
 )
 }

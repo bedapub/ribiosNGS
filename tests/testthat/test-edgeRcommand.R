@@ -19,8 +19,7 @@ expComm <- paste("/pstore/apps/bioinfo/geneexpression//bin/ngsDge_edgeR.Rscript"
                  sprintf("-featureAnnotationFile \"%s\"", file.path(inputDir, "test-featureAnno.txt")),
                  sprintf("-phenoData \"%s\"", file.path(inputDir, "test-sampleAnno.txt")),
                  sprintf("-outdir \"%s\"", myDir),
-                 sprintf("-log \"%s.log\"", myDir),
-                 "-writedb")
+                 sprintf("-log \"%s.log\"", myDir))
 
 test_that("edgeRcommand works with default options", {
   expect_equal(expComm, comm)

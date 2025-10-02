@@ -13,7 +13,7 @@ lsfEdgeRcommand(
   limmaVoom = FALSE,
   appendGmt = NULL,
   qos = c("long", "preempty", "short"),
-  rootPath = "~/apps/geneexpression",
+  rootPath = "/apps/rocs/pRED/groups/bioinfo/geneexpression",
   debug = FALSE,
   bsubFile = NULL
 )

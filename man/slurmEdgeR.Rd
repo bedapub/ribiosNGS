@@ -6,15 +6,15 @@
 \usage{
 slurmEdgeR(
   dgeList,
-  designMatrix,
-  contrastMatrix,
+  designContrast,
   outdir = "edgeR_output",
   outfilePrefix = "an-unnamed-project-",
   overwrite = c("ask", "overwrite", "append", "no"),
   mps = FALSE,
   limmaVoom = FALSE,
   appendGmt = NULL,
-  qos = c("short", "interactive", "normal"),
+  qos = c("3h", "1d", "3d", "15d", "interactive", "preempt"),
+  rootPath = "/apps/rocs/pRED/groups/bioinfo/geneexpression",
   debug = FALSE
 )
 }
@@ -22,9 +22,7 @@ slurmEdgeR(
 \item{dgeList}{An \code{DGEList} object with \code{counts}, \code{genes},
 and \code{samples}}
 
-\item{designMatrix}{The design matrix to model the data}
-
-\item{contrastMatrix}{The contrast matrix matching the design matrix}
+\item{designContrast}{The DesignContrast object to model the data}
 
 \item{outdir}{Output directory of the edgeR script. Default value
 "edgeR_output".}
@@ -50,6 +48,8 @@ file for gene-set analysis. The option is passed to
 using \code{srun} and the 'interaction' queue of jobs instead of using
 \code{sbatch}.}
 
+\item{rootPath}{Character string, the directory of geneexpression scripts, under which \code{bin/ngsDge_edgeR.Rscript} is found.}
+
 \item{debug}{Logical, if \code{TRUE}, the source code of Rscript is used instead of
 the installed version. The option is passed to \code{edgeRcommand}.}
 }
@@ -72,9 +72,9 @@ Even if the output directory is empty, if \code{overwrite} is set to
  y <- edgeR::DGEList(counts=mat, group=myFac)
  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
+ myDescon <- DesignContrast(myDesign, myContrast)
  ## \dontrun{
- ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast,
- ##  outfilePrefix="test", outdir=tempdir())
+ ## slurmEdgeR(y, myDescon, outfilePrefix="test", outdir=tempdir())
  ## }
 
 }

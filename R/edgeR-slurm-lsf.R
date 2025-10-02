@@ -163,7 +163,6 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
                    sprintf("-phenoData \"%s\"", pDataFile),
                    sprintf("-outdir \"%s\"", outdir),
                    sprintf("-log \"%s\"", logFile),
-                   sprintf("-writedb"),
                    appendGmtComm,
                    mpsComm,
                    limmaVommComm)
@@ -211,9 +210,10 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'  y <- edgeR::DGEList(counts=mat, group=myFac)
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
-#'  slurmEdgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
-#'      outfilePrefix="test", outdir=tempdir())
-#'
+#'  myDesCon <- DesignContrast(designMatrix=myDesign,
+#'                             contrastMatrix=myContrast)
+#'  mytempdir <- tempdir()
+#'  slurmEdgeRcommand(y, myDesCon, outfilePrefix="test", outdir=mytempdir)
 #' @export
 slurmEdgeRcommand <- function(dgeList, designContrast,
                               outdir="edgeR_output",
@@ -294,9 +294,9 @@ slurmEdgeRcommand <- function(dgeList, designContrast,
 #'  y <- edgeR::DGEList(counts=mat, group=myFac)
 #'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
 #'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
+#'  myDescon <- DesignContrast(myDesign, myContrast)
 #'  ## \dontrun{
-#'  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast,
-#'  ##  outfilePrefix="test", outdir=tempdir())
+#'  ## slurmEdgeR(y, myDescon, outfilePrefix="test", outdir=tempdir())
 #'  ## }
 #'
 #' @export

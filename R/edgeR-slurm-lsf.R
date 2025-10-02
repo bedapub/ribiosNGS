@@ -177,8 +177,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'
 #' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
 #' and \code{samples}
-#' @param designMatrix The design matrix to model the data
-#' @param contrastMatrix The contrast matrix matching the design matrix
+#' @param designContrast The DesignContrast object to model the data
 #' @param outfilePrefix Prefix of the output files. It can include directories,
 #' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
 #' created.
@@ -193,6 +192,7 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' using \code{srun} and the 'interaction' queue of jobs instead of using
 #' \code{sbatch}.
 #' @param params Character, further parameters to pass to sbatch, for instance "--partition ANOTHER_PARITION"
+#' @param rootPath Character string, the directory of geneexpression scripts, under which \code{bin/ngsDge_edgeR.Rscript} is found.
 #' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
 #'   the installed version. The option is passed to \code{edgeRcommand}.
 #'
@@ -215,47 +215,123 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #'      outfilePrefix="test", outdir=tempdir())
 #'
 #' @export
-slurmEdgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
+slurmEdgeRcommand <- function(dgeList, designContrast,
                               outdir="edgeR_output",
                               outfilePrefix="an-unnamed-project-",
                               mps=FALSE,
                               limmaVoom=FALSE,
                               appendGmt=NULL,
-                              qos=c("short", "interactive", "normal"),
+                              qos=c("3h", "1d", "3d", "15d", "interactive", "preempt"),
                               params = "",
+                              rootPath = "/apps/rocs/pRED/groups/bioinfo/geneexpression",
                               debug=FALSE) {
   qos <- match.arg(qos)
   comm <- edgeRcommand(dgeList=dgeList,
-                       designMatrix=designMatrix,
-                       contrastMatrix=contrastMatrix,
+                       designMatrix=designMatrix(designContrast),
+                       contrastMatrix=contrastMatrix(designContrast),
                        outdir=outdir,
                        outfilePrefix=outfilePrefix,
                        mps=mps,
                        limmaVoom=limmaVoom,
                        appendGmt=appendGmt,
-                       debug=debug)
+                       debug=debug,
+                       rootPath=rootPath,
+                       contrastAnno = ribiosExpression::contrastAnnotation(designContrast))
   outdirBase <- basename(gsub("\\/$", "", outdir))
+  shfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".sh"))
   outfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".out"))
   errfile <- file.path(dirname(outdir), paste0("slurm-", outdirBase, ".err"))
-  if(qos == "short") {
-    prefix <- "sbatch --qos=short"
-  } else if (qos=="interactive") {
-    prefix <- "srun --qos=interaction"
-  } else if (qos=="normal") {
-    prefix <- "sbatch --qos=normal"
-  } else {
-    stop("Should not be here")
+
+  sh_content <- c("#!/bin/bash",
+                  "#SBATCH --cpus-per-task=12 ## Request 12 cores",
+                  "#SBATCH -n 1 ## one task",
+                  "#SBATCH --mem=24G",
+                  "#SBATCH -t 0-03:00 ## up to 3 hours",
+                  paste0("#SBATCH --qos=", qos),
+                  paste("#SBATCH -o", outfile),
+                  paste("#SBATCH -e", errfile),
+                  paste("#SBATCH -J", outdirBase),
+                  paste("srun", comm))
+  writeLines(sh_content, shfile)
+  command <- paste("sbatch", params, shfile)
+  return(command)
+}
+
+#' Send an edgeR analysis job to SLURM
+#'
+#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
+#' and \code{samples}
+#' @param designContrast The DesignContrast object to model the data
+#' @param outfilePrefix Prefix of the output files. It can include directories,
+#' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
+#' created.
+#' @param outdir Output directory of the edgeR script. Default value
+#' "edgeR_output".
+#' @param overwrite If \code{ask}, the user is asked before an existing output
+#' directory is overwritten. If \code{yes}, the job will start and an existing
+#' directory will be overwritten anyway. If \code{no}, and if an output
+#' directory is present, the job will not be started.
+#' @param mps Logical, whether molecular-phenotyping analysis is run.
+#' @param limmaVoom Logical, whether the limma-voom model is run instead of the edgeR model.
+#' @param appendGmt \code{NULL} or character string, path to an additional GMT
+#'   file for gene-set analysis. The option is passed to
+#'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
+#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{long} (useful if the job is expected to run more than three hours.)
+#' using \code{srun} and the 'interaction' queue of jobs instead of using
+#' \code{sbatch}.
+#' @param rootPath Character string, the directory of geneexpression scripts, under which \code{bin/ngsDge_edgeR.Rscript} is found.
+#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
+#'   the installed version. The option is passed to \code{edgeRcommand}.
+#' @return A list of two items, \code{command}, the command line call, and
+#' \code{output}, the output of the SLURM command in bash
+#' @note Even if the output directory is empty, if \code{overwrite} is set to
+#' \code{no} (or if the user answers \code{no}), the job will not be started.
+#' @examples
+#'
+#'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
+#'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
+#'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
+#'  y <- edgeR::DGEList(counts=mat, group=myFac)
+#'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
+#'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
+#'  ## \dontrun{
+#'  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast,
+#'  ##  outfilePrefix="test", outdir=tempdir())
+#'  ## }
+#'
+#' @export
+slurmEdgeR <- function(dgeList, designContrast,
+                       outdir="edgeR_output",
+                       outfilePrefix="an-unnamed-project-",
+                       overwrite=c("ask", "overwrite", "append", "no"),
+                       mps=FALSE,
+                       limmaVoom=FALSE,
+                       appendGmt=NULL,
+                       qos=c("3h", "1d", "3d", "15d", "interactive", "preempt"),
+                       rootPath = "/apps/rocs/pRED/groups/bioinfo/geneexpression",
+                       debug=FALSE) {
+  qos <- match.arg(qos)
+  overwrite <- match.arg(overwrite)
+  doOverwrite <- ribiosUtils::overwriteDir(outdir, action=overwrite)
+  if(!doOverwrite & dir.exists(outdir)) {
+    message(sprintf("outdir '%s' is not overwritten. Function returns NULL", outdir))
+    return(invisible(NULL))
   }
 
-  res <- paste(prefix,
-               "-n 1 -c 12",
-               sprintf("-e \"%s\"", errfile),
-               sprintf("-J \"%s\"", outdirBase),
-               sprintf("-o \"%s\"", outfile),
-               params,
-               comm)
-  return(res)
+  comm <- slurmEdgeRcommand(dgeList=dgeList,
+                            designContrast=designContrast,
+                            outdir=outdir,
+                            outfilePrefix=outfilePrefix,
+                            mps=mps,
+                            limmaVoom=limmaVoom,
+                            appendGmt=appendGmt,
+                            qos=qos,
+                            rootPath=rootPath,
+                            debug=debug)
+  res <- system(comm, intern=TRUE)
+  return(list(command=comm, output=res))
 }
+
 
 #' Return the LSF command to run the edgeR script
 #'
@@ -310,7 +386,7 @@ lsfEdgeRcommand <- function(dgeList,
                             limmaVoom=FALSE,
                             appendGmt=NULL,
                             qos=c("long", "preempty","short"),
-                            rootPath = "~/apps/geneexpression",
+                            rootPath="/apps/rocs/pRED/groups/bioinfo/geneexpression",
                             debug=FALSE,
                             bsubFile=NULL) {
   qos <- match.arg(qos)
@@ -340,85 +416,11 @@ lsfEdgeRcommand <- function(dgeList,
     bsubFile <- paste0(gsub("-$", "", outfilePrefix), ".bsub")
   }
   writeLines(bsub, bsubFile)
-
+  
   res <- paste0("ml load .testing; ml load R/4.2.2-foss-2020a; bsub < ", bsubFile)
   return(res)
 }
 
-
-#' Send an edgeR analysis job to SLURM
-#'
-#' @param dgeList An \code{DGEList} object with \code{counts}, \code{genes},
-#' and \code{samples}
-#' @param designMatrix The design matrix to model the data
-#' @param contrastMatrix The contrast matrix matching the design matrix
-#' @param outfilePrefix Prefix of the output files. It can include directories,
-#' e.g. \code{"data/outfile-"}. In case of \code{NULL}, temporary files will be
-#' created.
-#' @param outdir Output directory of the edgeR script. Default value
-#' "edgeR_output".
-#' @param overwrite If \code{ask}, the user is asked before an existing output
-#' directory is overwritten. If \code{yes}, the job will start and an existing
-#' directory will be overwritten anyway. If \code{no}, and if an output
-#' directory is present, the job will not be started.
-#' @param mps Logical, whether molecular-phenotyping analysis is run.
-#' @param limmaVoom Logical, whether the limma-voom model is run instead of the edgeR model.
-#' @param appendGmt \code{NULL} or character string, path to an additional GMT
-#'   file for gene-set analysis. The option is passed to
-#'   \code{\link{slurmEdgeRcommand}} and then to \code{\link{edgeRcommand}}.
-#' @param qos Character, specifying Quality of Service of Slurm. Available values include \code{short} (recommended default, running time cannot exceed 3 hours), \code{interactive} (useful if you wish to get the results from an interactive session), and \code{long} (useful if the job is expected to run more than three hours.)
-#' using \code{srun} and the 'interaction' queue of jobs instead of using
-#' \code{sbatch}.
-#' @param debug Logical, if \code{TRUE}, the source code of Rscript is used instead of
-#'   the installed version. The option is passed to \code{edgeRcommand}.
-#' @return A list of two items, \code{command}, the command line call, and
-#' \code{output}, the output of the SLURM command in bash
-#' @note Even if the output directory is empty, if \code{overwrite} is set to
-#' \code{no} (or if the user answers \code{no}), the job will not be started.
-#' @examples
-#'
-#'  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
-#'  rownames(mat) <- sprintf("gene%d", 1:nrow(mat))
-#'  myFac <- gl(2,5, labels=c("Control", "Treatment"))
-#'  y <- edgeR::DGEList(counts=mat, group=myFac)
-#'  myDesign <- model.matrix(~myFac); colnames(myDesign) <- levels(myFac)
-#'  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
-#'  ## \dontrun{
-#'  ## slurmEdgeR(y, designMatrix=myDesign, contrastMatrix=myContrast,
-#'  ##  outfilePrefix="test", outdir=tempdir())
-#'  ## }
-#'
-#' @export
-slurmEdgeR <- function(dgeList, designMatrix, contrastMatrix,
-                       outdir="edgeR_output",
-                       outfilePrefix="an-unnamed-project-",
-                       overwrite=c("ask", "overwrite", "append", "no"),
-                       mps=FALSE,
-                       limmaVoom=FALSE,
-                       appendGmt=NULL,
-                       qos=c("short", "interactive", "normal"),
-                       debug=FALSE) {
-  qos <- match.arg(qos)
-  overwrite <- match.arg(overwrite)
-  doOverwrite <- ribiosUtils::overwriteDir(outdir, action=overwrite)
-  if(!doOverwrite & dir.exists(outdir)) {
-    message(sprintf("outdir '%s' is not overwritten. Function returns NULL", outdir))
-    return(invisible(NULL))
-  }
-
-  comm <- slurmEdgeRcommand(dgeList=dgeList,
-                            designMatrix=designMatrix,
-                            contrastMatrix=contrastMatrix,
-                            outdir=outdir,
-                            outfilePrefix=outfilePrefix,
-                            mps=mps,
-                            limmaVoom=limmaVoom,
-                            appendGmt=appendGmt,
-                            qos=qos,
-                            debug=debug)
-  res <- system(comm, intern=TRUE)
-  return(list(command=comm, output=res))
-}
 
 #' Send an edgeR analysis job to SLF
 #'
@@ -473,8 +475,8 @@ lsfEdgeR <- function(dgeList, designContrast,
                      mps=FALSE,
                      limmaVoom=FALSE,
                      appendGmt=NULL,
-                     qos=c("short", "interactive", "long"),
-                     rootPath = "~/apps/geneexpression",
+                     qos=c("preempt_cpu", "interactive_cpu", "batch_cpu"),
+                     rootPath = "/apps/rocs/pRED/groups/bioinfo/geneexpression",
                      debug=FALSE) {
   qos <- match.arg(qos)
   overwrite <- match.arg(overwrite)

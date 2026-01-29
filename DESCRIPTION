@@ -38,7 +38,6 @@ Imports:
     vsn,
     made4,
     ggplot2,
-    ggpubr,
     rlang,
     gt,
     scales,
@@ -47,10 +46,11 @@ Imports:
     reshape2
 Suggests:
     testthat,
+    ggpubr,
     tibble
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate: 
     'utils.R'
     'ribiosNGS-package.R'

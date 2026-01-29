@@ -104,7 +104,6 @@ gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
 #' @importFrom ggplot2 ggplot aes_string geom_boxplot scale_fill_manual theme_bw
 #'   theme geom_point position_jitterdodge ylab xlab scale_y_log10 geom_hline
 #'   scale_y_continuous sec_axis
-#' @importFrom ggpubr stat_compare_means
 #' @importFrom scales percent
 #' @importFrom ribiosUtils haltifnot
 #' @importFrom rlang .data
@@ -165,10 +164,12 @@ plotKnockdown <- function(goiExpr,
                                            breaks=seq(0, 1, 0.1),
                                            labels=function(x) scales::percent(x, accuracy = 1),
                                            name="KD efficiency")) +
+    if (!requireNamespace("ggpubr", quietly = TRUE)) {
     ggpubr::stat_compare_means(label = "p.signif", 
                                method=test,
                                size=7, col="red",
                                symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1), symbols = c("***", "**", "*", "ns")),
                                ref.group = controlGroup, hide.ns = TRUE, label.y.npc=.9)
+    }
   return(res)
 }

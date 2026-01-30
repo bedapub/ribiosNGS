@@ -18,7 +18,7 @@ check_pattern_matching_file <- function(file, pattern) {
 #' and \code{gencode} is supported
 #' @param type GCT file type, \code{count}, \code{tpm}, \code{count_collapsed}, 
 #'   \code{tpm_collapsed}, and \code{log2tpm} are supported.
-#' @param type verbose, if TRUE, verbose mode is turned on.
+#' @param verbose verbose, if TRUE, verbose mode is turned on.
 #' @return A numeric matrix with the attribute \code{desc} encoding the values
 #'   in the description column of the GCT format.
 #'

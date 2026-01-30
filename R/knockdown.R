@@ -164,7 +164,7 @@ plotKnockdown <- function(goiExpr,
                                            breaks=seq(0, 1, 0.1),
                                            labels=function(x) scales::percent(x, accuracy = 1),
                                            name="KD efficiency")) +
-    if (!requireNamespace("ggpubr", quietly = TRUE)) {
+    if (requireNamespace("ggpubr", quietly = TRUE)) {
     ggpubr::stat_compare_means(label = "p.signif", 
                                method=test,
                                size=7, col="red",

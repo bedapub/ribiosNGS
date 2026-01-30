@@ -6,18 +6,18 @@
 \usage{
 readBiokitGctFile(
   dir,
-  anno = c("refseq", "ensembl"),
-  type = c("count", "tpm", "count_collapsed", "tpm_collapsed", "log2tpm")
+  anno = c("refseq", "ensembl", "gencode"),
+  type = c("count", "tpm", "count_collapsed", "tpm_collapsed", "log2tpm"),
+  verbose = FALSE
 )
 }
 \arguments{
 \item{dir}{Biokit output directory}
 
-\item{anno}{Annotation type, either \code{refseq} or \code{ensembl} is
-supported}
+\item{anno}{Annotation type, either \code{refseq}, \code{ensembl}, 
+and \code{gencode} is supported}
 
-\item{type}{GCT file type, \code{count}, \code{tpm}, \code{count_collapsed}, 
-\code{tpm_collapsed}, and \code{log2tpm} are supported.}
+\item{type}{verbose, if TRUE, verbose mode is turned on.}
 }
 \value{
 A numeric matrix with the attribute \code{desc} encoding the values

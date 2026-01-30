@@ -6,8 +6,9 @@
 \usage{
 readBiokitAsDGEList(
   dir,
-  anno = c("refseq", "ensembl"),
-  useCollapsedData = FALSE
+  anno = c("refseq", "ensembl", "gencode"),
+  useCollapsedData = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -17,9 +18,10 @@ readBiokitAsDGEList(
 supported}
 
 \item{useCollapsedData}{Logical, \code{FALSE} as default. If set to 
-  \code{TRUE}, counts are collapsed by gene symbols. This is not recommended
-  because gene symbols are not stable identifiers.
-  
+\code{TRUE}, counts are collapsed by gene symbols. This is not recommended
+because gene symbols are not stable identifiers.}
+
+\item{verbose}{Logical
 The function depends on \code{gct} (\code{gct-ens}) and \code{annot} 
 directories of biokit output directory.}
 }

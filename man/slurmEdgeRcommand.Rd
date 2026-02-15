@@ -65,7 +65,6 @@ A character string containing the SLURM \code{sbatch} command to
 Return the SLURM command to run the edgeR script
 }
 \examples{
-
  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
  rownames(mat) <- sprintf("gene\%d", 1:nrow(mat))
  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -76,6 +75,12 @@ Return the SLURM command to run the edgeR script
                             contrastMatrix=myContrast)
  mytempdir <- tempdir()
  slurmEdgeRcommand(y, myDesCon, outfilePrefix="test", outdir=mytempdir)
+ ## clean up
+ unlink(file.path(mytempdir, "input_data"), recursive=TRUE)
+ slurmFile <- file.path(dirname(mytempdir),
+     paste0("slurm-", basename(mytempdir), ".sh"))
+ unlink(slurmFile)
+
 }
 \seealso{
 \code{\link{edgeRcommand}}

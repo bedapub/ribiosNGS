@@ -63,7 +63,6 @@ A character string containing the LSF \code{bsub} command to
 Return the LSF command to run the edgeR script
 }
 \examples{
-
  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
  rownames(mat) <- sprintf("gene\%d", 1:nrow(mat))
  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -73,8 +72,9 @@ Return the LSF command to run the edgeR script
  myDesCon <- DesignContrast(designMatrix=myDesign, contrastMatrix=myContrast)
  lsfEdgeRcommand(y, designContrast=myDesCon,
      outfilePrefix="test", outdir=tempdir())
- ## remove the bsub file
- file.remove("test.bsub")
+ ## clean up
+ unlink(file.path(tempdir(), "input_data"), recursive=TRUE)
+ unlink("test.bsub")
 
 }
 \seealso{

@@ -2,7 +2,7 @@ Package: ribiosNGS
 Type: Package
 Title: Differential gene expression analysis for next-generation sequencing
     data in the 'ribios' suite
-Version: 0.99.0
+Version: 1.0.0
 Authors@R:
   c(person(given = "Jitao David",
          family = "Zhang",
@@ -11,8 +11,7 @@ Authors@R:
          comment = c(ORCID="0000-0002-3085-0909")),
     person(given="Ailu",
            family="Mading",
-           role="ctb"),
-    person("F.Hoffmann-La Roche AG", role="cph"))
+           role="ctb"))
 Description: Provides a comprehensive workflow for differential gene
     expression analysis of RNA-seq data using 'edgeR' and 'limma'-voom
     pipelines. The package supports count filtering, normalization,

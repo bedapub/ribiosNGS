@@ -13,7 +13,8 @@ writeBiokitSampleAnnotation(df, con)
 \item{con}{Connection, can be a character string indicating file name}
 }
 \value{
-NULL, side effect is used
+Called for its side effect of writing the sample annotation file;
+  returns invisibly NULL.
 }
 \description{
 Write sample annotation into a tab-delimited file to start the Biokit

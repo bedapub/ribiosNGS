@@ -3,13 +3,14 @@
 \name{isSig}
 \alias{isSig}
 \alias{isSigPos}
+\alias{isSigNeg}
 \title{Return logical vector indicating which genes are significantly regulated}
 \usage{
 isSig(data.frame, sigFilter)
 
 isSigPos(data.frame, sigFilter)
 
-isSigPos(data.frame, sigFilter)
+isSigNeg(data.frame, sigFilter)
 }
 \arguments{
 \item{data.frame}{A \code{data.frame} that must pass \code{assertEdgeToptable}}
@@ -26,6 +27,6 @@ Return logical vector indicating which genes are significantly regulated
 \itemize{
 \item \code{isSigPos()}: Returns which genes are significantly positively regulated
 
-\item \code{isSigPos()}: Returns which genes are significantly negatively regulated
+\item \code{isSigNeg()}: Returns which genes are significantly negatively regulated
 
 }}

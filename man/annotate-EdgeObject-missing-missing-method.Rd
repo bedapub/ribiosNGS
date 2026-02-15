@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeObject}
 }
+\value{
+An annotated \code{EdgeObject}.
+}
 \description{
 Annotate an EdgeObject automatically without checking the target
 }

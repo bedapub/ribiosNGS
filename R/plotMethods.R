@@ -59,6 +59,7 @@ nonNull <- function(x, val) return(ifelse(is.null(x), val, x))
 #' @param ylab Character, ylab.
 #' @param main Character, title.
 #' @param ... Passed to \code{boxplot}.
+#' @return Called for its side effect of plotting; returns invisibly NULL.
 #' @importFrom graphics boxplot
 #' @export
 setMethod("boxplot", "EdgeObject",
@@ -77,6 +78,7 @@ setMethod("boxplot", "EdgeObject",
 #' @param before.norm An \code{EdgeObject} before normalization.
 #' @param after.norm An \code{EdgeObject} after normalization.
 #' @param ... Other parameters passed to \code{boxplot}.
+#' @return Called for its side effect of plotting; returns invisibly NULL.
 #' @export
 normBoxplot <- function(before.norm, after.norm, ...) {
   op <- par(mfrow=c(1,2))
@@ -153,10 +155,10 @@ setMethod("volcanoPlot", "EdgeResult",
 
   if(!multipage) {
     op <- ribiosPlot::compactPar()
-    on.exit(par(op))
     op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
+    on.exit(par(c(op, op2)))
   }
-  
+
   if(is.null(main)) {
     mains <- names(tables)
   } else {
@@ -189,7 +191,7 @@ setMethod("volcanoPlot", "EdgeResult",
     if(!is.null(topLabel)) {
       stopifnot(is.numeric(topLabel) & !is.null(labelType))
       topLabel <- as.integer(topLabel)
-      topCurrTbl <- currTbl[1:topLabel,] 
+      topCurrTbl <- currTbl[1:topLabel,]
       topCurrY <- yVal[1:topLabel]
       topCurrLabel <- topCurrTbl[, labelType]
       text(topCurrTbl$logFC,
@@ -198,10 +200,6 @@ setMethod("volcanoPlot", "EdgeResult",
     }
     abline(h=0, col="lightgray")
     abline(v=0, col="lightgray")
-  }
-
-  if(!multipage) {
-    par(op2)
   }
 })
 
@@ -222,6 +220,7 @@ setMethod("volcanoPlot", "EdgeResult",
 #' @param smooth.scatter Passed to \code{\link[edgeR]{maPlot}}.
 #' @param lowess Passed to \code{\link[edgeR]{maPlot}}.
 #' @param ... Passed to \code{\link[edgeR]{maPlot}}.
+#' @return Called for its side effect of plotting; returns invisibly NULL.
 #' @importFrom edgeR maPlot
 #' @export
 customSmearPlot <- function(tbl, main, 
@@ -283,8 +282,8 @@ setMethod("smearPlot", "EdgeResult",
 
               if(!multipage) {
                 op <- ribiosPlot::compactPar()
-                on.exit(par(op))
                 op2 <- par(mfrow=grDevices::n2mfrow(length(tables)))
+                on.exit(par(c(op, op2)))
               }
               for(i in seq(along=tables)) {
                 if(freeRelation) {
@@ -294,9 +293,6 @@ setMethod("smearPlot", "EdgeResult",
                                                   xlim=xlim, ylim=ylim,
                                                   ...)
                 }
-              }
-              if(!multipage) {
-                par(op2)
               }
           })
 
@@ -315,7 +311,8 @@ setMethod("smearPlot", "EdgeResult",
 #'
 #' Plot pairwise logFCs
 #'
-#' @seealso \code{\link[graphics]{pairs}}. 
+#' @return Called for its side effect of plotting; returns invisibly NULL.
+#' @seealso \code{\link[graphics]{pairs}}.
 #' @importFrom graphics pairs
 #' @importFrom ribiosPlot panel.cor panel.lmSmooth
 #' @export
@@ -340,6 +337,8 @@ pairs.EdgeResult <- function(x, lower.panel=panel.lmSmooth, upper.panel=panel.co
 #' plotMDS for EdgeObject
 #' @param x An EdgeObject object
 #' @param ... Other parameters passed to \code{\link[limma]{plotMDS}}.
+#' @return An \code{MDS} object (invisibly), as returned by
+#'   \code{\link[limma]{plotMDS}}.
 #' @importFrom limma plotMDS
 #' @export
 plotMDS.EdgeObject <- function(x,  ...) {

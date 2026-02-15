@@ -17,6 +17,10 @@ exportEdgeResult(
 
 \item{action}{Character string, what happens if the output directory exists}
 }
+\value{
+Invisibly returns \code{NULL}. Called for its side effects of writing
+  result files to disk.
+}
 \description{
 Export dgeTest results
 }

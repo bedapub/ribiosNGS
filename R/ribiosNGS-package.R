@@ -30,12 +30,15 @@ NULL
 #' @export `featureNames<-`
 NULL
 
+#' @return A \code{DGEList} object.
 #' @export
 edgeR::DGEList
 
+#' @return A \code{DesignContrast} object.
 #' @export
 ribiosExpression::DesignContrast
 
+#' @return A numeric matrix of counts per million values.
 #' @export
 edgeR::cpm
 

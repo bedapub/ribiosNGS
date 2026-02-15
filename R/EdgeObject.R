@@ -31,6 +31,7 @@ NULL
 #' ## note that pData are appended after count information
 #' pData(exObj2)
 #' pData(exObj3)
+#' @return An \code{EdgeObject}.
 #' @exportMethod EdgeObject
 setGeneric("EdgeObject", function(object, designContrast, ...) standardGeneric("EdgeObject"))
 
@@ -126,7 +127,8 @@ exampleEdgeObject <- function(nfeat=20, nsample=6, ngroup=3, lambda=10) {
 
 #' Retrieve the design/contrast object
 #' @param edgeObject An \code{EdgeObject}
-#' @examples 
+#' @return A \code{DesignContrast} object.
+#' @examples
 #' designContrast(exampleEdgeObject())
 #' @export
 designContrast <- function(edgeObject) {

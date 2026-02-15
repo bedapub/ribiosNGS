@@ -9,6 +9,9 @@ dgeGML(edgeResult)
 \arguments{
 \item{edgeResult}{An \code{EdgeResult} object.}
 }
+\value{
+A \code{DGEGLM} object.
+}
 \description{
 Return the dgeGML method
 }

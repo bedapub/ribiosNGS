@@ -15,7 +15,7 @@ groupCol <- function(edgeObj, panel="Set1") {
 #' Make static gene-level plots of an EdgeResult object
 #' 
 #' @param edgeResult An EdgeResult object
-#' @return \code{NULL}, side effect is used
+#' @return Called for its side effect of generating plots; returns invisibly NULL.
 #' 
 #' @importFrom made4 plotarrays ord
 #' @examples 
@@ -80,7 +80,9 @@ staticGeneLevelPlots <- function(edgeResult) {
 #' 
 #' @param edgeResult An \code{EdgeResult} object
 #' @param file Character string, the PDF file name
-#' 
+#'
+#' @return Called for its side effect of writing plots to a PDF file; returns
+#'   invisibly NULL.
 #' @export
 exportStaticGeneLevelPlots <- function(edgeResult, file) {
   openFileDevice(file)
@@ -100,6 +102,7 @@ exportStaticGeneLevelPlots <- function(edgeResult, file) {
 #' @param auto.key passed to \code{lattice::barchart}
 #' @param ... passed to \code{lattice::barchart}
 #'
+#' @return A \code{trellis} object (lattice barchart).
 #' @importFrom ribiosUtils ofactor
 #' @importFrom lattice barchart
 #' @export

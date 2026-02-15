@@ -15,6 +15,9 @@ tagwiseBCV(x)
 \arguments{
 \item{x}{An object}
 }
+\value{
+A numeric vector of tagwise BCV values.
+}
 \description{
 Tagwise biological coefficients of variance
 }

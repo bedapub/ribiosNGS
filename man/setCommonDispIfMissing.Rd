@@ -17,6 +17,9 @@ setCommonDispIfMissing(object, value)
 
 \item{value}{Numeric}
 }
+\value{
+The object, with common dispersion set if it was previously missing.
+}
 \description{
 Set common dispersion if missing
 }

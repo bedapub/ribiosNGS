@@ -4,7 +4,7 @@
 \alias{prcomp.DGEListList}
 \title{Run principal component analysis on a DGEListList object}
 \usage{
-\method{prcomp}{DGEListList}(x, ntop = NULL, fun = function(x) cpm(x, log = TRUE))
+\method{prcomp}{DGEListList}(x, ntop = NULL, fun = function(x) cpm(x, log = TRUE), ...)
 }
 \arguments{
 \item{x}{A \code{DGEListList} object}
@@ -14,6 +14,8 @@ used}
 
 \item{fun}{Function, used to transform count data into continuous data used
 by PCA}
+
+\item{...}{Not used.}
 }
 \value{
 A list of \code{prcomp} objects.

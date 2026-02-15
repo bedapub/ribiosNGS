@@ -57,6 +57,10 @@ It uses \code{outdir} to specify slurm output and error files as in the same
 directory of \code{outdir}. And the job name is set as the name of the
 output directory.}
 }
+\value{
+A character string containing the SLURM \code{sbatch} command to
+  submit the edgeR analysis job.
+}
 \description{
 Return the SLURM command to run the edgeR script
 }

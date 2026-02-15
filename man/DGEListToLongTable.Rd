@@ -13,6 +13,9 @@ DGEListToLongTable(x, exprsFun = function(dgeList) cpm(dgeList, log = TRUE))
 \item{exprsFun}{A function to convert counts to expression data. 
 Default: logCPM}
 }
+\value{
+A long-format \code{data.frame} with expression values and annotations.
+}
 \description{
 Convert a DGEList object to a long data.frame containing expression, 
 feature annotation, and sample annotation

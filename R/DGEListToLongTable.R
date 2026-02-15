@@ -13,6 +13,7 @@
 #' y <- edgeR::DGEList(counts=mat, group=rep(1:2, each=5))
 #' DGEListToLongTable(y)
 #' 
+#' @return A long-format \code{data.frame} with expression values and annotations.
 #' @importFrom edgeR cpm
 #' @export
 DGEListToLongTable <- function (x,

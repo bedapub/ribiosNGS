@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An \code{EdgeObject} object}
 }
+\value{
+A factor of sample group assignments.
+}
 \description{
 Get sample groups from an EdgeObject object
 }

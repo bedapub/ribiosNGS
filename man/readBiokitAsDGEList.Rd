@@ -25,6 +25,11 @@ because gene symbols are not stable identifiers.}
 The function depends on \code{gct} (\code{gct-ens}) and \code{annot} 
 directories of biokit output directory.}
 }
+\value{
+A \code{DGEList} object with count and TPM matrices, sample
+  annotation, feature annotation, and an additional \code{BiokitAnno}
+  element indicating the annotation type used.
+}
 \description{
 Read a Biokit output directory into a DGEList object for downstream analysis
 }

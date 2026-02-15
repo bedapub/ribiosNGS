@@ -13,6 +13,10 @@
 
 \item{...}{Other parameters passed to \code{\link[edgeR]{calcNormFactors}}.}
 }
+\value{
+An \code{EdgeObject} with updated normalization factors in the
+  internal \code{DGEList}.
+}
 \description{
 Normalize an EdgeObject
 }

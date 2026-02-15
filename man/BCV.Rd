@@ -15,6 +15,9 @@ BCV(x)
 \arguments{
 \item{x}{An object}
 }
+\value{
+A \code{data.frame} of BCV values.
+}
 \description{
 Return a data.frame of BCV values
 }

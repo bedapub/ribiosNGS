@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{A \code{DGEList} object.}
 }
+\value{
+A numeric matrix of counts.
+}
 \description{
 Return counts in a DGEList object
 }

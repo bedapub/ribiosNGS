@@ -43,6 +43,9 @@ saved.
 Sample group and group level information are derived from the \code{group}
 column of the sample annotation.}
 }
+\value{
+Called for its side effect of writing files; returns invisibly NULL.
+}
 \description{
 Write an DGEList object as plain files for downstream analysis
 }

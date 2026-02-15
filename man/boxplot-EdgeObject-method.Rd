@@ -26,6 +26,9 @@
 
 \item{...}{Passed to \code{boxplot}.}
 }
+\value{
+Called for its side effect of plotting; returns invisibly NULL.
+}
 \description{
 Boxplot of an EdgeObject
 }

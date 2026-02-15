@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{A DGEList object}
 }
+\value{
+A character vector of sample names.
+}
 \description{
 Return sample names from a DGEList object
 }

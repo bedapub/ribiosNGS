@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{A DGEListList object}
 }
+\value{
+Called for its side effect of printing; returns invisibly NULL.
+}
 \description{
 Show DGEListList
 }

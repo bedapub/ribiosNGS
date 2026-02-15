@@ -7,6 +7,13 @@
 \alias{DesignContrast}
 \alias{cpm}
 \title{Objects exported from other packages}
+\value{
+A \code{DGEList} object.
+
+A \code{DesignContrast} object.
+
+A numeric matrix of counts per million values.
+}
 \keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links

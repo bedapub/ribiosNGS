@@ -17,7 +17,10 @@ readBiokitGctFile(
 \item{anno}{Annotation type, either \code{refseq}, \code{ensembl}, 
 and \code{gencode} is supported}
 
-\item{type}{verbose, if TRUE, verbose mode is turned on.}
+\item{type}{GCT file type, \code{count}, \code{tpm}, \code{count_collapsed}, 
+\code{tpm_collapsed}, and \code{log2tpm} are supported.}
+
+\item{verbose}{Logical, if TRUE, verbose mode is turned on.}
 }
 \value{
 A numeric matrix with the attribute \code{desc} encoding the values

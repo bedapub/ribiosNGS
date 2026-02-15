@@ -17,6 +17,9 @@ commonDisp(object) <- value
 
 \item{value}{Numeric value}
 }
+\value{
+The updated object with the common dispersion set.
+}
 \description{
 Set common dispersion
 }

@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An \code{EdgeResult} object.}
 }
+\value{
+An integer, the number of contrasts.
+}
 \description{
 Return the number of contrasts
 }

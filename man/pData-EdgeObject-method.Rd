@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeObject}
 }
+\value{
+A \code{data.frame} of sample annotations.
+}
 \description{
 Get pData
 }

@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeObject object}
 }
+\value{
+A character vector of contrast names.
+}
 \description{
 Extract contrast names from an EdgeObject object
 }

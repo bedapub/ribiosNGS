@@ -4,6 +4,8 @@
 #'
 #' Right now, the function checks no column names contain the equal sign.
 #'
+#' @return Invisibly returns \code{NULL}. Called for its side effect of issuing
+#'   a message, warning, or error if column names contain equal signs.
 #' @examples
 #' testDesign <- cbind(Control=rep(1,8), Treatment=rep(c(0,1),4), Batch=rep(c(0, 1), each=4))
 #' problemContrast <- limma::makeContrasts("Treatment"="Treatment",
@@ -81,6 +83,7 @@ checkContrastNames <- function(contrastMatrix,
 #'  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
 #'      outfilePrefix="test", outdir=tempdir())
 #'
+#' @return A character string containing the command to run the edgeR script.
 #' @importFrom ribiosUtils haltifnot createDir assertFile trim
 #' @importFrom ribiosIO writeMatrix
 #' @export
@@ -201,6 +204,8 @@ edgeRcommand <- function(dgeList, designMatrix, contrastMatrix,
 #' It uses \code{outdir} to specify slurm output and error files as in the same
 #' directory of \code{outdir}. And the job name is set as the name of the
 #' output directory.
+#' @return A character string containing the SLURM \code{sbatch} command to
+#'   submit the edgeR analysis job.
 #' @seealso \code{\link{edgeRcommand}}
 #' @examples
 #'
@@ -361,6 +366,8 @@ slurmEdgeR <- function(dgeList, designContrast,
 #' directory of \code{outdir}. And the job name is set as the name of the
 #' output directory.
 #'
+#' @return A character string containing the LSF \code{bsub} command to
+#'   submit the edgeR analysis job.
 #' @seealso \code{\link{edgeRcommand}}
 #' @examples
 #'

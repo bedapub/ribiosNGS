@@ -22,6 +22,9 @@ inferSV(object, design, ...)
 
 \item{...}{Other parameters}
 }
+\value{
+A matrix of surrogate variables.
+}
 \description{
 Infer surrogate variables
 }

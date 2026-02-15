@@ -49,6 +49,9 @@ instead of the installed version.}
 
 \item{contrastAnno}{A \code{data.frame} or \code{NULL}, contrast annotation.}
 }
+\value{
+A character string containing the command to run the edgeR script.
+}
 \description{
 Export an DGEList, designMatrix, and contrastMatrix to files and return the
 command to run the edgeR script

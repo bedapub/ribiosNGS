@@ -16,6 +16,9 @@ updateDesignMatrixBySVA(object, design, ...)
 
 \item{...}{Other parameters}
 }
+\value{
+A design matrix updated with surrogate variables.
+}
 \description{
 Update design matrix by SVA
 }

@@ -26,6 +26,12 @@ The filter removes genes that are less expressed than 1 copy per million
 reads (cpm) in at least \code{n} samples, where \code{n} equals the number
 of samples in the smallest group of the design.}
 }
+\value{
+An \code{EdgeObject} with lowly expressed genes removed from the
+  internal \code{DGEList}. The unfiltered counts and gene annotation are
+  preserved in the \code{counts.unfiltered} and \code{genes.unfiltered}
+  fields of the \code{DGEList}.
+}
 \description{
 Filter EdgeObj and remove lowly expressed genes
 }
@@ -35,7 +41,7 @@ myFac <- gl(3,2)
 set.seed(1234)
 myMat <- matrix(rpois(1200,100), nrow=200, ncol=6)
 myMat[1:3,] <- 0
-myEdgeObj <- EdgeObject(myMat, 
+myEdgeObj <- EdgeObject(myMat,
                        DesignContrast(designMatrix=model.matrix(~myFac),
                         contrastMatrix=matrix(c(0,1,0), ncol=1), groups=myFac),
                         fData=data.frame(GeneSymbol=sprintf("Gene\%d", 1:200)))

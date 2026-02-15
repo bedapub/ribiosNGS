@@ -1,0 +1,118 @@
+---
+title: "Introduction to ribiosNGS"
+author:
+  - name: Jitao David Zhang
+    affiliation: F. Hoffmann-La Roche AG
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{Introduction to ribiosNGS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+`ribiosNGS` provides a streamlined workflow for differential gene expression
+(DGE) analysis of RNA-seq count data. It wraps `edgeR` and `limma`-voom
+pipelines into a consistent interface built around the `EdgeObject` and
+`EdgeResult` S4 classes. The package supports count filtering, normalization,
+dispersion estimation, generalized linear model fitting, and visualization.
+
+# Quick start
+
+## Creating an EdgeObject
+
+The starting point of any analysis is an `EdgeObject`, which bundles a count
+matrix with an experimental design and contrast specification. We use
+simulated data here for illustration.
+
+```{r create-edge-object}
+library(ribiosNGS)
+
+set.seed(1887)
+
+## Simulate count data: 200 genes, 6 samples in 2 groups
+counts <- matrix(rpois(1200, lambda = 10), nrow = 200, ncol = 6)
+rownames(counts) <- paste0("Gene", seq_len(200))
+colnames(counts) <- paste0("Sample", seq_len(6))
+
+## Define experimental groups
+groups <- gl(2, 3, labels = c("Control", "Treatment"))
+
+## Create design and contrast matrices
+design <- model.matrix(~ 0 + groups)
+colnames(design) <- levels(groups)
+contrast <- matrix(c(-1, 1), ncol = 1,
+                   dimnames = list(levels(groups),
+                                   "Treatment.vs.Control"))
+
+## Bundle into a DesignContrast object
+descon <- DesignContrast(design, contrast, groups = groups)
+
+## Feature and sample annotation
+fdata <- data.frame(Identifier = rownames(counts))
+pdata <- data.frame(Name = colnames(counts), Group = groups)
+
+## Create the EdgeObject
+edgeObj <- EdgeObject(counts, descon, fData = fdata, pData = pdata)
+edgeObj
+```
+
+## Running differential gene expression with edgeR
+
+The `dgeWithEdgeR()` function performs the complete DGE pipeline: CPM
+filtering, normalization, dispersion estimation, GLM fitting, and likelihood
+ratio testing.
+
+```{r dge-edger}
+edgeResult <- dgeWithEdgeR(edgeObj)
+edgeResult
+```
+
+## Extracting results
+
+The `dgeTable()` function returns the results as a `data.frame`, sorted by
+statistical significance.
+
+```{r dge-table}
+res <- dgeTable(edgeResult)
+head(res)
+```
+
+## Running with limma-voom
+
+An alternative pipeline uses `limma`-voom for the analysis, which is
+particularly useful when the sample size is large.
+
+```{r dge-limma-voom}
+voomResult <- dgeWithLimmaVoom(edgeObj)
+voomRes <- dgeTable(voomResult)
+head(voomRes)
+```
+
+## Using the convenience function
+
+The `exampleEdgeObject()` function generates a ready-to-use `EdgeObject`
+for quick testing and demonstration.
+
+```{r example-object}
+set.seed(42)
+exObj <- exampleEdgeObject(nfeat = 100, nsample = 9, ngroup = 3)
+exObj
+```
+
+# Session info
+
+```{r session-info}
+sessionInfo()
+```

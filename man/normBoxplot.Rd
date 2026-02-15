@@ -13,6 +13,9 @@ normBoxplot(before.norm, after.norm, ...)
 
 \item{...}{Other parameters passed to \code{boxplot}.}
 }
+\value{
+Called for its side effect of plotting; returns invisibly NULL.
+}
 \description{
 Plot distribution of normalized counts
 }

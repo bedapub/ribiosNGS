@@ -15,6 +15,9 @@ contrastMatrix(object) <- value
 
 \item{value}{Matrix}
 }
+\value{
+The updated object with the new contrast matrix.
+}
 \description{
 Assign contrast matrix
 }

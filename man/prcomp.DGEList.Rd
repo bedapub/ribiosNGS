@@ -36,7 +36,7 @@ myDgeList <- DGEList(counts=myCounts,
   samples=data.frame(group=gl(5,2)))
 myPrcomp <- prcomp(myDgeList)
 
-\dontrun{
+\donttest{
   vsn::meanSdPlot(myPrcomp$vsnFit)
 }
 

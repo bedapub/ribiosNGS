@@ -16,6 +16,8 @@
 \alias{`logCPM<-`}
 \alias{`pValue<-`}
 \alias{`FDR<-`}
+\alias{update.EdgeSigFilter}
+\alias{update.LimmaSigFilter}
 \title{Update SigFilter}
 \usage{
 posLogFC(object) <- value
@@ -33,6 +35,10 @@ logCPM(object) <- value
 aveExpr(object) <- value
 
 \method{update}{SigFilter}(object, logFC, posLogFC, negLogFC, pValue, FDR, ...)
+
+\method{update}{EdgeSigFilter}(object, logFC, posLogFC, negLogFC, pValue, FDR, logCPM, ...)
+
+\method{update}{LimmaSigFilter}(object, logFC, posLogFC, negLogFC, pValue, FDR, aveExpr, ...)
 }
 \arguments{
 \item{object}{An \code{SigFilter} object}
@@ -50,9 +56,17 @@ aveExpr(object) <- value
 \item{FDR}{Numeric, FDR filter value, optional}
 
 \item{...}{not used now}
+
+\item{logCPM}{Numeric, logCPM filter value, optional (only for \code{EdgeSigFilter}).}
+
+\item{aveExpr}{Numeric, aveExpr filter value, optional (only for \code{LimmaSigFilter}).}
 }
 \value{
 An updated \code{SigFilter} object.
+
+An updated \code{EdgeSigFilter} object.
+
+An updated \code{LimmaSigFilter} object.
 }
 \description{
 Update SigFilter

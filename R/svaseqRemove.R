@@ -12,11 +12,11 @@
 #' @seealso \link[ribiosPlot]{pcaScores}
 #' 
 #' @return A list with following items
-#' \itemize{
+#' \describe{
 #'   \item{sva}{Results of \code{svaseq}}
 #'   \item{vsnFit}{Fit object of vsn}
 #'   \item{vsnMat}{Fitted matrix of vsn}
-#'   \item{vsnBatchRemoved}{Fitted matrix of vsn, with surrogates' effect 
+#'   \item{vsnBatchRemoved}{Fitted matrix of vsn, with surrogates' effect
 #'        removed}
 #'   \item{vsnBatchRemovedPca}{PCA object derived from \code{vsnBatchRemoved}}
 #'   \item{vsnBatchRemovedPcaScores}{PCA scores with annotations}

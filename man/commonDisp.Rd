@@ -15,6 +15,9 @@ commonDisp(object)
 \arguments{
 \item{object}{An object}
 }
+\value{
+A numeric value of the common dispersion.
+}
 \description{
 Common dispersion
 }

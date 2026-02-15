@@ -13,6 +13,9 @@ EdgeObject(object, designContrast, ...)
 
 \item{...}{Other parameters}
 }
+\value{
+An \code{EdgeObject}.
+}
 \description{
 Construct an EdgeObject object by a count matrix and DesignContrast
 }

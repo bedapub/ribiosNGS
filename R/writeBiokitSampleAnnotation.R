@@ -63,7 +63,8 @@ checkBiokitSampleAnnotation <- function(df) {
 #' 
 #' @param df A data.frame or anything that can be converted to a data.frame
 #' @param con Connection, can be a character string indicating file name
-#' @return NULL, side effect is used
+#' @return Called for its side effect of writing the sample annotation file;
+#'   returns invisibly NULL.
 #' @note Starting from version 1.0-36, the function checks the input
 #' \code{data.frame} or \code{tbl_df} before writing to the file
 #' @examples

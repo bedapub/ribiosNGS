@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeResult object}
 }
+\value{
+Invisibly returns the formatted message string.
+}
 \description{
 Show an EdgeResult object
 }

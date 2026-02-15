@@ -49,6 +49,9 @@ instead of the installed version.}
 
 \item{contrastAnno}{A \code{data.frame} or \code{NULL}, contrast annotation.}
 }
+\value{
+A character string containing the command to run the edgeR script.
+}
 \description{
 Export an DGEList, designMatrix, and contrastMatrix to files and return the
 command to run the edgeR script
@@ -65,7 +68,6 @@ The output file names start with the outfilePrefix, followed by '-' and
 customed file suffixes.
 }
 \examples{
-
  mat <- matrix(rnbinom(100, mu=5, size=2), ncol=10)
  rownames(mat) <- sprintf("gene\%d", 1:nrow(mat))
  myFac <- gl(2,5, labels=c("Control", "Treatment"))
@@ -74,5 +76,7 @@ customed file suffixes.
  myContrast <- limma::makeContrasts(Treatment, levels=myDesign)
  edgeRcommand(y, designMatrix=myDesign, contrastMatrix=myContrast,
      outfilePrefix="test", outdir=tempdir())
+ ## clean up
+ unlink(file.path(tempdir(), "input_data"), recursive=TRUE)
 
 }

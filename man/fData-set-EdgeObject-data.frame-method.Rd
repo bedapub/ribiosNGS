@@ -11,6 +11,9 @@
 
 \item{value}{A \code{data.frame}}
 }
+\value{
+The updated \code{EdgeObject} with new feature annotations.
+}
 \description{
 Set fData
 }

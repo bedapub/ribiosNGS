@@ -50,6 +50,9 @@ smearPlot(object, ...)
 
 \item{multipage}{Logical}
 }
+\value{
+Called for its side effect of plotting; returns invisibly NULL.
+}
 \description{
 Smear plot
 }

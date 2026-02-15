@@ -10,7 +10,7 @@ staticGeneLevelPlots(edgeResult)
 \item{edgeResult}{An EdgeResult object}
 }
 \value{
-\code{NULL}, side effect is used
+Called for its side effect of generating plots; returns invisibly NULL.
 }
 \description{
 Make static gene-level plots of an EdgeResult object

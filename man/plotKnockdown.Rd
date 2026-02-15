@@ -30,6 +30,10 @@ must contain columns given below as \code{exprsVar} and \code{groupVar}.}
 
 \item{test}{Character, statistical test, \code{wilcox.test} and \code{t.test} are supported.}
 }
+\value{
+A \code{ggplot} object displaying boxplots of gene expression across
+  groups with a secondary axis showing knockdown efficiency.
+}
 \description{
 Plot gene expression with knockdown efficiency
 }

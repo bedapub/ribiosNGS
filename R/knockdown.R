@@ -101,15 +101,17 @@ gtKdTable <- function(kdTable, feature_label="GeneSymbol", ...) {
 #' @param test Character, statistical test, \code{wilcox.test} and \code{t.test} are supported.
 #' @importFrom magrittr '%>%'
 #' @importFrom dplyr mutate
-#' @importFrom ggplot2 ggplot aes_string geom_boxplot scale_fill_manual theme_bw
+#' @importFrom ggplot2 ggplot aes geom_boxplot scale_fill_manual theme_bw
 #'   theme geom_point position_jitterdodge ylab xlab scale_y_log10 geom_hline
-#'   scale_y_continuous sec_axis
+#'   scale_y_continuous sec_axis element_text
 #' @importFrom scales percent
 #' @importFrom ribiosUtils haltifnot
+#' @return A \code{ggplot} object displaying boxplots of gene expression across
+#'   groups with a secondary axis showing knockdown efficiency.
 #' @importFrom rlang .data
 #' @export
-#' @examples 
-#' 
+#' @examples
+#'
 #' myData <- data.frame(group=gl(3,4),
 #'  exprs=as.vector(sapply(c(100, 10, 1), function(x) rnorm(4, x))))
 #' plotKnockdown(myData)
@@ -148,9 +150,9 @@ plotKnockdown <- function(goiExpr,
   isControl <- group==controlGroup
   controlExpr <- goiExpr[isControl, exprsVar]
   medianControl <- median(controlExpr, na.rm=TRUE)
-  res <- ggplot(goiExpr, aes_string(x = groupVar, y = exprsVar,
-                                    color= groupVar, 
-                                    group = groupVar)) +
+  res <- ggplot(goiExpr, aes(x = .data[[groupVar]], y = .data[[exprsVar]],
+                                    color= .data[[groupVar]],
+                                    group = .data[[groupVar]])) +
     geom_boxplot(outlier.shape = NA) + 
     theme_bw(base_size=13) + theme(legend.position = "none") +
     geom_point(position = position_jitterdodge(), pch=4) +
@@ -164,8 +166,8 @@ plotKnockdown <- function(goiExpr,
                                            breaks=seq(0, 1, 0.1),
                                            labels=function(x) scales::percent(x, accuracy = 1),
                                            name="KD efficiency")) +
-    if (!requireNamespace("ggpubr", quietly = TRUE)) {
-    ggpubr::stat_compare_means(label = "p.signif", 
+    if (requireNamespace("ggpubr", quietly = TRUE)) {
+    ggpubr::stat_compare_means(label = "p.signif",
                                method=test,
                                size=7, col="red",
                                symnum.args = list(cutpoints = c(0, 0.001, 0.01, 0.05, 1), symbols = c("***", "**", "*", "ns")),

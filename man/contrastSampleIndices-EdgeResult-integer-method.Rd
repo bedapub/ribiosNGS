@@ -11,6 +11,9 @@
 
 \item{contrast}{Character, indicating the contrast of interest.}
 }
+\value{
+A list of integer vectors indicating sample indices for each group in the contrast.
+}
 \description{
 Extract contrast sample indices
 }

@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An LimmaSigFilter object}
 }
+\value{
+Invisibly returns the formatted message strings.
+}
 \description{
 Show an LimmaSigFilter object
 }

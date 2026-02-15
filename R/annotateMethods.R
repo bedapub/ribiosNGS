@@ -5,6 +5,7 @@ NULL
 #' @param object An EdgeObject.
 #' @param target Character, target of annotation.
 #' @param check.target Logical, check whether the target is valid or not.
+#' @return An annotated \code{EdgeObject}.
 #' @importMethodsFrom ribiosExpression annotate
 #' @importFrom ribiosAnnotation annotateEnsemblGeneIDs annotateGeneIDs
 #' annotateAnyIDs
@@ -62,6 +63,7 @@ setMethod("annotate", c("EdgeObject","character", "logical"),
 #' Annotate an EdgeObject, without checking the target
 #' @param object An EdgeObject
 #' @param target Character, target of annotation
+#' @return An annotated \code{EdgeObject}.
 #' @importMethodsFrom ribiosExpression annotate
 #' @export
 setMethod("annotate", c("EdgeObject","character", "missing"),
@@ -71,6 +73,7 @@ setMethod("annotate", c("EdgeObject","character", "missing"),
 
 #' Annotate an EdgeObject automatically without checking the target
 #' @param object An EdgeObject
+#' @return An annotated \code{EdgeObject}.
 #' @importMethodsFrom ribiosExpression annotate
 #' @export
 setMethod("annotate", c("EdgeObject","missing", "missing"),

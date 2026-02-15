@@ -4,10 +4,12 @@
 \alias{readBiokitPhenodata}
 \title{Read Biokit phenodata}
 \usage{
-readBiokitPhenodata(dir)
+readBiokitPhenodata(dir, verbose = FALSE)
 }
 \arguments{
 \item{dir}{Character string, Biokit output directory}
+
+\item{verbose}{Logical}
 }
 \value{
 A \code{data.frame} with sample annotation in columns, and sample 

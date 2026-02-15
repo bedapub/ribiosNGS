@@ -4,12 +4,18 @@
 \alias{readBiokitFeatureAnnotation}
 \title{Read feature annotation from Biokit directory}
 \usage{
-readBiokitFeatureAnnotation(dir, anno = c("refseq", "ensembl"))
+readBiokitFeatureAnnotation(
+  dir,
+  anno = c("refseq", "ensembl", "gencode"),
+  verbose = FALSE
+)
 }
 \arguments{
 \item{dir}{Character string, a Biokit output directory.}
 
 \item{anno}{Character, indicating the annotation type.}
+
+\item{verbose}{Logical}
 }
 \value{
 A \code{data.frame} containing feature annotation, with feature IDs 

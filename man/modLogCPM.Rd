@@ -19,6 +19,9 @@ modLogCPM(object, ...)
 
 \item{prior.count}{Integer, prior count.}
 }
+\value{
+A numeric matrix of modulated log-CPM values.
+}
 \description{
 Modulated logCPM
 }

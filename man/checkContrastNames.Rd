@@ -13,6 +13,10 @@ checkContrastNames(contrastMatrix, action = c("message", "warning", "error"))
 
 Right now, the function checks no column names contain the equal sign.}
 }
+\value{
+Invisibly returns \code{NULL}. Called for its side effect of issuing
+  a message, warning, or error if column names contain equal signs.
+}
 \description{
 Check a contrast matrix to make sure that it is likely o.k.
 }

@@ -15,6 +15,9 @@ hasCommonDisp(object)
 \arguments{
 \item{object}{An object}
 }
+\value{
+Logical, whether the common dispersion has been set.
+}
 \description{
 Tells whether common dispersion has been set
 }

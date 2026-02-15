@@ -12,6 +12,9 @@ isAnnotated(object)
 \arguments{
 \item{object}{An object}
 }
+\value{
+Logical, whether the object is annotated.
+}
 \description{
 Is the object annotated
 }

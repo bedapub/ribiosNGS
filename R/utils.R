@@ -13,6 +13,7 @@ calcNormFactorsIfNot <- function(dgeList) {
 #' cpm for EdgeObject
 #' @param y An EdgeObject object
 #' @param ... Passed to \code{cpm}
+#' @return A numeric matrix of counts per million values.
 #' @seealso \code{\link[edgeR]{cpm}}
 #' @importFrom edgeR cpm
 #' @export

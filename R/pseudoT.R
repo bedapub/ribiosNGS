@@ -16,6 +16,7 @@ utils::globalVariables(c("PValue", "logFC"))
 #' tVals <- pseudoTfromPvalue(pVals, 5, sign=signs)
 #' logFCs <- rep(c(1.2,-1.2),6)
 #' tValsLogFCs <- pseudoTfromPvalue(pVals, 5, sign=logFCs)
+#' @return A numeric vector of pseudo t-statistics.
 #' @export
 pseudoTfromPvalue <- function(p, df, sign, replaceZero=TRUE) {
   if(replaceZero) {

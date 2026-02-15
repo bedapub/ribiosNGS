@@ -29,6 +29,10 @@ than the given value is not considered. This option is helpful to remove
 genes that are lowly expressed which yet show strong differential
 expression.}
 }
+\value{
+A numeric matrix of log2(fold-change) values with features in rows
+  and contrasts in columns.
+}
 \description{
 Extract a matrix of log2(fold-change) values
 }

@@ -15,6 +15,9 @@ designMatrix(object) <- value
 
 \item{value}{Matrix}
 }
+\value{
+The updated object with the new design matrix.
+}
 \description{
 Assign the design matrix
 }

@@ -15,6 +15,9 @@ normFactors(object)
 \arguments{
 \item{object}{An object}
 }
+\value{
+A numeric vector of normalisation factors.
+}
 \description{
 Extract normalisation factors from the object
 }

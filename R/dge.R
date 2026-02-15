@@ -53,9 +53,9 @@ utils::globalVariables(c("P.Value", "adj.P.Val", "CI.L", "CI.R"))
 #' The function performs end-to-end differential gene expression (DGE) analysis
 #' with common best practice using voom-limma
 #' 
-#' @return An \code{EdgeResult} object
+#' @return A \code{LimmaVoomResult} object.
 #' @examples
-#' 
+#'
 #' set.seed(1887)
 #' exObj <- exampleEdgeObject()
 #' exLimmaVoomRes <- dgeWithLimmaVoom(exObj)

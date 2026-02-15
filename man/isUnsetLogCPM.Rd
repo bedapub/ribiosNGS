@@ -9,6 +9,9 @@ isUnsetLogCPM(edgeSigFilter)
 \arguments{
 \item{edgeSigFilter}{A \code{EdgeSigFilter} object}
 }
+\value{
+Logical, whether the logCPM threshold is the default value.
+}
 \description{
 Whether the logCPM filter is set
 }

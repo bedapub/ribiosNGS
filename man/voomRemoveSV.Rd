@@ -14,6 +14,9 @@ voomRemoveSV(counts, designMatrix)
 }
 \value{
 The voom expression matrix, with SV effects removed
+
+A numeric matrix of voom-transformed expression values with
+  surrogate variable effects removed.
 }
 \description{
 Apply SVA to voom-transformed count data, and return the voom expression

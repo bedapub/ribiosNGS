@@ -15,6 +15,9 @@ humanGeneSymbols(object)
 \arguments{
 \item{object}{An object}
 }
+\value{
+A character vector of human gene symbols.
+}
 \description{
 Get human gene symbols for gene-set enrichment analysis
 }

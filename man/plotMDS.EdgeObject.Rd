@@ -11,6 +11,10 @@
 
 \item{...}{Other parameters passed to \code{\link[limma]{plotMDS}}.}
 }
+\value{
+An \code{MDS} object (invisibly), as returned by
+  \code{\link[limma]{plotMDS}}.
+}
 \description{
 plotMDS for EdgeObject
 }

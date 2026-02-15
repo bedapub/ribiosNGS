@@ -20,8 +20,10 @@
 #' 
 #' d1SampleSplit <- split(d1, d1$samples$donor)
 #' d1GeneSplit <- split(d1, d1$genes$GeneType, bySample=FALSE)
-#' 
-#' @export 
+#'
+#' @return A \code{DGEListList} object, a list of \code{DGEList} objects split
+#'   by the factor \code{f}.
+#' @export
 split.DGEList <- function(x, f, drop=FALSE, bySample=TRUE, sampleDropLevels=TRUE, ...) {
   if(!is.factor(f))
     f <- as.factor(f)

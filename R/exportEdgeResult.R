@@ -64,6 +64,8 @@ writeTruncatedDgeTables <- function(edgeResult, outdir=getwd()) {
 #' @param outRootDir Character string, output directory
 #' @param action Character string, what happens if the output directory exists
 #'
+#' @return Invisibly returns \code{NULL}. Called for its side effects of writing
+#'   result files to disk.
 #' @importFrom ribiosUtils overwriteDir createDir
 #' @importFrom ribiosIO writeMatrix
 #' @importFrom ribiosExpression writeGct

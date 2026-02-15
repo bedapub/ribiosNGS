@@ -11,6 +11,9 @@
 
 \item{target}{Character, target of annotation}
 }
+\value{
+An annotated \code{EdgeObject}.
+}
 \description{
 Annotate an EdgeObject, without checking the target
 }

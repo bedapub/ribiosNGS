@@ -41,6 +41,7 @@ replaceNAwithZero <- function(edgeObj) {
 
 #' Return the dgeGML method
 #' @param edgeResult An \code{EdgeResult} object.
+#' @return A \code{DGEGLM} object.
 #' @export
 dgeGML <- function(edgeResult)
   return(edgeResult@dgeGLM)
@@ -164,7 +165,6 @@ isSigPos <- function(data.frame, sigFilter) {
   resExcAveExpr <- with(
     data.frame,
     logFC >= posLogFC(sigFilter) &
-      AveExpr >= aveExpr(sigFilter) &
       PValue <= pValue(sigFilter) &
       FDR <= FDR(sigFilter)
   )
@@ -175,19 +175,6 @@ isSigPos <- function(data.frame, sigFilter) {
 
 #' @describeIn isSig Returns which genes are significantly negatively regulated
 #' @export
-isSigPos <- function(data.frame, sigFilter) {
-  assertEdgeToptable(data.frame)
-  resExcAveExpr <- with(
-    data.frame,
-    logFC >= posLogFC(sigFilter) &
-      PValue <= pValue(sigFilter) &
-      FDR <= FDR(sigFilter)
-  )
-  isAveExpr <- isHighAveExpr(data.frame, sigFilter)
-  res <- resExcAveExpr & isAveExpr
-  return(res)
-}
-
 isSigNeg <- function(data.frame, sigFilter) {
   assertEdgeToptable(data.frame)
   resExcAveExpr <- with(

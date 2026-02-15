@@ -1,10 +1,24 @@
+check_pattern_matching_file <- function(file, pattern) {
+  if(!file.exists(file)) {
+    stop(paste0("File with the pattern '", pattern, "' does not exist!"))
+  } else if (length(file)>1) {
+    stop(paste0("More than one file with the pattern '", pattern, "' were found:",
+                paste(file, sep=",")))
+  } else {
+    return(file)
+  }
+  stop("Should not be here - please inform the developer")
+  return(FALSE)
+}
+
 #' Read GCT files from Biokit output directory
 #' 
 #' @param dir Biokit output directory
-#' @param anno Annotation type, either \code{refseq} or \code{ensembl} is
-#' supported
+#' @param anno Annotation type, either \code{refseq}, \code{ensembl}, 
+#' and \code{gencode} is supported
 #' @param type GCT file type, \code{count}, \code{tpm}, \code{count_collapsed}, 
 #'   \code{tpm_collapsed}, and \code{log2tpm} are supported.
+#' @param verbose Logical, if TRUE, verbose mode is turned on.
 #' @return A numeric matrix with the attribute \code{desc} encoding the values
 #'   in the description column of the GCT format.
 #'
@@ -19,28 +33,30 @@
 #' @importFrom ribiosIO read_gct_matrix
 #' @export readBiokitGctFile
 readBiokitGctFile <- function(dir, 
-                              anno=c("refseq", "ensembl"),
+                              anno=c("refseq", "ensembl", "gencode"),
                               type=c("count", "tpm", "count_collapsed", 
-                                     "tpm_collapsed", "log2tpm")) {
+                                     "tpm_collapsed", "log2tpm"),
+                              verbose=FALSE) {
   anno <- match.arg(anno)  
   type <- match.arg(type)
   
-  annoPath <- switch(anno,
-                     "refseq"="gct",
-                     "ensembl"="gct-ens")
+  annoPath <- "gct"
   
   gctDir <- file.path(dir, annoPath) 
   assertDir(gctDir)
   
-  filePattern <- switch(type,
+  fileEndPattern <- switch(type,
                         "count"=".*_count.gct",
                         "tpm"=".*_tpm.gct",
                         "count_collapsed"=".*_count_collapsed.gct",
                         "tpm_collapsed"=".*_tpm_collapsed.gct")
   
+  filePattern <- paste0("^", anno, ".*", fileEndPattern, "$")
+  
   gctFile <- dir(gctDir, pattern=filePattern, full.names=TRUE)
-  if(length(gctFile)==0 || !file.exists(gctFile))
-    stop(paste0("GCT file with the pattern'", filePattern, "' does not exist!"))
+  check_pattern_matching_file(gctFile, filePattern)
+  if(verbose)
+    message("Reading GCT file: ", gctFile)
   mat <- ribiosIO::read_gct_matrix(gctFile)
   return(mat)
 }
@@ -48,6 +64,7 @@ readBiokitGctFile <- function(dir,
 #' Read Biokit phenodata
 #' 
 #' @param dir Character string, Biokit output directory
+#' @param verbose Logical
 #' @return A \code{data.frame} with sample annotation in columns, and sample 
 #'   names (identical as the names in gct files, character strings) are row 
 #'   names. Nmes of the first three columns are fixed:
@@ -62,12 +79,15 @@ readBiokitGctFile <- function(dir,
 #'  output directory.
 #'  
 #' @export
-readBiokitPhenodata <- function(dir) {
+readBiokitPhenodata <- function(dir, verbose=FALSE) {
   ## read sample annotation from annot/phenoData.meta
   phenoDataFile <- file.path(dir, "annot", "phenoData.meta")
   ribiosUtils::assertFile(phenoDataFile)
   
   ## to have consistent formats of sample annotation, we rename the frist three columns of annot
+  if(verbose)
+    message("Reading phenodata file: ", phenoDataFile)
+  
   annot <- ribiosIO::readTable(phenoDataFile, row.names=FALSE)
   colnames(annot)[1:3] <- c("SampleName", "SampleID", "group")
   annotSampleName <- as.character(annot[, 1L])
@@ -84,6 +104,7 @@ utils::globalVariables(c("GeneID", "EnsemblID"))
 #' 
 #' @param dir Character string, a Biokit output directory.
 #' @param anno Character, indicating the annotation type.
+#' @param verbose Logical
 #' @return A \code{data.frame} containing feature annotation, with feature IDs 
 #'   as characters in rownames. The data frame contains following columns 
 #'   depending on the \code{anno} parameter: 
@@ -115,16 +136,24 @@ utils::globalVariables(c("GeneID", "EnsemblID"))
 #' @examples
 #' ## TODO add small example files
 readBiokitFeatureAnnotation <-
-  function(dir, anno = c("refseq", "ensembl")) {
+  function(dir, anno = c("refseq", "ensembl", "gencode"), verbose=FALSE) {
     anno <- match.arg(anno)
     annoDir <- file.path(dir, "annot")
-    if (anno == "refseq")  {
-      annotFile <- file.path(annoDir, "refseq.annot.gz")
-      lenFile <- file.path(annoDir, "refseq.geneLength.gz")
-    } else if (anno == "ensembl") {
-      annotFile <- file.path(annoDir, "ensembl.annot.gz")
-      lenFile <- file.path(annoDir, "ensembl.geneLength.gz")
+   
+    annotFilePattern <- paste0("^", anno, ".*\\.annot\\.gz$")
+    geneLengthFilePattern <- paste0("^", anno, ".*\\.geneLength\\.gz$")
+    
+    annotFile <- dir(annoDir, pattern=annotFilePattern, full.names=TRUE)
+    lenFile <- dir(annoDir, pattern=geneLengthFilePattern, full.names=TRUE)
+    
+    check_pattern_matching_file(annotFile, annotFilePattern)
+    check_pattern_matching_file(lenFile, geneLengthFilePattern)
+  
+    if(verbose) {
+      message("Reading feature annotation file: ", annotFile)
+      message("Reading gene length annotation file: ", lenFile)
     }
+    
     if(file.exists(annotFile)) {
       if (anno == "refseq") {
         ## in the current file, some gene names are not present,
@@ -134,27 +163,28 @@ readBiokitFeatureAnnotation <-
           col_names = c("GeneID", "GeneSymbol", "GeneName"),
           col_types = "icc"
         ))
-        annotTbl <- dplyr::mutate(annotTbl, FeatureName=GeneID) %>%
-          dplyr::select("FeatureName", dplyr::everything())
-      } else if (anno == "ensembl") {
+        annotTbl <- dplyr::mutate(annotTbl, FeatureName=GeneID)
+      } else if (anno %in% c("ensembl", "gencode")) {
         suppressWarnings(annotTbl <- readr::read_tsv(
           annotFile,
-          col_names = c("EnsemblID", "GeneSymbol"),
+          col_names = c("EnsemblID", "GeneSymbol", "GeneName"),
           col_types = "cc"
         ))
-        annotTbl <- dplyr::mutate(annotTbl, FeatureName=EnsemblID) %>%
-          dplyr::select("FeatureName", everything())
+        annotTbl <- dplyr::mutate(annotTbl, FeatureName=EnsemblID)
       }
+      annotTbl <-  annotTbl %>%
+        dplyr::select("FeatureName", dplyr::everything())
     } else {
       gctMat <- readBiokitGctFile(dir, anno=anno)
       annotTbl <- data.frame(FeatureName=rownames(gctMat),
                              Description=gctDesc(gctMat),
                              GeneID=rownames(gctMat),
                              GeneSymbol=gctDesc(gctMat))
-      if(anno=="ensembl") {
+      if(anno %in% c("ensembl", "gencode")) {
         colnames(annotTbl)[3L] <- "EnsemblID"
       }
     }
+    
     if(file.exists(lenFile)) {
       lenTbl <- readr::read_tsv(lenFile,
                                 col_names = TRUE,
@@ -177,18 +207,21 @@ readBiokitFeatureAnnotation <-
 #' @param useCollapsedData Logical, \code{FALSE} as default. If set to 
 #'   \code{TRUE}, counts are collapsed by gene symbols. This is not recommended
 #'   because gene symbols are not stable identifiers.
-#'   
+#' @param verbose Logical
 #' The function depends on \code{gct} (\code{gct-ens}) and \code{annot} 
 #' directories of biokit output directory.
 #' 
+#' @return A \code{DGEList} object with count and TPM matrices, sample
+#'   annotation, feature annotation, and an additional \code{BiokitAnno}
+#'   element indicating the annotation type used.
 #' @examples
-#' 
+#'
 #' ##... (TODO: add a mock output directory in testdata)
-#' 
+#'
 #' @export readBiokitAsDGEList
-readBiokitAsDGEList <- function(dir, 
-                                anno=c("refseq", "ensembl"),
-                                useCollapsedData=FALSE) {
+readBiokitAsDGEList <- function(dir,
+                                anno=c("refseq", "ensembl", "gencode"),
+                                useCollapsedData=FALSE, verbose=FALSE) {
   ## read gct file
   anno <- match.arg(anno)
   if(useCollapsedData) {
@@ -198,8 +231,8 @@ readBiokitAsDGEList <- function(dir,
     countType <- "count"
     tpmType <- "tpm"
   }
-  countMat <- readBiokitGctFile(dir, anno=anno, type=countType)
-  tpmMat <- readBiokitGctFile(dir, anno=anno, type=tpmType)
+  countMat <- readBiokitGctFile(dir, anno=anno, type=countType, verbose=verbose)
+  tpmMat <- readBiokitGctFile(dir, anno=anno, type=tpmType, verbose=verbose)
   
   stopifnot(identical(colnames(countMat), colnames(tpmMat)))
   if(!identical(rownames(countMat), rownames(tpmMat))) {
@@ -221,7 +254,7 @@ readBiokitAsDGEList <- function(dir,
   stopifnot(identical(rownames(countMat), rownames(tpmMat)))
   
   ## sample annotation
-  annot <- readBiokitPhenodata(dir)
+  annot <- readBiokitPhenodata(dir, verbose=verbose)
   annotSampleName <- rownames(annot)
   if(!setequal(annotSampleName , colnames(countMat))) {
     stop("SampleID-group and gct file sample names do not match. Contact the developer.")
@@ -231,7 +264,7 @@ readBiokitAsDGEList <- function(dir,
   }
   
   ## feature annotation
-  genes <- readBiokitFeatureAnnotation(dir, anno=anno)
+  genes <- readBiokitFeatureAnnotation(dir, anno=anno, verbose=verbose)
   if(!setequal(rownames(countMat), rownames(genes))) {
     warnings("FeatureNames different bewteen gct file and feature annotation")
   }

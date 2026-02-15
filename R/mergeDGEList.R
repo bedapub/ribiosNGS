@@ -5,15 +5,15 @@
 #' @param DGEListLabels Labels, either \code{NULL} or a vector of character
 #'   strings with length two
 #'   
-#' The function merges two \code{DGEList} objects. It does essentially 
-#' three things: 
-#' \itemize{
+#' The function merges two \code{DGEList} objects. It does essentially
+#' three things:
+#' \describe{
 #'   \item{Feature annotation}{It extracts the common
-#'   features from both objects, and use the feature annotation in the 
-#'   \code{firstDgeList} object as the annotation for the final object. }
+#'   features from both objects, and use the feature annotation in the
+#'   \code{firstDgeList} object as the annotation for the final object.}
 #'   \item{Sample annotation}{It extracts the common
-#'   columns from sample annotation of both objects, and row-bind them as 
-#'   the annotaiton for the final object.}
+#'   columns from sample annotation of both objects, and row-bind them as
+#'   the annotation for the final object.}
 #'   \item{counts}{Matching final features and samples, the counts matrices
 #'   are column-binded.}
 #' }
@@ -40,6 +40,8 @@
 #' md <- mergeDGEList(d1, d2)
 #' md2 <- mergeDGEList(d1, d2, DGEListLabels=c("d1", "d2"))
 #' 
+#' @return A \code{DGEList} object containing the merged counts, sample
+#'   annotation, and gene annotation from both input objects.
 #' @importFrom edgeR DGEList
 #' @importFrom ribiosUtils removeColumns
 #' @export

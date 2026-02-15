@@ -14,6 +14,9 @@ testGLM(object, fit)
 
 \item{fit}{A fit object}
 }
+\value{
+An \code{EdgeResult} object containing the test results.
+}
 \description{
 Test GLM
 }

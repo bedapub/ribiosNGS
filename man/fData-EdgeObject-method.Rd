@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeObject}
 }
+\value{
+A \code{data.frame} of feature (gene) annotations.
+}
 \description{
 Get fData
 }

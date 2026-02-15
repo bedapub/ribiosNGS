@@ -15,6 +15,9 @@ trendedBCV(x)
 \arguments{
 \item{x}{An object}
 }
+\value{
+A numeric vector of trended BCV values.
+}
 \description{
 Trended biological coefficients of variance
 }

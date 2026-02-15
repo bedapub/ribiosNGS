@@ -48,6 +48,9 @@ all contrasts are used}
 
 \item{labelType}{NULL or a character string, a column name in the feature annotation}
 }
+\value{
+Called for its side effect of plotting; returns invisibly NULL.
+}
 \description{
 Volcano plot
 }

@@ -262,6 +262,11 @@ slurmEdgeRcommand <- function(dgeList, designContrast,
                   paste("#SBATCH -o", outfile),
                   paste("#SBATCH -e", errfile),
                   paste("#SBATCH -J", outdirBase),
+                  "ml load .testing",
+                  "export R_LIBS_USER=/apps/rocs/pRED/groups/bioinfo/R/%V-foss/",
+                  "ml load foss-devel ## making sure that compilation works",
+                  "ml load R/4.5.0-foss-2024a",
+                  "ml load R-bundle/4.5.0-foss-2024a",
                   paste("srun", comm))
   writeLines(sh_content, shfile)
   command <- paste("sbatch", params, shfile)

@@ -11,6 +11,10 @@ exportStaticGeneLevelPlots(edgeResult, file)
 
 \item{file}{Character string, the PDF file name}
 }
+\value{
+Called for its side effect of writing plots to a PDF file; returns
+  invisibly NULL.
+}
 \description{
 Export static gene-level plots in PDF
 }

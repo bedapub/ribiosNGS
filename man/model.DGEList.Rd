@@ -15,6 +15,9 @@ Sample annotation is used to construct the formula}
 
 \item{...}{Not used so far}
 }
+\value{
+A design matrix.
+}
 \description{
 Build design matrix from a DGEList object
 }

@@ -41,6 +41,9 @@ customSmearPlot(
 
 \item{...}{Passed to \code{\link[edgeR]{maPlot}}.}
 }
+\value{
+Called for its side effect of plotting; returns invisibly NULL.
+}
 \description{
 Custom smear plot
 }

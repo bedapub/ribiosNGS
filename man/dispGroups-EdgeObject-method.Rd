@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An \code{EdgeObject} object}
 }
+\value{
+A character vector of display labels for sample groups.
+}
 \description{
 Get display labels of sample groups
 }

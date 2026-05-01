@@ -9,6 +9,9 @@ isUnsetAveExpr(limmaSigFilter)
 \arguments{
 \item{limmaSigFilter}{A \code{LimmaSigFilter} object}
 }
+\value{
+Logical, whether the aveExpr threshold is the default value.
+}
 \description{
 Whether the aveExpr filter is set
 }

@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{A DGEList}
 }
+\value{
+A \code{data.frame} of sample annotations.
+}
 \description{
 Get pData (sample annotation)
 }

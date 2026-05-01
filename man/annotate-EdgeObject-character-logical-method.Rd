@@ -13,6 +13,9 @@
 
 \item{check.target}{Logical, check whether the target is valid or not.}
 }
+\value{
+An annotated \code{EdgeObject}.
+}
 \description{
 Annotate an EdgeObject
 }

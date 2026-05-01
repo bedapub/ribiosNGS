@@ -20,6 +20,9 @@ plotBCV(x, ...)
 
 \item{...}{Other paramters}
 }
+\value{
+Called for its side effect of plotting; returns invisibly NULL.
+}
 \description{
 Plot BCV
 }

@@ -21,6 +21,7 @@ setMethod("ncol", "EdgeResult", function(x) ncol(x@dgeList))
 
 #' Dimensions of an EdgeResults
 #' @param x An EdgeResult object
+#' @return An integer vector of length two (features, samples).
 #' @export
 dim.EdgeResult <- function(x) c(nrow(x), ncol(x))
 
@@ -31,14 +32,16 @@ dim.EdgeResult <- function(x) c(nrow(x), ncol(x))
 #' Return counts in a DGEList object
 #' @importMethodsFrom BiocGenerics counts
 #' @param object A \code{DGEList} object.
+#' @return A numeric matrix of counts.
 #' @export
 setMethod("counts", "DGEList", function(object) object$counts)
 
 #' Return counts in EdgeObject
-#' 
+#'
 #' @param object An EdgeObject
 #' @param filter Logical, whether filtered matrix (by default) or unfiltered matrix should be returned
-#' 
+#'
+#' @return A numeric matrix of counts.
 #' @seealso \code{\link{filterByCPM}}
 #' @export
 setMethod("counts", "EdgeObject", function(object, filter=TRUE) {
@@ -72,6 +75,7 @@ setMethod("isAnnotated", "EdgeObject", function(object) {
 
 #' Get fData
 #' @param object A DGEList
+#' @return A \code{data.frame} of feature (gene) annotations.
 #' @importMethodsFrom Biobase fData fData<-
 #' @export
 setMethod("fData", "DGEList", function(object) object$genes)
@@ -79,6 +83,7 @@ setMethod("fData", "DGEList", function(object) object$genes)
 #' Set fData
 #' @param object A DGEList
 #' @param value A \code{data.frame}
+#' @return The updated \code{DGEList} object with new feature annotations.
 #' @export
 setMethod("fData<-", c("DGEList", "data.frame"), function(object, value) {
   object@genes <- value
@@ -87,6 +92,7 @@ setMethod("fData<-", c("DGEList", "data.frame"), function(object, value) {
 
 #' Get fData
 #' @param object An EdgeObject
+#' @return A \code{data.frame} of feature (gene) annotations.
 #' @export
 setMethod("fData", "EdgeObject", function(object) {
   return(object@dgeList$genes)
@@ -95,6 +101,7 @@ setMethod("fData", "EdgeObject", function(object) {
 #' Set fData
 #' @param object An EdgeObject
 #' @param value A \code{data.frame}
+#' @return The updated \code{EdgeObject} with new feature annotations.
 #' @export
 setMethod("fData<-", c("EdgeObject", "data.frame"), function(object, value) {
   object@dgeList$genes <- value
@@ -103,6 +110,7 @@ setMethod("fData<-", c("EdgeObject", "data.frame"), function(object, value) {
 
 #' Get pData (sample annotation)
 #' @param object A DGEList
+#' @return A \code{data.frame} of sample annotations.
 #' @importMethodsFrom Biobase pData pData<-
 #' @export
 setMethod("pData", "DGEList", function(object) object$samples)
@@ -110,6 +118,7 @@ setMethod("pData", "DGEList", function(object) object$samples)
 #' Set pData (sample annotation)
 #' @param object A DGEList
 #' @param value A \code{data.frame}
+#' @return The updated \code{DGEList} object with new sample annotations.
 #' @export
 setMethod("pData<-", c("DGEList", "data.frame"), function(object, value) {
   object@samples <- value
@@ -118,6 +127,7 @@ setMethod("pData<-", c("DGEList", "data.frame"), function(object, value) {
 
 #' Get pData
 #' @param object An EdgeObject
+#' @return A \code{data.frame} of sample annotations.
 #' @export
 setMethod("pData", "EdgeObject", function(object) {
   return(object@dgeList$samples)
@@ -126,6 +136,7 @@ setMethod("pData", "EdgeObject", function(object) {
 #' Set pData (sample annotation)
 #' @param object A DGEList
 #' @param value A \code{data.frame}
+#' @return The updated \code{EdgeObject} with new sample annotations.
 #' @export
 setMethod("pData<-", c("EdgeObject", "data.frame"), function(object, value) {
   object@dgeList$samples <- value
@@ -239,6 +250,7 @@ setMethod("dgeList", "EdgeResult", function(object) return(object@dgeList))
 
 #' Extract design matrix from an EdgeObject object
 #' @param object An EdgeObject object
+#' @return A design matrix.
 #' @importMethodsFrom ribiosExpression designMatrix
 #' @importFrom ribiosExpression designMatrix
 #' @export
@@ -246,11 +258,13 @@ setMethod("designMatrix", "EdgeObject", function(object) ribiosExpression::desig
 
 #' Extract design matrix from an EdgeResult object
 #' @param object An EdgeResult object
+#' @return A design matrix.
 #' @export
 setMethod("designMatrix", "EdgeResult", function(object) ribiosExpression::designMatrix(object@designContrast))
 
 #' Extract contrast matrix from an EdgeObject object
 #' @param object An EdgeObject object
+#' @return A contrast matrix.
 #' @importMethodsFrom ribiosExpression contrastMatrix
 #' @importFrom ribiosExpression contrastMatrix
 #' @export
@@ -258,17 +272,20 @@ setMethod("contrastMatrix", "EdgeObject", function(object) ribiosExpression::con
 
 #' Extract contrast matrix from an EdgeResult object
 #' @param object An EdgeResult object
+#' @return A contrast matrix.
 #' @export
 setMethod("contrastMatrix", "EdgeResult", function(object) ribiosExpression::contrastMatrix(object@designContrast))
 
 #' Extract contrast names from an EdgeObject object
 #' @param object An EdgeObject object
+#' @return A character vector of contrast names.
 #' @importMethodsFrom ribiosExpression contrastNames
 #' @export
 setMethod("contrastNames", "EdgeObject", function(object) colnames(contrastMatrix(object)))
 
 #' Extract contrast names from an EdgeResult object
 #' @param object An EdgeResult object
+#' @return A character vector of contrast names.
 #' @export
 setMethod("contrastNames", "EdgeResult", function(object) colnames(contrastMatrix(object)))
 
@@ -289,6 +306,7 @@ setMethod("contrastMatrix<-", c("EdgeObject", "matrix"), function(object, value)
 #' Return the number of contrasts
 #' @importMethodsFrom ribiosExpression nContrast
 #' @param object An \code{EdgeResult} object.
+#' @return An integer, the number of contrasts.
 #' @export
 setMethod("nContrast", "EdgeResult", function(object) {nContrast(object@designContrast)})
 
@@ -296,6 +314,7 @@ setMethod("nContrast", "EdgeResult", function(object) {nContrast(object@designCo
 #' @importMethodsFrom ribiosExpression contrastSampleIndices
 #' @param object An EdgeResult object.
 #' @param contrast Character, indicating the contrast of interest.
+#' @return A list of integer vectors indicating sample indices for each group in the contrast.
 #' @export
 setMethod("contrastSampleIndices", c("EdgeResult", "character"), function(object, contrast) {
               contrastSampleIndices(object@designContrast, contrast)
@@ -304,6 +323,7 @@ setMethod("contrastSampleIndices", c("EdgeResult", "character"), function(object
 #' Extract contrast sample indices
 #' @param object An EdgeResult object.
 #' @param contrast Character, indicating the contrast of interest.
+#' @return A list of integer vectors indicating sample indices for each group in the contrast.
 #' @export
 setMethod("contrastSampleIndices", c("EdgeResult", "integer"), function(object, contrast) {
               contrastSampleIndices(object@designContrast, contrast)
@@ -319,6 +339,7 @@ naOrSqrt <- function(x) {
 
 #' Show DGEList
 #' @param object A DGEList object
+#' @return Called for its side effect of printing; returns invisibly NULL.
 #' @export
 setMethod("show", "DGEList", function(object) {
   cat(sprintf("A DGEList object with %s features and %d samples\n",
@@ -329,6 +350,7 @@ setMethod("show", "DGEList", function(object) {
 
 #' Show DGEListList
 #' @param object A DGEListList object
+#' @return Called for its side effect of printing; returns invisibly NULL.
 #' @export
 setMethod("show", "DGEListList", function(object) {
   cat(sprintf("A list of %d DGEList objects:\n", length(object)))
@@ -340,6 +362,7 @@ setMethod("show", "DGEListList", function(object) {
 
 #' Return sample names from a DGEList object
 #' @param object A DGEList object
+#' @return A character vector of sample names.
 #' @importMethodsFrom Biobase sampleNames
 #' @export
 setMethod("sampleNames", "DGEList", function(object) colnames(object$counts))
@@ -413,6 +436,7 @@ aveLogCPM.EdgeResult <- function(y,...) {
 #' Get sample groups from an EdgeObject object
 #' @importMethodsFrom ribiosExpression groups
 #' @param object An \code{EdgeObject} object
+#' @return A factor of sample group assignments.
 #' @export
 setMethod("groups", "EdgeObject", function(object) {
   return(groups(object@designContrast))
@@ -421,6 +445,7 @@ setMethod("groups", "EdgeObject", function(object) {
 #' Get display labels of sample groups
 #' @importMethodsFrom ribiosExpression dispGroups
 #' @param object An \code{EdgeObject} object
+#' @return A character vector of display labels for sample groups.
 #' @export
 setMethod("dispGroups", "EdgeObject", function(object) {
   return(dispGroups(object@designContrast))
@@ -545,6 +570,7 @@ setMethod("setCommonDispIfMissing", c("EdgeObject","numeric"), function(object, 
 
 #' Feature names
 #' @param object An EdgeObject
+#' @return A character vector of feature names.
 #' @importMethodsFrom Biobase featureNames
 #' @export
 setMethod("featureNames", "EdgeObject", function(object) {
@@ -553,6 +579,7 @@ setMethod("featureNames", "EdgeObject", function(object) {
 
 #' Sample names
 #' @param object An EdgeObject
+#' @return A character vector of sample names.
 #' @importMethodsFrom Biobase sampleNames
 #' @export
 setMethod("sampleNames", "EdgeObject", function(object) {
@@ -560,14 +587,15 @@ setMethod("sampleNames", "EdgeObject", function(object) {
 })
 
 #' Build design matrix from a DGEList object
-#' 
+#'
 #' @param object A DGEList object
 #' @param formula Formula, passed to \code{\link{model.matrix}}
 #'
 #' Sample annotation is used to construct the formula
 #'
 #' @param ... Not used so far
-#' @export model.DGEList
+#' @return A design matrix.
+#' @export
 model.DGEList <- function(object, formula, ...) {
   model.matrix(formula, data=object$samples)
 }
@@ -649,6 +677,7 @@ setMethod("voomSVA", c("DGEList", "formula"), function(object, design) {
 
 #' Show an SigFilter object
 #' @param object An SigFilter object
+#' @return Invisibly returns the formatted message string.
 #' @importMethodsFrom methods show
 #' @export
 setMethod("show", "SigFilter", function(object) {
@@ -678,6 +707,7 @@ setMethod("show", "SigFilter", function(object) {
 
 #' Show an EdgeSigFilter object
 #' @param object An SigFilter object
+#' @return Invisibly returns the formatted message strings.
 #' @importFrom methods callNextMethod
 #' @export
 setMethod("show", "EdgeSigFilter", function(object) {
@@ -692,6 +722,7 @@ setMethod("show", "EdgeSigFilter", function(object) {
 
 #' Show an LimmaSigFilter object
 #' @param object An LimmaSigFilter object
+#' @return Invisibly returns the formatted message strings.
 #' @export
 setMethod("show", "LimmaSigFilter", function(object) {
   msgs <- callNextMethod()
@@ -705,6 +736,7 @@ setMethod("show", "LimmaSigFilter", function(object) {
 
 #' Show an EdgeResult object
 #' @param object An EdgeResult object
+#' @return Invisibly returns the formatted message string.
 #' @export
 setMethod("show", "EdgeResult", function(object) {
   summary <- sprintf("EdgeResult object: %d genes, %d samples, %d contrasts",

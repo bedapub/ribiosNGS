@@ -15,6 +15,9 @@ dgeList(object)
 \arguments{
 \item{object}{An EdgeResult object}
 }
+\value{
+A \code{DGEList} object.
+}
 \description{
 Extract DGEList from an EdgeObject
 

@@ -8,3 +8,4 @@
 ^coverage\.txt$
 ^coverage\.r$
 ^\.github$
+^\.claude$

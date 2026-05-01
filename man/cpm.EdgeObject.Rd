@@ -11,6 +11,9 @@
 
 \item{...}{Passed to \code{cpm}}
 }
+\value{
+A numeric matrix of counts per million values.
+}
 \description{
 cpm for EdgeObject
 }

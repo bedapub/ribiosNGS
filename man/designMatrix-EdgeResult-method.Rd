@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeResult object}
 }
+\value{
+A design matrix.
+}
 \description{
 Extract design matrix from an EdgeResult object
 }

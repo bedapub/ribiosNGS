@@ -10,6 +10,9 @@ DGEListList(...)
 \item{...}{A list of DGEListList objects, can be passed as individual objects
 or in a list}
 }
+\value{
+A \code{DGEListList} object.
+}
 \description{
 Construct a DGEListList object
 }

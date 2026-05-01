@@ -15,7 +15,7 @@ The function performs end-to-end differential gene expression (DGE) analysis
 with common best practice using voom-limma}
 }
 \value{
-An \code{EdgeResult} object
+A \code{LimmaVoomResult} object.
 }
 \description{
 Perform differential gene expression analysis with edgeR-limma

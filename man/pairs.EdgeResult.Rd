@@ -28,6 +28,9 @@
 
 Plot pairwise logFCs}
 }
+\value{
+Called for its side effect of plotting; returns invisibly NULL.
+}
 \description{
 Pairs plot for EdgeResult
 }

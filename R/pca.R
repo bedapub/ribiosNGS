@@ -4,12 +4,13 @@
 #' @param x Numeric matrix
 #' @param na.rm Logical. Should missing values (including NaN) be omitted from
 #' the calculations?
+#' @return A numeric vector of row variances.
 #' @examples
-#' 
+#'
 #' myVal <- matrix(1:9, nrow=3, byrow=FALSE)
 #' myVar <- rowVars(myVal)
 #' stopifnot(identical(myVar, c(9,9,9)))
-#' 
+#'
 #' @export rowVars
 rowVars <- function (x, na.rm=TRUE) {
   sqr = function(x) x * x
@@ -100,13 +101,14 @@ topVarRowsByMeanBinning <- function(matrix, ntop=NULL, nbin=NULL) {
 #' Effective Dimensionality Reduction." PLOS Computational Biology 15, no. 6
 #' (2019): e1006907
 #' 
+#' @return A \code{prcomp} object.
 #' @seealso \code{\link{topVarRowsByMeanBinning}}
 #' @examples
-#' 
+#'
 #' myTestExprs <- matrix(rnorm(1000), ncol=10, byrow=FALSE)
 #' myTestExprs[1:50, 6:10] <- myTestExprs[1:50, 6:10] + 2
 #' myTopPca <- prcompExprs(myTestExprs, ntop=50, nbin=5)
-#' 
+#'
 #' @export prcompExprs
 prcompExprs <- function(matrix, ntop=NULL, scale=FALSE, nbin=NULL) {
   if(!is.null(ntop) && !is.na(ntop)) {
@@ -144,7 +146,7 @@ prcompExprs <- function(matrix, ntop=NULL, scale=FALSE, nbin=NULL) {
 #'   samples=data.frame(group=gl(5,2)))
 #' myPrcomp <- prcomp(myDgeList)
 #' 
-#' \dontrun{
+#' \donttest{
 #'   vsn::meanSdPlot(myPrcomp$vsnFit)
 #' }
 #' 
@@ -172,17 +174,19 @@ prcomp.DGEList <- function(x, ntop=NULL,
 }
 
 #' Run principal component analysis on a DGEListList object
-#' 
+#'
 #' @param x A \code{DGEListList} object
 #' @param ntop NULL or integer. If set, only \code{ntop} top-variable genes are
 #' used
 #' @param fun Function, used to transform count data into continuous data used
 #' by PCA
+#' @param ... Not used.
 #' @return A list of \code{prcomp} objects.
-prcomp.DGEListList <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE)) {
+#' @export
+prcomp.DGEListList <- function(x, ntop=NULL, fun=function(x) cpm(x, log=TRUE), ...) {
   resList <- lapply(x@.Data,
-                    function(dgeList) 
-                      prcomp.DGEList(dgeList, fun=fun, ntop=ntop))
+                    function(dgeList)
+                      prcomp.DGEList(dgeList, ntop=ntop))
   names(resList) <- names(x)
   return(resList)
 }

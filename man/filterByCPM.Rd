@@ -11,6 +11,9 @@ filterByCPM(obj, ...)
 
 \item{...}{Other parameters}
 }
+\value{
+The return value depends on the class of \code{obj}. See method-specific documentation.
+}
 \description{
 Filter lowly expressed genes by counts per million (CPM)
 }

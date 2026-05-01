@@ -15,6 +15,9 @@ commonBCV(x)
 \arguments{
 \item{x}{An object}
 }
+\value{
+A numeric value of the common BCV.
+}
 \description{
 Common biological coefficients of variance (BCV)
 }

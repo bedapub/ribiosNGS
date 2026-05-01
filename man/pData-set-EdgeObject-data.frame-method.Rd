@@ -11,6 +11,9 @@
 
 \item{value}{A \code{data.frame}}
 }
+\value{
+The updated \code{EdgeObject} with new sample annotations.
+}
 \description{
 Set pData (sample annotation)
 }

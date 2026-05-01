@@ -17,6 +17,10 @@ and surrogate variables are estimated from the transformed data.
 Correspondingly the design matrix and contrast matrix associated with the
 object are updated, too.}
 }
+\value{
+An updated \code{EdgeObject} with the design and contrast matrices
+  augmented by surrogate variables, if any are detected.
+}
 \description{
 Perform surrogate variable analysis (SVA) to an EdgeObject object
 }

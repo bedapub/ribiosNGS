@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeResult object}
 }
+\value{
+A contrast matrix.
+}
 \description{
 Extract contrast matrix from an EdgeResult object
 }

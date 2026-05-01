@@ -23,6 +23,9 @@ voom(object, ...)
 
 \item{...}{Other parameters}
 }
+\value{
+An \code{EList} object containing voom-transformed values.
+}
 \description{
 Perform VOOM analysis
 }

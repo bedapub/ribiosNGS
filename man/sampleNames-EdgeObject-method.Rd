@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An EdgeObject}
 }
+\value{
+A character vector of sample names.
+}
 \description{
 Sample names
 }

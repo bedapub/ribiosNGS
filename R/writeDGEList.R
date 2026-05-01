@@ -46,7 +46,8 @@
 #' head(ribiosIO::readMatrix(pDataFile))
 #' head(readLines(groupFile))
 #' head(readLines(groupLevelsFile))
-#' 
+#'
+#' @return Called for its side effect of writing files; returns invisibly NULL.
 #' @export writeDGEList
 writeDGEList <- function(dgeList, exprs.file, fData.file, pData.file, 
                          group.file,

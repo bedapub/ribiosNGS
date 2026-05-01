@@ -18,7 +18,7 @@ check_pattern_matching_file <- function(file, pattern) {
 #' and \code{gencode} is supported
 #' @param type GCT file type, \code{count}, \code{tpm}, \code{count_collapsed}, 
 #'   \code{tpm_collapsed}, and \code{log2tpm} are supported.
-#' @param verbose verbose, if TRUE, verbose mode is turned on.
+#' @param verbose Logical, if TRUE, verbose mode is turned on.
 #' @return A numeric matrix with the attribute \code{desc} encoding the values
 #'   in the description column of the GCT format.
 #'
@@ -211,12 +211,15 @@ readBiokitFeatureAnnotation <-
 #' The function depends on \code{gct} (\code{gct-ens}) and \code{annot} 
 #' directories of biokit output directory.
 #' 
+#' @return A \code{DGEList} object with count and TPM matrices, sample
+#'   annotation, feature annotation, and an additional \code{BiokitAnno}
+#'   element indicating the annotation type used.
 #' @examples
-#' 
+#'
 #' ##... (TODO: add a mock output directory in testdata)
-#' 
+#'
 #' @export readBiokitAsDGEList
-readBiokitAsDGEList <- function(dir, 
+readBiokitAsDGEList <- function(dir,
                                 anno=c("refseq", "ensembl", "gencode"),
                                 useCollapsedData=FALSE, verbose=FALSE) {
   ## read gct file

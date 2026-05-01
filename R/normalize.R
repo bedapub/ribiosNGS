@@ -8,6 +8,8 @@ NULL
 #' @param object An \code{EdgeObject} object.
 #' @param method Method passed to \code{\link[edgeR]{calcNormFactors}}.
 #' @param ... Other parameters passed to \code{\link[edgeR]{calcNormFactors}}.
+#' @return An \code{EdgeObject} with updated normalization factors in the
+#'   internal \code{DGEList}.
 #' @importMethodsFrom BiocGenerics normalize
 #' @export
 setMethod("normalize", "EdgeObject", function(object, method="RLE", ...) {

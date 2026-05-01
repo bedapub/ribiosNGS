@@ -15,6 +15,8 @@ fitGLM(object, ...)
 \item{...}{Passed to \code{\link[edgeR]{glmFit}}}
 }
 \value{
+A \code{DGEGLM} object containing the GLM fit.
+
 The fit object
 }
 \description{

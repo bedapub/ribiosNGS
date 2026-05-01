@@ -66,7 +66,9 @@ countsRemoveSV <- function(counts, designMatrix,
 #' ## compare the results without SV removal, note the values in the 
 #' ## second and third column are much larger than the rest
 #' head(voom(exCounts, exDesign)$E)
-#' 
+#'
+#' @return A numeric matrix of voom-transformed expression values with
+#'   surrogate variable effects removed.
 #' @export voomRemoveSV
 voomRemoveSV <- function(counts, designMatrix) {
   countsRemoveSV(counts, designMatrix, 
@@ -194,7 +196,9 @@ updateContrastMatrixWithSV <- function(contrastMatrix, svMatrix) {
 #' ## the SVA does not give meaningful results.
 #' designMatrix(exObj) <- model.matrix(~0+exGroups)
 #' designMatrix(doSVA(exObj, transform="voom"))
-#' 
+#'
+#' @return An updated \code{EdgeObject} with the design and contrast matrices
+#'   augmented by surrogate variables, if any are detected.
 #' @export doSVA
 doSVA <- function(edgeObj, transform=c("voom", "cpm")) {
   transform <- match.arg(transform)

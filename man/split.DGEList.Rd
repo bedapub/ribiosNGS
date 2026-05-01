@@ -24,6 +24,10 @@ in the sample annotation are dropped}
 
 \item{...}{Not used so far.}
 }
+\value{
+A \code{DGEListList} object, a list of \code{DGEList} objects split
+  by the factor \code{f}.
+}
 \description{
 Split a DGEList object by a factor of samples (default) or genes
 }

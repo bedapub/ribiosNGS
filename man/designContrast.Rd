@@ -9,6 +9,9 @@ designContrast(edgeObject)
 \arguments{
 \item{edgeObject}{An \code{EdgeObject}}
 }
+\value{
+A \code{DesignContrast} object.
+}
 \description{
 Retrieve the design/contrast object
 }

@@ -32,6 +32,9 @@ sigGeneBarchart(
 
 \item{...}{passed to \code{lattice::barchart}}
 }
+\value{
+A \code{trellis} object (lattice barchart).
+}
 \description{
 Barchart of significantly regulated genes
 }

@@ -9,6 +9,9 @@
 \arguments{
 \item{x}{An EdgeResult object}
 }
+\value{
+An integer vector of length two (features, samples).
+}
 \description{
 Dimensions of an EdgeResults
 }

@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{An SigFilter object}
 }
+\value{
+Invisibly returns the formatted message strings.
+}
 \description{
 Show an EdgeSigFilter object
 }

@@ -13,6 +13,8 @@ utils::globalVariables("AveExpr")
 #' expression.
 #' @param removeNAfeatures Logical, if \code{TRUE}, features containing \code{NA}
 #'   values are removed.
+#' @return A numeric matrix of log2(fold-change) values with features in rows
+#'   and contrasts in columns.
 #' @note TODO: add edgeResult data example
 #' @importFrom ribiosUtils mintersect
 #' @export logFCmatrix

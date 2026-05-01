@@ -9,6 +9,9 @@
 \arguments{
 \item{object}{A DGEList}
 }
+\value{
+A \code{data.frame} of feature (gene) annotations.
+}
 \description{
 Get fData
 }

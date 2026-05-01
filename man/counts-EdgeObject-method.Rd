@@ -11,6 +11,9 @@
 
 \item{filter}{Logical, whether filtered matrix (by default) or unfiltered matrix should be returned}
 }
+\value{
+A numeric matrix of counts.
+}
 \description{
 Return counts in EdgeObject
 }

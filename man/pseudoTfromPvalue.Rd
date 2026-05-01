@@ -15,6 +15,9 @@ pseudoTfromPvalue(p, df, sign, replaceZero = TRUE)
 
 \item{replaceZero}{Logical, whether small p values or 0 should be replaced by a sufficient small number. Default and recommended: \code{TRUE}}
 }
+\value{
+A numeric vector of pseudo t-statistics.
+}
 \description{
 Convert p-values to t-statistics
 }

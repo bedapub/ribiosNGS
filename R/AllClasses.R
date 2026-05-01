@@ -163,6 +163,7 @@ setClass("EdgeSigFilter",
 
 #' Whether the logCPM filter is set
 #' @param edgeSigFilter A \code{EdgeSigFilter} object
+#' @return Logical, whether the logCPM threshold is the default value.
 #' @export
 isUnsetLogCPM <-
   function(edgeSigFilter)
@@ -195,6 +196,7 @@ setClass("LimmaSigFilter",
 
 #' Whether the aveExpr filter is set
 #' @param limmaSigFilter A \code{LimmaSigFilter} object
+#' @return Logical, whether the aveExpr threshold is the default value.
 #' @export
 isUnsetAveExpr <-
   function(limmaSigFilter)
@@ -241,6 +243,9 @@ update.SigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, ...
   return(object)
 }
 
+#' @rdname update.SigFilter
+#' @param logCPM Numeric, logCPM filter value, optional (only for \code{EdgeSigFilter}).
+#' @return An updated \code{EdgeSigFilter} object.
 #' @export
 update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, logCPM, ...) {
   res <- update.SigFilter(object, logFC, posLogFC, negLogFC, pValue, FDR)
@@ -249,6 +254,9 @@ update.EdgeSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR,
   return(res)
 }
 
+#' @rdname update.SigFilter
+#' @param aveExpr Numeric, aveExpr filter value, optional (only for \code{LimmaSigFilter}).
+#' @return An updated \code{LimmaSigFilter} object.
 #' @export
 update.LimmaSigFilter <- function(object, logFC, posLogFC, negLogFC, pValue, FDR, aveExpr, ...) {
   res <- update.SigFilter(object, logFC, posLogFC, negLogFC, pValue, FDR)
@@ -412,10 +420,11 @@ setClass("FeatAnnoExprs",
 setClass("DGEListList", representation("list"))
 
 #' Construct a DGEListList object
-#' 
+#'
 #' @param ... A list of DGEListList objects, can be passed as individual objects
 #' or in a list
-#' 
+#'
+#' @return A \code{DGEListList} object.
 #' @export
 DGEListList <- function(...) {
   li <- as.list(...)

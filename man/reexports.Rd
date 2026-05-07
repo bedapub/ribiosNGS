@@ -20,8 +20,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{edgeR}{\code{\link[edgeR]{cpm}}, \code{\link[edgeR]{DGEList}}}
+  \item{edgeR}{\code{\link[edgeR:cpm]{cpm()}}, \code{\link[edgeR:DGEList]{DGEList()}}}
 
-  \item{ribiosExpression}{\code{\link[ribiosExpression]{DesignContrast}}}
+  \item{ribiosExpression}{\code{\link[ribiosExpression:DesignContrast]{DesignContrast()}}}
 }}
 

@@ -2,7 +2,7 @@ Package: ribiosNGS
 Type: Package
 Title: Differential gene expression analysis for next-generation sequencing
     data in the 'ribios' suite
-Version: 1.0.0
+Version: 1.0.1
 Authors@R:
   c(person(given = "Jitao David",
          family = "Zhang",
@@ -59,7 +59,6 @@ biocViews: DifferentialExpression, GeneExpression, RNASeq, Transcriptomics
 License: GPL-3
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.3.3
 Collate: 
     'utils.R'
     'ribiosNGS-package.R'
@@ -111,3 +110,4 @@ Remotes:
 Additional_repositories: https://bedapub.r-universe.dev
 URL: https://github.com/bedapub/ribiosNGS
 BugReports: https://github.com/bedapub/ribiosNGS/issues
+Config/roxygen2/version: 8.0.0

@@ -569,6 +569,13 @@ setMethod("setCommonDispIfMissing", c("EdgeObject","numeric"), function(object, 
 ##----------------------------------------##
 
 #' Feature names
+#' @param object An DGEList
+#' @return A character vector of feature names.
+#' @importMethodsFrom Biobase featureNames
+#' @export
+setMethod("featureNames", "DGEList", function(object) return(rownames(object$counts)))
+
+#' Feature names
 #' @param object An EdgeObject
 #' @return A character vector of feature names.
 #' @importMethodsFrom Biobase featureNames
